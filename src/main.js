@@ -1,18 +1,13 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import routes from './routes/index'
-import { createRouter, createWebHistory } from 'vue-router'
+
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { createI18n } from 'vue-i18n'
 import xllZhCN from './language/zh-cn'
 import xllEnUS from './language/en-us'
-
-const router = createRouter({
-    history: createWebHistory(),
-    routes: routes,
-})
+import router from "./routes";
 
 const messages = {
     en: {
@@ -31,6 +26,7 @@ const i18n = createI18n({
     // If you need to specify other options, you can set other options
     // ...
 })
+
 const app = createApp(App)
 
 app.use(router)
