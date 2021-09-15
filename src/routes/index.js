@@ -43,6 +43,19 @@ const routes = [
         },
     },
     {
+        path: '/register',
+        name: '注册',
+        component: () => import('@/views/register/index.vue'),
+        meta: {
+            title:{
+                '/zh-CN': '注册',
+                '/en-US': 'Register'
+            },
+            hidden: true,
+            hiddenTab: true,
+        },
+    },
+    {
         path: '/noFound',
         name: 'NoFound',
         component: () => import(/* webpackChunkName: "noFound" */ '@/views/noFound.vue'),

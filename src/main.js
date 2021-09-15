@@ -7,7 +7,8 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { createI18n } from 'vue-i18n'
 import xllZhCN from './language/zh-cn'
 import xllEnUS from './language/en-us'
-import router from "./routes";
+import router from "./routes"
+import './assets/css/aliIcon/iconfont.css'
 
 const messages = {
     en: {

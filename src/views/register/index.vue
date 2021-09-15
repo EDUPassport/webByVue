@@ -2,8 +2,7 @@
   <div>
     <el-container>
       <el-header class="container-1" height="auto">
-        <el-row justify="space-between" align="middle">
-          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"></el-col>
+        <el-row  justify="center" align="middle">
           <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
             <div class="logo-container">
               <router-link class="logo-title" to="/">
@@ -11,46 +10,17 @@
               </router-link>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-            <div class="create-account-container">
-              <div class="create-account-tips">New to ESL Passport?</div>
-              <div class="create-account-link">
-                <router-link to="/register">Create an account</router-link>
-              </div>
-            </div>
-          </el-col>
         </el-row>
       </el-header>
-      <el-main>
-        <el-row class="marginTop container-2" justify="center" align="middle">
+
+      <el-main >
+        <el-row class="container-2" justify="center" align="middle">
           <el-col :xs="0" :sm="12" :md="12" :lg="8" :xl="8">
-            <h1>Sign in to ESL Passport</h1>
+            <h1>Log in to your account</h1>
           </el-col>
         </el-row>
 
         <el-row class="marginTop container-3" justify="center" align="middle">
-          <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="8">
-            <span>We suggest using the email address that you use at work.</span>
-          </el-col>
-        </el-row>
-
-        <el-row class="marginTop container-4" justify="center" align="middle">
-          <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
-            <el-button class="google-btn" plain icon="iconfont  el-icon-aligoogle">Sign in with Google</el-button>
-          </el-col>
-        </el-row>
-        <el-row class=" marginTop container-5" justify="center" align="middle">
-          <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
-            <el-button class="apple-btn" plain icon="iconfont  el-icon-aliapple">Sign in with Apple</el-button>
-          </el-col>
-        </el-row>
-        <el-row class="marginTop container-6" justify="center" align="middle">
-          <el-col :xs="20" :sm="12" :md="12" :lg="8" :xl="6">
-            <el-divider>OR</el-divider>
-          </el-col>
-        </el-row>
-
-        <el-row class="marginTop container-7" justify="center" align="middle">
           <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
             <el-form
                 :model="ruleForm"
@@ -60,23 +30,40 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <el-form-item prop="email">
-                <el-input class="elInput"  placeholder="name@work-email.com" v-model="ruleForm.email"></el-input>
+              <el-form-item label="Enter your work email address" prop="email">
+                <el-input placeholder="name@work-email.com" v-model="ruleForm.email"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button class="submit-btn" :loading="submitLoadingStatus" @click="submitForm('ruleForm')">
-                  Sign in with email address
+                  Next ->
                 </el-button>
               </el-form-item>
             </el-form>
           </el-col>
         </el-row>
 
-        <el-row class="marginTop container-8" justify="center" align="middle">
+        <el-row class="marginTop container-4" justify="center" align="middle">
           <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
-            <div class="container-8-tips">
-              We’ll email you a magic code for a password-free sign-in. Or you can
-              <router-link to="/register"> sign in manually instead.</router-link>
+            <el-divider>Or Sign in with</el-divider>
+          </el-col>
+        </el-row>
+
+        <el-row class=" marginTop container-5" justify="center" align="middle">
+          <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
+            <el-button class="google-btn" plain icon="iconfont  el-icon-aligoogle">Sign in with Google</el-button>
+          </el-col>
+        </el-row>
+        <el-row class="marginTop container-6" justify="center" align="middle">
+          <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
+            <el-button class="apple-btn" plain icon="iconfont  el-icon-aliapple">Sign in with Apple</el-button>
+          </el-col>
+        </el-row>
+
+        <el-row class="marginTop container-7" justify="center" align="middle">
+          <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
+            <div class="container-7-tips">
+              Don't have an account yet?
+              <router-link to="/login"> Sign up</router-link>
             </div>
           </el-col>
         </el-row>
@@ -84,8 +71,8 @@
 
       <el-footer class="footer-container" height="auto">
 
-        <el-row justify="center" align="middle">
-          <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="6">
+        <el-row  justify="center" align="middle">
+          <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
             <div class="footer-content">
               <router-link to="/privacy">Privacy & terms</router-link>
 
@@ -144,7 +131,7 @@ export default {
 </script>
 
 <style scoped>
-.marginTop {
+.marginTop{
   margin-top: 20px;
 }
 
@@ -168,18 +155,6 @@ export default {
   text-decoration: none;
 }
 
-.create-account-tips {
-  color: #808080;
-  padding: 10px;
-}
-
-.create-account-link a {
-  text-decoration: none;
-  color: #00b3d2;
-  padding: 10px;
-  font-weight: bold;
-}
-
 .google-btn {
   width: 100%;
   font-size: 16px;
@@ -194,6 +169,7 @@ export default {
   line-height: 26px;
 }
 
+
 .submit-btn {
   width: 100%;
   background-color: #0aa0a8;
@@ -203,7 +179,7 @@ export default {
   line-height: 26px;
 }
 
-.container-8-tips {
+.container-7-tips {
   background-color: #eeeeee;
   padding: 20px;
   border-radius: 6px;
@@ -212,18 +188,17 @@ export default {
   color: #808080;
 }
 
-.container-8-tips a {
+.container-7-tips a {
   text-decoration: none;
   color: #00b3d2;
 }
 
-.footer-container {
+.footer-container{
   margin-top: 20px;
 }
 
-.footer-content a {
-  text-decoration: none;
-  color: #808080;
+.footer-content a{
+  color: #000000;
 }
 
 /deep/ .el-input__inner{

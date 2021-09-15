@@ -1,0 +1,23 @@
+{
+  "id": "2814433",
+  "name": "element",
+  "font_family": "iconfont",
+  "css_prefix_text": "el-icon-ali",
+  "description": "element ui",
+  "glyphs": [
+    {
+      "icon_id": "11983544",
+      "name": "google",
+      "font_class": "google",
+      "unicode": "ea0c",
+      "unicode_decimal": 59916
+    },
+    {
+      "icon_id": "18883440",
+      "name": "apple",
+      "font_class": "apple",
+      "unicode": "e945",
+      "unicode_decimal": 59717
+    }
+  ]
+}

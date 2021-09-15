@@ -1,6 +1,8 @@
 <template>
 <div>
-  footer
+  <el-footer>
+    footer
+  </el-footer>
 </div>
 </template>
 

@@ -1,7 +1,9 @@
 <template>
-  <Header></Header>
-  <router-view></router-view>
-  <Footer></Footer>
+  <el-container direction="vertical">
+    <Header></Header>
+    <router-view></router-view>
+    <Footer></Footer>
+  </el-container>
 </template>
 
 <script>
