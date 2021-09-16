@@ -66,12 +66,12 @@
     <!--  featured jobs -->
     <div class="featured-jobs-bg">
 
-      <el-row :gutter="0" justify="space-between" align="middle">
-        <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="4">
-          <div class="featured-jobs-label">Featured Jobs</div>
-          <div class="featured-jobs-underline"></div>
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="4">
+      <el-row :gutter="0" justify="center" align="middle">
+        <el-col class="featured-jobs-t" :xs="24" :sm="24" :md="24" :lg="24" :xl="20">
+          <div class="featured-jobs-t-l">
+            <div class="featured-jobs-label">Featured Jobs</div>
+            <div class="featured-jobs-underline"></div>
+          </div>
           <div class="featured-jobs-more">
             <el-button class="featured-jobs-more-btn" type="primary">See more jobs -></el-button>
           </div>
@@ -79,7 +79,7 @@
 
       </el-row>
 
-      <el-row :gutter="0" justify="start" align="middle">
+      <el-row :gutter="0" justify="center" align="middle">
         <el-col :xs="24" :sm="24" :md="22" :lg="22" :xl="20">
           <div class="featured-jobs-tips">
             Lorem ipsum dolor sit amet , consec tetur cing elit,Suspe nidsse suscipit
@@ -87,7 +87,7 @@
         </el-col>
       </el-row>
 
-      <el-row :gutter="0" justify="space-between" align="middle">
+      <el-row :gutter="0" justify="center" align="middle">
 
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="20">
           <div class="featured-jobs-slider">
@@ -348,9 +348,18 @@ export default {
 }
 
 .featured-jobs-bg {
-  padding: 20px 5%;
+  padding: 20px;
 }
 
+.featured-jobs-t{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+.featured-jobs-t-l{
+
+}
 .featured-jobs-label {
   font-size: 30px;
   font-weight: bold;
