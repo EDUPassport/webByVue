@@ -7,3 +7,6 @@ export const USER_LIST = (params) => post('service-core/user_list', params)
 export const USER_LIST_ID = (params) => get(`service-core/user_list/${params.id}`)
 export const UPLOAD_USER_CARD = (params) => uploader('service-core/user_upload_card', params)
 export const DELETE_BOOK = (params) => del(`service-core/book_list/${params.id}`)
+
+export const JOB_LIST = (params) => get('job/jobList', params)
+export const JOB_FEATURED_LIST = (params) => get('featureList',params)
