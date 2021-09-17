@@ -1,23 +1,27 @@
 <template>
   <div>
     <el-row :gutter="0" align="middle" justify="center">
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="20">
-        <div class="changemakers-container">
-          <view class="changemakers-btn-bg">
-            <el-button class="changemakers-btn" plain>Education Changemakers</el-button>
-          </view>
-        </div>
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+        <el-carousel indicator-position="none" height="700px" :interval="6000" >
+          <el-carousel-item v-for="item in 4" :key="item" >
+            <div class="changemakers-container">
+              <view class="changemakers-btn-bg">
+                <el-button class="changemakers-btn" plain>Education Changemakers</el-button>
+              </view>
+            </div>
+          </el-carousel-item>
+        </el-carousel>
       </el-col>
     </el-row>
 
-    <el-row :gutter="0" align="middle" justify="center">
-      <el-col class="search-container-col" :xs="24" :sm="24" :md="24" :lg="24" :xl="20">
+    <el-row class="search-container-row" :gutter="0" align="middle" justify="center">
+      <el-col class="search-container-col" :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
         <div class="search-container-bg">
           <div class="search-container">
             <div class="search-keywords">
               <div class="search-keywords-label">SEARCH KEYWORDS</div>
               <div class="search-keywords-content">
-                <el-input placeholder="Find something..." v-model="searchKeywordsValue">
+                <el-input class="search-keywords-input" placeholder="Find something..." v-model="searchKeywordsValue">
                   <template #append>
                     <el-button icon="el-icon-search"></el-button>
                   </template>
@@ -67,20 +71,24 @@
     <div class="featured-jobs-bg">
 
       <el-row :gutter="0" justify="center" align="middle">
-        <el-col class="featured-jobs-t" :xs="24" :sm="24" :md="24" :lg="24" :xl="20">
-          <div class="featured-jobs-t-l">
-            <div class="featured-jobs-label">Featured Jobs</div>
-            <div class="featured-jobs-underline"></div>
-          </div>
+
+        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
+          <div class="featured-jobs-label">Featured Jobs</div>
+          <div class="featured-jobs-underline"></div>
+        </el-col>
+
+        <el-col :xs="0" :sm="8" :md="8" :lg="8" :xl="6"></el-col>
+
+        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
           <div class="featured-jobs-more">
-            <el-button class="featured-jobs-more-btn" type="primary">See more jobs -></el-button>
+            <el-button class="featured-jobs-more-btn" type="primary">See more jobs ></el-button>
           </div>
         </el-col>
 
       </el-row>
 
       <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="22" :lg="22" :xl="20">
+        <el-col :xs="24" :sm="24" :md="20" :lg="16" :xl="14">
           <div class="featured-jobs-tips">
             Lorem ipsum dolor sit amet , consec tetur cing elit,Suspe nidsse suscipit
           </div>
@@ -89,9 +97,9 @@
 
       <el-row :gutter="0" justify="center" align="middle">
 
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="20">
+        <el-col :xs="0" :sm="24" :md="20" :lg="16" :xl="14">
           <div class="featured-jobs-slider">
-            <swiper :slidesPerView="4" :spaceBetween="30"
+            <swiper :slidesPerView="3" :spaceBetween="30"
                     :pagination='{"clickable": true}'
                     :autoplay='{"delay": 2500,"disableOnInteraction": false}'
                     :navigation="true"
@@ -119,6 +127,38 @@
 
           </div>
         </el-col>
+
+        <el-col :xs="24" :sm="0" :md="0" :lg="0" :xl="0">
+          <div class="featured-jobs-slider">
+            <swiper :slidesPerView="1" :spaceBetween="30"
+                    :pagination='{"clickable": true}'
+                    :autoplay='{"delay": 2500,"disableOnInteraction": false}'
+                    :navigation="true"
+                    class="mySwiper">
+              <swiper-slide v-for="(item,index) in jobListData" :key="index">
+                <div class="featured-jobs-card">
+                  <div class="featured-jobs-card-images">
+                    <el-image class="featured-jobs-card-image" :src="item.logo" fit="fill"></el-image>
+                  </div>
+                  <div class="featured-jobs-title">{{ item.job_title }}</div>
+                  <div class="featured-business-name">{{ item.business_name }}</div>
+                  <div class="featured-jobs-location">{{ item.address }}</div>
+                  <div class="featured-b">
+                    <div class="featured-b-l">
+                      <el-button>Quick Apply</el-button>
+                    </div>
+                    <div class="featured-b-r">
+                      <span>{{ item.currency }} {{ item.salary_min }} {{ item.salary_max }}</span>
+                    </div>
+
+                  </div>
+                </div>
+              </swiper-slide>
+            </swiper>
+
+          </div>
+        </el-col>
+
       </el-row>
 
     </div>
@@ -254,8 +294,9 @@ export default {
 </script>
 
 <style scoped>
+
 .changemakers-container {
-  height: 680px;
+  height: 100%;
   background: url("../../assets/changemakers.jpg") center no-repeat;
   background-size: cover;
 }
@@ -276,18 +317,19 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
-
+.search-container-row{
+  background-color: #eeeeee;
+}
 .search-container-col {
   position: relative;
   height: 100px;
-  background-color: #eeeeee;
 }
 
 .search-container-bg {
   width: 90%;
   background-color: rgba(10, 160, 168, 0.3);
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 10px;
   position: absolute;
   top: -50px;
   left: 0;
@@ -301,7 +343,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 20px;
 }
 
@@ -311,18 +353,26 @@ export default {
 
 .search-keywords-label {
   color: #808080;
+  font-weight: bold;
 }
 
 .search-keywords-content {
   margin-top: 20px;
 }
+ /deep/ .el-input__inner{
+    height: 40px;
+   line-height: 40px;
+}
+.search-keywords-input{
 
+}
 .service-category {
 
 }
 
 .service-category-label {
   color: #808080;
+  font-weight: bold;
 }
 
 .service-category-content {
@@ -335,6 +385,7 @@ export default {
 
 .search-tags-label {
   color: #808080;
+  font-weight: bold;
 }
 
 .search-tags-content {
@@ -342,7 +393,7 @@ export default {
 }
 
 .search-btn {
-  background-color: #0aa0a8;
+  /*background-color: #0aa0a8;*/
   font-size: 16px;
   font-weight: bold;
 }
@@ -351,15 +402,7 @@ export default {
   padding: 20px;
 }
 
-.featured-jobs-t{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row;
-}
-.featured-jobs-t-l{
 
-}
 .featured-jobs-label {
   font-size: 30px;
   font-weight: bold;
@@ -378,10 +421,9 @@ export default {
 }
 
 .featured-jobs-more-btn {
-  background-color: #0aa0a8;
+  /*background-color: #0aa0a8;*/
   font-size: 16px;
   font-weight: bold;
-
 }
 
 .featured-jobs-tips {
@@ -440,6 +482,17 @@ export default {
   justify-content: space-between;
   padding: 10px 20px;
   border-top: 1px solid #eeeeee;
+
+}
+
+
+@media screen and (max-width: 768px) {
+    .featured-jobs-label{
+      font-size: 14px;
+    }
+    .search-container-col{
+      display: none;
+    }
 
 }
 

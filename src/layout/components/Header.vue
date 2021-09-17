@@ -20,9 +20,8 @@
 
         <el-col :xs="12" :sm="3" :md="4" :lg="3" :xl="2">
           <div class="user-container">
-            Hi,Jon!
+            Hi,Jon!<router-link to="/login">Login</router-link>
           </div>
-
         </el-col>
 
       </el-row>
