@@ -128,8 +128,10 @@
           <div class="featured-jobs-slider">
             <swiper :slidesPerView="1" :spaceBetween="30"
                     :pagination='{"clickable": true}'
-                    :autoplay='{"delay": 2500,"disableOnInteraction": false}'
+                    :autoplay='{"delay": 3500,"disableOnInteraction": true}'
                     :navigation="true"
+                    :zoom="false"
+                    :style="{'--swiper-navigation-color' : '#0aa0a8','--swiper-theme-color': '#0aa0a8'}"
                     class="mySwiper">
               <swiper-slide v-for="(item,index) in jobListData" :key="index">
                 <div class="featured-jobs-card">
@@ -297,14 +299,15 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 
 // Import Swiper styles
 import 'swiper/css';
+import "swiper/css/zoom"
 import "swiper/css/pagination"
 import "swiper/css/navigation"
 
 import SwiperCore, {
-  Pagination, Autoplay, Navigation
+  Pagination, Autoplay, Navigation,Zoom
 } from 'swiper';
 
-SwiperCore.use([Pagination, Autoplay, Navigation]);
+SwiperCore.use([Pagination, Autoplay, Navigation,Zoom]);
 
 export default {
   name: "index",
@@ -814,6 +817,9 @@ export default {
   font-size: 14px;
 }
 
+/deep/ .swiper-button-next,  /deep/ .swiper-button-prev{
+  color: #0AA0A8 !important;
+}
 
 @media screen and (max-width: 768px) {
   .featured-jobs-label {
