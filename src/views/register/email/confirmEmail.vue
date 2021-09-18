@@ -16,7 +16,10 @@
       <el-main >
         <el-row class="container-2" justify="center" align="middle">
           <el-col :xs="0" :sm="12" :md="12" :lg="8" :xl="8">
-            <h1>Log in to your account</h1>
+            <h1>Check your email for a code</h1>
+            <span>
+              We’ve sent a six-digit code to xuliulei666@gamil.com. The code will expire shortly, so please enter it soon.
+            </span>
           </el-col>
         </el-row>
 
@@ -30,12 +33,12 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <el-form-item label="Enter your work email address" prop="email">
-                <el-input placeholder="name@work-email.com" v-model="ruleForm.email"></el-input>
+              <el-form-item prop="emailCode">
+                <el-input placeholder="Enter your email code" v-model="ruleForm.email"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button class="submit-btn" :loading="submitLoadingStatus" @click="submitForm('ruleForm')">
-                  Next >
+                  Confirm
                 </el-button>
               </el-form-item>
             </el-form>
@@ -44,26 +47,15 @@
 
         <el-row class="marginTop container-4" justify="center" align="middle">
           <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
-            <el-divider>Or Sign in with</el-divider>
-          </el-col>
-        </el-row>
-
-        <el-row class=" marginTop container-5" justify="center" align="middle">
-          <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
-            <el-button class="google-btn" plain icon="iconfont  el-icon-aligoogle">Sign in with Google</el-button>
-          </el-col>
-        </el-row>
-        <el-row class="marginTop container-6" justify="center" align="middle">
-          <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
-            <el-button class="apple-btn" plain icon="iconfont  el-icon-aliapple">Sign in with Apple</el-button>
+            <el-divider></el-divider>
           </el-col>
         </el-row>
 
         <el-row class="marginTop container-7" justify="center" align="middle">
           <el-col :xs="22" :sm="12" :md="12" :lg="8" :xl="6">
             <div class="container-7-tips">
-              Don't have an account yet?
-              <router-link to="/login"> Sign up</router-link>
+              Can’t find your code? Check your spam folder!
+              <router-link to="/login">Try again</router-link>
             </div>
           </el-col>
         </el-row>
@@ -82,17 +74,16 @@
       </el-footer>
     </el-container>
 
+
   </div>
 
 </template>
 
 <script>
 import imgLogo from '@/assets/logo.png'
-import {useRoute, useRouter} from "vue-router";
-import {SEND_EMAIL_CODE} from "@/api/api";
 
 export default {
-  name: "index",
+  name: "confirmEmail",
   data() {
     return {
       imgLogo,
@@ -107,33 +98,13 @@ export default {
       submitLoadingStatus: false
     }
   },
-  setup(){
-    let router = useRouter()
-    let route = useRoute()
-    const skipConfirmEmail = () =>{
-      router.push('/confirmemail')
-    }
-    const getParams = () =>{
-      console.log(route.params)
-    }
-    return {
-      skipConfirmEmail,
-      getParams
-    }
-  },
   methods: {
     submitForm(formName) {
       let self = this;
       this.submitLoadingStatus = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let params = Object.assign({},this.ruleForm)
-          SEND_EMAIL_CODE(params).then(res=>{
-            console.log(res)
-          }).catch(err=>{
-            console.log(err)
-          })
-          // this.skipConfirmEmail()
+          alert('submit!')
           setTimeout(function () {
             self.submitLoadingStatus = false
           }, 2000)
@@ -176,20 +147,9 @@ export default {
   text-decoration: none;
 }
 
-.google-btn {
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 26px;
+.container-2 span{
+  line-height:30px;
 }
-
-.apple-btn {
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 26px;
-}
-
 
 .submit-btn {
   width: 100%;

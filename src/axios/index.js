@@ -9,17 +9,18 @@ axios.defaults.baseURL = baseUrl
 axios.defaults.timeout = 3000
 // axios.defaults.withCredentials = true
 // 请求拦截器，设置token
-// axios.interceptors.request.use(config => {
-//     if (localStorage && localStorage.getItem('token')) {
-//         const token = localStorage.getItem('token')
-//         token && (config.headers.Authorization = token)
-//     }
-//     return config
-// }, error => {
-//     // 可以安装elementui等ui组件，将错误信息输出到界面。
-//     console.log(error)
-//     return Promise.error(error)
-// })
+axios.interceptors.request.use(config => {
+    // if (localStorage && localStorage.getItem('token')) {
+    //     const token = localStorage.getItem('token')
+    //     token && (config.headers.Authorization = token)
+    // }
+    config.headers.platform = 4;
+    return config
+}, error => {
+    // 可以安装elementui等ui组件，将错误信息输出到界面。
+    // console.log(error)
+    return Promise.error(error)
+})
 
 // 添加响应拦截器
 axios.interceptors.response.use(response => {

@@ -56,6 +56,19 @@ const routes = [
         },
     },
     {
+        path: '/confirmemail',
+        name: 'Confirm Email',
+        component: () => import('@/views/register/email/confirmEmail'),
+        meta: {
+            title:{
+                '/zh-CN': '注册',
+                '/en-US': 'Register'
+            },
+            hidden: true,
+            hiddenTab: true,
+        },
+    },
+    {
         path: '/noFound',
         name: 'NoFound',
         component: () => import(/* webpackChunkName: "noFound" */ '@/views/noFound.vue'),
