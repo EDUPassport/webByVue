@@ -10,3 +10,4 @@ export const DELETE_BOOK = (params) => del(`service-core/book_list/${params.id}`
 
 export const JOB_LIST = (params) => get('job/jobList', params)
 export const JOB_FEATURED_LIST = (params) => get('featureList',params)
+export const BUSINESS_LIST = (params)=>post('business/list',params)
