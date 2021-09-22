@@ -280,12 +280,79 @@
               </div>
             </div>
           </template>
-
         </el-col>
+      </el-row>
+    </div>
 
+    <!--  featured deals -->
+    <div class="featured-deals-bg">
 
+      <el-row :gutter="0" justify="center" align="middle">
+        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
+          <div class="featured-deals-label">Hot Deals</div>
+          <div class="featured-deals-underline"></div>
+        </el-col>
+        <el-col :xs="0" :sm="8" :md="8" :lg="8" :xl="6"></el-col>
+        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
+          <div class="featured-deals-more">
+            <el-button class="featured-deals-more-btn" type="primary">See more deals ></el-button>
+          </div>
+        </el-col>
       </el-row>
 
+      <el-row :gutter="0" justify="center" align="middle">
+        <el-col :xs="24" :sm="24" :md="20" :lg="16" :xl="14">
+          <div class="featured-deals-tips">
+            Lorem ipsum dolor sit amet , consec tetur cing elit,Suspe nidsse suscipit
+          </div>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="0" justify="center" align="middle">
+
+        <el-col :xs="0" :sm="24" :md="20" :lg="16" :xl="14">
+          <div class="hot-deals-container">
+            <div class="hot-deals-item" v-for="(item,index) in dealsListData" :key="index"
+                 :style="'background-image:url('+ item.user_info.profile_photo + ')'"
+            >
+              <div class="hot-deals-item-bg">
+                <div class="hot-deals-item-t">
+                  <div class="hot-deals-item-t-l">
+                    <template v-if="item.user_info">
+                      <el-image class="hot-deals-logo" :src="item.user_info.logo"></el-image>
+                    </template>
+                  </div>
+                  <div class="hot-deals-item-t-r">
+                    Heart
+                  </div>
+                </div>
+                <div class="hot-deals-item-tag-container">
+                  <div class="hot-deals-item-tag">Deal</div>
+                </div>
+                <div class="hot-deals-item-title">
+                  {{ item.desc }}
+                </div>
+                <div class="hot-deals-item-name">
+                  <template v-if="item.user_info">
+                    {{ item.user_info.vendor_name_en }}
+                  </template>
+                </div>
+                <div class="hot-deals-item-b">
+                  <div class="hot-deals-item-b-l">
+                    Category
+                  </div>
+                  <div class="hot-deals-item-b-r">
+                    <div class="hot-deals-item-b-r-item">Vegan Friendly</div>
+                    <div class="hot-deals-item-b-r-item">Child Friendly</div>
+                    <div class="hot-deals-item-b-r-item">Pet Friendly</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-col>
+
+      </el-row>
 
     </div>
 
@@ -293,7 +360,7 @@
 </template>
 
 <script>
-import {JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST} from "@/api/api";
+import {JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST} from "@/api/api";
 // Import Swiper Vue.js components
 import {Swiper, SwiperSlide} from 'swiper/vue';
 
@@ -304,10 +371,10 @@ import "swiper/css/pagination"
 import "swiper/css/navigation"
 
 import SwiperCore, {
-  Pagination, Autoplay, Navigation,Zoom
+  Pagination, Autoplay, Navigation, Zoom
 } from 'swiper';
 
-SwiperCore.use([Pagination, Autoplay, Navigation,Zoom]);
+SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 
 export default {
   name: "index",
@@ -366,7 +433,8 @@ export default {
         },
       ],
       jobListData: [],
-      businessListData: []
+      businessListData: [],
+      dealsListData: []
 
     }
   },
@@ -384,11 +452,14 @@ export default {
   },
   mounted() {
     this.getJobList()
+    // this.getJobFeaturedList()
     this.getBusinessList()
+    this.getDealsList()
   },
   methods: {
     getJobFeaturedList() {
       let params = {}
+
       JOB_FEATURED_LIST(params).then(res => {
         console.log(res)
         if (res.code === 200) {
@@ -397,8 +468,9 @@ export default {
           console.log(res.msg)
         }
       }).catch(err => {
-        console.log(err)
+        console.log(err.response)
       })
+
     },
     getJobList() {
       let params = {
@@ -424,8 +496,20 @@ export default {
       BUSINESS_LIST(params).then(res => {
         console.log(res)
         this.businessListData = res.message.data;
+      })
+    },
+    getDealsList() {
+      let params = {
+        page: 1,
+        limit: 6
+      }
+      DEALS_LIST(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.dealsListData = res.message.data;
+        }
       }).catch(err => {
-        console.log(err)
+        console.log(err.response)
       })
     }
 
@@ -817,8 +901,143 @@ export default {
   font-size: 14px;
 }
 
-/deep/ .swiper-button-next,  /deep/ .swiper-button-prev{
+/deep/ .swiper-button-next, /deep/ .swiper-button-prev {
   color: #0AA0A8 !important;
+}
+
+.featured-deals-bg {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+
+.featured-deals-label {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: left;
+  line-height: 40px;
+}
+
+.featured-deals-underline {
+  background-color: #0aa0a8;
+  height: 2px;
+  width: 80px;
+}
+
+.featured-deals-more {
+  text-align: right;
+}
+
+.featured-deals-more-btn {
+  /*background-color: #0aa0a8;*/
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.featured-deals-tips {
+  text-align: left;
+  color: #808080;
+  padding: 20px 0;
+}
+
+.hot-deals-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.hot-deals-item {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 48%;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+.hot-deals-item-bg{
+  background-color: rgba(0,0,0,0.6);
+  padding: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.hot-deals-item-bg:hover{
+  border: 1px solid #eeeeee;
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.3);
+}
+
+.hot-deals-item-t{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hot-deals-item-t-l{
+
+
+}
+.hot-deals-logo{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.hot-deals-item-t-r{
+  color: #ffffff;
+}
+.hot-deals-item-tag-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 0;
+}
+
+.hot-deals-item-tag{
+  background-color: #0AA0A8;
+  color: #ffffff;
+  padding: 4px 14px;
+  border-radius: 4px;
+
+}
+
+.hot-deals-item-title{
+  color: #ffffff;
+  font-size: 16px;
+  text-align: left;
+  line-height: 30px;
+}
+.hot-deals-item-name{
+  color: #ffffff;
+  font-size: 16px;
+  text-align: left;
+  line-height: 30px;
+}
+
+.hot-deals-item-b{
+  border-top: 1px solid #eeeeee;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+}
+.hot-deals-item-b-l{
+  color: #ffffff;
+}
+
+.hot-deals-item-b-r{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hot-deals-item-b-r-item{
+  color: #ffffff;
+  margin: 10px;
 }
 
 @media screen and (max-width: 768px) {

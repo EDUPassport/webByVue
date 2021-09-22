@@ -1,5 +1,6 @@
 // 一、配置axios
 import axios from 'axios'
+
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
 let baseUrl = process.env.NODE_ENV === 'development' ? 'https://api.test.esl-passport.cn/api/' : 'https://api.esl-passport.cn/api/'
@@ -10,10 +11,13 @@ axios.defaults.timeout = 3000
 // axios.defaults.withCredentials = true
 // 请求拦截器，设置token
 axios.interceptors.request.use(config => {
-    // if (localStorage && localStorage.getItem('token')) {
-    //     const token = localStorage.getItem('token')
-    //     token && (config.headers.Authorization = token)
-    // }
+    if (localStorage && localStorage.getItem('token')) {
+        const token = localStorage.getItem('token')
+        if (token) {
+            // config.data.token = token
+        }
+        // token && (config.headers.Authorization = token)
+    }
     config.headers.platform = 4;
     return config
 }, error => {
@@ -27,14 +31,17 @@ axios.interceptors.response.use(response => {
         return response.data
     },
     error => {
-        // 对响应错误做点什么
-        if(!error.response){
-            return Promise.reject(error);
+        // console.log(error)
+        if (error.response) {
+            if (error.response.status == 401) {
+                return window.location.href = '/login'
+            } else {
+                return Promise.reject(error);
+            }
         }
-        if (error.response.status == 401) {
-            window.location.href = '/login'
-        } else {
-            return Promise.reject(error)
+        // 对响应错误做点什么
+        if (!error.response) {
+            return Promise.reject(error);
         }
 
     })

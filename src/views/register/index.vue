@@ -108,10 +108,14 @@ export default {
     }
   },
   setup(){
+
     let router = useRouter()
     let route = useRoute()
-    const skipConfirmEmail = () =>{
-      router.push('/confirmemail')
+    const skipConfirmEmail = (query) =>{
+      router.push({
+        path:'/confirmemail',
+        query:query
+      })
     }
     const getParams = () =>{
       console.log(route.params)
@@ -125,18 +129,27 @@ export default {
     submitForm(formName) {
       let self = this;
       this.submitLoadingStatus = true;
+      let routerQuery = {
+        email: encodeURIComponent(this.ruleForm.email)
+      }
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let params = Object.assign({},this.ruleForm)
           SEND_EMAIL_CODE(params).then(res=>{
-            console.log(res)
-          }).catch(err=>{
-            console.log(err)
+            if(res.code == 200){
+              this.$message.success('Success')
+
+              setTimeout(function () {
+                self.skipConfirmEmail(routerQuery)
+                self.submitLoadingStatus = false
+              }, 1000)
+
+            }else{
+              this.$message.error(res.msg)
+            }
+            // console.log(res)
           })
-          // this.skipConfirmEmail()
-          setTimeout(function () {
-            self.submitLoadingStatus = false
-          }, 2000)
+
         } else {
           console.log('error submit!!')
           this.submitLoadingStatus = false

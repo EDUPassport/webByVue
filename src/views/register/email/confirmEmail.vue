@@ -18,7 +18,7 @@
           <el-col :xs="0" :sm="12" :md="12" :lg="8" :xl="8">
             <h1>Check your email for a code</h1>
             <span>
-              We’ve sent a six-digit code to xuliulei666@gamil.com. The code will expire shortly, so please enter it soon.
+              We’ve sent a six-digit code to {{ruleForm.email}}. The code will expire shortly, so please enter it soon.
             </span>
           </el-col>
         </el-row>
@@ -33,8 +33,14 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <el-form-item prop="emailCode">
-                <el-input placeholder="Enter your email code" v-model="ruleForm.email"></el-input>
+              <el-form-item prop="code">
+                <el-input placeholder="Enter your email code" type="number" :maxlength="6" v-model="ruleForm.code"></el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input placeholder="Enter your password" type="password" v-model="ruleForm.password"></el-input>
+              </el-form-item>
+              <el-form-item prop="c_password">
+                <el-input placeholder="Enter your password again" type="password" v-model="ruleForm.c_password" ></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button class="submit-btn" :loading="submitLoadingStatus" @click="submitForm('ruleForm')">
@@ -81,22 +87,60 @@
 
 <script>
 import imgLogo from '@/assets/logo.png'
+import {useRoute, useRouter} from "vue-router";
+import {EMAIL_REGISTER} from "@/api/api";
 
 export default {
   name: "confirmEmail",
   data() {
     return {
       imgLogo,
+      emailValue:'',
       ruleForm: {
-        email: ''
+        email: '',
+        code:'',
+        password:'',
+        c_password:''
       },
       rules: {
-        email: [
-          {required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+        code: [
+          {required: true, message: 'Please fill out your email code.', trigger: 'blur'}
+        ],
+        password: [
+          {required: true, message: 'Please fill out your password.', trigger: 'blur'}
+        ],
+        c_password: [
+          {required: true, message: 'Please fill out your password again.', trigger: 'blur'}
         ]
       },
       submitLoadingStatus: false
     }
+  },
+  setup(){
+    let router = useRouter()
+    let route = useRoute()
+    const getParams = () =>{
+      console.log(route.query )
+      return route.query;
+    }
+
+    const skipLoginPage = () =>{
+      return router.push(
+          {
+            path:'/login'
+          }
+      )
+    }
+
+    return {
+      getParams,
+      skipLoginPage
+    }
+  },
+  mounted() {
+    let params = this.getParams()
+    this.ruleForm.email = decodeURIComponent(params.email) ;
+
   },
   methods: {
     submitForm(formName) {
@@ -104,7 +148,18 @@ export default {
       this.submitLoadingStatus = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
+          let params = Object.assign({},this.ruleForm)
+          EMAIL_REGISTER(params).then(res=>{
+            console.log(res)
+            if(res.code == 200){
+                // let userInfo = res.message
+              // localStorage.setItem('uid',res.message.id)
+              this.$message.success('Register Success! ')
+              this.skipLoginPage()
+            }
+
+          })
+
           setTimeout(function () {
             self.submitLoadingStatus = false
           }, 2000)

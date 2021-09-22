@@ -18,3 +18,6 @@ export const SEND_EMAIL_CODE = (params) => post('email/sendEmailCode', params)
 export const EMAIL_REGISTER = (params) => post('email/register', params)
 // 使用邮箱登录
 export const EMAIL_LOGIN = (params) => post('email/login',params)
+
+// 获取deals列表
+export const DEALS_LIST = (params) => post('deals/dealsList',params)

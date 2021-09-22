@@ -61,7 +61,10 @@
                 class="demo-ruleForm"
             >
               <el-form-item prop="email">
-                <el-input class="elInput"  placeholder="name@work-email.com" v-model="ruleForm.email"></el-input>
+                <el-input class="elInput" placeholder="name@work-email.com" v-model="ruleForm.email"></el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input placeholder="Enter your password" type="password" v-model="ruleForm.password"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button class="submit-btn" :loading="submitLoadingStatus" @click="submitForm('ruleForm')">
@@ -102,6 +105,8 @@
 
 <script>
 import imgLogo from '@/assets/logo.png'
+import {EMAIL_LOGIN} from "@/api/api";
+import {useRoute, useRouter} from "vue-router";
 
 export default {
   name: "index",
@@ -114,9 +119,33 @@ export default {
       rules: {
         email: [
           {required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+        ],
+        password: [
+          {required: true, message: 'Please enter your password', trigger: 'blur'}
         ]
       },
       submitLoadingStatus: false
+    }
+  },
+  setup(){
+    let router = useRouter()
+    let route = useRoute()
+    const getParams = () =>{
+      console.log(route.query )
+      return route.query;
+    }
+
+    const skipHomePage = () =>{
+      return router.push(
+          {
+            path:'/'
+          }
+      )
+    }
+
+    return {
+      getParams,
+      skipHomePage
     }
   },
   methods: {
@@ -125,10 +154,23 @@ export default {
       this.submitLoadingStatus = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
-          setTimeout(function () {
-            self.submitLoadingStatus = false
-          }, 2000)
+          let params = Object.assign({}, this.ruleForm)
+          EMAIL_LOGIN(params).then(res => {
+            console.log(res)
+            if (res.code == 200) {
+              localStorage.setItem('token', res.message.token)
+              localStorage.setItem('identity', res.message.identity)
+              localStorage.setItem('language', res.message.language)
+              localStorage.setItem('email', res.message.email)
+              setTimeout(function () {
+                self.skipHomePage()
+                self.submitLoadingStatus = false
+              }, 2000)
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+
         } else {
           console.log('error submit!!')
           this.submitLoadingStatus = false
@@ -226,7 +268,7 @@ export default {
   color: #808080;
 }
 
-/deep/ .el-input__inner{
+/deep/ .el-input__inner {
   height: 50px !important;
 }
 </style>
