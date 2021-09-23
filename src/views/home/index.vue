@@ -101,7 +101,7 @@
                     :navigation="true"
                     class="mySwiper">
               <swiper-slide v-for="(item,index) in jobListData" :key="index">
-                <div class="featured-jobs-card">
+                <div class="featured-jobs-card animate__animated  animate__backInUp">
                   <div class="featured-jobs-card-images">
                     <el-image class="featured-jobs-card-image" :src="item.logo" fit="fill"></el-image>
                   </div>
@@ -187,10 +187,10 @@
       </el-row>
 
       <el-row :gutter="0" justify="center" align="middle">
-
         <el-col :xs="24" :sm="24" :md="24" :lg="7" :xl="6">
+
           <template v-if="businessListData[0]">
-            <div class="featured-schools-plus-container"
+            <div class="featured-schools-plus-container "
                  :style="'background-image:url('+businessListData[0]['header_photo'] +')'">
               <div class="featured-schools-plus-content">
                 <div class="featured-schools-plus-content-l">
@@ -356,6 +356,122 @@
 
     </div>
 
+    <!-- meet the team   -->
+    <div class="team-container">
+      <el-row :gutter="0" justify="center" align="middle">
+        <el-col :xs="0" :sm="24" :md="20" :lg="16" :xl="14">
+          <div class="team-label">MEET THE TEAM</div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="0" justify="center" align="middle">
+        <el-col :xs="0" :sm="24" :md="20" :lg="16" :xl="14">
+          <h2>
+            Meet our team of talented an experienced experts who are here to help and
+            support you all the way
+          </h2>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="0" justify="center" align="middle">
+        <el-col :xs="0" :sm="24" :md="24" :lg="16" :xl="14">
+          <div class="team-slider">
+            <swiper :slidesPerView="4" :spaceBetween="30"
+                    :pagination='{"clickable": true}'
+                    :autoplay='{"delay": 2500,"disableOnInteraction": false}'
+                    :navigation="false"
+                    class="myTeamSwiper">
+              <swiper-slide class="team-card">
+                <div class="team-card-avatar-container">
+                  <el-image class="team-card-avatar" :src="teamImgOne"></el-image>
+                </div>
+                <div class="team-card-name">
+                  Kong kong kong
+                </div>
+                <div class="team-card-position">
+                  Sales Excutive
+                </div>
+                <div class="team-social-media">
+                  <div class="team-social-media-item">Facebook</div>
+                  <div class="team-social-media-item">Ins</div>
+                  <div class="team-social-media-item">Twitter</div>
+                  <div class="team-social-media-item">Reddit</div>
+                </div>
+                <div class="team-properties">
+                  6 Listed Properties >
+                </div>
+              </swiper-slide>
+
+              <swiper-slide class="team-card">
+                <div class="team-card-avatar-container">
+                  <el-image class="team-card-avatar" :src="teamImgOne"></el-image>
+                </div>
+                <div class="team-card-name">
+                  Kong kong kong
+                </div>
+                <div class="team-card-position">
+                  Sales Excutive
+                </div>
+                <div class="team-social-media">
+                  <div class="team-social-media-item">Facebook</div>
+                  <div class="team-social-media-item">Ins</div>
+                  <div class="team-social-media-item">Twitter</div>
+                  <div class="team-social-media-item">Reddit</div>
+                </div>
+                <div class="team-properties">
+                  6 Listed Properties >
+                </div>
+              </swiper-slide>
+
+              <swiper-slide class="team-card">
+                <div class="team-card-avatar-container">
+                  <el-image class="team-card-avatar" :src="teamImgOne"></el-image>
+                </div>
+                <div class="team-card-name">
+                  Kong kong kong
+                </div>
+                <div class="team-card-position">
+                  Sales Excutive
+                </div>
+                <div class="team-social-media">
+                  <div class="team-social-media-item">Facebook</div>
+                  <div class="team-social-media-item">Ins</div>
+                  <div class="team-social-media-item">Twitter</div>
+                  <div class="team-social-media-item">Reddit</div>
+                </div>
+                <div class="team-properties">
+                  6 Listed Properties >
+                </div>
+              </swiper-slide>
+
+              <swiper-slide class="team-card">
+                <div class="team-card-avatar-container">
+                  <el-image class="team-card-avatar" :src="teamImgOne"></el-image>
+                </div>
+                <div class="team-card-name">
+                  Kong kong kong
+                </div>
+                <div class="team-card-position">
+                  Sales Excutive
+                </div>
+                <div class="team-social-media">
+                  <div class="team-social-media-item">Facebook</div>
+                  <div class="team-social-media-item">Ins</div>
+                  <div class="team-social-media-item">Twitter</div>
+                  <div class="team-social-media-item">Reddit</div>
+                </div>
+                <div class="team-properties">
+                  6 Listed Properties >
+                </div>
+              </swiper-slide>
+
+            </swiper>
+          </div>
+        </el-col>
+      </el-row>
+
+    </div>
+
+
   </div>
 </template>
 
@@ -363,7 +479,6 @@
 import {JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST} from "@/api/api";
 // Import Swiper Vue.js components
 import {Swiper, SwiperSlide} from 'swiper/vue';
-
 // Import Swiper styles
 import 'swiper/css';
 import "swiper/css/zoom"
@@ -375,6 +490,7 @@ import SwiperCore, {
 } from 'swiper';
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
+import teamImgOne from '@/assets/team/kongboss.png'
 
 export default {
   name: "index",
@@ -384,7 +500,7 @@ export default {
   },
   data() {
     return {
-
+      teamImgOne,
       searchKeywordsValue: '',
       serviceCategoryValue: '',
       categoryOptions: [
@@ -457,6 +573,8 @@ export default {
     this.getDealsList()
   },
   methods: {
+
+
     getJobFeaturedList() {
       let params = {}
 
@@ -630,6 +748,7 @@ export default {
 
 .featured-jobs-bg {
   padding: 20px;
+  background-color: #ffffff;
 }
 
 
@@ -929,7 +1048,6 @@ export default {
 }
 
 .featured-deals-more-btn {
-  /*background-color: #0aa0a8;*/
   font-size: 16px;
   font-weight: bold;
 }
@@ -957,37 +1075,41 @@ export default {
   border-radius: 4px;
 }
 
-.hot-deals-item-bg{
-  background-color: rgba(0,0,0,0.6);
+.hot-deals-item-bg {
+  background-color: rgba(0, 0, 0, 0.6);
   padding: 20px;
   border-radius: 4px;
   cursor: pointer;
 }
-.hot-deals-item-bg:hover{
+
+.hot-deals-item-bg:hover {
   border: 1px solid #eeeeee;
   box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.3);
 }
 
-.hot-deals-item-t{
+.hot-deals-item-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-.hot-deals-item-t-l{
+.hot-deals-item-t-l {
 
 
 }
-.hot-deals-logo{
+
+.hot-deals-logo {
   width: 100px;
   height: 100px;
   border-radius: 50%;
 }
-.hot-deals-item-t-r{
+
+.hot-deals-item-t-r {
   color: #ffffff;
 }
-.hot-deals-item-tag-container{
+
+.hot-deals-item-tag-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -995,7 +1117,7 @@ export default {
   padding: 10px 0;
 }
 
-.hot-deals-item-tag{
+.hot-deals-item-tag {
   background-color: #0AA0A8;
   color: #ffffff;
   padding: 4px 14px;
@@ -1003,20 +1125,21 @@ export default {
 
 }
 
-.hot-deals-item-title{
-  color: #ffffff;
-  font-size: 16px;
-  text-align: left;
-  line-height: 30px;
-}
-.hot-deals-item-name{
+.hot-deals-item-title {
   color: #ffffff;
   font-size: 16px;
   text-align: left;
   line-height: 30px;
 }
 
-.hot-deals-item-b{
+.hot-deals-item-name {
+  color: #ffffff;
+  font-size: 16px;
+  text-align: left;
+  line-height: 30px;
+}
+
+.hot-deals-item-b {
   border-top: 1px solid #eeeeee;
   display: flex;
   flex-direction: row;
@@ -1024,21 +1147,119 @@ export default {
   justify-content: space-between;
 
 }
-.hot-deals-item-b-l{
+
+.hot-deals-item-b-l {
   color: #ffffff;
 }
 
-.hot-deals-item-b-r{
+.hot-deals-item-b-r {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-.hot-deals-item-b-r-item{
+.hot-deals-item-b-r-item {
   color: #ffffff;
   margin: 10px;
 }
+
+.team-container {
+  margin-top: 20px;
+}
+
+.team-label {
+  font-size: 16px;
+  color: #0AA0A8;
+  font-weight: bold;
+}
+
+.team-container h2 {
+  margin-top: 20px;
+}
+
+.team-slider {
+  margin-top: 20px;
+
+}
+
+.myTeamSwiper {
+  height: 340px;
+  padding: 20px;
+}
+
+.team-card {
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.team-card-avatar-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.team-card-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+.team-card-name {
+  font-size: 16px;
+  line-height: 30px;
+}
+
+.team-card-position {
+  font-size: 16px;
+  line-height: 30px;
+}
+
+.team-social-media {
+  opacity: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10px;
+}
+
+.team-social-media-item {
+  margin: 10px;
+}
+
+.team-properties {
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  line-height: 30px;
+  height: 60px;
+}
+
+.team-card:hover {
+  box-shadow: 0 11px 30px 0 rgba(51, 51, 51, .15);
+}
+
+.team-card:nth-child(2):not(:hover) {
+  box-shadow: 0 11px 30px 0 rgba(51, 51, 51, .15);
+}
+
+.team-card:nth-child(2):not(:hover) .team-social-media {
+  opacity: 1;
+}
+
+.team-card:nth-child(2):not(:hover) .team-properties {
+  opacity: 1;
+}
+
+.team-card:hover .team-social-media {
+  opacity: 1;
+}
+
+.team-card:hover .team-properties {
+  opacity: 1;
+}
+
 
 @media screen and (max-width: 768px) {
   .featured-jobs-label {

@@ -10,6 +10,7 @@ import xllZhCN from './language/zh-cn'
 import xllEnUS from './language/en-us'
 import router from "./routes"
 import './assets/css/aliIcon/iconfont.css'
+import 'animate.css'
 
 const messages = {
     en: {
