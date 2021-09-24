@@ -8,6 +8,11 @@ export default {
   name: 'App',
   components: {
 
+  },
+  data(){
+    return {
+
+    }
   }
 }
 </script>
@@ -25,6 +30,7 @@ html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, l
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   background-color: #ffffff;
+
 }
 
 </style>

@@ -1,25 +1,26 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
 
 import ElementPlus from 'element-plus'
 // import 'element-plus/dist/index.css'
 import '../theme/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import { createI18n } from 'vue-i18n'
+import {createI18n} from 'vue-i18n'
 import xllZhCN from './language/zh-cn'
 import xllEnUS from './language/en-us'
 import router from "./routes"
 import './assets/css/aliIcon/iconfont.css'
 import 'animate.css'
+import VTypical from 'vue-typical';
 
 const messages = {
     en: {
-      message: xllEnUS
+        message: xllEnUS
     },
     ch: {
-      message:xllZhCN
+        message: xllZhCN
     }
-  }
+}
 
 
 const i18n = createI18n({
@@ -30,10 +31,13 @@ const i18n = createI18n({
     // ...
 })
 
+
 const app = createApp(App)
 
 app.use(router)
-app.use(ElementPlus, {  locale: zhCn, size: 'small', zIndex: 2000 })
+app.use(ElementPlus, {locale: zhCn, size: 'small', zIndex: 2000})
 app.use(i18n)
-
+app.use(VTypical, {
+    /* options */
+});
 app.mount('#app')

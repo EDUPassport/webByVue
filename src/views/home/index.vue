@@ -1,72 +1,91 @@
 <template>
-  <div>
-    <el-row :gutter="0" align="middle" justify="center">
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-carousel indicator-position="none" height="700px" :interval="6000">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <div class="changemakers-container">
-              <view class="changemakers-btn-bg">
-                <el-button class="changemakers-btn" plain>Education Changemakers</el-button>
-              </view>
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </el-col>
-    </el-row>
+  <div class="home-bg">
 
-    <el-row class="search-container-row" :gutter="0" align="middle" justify="center">
-      <el-col class="search-container-col" :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-        <div class="search-container-bg">
-          <div class="search-container">
-            <div class="search-keywords">
-              <div class="search-keywords-label">SEARCH KEYWORDS</div>
-              <div class="search-keywords-content">
-                <el-input class="search-keywords-input" placeholder="Find something..." v-model="searchKeywordsValue">
-                  <template #append>
-                    <el-button icon="el-icon-search"></el-button>
-                  </template>
-                </el-input>
-              </div>
-            </div>
+    <div class="xll-search-container">
 
-            <div class="service-category">
-              <div class="service-category-label">SERVICE CATEGORY</div>
-              <div class="service-category-content">
-                <el-select v-model="serviceCategoryValue" clearable placeholder="Select">
-                  <el-option
-                      v-for="item in categoryOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </div>
-            </div>
+      <el-row class="xll-find-best-row" :gutter="0" align="middle" justify="center">
 
-            <div class="search-tags">
-              <div class="search-tags-label">TAGS</div>
-              <div class="search-tags-content">
-                <el-select v-model="searchTagsValue" clearable placeholder="Select">
-                  <el-option
-                      v-for="item in tagsOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </div>
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+          <div class="changemakers-container">
+            <div class="changemakers-bg">
+              <h2>Find the best</h2>
+              <v-typical
+                  class="blink"
+                  :steps="['Jobs', 2000, 'Deals', 2000, 'Events', 2000]"
+                  :loop="Infinity"
+                  :wrapper="'h1'"
+              ></v-typical>
             </div>
-
-            <div class="search-btn-container">
-              <el-button class="search-btn" type="primary">Search Now</el-button>
-            </div>
-
           </div>
-        </div>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+
+      <el-row class="xll-search-btn-row" :gutter="0" align="middle" justify="center">
+        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+          <el-button type="primary">Jobs</el-button>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+          <el-button type="primary">Deals</el-button>
+        </el-col>
+      </el-row>
+
+      <el-row class="search-container-row" :gutter="0" align="middle" justify="center">
+        <el-col class="search-container-col" :xs="24" :sm="20" :md="20" :lg="20" :xl="20">
+          <div class="search-container-bg">
+            <div class="search-container">
+              <div class="search-keywords">
+                <div class="search-keywords-label">SEARCH KEYWORDS</div>
+                <div class="search-keywords-content">
+                  <el-input class="search-keywords-input" placeholder="Find something..." v-model="searchKeywordsValue">
+                    <template #append>
+                      <el-button icon="el-icon-search"></el-button>
+                    </template>
+                  </el-input>
+                </div>
+              </div>
+
+              <div class="service-category">
+                <div class="service-category-label">SERVICE CATEGORY</div>
+                <div class="service-category-content">
+                  <el-select v-model="serviceCategoryValue" clearable placeholder="Select">
+                    <el-option
+                        v-for="item in categoryOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+
+              <div class="search-tags">
+                <div class="search-tags-label">TAGS</div>
+                <div class="search-tags-content">
+                  <el-select v-model="searchTagsValue" clearable placeholder="Select">
+                    <el-option
+                        v-for="item in tagsOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+
+              <div class="search-btn-container">
+                <el-button class="search-btn" type="primary">Search Now</el-button>
+              </div>
+
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+
+
+    </div>
+
     <!--  featured jobs -->
     <div class="featured-jobs-bg">
 
@@ -476,6 +495,7 @@
 </template>
 
 <script>
+import teamImgOne from '@/assets/team/kongboss.png'
 import {JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST} from "@/api/api";
 // Import Swiper Vue.js components
 import {Swiper, SwiperSlide} from 'swiper/vue';
@@ -490,13 +510,14 @@ import SwiperCore, {
 } from 'swiper';
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
-import teamImgOne from '@/assets/team/kongboss.png'
+import VTypical from 'vue-typical';
 
 export default {
   name: "index",
   components: {
     Swiper,
     SwiperSlide,
+    VTypical
   },
   data() {
     return {
@@ -550,7 +571,7 @@ export default {
       ],
       jobListData: [],
       businessListData: [],
-      dealsListData: []
+      dealsListData: [],
 
     }
   },
@@ -563,10 +584,11 @@ export default {
     };
     return {
       onSwiper,
-      onSlideChange,
+      onSlideChange
     };
   },
   mounted() {
+
     this.getJobList()
     // this.getJobFeaturedList()
     this.getBusinessList()
@@ -638,48 +660,66 @@ export default {
 
 <style scoped>
 
-.changemakers-container {
-  height: 100%;
-  background: url("../../assets/changemakers.jpg") center no-repeat;
-  background-size: cover;
+.home-bg{
+  background-image: url("~@/assets/bg/bg-h-1.jpg");
+  background-position: top;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.xll-search-container{
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.2);
 }
 
-.changemakers-btn-bg {
+.xll-find-best-row{
+  width: 100%;
+}
+.xll-search-btn-row{
+  width: 100%;
+  margin-top: 40px;
+}
+.changemakers-container {
+  height: 100%;
+}
+
+.changemakers-bg {
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
+.changemakers-bg h2{
+  color: #ffffff;
+  font-size: 36px;
+}
 
-.changemakers-btn {
-  background-color: rgba(255, 255, 255, 0.5);
-  padding: 20px 40px;
-  font-size: 16px;
-  font-weight: bold;
+.changemakers-bg h1{
+  color: #ffffff;
+  margin-left: 10px;
+  text-decoration: underline;
+  font-size: 36px;
 }
 
 .search-container-row {
-  background-color: #eeeeee;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .search-container-col {
-  position: relative;
   height: 100px;
 }
 
 .search-container-bg {
-  width: 90%;
-  background-color: rgba(10, 160, 168, 0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   padding: 10px;
   border-radius: 10px;
-  position: absolute;
-  top: -50px;
-  left: 0;
-  right: 0;
-  margin: auto;
 }
 
 .search-container {
@@ -842,6 +882,11 @@ export default {
   padding: 10px 20px;
   border-top: 1px solid #eeeeee;
 
+}
+
+.featured-schools-container{
+  background-color: #eeeeee;
+  padding: 20px 0;
 }
 
 .featured-schools-label {
@@ -1025,8 +1070,8 @@ export default {
 }
 
 .featured-deals-bg {
-  padding: 20px;
-  margin-top: 20px;
+  padding: 20px 0;
+  background-color: #ffffff;
 }
 
 
@@ -1165,7 +1210,8 @@ export default {
 }
 
 .team-container {
-  margin-top: 20px;
+  padding: 20px 0;
+  background-color: #eeeeee;
 }
 
 .team-label {
@@ -1192,6 +1238,7 @@ export default {
   border-radius: 10px;
   cursor: pointer;
   overflow: hidden;
+  background-color: #ffffff;
 }
 
 .team-card-avatar-container {
