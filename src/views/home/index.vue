@@ -661,7 +661,7 @@ export default {
 <style scoped>
 
 .home-bg{
-  background-image: url("~@/assets/bg/bg-h-1.jpg");
+  background-image: url("~@/assets/bg/bg-15.jpg");
   background-position: top;
   background-size: 100%;
   background-repeat: no-repeat;
