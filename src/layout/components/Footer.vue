@@ -1,8 +1,9 @@
 <template>
   <div>
+    <el-backtop/>
     <el-footer height="auto" class="footer-bg">
-      <el-row  :gutter="0" align="middle" justify="center">
-        <el-col  :xs="24" :sm="24" :md="24" :lg="6" :xl="4">
+      <el-row :gutter="0" align="middle" justify="center">
+        <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="4">
           <div class="esl-logo-container">
             <el-image class="esl-logo" :src="imgLogo"></el-image>
           </div>
@@ -39,7 +40,7 @@
             Industry News
           </div>
         </el-col>
-        <el-col  :xs="24" :sm="24" :md="24" :lg="6" :xl="4">
+        <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="4">
           <div class="quick-links">
             Quick links
           </div>
@@ -64,23 +65,19 @@
             Lorem ipsum dolor sit amet, consecte tur cing elit. Suspe ndisse suscipit sagittis
           </div>
           <div class="sign-up-form">
-            <el-form
-                :model="ruleForm"
-                :rules="rules"
-                ref="ruleForm"
-                label-width="100px"
-                label-position="top"
-                class="demo-ruleForm"
-            >
-              <el-form-item label="Enter your work email address" prop="email">
-                <el-input placeholder="name@work-email.com" v-model="ruleForm.email"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button class="submit-btn" :loading="submitLoadingStatus" @click="submitForm('ruleForm')">
-                  Subscribe
-                </el-button>
-              </el-form-item>
-            </el-form>
+
+            <div class="subscribe-container">
+              <el-input
+                  v-model="subscribeEmail"
+                  placeholder="Email"
+                  class="subscribe-input"
+              >
+                <template #append>
+                  <el-button class="subscribe-btn" @click="subscribe()">Subscribe</el-button>
+                </template>
+              </el-input>
+            </div>
+
             <div class="social-media">
               <div class="social-media-item">
                 Twitter
@@ -99,13 +96,13 @@
         </el-col>
       </el-row>
       <el-row class="footer-b" :gutter="0" align="middle" justify="center">
-        <el-col   :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
           <div class="footer-b-l">
             <div class="footer-b-l-item">Terms of Use</div>
-            <div class="footer-b-l-item">Privacy Policy</div>
+            <div class="footer-b-l-item footer-b-l-item-margin">Privacy Policy</div>
           </div>
         </el-col>
-        <el-col  :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
 
         </el-col>
       </el-row>
@@ -121,6 +118,7 @@ export default {
   data() {
     return {
       imgLogo,
+      subscribeEmail: '',
       ruleForm: {
         email: ''
       },
@@ -139,119 +137,126 @@ export default {
 <style scoped>
 
 .footer-bg {
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   color: #ffffff;
   text-align: left;
   padding: 20px 40px;
 }
 
-.esl-logo{
+.esl-logo {
   width: 120px;
   height: 120px;
 }
-.esl-address{
-  line-height: 30px;
-  font-size: 16px;
-}
-.esl-email{
+
+.esl-address {
   line-height: 30px;
   font-size: 16px;
 }
 
-.esl-phone{
-  line-height: 30px;
-  font-size: 16px;
-}
-.esl-url{
+.esl-email {
   line-height: 30px;
   font-size: 16px;
 }
 
-.popular-searches{
+.esl-phone {
+  line-height: 30px;
+  font-size: 16px;
+}
+
+.esl-url {
+  line-height: 30px;
+  font-size: 16px;
+}
+
+.popular-searches {
   font-weight: bold;
   font-size: 18px;
   line-height: 40px;
 
 }
 
-.esl-jobs{
+.esl-jobs {
   line-height: 30px;
   font-size: 16px;
 }
 
-.esl-deals{
-  line-height: 30px;
-  font-size: 16px;
-}
-.esl-events{
+.esl-deals {
   line-height: 30px;
   font-size: 16px;
 }
 
-.esl-business-list{
+.esl-events {
   line-height: 30px;
   font-size: 16px;
 }
 
-.esl-industry-news{
+.esl-business-list {
   line-height: 30px;
   font-size: 16px;
 }
 
-.quick-links{
+.esl-industry-news {
+  line-height: 30px;
+  font-size: 16px;
+}
+
+.quick-links {
   font-weight: bold;
   font-size: 18px;
   line-height: 40px;
 
 }
 
-.terms-of-use{
+.terms-of-use {
   line-height: 30px;
   font-size: 16px;
 }
 
-.privacy{
-  line-height: 30px;
-  font-size: 16px;
-}
-.contact-support{
+.privacy {
   line-height: 30px;
   font-size: 16px;
 }
 
-.careers{
+.contact-support {
   line-height: 30px;
   font-size: 16px;
 }
 
-.sign-up{
+.careers {
+  line-height: 30px;
+  font-size: 16px;
+}
+
+.sign-up {
   font-weight: bold;
   font-size: 18px;
   line-height: 40px;
 }
-.sign-up-tips{
+
+.sign-up-tips {
   line-height: 30px;
   font-size: 16px;
 }
 
-.sign-up-form{
+.sign-up-form {
 
 }
 
-.social-media{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content:flex-start;
+.subscribe-container {
+  margin-top: 20px;
+}
+
+
+.subscribe-input {
 
 }
-.social-media-item{
-  margin: 10px;
+
+.subscribe-btn {
+  background-color: #0AA0A8 !important;
+  color: #ffffff !important;
 }
-.footer-b{
-  text-align: left;
-}
-.footer-b-l{
+
+.social-media {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -259,10 +264,27 @@ export default {
 
 }
 
-.footer-b-l-item{
+.social-media-item {
   margin: 10px;
+}
+
+.footer-b {
+  text-align: left;
+}
+
+.footer-b-l {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.footer-b-l-item {
   line-height: 30px;
   font-size: 16px;
 }
 
+.footer-b-l-item-margin {
+  margin-left: 20px;
+}
 </style>

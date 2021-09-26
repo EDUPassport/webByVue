@@ -6,6 +6,41 @@
   "description": "element ui",
   "glyphs": [
     {
+      "icon_id": "24609277",
+      "name": "爱心",
+      "font_class": "xll-heart-filled",
+      "unicode": "ea0d",
+      "unicode_decimal": 59917
+    },
+    {
+      "icon_id": "18184628",
+      "name": "爱心",
+      "font_class": "xll-heart",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "1727450",
+      "name": "217时间",
+      "font_class": "shijian",
+      "unicode": "e8c5",
+      "unicode_decimal": 59589
+    },
+    {
+      "icon_id": "3893248",
+      "name": "工作经验",
+      "font_class": "gongzuojingyan",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "11754555",
+      "name": "男女",
+      "font_class": "male-female",
+      "unicode": "e6e9",
+      "unicode_decimal": 59113
+    },
+    {
       "icon_id": "11983544",
       "name": "google",
       "font_class": "google",

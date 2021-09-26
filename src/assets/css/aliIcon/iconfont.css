@@ -2,9 +2,9 @@
   font-family: "iconfont"; /* Project id 2814433 */
   /* Color fonts */
   src: 
-       url('iconfont.woff2?t=1631687694864') format('woff2'),
-       url('iconfont.woff?t=1631687694864') format('woff'),
-       url('iconfont.ttf?t=1631687694864') format('truetype');
+       url('iconfont.woff2?t=1632635788993') format('woff2'),
+       url('iconfont.woff?t=1632635788993') format('woff'),
+       url('iconfont.ttf?t=1632635788993') format('truetype');
 }
 
 .iconfont {
@@ -13,6 +13,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-alixll-heart-filled:before {
+  content: "\ea0d";
+}
+
+.el-icon-alixll-heart:before {
+  content: "\e646";
+}
+
+.el-icon-alishijian:before {
+  content: "\e8c5";
+}
+
+.el-icon-aligongzuojingyan:before {
+  content: "\e60f";
+}
+
+.el-icon-alimale-female:before {
+  content: "\e6e9";
 }
 
 .el-icon-aligoogle:before {

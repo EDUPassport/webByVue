@@ -11,8 +11,9 @@ import xllEnUS from './language/en-us'
 import router from "./routes"
 import './assets/css/aliIcon/iconfont.css'
 import 'animate.css'
-import VTypical from 'vue-typical';
+import VTypical from 'vue-typical'
 
+import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold } from '@element-plus/icons'
 const messages = {
     en: {
         message: xllEnUS
@@ -33,7 +34,10 @@ const i18n = createI18n({
 
 
 const app = createApp(App)
-
+app.component('LocationFilled',LocationFilled )
+app.component('Stopwatch',Stopwatch )
+app.component('Calendar',Calendar )
+app.component('ArrowRightBold',ArrowRightBold )
 app.use(router)
 app.use(ElementPlus, {locale: zhCn, size: 'small', zIndex: 2000})
 app.use(i18n)
