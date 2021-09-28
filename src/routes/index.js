@@ -1,6 +1,6 @@
 import layout from '../layout/index'
 
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 
 const routes = [
     {
@@ -8,11 +8,7 @@ const routes = [
         component: layout,
         redirect: '/home',
         meta: {
-            title:{
-                '/zh-CN': '首页',
-                '/en-US': 'Home Page'
-            },
-            icon: 'el-icon-s-home',
+            title: 'Home'
         },
         children: [
             {
@@ -20,81 +16,55 @@ const routes = [
                 name: 'home',
                 component: () => import('@/views/home/index.vue'),
                 meta: {
-                    title:{
-                        '/zh-CN': '首页',
-                        '/en-US': 'Home Page'
-                    },
-                    icon: 'home',
+                    title: 'Home'
                 },
+            },
+            {
+                path: '/jobs',
+                name: 'jobs',
+                component: () => import('@/views/jobs/list'),
+                meta: {
+                    title: 'Jobs Lists'
+                }
             },
         ],
     },
     {
         path: '/login',
-        name: '登录',
+        name: 'login',
         component: () => import('@/views/login/index.vue'),
         meta: {
-            title:{
-                '/zh-CN': '登录',
-                '/en-US': 'Login'
-            },
-            hidden: true,
-            hiddenTab: true,
+            title: 'Login'
         },
     },
-    {
-        path: '/register',
-        name: '注册',
-        component: () => import('@/views/register/index.vue'),
-        meta: {
-            title:{
-                '/zh-CN': '注册',
-                '/en-US': 'Register'
-            },
-            hidden: true,
-            hiddenTab: true,
-        },
-    },
-    {
-        path: '/confirmemail',
-        name: 'Confirm Email',
-        component: () => import('@/views/register/email/confirmEmail'),
-        meta: {
-            title:{
-                '/zh-CN': '注册',
-                '/en-US': 'Register'
-            },
-            hidden: true,
-            hiddenTab: true,
-        },
-    },
+
     {
         path: '/noFound',
-        name: 'NoFound',
+        name: 'noFound',
         component: () => import(/* webpackChunkName: "noFound" */ '@/views/noFound.vue'),
         meta: {
-            title:{
-                '/zh-CN': '404',
-                '/en-US': '404'
-            },
-            hidden: true,
-            hiddenTab: true,
+            title: 'NOT FOUND'
         },
     },
-    { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import(/* webpackChunkName: "noFound" */ '@/views/noFound.vue'),
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'noFound',
+        component: () => import(/* webpackChunkName: "noFound" */ '@/views/noFound.vue'),
         meta: {
-            title:{
-                '/zh-CN': '未找到',
-                '/en-US': 'NOT FOUND'
-            },
-            hidden: true,
-            hiddenTab: true,
-        }, },
-  ]
+            title: 'NOT FOUND'
+        },
+    },
+]
 
 const router = createRouter({
     history: createWebHistory(),
     routes: routes,
 })
+
+const defaultTitle = 'Home';
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title ? to.meta.title : defaultTitle;
+    next();
+});
 
 export default router;

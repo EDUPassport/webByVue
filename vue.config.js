@@ -15,6 +15,18 @@ module.exports = {
                     type: 'javascript/auto'
                 }
             ]
+        },
+        devServer:{
+            proxy:{
+                '/hcaptcha':{
+                    target:'https://hcaptcha.com',
+                    ws:true,
+                    changeOrigin:true,
+                    pathRewrite:{
+                        '^/hcaptcha':'/'
+                    }
+                }
+            }
         }
     }
 }

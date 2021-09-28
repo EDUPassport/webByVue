@@ -6,6 +6,62 @@
   "description": "element ui",
   "glyphs": [
     {
+      "icon_id": "1231051",
+      "name": "facebook",
+      "font_class": "facebook",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "1758589",
+      "name": "验证码",
+      "font_class": "yanzhengma",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "4503696",
+      "name": "password",
+      "font_class": "password",
+      "unicode": "e6d8",
+      "unicode_decimal": 59096
+    },
+    {
+      "icon_id": "8620352",
+      "name": "验证码",
+      "font_class": "yanzhengma1",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "11488038",
+      "name": "email",
+      "font_class": "email",
+      "unicode": "e74f",
+      "unicode_decimal": 59215
+    },
+    {
+      "icon_id": "11488253",
+      "name": "email-fill",
+      "font_class": "email-fill",
+      "unicode": "e77e",
+      "unicode_decimal": 59262
+    },
+    {
+      "icon_id": "20113787",
+      "name": "bxs-user",
+      "font_class": "lastname",
+      "unicode": "e6e8",
+      "unicode_decimal": 59112
+    },
+    {
+      "icon_id": "21513684",
+      "name": "user",
+      "font_class": "firstname",
+      "unicode": "e6cf",
+      "unicode_decimal": 59087
+    },
+    {
       "icon_id": "24609277",
       "name": "爱心",
       "font_class": "xll-heart-filled",

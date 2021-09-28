@@ -1,8 +1,9 @@
 // 一、配置axios
 import axios from 'axios'
-
+import {ElMessage} from "element-plus";
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
+//https://api.test.esl-passport.cn/api/
 let baseUrl = process.env.NODE_ENV === 'development' ? 'https://api.test.esl-passport.cn/api/' : 'https://api.esl-passport.cn/api/'
 // axios配置
 axios.defaults.baseURL = baseUrl
@@ -36,7 +37,13 @@ axios.interceptors.response.use(response => {
             if (error.response.status == 401) {
                 return window.location.href = '/login'
             } else {
-                return Promise.reject(error);
+                let errResponse = error.response;
+
+                return  ElMessage({
+                    message: errResponse.data.msg,
+                    type: 'error'
+                })
+                // return Promise.reject(error.response);
             }
         }
         // 对响应错误做点什么

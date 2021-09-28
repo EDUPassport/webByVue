@@ -21,18 +21,28 @@
       </el-row>
 
       <el-row class="xll-search-btn-row" :gutter="0" align="middle" justify="center">
-        <el-col class="xll-search-jobs-btn-container" :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <el-button class="xll-search-jobs-btn" type="primary">Jobs</el-button>
-          <div class="xll-search-btn-sj"></div>
+        <el-col class="xll-search-jobs-btn-container" :xs="6" :sm="6" :md="4" :lg="3" :xl="2">
+          <div class="xll-search-jobs-btn"
+               :class="searchCategoryValue == 1 ? 'xll-search-jobs-btn-active' : ''"
+               @click="chooseSearchCategory(1)">
+            Jobs
+          </div>
+          <div class="xll-search-btn-sj"
+               :class="searchCategoryValue == 1 ? 'xll-search-btn-sj-active' : ''"></div>
         </el-col>
-        <el-col class="xll-search-deals-btn-container" :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <el-button class="xll-search-deals-btn" type="primary">Deals</el-button>
-          <div class="xll-search-btn-sj"></div>
+        <el-col class="xll-search-deals-btn-container" :xs="6" :sm="6" :md="4" :lg="3" :xl="2">
+          <div class="xll-search-deals-btn"
+               :class="searchCategoryValue == 2 ? 'xll-search-deals-btn-active' : ''"
+               @click="chooseSearchCategory(2)">
+            Deals
+          </div>
+          <div class="xll-search-btn-sj"
+               :class="searchCategoryValue == 2 ? 'xll-search-btn-sj-active' : ''"></div>
         </el-col>
       </el-row>
 
       <el-row class="search-container-row" :gutter="0" align="middle" justify="center">
-        <el-col class="search-container-col" :xs="24" :sm="20" :md="20" :lg="20" :xl="20">
+        <el-col class="search-container-col" :xs="22" :sm="22" :md="22" :lg="18" :xl="15">
           <div class="search-container-bg">
 
             <div class="search-container">
@@ -105,7 +115,7 @@
                     :autoplay='{"delay": 2500,"disableOnInteraction": false}'
                     :navigation="false"
                     class="mySwiper">
-              <swiper-slide v-for="(item,index) in jobListData" :key="index">
+              <swiper-slide v-for="(item,index) in jobFeaturedListData" :key="index">
                 <!--                animate__animated  animate__backInUp-->
                 <div class="featured-jobs-card ">
                   <div class="featured-jobs-card-images">
@@ -123,16 +133,19 @@
                     <view class="featured-jobs-tags-l">
                       <view class="featured-jobs-work-type">
                         <i class="iconfont el-icon-alishijian"></i>
-                        PT
+                        <template v-if="item.employment_type==1">FT</template>
+                        <template v-if="item.employment_type==2">PT</template>
+                        <template v-if="item.employment_type==3">S</template>
                       </view>
-                      <view class="featured-jobs-gender">
+                      <view class="featured-jobs-gender" v-if="item.sex == 1 || item.sex == 2">
                         <i class="iconfont el-icon-alimale-female"></i>
-                        Male
+                        <template v-if="item.sex == 1">Male</template>
+                        <template v-if="item.sex == 2">Female</template>
                       </view>
-                      <view class="featured-jobs-work-exp">
-                        <i class="iconfont el-icon-aligongzuojingyan"></i>
-                        1-2 yrs
-                      </view>
+<!--                      <view class="featured-jobs-work-exp">-->
+<!--                        <i class="iconfont el-icon-aligongzuojingyan"></i>-->
+<!--                        1-2 yrs-->
+<!--                      </view>-->
                     </view>
                     <view class="featured-jobs-salary">
                       {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
@@ -141,13 +154,15 @@
                   </div>
                   <div class="featured-jobs-b">
                     <div class="featured-jobs-b-l">
-                      <el-button class="featured-jobs-apply-btn">Quick Apply</el-button>
+                      <el-button class="featured-jobs-apply-btn" type="default"
+                      @click="applyJob()"
+                      >Quick Apply</el-button>
                     </div>
                     <div class="featured-jobs-b-r">
                       <el-icon>
                         <Calendar/>
-                      </el-icon>
-                      25 days ago
+                      </el-icon> &nbsp;
+                      {{ $filters.howLongFormat(item.c_time) }}
                     </div>
 
                   </div>
@@ -163,7 +178,7 @@
       <el-row :gutter="0" justify="center" align="middle">
         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
           <div class="featured-jobs-more">
-            <el-button class="featured-jobs-more-btn" type="primary">
+            <el-button class="featured-jobs-more-btn" type="primary" @click="turnJobsList()">
               View All
               <el-icon>
                 <ArrowRightBold/>
@@ -198,7 +213,7 @@
                  :style="'background-image:url('+businessListData[0]['header_photo'] +')'">
               <div class="featured-schools-plus-content">
                 <div class="featured-schools-plus-content-l">
-                  <div class="featured-schools-plus-address">
+                  <div class="featured-schools-plus-address" v-if="businessListData[0].provinces">
                     {{ businessListData[0].provinces.Pinyin }} {{ businessListData[0].citys.Pinyin }}
                     {{ businessListData[0].districts.Pinyin }}
                   </div>
@@ -222,10 +237,11 @@
             <div class="featured-schools-pro-container">
               <div class="featured-schools-pro-l"
                    :style="'background-image:url('+businessListData[1]['logo'] +')'"
-              ></div>
+              >
+              </div>
               <div class="featured-schools-pro-r">
                 <div class="featured-schools-pro-r-l">
-                  <div class="featured-schools-pro-address">
+                  <div class="featured-schools-pro-address" v-if="businessListData[0].provinces">
                     {{ businessListData[1].provinces.Pinyin }} {{ businessListData[1].citys.Pinyin }}
                     {{ businessListData[1].districts.Pinyin }}
                   </div>
@@ -247,7 +263,7 @@
               ></div>
               <div class="featured-schools-pro-r">
                 <div class="featured-schools-pro-r-l">
-                  <div class="featured-schools-pro-address">
+                  <div class="featured-schools-pro-address" v-if="businessListData[0].provinces">
                     {{ businessListData[2].provinces.Pinyin }} {{ businessListData[2].citys.Pinyin }}
                     {{ businessListData[2].districts.Pinyin }}
                   </div>
@@ -446,30 +462,22 @@
           <div class="industry-articles-label">Articles</div>
           <div class="industry-news-label">Industry News</div>
           <div class="industry-news-link-container">
-            <view class="industry-news-link">
-              Chinese industry change
-            </view>
-            <view class="industry-news-link">
-              Chinese industry change
-            </view>
-            <view class="industry-news-link">
-              Chinese industry change
-            </view>
-            <view class="industry-news-link">
-              Chinese industry change
-            </view>
-            <view class="industry-news-link">
-              Chinese industry change
-            </view>
-            <view class="industry-news-link">
-              Chinese industry change
-            </view>
+            <template v-for="(item,index) in articleListData" :key="index">
+              <el-link class="industry-news-link"
+                       :href="item.link" target="_blank" :underline="false">{{ item.title }}
+              </el-link>
+            </template>
+          </div>
+          <div class="industry-news-readmore">
+            <el-button type="primary">Read More ></el-button>
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="6" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
-          <div class="industry-item">
+        <el-col :xs="24" :sm="24" :md="6" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}"
+                v-for="(item,index) in articleListLimitData" :key="index"
+        >
+          <div class="industry-item" v-if="index<2">
             <div class="industry-item-t">
-              <el-image class="industry-item-t-img" :src="teamImgOne"></el-image>
+              <el-image class="industry-item-t-img" :src="item.url" fit="cover"></el-image>
               <div class="industry-item-article-tag">ARTICLE</div>
             </div>
             <div class="industry-item-m">
@@ -477,59 +485,22 @@
               <div class="industry-item-tag">Policy</div>
             </div>
             <div class="industry-item-title">
-              Thailand To Raise Taxes On All Baozi Purchases
+              <el-link class="industry-item-title-link"
+                       :href="item.link" target="_blank" :underline="false">{{ item.title }}
+              </el-link>
             </div>
             <div class="industry-item-intro">
-              Thailand To Raise Taxes On All Baozi Purchases Thailand To Raise Taxes On All Baozi Purchases
-              Thailand To Raise Taxes On All Baozi Purchases Thailand To Raise Taxes On All Baozi Purchases
-              Thailand To Raise Taxes On All Baozi Purchases Thailand To Raise Taxes On All Baozi Purchases
-            </div>
-            <div class="industry-item-readmore">
-              <el-button>Read More ></el-button>
-            </div>
-            <div class="industry-item-b">
-              <div class="industry-item-date">
-                April 4 , 2020
-              </div>
-              <div class="industry-item-b-r">
-                <div class="industry-item-comment">评论：20</div>
-                <div class="industry-item-like">点赞：20</div>
-                <div class="industry-item-share">分享：20</div>
-              </div>
+              {{item.desc}}
             </div>
 
-          </div>
-
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="6" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
-          <div class="industry-item">
-            <div class="industry-item-t">
-              <el-image class="industry-item-t-img" :src="teamImgOne"></el-image>
-              <div class="industry-item-article-tag">ARTICLE</div>
-            </div>
-            <div class="industry-item-m">
-              <div class="industry-item-author">By Sara</div>
-              <div class="industry-item-tag">Policy</div>
-            </div>
-            <div class="industry-item-title">
-              Thailand To Raise Taxes On All Baozi Purchases
-            </div>
-            <div class="industry-item-intro">
-              Thailand To Raise Taxes On All Baozi Purchases Thailand To Raise Taxes On All Baozi Purchases
-              Thailand To Raise Taxes On All Baozi Purchases Thailand To Raise Taxes On All Baozi Purchases
-              Thailand To Raise Taxes On All Baozi Purchases Thailand To Raise Taxes On All Baozi Purchases
-            </div>
-            <div class="industry-item-readmore">
-              <el-button>Read More ></el-button>
-            </div>
             <div class="industry-item-b">
               <div class="industry-item-date">
-                April 4 , 2020
+                {{ $filters.newsDateFormat(item.u_time) }}
               </div>
               <div class="industry-item-b-r">
-                <div class="industry-item-comment">评论：20</div>
-                <div class="industry-item-like">点赞：20</div>
-                <div class="industry-item-share">分享：20</div>
+                <!--                <div class="industry-item-comment">评论：20</div>-->
+                <!--                <div class="industry-item-like">点赞：20</div>-->
+                <!--                <div class="industry-item-share">分享：20</div>-->
               </div>
             </div>
 
@@ -542,119 +513,7 @@
 
 
     <!-- meet the team   -->
-    <div class="team-container">
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="0" :sm="24" :md="20" :lg="16" :xl="14">
-          <div class="team-label">MEET THE TEAM</div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="0" :sm="24" :md="20" :lg="16" :xl="14">
-          <h2>
-            Meet our team of talented an experienced experts who are here to help and
-            support you all the way
-          </h2>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="0" :sm="24" :md="24" :lg="16" :xl="14">
-          <div class="team-slider">
-            <swiper :slidesPerView="4" :spaceBetween="30"
-                    :pagination='{"clickable": true}'
-                    :autoplay='{"delay": 2500,"disableOnInteraction": false}'
-                    :navigation="false"
-                    class="myTeamSwiper">
-              <swiper-slide class="team-card">
-                <div class="team-card-avatar-container">
-                  <el-image class="team-card-avatar" :src="teamImgOne"></el-image>
-                </div>
-                <div class="team-card-name">
-                  Kong kong kong
-                </div>
-                <div class="team-card-position">
-                  Sales Excutive
-                </div>
-                <div class="team-social-media">
-                  <div class="team-social-media-item">Facebook</div>
-                  <div class="team-social-media-item">Ins</div>
-                  <div class="team-social-media-item">Twitter</div>
-                  <div class="team-social-media-item">Reddit</div>
-                </div>
-                <div class="team-properties">
-                  6 Listed Properties >
-                </div>
-              </swiper-slide>
-
-              <swiper-slide class="team-card">
-                <div class="team-card-avatar-container">
-                  <el-image class="team-card-avatar" :src="teamImgOne"></el-image>
-                </div>
-                <div class="team-card-name">
-                  Kong kong kong
-                </div>
-                <div class="team-card-position">
-                  Sales Excutive
-                </div>
-                <div class="team-social-media">
-                  <div class="team-social-media-item">Facebook</div>
-                  <div class="team-social-media-item">Ins</div>
-                  <div class="team-social-media-item">Twitter</div>
-                  <div class="team-social-media-item">Reddit</div>
-                </div>
-                <div class="team-properties">
-                  6 Listed Properties >
-                </div>
-              </swiper-slide>
-
-              <swiper-slide class="team-card">
-                <div class="team-card-avatar-container">
-                  <el-image class="team-card-avatar" :src="teamImgOne"></el-image>
-                </div>
-                <div class="team-card-name">
-                  Kong kong kong
-                </div>
-                <div class="team-card-position">
-                  Sales Excutive
-                </div>
-                <div class="team-social-media">
-                  <div class="team-social-media-item">Facebook</div>
-                  <div class="team-social-media-item">Ins</div>
-                  <div class="team-social-media-item">Twitter</div>
-                  <div class="team-social-media-item">Reddit</div>
-                </div>
-                <div class="team-properties">
-                  6 Listed Properties >
-                </div>
-              </swiper-slide>
-
-              <swiper-slide class="team-card">
-                <div class="team-card-avatar-container">
-                  <el-image class="team-card-avatar" :src="teamImgOne"></el-image>
-                </div>
-                <div class="team-card-name">
-                  Kong kong kong
-                </div>
-                <div class="team-card-position">
-                  Sales Excutive
-                </div>
-                <div class="team-social-media">
-                  <div class="team-social-media-item">Facebook</div>
-                  <div class="team-social-media-item">Ins</div>
-                  <div class="team-social-media-item">Twitter</div>
-                  <div class="team-social-media-item">Reddit</div>
-                </div>
-                <div class="team-properties">
-                  6 Listed Properties >
-                </div>
-              </swiper-slide>
-
-            </swiper>
-          </div>
-        </el-col>
-      </el-row>
-
-    </div>
+    <!--    <TeamComponent></TeamComponent>-->
 
     <!-- vendor six logos    -->
     <div class="vendor-logos-container">
@@ -714,6 +573,7 @@
 </template>
 
 <script>
+// import TeamComponent from '@/layout/components/Team'
 import imgLogo from '@/assets/logo.png'
 import teamImgOne from '@/assets/team/kongboss.png'
 import {JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST} from "@/api/api";
@@ -731,6 +591,9 @@ import SwiperCore, {
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 import VTypical from 'vue-typical';
+import {ADS_LIST} from "@/api/api";
+import { useRouter} from "vue-router";
+
 
 export default {
   name: "index",
@@ -743,6 +606,7 @@ export default {
     return {
       teamImgOne,
       imgLogo,
+      searchCategoryValue: 1,
       subscribeEmail: '',
       searchKeywordsValue: '',
       serviceCategoryValue: '',
@@ -791,46 +655,64 @@ export default {
           label: '北京烤鸭',
         },
       ],
-      jobListData: [],
+      jobFeaturedListData: [],
       businessListData: [],
       dealsListData: [],
+      articleListData: [],
+      articleListLimitData: []
 
     }
   },
   setup() {
+    let router = useRouter()
+    // let route = useRoute()
+
     const onSwiper = (swiper) => {
       console.log(swiper);
     };
     const onSlideChange = () => {
       console.log('slide change');
     };
+    // const getParams = () =>{
+    //   console.log(route.params)
+    // }
+    const skipJobsList = (query)=>{
+      router.push({
+        path:'/jobs',
+        query:query
+      })
+    }
     return {
       onSwiper,
-      onSlideChange
+      onSlideChange,
+      skipJobsList
     };
   },
   mounted() {
-
-    this.getJobList()
-    // this.getJobFeaturedList()
+    this.getJobFeaturedList()
     this.getBusinessList()
     this.getDealsList()
+    this.getAdsList()
   },
   methods: {
-
-
+    applyJob(){
+      console.log('apply job')
+    },
+    chooseSearchCategory(value) {
+      this.searchCategoryValue = value
+    },
     getJobFeaturedList() {
-      let params = {}
+      let params = {
+        ad_type:1
+      }
 
       JOB_FEATURED_LIST(params).then(res => {
         console.log(res)
         if (res.code === 200) {
-          this.jobListData = res.message.data;
+          this.jobFeaturedListData = res.message;
         } else {
           console.log(res.msg)
         }
-      }).catch(err => {
-        console.log(err.response)
       })
 
     },
@@ -874,8 +756,47 @@ export default {
         console.log(err.response)
       })
     },
+    getAdsList() {
+      let identity = localStorage.getItem('identity')
+
+      let params = {
+        page: 1,
+        limit: 10000
+      }
+      ADS_LIST(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          let adsData = res.message;
+          // console.log(adsData);
+
+          let adsDataNews = [];
+
+          if (identity == 0 || !identity) {
+            adsDataNews = adsData.filter(item => item.name == 'guest_industry_news');
+          }
+          if (identity == 1) {
+            adsDataNews = adsData.filter(item => item.name == 'educator_industry_news');
+          }
+          if (identity == 2) {
+            adsDataNews = adsData.filter(item => item.name == 'business_industry_news');
+          }
+          if (identity == 3) {
+            adsDataNews = adsData.filter(item => item.name == 'vendor_industry_news');
+          }
+          let articleListData = adsDataNews[0].data;
+          this.articleListData = articleListData;
+          this.articleListLimitData = articleListData.slice(0, 2)
+
+
+        }
+      })
+
+    },
     subscribe() {
       console.log('subscribe')
+    },
+    turnJobsList(){
+        this.skipJobsList()
     }
 
   }
@@ -884,6 +805,9 @@ export default {
 </script>
 
 <style scoped>
+/deep/ .swiper-pagination-bullet-active {
+  background-color: #0AA0A8;
+}
 
 .home-bg {
   background-image: url("~@/assets/bg/bg-15.jpg");
@@ -926,18 +850,30 @@ export default {
 }
 
 .xll-search-jobs-btn {
-
+  background-color: #ffffff;
   font-size: 16px;
-  line-height: 30px;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding: 14px 40px;
+  cursor: pointer;
+  border-radius: 6px;
+
+}
+
+.xll-search-jobs-btn-active {
+  background-color: #0AA0A8;
+  color: #ffffff;
 }
 
 .xll-search-deals-btn {
-  padding-left: 40px;
-  padding-right: 40px;
+  background-color: #ffffff;
   font-size: 16px;
-  line-height: 30px;
+  padding: 14px 40px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.xll-search-deals-btn-active {
+  background-color: #0AA0A8;
+  color: #ffffff;
 }
 
 .xll-search-btn-sj {
@@ -945,6 +881,10 @@ export default {
   height: 0;
   border-style: solid;
   border-width: 10px 10px 0 10px;
+  border-color: transparent transparent transparent transparent;
+}
+
+.xll-search-btn-sj-active {
   border-color: #0AA0A8 transparent transparent transparent;
 }
 
@@ -1129,11 +1069,13 @@ export default {
 .featured-jobs-gender {
   font-size: 14px;
   color: #808080;
+  margin-left: 4px;
 }
 
 .featured-jobs-work-exp {
   font-size: 14px;
   color: #808080;
+  margin-left: 4px;
 }
 
 .featured-jobs-salary {
@@ -1361,7 +1303,7 @@ export default {
 
 .hot-deals-item {
   width: 30%;
-  margin-top: 10px;
+  margin-top: 20px;
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid #808080;
@@ -1490,103 +1432,6 @@ export default {
   color: #00b3d2;
 }
 
-.team-container {
-  padding: 20px 0;
-  background-color: #f5f6f7;
-}
-
-.team-label {
-  font-size: 16px;
-  color: #0AA0A8;
-  font-weight: bold;
-}
-
-.team-container h2 {
-  margin-top: 20px;
-}
-
-.team-slider {
-  margin-top: 20px;
-
-}
-
-.myTeamSwiper {
-  height: 340px;
-  padding: 20px;
-}
-
-.team-card {
-  border-radius: 10px;
-  cursor: pointer;
-  overflow: hidden;
-  background-color: #ffffff;
-}
-
-.team-card-avatar-container {
-  text-align: center;
-  padding: 20px;
-}
-
-.team-card-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-}
-
-.team-card-name {
-  font-size: 16px;
-  line-height: 30px;
-}
-
-.team-card-position {
-  font-size: 16px;
-  line-height: 30px;
-}
-
-.team-social-media {
-  opacity: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 10px;
-}
-
-.team-social-media-item {
-  margin: 10px;
-}
-
-.team-properties {
-  opacity: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  font-size: 16px;
-  line-height: 30px;
-  height: 60px;
-}
-
-.team-card:hover {
-  box-shadow: 0 11px 30px 0 rgba(51, 51, 51, .15);
-}
-
-.team-card:nth-child(2):not(:hover) {
-  box-shadow: 0 11px 30px 0 rgba(51, 51, 51, .15);
-}
-
-.team-card:nth-child(2):not(:hover) .team-social-media {
-  opacity: 1;
-}
-
-.team-card:nth-child(2):not(:hover) .team-properties {
-  opacity: 1;
-}
-
-.team-card:hover .team-social-media {
-  opacity: 1;
-}
-
-.team-card:hover .team-properties {
-  opacity: 1;
-}
 
 .popular-work-container {
   background-color: #f5f6f7;
@@ -1674,13 +1519,14 @@ export default {
 }
 
 .industry-item-t {
-  height: 240px;
+  height: 200px;
   overflow: hidden;
   position: relative;
 }
 
 .industry-item-t-img {
   width: 100%;
+  height: 100%;
 }
 
 .industry-item-article-tag {
@@ -1689,7 +1535,9 @@ export default {
   left: 20px;
   background-color: #00b3d2;
   color: #ffffff;
-  padding: 10px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
 .industry-item-m {
@@ -1710,7 +1558,10 @@ export default {
 
 .industry-item-title {
   padding-left: 20px;
-  font-size: 20px;
+}
+
+.industry-item-title-link {
+  font-size: 16px;
   font-weight: bold;
   text-align: left;
 }
@@ -1719,12 +1570,17 @@ export default {
   font-size: 14px;
   color: #808080;
   text-align: left;
-  padding-left: 20px;
+  padding: 10px 20px 0 20px;
+
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
-.industry-item-readmore {
+.industry-news-readmore {
   text-align: left;
-  padding: 20px 0 0 20px;
+  padding: 20px 0;
 }
 
 .industry-item-b {
@@ -1810,7 +1666,7 @@ export default {
   }
 
   .search-container-col {
-    display: none;
+    /*display: none;*/
   }
 
 }

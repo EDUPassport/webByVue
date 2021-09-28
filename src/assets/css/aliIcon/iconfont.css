@@ -2,9 +2,9 @@
   font-family: "iconfont"; /* Project id 2814433 */
   /* Color fonts */
   src: 
-       url('iconfont.woff2?t=1632635788993') format('woff2'),
-       url('iconfont.woff?t=1632635788993') format('woff'),
-       url('iconfont.ttf?t=1632635788993') format('truetype');
+       url('iconfont.woff2?t=1632723640414') format('woff2'),
+       url('iconfont.woff?t=1632723640414') format('woff'),
+       url('iconfont.ttf?t=1632723640414') format('truetype');
 }
 
 .iconfont {
@@ -13,6 +13,38 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-alifacebook:before {
+  content: "\e604";
+}
+
+.el-icon-aliyanzhengma:before {
+  content: "\e65a";
+}
+
+.el-icon-alipassword:before {
+  content: "\e6d8";
+}
+
+.el-icon-aliyanzhengma1:before {
+  content: "\e603";
+}
+
+.el-icon-aliemail:before {
+  content: "\e74f";
+}
+
+.el-icon-aliemail-fill:before {
+  content: "\e77e";
+}
+
+.el-icon-alilastname:before {
+  content: "\e6e8";
+}
+
+.el-icon-alifirstname:before {
+  content: "\e6cf";
 }
 
 .el-icon-alixll-heart-filled:before {

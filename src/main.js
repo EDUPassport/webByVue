@@ -14,6 +14,7 @@ import 'animate.css'
 import VTypical from 'vue-typical'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold } from '@element-plus/icons'
+import {howLong, ymdFormat} from "@/utils";
 const messages = {
     en: {
         message: xllEnUS
@@ -44,4 +45,16 @@ app.use(i18n)
 app.use(VTypical, {
     /* options */
 });
+
+app.config.globalProperties.$filters = {
+    newsDateFormat(value){
+        let eParse = new Date(value)
+        // console.log(eParse)
+        return ymdFormat(eParse,'en-US')
+    },
+    howLongFormat(value){
+        let eParse = Date.parse(value) / 1000
+        return howLong(eParse,'en-US')
+    }
+}
 app.mount('#app')
