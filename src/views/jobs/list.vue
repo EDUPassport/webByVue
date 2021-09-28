@@ -155,7 +155,7 @@
       </el-col>
       <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10">
         <div class="jobs-list-container">
-          <div class="jobs-list-label">We've found you 50 open jobs</div>
+          <div class="jobs-list-label">We've found you {{jobTotalNum}} open jobs</div>
           <div class="jobs-list-content">
             <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
                 <div class="jobs-list-item-l">
