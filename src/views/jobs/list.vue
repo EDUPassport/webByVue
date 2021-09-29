@@ -98,7 +98,9 @@
                   <div class="featured-jobs-card-images">
                     <el-image class="featured-jobs-card-image" :src="item.logo" fit="fill"></el-image>
                   </div>
-                  <div class="featured-jobs-title">{{ item.job_title }}</div>
+                  <div class="featured-jobs-title">
+                    <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}" >{{ item.job_title }}</router-link>
+                  </div>
                   <div class="featured-business-name">{{ item.business_name }}</div>
                   <div class="featured-jobs-location">
                     <el-icon>
@@ -174,7 +176,7 @@
               </div>
               <div class="jobs-list-item-r">
                 <div class="jobs-list-item-title">
-                  {{ item.job_title }}
+                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}" >{{ item.job_title }}</router-link>
                 </div>
                 <div class="jobs-list-item-name">
                   {{ item.business_name }}
@@ -800,9 +802,11 @@ export default {
   width: 70%;
 }
 
-.jobs-list-item-title {
+.jobs-list-item-title a{
   font-size: 18px;
   font-weight: bold;
+  color: #000000;
+  text-decoration: none;
 }
 
 .jobs-list-item-name {

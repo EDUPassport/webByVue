@@ -28,6 +28,15 @@ const routes = [
                     title: 'Jobs Lists'
                 }
             },
+            {
+                path:'/jobs/detail',
+                name:'jobsDetail',
+                component:()=>import('@/views/jobs/detail'),
+                meta: {
+                    title: 'Jobs Detail'
+                }
+            }
+
         ],
     },
     {

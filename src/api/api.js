@@ -9,21 +9,24 @@ export const UPLOAD_USER_CARD = (params) => uploader('service-core/user_upload_c
 export const DELETE_BOOK = (params) => del(`service-core/book_list/${params.id}`)
 
 export const JOB_LIST = (params) => get('job/jobList', params)
-export const JOB_FEATURED_LIST = (params) => get('featureList',params)
-export const BUSINESS_LIST = (params)=>post('business/list',params)
+export const JOB_FEATURED_LIST = (params) => get('featureList', params)
+export const BUSINESS_LIST = (params) => post('business/list', params)
 
 // 使用邮箱获取验证码
 export const SEND_EMAIL_CODE = (params) => post('email/sendEmailCode', params)
 // 使用邮箱注册
 export const EMAIL_REGISTER = (params) => post('email/register', params)
 // 使用邮箱登录
-export const EMAIL_LOGIN = (params) => post('email/login',params)
+export const EMAIL_LOGIN = (params) => post('email/login', params)
 
 // 获取deals列表
-export const DEALS_LIST = (params) => post('deals/dealsList',params)
+export const DEALS_LIST = (params) => post('deals/dealsList', params)
 
 // 获取广告列表
-export const ADS_LIST = (params) => get('ad/list',params)
+export const ADS_LIST = (params) => get('ad/list', params)
 
 // 获取 user objectlist
-export const USER_OBJECT_LIST = (params) => get('user/userObjectList',params)
+export const USER_OBJECT_LIST = (params) => get('user/userObjectList', params)
+
+// 获取职位详情
+export const JOB_DETAIL = (params) => get('job/detail', params)
