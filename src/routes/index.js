@@ -1,6 +1,7 @@
 import layout from '../layout/index'
 
 import {createRouter, createWebHistory} from 'vue-router'
+import {isPhone} from "@/utils";
 
 const routes = [
     {
@@ -64,6 +65,9 @@ const router = createRouter({
 const defaultTitle = 'Home';
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title ? to.meta.title : defaultTitle;
+    if(isPhone()){
+        window.location.href = 'https://esl-passport.cn/'
+    }
     next();
 });
 

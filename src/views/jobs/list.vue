@@ -1,11 +1,12 @@
 <template>
   <div class="bg">
     <el-row class="bg-container" align="top" justify="center">
-      <el-col :xs="24" :sm="24" :md="5" :lg="5" :xl="4">
+      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
         <div class="jobs-filter-container">
           <div class="jobs-filter-label">Find a job</div>
           <div class="jobs-filter-location">
-            <el-select class="jobs-filter-select" v-model="locationValue" clearable placeholder="Location" size="medium">
+            <el-select class="jobs-filter-select" v-model="locationValue" clearable placeholder="Location"
+                       size="medium">
               <el-option
                   v-for="item in locationOptions"
                   :key="item.value"
@@ -16,7 +17,9 @@
             </el-select>
           </div>
           <div class="jobs-filter-salary">
-            <el-select  class="jobs-filter-select"  v-model="salaryValue" clearable placeholder="Salary" size="medium">
+            <el-select class="jobs-filter-select" v-model="salaryValue" clearable
+                       @change="salaryChange"
+                       placeholder="Salary" size="medium">
               <el-option
                   v-for="item in salaryOptions"
                   :key="item.value"
@@ -27,7 +30,9 @@
             </el-select>
           </div>
           <div class="jobs-filter-gender">
-            <el-select  class="jobs-filter-select"  v-model="genderValue" clearable placeholder="Gender" size="medium">
+            <el-select class="jobs-filter-select" v-model="genderValue" clearable
+                       @change="genderChange"
+                       placeholder="Gender" size="medium">
               <el-option
                   v-for="item in genderOptions"
                   :key="item.value"
@@ -38,7 +43,9 @@
             </el-select>
           </div>
           <div class="jobs-filter-job-type">
-            <el-select  class="jobs-filter-select"  v-model="jobTypeValue" clearable placeholder="Job Type" size="medium">
+            <el-select class="jobs-filter-select" v-model="jobTypeValue" clearable
+                       @change="jobTypeChange"
+                       placeholder="Job Type" size="medium">
               <el-option
                   v-for="item in jobTypeOptions"
                   :key="item.value"
@@ -49,7 +56,10 @@
             </el-select>
           </div>
           <div class="jobs-filter-student-age">
-            <el-select  class="jobs-filter-select"  v-model="studentAgeValue" clearable placeholder="Student Age" size="medium">
+            <el-select class="jobs-filter-select" v-model="studentAgeValue" clearable
+                       @change="studentAgeChange"
+                       placeholder="Student Age"
+                       size="medium">
               <el-option
                   v-for="item in studentAgeOptions"
                   :key="item.value"
@@ -60,7 +70,8 @@
             </el-select>
           </div>
           <div class="jobs-filter-work-exp">
-            <el-select  class="jobs-filter-select"  v-model="workExpValue" clearable placeholder="Work Experience" size="medium">
+            <el-select class="jobs-filter-select" v-model="workExpValue" clearable placeholder="Work Experience"
+                       size="medium">
               <el-option
                   v-for="item in workExpOptions"
                   :key="item.value"
@@ -145,7 +156,7 @@
                 <el-image class="articles-item-banner" :src="item.url" fit="cover"></el-image>
               </div>
               <div class="articles-item-r">
-                <div class="articles-title">{{item.title}}</div>
+                <div class="articles-title">{{ item.title }}</div>
                 <div class="articles-date"> {{ $filters.newsDateFormat(item.u_time) }}</div>
               </div>
             </div>
@@ -153,29 +164,29 @@
         </div>
 
       </el-col>
-      <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10">
+      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
         <div class="jobs-list-container">
-          <div class="jobs-list-label">We've found you {{jobTotalNum}} open jobs</div>
+          <div class="jobs-list-label">We've found you {{ jobTotalNum }} open jobs</div>
           <div class="jobs-list-content">
             <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
-                <div class="jobs-list-item-l">
-                  <el-image class="jobs-item-logo" :src="item.logo" fit="cover"></el-image>
-                </div>
+              <div class="jobs-list-item-l">
+                <el-image class="jobs-item-logo" :src="item.logo" fit="cover"></el-image>
+              </div>
               <div class="jobs-list-item-r">
                 <div class="jobs-list-item-title">
-                  {{item.job_title}}
+                  {{ item.job_title }}
                 </div>
                 <div class="jobs-list-item-name">
-                  {{item.business_name}}
+                  {{ item.business_name }}
                 </div>
                 <div class="jobs-list-item-address">
-                  {{item.address}}
+                  {{ item.address }}
                 </div>
                 <div class="jobs-list-item-desc">
-                    {{item.desc}}
+                  {{ item.desc }}
                 </div>
                 <div class="jobs-list-item-readmore">
-                 Read More...
+                  Read More...
                 </div>
               </div>
 
@@ -240,7 +251,7 @@ import SwiperCore, {
   Pagination, Autoplay, Navigation, Zoom
 } from 'swiper';
 import {useRouter} from "vue-router";
-import {ADS_LIST, JOB_FEATURED_LIST, JOB_LIST} from "@/api/api";
+import {ADS_LIST, JOB_FEATURED_LIST, JOB_LIST,USER_OBJECT_LIST} from "@/api/api";
 
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
@@ -249,24 +260,62 @@ export default {
   name: "list",
   data() {
     return {
-      locationValue:'',
+      locationValue: '',
       locationOptions: [],
-      salaryValue:'',
-      salaryOptions:[],
-      genderValue:'',
-      genderOptions:[],
-      jobTypeValue:'',
-      jobTypeOptions:[],
-      studentAgeValue:'',
-      studentAgeOptions:[],
-      workExpValue:'',
-      workExpOptions:[],
-      jobFeaturedListData:[],
-      jobListData:[],
-      articleListData:[],
-      jobPage:1,
-      jobLimit:5,
-      jobTotalNum:0
+      salaryValue: '',
+      salaryOptions: [
+        {
+          label: '0-5K',
+          value: 1
+        },
+        {
+          label: '5K-10K',
+          value: 2
+        },
+        {
+          label: '10K-15K',
+          value: 3
+        },
+        {
+          label: '15K+',
+          value: 4
+        }
+      ],
+      genderValue: '',
+      genderOptions: [
+        {
+          label: 'Male',
+          value: 1
+        }, {
+          label: 'Female',
+          value: 2
+        }
+      ],
+      jobTypeValue: '',
+      jobTypeOptions: [
+        {
+          label:'Full-time',
+          value:1
+        },
+        {
+          label: 'Part-time',
+          value: 2
+        },
+        {
+          label: 'Seasonal',
+          value: 3
+        }
+      ],
+      studentAgeValue: '',
+      studentAgeOptions: [],
+      workExpValue: '',
+      workExpOptions: [],
+      jobFeaturedListData: [],
+      jobListData: [],
+      articleListData: [],
+      jobPage: 1,
+      jobLimit: 5,
+      jobTotalNum: 0
 
     }
   },
@@ -287,10 +336,10 @@ export default {
     // const getParams = () =>{
     //   console.log(route.params)
     // }
-    const skipJobsList = (query)=>{
+    const skipJobsList = (query) => {
       router.push({
-        path:'/jobs',
-        query:query
+        path: '/jobs',
+        query: query
       })
     }
     return {
@@ -300,14 +349,15 @@ export default {
     };
   },
   mounted() {
-    this.getJobList(this.jobPage,this.jobLimit)
+    this.getJobList(this.jobPage, this.jobLimit)
     this.getJobFeaturedList()
     this.getAdsList()
+    this.getUserObjectList()
   },
-  methods:{
+  methods: {
     getJobFeaturedList() {
       let params = {
-        ad_type:2
+        ad_type: 2
       }
 
       JOB_FEATURED_LIST(params).then(res => {
@@ -320,19 +370,50 @@ export default {
       })
 
     },
-    jobPageSizeChange(e){
+    jobPageSizeChange(e) {
       console.log(e)
     },
-    jobPageChange(e){
+    jobPageChange(e) {
       this.jobPage = e
-      this.getJobList(e,this.jobLimit)
+      this.getJobList(e, this.jobLimit)
       console.log(e)
     },
-    getJobList(page,limit) {
+    getJobList(page, limit) {
       let params = {
         page: page,
         limit: limit
       }
+      let salaryValue = this.salaryValue
+      if(salaryValue !=''){
+         if(salaryValue == 1){
+           params.salary_begin = 0
+           params.salary_end = 5000
+         }
+         if(salaryValue == 2){
+           params.salary_begin = 5000
+           params.salary_end = 10000
+         }
+         if(salaryValue == 3){
+           params.salary_begin = 10000
+           params.salary_end = 15000
+         }
+         if(salaryValue == 4){
+           params.salary_begin = 15000
+         }
+
+      }
+      if(this.genderValue != ''){
+        params.sex = this.genderValue
+      }
+
+      if(this.jobTypeValue != ''){
+        params.employment_type = this.jobTypeValue
+      }
+
+      if(this.studentAgeValue != ''){
+        params.age_to_teach = this.studentAgeValue
+      }
+
       JOB_LIST(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
@@ -380,6 +461,50 @@ export default {
         }
       })
 
+    },
+    getUserObjectList(){
+      let params = {
+
+      }
+      USER_OBJECT_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+            let ageToTeachList = res.message.filter(item=>item.pid == 4)
+          // let lan = localStorage.getItem('language')
+
+          ageToTeachList.forEach(item=>{
+            let obj = {
+              label:item.object_en,
+              value:item.id
+            }
+
+            this.studentAgeOptions.push(obj)
+
+          })
+
+        }
+
+      })
+    },
+    salaryChange(e){
+      // console.log(e)
+      this.salaryValue = e
+      this.getJobList(this.jobPage,this.jobLimit)
+    },
+    genderChange(e){
+      // console.log(e)
+      this.genderValue = e
+      this.getJobList(this.jobPage,this.jobLimit)
+    },
+    jobTypeChange(e){
+      // console.log(e)
+      this.jobTypeValue = e
+      this.getJobList(this.jobPage,this.jobLimit)
+    },
+    studentAgeChange(e){
+      // console.log(e)
+      this.studentAgeValue = e
+      this.getJobList(this.jobPage,this.jobLimit)
     }
 
   }
@@ -389,52 +514,58 @@ export default {
 </script>
 
 <style scoped>
-.bg{
+.bg {
   background-color: #f5f6f7;
 }
-.bg-container{
+
+.bg-container {
+  width: 1100px;
+  margin: 0 auto;
   padding-top: 40px;
 }
-.jobs-filter-container{
+
+.jobs-filter-container {
   background-color: #ffffff;
   border: 1px solid #eeeeee;
   padding: 20px;
   border-radius: 10px;
 }
 
-.jobs-filter-label{
+.jobs-filter-label {
   font-size: 18px;
   font-weight: bold;
   text-align: left;
 }
 
-.jobs-filter-location{
+.jobs-filter-location {
   margin-top: 10px;
 }
 
-.jobs-filter-select{
+.jobs-filter-select {
   width: 100%;
 }
 
-.jobs-filter-salary{
+.jobs-filter-salary {
   margin-top: 10px;
 }
 
-.jobs-filter-gender{
-  margin-top: 10px;
-}
-.jobs-filter-job-type{
+.jobs-filter-gender {
   margin-top: 10px;
 }
 
-.jobs-filter-student-age{
+.jobs-filter-job-type {
   margin-top: 10px;
 }
 
-.jobs-filter-work-exp{
+.jobs-filter-student-age {
   margin-top: 10px;
 }
-.featured-jobs-container{
+
+.jobs-filter-work-exp {
+  margin-top: 10px;
+}
+
+.featured-jobs-container {
   background-color: #ffffff;
   border-radius: 10px;
   padding: 20px;
@@ -442,20 +573,24 @@ export default {
   margin-top: 20px;
 }
 
-.featured-jobs-label{
+.featured-jobs-label {
   font-size: 18px;
   font-weight: bold;
   text-align: left;
 }
-.featured-jobs-content{
+
+.featured-jobs-content {
   margin-top: 10px;
 }
-#mySwiper{
+
+#mySwiper {
   height: 350px;
 }
-.mySwiper{
+
+.mySwiper {
   padding-bottom: 30px;
 }
+
 .featured-jobs-card {
   width: 98%;
   margin: 0 auto;
@@ -547,7 +682,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding:10px 20px;
+  padding: 10px 20px;
   border-top: 1px solid #eeeeee;
 
 }
@@ -570,24 +705,25 @@ export default {
   justify-content: space-between;
 }
 
-.articles-container{
+.articles-container {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   border: 1px solid #eeeeee;
   margin-top: 20px;
 }
-.articles-label{
+
+.articles-label {
   font-size: 18px;
   font-weight: bold;
   text-align: left;
 }
 
-.articles-content{
+.articles-content {
   margin-top: 10px;
 }
 
-.articles-item{
+.articles-item {
   display: flex;
   flex-direction: row;
   align-content: center;
@@ -595,46 +731,49 @@ export default {
   padding: 10px 0;
   border-bottom: 1px solid #eeeeee;
 }
-.articles-item-l{
+
+.articles-item-l {
   width: 30%;
 }
-.articles-item-banner{
+
+.articles-item-banner {
   width: 100%;
   height: 100%;
   border-radius: 4px;
 }
 
-.articles-item-r{
+.articles-item-r {
   width: 65%;
 }
-.articles-title{
+
+.articles-title {
   font-size: 12px;
   text-align: left;
   font-weight: bold;
 }
 
-.articles-date{
+.articles-date {
   text-align: left;
   font-size: 12px;
   margin-top: 16px;
 }
 
 
-.jobs-list-container{
+.jobs-list-container {
   padding: 20px;
 }
 
-.jobs-list-label{
+.jobs-list-label {
   font-size: 18px;
   font-weight: bold;
   text-align: left;
 }
 
-.jobs-list-content{
+.jobs-list-content {
   margin-top: 10px;
 }
 
-.jobs-list-item{
+.jobs-list-item {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -646,43 +785,51 @@ export default {
   border-radius: 10px;
   text-align: left;
 }
-.jobs-list-item-l{
+
+.jobs-list-item-l {
   width: 30%;
 }
-.jobs-item-logo{
+
+.jobs-item-logo {
   width: 80%;
   height: 80%;
   border-radius: 10px;
 }
-.jobs-list-item-r{
+
+.jobs-list-item-r {
   width: 70%;
 }
-.jobs-list-item-title{
+
+.jobs-list-item-title {
   font-size: 18px;
   font-weight: bold;
 }
-.jobs-list-item-name{
+
+.jobs-list-item-name {
   font-size: 16px;
   color: #808080;
   margin-top: 20px;
 }
 
-.jobs-list-item-address{
+.jobs-list-item-address {
   font-size: 14px;
   color: #808080;
   margin-top: 10px;
 }
-.jobs-list-item-desc{
+
+.jobs-list-item-desc {
   font-size: 12px;
   color: #808080;
   margin-top: 10px;
 }
-.jobs-list-item-readmore{
+
+.jobs-list-item-readmore {
   font-size: 14px;
   color: #808080;
   margin-top: 20px;
 }
-.jobs-list-item-b{
+
+.jobs-list-item-b {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -691,26 +838,29 @@ export default {
   padding: 10px 0;
 }
 
-.jobs-list-item-work-type{
-  font-size: 12px;
-}
-.jobs-list-item-gender{
-  font-size: 12px;
-}
-.jobs-list-item-work-exp{
+.jobs-list-item-work-type {
   font-size: 12px;
 }
 
-.jobs-list-item-date{
+.jobs-list-item-gender {
   font-size: 12px;
 }
-.jobs-list-item-salary{
+
+.jobs-list-item-work-exp {
+  font-size: 12px;
+}
+
+.jobs-list-item-date {
+  font-size: 12px;
+}
+
+.jobs-list-item-salary {
   font-size: 12px;
   margin-left: 10px;
   color: #00b3d2;
 }
 
-.jobs-list-pagination{
+.jobs-list-pagination {
   margin-top: 20px;
 }
 </style>

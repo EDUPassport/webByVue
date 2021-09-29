@@ -66,3 +66,7 @@ export const howLong = (createtime, languageValue) => {
     // console.log(content)
     return content;
 }
+
+export const isPhone = ()=>{
+    return (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent))
+}

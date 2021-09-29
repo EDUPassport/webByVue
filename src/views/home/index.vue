@@ -21,7 +21,7 @@
       </el-row>
 
       <el-row class="xll-search-btn-row" :gutter="0" align="middle" justify="center">
-        <el-col class="xll-search-jobs-btn-container" :xs="6" :sm="6" :md="4" :lg="3" :xl="2">
+        <el-col class="xll-search-jobs-btn-container" :xs="6" :sm="6" :md="4" :lg="4" :xl="4">
           <div class="xll-search-jobs-btn"
                :class="searchCategoryValue == 1 ? 'xll-search-jobs-btn-active' : ''"
                @click="chooseSearchCategory(1)">
@@ -30,7 +30,7 @@
           <div class="xll-search-btn-sj"
                :class="searchCategoryValue == 1 ? 'xll-search-btn-sj-active' : ''"></div>
         </el-col>
-        <el-col class="xll-search-deals-btn-container" :xs="6" :sm="6" :md="4" :lg="3" :xl="2">
+        <el-col class="xll-search-deals-btn-container" :xs="6" :sm="6" :md="4" :lg="4" :xl="4">
           <div class="xll-search-deals-btn"
                :class="searchCategoryValue == 2 ? 'xll-search-deals-btn-active' : ''"
                @click="chooseSearchCategory(2)">
@@ -42,7 +42,7 @@
       </el-row>
 
       <el-row class="search-container-row" :gutter="0" align="middle" justify="center">
-        <el-col class="search-container-col" :xs="22" :sm="22" :md="22" :lg="18" :xl="15">
+        <el-col class="search-container-col" :xs="22" :sm="22" :md="22" :lg="22" :xl="22">
           <div class="search-container-bg">
 
             <div class="search-container">
@@ -106,9 +106,9 @@
         </el-col>
       </el-row>
 
-      <el-row :gutter="0" justify="center" align="middle">
+      <el-row class="featured-jobs-row" :gutter="0" justify="center" align="middle">
 
-        <el-col :xs="0" :sm="24" :md="20" :lg="16" :xl="14">
+        <el-col :xs="0" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="featured-jobs-slider">
             <swiper :slidesPerView="3" :spaceBetween="30"
                     :pagination='{"clickable": true}'
@@ -207,7 +207,7 @@
       </el-row>
 
       <el-row class="featured-schools-content-container" :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="24" :lg="7" :xl="6">
+        <el-col :xs="24" :sm="24" :md="11" :lg="11" :xl="11">
           <template v-if="businessListData[0]">
             <div class="featured-schools-plus-container "
                  :style="'background-image:url('+businessListData[0]['header_photo'] +')'">
@@ -232,7 +232,7 @@
 
         <el-col :xs="24" :sm="24" :md="24" :lg="1" :xl="1"></el-col>
 
-        <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="7">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
           <template v-if="businessListData[1]">
             <div class="featured-schools-pro-container">
               <div class="featured-schools-pro-l"
@@ -312,9 +312,9 @@
         </el-col>
       </el-row>
 
-      <el-row :gutter="0" justify="center" align="middle">
+      <el-row class="featured-deals-row" :gutter="0" justify="center" align="middle">
 
-        <el-col :xs="0" :sm="24" :md="20" :lg="16" :xl="14">
+        <el-col :xs="0" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="hot-deals-container">
             <div class="hot-deals-item" v-for="(item,index) in dealsListData" :key="index">
 
@@ -405,8 +405,8 @@
         </el-col>
       </el-row>
 
-      <el-row :gutter="0" align="middle" justify="center">
-        <el-col :xs="24" :sm="24" :md="24" :lg="16" :xl="14">
+      <el-row class="popular-work-row" :gutter="0" align="middle" justify="center">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 
           <swiper :slidesPerView="3" :spaceBetween="30"
                   :pagination='{"clickable": true}'
@@ -457,8 +457,8 @@
 
     <!-- articles industry news   -->
     <div class="industry-news-container">
-      <el-row :gutter="0" align="middle" justify="center">
-        <el-col :xs="24" :sm="24" :md="6" :lg="4" :xl="4">
+      <el-row class="industry-news-row" :gutter="0" align="middle" justify="center">
+        <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="8">
           <div class="industry-articles-label">Articles</div>
           <div class="industry-news-label">Industry News</div>
           <div class="industry-news-link-container">
@@ -472,7 +472,7 @@
             <el-button type="primary">Read More ></el-button>
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="6" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}"
+        <el-col :xs="24" :sm="24" :md="{span:7,offset:1}" :lg="{span:7,offset:1}" :xl="{span:7,offset:1}"
                 v-for="(item,index) in articleListLimitData" :key="index"
         >
           <div class="industry-item" v-if="index<2">
@@ -819,6 +819,7 @@ export default {
 
 .xll-search-container {
   height: 800px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -831,7 +832,8 @@ export default {
 }
 
 .xll-search-btn-row {
-  width: 100%;
+  /*width: 100%;*/
+  width: 1100px;
   margin-top: 140px;
 }
 
@@ -914,7 +916,8 @@ export default {
 }
 
 .search-container-row {
-  width: 100%;
+  /*width: 100%;*/
+  width: 1100px;
   margin-top: 20px;
 }
 
@@ -981,7 +984,10 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
-
+.featured-jobs-row{
+  width: 1100px;
+  margin: 0 auto;
+}
 .featured-jobs-tips {
   text-align: center;
   color: #808080;
@@ -1140,6 +1146,8 @@ export default {
 }
 
 .featured-schools-content-container {
+  width: 1100px;
+  margin: 0 auto;
   padding: 20px;
 }
 
@@ -1292,7 +1300,10 @@ export default {
   color: #808080;
   padding: 20px 0;
 }
-
+.featured-deals-row{
+  width: 1100px;
+  margin: 0 auto;
+}
 .hot-deals-container {
   display: flex;
   flex-direction: row;
@@ -1302,7 +1313,7 @@ export default {
 }
 
 .hot-deals-item {
-  width: 30%;
+  width: 32%;
   margin-top: 20px;
   border-radius: 20px;
   overflow: hidden;
@@ -1415,8 +1426,8 @@ export default {
 }
 
 .hot-deals-item-more-logo {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 }
 
@@ -1447,6 +1458,10 @@ export default {
 .popular-work-tips {
   color: #808080;
   padding: 20px 0;
+}
+.popular-work-row{
+  width: 1100px;
+  margin: 0 auto;
 }
 
 .myWorkSwiper {
@@ -1485,7 +1500,10 @@ export default {
   background-color: #ffffff;
   padding: 20px 0;
 }
-
+.industry-news-row{
+  width: 1100px;
+  margin: 0 auto;
+}
 .industry-articles-label {
   color: #00b3d2;
   font-size: 20px;

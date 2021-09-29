@@ -1,7 +1,7 @@
 <template>
   <div class="bg">
     <div class="bg-2">
-      <el-container>
+      <el-container class="login-container">
         <el-header class="container-1" height="auto">
           <el-row justify="center" align="middle">
             <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
@@ -15,7 +15,7 @@
         </el-header>
         <el-main>
           <el-row justify="center" align="middle">
-            <el-col :xs="22" :sm="12" :md="12" :lg="7" :xl="6">
+            <el-col :xs="22" :sm="12" :md="14" :lg="14" :xl="14">
               <el-tabs type="border-card" class="login-tabs">
                 <el-tab-pane label="Login">
                   <div class="login-tabs-login-container">
@@ -268,6 +268,9 @@ export default {
     humanVerify(response, responseKey) {
       // console.log(response);
       console.log(responseKey);
+      this.$loading({
+        text:'Loading...'
+      })
       let params = new FormData()
       params.append('secret', '0x55587f4f237ef6B48A96284Ee257D0AA3d828508')
       params.append('response', response)
@@ -281,10 +284,12 @@ export default {
       }).then(res => {
         console.log(res)
         if (res.success) {
+          this.$loading().close()
           this.humanVerifyStatus = true
           this.$message.success('Success')
         } else {
           this.$message.error('Fail')
+          this.$loading().close()
         }
 
       })
@@ -326,12 +331,32 @@ export default {
           if (valid) {
             let params = Object.assign({}, this.loginForm)
             EMAIL_LOGIN(params).then(res => {
-              console.log(res)
+              // console.log(res)
               if (res.code == 200) {
                 localStorage.setItem('token', res.message.token)
                 localStorage.setItem('identity', res.message.identity)
                 localStorage.setItem('language', res.message.language)
                 localStorage.setItem('email', res.message.email)
+
+                let identity  = res.message.identity
+                if(identity == 0){
+                  localStorage.setItem('name','Guest')
+                }
+                if(identity == 1){
+                  let firstName = res.message.educator.first_name;
+                  let lastName = res.message.educator.last_name;
+                  localStorage.setItem('name',firstName+' '+ lastName)
+                }
+                if(identity == 2){
+                  let firstName = res.message.business.first_name;
+                  let lastName = res.message.business.last_name;
+                  localStorage.setItem('name',firstName+' '+ lastName)
+                }
+                if(identity == 3){
+                  let firstName = res.message.vendor.first_name;
+                  let lastName = res.message.vendor.last_name;
+                  localStorage.setItem('name',firstName+' '+ lastName)
+                }
                 setTimeout(function () {
                   self.skipHomePage()
                   self.submitLoginLoadingStatus = false
@@ -363,7 +388,7 @@ export default {
               // let userInfo = res.message
               // localStorage.setItem('uid',res.message.id)
               this.$message.success('Register Success! ')
-
+              location.reload()
             }
 
           })
@@ -397,6 +422,11 @@ export default {
   background-color: rgba(255,255,255,0.95);
   height: 100vh;
 }
+.login-container{
+  width: 1100px;
+  margin: 0 auto;
+}
+
 .marginTop {
   margin-top: 20px;
 }

@@ -24,3 +24,6 @@ export const DEALS_LIST = (params) => post('deals/dealsList',params)
 
 // 获取广告列表
 export const ADS_LIST = (params) => get('ad/list',params)
+
+// 获取 user objectlist
+export const USER_OBJECT_LIST = (params) => get('user/userObjectList',params)
