@@ -35,9 +35,18 @@ const routes = [
                 meta: {
                     title: 'Jobs Detail'
                 }
-            }
+            },
+
 
         ],
+    },
+    {
+        path:'/comeSoon',
+        name:'comeSoon',
+        component:()=>import('@/views/comeSoon'),
+        meta: {
+            title: 'Coming Soon'
+        }
     },
     {
         path: '/login',

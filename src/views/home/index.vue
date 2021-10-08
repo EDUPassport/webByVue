@@ -85,12 +85,10 @@
           </div>
         </el-col>
       </el-row>
-
-
     </div>
 
     <!--  featured jobs -->
-    <div class="featured-jobs-bg">
+    <div class="featured-jobs-bg" v-if="jobFeaturedListData.length>0">
 
       <el-row :gutter="0" justify="center" align="middle">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">

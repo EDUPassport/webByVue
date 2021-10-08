@@ -1,14 +1,16 @@
 <template>
-<div>
+<div class="bg">
   <div>
-    <el-row class="detail-row" align="top" justify="center">
-      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+    <el-row class="detail-row" align="top" justify="start">
+      <el-col class="detail-l-col" :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
         <div class="job-title">{{detailData.job_title}}</div>
-        <div class="job-address">
-          {{detailData.address}}
-        </div>
-        <div class="job-salary">
-          {{detailData.currency}}{{detailData.salary_min}} - {{detailData.salary_max}}
+        <div class="job-address-salary">
+          <div class="job-address">
+            {{detailData.address}}
+          </div>
+          <div class="job-salary">
+            {{detailData.currency}}{{detailData.salary_min}} - {{detailData.salary_max}}
+          </div>
         </div>
 
         <div class="job-desc-container">
@@ -163,8 +165,44 @@ export default {
 </script>
 
 <style scoped>
+.bg{
+  background-color: #f5f6f7;
+}
 .detail-row{
   width: 1100px;
   margin: 0 auto;
+  text-align: left;
 }
+
+.detail-l-col{
+  padding: 20px;
+}
+
+.job-title{
+  font-size: 24px;
+  color: #ff2870;
+}
+
+.job-address-salary{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+}
+.job-address{
+  color: #808080;
+  font-size: 14px;
+}
+
+.job-salary{
+  font-size: 14px;
+  color: #ff2870;
+}
+
+.job-desc-container{
+  background-color: #ffffff;
+
+}
+
 </style>
