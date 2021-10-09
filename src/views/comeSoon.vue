@@ -2,19 +2,20 @@
 <div class="bg">
   <div class="container">
     <div class="welcome">
-      Welcome to you
+
     </div>
-    <h1>We Are Coming Soon</h1>
+    <h1> New Website Coming Soon </h1>
     <div class="end-date">
       December 9th, 2021
     </div>
     <div class="count-down">
-      <FlipDown
+      <xllCountDown
           :endDate="1639065600000"
           :type="4"
           :theme="1"
           :timeUnit="['Days','Hrs','Mins','Secs']"
-      ></FlipDown>
+      >
+      </xllCountDown>
     </div>
   </div>
 
@@ -22,11 +23,11 @@
 </template>
 
 <script>
-import FlipDown from 'vue-flip-down'
+import xllCountDown from "@/components/xllCountDown";
 export default {
   name: "comeSoon",
   components:{
-    FlipDown
+    xllCountDown
   }
 }
 </script>
@@ -46,7 +47,7 @@ export default {
   height: 100%;
 }
 .welcome{
-  padding: 80px 40px 40px 40px;
+  padding: 100px 40px 40px 40px;
   color: #ff0000;
   font-size:18px;
 }
@@ -56,7 +57,7 @@ h1{
 
 .end-date{
   padding: 40px;
-  color: #ff0000;
+  color: #ffffff;
   font-size:18px;
 }
 
@@ -66,26 +67,4 @@ h1{
   padding: 20px;
 }
 
-/deep/ .time-unit{
-  color: #ffffff;
-  line-height: 80px;
-}
-/deep/ .time-box{
-  background-color: #000000;
-  height: 80px;
-  min-width: 80px;
-  font-size: 22px;
-  line-height: 80px;
-}
-
-/deep/ .vue-countdown-component .time-box>div.base .base-b{
-  background-color: transparent;
-}
-
-/deep/ .vue-countdown-component .time-box>div.face{
-  background-color: #ff2870;
-}
-/deep/ .vue-countdown-component .time-box>div.back{
-  background-color: #0AA0A8;
-}
 </style>

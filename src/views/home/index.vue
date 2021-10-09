@@ -379,7 +379,7 @@
               <el-row align="middle" justify="center">
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                   <div class="featured-deals-more">
-                    <el-button class="featured-deals-more-btn" type="primary">View More</el-button>
+                    <el-button class="featured-deals-more-btn" type="primary" @click="turnDealsPage()">View More</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -794,6 +794,9 @@ export default {
     },
     turnJobsList(){
         this.skipJobsList()
+    },
+    turnDealsPage(){
+      this.$router.push({path:'/deals'})
     }
 
   }

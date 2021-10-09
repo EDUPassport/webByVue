@@ -7,7 +7,7 @@ const routes = [
     {
         path: '/',
         component: layout,
-        redirect: '/home',
+        redirect: '/comeSoon',
         meta: {
             title: 'Home'
         },
@@ -36,6 +36,14 @@ const routes = [
                     title: 'Jobs Detail'
                 }
             },
+            {
+                path:'deals',
+                name:'deals',
+                component:()=>import('@/views/deals/index'),
+                meta: {
+                    title: 'Deals List'
+                }
+            }
 
 
         ],
