@@ -3,7 +3,7 @@
     <el-backtop/>
     <el-footer height="auto" class="footer-bg">
       <el-row :gutter="0" align="middle" justify="center">
-        <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="4">
+        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
           <div class="esl-logo-container">
             <el-image class="esl-logo" :src="imgLogo"></el-image>
           </div>
@@ -20,7 +20,7 @@
             www.esl-passport.cn
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="4">
+        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
           <div class="popular-searches">
             Popular Searches
           </div>
@@ -40,7 +40,7 @@
             Industry News
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="4">
+        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
           <div class="quick-links">
             Quick links
           </div>
@@ -57,7 +57,7 @@
             Careers
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
+        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
           <div class="sign-up">
             Sign Up for Our Newsletter
           </div>
@@ -96,13 +96,13 @@
         </el-col>
       </el-row>
       <el-row class="footer-b" :gutter="0" align="middle" justify="center">
-        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="9">
           <div class="footer-b-l">
             <div class="footer-b-l-item">Terms of Use</div>
             <div class="footer-b-l-item footer-b-l-item-margin">Privacy Policy</div>
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
+        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="9">
 
         </el-col>
       </el-row>

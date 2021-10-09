@@ -15,6 +15,8 @@ import VTypical from 'vue-typical'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold } from '@element-plus/icons'
 import {howLong, ymdFormat} from "@/utils";
+import VueGoogleMaps from '@fawmi/vue-google-maps'
+
 const messages = {
     en: {
         message: xllEnUS
@@ -45,6 +47,11 @@ app.use(i18n)
 app.use(VTypical, {
     /* options */
 });
+app.use(VueGoogleMaps, {
+    load: {
+        key: 'YOUR_API_KEY_COMES_HERE',
+    },
+})
 
 app.config.globalProperties.$filters = {
     newsDateFormat(value){
