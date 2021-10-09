@@ -30,3 +30,6 @@ export const USER_OBJECT_LIST = (params) => get('user/userObjectList', params)
 
 // 获取职位详情
 export const JOB_DETAIL = (params) => get('job/detail', params)
+
+// 获取公司职位列表
+export const COMPANY_JOB_LIST = (params) => get('job/companyJobs',params)

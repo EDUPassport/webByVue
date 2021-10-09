@@ -228,7 +228,7 @@
           </template>
         </el-col>
 
-        <el-col :xs="24" :sm="24" :md="24" :lg="1" :xl="1"></el-col>
+        <el-col :xs="24" :sm="24" :md="1" :lg="1" :xl="1"></el-col>
 
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
           <template v-if="businessListData[1]">
@@ -290,7 +290,6 @@
           </div>
         </el-col>
       </el-row>
-
     </div>
 
     <!--  featured deals -->
@@ -809,14 +808,14 @@ export default {
 
 .home-bg {
   background-image: url("~@/assets/bg/bg-15.jpg");
-  background-position: top;
-  background-size: 100%;
+  background-position: center;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
 .xll-search-container {
-  height: 800px;
+  height: 700px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -832,7 +831,7 @@ export default {
 .xll-search-btn-row {
   /*width: 100%;*/
   width: 1100px;
-  margin-top: 140px;
+  margin-top: 100px;
 }
 
 .xll-search-jobs-btn-container {

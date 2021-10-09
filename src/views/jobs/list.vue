@@ -83,87 +83,10 @@
           </div>
 
         </div>
-
-        <div class="featured-jobs-container">
-          <div class="featured-jobs-label">Featured Jobs</div>
-          <div class="featured-jobs-content">
-            <swiper :slidesPerView="1" :spaceBetween="30"
-                    :pagination='{"clickable": true}'
-                    :autoplay='{"delay": 2500,"disableOnInteraction": false}'
-                    :navigation="false"
-                    class="mySwiper">
-              <swiper-slide v-for="(item,index) in jobFeaturedListData" :key="index">
-                <!--                animate__animated  animate__backInUp-->
-                <div class="featured-jobs-card ">
-                  <div class="featured-jobs-card-images">
-                    <el-image class="featured-jobs-card-image" :src="item.logo" fit="fill"></el-image>
-                  </div>
-                  <div class="featured-jobs-title">
-                    <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}" >{{ item.job_title }}</router-link>
-                  </div>
-                  <div class="featured-business-name">{{ item.business_name }}</div>
-                  <div class="featured-jobs-location">
-                    <el-icon>
-                      <LocationFilled></LocationFilled>
-                    </el-icon>
-                    {{ item.address }}
-                  </div>
-                  <div class="featured-jobs-tags">
-                    <view class="featured-jobs-tags-l">
-                      <view class="featured-jobs-work-type">
-                        <i class="iconfont el-icon-alishijian"></i>
-                        <template v-if="item.employment_type==1">FT</template>
-                        <template v-if="item.employment_type==2">PT</template>
-                        <template v-if="item.employment_type==3">S</template>
-                      </view>
-                      <view class="featured-jobs-gender" v-if="item.sex == 1 || item.sex == 2">
-                        <i class="iconfont el-icon-alimale-female"></i>
-                        <template v-if="item.sex == 1">Male</template>
-                        <template v-if="item.sex == 2">Female</template>
-                      </view>
-                      <view class="featured-jobs-work-exp">
-                        <i class="iconfont el-icon-aligongzuojingyan"></i>
-                        1-2 yrs
-                      </view>
-                    </view>
-                    <view class="featured-jobs-salary">
-                      {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
-                    </view>
-
-                  </div>
-                  <div class="featured-jobs-b">
-                    <div class="featured-jobs-b-l">
-                      <el-button class="featured-jobs-apply-btn">Quick Apply</el-button>
-                    </div>
-                    <div class="featured-jobs-b-r">
-                      <el-icon>
-                        <Calendar/>
-                      </el-icon>&nbsp;
-                      {{ $filters.howLongFormat(item.c_time) }}
-                    </div>
-
-                  </div>
-                </div>
-              </swiper-slide>
-            </swiper>
-
-          </div>
-        </div>
-
-        <div class="articles-container">
-          <div class="articles-label">Latest Industry Articles</div>
-          <div class="articles-content">
-            <div class="articles-item" v-for="(item,index) in articleListData" :key="index">
-              <div class="articles-item-l">
-                <el-image class="articles-item-banner" :src="item.url" fit="cover"></el-image>
-              </div>
-              <div class="articles-item-r">
-                <div class="articles-title">{{ item.title }}</div>
-                <div class="articles-date"> {{ $filters.newsDateFormat(item.u_time) }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!--        featuredJobs jobs    -->
+        <featuredJobs></featuredJobs>
+        <!--        latest industry articles-->
+        <latestIndustryNews></latestIndustryNews>
 
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
@@ -176,7 +99,7 @@
               </div>
               <div class="jobs-list-item-r">
                 <div class="jobs-list-item-title">
-                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}" >{{ item.job_title }}</router-link>
+                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">{{ item.job_title }}</router-link>
                 </div>
                 <div class="jobs-list-item-name">
                   {{ item.business_name }}
@@ -242,21 +165,12 @@
 </template>
 
 <script>
-// Import Swiper Vue.js components
-import {Swiper, SwiperSlide} from 'swiper/vue';
-// Import Swiper styles
-import 'swiper/css';
-import "swiper/css/zoom"
-import "swiper/css/pagination"
-import "swiper/css/navigation"
-import SwiperCore, {
-  Pagination, Autoplay, Navigation, Zoom
-} from 'swiper';
+
 import {useRouter} from "vue-router";
-import {ADS_LIST, JOB_FEATURED_LIST, JOB_LIST,USER_OBJECT_LIST} from "@/api/api";
+import {JOB_LIST, USER_OBJECT_LIST} from "@/api/api";
 
-
-SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
+import featuredJobs from "@/components/featuredJobs";
+import latestIndustryNews from "@/components/latestIndustryNews";
 
 export default {
   name: "list",
@@ -296,8 +210,8 @@ export default {
       jobTypeValue: '',
       jobTypeOptions: [
         {
-          label:'Full-time',
-          value:1
+          label: 'Full-time',
+          value: 1
         },
         {
           label: 'Part-time',
@@ -322,8 +236,8 @@ export default {
     }
   },
   components: {
-    Swiper,
-    SwiperSlide
+    featuredJobs,
+    latestIndustryNews
   },
   setup() {
     let router = useRouter()
@@ -352,26 +266,9 @@ export default {
   },
   mounted() {
     this.getJobList(this.jobPage, this.jobLimit)
-    this.getJobFeaturedList()
-    this.getAdsList()
     this.getUserObjectList()
   },
   methods: {
-    getJobFeaturedList() {
-      let params = {
-        ad_type: 2
-      }
-
-      JOB_FEATURED_LIST(params).then(res => {
-        console.log(res)
-        if (res.code === 200) {
-          this.jobFeaturedListData = res.message;
-        } else {
-          console.log(res.msg)
-        }
-      })
-
-    },
     jobPageSizeChange(e) {
       console.log(e)
     },
@@ -386,33 +283,33 @@ export default {
         limit: limit
       }
       let salaryValue = this.salaryValue
-      if(salaryValue !=''){
-         if(salaryValue == 1){
-           params.salary_begin = 0
-           params.salary_end = 5000
-         }
-         if(salaryValue == 2){
-           params.salary_begin = 5000
-           params.salary_end = 10000
-         }
-         if(salaryValue == 3){
-           params.salary_begin = 10000
-           params.salary_end = 15000
-         }
-         if(salaryValue == 4){
-           params.salary_begin = 15000
-         }
+      if (salaryValue != '') {
+        if (salaryValue == 1) {
+          params.salary_begin = 0
+          params.salary_end = 5000
+        }
+        if (salaryValue == 2) {
+          params.salary_begin = 5000
+          params.salary_end = 10000
+        }
+        if (salaryValue == 3) {
+          params.salary_begin = 10000
+          params.salary_end = 15000
+        }
+        if (salaryValue == 4) {
+          params.salary_begin = 15000
+        }
 
       }
-      if(this.genderValue != ''){
+      if (this.genderValue != '') {
         params.sex = this.genderValue
       }
 
-      if(this.jobTypeValue != ''){
+      if (this.jobTypeValue != '') {
         params.employment_type = this.jobTypeValue
       }
 
-      if(this.studentAgeValue != ''){
+      if (this.studentAgeValue != '') {
         params.age_to_teach = this.studentAgeValue
       }
 
@@ -428,56 +325,18 @@ export default {
       })
 
     },
-    getAdsList() {
-      let identity = localStorage.getItem('identity')
-
-      let params = {
-        page: 1,
-        limit: 10000
-      }
-      ADS_LIST(params).then(res => {
+    getUserObjectList() {
+      let params = {}
+      USER_OBJECT_LIST(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let adsData = res.message;
-          // console.log(adsData);
-
-          let adsDataNews = [];
-
-          if (identity == 0 || !identity) {
-            adsDataNews = adsData.filter(item => item.name == 'guest_industry_news');
-          }
-          if (identity == 1) {
-            adsDataNews = adsData.filter(item => item.name == 'educator_industry_news');
-          }
-          if (identity == 2) {
-            adsDataNews = adsData.filter(item => item.name == 'business_industry_news');
-          }
-          if (identity == 3) {
-            adsDataNews = adsData.filter(item => item.name == 'vendor_industry_news');
-          }
-          let articleListData = adsDataNews[0].data;
-          this.articleListData = articleListData;
-          this.articleListLimitData = articleListData.slice(0, 2)
-
-
-        }
-      })
-
-    },
-    getUserObjectList(){
-      let params = {
-
-      }
-      USER_OBJECT_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-            let ageToTeachList = res.message.filter(item=>item.pid == 4)
+          let ageToTeachList = res.message.filter(item => item.pid == 4)
           // let lan = localStorage.getItem('language')
 
-          ageToTeachList.forEach(item=>{
+          ageToTeachList.forEach(item => {
             let obj = {
-              label:item.object_en,
-              value:item.id
+              label: item.object_en,
+              value: item.id
             }
 
             this.studentAgeOptions.push(obj)
@@ -488,25 +347,25 @@ export default {
 
       })
     },
-    salaryChange(e){
+    salaryChange(e) {
       // console.log(e)
       this.salaryValue = e
-      this.getJobList(this.jobPage,this.jobLimit)
+      this.getJobList(this.jobPage, this.jobLimit)
     },
-    genderChange(e){
+    genderChange(e) {
       // console.log(e)
       this.genderValue = e
-      this.getJobList(this.jobPage,this.jobLimit)
+      this.getJobList(this.jobPage, this.jobLimit)
     },
-    jobTypeChange(e){
+    jobTypeChange(e) {
       // console.log(e)
       this.jobTypeValue = e
-      this.getJobList(this.jobPage,this.jobLimit)
+      this.getJobList(this.jobPage, this.jobLimit)
     },
-    studentAgeChange(e){
+    studentAgeChange(e) {
       // console.log(e)
       this.studentAgeValue = e
-      this.getJobList(this.jobPage,this.jobLimit)
+      this.getJobList(this.jobPage, this.jobLimit)
     }
 
   }
@@ -567,200 +426,6 @@ export default {
   margin-top: 10px;
 }
 
-.featured-jobs-container {
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 20px;
-  border: 1px solid #eeeeee;
-  margin-top: 20px;
-}
-
-.featured-jobs-label {
-  font-size: 18px;
-  font-weight: bold;
-  text-align: left;
-}
-
-.featured-jobs-content {
-  margin-top: 10px;
-}
-
-#mySwiper {
-  height: 350px;
-}
-
-.mySwiper {
-  padding-bottom: 30px;
-}
-
-.featured-jobs-card {
-  width: 98%;
-  margin: 0 auto;
-  background-color: #ffffff;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
-  overflow: hidden;
-  border: 1px solid #eeeeee;
-
-}
-
-.featured-jobs-card:hover {
-
-}
-
-.featured-jobs-card-images {
-  width: 100%;
-  height: 240px;
-  overflow: hidden;
-}
-
-.featured-jobs-card-image {
-  width: 100%;
-
-}
-
-.featured-jobs-title {
-  font-weight: bold;
-  font-size: 16px;
-  color: #000000;
-  text-align: left;
-  padding: 0 20px;
-  margin-top: 10px;
-}
-
-.featured-business-name {
-  text-align: left;
-  font-weight: bold;
-  font-size: 16px;
-  color: #808080;
-  padding: 0 20px;
-  margin-top: 10px;
-}
-
-.featured-jobs-location {
-  text-align: left;
-  font-size: 14px;
-  color: #808080;
-  padding: 0 20px;
-  margin-top: 10px;
-}
-
-.featured-jobs-tags {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  margin-top: 10px;
-}
-
-.featured-jobs-tags-l {
-
-}
-
-.featured-jobs-work-type {
-  font-size: 12px;
-  color: #808080;
-}
-
-.featured-jobs-gender {
-  font-size: 12px;
-  color: #808080;
-}
-
-.featured-jobs-work-exp {
-  font-size: 12px;
-  color: #808080;
-}
-
-.featured-jobs-salary {
-  color: #00b3d2;
-  font-size: 12px;
-}
-
-.featured-jobs-b {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  border-top: 1px solid #eeeeee;
-
-}
-
-.featured-jobs-b-l {
-
-}
-
-.featured-jobs-apply-btn {
-  background-color: #b1c452;
-  color: #ffffff;
-}
-
-.featured-jobs-b-r {
-  font-size: 14px;
-  color: #808080;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.articles-container {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #eeeeee;
-  margin-top: 20px;
-}
-
-.articles-label {
-  font-size: 18px;
-  font-weight: bold;
-  text-align: left;
-}
-
-.articles-content {
-  margin-top: 10px;
-}
-
-.articles-item {
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #eeeeee;
-}
-
-.articles-item-l {
-  width: 30%;
-}
-
-.articles-item-banner {
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-}
-
-.articles-item-r {
-  width: 65%;
-}
-
-.articles-title {
-  font-size: 12px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.articles-date {
-  text-align: left;
-  font-size: 12px;
-  margin-top: 16px;
-}
-
-
 .jobs-list-container {
   padding: 20px;
 }
@@ -802,7 +467,7 @@ export default {
   width: 70%;
 }
 
-.jobs-list-item-title a{
+.jobs-list-item-title a {
   font-size: 18px;
   font-weight: bold;
   color: #000000;

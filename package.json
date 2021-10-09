@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build:prod": "vue-cli-service build --mode production",
+    "build:stage": "vue-cli-service  build --mode development",
+    "all": "vue-cli-service  build --mode development && vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -19,6 +21,7 @@
     "natives": "^1.1.6",
     "swiper": "^7.0.6",
     "vue": "^3.0.0",
+    "vue-flip-down": "^3.0.0",
     "vue-i18n": "^9.1.7",
     "vue-router": "^4.0.11",
     "vue-typical": "^2.1.0",

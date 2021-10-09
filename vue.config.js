@@ -1,4 +1,5 @@
 module.exports = {
+    outputDir:process.env.outputDir,
     // 调整内部的 webpack 配置
     configureWebpack: {
 
