@@ -33,3 +33,12 @@ export const JOB_DETAIL = (params) => get('job/detail', params)
 
 // 获取公司职位列表
 export const COMPANY_JOB_LIST = (params) => get('job/companyJobs',params)
+
+// sub cate list
+export const SUB_CATE_LIST = (params) =>get('weixin/subCateList',params)
+
+// deals events tags list
+export const TAGS_LIST = (params) => get('home/tagList',params)
+
+//deals area list
+export const DEALS_AREA_LIST = (params) => get('deals/dealsAreaList',params)

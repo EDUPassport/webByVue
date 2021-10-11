@@ -7,7 +7,7 @@ const routes = [
     {
         path: '/',
         component: layout,
-        redirect: '/comeSoon',
+        redirect: '/home',
         meta: {
             title: 'Home'
         },
