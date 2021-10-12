@@ -299,17 +299,17 @@ export default {
       let self = this;
       let email = this.registerForm.email
       if (email) {
-        self.sendCodeLoading = true;
+
         let params = {
           email: email
         }
 
         SEND_EMAIL_CODE(params).then(res => {
           if (res.code == 200) {
-            this.$message.success('Success')
-
+            self.sendCodeLoading = true;
             setTimeout(function () {
               self.sendCodeLoading = false
+              self.$message.success('Success')
             }, 3000)
 
           }

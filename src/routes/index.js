@@ -43,7 +43,24 @@ const routes = [
                 meta: {
                     title: 'Deals List'
                 }
+            },
+            {
+                path:'overview',
+                name:'overview',
+                component:()=>import('@/views/profile/overview'),
+                meta: {
+                    title: 'Overview'
+                }
+            },
+            {
+                path:'favorites',
+                name:'favorites',
+                component:()=>import('@/views/me/favorites'),
+                meta: {
+                    title: 'My Favorites'
+                }
             }
+
 
 
         ],

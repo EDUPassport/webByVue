@@ -35,9 +35,9 @@ export default {
 <style scoped>
 .bg{
   height: 100vh;
-  background-image: url("~@/assets/bg/bg-h-1.jpg");
+  background-image: url("~@/assets/bg/csoon.jpg");
   background-position: center;
-  background-size: 100% 100%;
+  background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
 

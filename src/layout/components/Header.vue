@@ -11,17 +11,17 @@
           <div class="nav-link-container">
             <router-link to="/home" exact>Home</router-link>
             <router-link to="/jobs" exact>Job Listings</router-link>
-            <router-link to="/comeSoon" exact> Industry News</router-link>
-            <router-link to="/comeSoon" exact>Blog</router-link>
-            <router-link to="/comeSoon" exact> Contact</router-link>
-            <router-link to="/comeSoon" exact> GoDeals</router-link>
+            <router-link to="/" exact> Industry News</router-link>
+            <router-link to="/" exact>Blog</router-link>
+            <router-link to="/" exact> Contact</router-link>
+            <router-link to="/" exact> GoDeals</router-link>
           </div>
         </el-col>
 
         <el-col :xs="12" :sm="3" :md="4" :lg="3" :xl="3">
           <div class="user-container">
             <template v-if="username!='' && username ">
-              Hi,{{ username }}!
+              Hi, <span @click="turnProfilePage()">{{ username }}</span>!
               <el-button type="warning" @click="loginOut">Login Out</el-button>
             </template>
             <template v-else>
@@ -64,6 +64,9 @@ export default {
     loginOut() {
       localStorage.clear()
       location.reload()
+    },
+    turnProfilePage(){
+      this.$router.push('/overview')
     }
   }
 
@@ -103,7 +106,9 @@ export default {
 .user-container {
   text-align: right;
 }
-
+.user-container span{
+  cursor: pointer;
+}
 .router-link-exact-active {
   background-color: #00b3d2;
   color: #ffffff !important;

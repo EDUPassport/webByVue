@@ -810,7 +810,7 @@ export default {
 }
 
 .home-bg {
-  background-image: url("~@/assets/bg/bg-15.jpg");
+  background-image: url("~@/assets/bg/bg-h-1.jpg");
   background-position: center;
   background-size: 100% 100%;
   background-repeat: no-repeat;
