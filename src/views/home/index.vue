@@ -153,7 +153,7 @@
                   <div class="featured-jobs-b">
                     <div class="featured-jobs-b-l">
                       <el-button class="featured-jobs-apply-btn" type="default"
-                      @click="applyJob()"
+                      @click="applyJobs(item.id)"
                       >Quick Apply</el-button>
                     </div>
                     <div class="featured-jobs-b-r">
@@ -590,6 +590,7 @@ SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 import VTypical from 'vue-typical';
 import {ADS_LIST} from "@/api/api";
 import { useRouter} from "vue-router";
+import {APPLY_JOBS} from "../../api/api";
 
 
 export default {
@@ -797,7 +798,28 @@ export default {
     },
     turnDealsPage(){
       this.$router.push({path:'/deals'})
-    }
+    },
+    applyJobs(id) {
+
+      let identity = localStorage.getItem('identity')
+      let token = localStorage.getItem('token')
+      if (identity == 1) {
+        let params = {
+          job_id:id,
+          token:token
+        }
+        APPLY_JOBS(params).then(res=>{
+          if(res.code == 200){
+            this.$message.success('Apply Success')
+          }
+        })
+
+      } else {
+        this.$message.warning('Only Educator Can Apply')
+      }
+
+
+    },
 
   }
 

@@ -42,3 +42,6 @@ export const TAGS_LIST = (params) => get('home/tagList',params)
 
 //deals area list
 export const DEALS_AREA_LIST = (params) => get('deals/dealsAreaList',params)
+
+//申请职位
+export const APPLY_JOBS = (params) => post('job/applyJobs',params)
