@@ -121,6 +121,16 @@
 
               <div class="address-location">
                 <b>Location: </b>
+                <div>
+                  <GMapMap
+                          :center="{lat: detailData.lat, lng: detailData.lng}"
+                          :zoom="7"
+                          map-type-id="terrain"
+                          style="width: 100%; height: 300px;"
+                  >
+                  </GMapMap>
+
+                </div>
               </div>
             </div>
 

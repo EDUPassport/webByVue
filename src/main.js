@@ -49,7 +49,7 @@ app.use(VTypical, {
 });
 app.use(VueGoogleMaps, {
     load: {
-        key: 'YOUR_API_KEY_COMES_HERE',
+        key: 'AIzaSyAEZnQMg_RzTe3KHNaXGkN5sm4rFBm42do',
     },
 })
 
