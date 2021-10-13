@@ -3,22 +3,22 @@
   <div>
     <el-header class="header-container" height="auto">
       <el-row :gutter="0" justify="start" align="middle">
-        <el-col class="logo-container" :xs="12" :sm="3" :md="3" :lg="1" :xl="1">
+        <el-col class="logo-container" :xs="12" :sm="3" :md="3" :lg="2" :xl="2">
           <el-image class="logo-img" :src="logoImg" fit="fill"></el-image>
         </el-col>
 
-        <el-col :xs="0" :sm="18" :md="17" :lg="20" :xl="20">
+        <el-col :xs="0" :sm="18" :md="16" :lg="17" :xl="17">
           <div class="nav-link-container">
             <router-link to="/home" exact>Home</router-link>
             <router-link to="/jobs" exact>Job Listings</router-link>
             <router-link to="/" exact> Industry News</router-link>
             <router-link to="/" exact>Blog</router-link>
             <router-link to="/" exact> Contact</router-link>
-            <router-link to="/" exact> GoDeals</router-link>
+            <router-link to="/deals" exact> Go Deals</router-link>
           </div>
         </el-col>
 
-        <el-col :xs="12" :sm="3" :md="4" :lg="3" :xl="3">
+        <el-col :xs="12" :sm="3" :md="5" :lg="5" :xl="5">
           <div class="user-container">
             <template v-if="username!='' && username ">
               Hi, <span @click="turnProfilePage()">{{ username }}</span>!
