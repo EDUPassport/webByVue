@@ -303,17 +303,20 @@ export default {
         let params = {
           email: email
         }
-
+        self.sendCodeLoading = true
         SEND_EMAIL_CODE(params).then(res => {
           if (res.code == 200) {
-            self.sendCodeLoading = true;
+
             setTimeout(function () {
               self.sendCodeLoading = false
               self.$message.success('Success')
-            }, 3000)
+            }, 1500)
 
           }
 
+        }).catch(err=>{
+          console.log(err)
+          self.sendCodeLoading = false
         })
 
       }
@@ -334,6 +337,7 @@ export default {
               // console.log(res)
               if (res.code == 200) {
                 localStorage.setItem('token', res.message.token)
+                localStorage.setItem('uid',res.message.id)
                 localStorage.setItem('identity', res.message.identity)
                 localStorage.setItem('language', res.message.language)
                 localStorage.setItem('email', res.message.email)
@@ -360,7 +364,7 @@ export default {
                 setTimeout(function () {
                   self.skipHomePage()
                   self.submitLoginLoadingStatus = false
-                }, 2000)
+                }, 1500)
               }
             })
 
