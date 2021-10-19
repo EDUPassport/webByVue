@@ -59,6 +59,14 @@ const routes = [
                 meta: {
                     title: 'My Favorites'
                 }
+            },
+            {
+                path:'/educator/profile',
+                name:'educatorProfile',
+                component:()=>import('@/views/profile/educator/profile'),
+                meta: {
+                    title: 'My Profile'
+                }
             }
 
 
