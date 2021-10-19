@@ -12,22 +12,12 @@
         <router-link to="/favorites" exact>My Favorites</router-link>
       </div>
       <div class="l-item">
-        <router-link to="/" exact>Account Info</router-link>
+        <router-link v-if="identity == 1" to="/educator/profile" exact>My Account & Profile</router-link>
+        <router-link v-if="identity == 2" to="/business/profile" exact>My Account & Profile</router-link>
+        <router-link v-if="identity == 3" to="/vendor/profile" exact>My Account & Profile</router-link>
       </div>
       <div class="l-item">
         <router-link to="/" exact>My Ads</router-link>
-      </div>
-      <div class="l-item">
-        <router-link to="/" exact>My Profile</router-link>
-      </div>
-      <div class="l-item">
-        <router-link to="/" exact>Discount Card</router-link>
-      </div>
-      <div class="l-item">
-        <router-link to="/" exact>Change Language</router-link>
-      </div>
-      <div class="l-item">
-        <router-link to="/" exact>Switch Account</router-link>
       </div>
       <div class="l-item">
         <router-link to="/" exact>My Jobs</router-link>
@@ -39,13 +29,16 @@
         <router-link to="/" exact>My Deals</router-link>
       </div>
       <div class="l-item">
-        <router-link to="/" exact>Post a Job</router-link>
-      </div>
-      <div class="l-item">
         <router-link to="/" exact>Offer a Deal</router-link>
       </div>
       <div class="l-item">
+        <router-link to="/" exact>Privacy Policy</router-link>
+      </div>
+      <div class="l-item">
         <router-link to="/" exact>My Messages</router-link>
+      </div>
+      <div class="l-item">
+        <router-link to="/" exact>My Applications</router-link>
       </div>
     </div>
 
@@ -55,7 +48,16 @@
 
 <script>
 export default {
-  name: "meSideMenu"
+  name: "meSideMenu",
+  setup(){
+    let identity = localStorage.getItem('identity')
+    return {
+      identity
+    }
+  },
+  mounted() {
+    console.log(this.identity)
+  }
 }
 </script>
 

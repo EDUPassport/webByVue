@@ -588,10 +588,8 @@ import SwiperCore, {
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 import VTypical from 'vue-typical';
-import {ADS_LIST} from "@/api/api";
+import {ADS_LIST, APPLY_JOBS} from "@/api/api";
 import { useRouter} from "vue-router";
-import {APPLY_JOBS} from "../../api/api";
-
 
 export default {
   name: "index",
