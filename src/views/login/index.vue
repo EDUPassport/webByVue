@@ -383,6 +383,7 @@ export default {
       this.submitRegisterLoadingStatus = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          // console.log(valid)
           let params = Object.assign({
             identity:self.identityValue
           },this.registerForm)

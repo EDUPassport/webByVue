@@ -16,6 +16,7 @@ import VTypical from 'vue-typical'
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold } from '@element-plus/icons'
 import {howLong, ymdFormat} from "@/utils";
 import VueGoogleMaps from '@fawmi/vue-google-maps'
+import {ymdFormatTimestamp} from "./utils";
 
 const messages = {
     en: {
@@ -41,6 +42,7 @@ app.component('LocationFilled',LocationFilled )
 app.component('Stopwatch',Stopwatch )
 app.component('Calendar',Calendar )
 app.component('ArrowRightBold',ArrowRightBold )
+
 app.use(router)
 app.use(ElementPlus, {locale: zhCn, size: 'small', zIndex: 2000})
 app.use(i18n)
@@ -58,6 +60,9 @@ app.config.globalProperties.$filters = {
         let eParse = new Date(value)
         // console.log(eParse)
         return ymdFormat(eParse,'en-US')
+    },
+    ymdFormatTimestamp(value){
+        return ymdFormatTimestamp(value,'en-US')
     },
     howLongFormat(value){
         let eParse = Date.parse(value) / 1000

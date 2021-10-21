@@ -65,29 +65,7 @@
             </div>
           </div>
 
-          <div class="account-info-container">
-            <div class="account-info-label">Account Info</div>
-            <div class="account-info-content">
-              <div class="account-info-name">
-                Account Name: Llyod
-              </div>
-              <div class="account-info-tags">
-                <div class="account-info-tag">
-                  <el-image></el-image>
-                  <span>Educator</span>
-                </div>
-                <div class="account-info-tag">
-                  <el-image></el-image>
-                  <span>17621732412</span>
-                </div>
-                <div class="account-info-tag">
-                  <el-image></el-image>
-                  <span>Pro Member</span>
-                </div>
-
-              </div>
-            </div>
-          </div>
+          <accountInfo></accountInfo>
 
           <div class="ads-container">
             <el-image></el-image>
@@ -99,11 +77,13 @@
 </template>
 
 <script>
+import accountInfo from "../../components/accountInfo";
 import meSideMenu from "@/components/meSideMenu";
 export default {
   name: "index",
   components:{
-    meSideMenu
+    meSideMenu,
+    accountInfo
   }
 }
 </script>
@@ -168,44 +148,7 @@ export default {
 }
 
 
-.account-info-container{
-  padding: 20px;
-  text-align: left;
-}
 
-.account-info-label{
-  font-size: 20px;
-  font-weight: bold;
-}
-.account-info-content{
-  margin-top: 20px;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
-
-}
-.account-info-name{
-  font-size: 14px;
-}
-
-.account-info-tags{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content:flex-start;
-  padding: 20px 0;
-}
-
-.account-info-tag{
-  margin-left: 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-.account-info-tag span{
-  margin-left: 10px;
-}
 
 .ads-container{
   margin-top: 20px;

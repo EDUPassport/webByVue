@@ -37,6 +37,8 @@ export const COMPANY_JOB_LIST = (params) => get('job/companyJobs',params)
 // sub cate list
 export const SUB_CATE_LIST = (params) =>get('weixin/subCateList',params)
 
+// sub cate lists
+export const SUB_CATE_LISTS = (params) => get('weixin/subCateLists',params)
 // deals events tags list
 export const TAGS_LIST = (params) => get('home/tagList',params)
 
@@ -45,3 +47,33 @@ export const DEALS_AREA_LIST = (params) => get('deals/dealsAreaList',params)
 
 //申请职位
 export const APPLY_JOBS = (params) => post('job/applyJobs',params)
+
+// 获取省市区
+export const ALL_AREAS = (params) => get('getAreas',params)
+
+//user/addEduBasic
+export const ADD_EDU_BASIC = (params) => post('user/addEduBasic',params)
+
+// getBasicInfo
+export const GET_BASIC_INFO = (params) => get('user/info',params)
+
+//visitor/userInfo
+export const VISITOR_USER_INFO = (params) =>get('visitor/userInfo',params)
+
+//user/addLanguageScore
+export const ADD_LANGUAGE_SCORE = (params) => post('user/addLanguageScore',params)
+
+// add profile
+export const ADD_PROFILE = (params) => post('user/addProfile',params)
+
+//user/addUserEducation
+export const ADD_USER_EDUCATION = (params) =>post('user/addUserEducation',params)
+
+//user/addUserWork
+export const ADD_USER_WORK = (params) =>post('user/addUserWork',params)
+
+//user addUserInfo
+export const ADD_USER_INFO = (params)=>post('user/addUserInfo',params)
+
+//user addUserImg
+export const ADD_USER_IMG = (params) => post('user/addUserImg',params)

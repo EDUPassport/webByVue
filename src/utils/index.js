@@ -12,6 +12,21 @@ export const ymdFormat = (time, language) => {
     return month + ' ' + day + ', ' + year;
 }
 
+export const ymdFormatTimestamp = (time, language) => {
+    let t = new Date(time * 1000)
+    let monthArr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Spt", "Oct", "Nov", "Dec"];
+    let monthArrCn = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+
+    let year = t.getFullYear();
+    let month = monthArr[t.getMonth()];
+    let day = t.getDate();
+
+    if (language == 'zh-CN') {
+        month = monthArrCn[t.getMonth()];
+    }
+    return month + ' ' + day + ', ' + year;
+}
+
 export const howLong = (createtime, languageValue) => {
     let now = Date.parse(new Date()) / 1000;
     let limit = now - createtime;

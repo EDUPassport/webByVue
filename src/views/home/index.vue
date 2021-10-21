@@ -573,7 +573,7 @@
 // import TeamComponent from '@/layout/components/Team'
 import imgLogo from '@/assets/logo.png'
 import teamImgOne from '@/assets/team/kongboss.png'
-import {JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST} from "@/api/api";
+import {JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST,ADS_LIST, APPLY_JOBS} from "@/api/api";
 // Import Swiper Vue.js components
 import {Swiper, SwiperSlide} from 'swiper/vue';
 // Import Swiper styles
@@ -588,7 +588,6 @@ import SwiperCore, {
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 import VTypical from 'vue-typical';
-import {ADS_LIST, APPLY_JOBS} from "@/api/api";
 import { useRouter} from "vue-router";
 
 export default {

@@ -15,7 +15,7 @@ const routes = [
             {
                 path: '/home',
                 name: 'home',
-                component: () => import('@/views/home/index.vue'),
+                component: () => import('@/views/home/index'),
                 meta: {
                     title: 'Home'
                 },
@@ -37,7 +37,7 @@ const routes = [
                 }
             },
             {
-                path:'deals',
+                path:'/deals',
                 name:'deals',
                 component:()=>import('@/views/deals/index'),
                 meta: {
@@ -45,7 +45,7 @@ const routes = [
                 }
             },
             {
-                path:'overview',
+                path:'/overview',
                 name:'overview',
                 component:()=>import('@/views/profile/overview'),
                 meta: {
@@ -53,7 +53,7 @@ const routes = [
                 }
             },
             {
-                path:'favorites',
+                path:'/favorites',
                 name:'favorites',
                 component:()=>import('@/views/me/favorites'),
                 meta: {
@@ -67,7 +67,32 @@ const routes = [
                 meta: {
                     title: 'My Profile'
                 }
+            },
+            {
+                path:'/educator/edit/basic',
+                name:'editEducatorBasic',
+                component:()=>import('@/views/profile/educator/edit/basic'),
+                meta: {
+                    title: 'Edit Basic Info'
+                }
+            },
+            {
+                path:'/educator/edit/education',
+                name:'editEducatorEducation',
+                component:()=>import('@/views/profile/educator/edit/education'),
+                meta: {
+                    title: 'Education'
+                }
+            },
+            {
+                path:'/educator/edit/work',
+                name:'editEducatorWork',
+                component:()=>import('@/views/profile/educator/edit/work'),
+                meta: {
+                    title: 'Work Experience'
+                }
             }
+
 
 
 
