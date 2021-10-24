@@ -1,0 +1,266 @@
+<template>
+  <div class="bg">
+    <div class="basic-container">
+      <el-row align="top" justify="center">
+
+        <el-col class="basic-r-container" :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
+          <div class="basic-breadcrumb-container">
+            <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/educator/profile' }">Profile</el-breadcrumb-item>
+              <el-breadcrumb-item>Educator</el-breadcrumb-item>
+            </el-breadcrumb>
+          </div>
+          <div class="basic-form">
+            <el-form
+                ref="basicForm"
+                :model="basicForm"
+                :rules="basicRules"
+                label-width="120px"
+                label-position="top"
+                class="demo-ruleForm"
+            >
+              <el-form-item label="First Name" prop="first_name">
+                <el-input v-model="basicForm.first_name" placeholder="First Name"></el-input>
+              </el-form-item>
+              <el-form-item label="Wechat ID" prop="wx_id">
+                <el-input v-model="basicForm.wx_id" placeholder="Wechat ID"></el-input>
+              </el-form-item>
+
+              <el-form-item label="Profile Photo" prop="profile_photo">
+                <el-upload
+                    class="profile-uploader"
+                    :action="uploadActionUrl"
+                    :headers="uploadHeaders"
+                    :data="uploadData"
+                    :show-file-list="false"
+                    name="file[]"
+                    :on-success="handleProfilePhotoSuccess"
+                    :before-upload="beforeProfilePhotoUpload"
+                >
+                  <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('basicForm')">
+                  Submit
+                </el-button>
+                <el-button @click="resetForm('basicForm')">Reset</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+  </div>
+</template>
+
+<script>
+import {countriesData} from "../../utils/data";
+import {CHANGE_IDENTITY_LANGUAGE, ADD_EDU_BASIC} from '@/api/api'
+
+export default {
+  name: "educator",
+  components: {},
+  data() {
+    return {
+      uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
+      uploadHeaders: {
+        platform: 4
+      },
+      uploadData: {
+        token: localStorage.getItem('token')
+      },
+      profilePhotoUrl: '',
+      logoPhotoUrl: '',
+      nationalityOptions: countriesData,
+      basicForm: {
+        first_name: "",
+        wx_id: '',
+        profile_photo: '',
+        token: localStorage.getItem('token')
+      },
+      basicRules: {
+        first_name: [
+          {
+            required: true,
+            message: 'First Name',
+            trigger: 'blur',
+          }
+        ],
+        wx_id: [
+          {
+            required: true,
+            message: "Wechat ID",
+            trigger: 'blur',
+          },
+        ],
+        profile_photo: [
+          {
+            required: true,
+            message: "Choose Your Profile Photo",
+            trigger: 'change',
+          },
+        ]
+      }
+
+    }
+  },
+  mounted() {
+
+  },
+  methods: {
+    handleProfilePhotoSuccess(res, file) {
+      // console.log(res.data[0]['file_url'])
+      this.profilePhotoUrl = URL.createObjectURL(file.raw)
+      this.basicForm.profile_photo = res.data[0]['file_url']
+    },
+    beforeProfilePhotoUpload(file) {
+
+      const isLt2M = file.size / 1024 / 1024 < 20
+
+      if (!isLt2M) {
+        this.$message.error('Avatar picture size can not exceed 20MB')
+      }
+      return isLt2M
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log(this.basicForm)
+          let params = Object.assign({}, this.basicForm)
+          ADD_EDU_BASIC(params).then(res => {
+            console.log(res)
+            if (res.code == 200) {
+              // this.$router.push('/educator/profile')
+              this.changeIdentity(1)
+            }
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    },
+    changeIdentity(identity) {
+      let params = {
+        token: localStorage.getItem('token'),
+        identity: identity
+      }
+
+      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          console.log('success')
+          localStorage.setItem('identity',identity)
+          this.$router.push('/home')
+        }
+      })
+
+    }
+
+
+  }
+}
+</script>
+
+<style scoped>
+.bg {
+  background-color: #f5f6f7;
+}
+
+.basic-container {
+  width: 1100px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.basic-breadcrumb-container {
+  padding: 10px;
+}
+
+.basic-r-container {
+  padding: 20px;
+}
+
+.basic-form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.demo-ruleForm {
+  text-align: left;
+}
+
+.categories-tags {
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px dashed #EEEEEE;
+  padding-bottom: 10px;
+}
+
+.categories-tags:last-child {
+  border-bottom: none;
+}
+
+.category-parent {
+  width: 100%;
+  font-size: 14px;
+  color: #808080;
+  font-weight: 700;
+  text-align: left;
+}
+
+.categories-tags-item {
+  padding: 4px 10px;
+  background-color: #EEEEEE;
+  margin-top: 10px;
+  margin-left: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tag-active {
+  background-color: #00b3d2;
+  color: #FFFFFF;
+}
+
+/deep/ .profile-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/deep/ .profile-uploader .el-upload:hover {
+  border-color: #0AA0A8;
+}
+
+/deep/ .avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+
+</style>

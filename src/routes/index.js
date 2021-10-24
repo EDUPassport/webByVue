@@ -61,6 +61,30 @@ const routes = [
                 }
             },
             {
+                path:'/role/educator',
+                name:'roleEducator',
+                component:()=>import('@/views/role/educator'),
+                meta: {
+                    title: 'Educator'
+                }
+            },
+            {
+                path:'/role/business',
+                name:'roleBusiness',
+                component:()=>import('@/views/role/business'),
+                meta: {
+                    title: 'Business'
+                }
+            },
+            {
+                path:'/role/vendor',
+                name:'roleVendor',
+                component:()=>import('@/views/role/vendor'),
+                meta: {
+                    title: 'Vendor'
+                }
+            },
+            {
                 path:'/educator/profile',
                 name:'educatorProfile',
                 component:()=>import('@/views/profile/educator/profile'),
@@ -91,7 +115,31 @@ const routes = [
                 meta: {
                     title: 'Work Experience'
                 }
-            }
+            },
+            {
+                path:'/business/profile',
+                name:'businessProfile',
+                component:()=>import('@/views/profile/business/profile'),
+                meta: {
+                    title: 'My Profile'
+                }
+            },
+            {
+                path:'/business/edit/basic',
+                name:'editBusinessBasic',
+                component:()=>import('@/views/profile/business/edit/basic'),
+                meta: {
+                    title: 'Edit Basic Info'
+                }
+            },
+            {
+                path:'/vendor/profile',
+                name:'vendorProfile',
+                component:()=>import('@/views/profile/vendor/profile'),
+                meta: {
+                    title: 'My Profile'
+                }
+            },
 
 
 

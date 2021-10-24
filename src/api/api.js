@@ -77,3 +77,12 @@ export const ADD_USER_INFO = (params)=>post('user/addUserInfo',params)
 
 //user addUserImg
 export const ADD_USER_IMG = (params) => post('user/addUserImg',params)
+
+// 切换身份 huo language
+export const CHANGE_IDENTITY_LANGUAGE = (params)=>post('weixin/change',params)
+
+//addBusinessBasic
+export const ADD_BUSINESS_BASIC = (params)=>post('user/addBusinessBasic',params)
+
+//addVendorBasic
+export const ADD_VENDOR_BASIC = (params)=>post('user/addVendorBasic',params)
