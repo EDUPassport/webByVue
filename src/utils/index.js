@@ -85,3 +85,14 @@ export const howLong = (createtime, languageValue) => {
 export const isPhone = ()=>{
     return (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent))
 }
+
+export const randomString= ()=>{
+    let len = 32;
+    let chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
+    let maxPos = chars.length;
+    let character = '';
+    for(let i=0;i<len;i++){
+        character+=chars.charAt(Math.floor(Math.random()*maxPos))
+    }
+    return character;
+}

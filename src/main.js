@@ -52,6 +52,7 @@ app.use(VTypical, {
 app.use(VueGoogleMaps, {
     load: {
         key: 'AIzaSyAEZnQMg_RzTe3KHNaXGkN5sm4rFBm42do',
+        libraries:"places"
     },
 })
 

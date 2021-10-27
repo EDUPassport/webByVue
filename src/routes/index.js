@@ -37,11 +37,51 @@ const routes = [
                 }
             },
             {
+                path:'/jobs/post',
+                name:'postJob',
+                component:()=>import('@/views/jobs/post/post'),
+                meta: {
+                    title: 'Post a Job'
+                }
+            },
+            {
+                path:'/jobs/myJobs',
+                name:'myJobs',
+                component:()=>import('@/views/jobs/my/jobs'),
+                meta: {
+                    title: 'My Posted Jobs'
+                }
+            },
+            {
                 path:'/deals',
                 name:'deals',
                 component:()=>import('@/views/deals/index'),
                 meta: {
                     title: 'Deals List'
+                }
+            },
+            {
+                path:'/deals/offer',
+                name:'dealsOffer',
+                component:()=>import('@/views/deals/offer/offer'),
+                meta: {
+                    title: 'Offer a Deal'
+                }
+            },
+            {
+                path:'/deals/myDeals',
+                name:'myDeals',
+                component:()=>import('@/views/deals/my/deals'),
+                meta: {
+                    title: 'My Deals'
+                }
+            },
+            {
+                path:'/deals/detail',
+                name:'dealDetail',
+                component:()=>import('@/views/deals/detail'),
+                meta: {
+                    title: 'Deal Detail'
                 }
             },
             {
@@ -133,6 +173,22 @@ const routes = [
                 }
             },
             {
+                path:'/business/edit/businessInfo',
+                name:'editBusinessInfo',
+                component:()=>import('@/views/profile/business/edit/businessInfo'),
+                meta: {
+                    title: 'Edit Business Information'
+                }
+            },
+            {
+                path:'/business/edit/school',
+                name:'editSchoolInfo',
+                component:()=>import('@/views/profile/business/edit/school'),
+                meta: {
+                    title: 'Edit School Information'
+                }
+            },
+            {
                 path:'/vendor/profile',
                 name:'vendorProfile',
                 component:()=>import('@/views/profile/vendor/profile'),
@@ -140,9 +196,30 @@ const routes = [
                     title: 'My Profile'
                 }
             },
-
-
-
+            {
+                path:'/vendor/edit/basic',
+                name:'editVendorBasic',
+                component:()=>import('@/views/profile/vendor/edit/basic'),
+                meta: {
+                    title: 'Edit Basic Info'
+                }
+            },
+            {
+                path:'/vendor/edit/vendorInfo',
+                name:'editVendorInfo',
+                component:()=>import('@/views/profile/vendor/edit/vendorInfo'),
+                meta: {
+                    title: 'Edit Company General Info'
+                }
+            },
+            {
+                path:'/vendor/edit/legalInfo',
+                name:'editLegalInfo',
+                component:()=>import('@/views/profile/vendor/edit/legalInfo'),
+                meta: {
+                    title: 'Edit Company Legal Info'
+                }
+            }
 
         ],
     },

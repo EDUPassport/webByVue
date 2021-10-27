@@ -52,7 +52,9 @@
         </el-col>
         <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
           <div class="deals-container">
-            <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index">
+            <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index"
+                 @click="turnDealDetail(item.id)"
+            >
 
               <div class="deals-item-bg" :style="'background-image:url('+ item.user_info.profile_photo + ')'">
                 <div class="deals-item-t">
@@ -146,6 +148,11 @@ export default {
     this.getDealsList(this.dealPage,this.dealLimit,this.sCateId)
   },
   methods: {
+    turnDealDetail(id){
+      this.$router.push({path:'/deals/detail',query:{
+          id:id
+        }})
+    },
     selectSubCate(cateId){
       // console.log(cateId)
       if(this.sCateId == cateId){

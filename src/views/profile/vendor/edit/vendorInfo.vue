@@ -9,8 +9,8 @@
           <div class="basic-breadcrumb-container">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-              <el-breadcrumb-item :to="{ path: '/business/profile' }">Profile</el-breadcrumb-item>
-              <el-breadcrumb-item>Business Information</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/vendor/profile' }">Profile</el-breadcrumb-item>
+              <el-breadcrumb-item>Company General Info</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           <div class="basic-form">
@@ -22,22 +22,18 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <el-form-item label="Business Name" prop="business_name">
-                <el-input v-model="basicForm.business_name" placeholder="Business Name"></el-input>
+              <el-form-item label="Vendor Introduction" >
+                <el-input v-model="basicForm.vendor_bio" placeholder="Vendor Introduction"></el-input>
               </el-form-item>
-              <el-form-item label="Business Introduction" prop="business_bio">
-                <el-input v-model="basicForm.business_bio" type="textarea" placeholder="Business Introduction"></el-input>
+              <el-form-item label="WeChat Official Account ID" >
+                <el-input v-model="basicForm.wechat_public_name" placeholder="WeChat Official Account ID"></el-input>
               </el-form-item>
-              <el-form-item label="Year Founded" >
-                <el-date-picker
-                    v-model="basicForm.year_founded"
-                    type="year"
-                    value-format="YYYY"
-                    placeholder="Year Founded"
-                    style="width: 100%"
-                ></el-date-picker>
+              <el-form-item label="Website" >
+                <el-input v-model="basicForm.website" placeholder="Website"></el-input>
               </el-form-item>
-
+              <el-form-item label="Phone #" >
+                <el-input v-model="basicForm.phone" placeholder="Phone #"></el-input>
+              </el-form-item>
               <el-form-item label="Location">
                 <el-select v-model="basicForm.province"
                            @change="provinceChange"
@@ -57,22 +53,19 @@
                              :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
-<!--              <el-form-item label="Add Location Pin" >-->
-<!--                <el-input v-model="basicForm.address" placeholder="Add Location Pin"></el-input>-->
-<!--                <GMapAutocomplete-->
-<!--                    placeholder="This is a placeholder"-->
-<!--                    @place_changed="setPlace"-->
-<!--                >-->
-<!--                </GMapAutocomplete>-->
-<!--              </el-form-item>-->
-              <el-form-item label="Website" >
-                <el-input v-model="basicForm.website" placeholder="www.eslpassport.com"></el-input>
+              <!--              <el-form-item label="Add Location Pin" >-->
+              <!--                <el-input v-model="basicForm.address" placeholder="Add Location Pin"></el-input>-->
+              <!--                <GMapAutocomplete-->
+              <!--                    placeholder="This is a placeholder"-->
+              <!--                    @place_changed="setPlace"-->
+              <!--                >-->
+              <!--                </GMapAutocomplete>-->
+              <!--              </el-form-item>-->
+              <el-form-item label="Dog Friendly">
+                <el-switch v-model="basicForm.is_dog_friendly"></el-switch>
               </el-form-item>
-              <el-form-item label="Business Phone #" >
-                <el-input v-model="basicForm.business_phone" placeholder="Business Phone #"></el-input>
-              </el-form-item>
-              <el-form-item label="Currently Hiring">
-                <el-switch v-model="basicForm.is_currently_hiring"></el-switch>
+              <el-form-item label="Do you have events?">
+                <el-switch v-model="basicForm.is_events"></el-switch>
               </el-form-item>
 
               <el-form-item>
@@ -82,6 +75,7 @@
                 <el-button @click="resetForm('basicForm')">Reset</el-button>
               </el-form-item>
             </el-form>
+
           </div>
         </el-col>
       </el-row>
@@ -91,125 +85,54 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {ALL_AREAS, ADD_BUSINESS_BASIC} from '@/api/api'
-import {countriesData} from "../../../../utils/data";
+import { ALL_AREAS,ADD_VENDOR_BASIC} from '@/api/api'
 
 export default {
-  name: "businessInfo",
+  name: "vendorInfo",
   components: {
     meSideMenu
   },
   data() {
     return {
+
       basicForm: {
-        business_name: '',
-        business_bio: '',
-        year_founded: '',
-        location: '',
+        vendor_bio: '',
         country: '',
+        location:'',
         province: '',
         city: '',
         district: '',
-        website: '',
-        business_phone: '',
-        is_currently_hiring: 0,
-        curriculum: '',
-        is_special_needs: '',
-        staff_student_ratio: '',
-        technology_available: '',
-        felds_trips: '',
-        is_events: '',
-        contact_name: '',
-        contact_phone: '',
-        is_school: '',
         address: '',
-        lat: '',
-        lng: '',
+        website: '',
+        wechat_public_name: '',
+        phone: '',
+        is_events: 0,
+        is_dog_friendly: 0,
+        lat:'',
+        lng:'',
         token:localStorage.getItem('token')
       },
       basicRules: {
-        business_name: [
+        vendor_bio: [
           {
             required: true,
-            message: 'Please input ',
+            message: 'Please input',
             trigger: 'blur',
           }
         ],
-        business_bio: [
-          {
-            required: true,
-            message: 'Please input ',
-            trigger: 'blur',
-          },
-        ]
-
 
       },
-      sexOptions: [
-        {
-          value: 1,
-          object_en: 'Male',
-          object_cn: '男'
-        },
-        {
-          value: 2,
-          object_en: 'Female',
-          object_cn: "女"
-        },
-        {
-          value: 3,
-          object_en: 'No Gender Requirements',
-          object_cn: '无性别要求'
-        }
-      ],
-      nationalityOptions: countriesData,
       provinceOptions: [],
       cityOptions: [],
       districtOptions: [],
-      subCateOptions: [],
-      selectEducatorTypeList: []
 
     }
   },
   mounted() {
     // console.log(countriesData)
     this.getAllAreas(0)
-
   },
   methods: {
-    setPlace(e){
-      console.log(e)
-    },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-
-          if (this.basicForm.is_currently_hiring) {
-            this.basicForm.is_currently_hiring = 1
-          } else {
-            this.basicForm.is_currently_hiring = 0
-          }
-
-          let params = Object.assign({}, this.basicForm);
-          ADD_BUSINESS_BASIC(params).then(res => {
-            console.log(res)
-            if(res.code == 200){
-              this.$router.push('/business/profile')
-            }
-          })
-
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-    },
-    handleChange(e) {
-      console.log(e)
-    },
     getAllAreas(pid) {
       let params = {
         pid: pid
@@ -254,6 +177,40 @@ export default {
     districtChange(e) {
       console.log(e)
     },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.basicForm.is_dog_friendly) {
+            this.basicForm.is_dog_friendly = 1
+          } else {
+            this.basicForm.is_dog_friendly = 0
+          }
+          if (this.basicForm.is_events) {
+            this.basicForm.is_events = 1
+          } else {
+            this.basicForm.is_events = 0
+          }
+          let params = Object.assign({}, this.basicForm)
+          ADD_VENDOR_BASIC(params).then(res => {
+            console.log(res)
+            if(res.code == 200){
+              this.$router.push('/vendor/profile')
+            }
+          })
+
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    },
+    handleChange(e) {
+      console.log(e)
+    },
+
 
 
   }
@@ -322,8 +279,95 @@ export default {
   background-color: #00b3d2;
   color: #FFFFFF;
 }
+.object-show-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.object-show-item {
+  background-color: rgba(0, 179, 210, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.object-tags-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.object-tags {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+
+}
+
+.object-tags-item {
+  background-color: rgba(0, 179, 210, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.object-tags-add {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.object-tags-item-add {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.tags-active {
+  background-color: #00CE47;
+  color: #FFFFFF;
+}
+
+
 .basic-breadcrumb-container{
   padding: 10px;
+}
+/deep/ .profile-uploader .el-upload{
+  border: 1px dashed #d9d9d9;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+/deep/ .profile-uploader .el-upload:hover {
+  border-color: #0AA0A8;
+}
+/deep/ .avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+.profile-avatar{
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 
 </style>

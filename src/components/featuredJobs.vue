@@ -171,12 +171,17 @@ export default {
 }
 
 .featured-jobs-title {
+  padding: 0 20px;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.featured-jobs-title a{
+  text-decoration: none;
   font-weight: bold;
   font-size: 16px;
   color: #000000;
-  text-align: left;
-  padding: 0 20px;
-  margin-top: 10px;
+
 }
 
 .featured-business-name {

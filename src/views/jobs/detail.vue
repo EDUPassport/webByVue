@@ -121,15 +121,8 @@
 
               <div class="address-location">
                 <b>Location: </b>
-                <div>
-                  <GMapMap
-                          :center="{lat: detailData.lat, lng: detailData.lng}"
-                          :zoom="7"
-                          map-type-id="terrain"
-                          style="width: 100%; height: 300px;"
-                  >
-                  </GMapMap>
-
+                <div class="map-container">
+                  <div id="mapContainer" class="basemap"></div>
                 </div>
               </div>
             </div>
@@ -208,12 +201,18 @@
 </template>
 
 <script>
+import mapboxgl from "mapbox-gl";
+import 'mapbox-gl/dist/mapbox-gl.css'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import {COMPANY_JOB_LIST, JOB_DETAIL} from "@/api/api";
 import latestIndustryNews from "@/components/latestIndustryNews";
 export default {
   name: "detail",
   data() {
     return {
+      accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
+      mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       detailData: {},
       otherJobsData:[]
     }
@@ -226,6 +225,37 @@ export default {
     this.getJobDetail(jobId)
   },
   methods: {
+    initMap(lng,lat){
+      mapboxgl.accessToken = this.accessToken;
+
+      const map = new mapboxgl.Map({
+        container: "mapContainer",
+        center: [lng, lat],
+        style: this.mapStyle,
+        zoom: 12
+      });
+      const nav = new mapboxgl.NavigationControl();
+      map.addControl(nav, "top-right");
+
+      const geolocate = new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      });
+
+      map.addControl(geolocate, "top-right")
+
+      const geocoder = new MapboxGeocoder({
+        "accessToken": this.accessToken,
+        "mapboxgl": mapboxgl
+      })
+
+      map.addControl(geocoder, 'top-left')
+      const marker = new mapboxgl.Marker()
+      marker.setLngLat([lng,lat]).addTo(map)
+
+    },
     getJobDetail(id) {
       let params = {
         job_id: id
@@ -234,6 +264,7 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.detailData = res.message
+          this.initMap(res.message.lng,res.message.lat)
           let userId = res.message.user_id
           this.getCompanyJobList(userId)
         }
@@ -795,5 +826,13 @@ export default {
 .other-jobs-r-b{
   font-size: 14px;
   margin-top: 20px;
+}
+
+.map-container{
+  height: 300px;
+}
+.basemap{
+  width: 100%;
+  height: 100%;
 }
 </style>

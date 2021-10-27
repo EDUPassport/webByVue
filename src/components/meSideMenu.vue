@@ -1,8 +1,8 @@
 <template>
   <div class="profile-l-container">
     <div class="profile-photo-container">
-      <el-image class="profile-photo"></el-image>
-      <span>Jon Snow</span>
+      <el-image class="profile-photo" :src="accountPhotoValue"></el-image>
+      <span>{{accountInfo.first_name}} {{accountInfo.last_name}}</span>
     </div>
     <div class="l-container">
       <div class="l-item">
@@ -20,16 +20,19 @@
         <router-link to="/" exact>My Ads</router-link>
       </div>
       <div class="l-item">
-        <router-link to="/" exact>My Jobs</router-link>
+        <router-link to="/jobs/myJobs" exact>My Jobs</router-link>
+      </div>
+<!--      <div class="l-item">-->
+<!--        <router-link to="/" exact>My Events</router-link>-->
+<!--      </div>-->
+      <div class="l-item">
+        <router-link to="/deals/myDeals" exact>My Deals</router-link>
       </div>
       <div class="l-item">
-        <router-link to="/" exact>My Events</router-link>
+        <router-link :to="{path:'/jobs/post',query:{version_time:versionTime}}" exact>Post a Job</router-link>
       </div>
       <div class="l-item">
-        <router-link to="/" exact>My Deals</router-link>
-      </div>
-      <div class="l-item">
-        <router-link to="/" exact>Offer a Deal</router-link>
+        <router-link to="/deals/offer" exact>Offer a Deal</router-link>
       </div>
       <div class="l-item">
         <router-link to="/" exact>Privacy Policy</router-link>
@@ -47,6 +50,9 @@
 </template>
 
 <script>
+import {randomString} from "../utils";
+import {GET_BASIC_INFO} from  '@/api/api'
+
 export default {
   name: "meSideMenu",
   setup(){
@@ -55,8 +61,47 @@ export default {
       identity
     }
   },
+  data(){
+    return {
+      accountInfo:{},
+      accountPhotoValue:'',
+      versionTime:randomString()
+    }
+  },
   mounted() {
-    console.log(this.identity)
+    // console.log(this.identity)
+    this.getBasicInfo()
+  },
+  methods:{
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let identity = localStorage.getItem('identity')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+
+          this.phone = res.message.phone;
+          if (identity == 1 && res.message.educator_info) {
+            this.accountInfo = res.message.educator_info;
+            this.accountPhotoValue = res.message.educator_info.profile_photo
+          }
+          if (identity == 2 && res.message.business_info) {
+            this.accountInfo = res.message.business_info;
+            this.accountPhotoValue = res.message.business_info.logo
+
+          }
+          if (identity == 3 && res.message.vendor_info) {
+            this.accountInfo = res.message.vendor_info;
+            this.accountPhotoValue = res.message.vendor_info.logo
+          }
+
+        }
+      })
+    }
   }
 }
 </script>

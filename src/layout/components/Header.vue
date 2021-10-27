@@ -224,6 +224,7 @@ export default {
           localStorage.setItem('identity',identity)
           this.dialogSwitchAccountVisible =false
           this.getBasicInfo()
+          this.$router.push('/home')
         }
       })
 

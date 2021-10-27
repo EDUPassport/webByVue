@@ -86,3 +86,25 @@ export const ADD_BUSINESS_BASIC = (params)=>post('user/addBusinessBasic',params)
 
 //addVendorBasic
 export const ADD_VENDOR_BASIC = (params)=>post('user/addVendorBasic',params)
+
+//job addprofile
+export const JOB_ADD_PROFILE = (params)=>post('job/addProfile',params)
+
+//add job
+export const ADD_JOB = (params)=>post('job/add',params)
+
+// my jobs
+export const MY_JOBS = (params)=>get('job/myJobs',params)
+
+// tags list
+export const TAG_LIST = (params)=>get('home/tagList',params)
+//tag is exists
+export const TAG_IS_EXISTS = (params)=>get('home/tagIsExists',params)
+//add deals
+export const ADD_DEALS = (params)=>post('deals/addDeals',params)
+
+//mydeals
+export const MY_DEALS = (params)=>get('myDeals',params)
+
+//deals detail
+export const DEALS_DETAIL=(params)=>get('deals/detail',params)
