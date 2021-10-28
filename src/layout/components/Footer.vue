@@ -2,7 +2,7 @@
   <div>
     <el-backtop/>
     <el-footer height="auto" class="footer-bg">
-      <el-row :gutter="0" align="middle" justify="center">
+      <el-row class="footer-row" :gutter="0" align="top" justify="center">
         <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
           <div class="esl-logo-container">
             <el-image class="esl-logo" :src="imgLogo"></el-image>
@@ -17,7 +17,10 @@
             (+68)1221 09876
           </div>
           <div class="esl-url">
-            www.esl-passport.cn
+            <el-link class="esl-url-link"
+                     href="https://www.eslpassport.com" target="_blank" :underline="false">
+              www.eslpassport.com
+            </el-link>
           </div>
         </el-col>
         <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
@@ -25,20 +28,20 @@
             Popular Searches
           </div>
           <div class="esl-jobs">
-            ESL Jobs
+            <router-link to="/jobs">ESL Jobs</router-link>
           </div>
           <div class="esl-deals">
-            Deals
+            <router-link to="/deals"> Deals</router-link>
           </div>
-          <div class="esl-events">
-            Events
-          </div>
-          <div class="esl-business-list">
-            Business Listings
-          </div>
-          <div class="esl-industry-news">
-            Industry News
-          </div>
+<!--          <div class="esl-events">-->
+<!--            Events-->
+<!--          </div>-->
+<!--          <div class="esl-business-list">-->
+<!--            Business Listings-->
+<!--          </div>-->
+<!--          <div class="esl-industry-news">-->
+<!--            Industry News-->
+<!--          </div>-->
         </el-col>
         <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
           <div class="quick-links">
@@ -50,19 +53,19 @@
           <div class="privacy">
             Privacy Policy
           </div>
-          <div class="contact-support">
-            Contact Support
-          </div>
-          <div class="careers">
-            Careers
-          </div>
+<!--          <div class="contact-support">-->
+<!--            Contact Support-->
+<!--          </div>-->
+<!--          <div class="careers">-->
+<!--            Careers-->
+<!--          </div>-->
         </el-col>
         <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
           <div class="sign-up">
             Sign Up for Our Newsletter
           </div>
           <div class="sign-up-tips">
-            Lorem ipsum dolor sit amet, consecte tur cing elit. Suspe ndisse suscipit sagittis
+            Subscribe to newsletter to receive exclusive offers and the latest news
           </div>
           <div class="sign-up-form">
 
@@ -142,7 +145,10 @@ export default {
   text-align: left;
   padding: 20px 40px;
 }
-
+.footer-row{
+  width: 1100px;
+  margin: 0 auto;
+}
 .esl-logo {
   width: 120px;
   height: 120px;
@@ -163,9 +169,10 @@ export default {
   font-size: 16px;
 }
 
-.esl-url {
+.esl-url-link {
   line-height: 30px;
   font-size: 16px;
+  color: #ffffff;
 }
 
 .popular-searches {
@@ -179,10 +186,17 @@ export default {
   line-height: 30px;
   font-size: 16px;
 }
-
+.esl-jobs a{
+  text-decoration: none;
+  color: #ffffff;
+}
 .esl-deals {
   line-height: 30px;
   font-size: 16px;
+}
+.esl-deals a{
+  text-decoration: none;
+  color: #ffffff;
 }
 
 .esl-events {
@@ -235,7 +249,8 @@ export default {
 
 .sign-up-tips {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
+  color: #808080;
 }
 
 .sign-up-form {
@@ -269,6 +284,8 @@ export default {
 }
 
 .footer-b {
+  width: 1100px;
+  margin: 0 auto;
   text-align: left;
 }
 

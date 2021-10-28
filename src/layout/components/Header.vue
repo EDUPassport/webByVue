@@ -11,9 +11,9 @@
           <div class="nav-link-container">
             <router-link to="/home" exact>Home</router-link>
             <router-link to="/jobs" exact>Job Listings</router-link>
-            <router-link to="/" exact> Industry News</router-link>
-            <router-link to="/" exact>Blog</router-link>
-            <router-link to="/" exact> Contact</router-link>
+<!--            <router-link to="/" exact> Industry News</router-link>-->
+<!--            <router-link to="/" exact>Blog</router-link>-->
+<!--            <router-link to="/" exact> Contact</router-link>-->
             <router-link to="/deals" exact> Go Deals</router-link>
           </div>
         </el-col>
