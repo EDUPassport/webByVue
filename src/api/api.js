@@ -108,3 +108,12 @@ export const MY_DEALS = (params)=>get('myDeals',params)
 
 //deals detail
 export const DEALS_DETAIL=(params)=>get('deals/detail',params)
+
+// featured deals list
+export const FEATURED_DEALS_LIST = (params)=>get('home/featuredDealsList',params)
+
+//get system info
+export const GET_SYSTEM_INFO = (params)=>get('home/getSystemInfo',params)
+
+//add favorite
+export const ADD_FAVORITE = (params)=>post('favorite/addFavorite',params)

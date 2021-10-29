@@ -14,7 +14,7 @@
                   <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                 </div>
                 <div class="dashboard-item-r">
-                  <router-link to="/">Job Posts</router-link>
+                  <router-link to="/jobs">Job Posts</router-link>
                 </div>
               </div>
               <div class="dashboard-item deals-bg">
@@ -22,50 +22,50 @@
                   <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                 </div>
                 <div class="dashboard-item-r">
-                  <router-link to="/"> My Deals</router-link>
+                  <router-link to="/deals"> My Deals</router-link>
                 </div>
               </div>
 
-              <div class="dashboard-item ads-bg">
-                <div class="dashboard-item-l">
-                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                </div>
-                <div class="dashboard-item-r">
-                  <router-link to="/">My Ads</router-link>
-                </div>
-              </div>
+<!--              <div class="dashboard-item ads-bg">-->
+<!--                <div class="dashboard-item-l">-->
+<!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
+<!--                </div>-->
+<!--                <div class="dashboard-item-r">-->
+<!--                  <router-link to="/">My Ads</router-link>-->
+<!--                </div>-->
+<!--              </div>-->
 
-              <div class="dashboard-item events-bg">
-                <div class="dashboard-item-l">
-                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                </div>
-                <div class="dashboard-item-r">
-                  <router-link to="/">Events</router-link>
-                </div>
-              </div>
+<!--              <div class="dashboard-item events-bg">-->
+<!--                <div class="dashboard-item-l">-->
+<!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
+<!--                </div>-->
+<!--                <div class="dashboard-item-r">-->
+<!--                  <router-link to="/">Events</router-link>-->
+<!--                </div>-->
+<!--              </div>-->
 
               <div class="dashboard-item favorites-bg">
                 <div class="dashboard-item-l">
                   <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                 </div>
                 <div class="dashboard-item-r">
-                  <router-link to="/">My Favorites</router-link>
+                  <router-link to="/favorites">My Favorites</router-link>
                 </div>
               </div>
 
-              <div class="dashboard-item msg-bg">
-                <div class="dashboard-item-l">
-                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                </div>
-                <div class="dashboard-item-r">
-                  <router-link to="/">My Messages</router-link>
-                </div>
-              </div>
+<!--              <div class="dashboard-item msg-bg">-->
+<!--                <div class="dashboard-item-l">-->
+<!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
+<!--                </div>-->
+<!--                <div class="dashboard-item-r">-->
+<!--                  <router-link to="/">My Messages</router-link>-->
+<!--                </div>-->
+<!--              </div>-->
 
             </div>
           </div>
 
-          <accountInfo></accountInfo>
+          <accountInfo :info="userInfo" :phone="basicUserInfo.phone" ></accountInfo>
 
           <div class="ads-container">
             <el-image class="ads-img" :src="dashboardAdsImg"></el-image>
@@ -82,6 +82,7 @@ import meSideMenu from "@/components/meSideMenu";
 import {VISITOR_USER_INFO} from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
+import { onBeforeRouteUpdate } from "vue-router";
 
 export default {
   name: "index",
@@ -94,10 +95,17 @@ export default {
       dashboardListsImg,
       dashboardAdsImg,
       userInfo: {},
-      basicUserInfo: {}
+      basicUserInfo: {},
+      identity:this.$route.query.identity
     }
   },
   mounted() {
+    onBeforeRouteUpdate( to =>{
+      console.log(to)
+      this.identity = to.query.identity
+      this.getVisitorBasicInfo()
+      // console.log(to.params, to.query)
+    })
     this.getVisitorBasicInfo()
   },
   methods: {
@@ -195,7 +203,7 @@ export default {
 }
 .ads-container {
   margin-top: 20px;
-  padding: 20px;
+  padding:0 20px;
 }
 .ads-img{
   width: 100%;

@@ -83,16 +83,23 @@
 
             <div class="social-media">
               <div class="social-media-item">
-                Twitter
+                <el-link class="social-media-item-link"
+                         href="https://www.eslpassport.com" target="_blank" :underline="false">
+                  <el-image  class="social-media-item-img" :src="twitterImg"></el-image>
+                </el-link>
+
               </div>
               <div class="social-media-item">
-                Twitter
+                <el-link class="social-media-item-link"
+                         href="https://www.eslpassport.com" target="_blank" :underline="false">
+                  <el-image  class="social-media-item-img" :src="facebookImg"></el-image>
+                </el-link>
               </div>
               <div class="social-media-item">
-                Twitter
-              </div>
-              <div class="social-media-item">
-                Twitter
+                <el-link class="social-media-item-link"
+                         href="https://www.eslpassport.com" target="_blank" :underline="false">
+                  <el-image class="social-media-item-img" :src="linkedinImg"></el-image>
+                </el-link>
               </div>
             </div>
           </div>
@@ -115,12 +122,18 @@
 
 <script>
 import imgLogo from '@/assets/logo.png'
+import twitterImg from '@/assets/footer/twitter-footer.png'
+import linkedinImg from '@/assets/footer/linkedin-footer.png'
+import facebookImg from '@/assets/footer/facebook-footer.png'
 
 export default {
   name: "Footer",
   data() {
     return {
       imgLogo,
+      twitterImg,
+      linkedinImg,
+      facebookImg,
       subscribeEmail: '',
       ruleForm: {
         email: ''
@@ -132,6 +145,11 @@ export default {
       },
       submitLoadingStatus: false
 
+    }
+  },
+  methods:{
+    subscribe(){
+      console.log('subscribe')
     }
   }
 }
@@ -150,28 +168,28 @@ export default {
   margin: 0 auto;
 }
 .esl-logo {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
 }
 
 .esl-address {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .esl-email {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .esl-phone {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .esl-url-link {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
   color: #ffffff;
 }
 
@@ -184,7 +202,7 @@ export default {
 
 .esl-jobs {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 .esl-jobs a{
   text-decoration: none;
@@ -192,7 +210,7 @@ export default {
 }
 .esl-deals {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 .esl-deals a{
   text-decoration: none;
@@ -201,17 +219,17 @@ export default {
 
 .esl-events {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .esl-business-list {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .esl-industry-news {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .quick-links {
@@ -223,22 +241,22 @@ export default {
 
 .terms-of-use {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .privacy {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .contact-support {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .careers {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .sign-up {
@@ -276,13 +294,19 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-
+  margin-top: 20px;
 }
 
 .social-media-item {
   margin: 10px;
 }
-
+.social-media-item-link{
+  text-decoration: none;
+}
+.social-media-item-img{
+  width: 30px;
+  height: 30px;
+}
 .footer-b {
   width: 1100px;
   margin: 0 auto;
@@ -298,7 +322,7 @@ export default {
 
 .footer-b-l-item {
   line-height: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .footer-b-l-item-margin {

@@ -1,202 +1,193 @@
 <template>
   <div class="bg">
-    <div>
-      <el-row class="detail-row" align="top" justify="start">
-        <el-col class="detail-l-col" :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-          <div class="job-title">{{ detailData.job_title }}</div>
-          <div class="job-address-salary">
-            <div class="job-address">
-              {{ detailData.address }}
+    <el-row class="detail-row" align="top" justify="start">
+      <el-col class="detail-l-col" :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+        <div class="job-title">{{ detailData.job_title }}</div>
+        <div class="job-address-salary">
+          <div class="job-address">
+            {{ detailData.address }}
+          </div>
+          <div class="job-salary">
+            {{ detailData.currency }}{{ detailData.salary_min }} - {{ detailData.salary_max }}
+          </div>
+        </div>
+
+        <div class="job-desc-container">
+          <div class="job-desc-label">Job Description</div>
+          <div class="job-desc-label-underline"></div>
+          <div class="job-desc-content">
+            {{ detailData.desc }}
+          </div>
+          <div class="job-tags">
+            <div class="job-tag" v-if="detailData.employment_type==1">FullTime</div>
+            <div class="job-tag" v-if="detailData.employment_type==2">PartTime</div>
+            <div class="job-tag" v-if="detailData.employment_type==3">Seasonal</div>
+            <div class="job-tag" v-if="detailData.is_equal == 1">Equal Opportunity</div>
+            <div class="job-tag" v-if="detailData.is_online == 1">Online</div>
+          </div>
+        </div>
+
+        <div class="job-details-container">
+          <div class="job-details-label">Job Details</div>
+          <div class="job-details-label-underline"></div>
+          <div class="job-details-content">
+            <div class="application-deadline">
+              <b>Application: </b>
+              <span>{{detailData.apply_due_date}}</span>
             </div>
-            <div class="job-salary">
-              {{ detailData.currency }}{{ detailData.salary_min }} - {{ detailData.salary_max }}
+            <div class="start-date">
+              <b>Start Date: </b>
+              <span>{{detailData.entry_date}}</span>
+            </div>
+            <div class="number-vacancies">
+              <b>Number of Vacancies: </b>
+              <span>{{detailData.numbers}}</span>
+            </div>
+            <div class="class-size">
+              <b>Class Size: </b>
+              <span>{{detailData.class_size}} Students</span>
+            </div>
+            <div class="subjects" v-if="detailData.subject">
+              <b>Subject(s):</b>
+              <span v-for="(item,i) in detailData.subject" :key="i">{{item.object_en}}</span>
+            </div>
+            <div class="working-hours">
+
+            </div>
+            <div class="student-ages" v-if="detailData.age_to_teach">
+              <b>Student Ages</b>
+              <span v-for="(item,i) in detailData.age_to_teach" :key="i">{{item.object_en}}</span>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="compensation-container">
+          <div class="compensation-label">Compensation</div>
+          <div class="compensation-label-underline"></div>
+          <div class="compensation-content">
+            <div class="compensation-salary">
+              <b>Salary: </b>
+              <span> {{ detailData.currency }}{{ detailData.salary_min }} - {{ detailData.salary_max }}</span>
+
+            </div>
+            <div class="compensation-payment">
+              <b>Payment: </b>
+              <span>{{ detailData.payment_period_en }}</span>
+            </div>
+            <div class="compensation-class-size">
+              <b>Class Size: </b>
+              <span>{{ detailData.class_size }}</span>
+            </div>
+            <div class="compensation-benefits" v-if="detailData.benefits">
+              <b>Benefits:</b>
+              <span v-for="(item,i) in detailData.benefits" :key="i">{{item.object_en}}</span>
             </div>
           </div>
+        </div>
 
-          <div class="job-desc-container">
-            <div class="job-desc-label">Job Description</div>
-            <div class="job-desc-label-underline"></div>
-            <div class="job-desc-content">
-              {{ detailData.desc }}
+        <div class="qua-container">
+          <div class="qua-label">Qualification Requirements</div>
+          <div class="qua-label-underline"></div>
+          <div class="qua-content">
+            <div class="qua-teach-exp">
+              <b>Teaching Experience: </b>
+              <span>{{detailData.teaching_times_en}}</span>
             </div>
-            <div class="job-tags">
-              <div class="job-tag">FullTime</div>
-              <div class="job-tag">Equal Opportunity</div>
-              <div class="job-tag">laboris</div>
+            <div class="qua-age">
+              <b>Age: </b>
+              <span>{{ detailData.age_min }} - {{detailData.age_max}}</span>
             </div>
-          </div>
-
-          <div class="job-details-container">
-            <div class="job-details-label">Job Details</div>
-            <div class="job-details-label-underline"></div>
-            <div class="job-details-content">
-              <div class="application-deadline">
-                <b>Application: </b>
-                <span>Dec 31, 2021</span>
-              </div>
-              <div class="start-date">
-                <b>Start Date: </b>
-                <span>Dec 31,2021</span>
-              </div>
-              <div class="number-vacancies">
-                <b>Number of Vacancies:</b>
-                <span>1</span>
-              </div>
-              <div class="class-size">
-                <b>Class Size:</b>
-                <span>10</span>
-              </div>
-              <div class="subjects">
-                <b>Subject(s):</b>
-                <span>English</span>
-                <span>Maths</span>
-              </div>
-              <div class="working-hours">
-
-              </div>
-              <div class="student-ages">
-                <b>Student Ages</b>
-                <span>Montessori(7-12yrs)</span>
-                <span>Montessori(7-12yrs)</span>
-                <span>Montessori(7-12yrs)</span>
-              </div>
-
+            <div class="qua-education-req">
+              <b>Minimum Education Requirements: </b>
+              <span>{{detailData.education_en}}</span>
             </div>
           </div>
+        </div>
 
-          <div class="compensation-container">
-            <div class="compensation-label">Compensation</div>
-            <div class="compensation-label-underline"></div>
-            <div class="compensation-content">
-              <div class="compensation-salary">
-                <b>Salary: </b>
-                <span> {{ detailData.currency }}{{ detailData.salary_min }} - {{ detailData.salary_max }}</span>
+        <div class="address-container">
+          <div class="address-label">Address & Location</div>
+          <div class="address-label-underline"></div>
+          <div class="address-content">
+            <div class="address-address">
+              <b>Address:</b>
+              <span>{{ detailData.address }}</span>
+            </div>
 
-              </div>
-              <div class="compensation-payment">
-                <b>Payment: </b>
-                <span>{{ detailData.payment_period_en }}</span>
-              </div>
-              <div class="compensation-class-size">
-                <b>Class Size: </b>
-                <span>{{ detailData.class_size }}</span>
-              </div>
-              <div class="compensation-benefits">
-                <b>Benefits: </b>
-                <span>Work Visa</span>
-                <span>Work Visa</span>
-                <span>Work Visa</span>
-                <span>Work Visa</span>
+            <div class="address-location">
+              <b>Location: </b>
+              <div class="map-container">
+                <div id="mapContainer" class="basemap"></div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="qua-container">
-            <div class="qua-label">Qualification Requirements</div>
-            <div class="qua-label-underline"></div>
-            <div class="qua-content">
-              <div class="qua-teach-exp">
-                <b>Teaching Experience: </b>
-                <span>1-2yrs</span>
+        <div class="apply-btn-container">
+          <el-button class="apply-btn" type="default">Apply Now!</el-button>
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+        <div class="company-bio-container">
+          <div class="company-bio-label">Company Bio</div>
+          <div class="company-bio-label-underline"></div>
+          <div class="company-bio-content">
+            <div class="company-logo-container">
+              <el-image class="company-logo" v-if="detailData.business"
+                        :src="detailData.business.logo"></el-image>
+            </div>
+            <div class="company-bio-text" v-if="detailData.business">
+              {{ detailData.business.business_bio }}
+            </div>
+            <div class="view-profile-btn-container">
+              <el-button class="view-profile-btn" type="primary">View Profile</el-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-container" v-if="detailData.business">
+          <div class="contact-label">Contact Person</div>
+          <div class="contact-content">
+            <div class="contact-l">
+              <el-image class="contact-profile-photo" :src="detailData.business.profile_photo"></el-image>
+            </div>
+            <div class="contact-r">
+              <div class="contact-r-t">
+                Hi I am {{ detailData.business.first_name }} from {{ detailData.business.business_name }}.
               </div>
-              <div class="qua-age">
-                <b>Age: </b>
-                <span>18-44</span>
-              </div>
-              <div class="qua-education-req">
-                <b>Minimum Education Requirements: </b>
-                <span>Bachelors</span>
+              <div class="contact-r-b">
+                <el-button type="primary">Let's Chat!</el-button>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="address-container">
-            <div class="address-label">Address & Location</div>
-            <div class="address-label-underline"></div>
-            <div class="address-content">
-              <div class="address-address">
-                <b>Address:</b>
-                <span>{{ detailData.address }}</span>
+        <div class="other-jobs-container">
+          <div class="other-jobs-label">
+            Other Jobs by
+            <span v-if="detailData.business">{{ detailData.business.business_name }}</span>
+          </div>
+          <div class="other-jobs-content">
+            <div class="other-jobs-item" v-for="(item,index) in otherJobsData" :key="index">
+              <div class="other-jobs-l">
+                <el-image class="other-jobs-logo" v-if="detailData.business" :src="detailData.business.logo"></el-image>
               </div>
-
-              <div class="address-location">
-                <b>Location: </b>
-                <div class="map-container">
-                  <div id="mapContainer" class="basemap"></div>
+              <div class="other-jobs-r">
+                <div class="other-jobs-r-t">
+                  {{item.job_title}}
                 </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="apply-btn-container">
-            <el-button class="apply-btn" type="info">Apply Now!</el-button>
-          </div>
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-          <div class="company-bio-container">
-            <div class="company-bio-label">Company Bio</div>
-            <div class="company-bio-label-underline"></div>
-            <div class="company-bio-content">
-              <div class="company-logo-container">
-                <el-image class="company-logo" v-if="detailData.business"
-                          :src="detailData.business.logo"></el-image>
-              </div>
-              <div class="company-bio-text" v-if="detailData.business">
-                {{ detailData.business.business_bio }}
-              </div>
-              <div class="view-profile-btn-container">
-                <el-button class="view-profile-btn" type="primary">View Profile</el-button>
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-container" v-if="detailData.business">
-            <div class="contact-label">Contact Person</div>
-            <div class="contact-content">
-              <div class="contact-l">
-                <el-image class="contact-profile-photo" :src="detailData.business.profile_photo"></el-image>
-              </div>
-              <div class="contact-r">
-                <div class="contact-r-t">
-                  Hi I am {{ detailData.business.first_name }} from {{ detailData.business.business_name }}.
-                </div>
-                <div class="contact-r-b">
-                  <el-button type="primary">Let's Chat!</el-button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="other-jobs-container">
-            <div class="other-jobs-label">
-              Other Jobs by
-              <span v-if="detailData.business">{{ detailData.business.business_name }}</span>
-            </div>
-            <div class="other-jobs-content">
-              <div class="other-jobs-item" v-for="(item,index) in otherJobsData" :key="index">
-                <div class="other-jobs-l">
-                    <el-image class="other-jobs-logo" v-if="detailData.business" :src="detailData.business.logo"></el-image>
-                </div>
-                <div class="other-jobs-r">
-                  <div class="other-jobs-r-t">
-                    {{item.job_title}}
-                  </div>
-                  <div class="other-jobs-r-b">
-                    {{item.refresh_time}}
-                  </div>
+                <div class="other-jobs-r-b">
+                  {{item.refresh_time}}
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
+        <latestIndustryNews></latestIndustryNews>
 
-          <latestIndustryNews></latestIndustryNews>
-
-        </el-col>
-      </el-row>
-    </div>
-
+      </el-col>
+    </el-row>
   </div>
 </template>
 

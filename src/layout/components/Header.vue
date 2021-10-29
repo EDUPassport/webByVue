@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <el-header class="header-container" height="auto">
       <el-row :gutter="0" justify="start" align="middle">
@@ -11,9 +10,9 @@
           <div class="nav-link-container">
             <router-link to="/home" exact>Home</router-link>
             <router-link to="/jobs" exact>Job Listings</router-link>
-<!--            <router-link to="/" exact> Industry News</router-link>-->
-<!--            <router-link to="/" exact>Blog</router-link>-->
-<!--            <router-link to="/" exact> Contact</router-link>-->
+            <!--            <router-link to="/" exact> Industry News</router-link>-->
+            <!--            <router-link to="/" exact>Blog</router-link>-->
+            <!--            <router-link to="/" exact> Contact</router-link>-->
             <router-link to="/deals" exact> Go Deals</router-link>
           </div>
         </el-col>
@@ -22,26 +21,36 @@
 
           <div class="user-container">
             <template v-if="username!='' && username ">
-              <el-dropdown>
-                Hi, {{ username }}
-                <span class="el-dropdown-link" >
+              <div class="user-container-1">
+                <div class="user-avatar">
+                  <el-image class="user-avatar-img" :src="userAvatar"></el-image>
+                </div>
+                <div class="user-1-r">
+                  <div class="user-name"> Hi, {{ username }}</div>
+                  <div class="user-dropdown">
+                    <el-dropdown>
+                <span class="el-dropdown-link">
                   <template v-if="identity == 1">Educator</template>
                   <template v-if="identity == 2">Business</template>
                   <template v-if="identity == 3">Vendor</template>
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
 
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item @click="dialogSwitchAccountVisible=true">Switch Account</el-dropdown-item>
-                    <el-dropdown-item>My Discount Card</el-dropdown-item>
-                    <el-dropdown-item @click="turnEditProfile()">Edit Profile</el-dropdown-item>
-                    <el-dropdown-item>Change Password</el-dropdown-item>
-                    <el-dropdown-item >Change Language</el-dropdown-item>
-                    <el-dropdown-item divided @click="loginOut">Log Out</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item @click="dialogSwitchAccountVisible=true">Switch Account</el-dropdown-item>
+                          <el-dropdown-item>My Discount Card</el-dropdown-item>
+                          <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>
+                          <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
+                          <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
+                          <el-dropdown-item divided @click="loginOut">Log Out</el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+
+                  </div>
+                </div>
+              </div>
             </template>
             <template v-else>
               <el-button type="primary" @click="login">Login</el-button>
@@ -72,13 +81,13 @@
           Vendor (Deal Program)
         </div>
       </div>
-<!--      <template #footer>-->
-<!--      <span class="dialog-footer">-->
-<!--        <el-button @click="dialogSwitchAccountVisible = false">Cancel</el-button>-->
-<!--        <el-button type="primary"-->
-<!--                   @click="dialogSwitchAccountVisible = false">Confirm</el-button>-->
-<!--      </span>-->
-<!--      </template>-->
+      <!--      <template #footer>-->
+      <!--      <span class="dialog-footer">-->
+      <!--        <el-button @click="dialogSwitchAccountVisible = false">Cancel</el-button>-->
+      <!--        <el-button type="primary"-->
+      <!--                   @click="dialogSwitchAccountVisible = false">Confirm</el-button>-->
+      <!--      </span>-->
+      <!--      </template>-->
     </el-dialog>
 
   </div>
@@ -86,7 +95,7 @@
 </template>
 
 <script>
-import {CHANGE_IDENTITY_LANGUAGE,GET_BASIC_INFO} from '@/api/api'
+import {CHANGE_IDENTITY_LANGUAGE, GET_BASIC_INFO} from '@/api/api'
 import logoImg from '@/assets/logo.png'
 
 export default {
@@ -94,17 +103,34 @@ export default {
   data() {
     return {
       logoImg,
-      dialogSwitchAccountVisible:false,
-      username:'',
-      identity: '',
-      token:''
+      dialogSwitchAccountVisible: false,
+      token: '',
     }
   },
+  computed:{
+    username:{
+      get(){
+        return this.$store.state.username
+      }
+    },
+    userAvatar:{
+      get(){
+        return this.$store.state.userAvatar
+      }
+
+    },
+    identity:{
+      get(){
+        return this.$store.state.identity
+      }
+    }
+
+  },
   mounted() {
-    this.username = localStorage.getItem('name')
-    this.identity = localStorage.getItem('identity')
-    this.token = localStorage.getItem('token')
-    if(this.token){
+    // this.username = localStorage.getItem('name')
+    // this.identity = localStorage.getItem('identity')
+    let token = localStorage.getItem('token')
+    if (token) {
       this.getBasicInfo()
     }
 
@@ -118,38 +144,46 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
 
-          localStorage.setItem('uid',res.message.id)
+          localStorage.setItem('uid', res.message.id)
           localStorage.setItem('identity', res.message.identity)
           localStorage.setItem('language', res.message.language)
           localStorage.setItem('email', res.message.email)
 
-          let identity  = res.message.identity
+          let identity = res.message.identity
           let firstName;
           let lastName;
-          this.identity = identity
+          let avatar;
 
-          if(identity == 0){
-            localStorage.setItem('name','Guest')
+          if (identity == 0) {
+            localStorage.setItem('name', 'Guest')
             firstName = 'Guest'
             lastName = ''
+            avatar = ''
           }
-          if(identity == 1){
-             firstName = res.message.educator_info.first_name;
-             lastName = res.message.educator_info.last_name;
+          if (identity == 1) {
+            firstName = res.message.educator_info.first_name;
+            lastName = res.message.educator_info.last_name;
+            avatar = res.message.educator_info.profile_photo;
           }
-          if(identity == 2){
-             firstName = res.message.business_info.first_name;
-             lastName = res.message.business_info.last_name;
+          if (identity == 2) {
+            firstName = res.message.business_info.first_name;
+            lastName = res.message.business_info.last_name;
+            avatar = res.message.business_info.profile_photo;
           }
-          if(identity == 3){
-             firstName = res.message.vendor_info.first_name;
-             lastName = res.message.vendor_info.last_name;
+          if (identity == 3) {
+            firstName = res.message.vendor_info.first_name;
+            lastName = res.message.vendor_info.last_name;
+            avatar = res.message.vendor_info.profile_photo;
           }
 
-          localStorage.setItem('name',firstName+' '+ lastName)
-          this.username = firstName+' '+ lastName
+          localStorage.setItem('name', firstName + ' ' + lastName)
+          localStorage.setItem('avatar', avatar)
+
+          this.$store.commit('username',firstName + ' ' + lastName)
+          this.$store.commit('userAvatar',avatar)
+          this.$store.commit('identity',identity)
 
         }
       })
@@ -162,10 +196,10 @@ export default {
       location.reload()
     },
     turnProfilePage() {
-      this.$router.push('/overview')
+      this.$router.push({path: '/overview', query: {identity: this.identity}})
     },
-    turnEditProfile(){
-      this.$router.push('/overview')
+    turnEditProfile() {
+      this.$router.push({path: '/overview', query: {identity: this.identity}})
     },
     selectRole(e) {
       let uid = localStorage.getItem('uid')
@@ -183,7 +217,7 @@ export default {
         if (e == 1) {
           if (isEducator >= 10) {
             this.changeIdentity(1)
-          }else{
+          } else {
             this.$message.warning('Oops!.. Your profile is incomplete. ')
             this.$router.push('/role/educator')
             this.dialogSwitchAccountVisible = false
@@ -212,19 +246,21 @@ export default {
         }
       })
     },
-    changeIdentity(identity){
+    changeIdentity(identity) {
       let params = {
-        token:localStorage.getItem('token'),
-        identity:identity
+        token: localStorage.getItem('token'),
+        identity: identity
       }
 
-      CHANGE_IDENTITY_LANGUAGE(params).then(res=>{
+      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
         console.log(res)
-        if(res.code == 200){
-          localStorage.setItem('identity',identity)
-          this.dialogSwitchAccountVisible =false
+        if (res.code == 200) {
+          localStorage.setItem('identity', identity)
+          this.dialogSwitchAccountVisible = false
           this.getBasicInfo()
-          this.$router.push('/home')
+          this.$router.push({
+            path: '/overview', query: {identity: identity}
+          })
         }
       })
 
@@ -271,6 +307,29 @@ export default {
 .user-container span {
   cursor: pointer;
 }
+.user-container-1{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.user-avatar{
+
+}
+.user-avatar-img{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.user-1-r{
+  margin-left: 10px;
+}
+
+.user-name{
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 .router-link-exact-active {
   background-color: #00b3d2;
@@ -283,22 +342,30 @@ export default {
   cursor: pointer;
   color: #0AA0A8;
 }
+
 .el-icon-arrow-down {
   font-size: 12px;
 }
 
-.switch-account-tips{
+.switch-account-tips {
   font-size: 12px;
 }
-.switch-account-container{
-    padding: 10px;
+
+.switch-account-container {
+  padding: 10px;
 }
-.switch-account-item{
+
+.switch-account-item {
   font-size: 14px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 4px;
   cursor: pointer;
   margin-top: 10px;
+}
+
+.switch-account-item:hover {
+  background-color: #0AA0A8;
+  color: #FFFFFF;
 }
 </style>

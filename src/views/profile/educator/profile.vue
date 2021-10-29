@@ -6,7 +6,7 @@
           <meSideMenu></meSideMenu>
         </el-col>
         <el-col :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
-          <accountInfo></accountInfo>
+          <accountInfo :info="educatorInfo" :phone="basicUserInfo.phone"></accountInfo>
           <div class="educator-r-container">
             <div class="basic-info-container">
               <div class="basic-info-t">

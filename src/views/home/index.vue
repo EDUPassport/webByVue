@@ -119,7 +119,9 @@
                   <div class="featured-jobs-card-images">
                     <el-image class="featured-jobs-card-image" :src="item.logo" fit="fill"></el-image>
                   </div>
-                  <div class="featured-jobs-title">{{ item.job_title }}</div>
+                  <div class="featured-jobs-title">
+                    <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}"> {{ item.job_title }}</router-link>
+                  </div>
                   <div class="featured-business-name">{{ item.business_name }}</div>
                   <div class="featured-jobs-location">
                     <el-icon>
@@ -189,108 +191,108 @@
     </div>
 
     <!--    Education Business   -->
-    <div class="featured-schools-container">
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <div class="featured-schools-label">Education Businesses</div>
-        </el-col>
-      </el-row>
+<!--    <div class="featured-schools-container">-->
+<!--      <el-row :gutter="0" justify="center" align="middle">-->
+<!--        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
+<!--          <div class="featured-schools-label">Education Businesses</div>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
 
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <div class="featured-schools-tips">
-            These are schools we think you would like.
-          </div>
-        </el-col>
-      </el-row>
+<!--      <el-row :gutter="0" justify="center" align="middle">-->
+<!--        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
+<!--          <div class="featured-schools-tips">-->
+<!--            These are schools we think you would like.-->
+<!--          </div>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
 
-      <el-row class="featured-schools-content-container" :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="11" :lg="11" :xl="11">
-          <template v-if="businessListData[0]">
-            <div class="featured-schools-plus-container "
-                 :style="'background-image:url('+businessListData[0]['header_photo'] +')'">
-              <div class="featured-schools-plus-content">
-                <div class="featured-schools-plus-content-l">
-                  <div class="featured-schools-plus-address" v-if="businessListData[0].provinces">
-                    {{ businessListData[0].provinces.Pinyin }} {{ businessListData[0].citys.Pinyin }}
-                    {{ businessListData[0].districts.Pinyin }}
-                  </div>
-                  <div class="featured-schools-plus-type">
-                    {{ businessListData[0].business_type_name }}
-                  </div>
-                  <div class="featured-schools-plus-business-name">
-                    {{ businessListData[0].business_name }}
-                  </div>
-                </div>
+<!--      <el-row class="featured-schools-content-container" :gutter="0" justify="center" align="middle">-->
+<!--        <el-col :xs="24" :sm="24" :md="11" :lg="11" :xl="11">-->
+<!--          <template v-if="businessListData[0]">-->
+<!--            <div class="featured-schools-plus-container "-->
+<!--                 :style="'background-image:url('+businessListData[0]['header_photo'] +')'">-->
+<!--              <div class="featured-schools-plus-content">-->
+<!--                <div class="featured-schools-plus-content-l">-->
+<!--                  <div class="featured-schools-plus-address" v-if="businessListData[0].provinces">-->
+<!--                    {{ businessListData[0].provinces.Pinyin }} {{ businessListData[0].citys.Pinyin }}-->
+<!--                    {{ businessListData[0].districts.Pinyin }}-->
+<!--                  </div>-->
+<!--                  <div class="featured-schools-plus-type">-->
+<!--                    {{ businessListData[0].business_type_name }}-->
+<!--                  </div>-->
+<!--                  <div class="featured-schools-plus-business-name">-->
+<!--                    {{ businessListData[0].business_name }}-->
+<!--                  </div>-->
+<!--                </div>-->
 
-              </div>
-            </div>
-          </template>
-        </el-col>
+<!--              </div>-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </el-col>-->
 
-        <el-col :xs="24" :sm="24" :md="1" :lg="1" :xl="1"></el-col>
+<!--        <el-col :xs="24" :sm="24" :md="1" :lg="1" :xl="1"></el-col>-->
 
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-          <template v-if="businessListData[1]">
-            <div class="featured-schools-pro-container">
-              <div class="featured-schools-pro-l"
-                   :style="'background-image:url('+businessListData[1]['logo'] +')'"
-              >
-              </div>
-              <div class="featured-schools-pro-r">
-                <div class="featured-schools-pro-r-l">
-                  <div class="featured-schools-pro-address" v-if="businessListData[0].provinces">
-                    {{ businessListData[1].provinces.Pinyin }} {{ businessListData[1].citys.Pinyin }}
-                    {{ businessListData[1].districts.Pinyin }}
-                  </div>
-                  <div class="featured-schools-pro-type">
-                    {{ businessListData[1].business_type_name }}
-                  </div>
-                  <div class="featured-schools-pro-business-name">
-                    {{ businessListData[1].business_name }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
+<!--        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">-->
+<!--          <template v-if="businessListData[1]">-->
+<!--            <div class="featured-schools-pro-container">-->
+<!--              <div class="featured-schools-pro-l"-->
+<!--                   :style="'background-image:url('+businessListData[1]['logo'] +')'"-->
+<!--              >-->
+<!--              </div>-->
+<!--              <div class="featured-schools-pro-r">-->
+<!--                <div class="featured-schools-pro-r-l">-->
+<!--                  <div class="featured-schools-pro-address" v-if="businessListData[0].provinces">-->
+<!--                    {{ businessListData[1].provinces.Pinyin }} {{ businessListData[1].citys.Pinyin }}-->
+<!--                    {{ businessListData[1].districts.Pinyin }}-->
+<!--                  </div>-->
+<!--                  <div class="featured-schools-pro-type">-->
+<!--                    {{ businessListData[1].business_type_name }}-->
+<!--                  </div>-->
+<!--                  <div class="featured-schools-pro-business-name">-->
+<!--                    {{ businessListData[1].business_name }}-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </template>-->
 
-          <template v-if="businessListData[2]">
-            <div class="featured-schools-pro-container featured-schools-pro-margin">
-              <div class="featured-schools-pro-l"
-                   :style="'background-image:url('+businessListData[2]['logo'] +')'"
-              ></div>
-              <div class="featured-schools-pro-r">
-                <div class="featured-schools-pro-r-l">
-                  <div class="featured-schools-pro-address" v-if="businessListData[0].provinces">
-                    {{ businessListData[2].provinces.Pinyin }} {{ businessListData[2].citys.Pinyin }}
-                    {{ businessListData[2].districts.Pinyin }}
-                  </div>
-                  <div class="featured-schools-pro-type">
-                    {{ businessListData[2].business_type_name }}
-                  </div>
-                  <div class="featured-schools-pro-business-name">
-                    {{ businessListData[2].business_name }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
-        </el-col>
-      </el-row>
+<!--          <template v-if="businessListData[2]">-->
+<!--            <div class="featured-schools-pro-container featured-schools-pro-margin">-->
+<!--              <div class="featured-schools-pro-l"-->
+<!--                   :style="'background-image:url('+businessListData[2]['logo'] +')'"-->
+<!--              ></div>-->
+<!--              <div class="featured-schools-pro-r">-->
+<!--                <div class="featured-schools-pro-r-l">-->
+<!--                  <div class="featured-schools-pro-address" v-if="businessListData[0].provinces">-->
+<!--                    {{ businessListData[2].provinces.Pinyin }} {{ businessListData[2].citys.Pinyin }}-->
+<!--                    {{ businessListData[2].districts.Pinyin }}-->
+<!--                  </div>-->
+<!--                  <div class="featured-schools-pro-type">-->
+<!--                    {{ businessListData[2].business_type_name }}-->
+<!--                  </div>-->
+<!--                  <div class="featured-schools-pro-business-name">-->
+<!--                    {{ businessListData[2].business_name }}-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
 
-      <el-row class="featured-schools-more-container" :gutter="0" align="middle" justify="center">
-        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
-          <div class="featured-schools-more">
-            <el-button class="featured-schools-more-btn" type="primary">
-              View All
-              <el-icon>
-                <ArrowRightBold/>
-              </el-icon>
-            </el-button>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
+<!--      <el-row class="featured-schools-more-container" :gutter="0" align="middle" justify="center">-->
+<!--        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">-->
+<!--          <div class="featured-schools-more">-->
+<!--            <el-button class="featured-schools-more-btn" type="primary">-->
+<!--              View All-->
+<!--              <el-icon>-->
+<!--                <ArrowRightBold/>-->
+<!--              </el-icon>-->
+<!--            </el-button>-->
+<!--          </div>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+<!--    </div>-->
 
     <!--  featured deals -->
     <div class="featured-deals-bg">
@@ -313,16 +315,17 @@
 
         <el-col :xs="0" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="hot-deals-container">
-            <div class="hot-deals-item" v-for="(item,index) in dealsListData" :key="index">
+            <div class="hot-deals-item" v-for="(item,index) in featuredDealsList" :key="index">
 
-              <div class="hot-deals-item-bg" :style="'background-image:url('+ item.user_info.profile_photo + ')'">
+              <div class="hot-deals-item-bg"
+                   :style="item.user_info.header_photo !='' ? 'background-image:url('+ item.user_info.header_photo + ')' : ''">
                 <div class="hot-deals-item-t">
                   <div class="hot-deals-item-t-l">
                     <template v-if="item.user_info">
                       <el-image class="hot-deals-logo" :src="item.user_info.logo"></el-image>
                     </template>
                   </div>
-                  <div class="hot-deals-item-t-r">
+                  <div class="hot-deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
                     <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                   </div>
                 </div>
@@ -332,7 +335,7 @@
 
                 <div class="hot-deals-item-name-container">
                   <div class="hot-deals-item-title">
-                    {{ item.desc }}
+                    <router-link :to="{path:'/deals/detail',query:{id:item.id}}">{{ item.desc }}</router-link>
                   </div>
                   <div class="hot-deals-item-name">
                     <template v-if="item.user_info">
@@ -340,15 +343,17 @@
                     </template>
                   </div>
                 </div>
-
               </div>
 
               <div class="hot-deals-item-b">
                 <div class="hot-deals-item-b-l">
-                  Category
+                  <template v-if="item.vendor_type_icon">
+                    <el-image class="hot-deal-type-icon" :src="item.vendor_type_icon.icon_url"></el-image>
+                  </template>
+<!--                  {{ item.vendor_type_name }}-->
                 </div>
                 <div class="hot-deals-item-b-r">
-                  Los Angeles, USA
+                  {{item.location}}
                 </div>
               </div>
 
@@ -356,12 +361,9 @@
 
             <div class="hot-deals-item-more">
               <div class="hot-deals-item-more-logo-container">
-                <el-image class="hot-deals-item-more-logo" :src="imgLogo"></el-image>
-                <el-image class="hot-deals-item-more-logo" :src="imgLogo"></el-image>
-                <el-image class="hot-deals-item-more-logo" :src="imgLogo"></el-image>
-                <el-image class="hot-deals-item-more-logo" :src="imgLogo"></el-image>
-                <el-image class="hot-deals-item-more-logo" :src="imgLogo"></el-image>
-                <el-image class="hot-deals-item-more-logo" :src="imgLogo"></el-image>
+                <template v-for="(item,i) in featuredDealsLogoData" :key="i">
+                  <el-image class="hot-deals-item-more-logo" :src="item.sys_value"></el-image>
+                </template>
               </div>
               <div class="hot-deals-item-more-tips">
                 1000+ Deals in multiple locations
@@ -561,7 +563,8 @@
 // import TeamComponent from '@/layout/components/Team'
 import imgLogo from '@/assets/logo.png'
 import teamImgOne from '@/assets/team/kongboss.png'
-import {JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST,ADS_LIST, APPLY_JOBS} from "@/api/api";
+import {JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST,ADS_LIST, APPLY_JOBS,
+  FEATURED_DEALS_LIST,GET_SYSTEM_INFO,ADD_FAVORITE} from "@/api/api";
 // Import Swiper Vue.js components
 import {Swiper, SwiperSlide} from 'swiper/vue';
 // Import Swiper styles
@@ -641,8 +644,10 @@ export default {
       jobFeaturedListData: [],
       businessListData: [],
       dealsListData: [],
+      featuredDealsList:[],
       articleListData: [],
-      articleListLimitData: []
+      articleListLimitData: [],
+      featuredDealsLogoData:[]
 
     }
   },
@@ -676,6 +681,8 @@ export default {
     this.getBusinessList()
     this.getDealsList()
     this.getAdsList()
+    this.getFeaturedDealsList()
+    this.getSystemInfo()
   },
   methods: {
     applyJob(){
@@ -683,6 +690,21 @@ export default {
     },
     chooseSearchCategory(value) {
       this.searchCategoryValue = value
+    },
+    getSystemInfo(){
+      let params = {
+        page:1,
+        limit:10000,
+        cate:1
+      }
+
+      GET_SYSTEM_INFO(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          let imgData = res.message.data;
+          this.featuredDealsLogoData = imgData.filter(item=>item.sys_key=='16')
+        }
+      })
     },
     getJobFeaturedList() {
       let params = {
@@ -737,6 +759,15 @@ export default {
         }
       }).catch(err => {
         console.log(err.response)
+      })
+    },
+    getFeaturedDealsList(){
+      let params = {}
+      FEATURED_DEALS_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.featuredDealsList = res.message;
+        }
       })
     },
     getAdsList() {
@@ -805,6 +836,23 @@ export default {
 
 
     },
+    addFavorite(id,type,title,url){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:id,
+        type_title:title,
+        type_url:url
+      }
+      ADD_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.$message.success('Success')
+          this.getFeaturedDealsList()
+        }
+      })
+
+    }
 
   }
 
@@ -972,7 +1020,7 @@ export default {
 
 .featured-jobs-bg {
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #f5f6f7;
 }
 
 
@@ -1014,8 +1062,8 @@ export default {
   margin: 0 auto;
   background-color: #ffffff;
   border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
+  /*cursor: pointer;*/
+  box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.47);
   overflow: hidden;
   border: 1px solid #eeeeee;
 }
@@ -1036,18 +1084,25 @@ export default {
 }
 
 .featured-jobs-title {
-  font-weight: bold;
-  font-size: 16px;
-  color: #000000;
   text-align: left;
   padding: 0 20px;
   margin-top: 10px;
 }
+.featured-jobs-title a{
+  font-size: 16px;
+  color: #000000;
+  font-weight: bold;
+  text-decoration: none;
+}
+.featured-jobs-title a:hover{
+  text-decoration: underline;
+}
+
 
 .featured-business-name {
   text-align: left;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   color: #808080;
   padding: 0 20px;
   margin-top: 10px;
@@ -1326,9 +1381,11 @@ export default {
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid #EEEEEE;
+  box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.47);
 }
 
 .hot-deals-item-bg {
+  background-color: #faf7f7;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -1336,8 +1393,8 @@ export default {
 }
 
 .hot-deals-item:hover {
-  border: 1px solid #eeeeee;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
+  /*border: 1px solid #eeeeee;*/
+  /*box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);*/
 }
 
 .hot-deals-item-t {
@@ -1380,7 +1437,7 @@ export default {
   color: #ffffff;
   padding: 4px 14px;
   border-radius: 4px;
-
+  font-size: 14px;
 }
 
 .hot-deals-item-name-container {
@@ -1389,12 +1446,22 @@ export default {
 }
 
 .hot-deals-item-title {
-  color: #ffffff;
-  font-size: 14px;
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
+  padding: 4px 0;
 }
+
+.hot-deals-item-title a{
+  color: #ffffff;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: bold;
+}
+.hot-deals-item-title a:hover{
+  text-decoration: underline;
+}
+
 
 .hot-deals-item-name {
   color: #ffffff;
@@ -1409,21 +1476,37 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding-top: 6px;
+  /*padding: 20px 20px 0 20px;*/
 }
 
 .hot-deals-item-b-l {
-  color: #000000;
+  color: #00b3d2;
+  font-size: 12px;
+  width: 20%;
+}
+.hot-deal-type-icon{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .hot-deals-item-b-r {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  width: 79%;
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*align-items: center;*/
+  /*justify-content: space-between;*/
+  font-size: 12px;
+  color: #808080;
+  padding-right: 20px;
+  text-align: right;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .hot-deals-item-more {
+  background-color: #faf7f7;
   width: 32%;
   height:240px;
   margin-top: 10px;
@@ -1434,7 +1517,7 @@ export default {
   align-items: center;
   flex-direction: column;
   justify-content: center;
-
+  box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.47);
 }
 
 .hot-deals-item-more-logo-container {

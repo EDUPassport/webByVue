@@ -7,31 +7,38 @@
 <!--        <div class="account-info-t-edit">Edit</div>-->
 <!--      </div>-->
       <div class="account-info-b">
-        <div class="account-info-photo" v-if="accountPhotoValue">
-          <el-image class="account-photo-img" :src="accountPhotoValue"></el-image>
+        <div class="account-info-photo">
+          <template v-if="identity == 1">
+            <el-image class="account-photo-img" :src="info.profile_photo"></el-image>
+          </template>
+          <template v-if="identity == 2 || identity == 3 ">
+            <el-image class="account-photo-img" :src="info.logo"></el-image>
+          </template>
         </div>
         <div class="account-info-tags">
           <div class="account-info-tag">
             Name:
-            <span>{{ accountInfo.first_name }} {{accountInfo.last_name}}</span>
+            <span>{{ info.first_name }} {{info.last_name}}</span>
           </div>
           <div class="account-info-tag" v-if="phone!=''">
             Phone #:
             <span>{{phone}}</span>
           </div>
-          <div class="account-info-tag" v-if="categoryName!=''">
+          <div class="account-info-tag">
             Category:
-            <span>{{categoryName}}</span>
+            <span v-if="identity == 1">{{info.sub_identity_name}}</span>
+            <span v-if="identity == 2">{{info.business_type_name}}</span>
+            <span v-if="identity == 3">{{info.vendor_type_name}}</span>
           </div>
           <div class="account-info-tag">
             Membership Level:
-            <span v-if="level == 1">Basic Member</span>
-            <span v-if="level == 2">Pro Member</span>
-            <span v-if="level == 3">Plus Member</span>
+            <span v-if="info.level == 1">Basic Member</span>
+            <span v-if="info.level == 2">Pro Member</span>
+            <span v-if="info.level == 3">Plus Member</span>
           </div>
-          <div class="account-info-tag" v-if=" vipDueTime && vipDueTime!=''">
+          <div class="account-info-tag" v-if=" info.vip_due_time && info.vip_due_time!=''">
             Membership Expiration Date:
-            <span>{{vipDueTime}}</span>
+            <span>{{info.vip_due_time}}</span>
           </div>
 
       </div>
@@ -45,69 +52,35 @@
 </template>
 
 <script>
-import {GET_BASIC_INFO} from  '@/api/api'
 
 export default {
   name: "accountInfo",
+  props:{
+    info:Object,
+    phone:String
+  },
+  computed:{
+    identity(){
+      return this.$store.state.identity
+    }
+  },
   data(){
     return {
       accountInfo:{},
-      accountPhotoValue:'',
-      phone:'',
-      categoryName:'',
-      level:1,
-      vipDueTime:''
     }
   },
   mounted() {
-    this.getBasicInfo()
+
   },
   methods:{
-    getBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
-      let params = {
-        id: uid,
-        token: localStorage.getItem('token')
-      }
-      GET_BASIC_INFO(params).then(res => {
-        console.log(res)
-        if(res.code == 200){
 
-          this.phone = res.message.phone;
-          if (identity == 1 && res.message.educator_info) {
-            this.accountInfo = res.message.educator_info;
-            this.categoryName = res.message.educator_info.sub_identity_name
-            this.level = res.message.educator_info.level
-            this.vipDueTime = res.message.educator_info.vip_due_time
-            this.accountPhotoValue = res.message.educator_info.profile_photo
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.accountInfo = res.message.business_info;
-            this.categoryName = res.message.business_info.business_type_name
-            this.level = res.message.business_info.level
-            this.vipDueTime = res.message.business_info.vip_due_time
-            this.accountPhotoValue = res.message.business_info.logo
-
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.accountInfo = res.message.vendor_info;
-            this.categoryName = res.message.vendor_info.vendor_type_name;
-            this.level = res.message.vendor_info.level;
-            this.vipDueTime = res.message.vendor_info.vip_due_time
-            this.accountPhotoValue = res.message.vendor_info.logo
-          }
-
-        }
-      })
-    },
   }
 }
 </script>
 
 <style scoped>
 .account-info-container{
-  padding: 20px;
+  padding:10px 20px;
   text-align: left;
 }
 
@@ -138,7 +111,7 @@ export default {
   font-weight: bold;
 }
 .account-info-b{
-  border-bottom: 1px solid #eeeeee;
+  /*border-bottom: 1px solid #eeeeee;*/
   display: flex;
   flex-direction: row;
   align-items: center;

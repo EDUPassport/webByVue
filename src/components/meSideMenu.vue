@@ -1,8 +1,10 @@
 <template>
   <div class="profile-l-container">
     <div class="profile-photo-container">
-      <el-image class="profile-photo" :src="accountPhotoValue"></el-image>
-      <span>{{accountInfo.first_name}} {{accountInfo.last_name}}</span>
+      <el-image class="profile-photo" v-if="userAvatar" :src="userAvatar"></el-image>
+      <div>
+        <span>{{username}}</span>
+      </div>
     </div>
     <div class="l-container">
       <div class="l-item">
@@ -16,31 +18,31 @@
         <router-link v-if="identity == 2" to="/business/profile" exact>My Account & Profile</router-link>
         <router-link v-if="identity == 3" to="/vendor/profile" exact>My Account & Profile</router-link>
       </div>
-      <div class="l-item">
-        <router-link to="/" exact>My Ads</router-link>
-      </div>
-      <div class="l-item">
+<!--      <div class="l-item">-->
+<!--        <router-link to="/" exact>My Ads</router-link>-->
+<!--      </div>-->
+      <div class="l-item" v-if="identity == 2">
         <router-link to="/jobs/myJobs" exact>My Jobs</router-link>
       </div>
 <!--      <div class="l-item">-->
 <!--        <router-link to="/" exact>My Events</router-link>-->
 <!--      </div>-->
-      <div class="l-item">
+      <div class="l-item" v-if="identity == 3">
         <router-link to="/deals/myDeals" exact>My Deals</router-link>
       </div>
-      <div class="l-item">
+      <div class="l-item" v-if="identity == 2">
         <router-link :to="{path:'/jobs/post',query:{version_time:versionTime}}" exact>Post a Job</router-link>
       </div>
-      <div class="l-item">
+      <div class="l-item" v-if="identity == 3">
         <router-link to="/deals/offer" exact>Offer a Deal</router-link>
       </div>
       <div class="l-item">
         <router-link to="/" exact>Privacy Policy</router-link>
       </div>
-      <div class="l-item">
-        <router-link to="/" exact>My Messages</router-link>
-      </div>
-      <div class="l-item">
+<!--      <div class="l-item">-->
+<!--        <router-link to="/" exact>My Messages</router-link>-->
+<!--      </div>-->
+      <div class="l-item" v-if="identity == 2">
         <router-link to="/" exact>My Applications</router-link>
       </div>
     </div>
@@ -55,12 +57,6 @@ import {GET_BASIC_INFO} from  '@/api/api'
 
 export default {
   name: "meSideMenu",
-  setup(){
-    let identity = localStorage.getItem('identity')
-    return {
-      identity
-    }
-  },
   data(){
     return {
       accountInfo:{},
@@ -68,9 +64,28 @@ export default {
       versionTime:randomString()
     }
   },
+  computed:{
+    username:{
+      get(){
+        return this.$store.state.username
+      }
+    },
+    userAvatar:{
+      get(){
+        return this.$store.state.userAvatar
+      }
+
+    },
+    identity:{
+      get(){
+        return this.$store.state.identity
+      }
+    }
+
+  },
   mounted() {
     // console.log(this.identity)
-    this.getBasicInfo()
+    // this.getBasicInfo()
   },
   methods:{
     getBasicInfo() {
@@ -108,15 +123,16 @@ export default {
 
 <style scoped>
 .profile-l-container{
-  background-color: #004956;
+  background-color: #0A1E76;
   border-radius: 10px;
+  padding-bottom: 20px;
 }
 .profile-photo-container{
   padding: 30px;
 }
 .profile-photo{
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 .profile-photo-container span{
@@ -132,7 +148,7 @@ export default {
 
 }
 .l-item a:hover{
-  background-color: #0AA0A8;
+  background-color: #0C1954;
 }
 .l-item a{
   /*width: 100%;*/
@@ -144,7 +160,7 @@ export default {
   padding-left: 20px;
 }
 .router-link-exact-active {
-  background-color: #00b3d2;
+  background-color: #0C1954;
   color: #ffffff !important;
 }
 </style>

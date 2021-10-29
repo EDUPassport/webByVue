@@ -17,6 +17,7 @@ import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold } from '@element-plus
 import {howLong, ymdFormat} from "@/utils";
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 import {ymdFormatTimestamp} from "./utils";
+import store from "./store";
 
 const messages = {
     en: {
@@ -44,6 +45,7 @@ app.component('Calendar',Calendar )
 app.component('ArrowRightBold',ArrowRightBold )
 
 app.use(router)
+app.use(store)
 app.use(ElementPlus, {locale: zhCn, size: 'small', zIndex: 2000})
 app.use(i18n)
 app.use(VTypical, {
