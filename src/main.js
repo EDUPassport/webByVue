@@ -4,7 +4,10 @@ import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 // import '../theme/index.css'
+import './style/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+// import 'element-plus/theme-chalk/index.css'
+
 import {createI18n} from 'vue-i18n'
 import xllZhCN from './language/zh-cn'
 import xllEnUS from './language/en-us'
@@ -14,9 +17,8 @@ import 'animate.css'
 import VTypical from 'vue-typical'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold } from '@element-plus/icons'
-import {howLong, ymdFormat} from "@/utils";
-import VueGoogleMaps from '@fawmi/vue-google-maps'
-import {ymdFormatTimestamp} from "./utils";
+
+import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
 
 const messages = {
@@ -51,12 +53,6 @@ app.use(i18n)
 app.use(VTypical, {
     /* options */
 });
-app.use(VueGoogleMaps, {
-    load: {
-        key: 'AIzaSyAEZnQMg_RzTe3KHNaXGkN5sm4rFBm42do',
-        libraries:"places"
-    },
-})
 
 app.config.globalProperties.$filters = {
     newsDateFormat(value){

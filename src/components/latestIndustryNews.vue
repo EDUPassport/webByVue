@@ -4,10 +4,14 @@
     <div class="articles-content">
       <div class="articles-item" v-for="(item,index) in articleListData" :key="index">
         <div class="articles-item-l">
-          <el-image class="articles-item-banner" :src="item.url" fit="cover"></el-image>
+          <el-image class="articles-item-banner" :src="item.user_url !='' ? item.user_url : item.url" fit="cover"></el-image>
         </div>
         <div class="articles-item-r">
-          <div class="articles-title">{{ item.title }}</div>
+          <div class="articles-title">
+            <el-link class="articles-title-link"
+                     :href="item.link" target="_blank" :underline="false">{{ item.title }}
+            </el-link>
+          </div>
           <div class="articles-date"> {{ $filters.newsDateFormat(item.u_time) }}</div>
         </div>
       </div>
@@ -112,8 +116,11 @@ export default {
 }
 
 .articles-title {
-  font-size: 12px;
   text-align: left;
+}
+
+.articles-title-link{
+  font-size: 12px;
   font-weight: bold;
 }
 
@@ -122,6 +129,5 @@ export default {
   font-size: 12px;
   margin-top: 16px;
 }
-
 
 </style>

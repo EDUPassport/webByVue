@@ -48,10 +48,10 @@
 
                 <div class="deals-item-b">
                   <div class="deals-item-b-l">
-                    Category
+
                   </div>
                   <div class="deals-item-b-r">
-                    Los Angeles, USA
+                    {{item.location}}
                   </div>
                 </div>
 
@@ -316,6 +316,8 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  font-size: 12px;
+  color: #808080;
 }
 
 .deals-pagination{

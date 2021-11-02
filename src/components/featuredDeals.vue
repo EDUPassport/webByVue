@@ -9,16 +9,16 @@
               class="mySwiper">
         <swiper-slide v-for="(item,index) in dealsListData" :key="index">
           <!--                animate__animated  animate__backInUp-->
-          <div class="hot-deals-item"  :key="index">
-
-            <div class="hot-deals-item-bg" :style="'background-image:url('+ item.user_info.profile_photo + ')'">
+          <div class="hot-deals-item" >
+            <div class="hot-deals-item-bg"
+                 :style="item.user_info.header_photo !='' ? 'background-image:url('+ item.user_info.header_photo + ')' : ''">
               <div class="hot-deals-item-t">
                 <div class="hot-deals-item-t-l">
                   <template v-if="item.user_info">
                     <el-image class="hot-deals-logo" :src="item.user_info.logo"></el-image>
                   </template>
                 </div>
-                <div class="hot-deals-item-t-r">
+                <div class="hot-deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
                   <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                 </div>
               </div>
@@ -28,7 +28,7 @@
 
               <div class="hot-deals-item-name-container">
                 <div class="hot-deals-item-title">
-                  {{ item.desc }}
+                  <router-link :to="{path:'/deals/detail',query:{id:item.id}}">{{ item.desc }}</router-link>
                 </div>
                 <div class="hot-deals-item-name">
                   <template v-if="item.user_info">
@@ -36,15 +36,16 @@
                   </template>
                 </div>
               </div>
-
             </div>
 
             <div class="hot-deals-item-b">
               <div class="hot-deals-item-b-l">
-                Category
+                <template v-if="item.vendor_type_icon">
+                  <el-image class="hot-deal-type-icon" :src="item.vendor_type_icon.icon_url"></el-image>
+                </template>
               </div>
               <div class="hot-deals-item-b-r">
-                Los Angeles, USA
+                {{item.location}}
               </div>
             </div>
 
@@ -67,7 +68,7 @@ import "swiper/css/navigation"
 import SwiperCore, {
   Pagination, Autoplay, Navigation, Zoom
 } from 'swiper';
-import {DEALS_LIST} from "@/api/api";
+import {DEALS_LIST,FEATURED_DEALS_LIST} from "@/api/api";
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 
@@ -83,9 +84,19 @@ export default {
     SwiperSlide,
   },
   mounted() {
-    this.getDealsList()
+    // this.getDealsList()
+    this.getFeaturedDealsList()
   },
   methods:{
+    getFeaturedDealsList(){
+      let params = {}
+      FEATURED_DEALS_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.dealsListData = res.message;
+        }
+      })
+    },
     getDealsList() {
       let params = {
         page: 1,
@@ -133,14 +144,17 @@ export default {
   padding-bottom: 30px;
 }
 .hot-deals-item {
-  width: 98%;
+  width: 100%;
+  height: 240px;
   margin-top: 20px;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid #808080;
+  border: 1px solid #EEEEEE;
+  box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.47);
 }
 
 .hot-deals-item-bg {
+  background-color: #faf7f7;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -148,8 +162,8 @@ export default {
 }
 
 .hot-deals-item:hover {
-  border: 1px solid #eeeeee;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
+  /*border: 1px solid #eeeeee;*/
+  /*box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);*/
 }
 
 .hot-deals-item-t {
@@ -192,7 +206,7 @@ export default {
   color: #ffffff;
   padding: 4px 14px;
   border-radius: 4px;
-
+  font-size: 14px;
 }
 
 .hot-deals-item-name-container {
@@ -201,15 +215,30 @@ export default {
 }
 
 .hot-deals-item-title {
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 4px 0;
+}
+
+.hot-deals-item-title a{
   color: #ffffff;
   font-size: 16px;
-  text-align: left;
+  text-decoration: none;
+  font-weight: bold;
 }
+.hot-deals-item-title a:hover{
+  text-decoration: underline;
+}
+
 
 .hot-deals-item-name {
   color: #ffffff;
-  font-size: 16px;
+  font-size: 14px;
   text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .hot-deals-item-b {
@@ -217,18 +246,34 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding-top: 6px;
+  /*padding: 20px 20px 0 20px;*/
 }
 
 .hot-deals-item-b-l {
-  color: #000000;
+  color: #00b3d2;
+  font-size: 12px;
+  width: 20%;
+}
+.hot-deal-type-icon{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .hot-deals-item-b-r {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  width: 79%;
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*align-items: center;*/
+  /*justify-content: space-between;*/
+  font-size: 12px;
+  color: #808080;
+  padding-right: 20px;
+  text-align: right;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
+
 
 </style>

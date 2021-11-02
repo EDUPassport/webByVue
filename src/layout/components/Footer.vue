@@ -8,13 +8,13 @@
             <el-image class="esl-logo" :src="imgLogo"></el-image>
           </div>
           <div class="esl-address">
-            58 Howard Street #2 San Francisco
+            San Antonio, Texas, 78266
           </div>
           <div class="esl-email">
-            contact@homeid.com
+            contact@eslpassport.com
           </div>
           <div class="esl-phone">
-            (+68)1221 09876
+            (+1) 131 2275 4880
           </div>
           <div class="esl-url">
             <el-link class="esl-url-link"
@@ -27,21 +27,21 @@
           <div class="popular-searches">
             Popular Searches
           </div>
-          <div class="esl-jobs">
+          <div class="popular-searches-item">
             <router-link to="/jobs">ESL Jobs</router-link>
           </div>
-          <div class="esl-deals">
+          <div class="popular-searches-item">
             <router-link to="/deals"> Deals</router-link>
           </div>
-<!--          <div class="esl-events">-->
-<!--            Events-->
-<!--          </div>-->
-<!--          <div class="esl-business-list">-->
-<!--            Business Listings-->
-<!--          </div>-->
-<!--          <div class="esl-industry-news">-->
-<!--            Industry News-->
-<!--          </div>-->
+          <div class="popular-searches-item">
+            <router-link to="#"> Events</router-link>
+          </div>
+          <div class="popular-searches-item">
+            <router-link to="#">  Business Listings</router-link>
+          </div>
+          <div class="popular-searches-item">
+            <router-link to="#"> Industry News</router-link>
+          </div>
         </el-col>
         <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
           <div class="quick-links">
@@ -53,26 +53,26 @@
           <div class="privacy">
             Privacy Policy
           </div>
-<!--          <div class="contact-support">-->
-<!--            Contact Support-->
-<!--          </div>-->
-<!--          <div class="careers">-->
-<!--            Careers-->
-<!--          </div>-->
+          <div class="contact-support">
+            Contact Support
+          </div>
+          <div class="careers">
+            Careers
+          </div>
         </el-col>
         <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
           <div class="sign-up">
             Sign Up for Our Newsletter
           </div>
           <div class="sign-up-tips">
-            Subscribe to newsletter to receive exclusive offers and the latest news
+            Be the first to be notified of new trends and changes and what's hot in the industry
           </div>
           <div class="sign-up-form">
 
             <div class="subscribe-container">
               <el-input
                   v-model="subscribeEmail"
-                  placeholder="Email"
+                  placeholder="Your Email"
                   class="subscribe-input"
               >
                 <template #append>
@@ -93,6 +93,12 @@
                 <el-link class="social-media-item-link"
                          href="https://www.eslpassport.com" target="_blank" :underline="false">
                   <el-image  class="social-media-item-img" :src="facebookImg"></el-image>
+                </el-link>
+              </div>
+              <div class="social-media-item">
+                <el-link class="social-media-item-link"
+                         href="https://www.eslpassport.com" target="_blank" :underline="false">
+                  <el-image  class="social-media-item-img" :src="instagramImg"></el-image>
                 </el-link>
               </div>
               <div class="social-media-item">
@@ -122,10 +128,11 @@
 
 <script>
 import imgLogo from '@/assets/logo.png'
-import twitterImg from '@/assets/footer/twitter-footer.png'
-import linkedinImg from '@/assets/footer/linkedin-footer.png'
-import facebookImg from '@/assets/footer/facebook-footer.png'
-
+import twitterImg from '@/assets/footer/twitter.png'
+import linkedinImg from '@/assets/footer/linkedin.png'
+import facebookImg from '@/assets/footer/facebook.png'
+import instagramImg from '@/assets/footer/instagram-fill.png'
+import {ADD_SUBSCRIBE_EMAIL} from '@/api/api'
 export default {
   name: "Footer",
   data() {
@@ -134,6 +141,7 @@ export default {
       twitterImg,
       linkedinImg,
       facebookImg,
+      instagramImg,
       subscribeEmail: '',
       ruleForm: {
         email: ''
@@ -149,7 +157,16 @@ export default {
   },
   methods:{
     subscribe(){
-      console.log('subscribe')
+      let params = {
+        email:this.subscribeEmail
+      }
+      ADD_SUBSCRIBE_EMAIL(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.$message.success('Subscribe Success')
+          this.subscribeEmail = ''
+        }
+      })
     }
   }
 }
@@ -200,11 +217,11 @@ export default {
 
 }
 
-.esl-jobs {
+.popular-searches-item {
   line-height: 30px;
   font-size: 14px;
 }
-.esl-jobs a{
+.popular-searches-item a{
   text-decoration: none;
   color: #ffffff;
 }
@@ -307,6 +324,7 @@ export default {
   width: 30px;
   height: 30px;
 }
+
 .footer-b {
   width: 1100px;
   margin: 0 auto;

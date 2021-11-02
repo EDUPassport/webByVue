@@ -117,3 +117,15 @@ export const GET_SYSTEM_INFO = (params)=>get('home/getSystemInfo',params)
 
 //add favorite
 export const ADD_FAVORITE = (params)=>post('favorite/addFavorite',params)
+
+//six logos
+export const SIX_LOGO_LIST = (params)=>get('home/getSixLogo',params)
+
+//jobsarealist
+export const JOBS_AREA_LIST = (params)=>get('deals/jobsAreaList',params)
+
+//add subscribe email
+export const ADD_SUBSCRIBE_EMAIL = (params)=>post('home/addSubscribeEmail',params)
+
+//getFavoriteList
+export const GET_FAVORITE_LIST = (params)=>get('favorite/getFavoriteList',params)

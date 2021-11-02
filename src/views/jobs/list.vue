@@ -6,12 +6,13 @@
           <div class="jobs-filter-label">Find a job</div>
           <div class="jobs-filter-location">
             <el-select class="jobs-filter-select" v-model="locationValue" clearable placeholder="Location"
+                       @change="locationChange"
                        size="medium">
               <el-option
                   v-for="item in locationOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  :key="item.id"
+                  :label="item.CityPinyin"
+                  :value="item.id"
               >
               </el-option>
             </el-select>
@@ -111,7 +112,7 @@
                   {{ item.desc }}
                 </div>
                 <div class="jobs-list-item-readmore">
-                  Read More...
+                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">Read More...</router-link>
                 </div>
               </div>
 
@@ -119,19 +120,19 @@
                 <div class="jobs-list-item-b-l">
                   <view class="jobs-list-item-work-type">
                     <i class="iconfont el-icon-alishijian"></i>
-                    <template v-if="item.employment_type==1">FT</template>
-                    <template v-if="item.employment_type==2">PT</template>
-                    <template v-if="item.employment_type==3">S</template>
+                    <span v-if="item.employment_type==1">FT</span>
+                    <span v-if="item.employment_type==2">PT</span>
+                    <span v-if="item.employment_type==3">S</span>
                   </view>
                   <view class="jobs-list-item-gender" v-if="item.sex == 1 || item.sex == 2">
                     <i class="iconfont el-icon-alimale-female"></i>
-                    <template v-if="item.sex == 1">Male</template>
-                    <template v-if="item.sex == 2">Female</template>
+                    <span v-if="item.sex == 1">Male</span>
+                    <span v-if="item.sex == 2">Female</span>
                   </view>
-                  <view class="jobs-list-item-work-exp">
-                    <i class="iconfont el-icon-aligongzuojingyan"></i>
-                    1-2 yrs
-                  </view>
+<!--                  <view class="jobs-list-item-work-exp">-->
+<!--                    <i class="iconfont el-icon-aligongzuojingyan"></i>-->
+<!--                    1-2 yrs-->
+<!--                  </view>-->
                 </div>
 
                 <div class="jobs-list-item-b-r">
@@ -167,7 +168,7 @@
 <script>
 
 import {useRouter} from "vue-router";
-import {JOB_LIST, USER_OBJECT_LIST} from "@/api/api";
+import {JOB_LIST, USER_OBJECT_LIST,JOBS_AREA_LIST} from "@/api/api";
 
 import featuredJobs from "@/components/featuredJobs";
 import latestIndustryNews from "@/components/latestIndustryNews";
@@ -265,10 +266,26 @@ export default {
     };
   },
   mounted() {
-    this.getJobList(this.jobPage, this.jobLimit)
+    this.getJobsAreaList()
     this.getUserObjectList()
+
+    let cityValue= this.$route.query.city;
+    if(cityValue && cityValue !=''){
+      this.locationValue = Number(cityValue)
+    }
+
+    this.getJobList(this.jobPage, this.jobLimit)
   },
   methods: {
+    getJobsAreaList(){
+      let params = {}
+      JOBS_AREA_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.locationOptions = res.message;
+        }
+      })
+    },
     jobPageSizeChange(e) {
       console.log(e)
     },
@@ -300,6 +317,9 @@ export default {
           params.salary_begin = 15000
         }
 
+      }
+      if(this.locationValue != ''){
+        params.city = this.locationValue
       }
       if (this.genderValue != '') {
         params.sex = this.genderValue
@@ -346,6 +366,11 @@ export default {
         }
 
       })
+    },
+    locationChange(e){
+      // console.log(e)
+      this.locationValue = e;
+      this.getJobList(this.jobPage, this.jobLimit)
     },
     salaryChange(e) {
       // console.log(e)
@@ -490,14 +515,20 @@ export default {
   font-size: 12px;
   color: #808080;
   margin-top: 10px;
+  overflow: hidden;
+  display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 4;
 }
 
 .jobs-list-item-readmore {
-  font-size: 14px;
-  color: #808080;
   margin-top: 20px;
 }
-
+.jobs-list-item-readmore a{
+  font-size: 14px;
+  color: #808080;
+  text-decoration: none;
+}
 .jobs-list-item-b {
   width: 100%;
   display: flex;
@@ -510,13 +541,25 @@ export default {
 .jobs-list-item-work-type {
   font-size: 12px;
 }
+.jobs-list-item-work-type span{
+  margin-left: 4px;
+}
 
 .jobs-list-item-gender {
+  margin-left: 5px;
   font-size: 12px;
+}
+.jobs-list-item-gender span{
+  margin-left: 4px;
 }
 
 .jobs-list-item-work-exp {
+  margin-left: 5px;
   font-size: 12px;
+}
+
+.jobs-list-item-work-exp span{
+  margin-left: 4px;
 }
 
 .jobs-list-item-date {

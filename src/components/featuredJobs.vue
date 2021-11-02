@@ -27,14 +27,14 @@
               <view class="featured-jobs-tags-l">
                 <view class="featured-jobs-work-type">
                   <i class="iconfont el-icon-alishijian"></i>
-                  <template v-if="item.employment_type==1">FT</template>
-                  <template v-if="item.employment_type==2">PT</template>
-                  <template v-if="item.employment_type==3">S</template>
+                  <span v-if="item.employment_type==1">FT</span>
+                  <span v-if="item.employment_type==2">PT</span>
+                  <span v-if="item.employment_type==3">S</span>
                 </view>
                 <view class="featured-jobs-gender" v-if="item.sex == 1 || item.sex == 2">
                   <i class="iconfont el-icon-alimale-female"></i>
-                  <template v-if="item.sex == 1">Male</template>
-                  <template v-if="item.sex == 2">Female</template>
+                  <span v-if="item.sex == 1">Male</span>
+                  <span v-if="item.sex == 2">Female</span>
                 </view>
                 <view class="featured-jobs-work-exp">
                   <i class="iconfont el-icon-aligongzuojingyan"></i>
@@ -219,14 +219,26 @@ export default {
   color: #808080;
 }
 
+.featured-jobs-work-type span{
+  margin-left: 4px;
+}
+
 .featured-jobs-gender {
+  margin-left: 5px;
   font-size: 12px;
   color: #808080;
 }
+.featured-jobs-gender span{
+  margin-left: 4px;
+}
 
 .featured-jobs-work-exp {
+  margin-left: 5px;
   font-size: 12px;
   color: #808080;
+}
+.featured-jobs-work-exp span{
+  margin-left: 4px;
 }
 
 .featured-jobs-salary {

@@ -121,9 +121,9 @@ export default {
   width: 30%;
 }
 .account-photo-img{
-  width: 120px;
-  height: 120px;
-  border-radius: 120px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
   border: 1px solid #EEEEEE;
 }
 

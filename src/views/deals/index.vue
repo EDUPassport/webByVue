@@ -56,7 +56,8 @@
                  @click="turnDealDetail(item.id)"
             >
 
-              <div class="deals-item-bg" :style="'background-image:url('+ item.user_info.profile_photo + ')'">
+              <div class="deals-item-bg"
+                   :style="item.user_info.header_photo !='' ? 'background-image:url('+ item.user_info.header_photo + ')' : ''">
                 <div class="deals-item-t">
                   <div class="deals-item-t-l">
                     <template v-if="item.user_info">
@@ -86,10 +87,10 @@
 
               <div class="deals-item-b">
                 <div class="deals-item-b-l">
-                  Category
+
                 </div>
                 <div class="deals-item-b-r">
-                  Los Angeles, USA
+                  {{item.location}}
                 </div>
               </div>
 
@@ -135,10 +136,7 @@ export default {
       dealPage:1,
       dealLimit:10,
       dealTotalNum:0,
-      sCateId:0,
-
-
-
+      sCateId:0
     }
   },
   mounted() {
@@ -271,6 +269,7 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 10px;
+  cursor: pointer;
 }
 .sub-cate-item-active{
   border: 1px solid #0AA0A8;
@@ -328,6 +327,7 @@ export default {
 }
 
 .deals-item-bg {
+  background-color: #faf7f7;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -389,13 +389,17 @@ export default {
 
 .deals-item-title {
   color: #ffffff;
-  font-size: 16px;
+  font-size: 14px;
   text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-weight: bold;
 }
 
 .deals-item-name {
   color: #ffffff;
-  font-size: 16px;
+  font-size: 14px;
   text-align: left;
 }
 
@@ -412,10 +416,17 @@ export default {
 }
 
 .deals-item-b-r {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  width: 79%;
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*align-items: center;*/
+  /*justify-content: space-between;*/
+  font-size: 12px;
+  color: #808080;
+  padding-right: 20px;
+  text-align: right;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .deals-pagination{

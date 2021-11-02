@@ -28,18 +28,18 @@
                 <div class="user-1-r">
                   <div class="user-name"> Hi, {{ username }}</div>
                   <div class="user-dropdown">
-                    <el-dropdown>
-                <span class="el-dropdown-link">
-                  <template v-if="identity == 1">Educator</template>
-                  <template v-if="identity == 2">Business</template>
-                  <template v-if="identity == 3">Vendor</template>
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
+                  <el-dropdown>
+                    <span class="el-dropdown-link">
+                        <template v-if="identity == 1">Educator</template>
+                        <template v-if="identity == 2">Business</template>
+                        <template v-if="identity == 3">Vendor</template>
+                       <i class="el-icon-arrow-down el-icon--right"></i>
+                     </span>
 
                       <template #dropdown>
                         <el-dropdown-menu>
                           <el-dropdown-item @click="dialogSwitchAccountVisible=true">Switch Account</el-dropdown-item>
-                          <el-dropdown-item>My Discount Card</el-dropdown-item>
+                          <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>
                           <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>
                           <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
                           <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
@@ -81,13 +81,16 @@
           Vendor (Deal Program)
         </div>
       </div>
-      <!--      <template #footer>-->
-      <!--      <span class="dialog-footer">-->
-      <!--        <el-button @click="dialogSwitchAccountVisible = false">Cancel</el-button>-->
-      <!--        <el-button type="primary"-->
-      <!--                   @click="dialogSwitchAccountVisible = false">Confirm</el-button>-->
-      <!--      </span>-->
-      <!--      </template>-->
+    </el-dialog>
+
+    <el-dialog
+        v-model="dialogDiscountCardVisible"
+        title="Discount Card"
+        width="30%"
+    >
+     <div class="discount-card-container">
+        <el-image :src="discountCardImg"></el-image>
+     </div>
     </el-dialog>
 
   </div>
@@ -97,14 +100,17 @@
 <script>
 import {CHANGE_IDENTITY_LANGUAGE, GET_BASIC_INFO} from '@/api/api'
 import logoImg from '@/assets/logo.png'
+import discountCardImg from '@/assets/discountcard/discountCard.png'
 
 export default {
   name: "Header",
   data() {
     return {
       logoImg,
+      discountCardImg,
       dialogSwitchAccountVisible: false,
       token: '',
+      dialogDiscountCardVisible:false
     }
   },
   computed:{
@@ -367,5 +373,10 @@ export default {
 .switch-account-item:hover {
   background-color: #0AA0A8;
   color: #FFFFFF;
+}
+
+.discount-card-container{
+  width: 99%;
+  margin: 0 auto;
 }
 </style>

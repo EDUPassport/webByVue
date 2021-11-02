@@ -134,7 +134,9 @@
               </el-form-item>
 
               <el-form-item label="Deal Agreement">
+                <div class="deal-agreement">
                   I understand this deal will need ESL Passport's approval.
+                </div>
               </el-form-item>
 
               <el-form-item>
@@ -574,6 +576,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+
 .tags-tips{
   text-align: left;
   font-size: 12px;
@@ -583,5 +586,11 @@ export default {
   text-align: left;
   font-size: 12px;
   color: #808080;
+}
+
+.deal-agreement{
+  text-align: left;
+  font-size: 12px;
+  color: #00b3d2;
 }
 </style>

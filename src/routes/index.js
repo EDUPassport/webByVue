@@ -219,6 +219,14 @@ const routes = [
                 meta: {
                     title: 'Edit Company Legal Info'
                 }
+            },
+            {
+                path:'/search/result',
+                name:'searchResult',
+                component:()=>import('@/views/search/result'),
+                meta: {
+                    title: 'Search Result'
+                }
             }
 
         ],
