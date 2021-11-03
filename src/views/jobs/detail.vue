@@ -124,7 +124,7 @@
         </div>
 
         <div class="apply-btn-container">
-          <el-button class="apply-btn" type="default">Apply Now!</el-button>
+          <el-button class="apply-btn" type="default" @click="applyJobs(detailData.id)">Apply Now!</el-button>
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
@@ -196,7 +196,7 @@ import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import {COMPANY_JOB_LIST, JOB_DETAIL} from "@/api/api";
+import {COMPANY_JOB_LIST, JOB_DETAIL,APPLY_JOBS} from "@/api/api";
 import latestIndustryNews from "@/components/latestIndustryNews";
 export default {
   name: "detail",
@@ -279,8 +279,28 @@ export default {
 
       })
 
-    }
+    },
+    applyJobs(id) {
 
+      let identity = localStorage.getItem('identity')
+      let token = localStorage.getItem('token')
+      if (identity == 1) {
+        let params = {
+          job_id: id,
+          token: token
+        }
+        APPLY_JOBS(params).then(res => {
+          if (res.code == 200) {
+            this.$message.success('Apply Success')
+          }
+        })
+
+      } else {
+        this.$message.warning('Only Educator Can Apply')
+      }
+
+
+    }
   }
 }
 </script>
@@ -304,6 +324,8 @@ export default {
 .job-title {
   font-size: 24px;
   color: #ff2870;
+  font-weight: bold;
+  padding-left: 20px;
 }
 
 .job-address-salary {
@@ -317,6 +339,8 @@ export default {
 .job-address {
   color: #808080;
   font-size: 14px;
+  padding-left: 20px;
+  padding-top: 10px;
 }
 
 .job-salary {

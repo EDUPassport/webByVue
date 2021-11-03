@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-header class="header-container" height="auto">
-      <el-row :gutter="0" justify="start" align="middle">
+      <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
         <el-col class="logo-container" :xs="12" :sm="3" :md="3" :lg="2" :xl="2">
           <el-image class="logo-img" :src="logoImg" fit="fill"></el-image>
         </el-col>
@@ -282,6 +282,10 @@ export default {
   border-bottom: 1px solid #eeeeee;
 }
 
+.header-row-container{
+
+}
+
 .logo-container {
   text-align: left;
 }
@@ -300,6 +304,8 @@ export default {
   text-decoration: none;
   color: #000000;
   font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
 }
 
 .nav-link-container a:hover {

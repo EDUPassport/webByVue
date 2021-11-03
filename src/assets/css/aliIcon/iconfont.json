@@ -6,6 +6,13 @@
   "description": "element ui",
   "glyphs": [
     {
+      "icon_id": "1190823",
+      "name": "like",
+      "font_class": "like",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
       "icon_id": "1231051",
       "name": "facebook",
       "font_class": "facebook",

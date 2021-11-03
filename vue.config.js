@@ -1,13 +1,17 @@
-import path from "path";
-
 module.exports = {
     outputDir:process.env.outputDir,
+    chainWebpack: config => {
+        config.module
+            .rule('vue')
+            .use('vue-loader')
+            .tap(options => {
+                // 修改它的选项...
+                return options
+            })
+    },
     // 调整内部的 webpack 配置
     configureWebpack: {
         resolve: {
-            alias: {
-                "~/": `${path.resolve(__dirname, "src")}/`,
-            },
             // .mjs needed for https://github.com/graphql/graphql-js/issues/1272
             extensions: ['*', '.mjs', '.js', '.vue', '.json', '.gql', '.graphql']
         },
@@ -18,6 +22,11 @@ module.exports = {
                     test: /\.mjs$/,
                     include: /node_modules/,
                     type: 'javascript/auto'
+                },
+                { test: /\.txt$/, use: "raw-loader" },
+                {
+                    test: /\.js$/, //匹配所有的js文件
+                    exclude: /node_modules/, //除了node_modules以外
                 }
             ]
         },
@@ -34,5 +43,7 @@ module.exports = {
             }
         }
 
+
     }
+
 }

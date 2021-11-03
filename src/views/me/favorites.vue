@@ -21,6 +21,9 @@
                 <span v-if="item.type==1">Job</span>
                 <span v-if="item.type==2">Deal</span>
               </div>
+              <div class="list-item-favorite-icon-container" @click="cancelFavorite(item.type,item.type_id)">
+                <i class="iconfont el-icon-alixll-heart-filled list-item-favorite-icon"></i>
+              </div>
             </div>
           </div>
           <div class="list-pagination">
@@ -33,6 +36,7 @@
           <div class="ads-container">
             <el-image :src="dashboardAdsImg"></el-image>
           </div>
+
         </el-col>
       </el-row>
     </div>
@@ -40,7 +44,7 @@
 </template>
 
 <script>
-import {GET_FAVORITE_LIST} from "@/api/api";
+import {GET_FAVORITE_LIST,CANCEL_FAVORITE} from "@/api/api";
 import dashboardAdsImg from '@/assets/ads/2.png'
 import meSideMenu from "@/components/meSideMenu";
 
@@ -86,6 +90,19 @@ export default {
       this.getFavoriteList(e, this.limit)
       console.log(e)
     },
+    cancelFavorite(type,typeId){
+       let params = {
+         token:localStorage.getItem('token'),
+         type:type,
+         type_id:typeId
+       }
+       CANCEL_FAVORITE(params).then(res=>{
+         console.log(res)
+         if(res.code == 200){
+           this.getFavoriteList()
+         }
+       })
+    }
 
   }
 }
@@ -161,6 +178,16 @@ export default {
   color: #FFFFFF;
   padding: 4px 10px;
   border-radius: 4px;
+}
+
+.list-item-favorite-icon-container{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+.list-item-favorite-icon{
+  font-size: 24px;
+  cursor: pointer;
 }
 
 .list-pagination{

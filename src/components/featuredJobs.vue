@@ -10,8 +10,9 @@
         <swiper-slide v-for="(item,index) in jobFeaturedListData" :key="index">
           <!--                animate__animated  animate__backInUp-->
           <div class="featured-jobs-card ">
-            <div class="featured-jobs-card-images">
-              <el-image class="featured-jobs-card-image" :src="item.logo" fit="fill"></el-image>
+            <div class="featured-jobs-card-images"
+                 :style="item.logo !='' ? 'background-image:url('+ item.logo + ')' : ''">
+              <div class="featured-jobs-card-image" ></div>
             </div>
             <div class="featured-jobs-title">
               <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}" >{{ item.job_title }}</router-link>
@@ -48,7 +49,7 @@
             </div>
             <div class="featured-jobs-b">
               <div class="featured-jobs-b-l">
-                <el-button class="featured-jobs-apply-btn">Quick Apply</el-button>
+                <el-button class="featured-jobs-apply-btn" @click="applyJobs(item.id)">Quick Apply</el-button>
               </div>
               <div class="featured-jobs-b-r">
                 <el-icon>
@@ -77,7 +78,7 @@ import "swiper/css/navigation"
 import SwiperCore, {
   Pagination, Autoplay, Navigation, Zoom
 } from 'swiper';
-import {JOB_FEATURED_LIST} from "@/api/api";
+import {JOB_FEATURED_LIST,APPLY_JOBS} from "@/api/api";
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 
@@ -111,6 +112,28 @@ export default {
       })
 
     },
+    applyJobs(id) {
+
+      let identity = localStorage.getItem('identity')
+      let token = localStorage.getItem('token')
+      if (identity == 1) {
+        let params = {
+          job_id: id,
+          token: token
+        }
+        APPLY_JOBS(params).then(res => {
+          if (res.code == 200) {
+            this.$message.success('Apply Success')
+          }
+        })
+
+      } else {
+        this.$message.warning('Only Educator Can Apply')
+      }
+
+
+    }
+
   }
 
 }
@@ -163,10 +186,17 @@ export default {
   width: 100%;
   height: 240px;
   overflow: hidden;
+  position: relative;
+  background-color: #EEEEEE;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .featured-jobs-card-image {
   width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.2);
 
 }
 
@@ -261,8 +291,11 @@ export default {
 }
 
 .featured-jobs-apply-btn {
-  background-color: #b1c452;
+  background-color: #20AEC6;
   color: #ffffff;
+  line-height:20px;
+  border-radius: 20px;
+  font-size: 14px;
 }
 
 .featured-jobs-b-r {

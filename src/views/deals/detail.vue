@@ -16,11 +16,9 @@
             <div class="job-desc-content">
               {{ detailData.desc }}
             </div>
-            <template v-if="detailData.tags">
-              <div class="job-tags" >
-                <div class="job-tag" v-for="(item,i) in detailData.tags" :key="i">{{item.tag_name_en}}</div>
-              </div>
-            </template>
+            <div class="job-tags" v-if="detailData.tags">
+              <div class="job-tag" v-for="(item,i) in detailData.tags" :key="i">{{item.tag_name_en}}</div>
+            </div>
 
           </div>
 
@@ -205,6 +203,8 @@ export default {
 .job-title {
   font-size: 24px;
   color: #ff2870;
+  padding-left: 20px;
+  font-weight: bold;
 }
 
 .job-address-salary {
@@ -218,6 +218,8 @@ export default {
 .job-address {
   color: #808080;
   font-size: 14px;
+  padding-left: 20px;
+  padding-top: 10px;
 }
 
 .job-salary {

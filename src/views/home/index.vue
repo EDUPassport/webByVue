@@ -78,7 +78,7 @@
               <!--              </div>-->
 
               <div class="search-btn-container">
-                <el-button class="search-btn" type="primary">Search Now</el-button>
+                <el-button class="search-btn" type="primary" @click="searchNow()">Search Now</el-button>
               </div>
 
             </div>
@@ -119,10 +119,10 @@
 <!--                  <div class="hot-deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">-->
 <!--                    <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>-->
 <!--                  </div>-->
-                  <div class="featured-jobs-card-images">
-                    <el-image class="featured-jobs-card-image"
-                              :src="item.logo"></el-image>
-                    <div class="featured-jobs-favorite" @click="addFavorite(item.id,1,item.job_title,item.logo)">>
+                  <div class="featured-jobs-card-images"
+                       :style="item.logo !='' ? 'background-image:url('+ item.logo + ')' : ''">
+                    <div class="featured-jobs-card-image"></div>
+                    <div class="featured-jobs-favorite" @click="addFavorite(item.id,1,item.job_title,item.logo)">
                       <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                     </div>
                   </div>
@@ -337,9 +337,9 @@
                     <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                   </div>
                 </div>
-                <div class="hot-deals-item-tag-container">
-                  <div class="hot-deals-item-tag">Deal</div>
-                </div>
+<!--                <div class="hot-deals-item-tag-container">-->
+<!--                  <div class="hot-deals-item-tag">Deal</div>-->
+<!--                </div>-->
 
                 <div class="hot-deals-item-name-container">
                   <div class="hot-deals-item-title">
@@ -521,15 +521,20 @@
 
         <el-row class="subscribe-input-row" :gutter="0" align="middle" justify="center">
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <el-input
-                v-model="subscribeEmail"
-                placeholder="Email"
-                class="subscribe-input"
-            >
-              <template #append>
-                <el-button class="subscribe-btn" @click="subscribe()">Subscribe</el-button>
-              </template>
-            </el-input>
+            <div class="xll-subscribe-container">
+              <div class="xll-subscribe-input-container">
+                <el-input
+                    v-model="subscribeEmail"
+                    placeholder="Email"
+                    class="xll-subscribe-input"
+                >
+                </el-input>
+              </div>
+              <div class="xll-subscribe-btn-container">
+                <el-button class="xll-subscribe-btn" type="primary" @click="subscribe()">Subscribe</el-button>
+              </div>
+            </div>
+
           </el-col>
         </el-row>
       </div>
@@ -844,6 +849,9 @@ export default {
         }
       })
 
+    },
+    searchNow(){
+      this.$router.push({path:'/search/result',query:{keyword:this.searchKeywordsValue}})
     }
 
   }
@@ -1030,6 +1038,9 @@ export default {
 .featured-jobs-more-btn {
   font-size: 16px;
   font-weight: bold;
+  background-color: #217CA3;
+  line-height:20px;
+  border-radius: 20px;
 }
 
 .featured-jobs-row {
@@ -1071,6 +1082,10 @@ export default {
   height: 240px;
   overflow: hidden;
   position: relative;
+  background-color: #EEEEEE;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .featured-jobs-favorite{
@@ -1082,7 +1097,8 @@ export default {
 
 .featured-jobs-card-image {
   width: 100%;
-
+  height: 100%;
+  background-color: rgba(0,0,0,0.2);
 }
 
 .featured-jobs-title {
@@ -1176,8 +1192,11 @@ export default {
 }
 
 .featured-jobs-apply-btn {
-  background-color: #b1c452;
+  background-color: #20AEC6;
   color: #ffffff;
+  line-height:20px;
+  border-radius: 20px;
+  font-size: 14px;
 }
 
 .featured-jobs-b-r {
@@ -1389,7 +1408,6 @@ export default {
 
 .hot-deals-item {
   width: 32%;
-  /*height: 240px;*/
   margin-top: 20px;
   border-radius: 20px;
   overflow: hidden;
@@ -1415,7 +1433,8 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: 10px 10px 40px 10px;
+  background-color: rgba(0,0,0,0.3);
 }
 
 .hot-deals-item-t-l {
@@ -1426,7 +1445,7 @@ export default {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 1px solid #EEEEEE;
+  border: 2px solid #EEEEEE;
 }
 
 .hot-deals-item-t-r {
@@ -1491,7 +1510,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  /*padding-top: 6px;*/
+  padding:4px 0;
 }
 
 .hot-deals-item-b-l {
@@ -1519,7 +1538,7 @@ export default {
 .hot-deals-item-more {
   background-color: #faf7f7;
   width: 32%;
-  height: 235px;
+  height: 230px;
   margin-top: 20px;
   border-radius: 20px;
   overflow: hidden;
@@ -1802,14 +1821,26 @@ export default {
   color: #ffffff;
   padding: 40px 20px;
 }
-
-.subscribe-input {
+.xll-subscribe-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 
 }
 
-.subscribe-btn {
-  background-color: #0AA0A8 !important;
-  color: #ffffff !important;
+.xll-subscribe-input-container {
+  width: 80%;
+}
+.xll-subscribe-input{
+
+}
+.xll-subscribe-btn-container {
+  width: 20%;
+}
+
+.xll-subscribe-btn{
+  font-size: 12px;
 }
 
 @media screen and (max-width: 768px) {

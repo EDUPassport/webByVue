@@ -37,7 +37,7 @@
         <router-link to="/deals/offer" exact>Offer a Deal</router-link>
       </div>
       <div class="l-item">
-        <router-link to="/" exact>Privacy Policy</router-link>
+        <router-link to="/privacy/policy" exact>Privacy Policy</router-link>
       </div>
 <!--      <div class="l-item">-->
 <!--        <router-link to="/" exact>My Messages</router-link>-->

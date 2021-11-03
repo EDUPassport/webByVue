@@ -22,9 +22,9 @@
                   <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                 </div>
               </div>
-              <div class="hot-deals-item-tag-container">
-                <div class="hot-deals-item-tag">Deal</div>
-              </div>
+<!--              <div class="hot-deals-item-tag-container">-->
+<!--                <div class="hot-deals-item-tag">Deal</div>-->
+<!--              </div>-->
 
               <div class="hot-deals-item-name-container">
                 <div class="hot-deals-item-title">
@@ -68,7 +68,7 @@ import "swiper/css/navigation"
 import SwiperCore, {
   Pagination, Autoplay, Navigation, Zoom
 } from 'swiper';
-import {DEALS_LIST,FEATURED_DEALS_LIST} from "@/api/api";
+import {DEALS_LIST,FEATURED_DEALS_LIST,ADD_FAVORITE} from "@/api/api";
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 
@@ -110,7 +110,25 @@ export default {
       }).catch(err => {
         console.log(err.response)
       })
+    },
+    addFavorite(id, type, title, url) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.getFeaturedDealsList()
+        }
+      })
+
     }
+
 
   }
 
@@ -145,7 +163,7 @@ export default {
 }
 .hot-deals-item {
   width: 100%;
-  height: 240px;
+  /*height: 240px;*/
   margin-top: 20px;
   border-radius: 20px;
   overflow: hidden;
@@ -171,7 +189,8 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 10px 10px 40px 10px;
+  background-color: rgba(0,0,0,0.3);
 }
 
 .hot-deals-item-t-l {

@@ -15,6 +15,7 @@ import router from "./routes"
 import './assets/css/aliIcon/iconfont.css'
 import 'animate.css'
 import VTypical from 'vue-typical'
+// import './assets/font/font.css'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold } from '@element-plus/icons'
 
@@ -52,7 +53,8 @@ app.use(ElementPlus, {locale: zhCn, size: 'small', zIndex: 2000})
 app.use(i18n)
 app.use(VTypical, {
     /* options */
-});
+})
+
 
 app.config.globalProperties.$filters = {
     newsDateFormat(value){

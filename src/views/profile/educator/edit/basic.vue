@@ -6,6 +6,13 @@
           <meSideMenu></meSideMenu>
         </el-col>
         <el-col class="basic-r-container" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+          <div class="basic-breadcrumb-container">
+            <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/educator/profile' }">Profile</el-breadcrumb-item>
+              <el-breadcrumb-item>Basic</el-breadcrumb-item>
+            </el-breadcrumb>
+          </div>
           <div class="basic-form">
             <el-form
                 ref="basicForm"
@@ -344,7 +351,9 @@ export default {
 .basic-r-container {
   padding: 20px;
 }
-
+.basic-breadcrumb-container{
+  padding: 10px;
+}
 .basic-form {
   background-color: #ffffff;
   padding: 20px;

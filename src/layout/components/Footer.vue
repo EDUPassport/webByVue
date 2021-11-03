@@ -70,15 +70,19 @@
           <div class="sign-up-form">
 
             <div class="subscribe-container">
-              <el-input
-                  v-model="subscribeEmail"
-                  placeholder="Your Email"
-                  class="subscribe-input"
-              >
-                <template #append>
-                  <el-button class="subscribe-btn" @click="subscribe()">Subscribe</el-button>
-                </template>
-              </el-input>
+              <div class="xll-subscribe-container">
+                <div class="xll-subscribe-input-container">
+                  <el-input
+                      v-model="subscribeEmail"
+                      placeholder="Your Email"
+                      class="xll-subscribe-input"
+                  >
+                  </el-input>
+                </div>
+                <div class="xll-subscribe-btn-container">
+                  <el-button class="xll-subscribe-btn" type="primary" @click="subscribe()">Subscribe</el-button>
+                </div>
+              </div>
             </div>
 
             <div class="social-media">
@@ -296,14 +300,27 @@ export default {
   margin-top: 20px;
 }
 
-
-.subscribe-input {
+.xll-subscribe-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 
 }
 
-.subscribe-btn {
-  background-color: #0AA0A8 !important;
-  color: #ffffff !important;
+.xll-subscribe-input-container {
+  width: 60%;
+}
+.xll-subscribe-input{
+
+}
+.xll-subscribe-btn-container {
+  width: 40%;
+  padding-left: 10px;
+}
+
+.xll-subscribe-btn{
+  font-size: 12px;
 }
 
 .social-media {

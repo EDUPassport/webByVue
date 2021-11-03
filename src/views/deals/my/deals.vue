@@ -16,7 +16,7 @@
               </div>
             </div>
             <div class="deals-list-content">
-              <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index" @click="turnDealDetail(item.id)">
+              <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index">
 
                 <div class="deals-item-bg" :style="'background-image:url('+ item.user_info.profile_photo + ')'">
                   <div class="deals-item-t">
@@ -26,15 +26,15 @@
                       </template>
                     </div>
                     <div class="deals-item-t-r">
-                      <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
+<!--                      <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>-->
                     </div>
                   </div>
-                  <div class="deals-item-tag-container">
-                    <div class="deals-item-tag">Deal</div>
-                  </div>
+<!--                  <div class="deals-item-tag-container">-->
+<!--                    <div class="deals-item-tag">Deal</div>-->
+<!--                  </div>-->
 
                   <div class="deals-item-name-container">
-                    <div class="deals-item-title">
+                    <div class="deals-item-title"  @click="turnDealDetail(item.id)">
                       {{ item.desc }}
                     </div>
                     <div class="deals-item-name">
@@ -48,7 +48,9 @@
 
                 <div class="deals-item-b">
                   <div class="deals-item-b-l">
-
+                    <template v-if="item.vendor_type_icon">
+                      <el-image class="hot-deal-type-icon" :src="item.vendor_type_icon.icon_url"></el-image>
+                    </template>
                   </div>
                   <div class="deals-item-b-r">
                     {{item.location}}
@@ -244,7 +246,8 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 10px 10px 40px 10px;
+  background-color: rgba(0,0,0,0.3);
 }
 
 .deals-item-t-l {
@@ -291,8 +294,12 @@ export default {
   color: #ffffff;
   font-size: 16px;
   text-align: left;
+  font-weight: bold;
 }
 
+.deals-item-title:hover{
+  text-decoration: underline;
+}
 .deals-item-name {
   color: #ffffff;
   font-size: 16px;
@@ -308,16 +315,23 @@ export default {
 }
 
 .deals-item-b-l {
-  color: #000000;
+  width: 20%;
+  text-align: left;
+}
+
+.hot-deal-type-icon{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .deals-item-b-r {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  width: 80%;
   font-size: 12px;
   color: #808080;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .deals-pagination{

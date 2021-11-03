@@ -52,10 +52,7 @@
         </el-col>
         <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
           <div class="deals-container">
-            <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index"
-                 @click="turnDealDetail(item.id)"
-            >
-
+            <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index">
               <div class="deals-item-bg"
                    :style="item.user_info.header_photo !='' ? 'background-image:url('+ item.user_info.header_photo + ')' : ''">
                 <div class="deals-item-t">
@@ -64,16 +61,16 @@
                       <el-image class="deals-logo" :src="item.user_info.logo"></el-image>
                     </template>
                   </div>
-                  <div class="deals-item-t-r">
+                  <div class="deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
                     <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                   </div>
                 </div>
-                <div class="deals-item-tag-container">
-                  <div class="deals-item-tag">Deal</div>
-                </div>
+<!--                <div class="deals-item-tag-container">-->
+<!--                  <div class="deals-item-tag">Deal</div>-->
+<!--                </div>-->
 
                 <div class="deals-item-name-container">
-                  <div class="deals-item-title">
+                  <div class="deals-item-title" @click="turnDealDetail(item.id)">
                     {{ item.desc }}
                   </div>
                   <div class="deals-item-name">
@@ -87,7 +84,9 @@
 
               <div class="deals-item-b">
                 <div class="deals-item-b-l">
-
+                  <template v-if="item.vendor_type_icon">
+                    <el-image class="hot-deal-type-icon" :src="item.vendor_type_icon.icon_url"></el-image>
+                  </template>
                 </div>
                 <div class="deals-item-b-r">
                   {{item.location}}
@@ -116,7 +115,7 @@
 import featuredJobs from "@/components/featuredJobs";
 import featuredDeals from "@/components/featuredDeals";
 import latestIndustryNews from "@/components/latestIndustryNews";
-import {SUB_CATE_LIST, TAGS_LIST, DEALS_LIST, DEALS_AREA_LIST} from "@/api/api";
+import {SUB_CATE_LIST, TAGS_LIST, DEALS_LIST, DEALS_AREA_LIST,ADD_FAVORITE} from "@/api/api";
 
 export default {
   name: "index",
@@ -239,7 +238,25 @@ export default {
     dealPageChange(e){
       this.dealPage = e
       this.getDealsList(e, this.dealLimit,this.sCateId)
+    },
+    addFavorite(id, type, title, url) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.getFeaturedDealsList()
+        }
+      })
+
     }
+
 
 
   }
@@ -335,8 +352,8 @@ export default {
 }
 
 .deals-item:hover {
-  border: 1px solid #eeeeee;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
+  /*border: 1px solid #eeeeee;*/
+  /*box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);*/
 }
 
 .deals-item-t {
@@ -344,7 +361,8 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 10px 10px 40px 10px;
+  background-color: rgba(0,0,0,0.3);
 }
 
 .deals-item-t-l {
@@ -389,12 +407,17 @@ export default {
 
 .deals-item-title {
   color: #ffffff;
-  font-size: 14px;
+  font-size: 16px;
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   font-weight: bold;
+}
+
+.deals-item-title:hover{
+  text-decoration: underline;
+
 }
 
 .deals-item-name {
@@ -412,15 +435,18 @@ export default {
 }
 
 .deals-item-b-l {
-  color: #000000;
+  width: 20%;
+  text-align: left;
+}
+
+.hot-deal-type-icon{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .deals-item-b-r {
   width: 79%;
-  /*display: flex;*/
-  /*flex-direction: row;*/
-  /*align-items: center;*/
-  /*justify-content: space-between;*/
   font-size: 12px;
   color: #808080;
   padding-right: 20px;

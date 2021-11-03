@@ -227,6 +227,14 @@ const routes = [
                 meta: {
                     title: 'Search Result'
                 }
+            },
+            {
+                path:'/privacy/policy',
+                name:'privacyPolicy',
+                component:()=>import('@/views/privacy/policy'),
+                meta: {
+                    title: 'Privacy Policy'
+                }
             }
 
         ],
