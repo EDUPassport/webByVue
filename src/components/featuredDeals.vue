@@ -140,8 +140,9 @@ export default {
   background-color: #ffffff;
   border-radius: 10px;
   padding: 20px;
-  border: 1px solid #eeeeee;
+  /*border: 1px solid #eeeeee;*/
   margin-top: 20px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
 .featured-deals-label {
@@ -187,7 +188,7 @@ export default {
 .hot-deals-item-t {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 10px 10px 40px 10px;
   background-color: rgba(0,0,0,0.3);
@@ -266,7 +267,6 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding-top: 6px;
-  /*padding: 20px 20px 0 20px;*/
 }
 
 .hot-deals-item-b-l {
@@ -282,16 +282,13 @@ export default {
 
 .hot-deals-item-b-r {
   width: 79%;
-  /*display: flex;*/
-  /*flex-direction: row;*/
-  /*align-items: center;*/
-  /*justify-content: space-between;*/
   font-size: 12px;
   color: #808080;
   padding-right: 20px;
   text-align: right;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 

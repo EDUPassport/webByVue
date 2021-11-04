@@ -88,8 +88,7 @@
     </div>
 
     <!--  featured jobs -->
-    <div class="featured-jobs-bg" v-if="jobFeaturedListData.length>0">
-
+    <div class="featured-jobs-bg" v-loading="jobFeaturedListData.length<=0" v-if="jobFeaturedShowStatus">
       <el-row :gutter="0" justify="center" align="middle">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="featured-jobs-label">Featured Jobs</div>
@@ -104,7 +103,7 @@
         </el-col>
       </el-row>
 
-      <el-row class="featured-jobs-row" :gutter="0" justify="center" align="middle">
+      <el-row class="featured-jobs-row" :gutter="0" justify="center" align="middle" >
 
         <el-col :xs="0" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="featured-jobs-slider">
@@ -161,7 +160,7 @@
                   </div>
                   <div class="featured-jobs-b">
                     <div class="featured-jobs-b-l">
-                      <el-button class="featured-jobs-apply-btn" type="default"
+                      <el-button class="featured-jobs-apply-btn" type="default" round
                                  @click="applyJobs(item.id)"
                       >Quick Apply
                       </el-button>
@@ -186,7 +185,7 @@
       <el-row :gutter="0" justify="center" align="middle">
         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
           <div class="featured-jobs-more">
-            <el-button class="featured-jobs-more-btn" type="primary" @click="turnJobsList()">
+            <el-button class="featured-jobs-more-btn" type="primary" round @click="turnJobsList()">
               View All
               <el-icon>
                 <ArrowRightBold/>
@@ -303,7 +302,7 @@
     <!--    </div>-->
 
     <!--  featured deals -->
-    <div class="featured-deals-bg">
+    <div class="featured-deals-bg" v-loading="featuredDealsList.length<=0" v-if="dealFeaturedShowStatus">
 
       <el-row :gutter="0" justify="center" align="middle">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -370,7 +369,7 @@
             <div class="hot-deals-item-more">
               <div class="hot-deals-item-more-logo-container" v-if="featuredDealsLogoData.length>0">
                 <div class="hot-deals-item-more-logo-item" v-for="(item,i) in featuredDealsLogoData" :key="i">
-                  <el-image class="hot-deals-item-more-logo" :src="item.logo_url"></el-image>
+                  <el-image class="hot-deals-item-more-logo" :src="item.logo_url" fit="fill"></el-image>
                 </div>
               </div>
               <div class="hot-deals-item-more-tips">
@@ -379,7 +378,7 @@
                 <span>Enjoy great discounts and deals where ver you go</span>
               </div>
               <div class="featured-deals-more">
-                <el-button class="featured-deals-more-btn" type="primary" @click="turnDealsPage()">View More</el-button>
+                <el-button class="featured-deals-more-btn" type="primary" round @click="turnDealsPage()">View More</el-button>
               </div>
             </div>
           </div>
@@ -388,7 +387,7 @@
     </div>
 
     <!-- popular work destinations  -->
-    <div class="popular-work-container">
+    <div class="popular-work-container" v-loading="popularCityData.length<=0" v-if="popularWorkShowStatus">
       <el-row :gutter="0" align="middle" justify="center">
         <el-col class="popular-work-title" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
           Popular Work Destinations
@@ -423,7 +422,7 @@
     </div>
 
     <!-- articles industry news   -->
-    <div class="industry-news-container">
+    <div class="industry-news-container" v-loading="articleListData.length<=0" v-if="industryShowStatus">
       <el-row class="industry-news-row" :gutter="0" align="middle" justify="center">
         <el-col :xs="24" :sm="7" :md="7" :lg="7" :xl="8">
           <div class="industry-articles-label">Articles</div>
@@ -486,22 +485,22 @@
     <!-- vendor six logos    -->
     <div class="vendor-logos-container">
       <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="3" :lg="3" :xl="2">
+        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgOne"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="3" :lg="3" :xl="2">
+        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgTwo"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="3" :lg="3" :xl="2">
+        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgThree"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="3" :lg="3" :xl="2">
+        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgFour"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="3" :lg="3" :xl="2">
+        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgFive"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="3" :lg="3" :xl="2">
+        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgSix"></el-image>
         </el-col>
 
@@ -520,7 +519,7 @@
         </el-row>
 
         <el-row class="subscribe-input-row" :gutter="0" align="middle" justify="center">
-          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
             <div class="xll-subscribe-container">
               <div class="xll-subscribe-input-container">
                 <el-input
@@ -618,6 +617,11 @@ export default {
       featuredDealsLogoData: [],
       popularCityData:[],
 
+      jobFeaturedShowStatus:true,
+      dealFeaturedShowStatus:true,
+      popularWorkShowStatus:true,
+      industryShowStatus:true
+
     }
   },
   setup() {
@@ -647,7 +651,7 @@ export default {
   },
   mounted() {
     this.getJobFeaturedList()
-    this.getBusinessList()
+    // this.getBusinessList()
     // this.getDealsList()
     this.getAdsList()
 
@@ -664,6 +668,10 @@ export default {
         console.log(res)
         if(res.code == 200){
           this.popularCityData = res.message;
+          let message = res.message;
+          if(message.length<=0){
+            this.popularWorkShowStatus = false
+          }
         }
       })
     },
@@ -702,10 +710,13 @@ export default {
       JOB_FEATURED_LIST(params).then(res => {
         console.log(res)
         if (res.code === 200) {
+          let message = res.message;
           this.jobFeaturedListData = res.message;
-        } else {
-          console.log(res.msg)
+          if(message.length<=0){
+            this.jobFeaturedShowStatus=false
+          }
         }
+
       })
 
     },
@@ -755,6 +766,10 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.featuredDealsList = res.message;
+          let message = res.message;
+          if(message.length<=0){
+            this.dealFeaturedShowStatus = false
+          }
         }
       })
     },
@@ -786,6 +801,9 @@ export default {
             adsDataNews = adsData.filter(item => item.name == 'vendor_industry_news');
           }
           let articleListData = adsDataNews[0].data;
+          if(articleListData.length<=0){
+            this.industryShowStatus=false;
+          }
           this.articleListData = articleListData;
           this.articleListLimitData = articleListData.slice(0, 2)
 
@@ -1038,9 +1056,6 @@ export default {
 .featured-jobs-more-btn {
   font-size: 16px;
   font-weight: bold;
-  background-color: #217CA3;
-  line-height:20px;
-  border-radius: 20px;
 }
 
 .featured-jobs-row {
@@ -1083,8 +1098,9 @@ export default {
   overflow: hidden;
   position: relative;
   background-color: #EEEEEE;
+
   background-position: center;
-  background-size: cover;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
 }
 
@@ -1194,8 +1210,6 @@ export default {
 .featured-jobs-apply-btn {
   background-color: #20AEC6;
   color: #ffffff;
-  line-height:20px;
-  border-radius: 20px;
   font-size: 14px;
 }
 
@@ -1431,7 +1445,7 @@ export default {
 .hot-deals-item-t {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 10px 10px 40px 10px;
   background-color: rgba(0,0,0,0.3);
@@ -1474,7 +1488,7 @@ export default {
 
 .hot-deals-item-name-container {
   padding: 10px 20px;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .hot-deals-item-title {
@@ -1533,6 +1547,7 @@ export default {
   text-align: right;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .hot-deals-item-more {
@@ -1570,7 +1585,7 @@ export default {
 }
 
 .hot-deals-item-more-logo {
-  width: 100%;
+  /*width: 100%;*/
 }
 
 .hot-deals-item-more-tips {

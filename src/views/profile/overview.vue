@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import defaultAvatar from '@/assets/default/avatar.png'
 import accountInfo from "../../components/accountInfo";
 import meSideMenu from "@/components/meSideMenu";
 import {VISITOR_USER_INFO} from '@/api/api';
@@ -94,6 +95,7 @@ export default {
     return {
       dashboardListsImg,
       dashboardAdsImg,
+      defaultAvatar,
       userInfo: {},
       basicUserInfo: {},
       identity:this.$route.query.identity

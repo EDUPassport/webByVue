@@ -124,7 +124,7 @@
         </div>
 
         <div class="apply-btn-container">
-          <el-button class="apply-btn" type="default" @click="applyJobs(detailData.id)">Apply Now!</el-button>
+          <el-button class="apply-btn" type="primary" round @click="applyJobs(detailData.id)">Apply Now!</el-button>
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
@@ -140,7 +140,7 @@
               {{ detailData.business.business_bio }}
             </div>
             <div class="view-profile-btn-container">
-              <el-button class="view-profile-btn" type="primary">View Profile</el-button>
+              <el-button class="view-profile-btn" type="primary" round>View Profile</el-button>
             </div>
           </div>
         </div>
@@ -174,7 +174,7 @@
               </div>
               <div class="other-jobs-r">
                 <div class="other-jobs-r-t">
-                  {{item.job_title}}
+                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">{{ item.job_title }}</router-link>
                 </div>
                 <div class="other-jobs-r-b">
                   {{item.refresh_time}}
@@ -702,8 +702,7 @@ export default {
 
 .apply-btn {
   width: 100%;
-  background-color: #b1c452;
-  color: #ffffff;
+  font-size: 14px;
 }
 
 .company-bio-container {
@@ -711,6 +710,7 @@ export default {
   padding: 20px;
   border-radius: 20px;
   margin-top: 20px;
+  min-height: 200px;
 }
 
 .company-bio-label {
@@ -732,13 +732,15 @@ export default {
   width: 120px;
   height: 120px;
   border-radius: 50%;
+  border: 1px solid #EEEEEE;
 }
 
 .company-bio-text {
-  height: 200px;
+  /*height: 200px;*/
+  min-height: 140px;
   font-size: 14px;
   word-wrap: break-word;
-  word-break: break-all;
+  /*word-break: break-all;*/
   /*overflow: hidden;*/
   /*text-overflow: ellipsis;*/
   /*display: -webkit-box;*/
@@ -753,6 +755,7 @@ export default {
 
 .view-profile-btn {
   font-size: 14px;
+  margin-top: 10px;
 }
 
 .contact-container {
@@ -834,9 +837,14 @@ export default {
 .other-jobs-r{
   padding: 10px;
 }
-.other-jobs-r-t{
+.other-jobs-r-t a{
   font-size: 14px;
   font-weight: bold;
+  color: #000000;
+  text-decoration: none;
+}
+.other-jobs-r-t a:hover{
+  text-decoration: underline;
 }
 .other-jobs-r-b{
   font-size: 14px;

@@ -1,7 +1,7 @@
 <template>
   <div class="profile-l-container">
     <div class="profile-photo-container">
-      <el-image class="profile-photo" v-if="userAvatar" :src="userAvatar"></el-image>
+      <el-image class="profile-photo" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-image>
       <div>
         <span>{{username}}</span>
       </div>
@@ -54,11 +54,12 @@
 <script>
 import {randomString} from "../utils";
 import {GET_BASIC_INFO} from  '@/api/api'
-
+import defaultAvatar from '@/assets/default/avatar.png'
 export default {
   name: "meSideMenu",
   data(){
     return {
+      defaultAvatar,
       accountInfo:{},
       accountPhotoValue:'',
       versionTime:randomString()

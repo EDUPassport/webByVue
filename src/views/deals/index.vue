@@ -1,5 +1,5 @@
 <template>
-  <div class="bg">
+  <div class="bg" v-loading="showLoadingStatus">
     <div class="xll-container">
       <el-row align="middle" justify="center">
         <el-col class="sub-cate-container" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -135,7 +135,8 @@ export default {
       dealPage:1,
       dealLimit:10,
       dealTotalNum:0,
-      sCateId:0
+      sCateId:0,
+      showLoadingStatus:true
     }
   },
   mounted() {
@@ -152,6 +153,9 @@ export default {
     },
     selectSubCate(cateId){
       // console.log(cateId)
+      this.dealsListData = []
+      this.showLoadingStatus=true
+
       if(this.sCateId == cateId){
         this.sCateId = 0
       }else{
@@ -162,11 +166,15 @@ export default {
     },
     locationChange(e){
       // console.log(e)
+      this.dealsListData = []
+      this.showLoadingStatus=true
       this.locationValue = e
       this.getDealsList(this.dealPage,this.dealLimit,this.sCateId)
     },
     tagChange(e){
       // console.log(e)
+      this.dealsListData = []
+      this.showLoadingStatus=true
       this.tagValue = e
       this.getDealsList(this.dealPage,this.dealLimit,this.sCateId)
     },
@@ -219,6 +227,7 @@ export default {
         if (res.code == 200) {
           this.dealsListData = res.message.data;
           this.dealTotalNum = res.message.total
+          this.showLoadingStatus=false
         }
       }).catch(err => {
         console.log(err.response)
@@ -236,6 +245,7 @@ export default {
       console.log(e)
     },
     dealPageChange(e){
+      this.showLoadingStatus=true
       this.dealPage = e
       this.getDealsList(e, this.dealLimit,this.sCateId)
     },
@@ -277,8 +287,11 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding:10px 40px;
-  border-bottom: 1px solid #eeeeee;
+  /*border-bottom: 1px solid #eeeeee;*/
   background-color: #ffffff;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 .sub-cate-item{
   display: flex;
@@ -304,9 +317,10 @@ export default {
 }
 .deals-events-filter-container{
   background-color: #ffffff;
-  border: 1px solid #eeeeee;
+  /*border: 1px solid #eeeeee;*/
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
 .deals-events-filter-label{
@@ -339,8 +353,9 @@ export default {
   margin-top: 20px;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid #eeeeee;
+  /*border: 1px solid #eeeeee;*/
   background-color: #ffffff;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
 .deals-item-bg {
@@ -359,7 +374,7 @@ export default {
 .deals-item-t {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 10px 10px 40px 10px;
   background-color: rgba(0,0,0,0.3);
@@ -373,6 +388,7 @@ export default {
   width: 60px;
   height: 60px;
   border-radius: 50%;
+  background-color: #FFFFFF;
 }
 
 .deals-item-t-r {
@@ -453,6 +469,7 @@ export default {
   text-align: right;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .deals-pagination{

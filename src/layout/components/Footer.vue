@@ -3,7 +3,7 @@
     <el-backtop/>
     <el-footer height="auto" class="footer-bg">
       <el-row class="footer-row" :gutter="0" align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
+        <el-col :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
           <div class="esl-logo-container">
             <el-image class="esl-logo" :src="imgLogo"></el-image>
           </div>
@@ -23,7 +23,7 @@
             </el-link>
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
+        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
           <div class="popular-searches">
             Popular Searches
           </div>
@@ -43,7 +43,7 @@
             <router-link to="#"> Industry News</router-link>
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
+        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
           <div class="quick-links">
             Quick links
           </div>
@@ -60,7 +60,7 @@
             Careers
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+        <el-col :xs="24" :sm="{span:6,offset:2}" :md="{span:6,offset:2}" :lg="{span:6,offset:2}" :xl="{span:6,offset:2}">
           <div class="sign-up">
             Sign Up for Our Newsletter
           </div>
@@ -116,13 +116,13 @@
         </el-col>
       </el-row>
       <el-row class="footer-b" :gutter="0" align="middle" justify="center">
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="9">
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="9">
           <div class="footer-b-l">
             <div class="footer-b-l-item">Terms of Use</div>
             <div class="footer-b-l-item footer-b-l-item-margin">Privacy Policy</div>
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="9">
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="9">
 
         </el-col>
       </el-row>
@@ -287,7 +287,6 @@ export default {
 }
 
 .sign-up-tips {
-  line-height: 30px;
   font-size: 14px;
   color: #808080;
 }

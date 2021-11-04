@@ -244,7 +244,7 @@ export default {
 .deals-item-t {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 10px 10px 40px 10px;
   background-color: rgba(0,0,0,0.3);

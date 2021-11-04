@@ -1,6 +1,6 @@
 <template>
-  <div class="bg">
-    <el-row class="bg-container" align="top" justify="center">
+  <div class="bg" v-loading="showLoadingStatus">
+    <el-row class="bg-container" align="top" justify="center" >
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
         <div class="jobs-filter-container">
           <div class="jobs-filter-label">Find a job</div>
@@ -91,7 +91,7 @@
 
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-        <div class="jobs-list-container">
+        <div class="jobs-list-container" >
           <div class="jobs-list-label">We've found you {{ jobTotalNum }} open jobs</div>
           <div class="jobs-list-content">
             <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
@@ -232,7 +232,8 @@ export default {
       articleListData: [],
       jobPage: 1,
       jobLimit: 5,
-      jobTotalNum: 0
+      jobTotalNum: 0,
+      showLoadingStatus:true
 
     }
   },
@@ -290,6 +291,7 @@ export default {
       console.log(e)
     },
     jobPageChange(e) {
+      this.showLoadingStatus = true;
       this.jobPage = e
       this.getJobList(e, this.jobLimit)
       console.log(e)
@@ -339,6 +341,7 @@ export default {
           this.jobListData = res.message.data
           // console.log(res.message.data)
           this.jobTotalNum = res.message.total
+          this.showLoadingStatus= false
         } else {
           console.log(res.msg)
         }
@@ -369,25 +372,35 @@ export default {
     },
     locationChange(e){
       // console.log(e)
+      this.jobListData = []
+      this.showLoadingStatus = true
       this.locationValue = e;
       this.getJobList(this.jobPage, this.jobLimit)
     },
     salaryChange(e) {
       // console.log(e)
+      this.jobListData = []
+      this.showLoadingStatus = true
       this.salaryValue = e
       this.getJobList(this.jobPage, this.jobLimit)
     },
     genderChange(e) {
+      this.jobListData = []
+      this.showLoadingStatus = true
       // console.log(e)
       this.genderValue = e
       this.getJobList(this.jobPage, this.jobLimit)
     },
     jobTypeChange(e) {
+      this.jobListData = []
+      this.showLoadingStatus = true
       // console.log(e)
       this.jobTypeValue = e
       this.getJobList(this.jobPage, this.jobLimit)
     },
     studentAgeChange(e) {
+      this.jobListData = []
+      this.showLoadingStatus = true
       // console.log(e)
       this.studentAgeValue = e
       this.getJobList(this.jobPage, this.jobLimit)
@@ -412,9 +425,10 @@ export default {
 
 .jobs-filter-container {
   background-color: #ffffff;
-  border: 1px solid #eeeeee;
+  /*border: 1px solid #eeeeee;*/
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
 .jobs-filter-label {
@@ -476,6 +490,7 @@ export default {
   padding: 20px;
   border-radius: 10px;
   text-align: left;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
 .jobs-list-item-l {
@@ -486,6 +501,7 @@ export default {
   width: 80%;
   height: 80%;
   border-radius: 10px;
+  border: 1px solid #EEEEEE;
 }
 
 .jobs-list-item-r {
@@ -497,6 +513,11 @@ export default {
   font-weight: bold;
   color: #000000;
   text-decoration: none;
+}
+
+.jobs-list-item-title a:hover {
+  text-decoration: underline;
+  font-size: 20px;
 }
 
 .jobs-list-item-name {
@@ -529,6 +550,12 @@ export default {
   color: #808080;
   text-decoration: none;
 }
+
+.jobs-list-item-readmore a:hover{
+  font-size: 16px;
+  text-decoration: underline;
+}
+
 .jobs-list-item-b {
   width: 100%;
   display: flex;

@@ -39,12 +39,12 @@
                           <div class="remeber-container">
                             <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
                           </div>
-                          <div class="hcaptcha-container">
-                            <hcaptcha
-                                sitekey="ad946ce8-55f2-4b65-97d5-0c42eccf794d"
-                                @verify="humanVerify"
-                            />
-                          </div>
+<!--                          <div class="hcaptcha-container">-->
+<!--                            <hcaptcha-->
+<!--                                sitekey="ad946ce8-55f2-4b65-97d5-0c42eccf794d"-->
+<!--                                @verify="humanVerify"-->
+<!--                            />-->
+<!--                          </div>-->
                           <el-form-item>
                             <el-button class="submit-btn" :loading="submitLoginLoadingStatus" @click="submitLoginForm('loginForm')">
                               Login in
@@ -102,10 +102,10 @@
                                       v-model="registerForm.code"></el-input>
                           </el-form-item>
                           <el-form-item label="Password" prop="password" required>
-                            <el-input size="medium" placeholder="Password" v-model="registerForm.password"></el-input>
+                            <el-input size="medium" type="password" placeholder="Password" v-model="registerForm.password"></el-input>
                           </el-form-item>
                           <el-form-item label="Confirm Password" prop="c_password" required>
-                            <el-input size="medium" placeholder="Confirm Password"
+                            <el-input size="medium" type="password" placeholder="Confirm Password"
                                       v-model="registerForm.c_password"></el-input>
                           </el-form-item>
                           <div class="identity-container">
@@ -161,7 +161,6 @@
             <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="6">
               <div class="footer-content">
 <!--                <router-link to="/privacy">Privacy & terms</router-link>-->
-
               </div>
             </el-col>
           </el-row>
@@ -169,14 +168,12 @@
       </el-container>
 
     </div>
-
-
   </div>
 
 </template>
 
 <script>
-import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
+// import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
 import imgLogo from '@/assets/logo.png'
 import {EMAIL_LOGIN, EMAIL_REGISTER} from "@/api/api";
 
@@ -202,7 +199,7 @@ export default {
       },
       submitLoginLoadingStatus: false,
       submitRegisterLoadingStatus:false,
-      humanVerifyStatus: false,
+      humanVerifyStatus: true,
       remeberValue: false,
       registerForm: {
         first_name: '',
@@ -238,9 +235,10 @@ export default {
     }
   },
   components: {
-    hcaptcha,
+
   },
   setup() {
+    //hcaptcha,
     let router = useRouter()
     let route = useRoute()
     const getParams = () => {
@@ -392,7 +390,7 @@ export default {
             if(res.code == 200){
               // let userInfo = res.message
               // localStorage.setItem('uid',res.message.id)
-              this.$message.success('Register Success! ')
+              this.$message.success('Registration completed!')
               location.reload()
             }
 

@@ -6,7 +6,7 @@
           <meSideMenu></meSideMenu>
         </el-col>
         <el-col class="list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
-          <div class="list-container">
+          <div class="list-container" v-if="favoriteData.length>0">
             <div class="list-item" v-for="(item,i) in favoriteData" :key="i">
               <div class="list-item-l">
                 <el-image class="list-item-l-img" :src="item.type_url"></el-image>
@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <div class="list-pagination">
+          <div class="list-pagination" v-if="favoriteData.length>0">
             <el-pagination layout="prev, pager, next" :default-current-page="1"
                            @size-change="pageSizeChange"
                            @current-change="pageChange"

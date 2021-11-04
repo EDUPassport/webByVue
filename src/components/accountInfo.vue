@@ -9,7 +9,7 @@
       <div class="account-info-b">
         <div class="account-info-photo">
           <template v-if="identity == 1">
-            <el-image class="account-photo-img" :src="info.profile_photo"></el-image>
+            <el-image class="account-photo-img" :src="info.profile_photo !='' ? info.profile_photo : defaultAvatar"></el-image>
           </template>
           <template v-if="identity == 2 || identity == 3 ">
             <el-image class="account-photo-img" :src="info.logo"></el-image>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-
+import defaultAvatar from '@/assets/default/avatar.png'
 export default {
   name: "accountInfo",
   props:{
@@ -66,6 +66,7 @@ export default {
   },
   data(){
     return {
+      defaultAvatar,
       accountInfo:{},
     }
   },

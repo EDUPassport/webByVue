@@ -49,7 +49,7 @@
             </div>
             <div class="featured-jobs-b">
               <div class="featured-jobs-b-l">
-                <el-button class="featured-jobs-apply-btn" @click="applyJobs(item.id)">Quick Apply</el-button>
+                <el-button class="featured-jobs-apply-btn" round @click="applyJobs(item.id)">Quick Apply</el-button>
               </div>
               <div class="featured-jobs-b-r">
                 <el-icon>
@@ -144,8 +144,9 @@ export default {
   background-color: #ffffff;
   border-radius: 10px;
   padding: 20px;
-  border: 1px solid #eeeeee;
+  /*border: 1px solid #eeeeee;*/
   margin-top: 20px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
 .featured-jobs-label {
@@ -293,8 +294,6 @@ export default {
 .featured-jobs-apply-btn {
   background-color: #20AEC6;
   color: #ffffff;
-  line-height:20px;
-  border-radius: 20px;
   font-size: 14px;
 }
 

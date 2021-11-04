@@ -58,7 +58,7 @@
                 {{ detailData.userInfo.vendor_bio }}
               </div>
               <div class="view-profile-btn-container">
-                <el-button class="view-profile-btn" type="primary">View Profile</el-button>
+                <el-button class="view-profile-btn" type="primary" round>View Profile</el-button>
               </div>
             </div>
           </div>
@@ -329,6 +329,7 @@ export default {
   padding: 20px;
   border-radius: 20px;
   margin-top: 20px;
+  min-height: 200px;
 }
 
 .company-bio-label {
@@ -350,13 +351,16 @@ export default {
   width: 120px;
   height: 120px;
   border-radius: 50%;
+  border: 1px solid #EEEEEE;
 }
 
 .company-bio-text {
-  height: 200px;
+  /*height: 200px;*/
+  min-height: 140px;
   font-size: 14px;
   word-wrap: break-word;
-  word-break: break-all;
+  /*overflow: hidden;*/
+  /*word-break: break-all;*/
   /*overflow: hidden;*/
   /*text-overflow: ellipsis;*/
   /*display: -webkit-box;*/
@@ -371,6 +375,7 @@ export default {
 
 .view-profile-btn {
   font-size: 14px;
+  margin-top: 10px;
 }
 
 .contact-container {

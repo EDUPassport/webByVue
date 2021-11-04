@@ -3,7 +3,7 @@
     <el-header class="header-container" height="auto">
       <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
         <el-col class="logo-container" :xs="12" :sm="3" :md="3" :lg="2" :xl="2">
-          <el-image class="logo-img" :src="logoImg" fit="fill"></el-image>
+          <el-image class="logo-img" :src="logoImg" fit="fill" @click="turnHome()"></el-image>
         </el-col>
 
         <el-col :xs="0" :sm="18" :md="16" :lg="17" :xl="17">
@@ -18,12 +18,11 @@
         </el-col>
 
         <el-col :xs="12" :sm="3" :md="5" :lg="5" :xl="5">
-
           <div class="user-container">
             <template v-if="username!='' && username ">
               <div class="user-container-1">
                 <div class="user-avatar">
-                  <el-image class="user-avatar-img" :src="userAvatar"></el-image>
+                  <el-image class="user-avatar-img" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-image>
                 </div>
                 <div class="user-1-r">
                   <div class="user-name"> Hi, {{ username }}</div>
@@ -100,6 +99,7 @@
 <script>
 import {CHANGE_IDENTITY_LANGUAGE, GET_BASIC_INFO} from '@/api/api'
 import logoImg from '@/assets/logo.png'
+import defaultAvatar from '@/assets/default/avatar.png'
 import discountCardImg from '@/assets/discountcard/discountCard.png'
 
 export default {
@@ -108,6 +108,7 @@ export default {
     return {
       logoImg,
       discountCardImg,
+      defaultAvatar,
       dialogSwitchAccountVisible: false,
       token: '',
       dialogDiscountCardVisible:false
@@ -199,7 +200,7 @@ export default {
     },
     loginOut() {
       localStorage.clear()
-      location.reload()
+      this.$router.push('/')
     },
     turnProfilePage() {
       this.$router.push({path: '/overview', query: {identity: this.identity}})
@@ -270,6 +271,9 @@ export default {
         }
       })
 
+    },
+    turnHome(){
+      this.$router.push('/')
     }
   }
 
@@ -293,6 +297,7 @@ export default {
 .logo-img {
   width: 60px;
   height: 60px;
+  cursor: pointer;
 }
 
 .nav-link-container {
