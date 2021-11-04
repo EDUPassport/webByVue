@@ -132,3 +132,6 @@ export const GET_FAVORITE_LIST = (params)=>get('favorite/getFavoriteList',params
 
 //cancel favorite
 export const CANCEL_FAVORITE = (params)=>post('favorite/cancelFavorite',params)
+
+//es search
+export const ES_SEARCH = (params)=>get('home/es',params)
