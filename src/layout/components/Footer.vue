@@ -95,7 +95,7 @@
               </div>
               <div class="social-media-item">
                 <el-link class="social-media-item-link"
-                         href="https://www.eslpassport.com" target="_blank" :underline="false">
+                         href="https://web.facebook.com/eslpassport/?_rdc=1&_rdr" target="_blank" :underline="false">
                   <el-image  class="social-media-item-img" :src="facebookImg"></el-image>
                 </el-link>
               </div>
@@ -107,7 +107,7 @@
               </div>
               <div class="social-media-item">
                 <el-link class="social-media-item-link"
-                         href="https://www.eslpassport.com" target="_blank" :underline="false">
+                         href="https://www.linkedin.com/company/esl-passport/" target="_blank" :underline="false">
                   <el-image class="social-media-item-img" :src="linkedinImg"></el-image>
                 </el-link>
               </div>

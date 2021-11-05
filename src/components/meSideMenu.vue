@@ -124,6 +124,7 @@ export default {
 
 <style scoped>
 .profile-l-container{
+  min-height: 800px;
   background-color: #0A1E76;
   border-radius: 10px;
   padding-bottom: 20px;
