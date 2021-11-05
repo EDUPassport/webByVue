@@ -341,7 +341,8 @@
 import meSideMenu from "@/components/meSideMenu";
 import accountInfo from "../../../components/accountInfo";
 import {VISITOR_USER_INFO, GET_BASIC_INFO, USER_OBJECT_LIST,
-  ADD_LANGUAGE_SCORE,ADD_EDU_BASIC,ADD_USER_INFO,ADD_USER_IMG,ADD_VENDOR_BASIC} from '@/api/api'
+  ADD_LANGUAGE_SCORE,ADD_EDU_BASIC,ADD_USER_INFO,ADD_USER_IMG,ADD_VENDOR_BASIC,
+  UPDATE_VENDOR_PROFILE} from '@/api/api'
 
 export default {
   name: "profile",
@@ -397,9 +398,17 @@ export default {
   mounted() {
     this.getVisitorBasicInfo()
     // this.getBasicInfo()
-
+    this.updateVendorProfile()
   },
   methods: {
+    updateVendorProfile(){
+      let params = {
+        token:localStorage.getItem('token')
+      }
+      UPDATE_VENDOR_PROFILE(params).then(res=>{
+        console.log(res)
+      })
+    },
     editBasicInfo() {
       this.$router.push('/vendor/edit/basic')
     },

@@ -135,3 +135,12 @@ export const CANCEL_FAVORITE = (params)=>post('favorite/cancelFavorite',params)
 
 //es search
 export const ES_SEARCH = (params)=>get('home/es',params)
+
+//
+export const UPDATE_EDUCATOR_PROFILE = (params)=>post('user/updateEduProfile',params)
+
+//
+export const UPDATE_BUSINESS_PROFILE = (params)=>post('user/updateBusProfile',params)
+
+//
+export const UPDATE_VENDOR_PROFILE = (params)=>post('user/updateVendorProfile',params)
