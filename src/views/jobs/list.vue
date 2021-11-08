@@ -95,6 +95,14 @@
           <div class="jobs-list-label">We've found you {{ jobTotalNum }} open jobs</div>
           <div class="jobs-list-content">
             <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
+
+              <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                   @click="cancelFavorite(1,item.id)">
+                <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
+              </div>
+              <div class="jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo)">
+                <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
+              </div>
               <div class="jobs-list-item-l">
                 <el-image class="jobs-item-logo" :src="item.logo" fit="cover"></el-image>
               </div>
@@ -168,7 +176,7 @@
 <script>
 
 import {useRouter} from "vue-router";
-import {JOB_LIST, USER_OBJECT_LIST,JOBS_AREA_LIST} from "@/api/api";
+import {JOB_LIST, USER_OBJECT_LIST,JOBS_AREA_LIST,ADD_FAVORITE,CANCEL_FAVORITE} from "@/api/api";
 
 import featuredJobs from "@/components/featuredJobs";
 import latestIndustryNews from "@/components/latestIndustryNews";
@@ -278,6 +286,23 @@ export default {
     this.getJobList(this.jobPage, this.jobLimit)
   },
   methods: {
+    addFavorite(id, type, title, url) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.getJobList(this.jobPage, this.jobLimit)
+        }
+      })
+
+    },
     getJobsAreaList(){
       let params = {}
       JOBS_AREA_LIST(params).then(res=>{
@@ -404,7 +429,21 @@ export default {
       // console.log(e)
       this.studentAgeValue = e
       this.getJobList(this.jobPage, this.jobLimit)
+    },
+    cancelFavorite(type,typeId){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      CANCEL_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.getJobList(this.jobPage, this.jobLimit)
+        }
+      })
     }
+
 
   }
 
@@ -480,6 +519,7 @@ export default {
 }
 
 .jobs-list-item {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -491,6 +531,18 @@ export default {
   border-radius: 10px;
   text-align: left;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
+.jobs-favorite{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+
+}
+
+.xll-heart-icon{
+  font-size: 24px;
 }
 
 .jobs-list-item-l {

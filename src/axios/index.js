@@ -12,11 +12,10 @@ axios.defaults.timeout = 16000
 // axios.defaults.withCredentials = true
 // 请求拦截器，设置token
 axios.interceptors.request.use(config => {
-    if (localStorage && localStorage.getItem('token')) {
-        const token = localStorage.getItem('token')
-        if (token) {
-            // config.data.token = token
-        }
+    const token = localStorage.getItem('token');
+
+    if (token && token !='' ) {
+        config.headers.token = token
         // token && (config.headers.Authorization = token)
     }
     config.headers.platform = 4;

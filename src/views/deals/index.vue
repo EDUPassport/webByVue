@@ -61,7 +61,11 @@
                       <el-image class="deals-logo" :src="item.user_info.logo"></el-image>
                     </template>
                   </div>
-                  <div class="deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
+                  <div class="deals-item-t-r" v-if="item.is_favorite && item.is_favorite == 1"
+                       @click="cancelFavorite(2,item.id)">
+                    <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
+                  </div>
+                  <div class="deals-item-t-r" v-else @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
                     <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                   </div>
                 </div>
@@ -115,7 +119,7 @@
 import featuredJobs from "@/components/featuredJobs";
 import featuredDeals from "@/components/featuredDeals";
 import latestIndustryNews from "@/components/latestIndustryNews";
-import {SUB_CATE_LIST, TAGS_LIST, DEALS_LIST, DEALS_AREA_LIST,ADD_FAVORITE} from "@/api/api";
+import {SUB_CATE_LIST, TAGS_LIST, DEALS_LIST, DEALS_AREA_LIST,ADD_FAVORITE,CANCEL_FAVORITE} from "@/api/api";
 
 export default {
   name: "index",
@@ -261,11 +265,25 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.$message.success('Success')
-          this.getFeaturedDealsList()
+          this.getDealsList(this.dealPage,this.dealLimit,this.sCateId)
         }
       })
 
+    },
+    cancelFavorite(type,typeId){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      CANCEL_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.getDealsList(this.dealPage,this.dealLimit,this.sCateId)
+        }
+      })
     }
+
 
 
 

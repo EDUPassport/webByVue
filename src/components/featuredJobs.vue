@@ -4,7 +4,7 @@
     <div class="featured-jobs-content">
       <swiper :slidesPerView="1" :spaceBetween="30"
               :pagination='{"clickable": true}'
-              :autoplay='{"delay": 2500,"disableOnInteraction": false}'
+              :autoplay='{"delay": 2500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
               :navigation="false"
               class="mySwiper">
         <swiper-slide v-for="(item,index) in jobFeaturedListData" :key="index">
@@ -12,7 +12,14 @@
           <div class="featured-jobs-card ">
             <div class="featured-jobs-card-images"
                  :style="item.logo !='' ? 'background-image:url('+ item.logo + ')' : ''">
-              <div class="featured-jobs-card-image" ></div>
+              <div class="featured-jobs-card-image"></div>
+              <div class="featured-jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                   @click="cancelFavorite(1,item.id)">
+                <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
+              </div>
+              <div class="featured-jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo)">
+                <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
+              </div>
             </div>
             <div class="featured-jobs-title">
               <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}" >{{ item.job_title }}</router-link>
@@ -78,7 +85,7 @@ import "swiper/css/navigation"
 import SwiperCore, {
   Pagination, Autoplay, Navigation, Zoom
 } from 'swiper';
-import {JOB_FEATURED_LIST,APPLY_JOBS} from "@/api/api";
+import {JOB_FEATURED_LIST,APPLY_JOBS,ADD_FAVORITE,CANCEL_FAVORITE} from "@/api/api";
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 
@@ -132,7 +139,37 @@ export default {
       }
 
 
-    }
+    },
+    addFavorite(id, type, title, url) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.getJobFeaturedList()
+        }
+      })
+
+    },
+    cancelFavorite(type,typeId){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      CANCEL_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.getJobFeaturedList()
+        }
+      })
+    },
 
   }
 
@@ -189,16 +226,25 @@ export default {
   overflow: hidden;
   position: relative;
   background-color: #EEEEEE;
+
   background-position: center;
-  background-size: cover;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
 }
 
+.featured-jobs-favorite{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+.xll-heart-icon {
+  font-size: 30px !important;
+}
 .featured-jobs-card-image {
   width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,0.2);
-
 }
 
 .featured-jobs-title {

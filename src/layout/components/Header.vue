@@ -22,7 +22,19 @@
             <template v-if="username!='' && username ">
               <div class="user-container-1">
                 <div class="user-avatar">
-                  <el-image class="user-avatar-img" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-image>
+                  <el-dropdown>
+                    <el-image class="user-avatar-img" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-image>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>
+                        <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>
+                        <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
+                        <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
+                        <el-dropdown-item divided @click="loginOut">Log Out</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
+
                 </div>
                 <div class="user-1-r">
                   <div class="user-name"> Hi, {{ username }}</div>
@@ -37,12 +49,9 @@
 
                       <template #dropdown>
                         <el-dropdown-menu>
-                          <el-dropdown-item @click="dialogSwitchAccountVisible=true">Switch Account</el-dropdown-item>
-                          <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>
-                          <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>
-                          <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
-                          <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
-                          <el-dropdown-item divided @click="loginOut">Log Out</el-dropdown-item>
+                          <el-dropdown-item  @click="selectRole(1)">Educator</el-dropdown-item>
+                          <el-dropdown-item  @click="selectRole(2)">Business</el-dropdown-item>
+                          <el-dropdown-item  @click="selectRole(3)">Vendor</el-dropdown-item>
                         </el-dropdown-menu>
                       </template>
                     </el-dropdown>
@@ -201,6 +210,9 @@ export default {
     loginOut() {
       localStorage.clear()
       this.$router.push('/')
+      setTimeout(function () {
+        location.reload()
+      },1500)
     },
     turnProfilePage() {
       this.$router.push({path: '/overview', query: {identity: this.identity}})
@@ -331,21 +343,26 @@ export default {
   justify-content: flex-end;
 }
 .user-avatar{
-
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.4);
+  overflow: hidden;
+  padding: 4px;
 }
 .user-avatar-img{
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  cursor: pointer;
 }
 .user-1-r{
   margin-left: 10px;
 }
 
 .user-name{
+  width: 80px;
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .router-link-exact-active {

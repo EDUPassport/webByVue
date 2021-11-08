@@ -41,7 +41,17 @@
 
           </div>
 
-<!--          <div class="apply-btn-container">-->
+          <div class="deals-detail-share-container">
+            <div class="deals-favorite" v-if="isFavoriteValue == 1"
+                 @click="cancelFavorite(2,detailData.id)">
+              <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
+            </div>
+            <div class="deals-favorite" v-else @click="addFavorite(detailData.id,2,detailData.title,detailData.userInfo.logo)">
+              <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
+            </div>
+          </div>
+
+          <!--          <div class="apply-btn-container">-->
 <!--            <el-button class="apply-btn" type="info">Apply Now!</el-button>-->
 <!--          </div>-->
         </el-col>
@@ -57,9 +67,9 @@
               <div class="company-bio-text" v-if="detailData.userInfo">
                 {{ detailData.userInfo.vendor_bio }}
               </div>
-              <div class="view-profile-btn-container">
-                <el-button class="view-profile-btn" type="primary" round>View Profile</el-button>
-              </div>
+<!--              <div class="view-profile-btn-container">-->
+<!--                <el-button class="view-profile-btn" type="primary" round>View Profile</el-button>-->
+<!--              </div>-->
             </div>
           </div>
 
@@ -92,7 +102,7 @@ import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import {COMPANY_JOB_LIST, DEALS_DETAIL} from "@/api/api";
+import {COMPANY_JOB_LIST, DEALS_DETAIL,ADD_FAVORITE,IS_FAVORITE,CANCEL_FAVORITE} from "@/api/api";
 
 export default {
   name: "detail",
@@ -101,7 +111,8 @@ export default {
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       detailData: {},
-      otherJobsData:[]
+      otherJobsData:[],
+      isFavoriteValue:0
     }
   },
   components:{
@@ -110,6 +121,11 @@ export default {
   mounted() {
     let dealId = this.$route.query.id;
     this.getDealDetail(dealId)
+    let token = localStorage.getItem('token')
+    if(token && token != ''){
+      this.isFavorite(2,dealId)
+    }
+
   },
   methods: {
     initMap(lng,lat){
@@ -178,7 +194,50 @@ export default {
 
       })
 
-    }
+    },
+    addFavorite(id, type, title, url) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.isFavoriteValue = 1
+        }
+      })
+
+    },
+    cancelFavorite(type,typeId){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      CANCEL_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.isFavoriteValue = 0
+        }
+      })
+    },
+    isFavorite(type,typeId){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      IS_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.isFavoriteValue = res.data;
+        }
+      })
+    },
 
   }
 }
@@ -473,4 +532,25 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+.deals-detail-share-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.deals-favorite{
+  cursor: pointer;
+}
+
+.xll-heart-icon{
+  font-size: 34px;
+}
+
+
 </style>

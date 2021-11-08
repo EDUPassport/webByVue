@@ -109,7 +109,7 @@
           <div class="featured-jobs-slider">
             <swiper :slidesPerView="3" :spaceBetween="30"
                     :pagination='{"clickable": true}'
-                    :autoplay='{"delay": 2500,"disableOnInteraction": false}'
+                    :autoplay='{"delay": 2500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
                     :navigation="false"
                     class="mySwiper">
               <swiper-slide v-for="(item,index) in jobFeaturedListData" :key="index">
@@ -121,7 +121,11 @@
                   <div class="featured-jobs-card-images"
                        :style="item.logo !='' ? 'background-image:url('+ item.logo + ')' : ''">
                     <div class="featured-jobs-card-image"></div>
-                    <div class="featured-jobs-favorite" @click="addFavorite(item.id,1,item.job_title,item.logo)">
+                    <div class="featured-jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                         @click="cancelFavorite(1,item.id)">
+                      <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
+                    </div>
+                    <div class="featured-jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo)">
                       <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                     </div>
                   </div>
@@ -332,7 +336,11 @@
                       <el-image class="hot-deals-logo" :src="item.user_info.logo"></el-image>
                     </template>
                   </div>
-                  <div class="hot-deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
+                  <div class="hot-deals-item-t-r" v-if="item.is_favorite && item.is_favorite==1"
+                       @click="cancelFavorite(2,item.id)">
+                    <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
+                  </div>
+                  <div class="hot-deals-item-t-r" v-else @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
                     <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                   </div>
                 </div>
@@ -556,7 +564,7 @@ import teamImgSix from '@/assets/team/6.jpg'
 import {
   JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST, ADS_LIST, APPLY_JOBS,
   FEATURED_DEALS_LIST, GET_SYSTEM_INFO, ADD_FAVORITE, SIX_LOGO_LIST,JOBS_AREA_LIST,
-  ADD_SUBSCRIBE_EMAIL
+  ADD_SUBSCRIBE_EMAIL,CANCEL_FAVORITE
 } from "@/api/api";
 // Import Swiper Vue.js components
 import {Swiper, SwiperSlide} from 'swiper/vue';
@@ -864,10 +872,26 @@ export default {
         if (res.code == 200) {
           this.$message.success('Success')
           this.getFeaturedDealsList()
+          this.getJobFeaturedList()
         }
       })
 
     },
+    cancelFavorite(type,typeId){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      CANCEL_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.getFeaturedDealsList()
+          this.getJobFeaturedList()
+        }
+      })
+    },
+
     searchNow(){
       this.$router.push({path:'/search/result',query:{keyword:this.searchKeywordsValue}})
     }

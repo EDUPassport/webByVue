@@ -126,6 +126,17 @@
         <div class="apply-btn-container">
           <el-button class="apply-btn" type="primary" round @click="applyJobs(detailData.id)">Apply Now!</el-button>
         </div>
+
+        <div class="job-detail-share-container">
+          <div class="jobs-favorite" v-if="isFavoriteValue == 1"
+               @click="cancelFavorite(1,detailData.id)">
+            <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
+          </div>
+          <div class="jobs-favorite" v-else @click="addFavorite(detailData.id,1,detailData.job_title,detailData.logo)">
+            <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
+          </div>
+
+        </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
         <div class="company-bio-container">
@@ -139,9 +150,9 @@
             <div class="company-bio-text" v-if="detailData.business">
               {{ detailData.business.business_bio }}
             </div>
-            <div class="view-profile-btn-container">
-              <el-button class="view-profile-btn" type="primary" round>View Profile</el-button>
-            </div>
+<!--            <div class="view-profile-btn-container">-->
+<!--              <el-button class="view-profile-btn" type="primary" round>View Profile</el-button>-->
+<!--            </div>-->
           </div>
         </div>
 
@@ -196,8 +207,9 @@ import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import {COMPANY_JOB_LIST, JOB_DETAIL,APPLY_JOBS} from "@/api/api";
+import {COMPANY_JOB_LIST, JOB_DETAIL,APPLY_JOBS,ADD_FAVORITE,IS_FAVORITE,CANCEL_FAVORITE} from "@/api/api";
 import latestIndustryNews from "@/components/latestIndustryNews";
+
 export default {
   name: "detail",
   data() {
@@ -205,7 +217,8 @@ export default {
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       detailData: {},
-      otherJobsData:[]
+      otherJobsData:[],
+      isFavoriteValue:0
     }
   },
   components:{
@@ -214,6 +227,11 @@ export default {
   mounted() {
     let jobId = this.$route.query.id;
     this.getJobDetail(jobId)
+    let token = localStorage.getItem('token')
+    if(token && token !=''){
+      this.isFavorite(1,jobId)
+    }
+
   },
   methods: {
     initMap(lng,lat){
@@ -262,6 +280,19 @@ export default {
       })
 
     },
+    isFavorite(type,typeId){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      IS_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.isFavoriteValue = res.data;
+        }
+      })
+    },
     getCompanyJobList(userId){
       let params = {
         user_id: userId,
@@ -300,6 +331,36 @@ export default {
       }
 
 
+    },
+    addFavorite(id, type, title, url) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.isFavoriteValue = 1
+        }
+      })
+
+    },
+    cancelFavorite(type,typeId){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      CANCEL_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.isFavoriteValue = 0
+        }
+      })
     }
   }
 }
@@ -704,6 +765,25 @@ export default {
   width: 100%;
   font-size: 14px;
 }
+
+.job-detail-share-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.jobs-favorite{
+  cursor: pointer;
+}
+
+.xll-heart-icon{
+  font-size: 34px;
+}
+
 
 .company-bio-container {
   background-color: #ffffff;

@@ -19,7 +19,7 @@
         <div class="team-slider">
           <swiper :slidesPerView="4" :spaceBetween="30"
                   :pagination='{"clickable": true}'
-                  :autoplay='{"delay": 2500,"disableOnInteraction": false}'
+                  :autoplay='{"delay": 2500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
                   :navigation="false"
                   class="myTeamSwiper">
             <swiper-slide class="team-card">

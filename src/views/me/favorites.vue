@@ -188,6 +188,7 @@ export default {
 .list-item-favorite-icon{
   font-size: 24px;
   cursor: pointer;
+
 }
 
 .list-pagination{

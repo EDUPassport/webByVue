@@ -4,7 +4,7 @@
     <div class="featured-deals-content">
       <swiper :slidesPerView="1" :spaceBetween="30"
               :pagination='{"clickable": true}'
-              :autoplay='{"delay": 2500,"disableOnInteraction": false}'
+              :autoplay='{"delay": 2500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
               :navigation="false"
               class="mySwiper">
         <swiper-slide v-for="(item,index) in dealsListData" :key="index">
@@ -18,7 +18,11 @@
                     <el-image class="hot-deals-logo" :src="item.user_info.logo"></el-image>
                   </template>
                 </div>
-                <div class="hot-deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
+                <div class="hot-deals-item-t-r" v-if="item.is_favorite && item.is_favorite==1"
+                     @click="cancelFavorite(2,item.id)">
+                  <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
+                </div>
+                <div class="hot-deals-item-t-r" v-else @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
                   <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                 </div>
               </div>
@@ -68,7 +72,7 @@ import "swiper/css/navigation"
 import SwiperCore, {
   Pagination, Autoplay, Navigation, Zoom
 } from 'swiper';
-import {DEALS_LIST,FEATURED_DEALS_LIST,ADD_FAVORITE} from "@/api/api";
+import {DEALS_LIST,FEATURED_DEALS_LIST,ADD_FAVORITE,CANCEL_FAVORITE} from "@/api/api";
 
 SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 
@@ -127,7 +131,20 @@ export default {
         }
       })
 
-    }
+    },
+    cancelFavorite(type,typeId){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      CANCEL_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.getFeaturedDealsList()
+        }
+      })
+    },
 
 
   }

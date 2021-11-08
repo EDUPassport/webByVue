@@ -32,115 +32,118 @@ export const USER_OBJECT_LIST = (params) => get('user/userObjectList', params)
 export const JOB_DETAIL = (params) => get('job/detail', params)
 
 // 获取公司职位列表
-export const COMPANY_JOB_LIST = (params) => get('job/companyJobs',params)
+export const COMPANY_JOB_LIST = (params) => get('job/companyJobs', params)
 
 // sub cate list
-export const SUB_CATE_LIST = (params) =>get('weixin/subCateList',params)
+export const SUB_CATE_LIST = (params) => get('weixin/subCateList', params)
 
 // sub cate lists
-export const SUB_CATE_LISTS = (params) => get('weixin/subCateLists',params)
+export const SUB_CATE_LISTS = (params) => get('weixin/subCateLists', params)
 // deals events tags list
-export const TAGS_LIST = (params) => get('home/tagList',params)
+export const TAGS_LIST = (params) => get('home/tagList', params)
 
 //deals area list
-export const DEALS_AREA_LIST = (params) => get('deals/dealsAreaList',params)
+export const DEALS_AREA_LIST = (params) => get('deals/dealsAreaList', params)
 
 //申请职位
-export const APPLY_JOBS = (params) => post('job/applyJobs',params)
+export const APPLY_JOBS = (params) => post('job/applyJobs', params)
 
 // 获取省市区
-export const ALL_AREAS = (params) => get('getAreas',params)
+export const ALL_AREAS = (params) => get('getAreas', params)
 
 //user/addEduBasic
-export const ADD_EDU_BASIC = (params) => post('user/addEduBasic',params)
+export const ADD_EDU_BASIC = (params) => post('user/addEduBasic', params)
 
 // getBasicInfo
-export const GET_BASIC_INFO = (params) => get('user/info',params)
+export const GET_BASIC_INFO = (params) => get('user/info', params)
 
 //visitor/userInfo
-export const VISITOR_USER_INFO = (params) =>get('visitor/userInfo',params)
+export const VISITOR_USER_INFO = (params) => get('visitor/userInfo', params)
 
 //user/addLanguageScore
-export const ADD_LANGUAGE_SCORE = (params) => post('user/addLanguageScore',params)
+export const ADD_LANGUAGE_SCORE = (params) => post('user/addLanguageScore', params)
 
 // add profile
-export const ADD_PROFILE = (params) => post('user/addProfile',params)
+export const ADD_PROFILE = (params) => post('user/addProfile', params)
 
 //user/addUserEducation
-export const ADD_USER_EDUCATION = (params) =>post('user/addUserEducation',params)
+export const ADD_USER_EDUCATION = (params) => post('user/addUserEducation', params)
 
 //user/addUserWork
-export const ADD_USER_WORK = (params) =>post('user/addUserWork',params)
+export const ADD_USER_WORK = (params) => post('user/addUserWork', params)
 
 //user addUserInfo
-export const ADD_USER_INFO = (params)=>post('user/addUserInfo',params)
+export const ADD_USER_INFO = (params) => post('user/addUserInfo', params)
 
 //user addUserImg
-export const ADD_USER_IMG = (params) => post('user/addUserImg',params)
+export const ADD_USER_IMG = (params) => post('user/addUserImg', params)
 
 // 切换身份 huo language
-export const CHANGE_IDENTITY_LANGUAGE = (params)=>post('weixin/change',params)
+export const CHANGE_IDENTITY_LANGUAGE = (params) => post('weixin/change', params)
 
 //addBusinessBasic
-export const ADD_BUSINESS_BASIC = (params)=>post('user/addBusinessBasic',params)
+export const ADD_BUSINESS_BASIC = (params) => post('user/addBusinessBasic', params)
 
 //addVendorBasic
-export const ADD_VENDOR_BASIC = (params)=>post('user/addVendorBasic',params)
+export const ADD_VENDOR_BASIC = (params) => post('user/addVendorBasic', params)
 
 //job addprofile
-export const JOB_ADD_PROFILE = (params)=>post('job/addProfile',params)
+export const JOB_ADD_PROFILE = (params) => post('job/addProfile', params)
 
 //add job
-export const ADD_JOB = (params)=>post('job/add',params)
+export const ADD_JOB = (params) => post('job/add', params)
 
 // my jobs
-export const MY_JOBS = (params)=>get('job/myJobs',params)
+export const MY_JOBS = (params) => get('job/myJobs', params)
 
 // tags list
-export const TAG_LIST = (params)=>get('home/tagList',params)
+export const TAG_LIST = (params) => get('home/tagList', params)
 //tag is exists
-export const TAG_IS_EXISTS = (params)=>get('home/tagIsExists',params)
+export const TAG_IS_EXISTS = (params) => get('home/tagIsExists', params)
 //add deals
-export const ADD_DEALS = (params)=>post('deals/addDeals',params)
+export const ADD_DEALS = (params) => post('deals/addDeals', params)
 
 //mydeals
-export const MY_DEALS = (params)=>get('myDeals',params)
+export const MY_DEALS = (params) => get('myDeals', params)
 
 //deals detail
-export const DEALS_DETAIL=(params)=>get('deals/detail',params)
+export const DEALS_DETAIL = (params) => get('deals/detail', params)
 
 // featured deals list
-export const FEATURED_DEALS_LIST = (params)=>get('home/featuredDealsList',params)
+export const FEATURED_DEALS_LIST = (params) => get('home/featuredDealsList', params)
 
 //get system info
-export const GET_SYSTEM_INFO = (params)=>get('home/getSystemInfo',params)
+export const GET_SYSTEM_INFO = (params) => get('home/getSystemInfo', params)
 
 //add favorite
-export const ADD_FAVORITE = (params)=>post('favorite/addFavorite',params)
+export const ADD_FAVORITE = (params) => post('favorite/addFavorite', params)
 
 //six logos
-export const SIX_LOGO_LIST = (params)=>get('home/getSixLogo',params)
+export const SIX_LOGO_LIST = (params) => get('home/getSixLogo', params)
 
 //jobsarealist
-export const JOBS_AREA_LIST = (params)=>get('deals/jobsAreaList',params)
+export const JOBS_AREA_LIST = (params) => get('deals/jobsAreaList', params)
 
 //add subscribe email
-export const ADD_SUBSCRIBE_EMAIL = (params)=>post('home/addSubscribeEmail',params)
+export const ADD_SUBSCRIBE_EMAIL = (params) => post('home/addSubscribeEmail', params)
 
 //getFavoriteList
-export const GET_FAVORITE_LIST = (params)=>get('favorite/getFavoriteList',params)
+export const GET_FAVORITE_LIST = (params) => get('favorite/getFavoriteList', params)
 
 //cancel favorite
-export const CANCEL_FAVORITE = (params)=>post('favorite/cancelFavorite',params)
+export const CANCEL_FAVORITE = (params) => post('favorite/cancelFavorite', params)
 
 //es search
-export const ES_SEARCH = (params)=>get('home/es',params)
+export const ES_SEARCH = (params) => get('home/es', params)
 
 //
-export const UPDATE_EDUCATOR_PROFILE = (params)=>post('user/updateEduProfile',params)
+export const UPDATE_EDUCATOR_PROFILE = (params) => post('user/updateEduProfile', params)
 
 //
-export const UPDATE_BUSINESS_PROFILE = (params)=>post('user/updateBusProfile',params)
+export const UPDATE_BUSINESS_PROFILE = (params) => post('user/updateBusProfile', params)
 
 //
-export const UPDATE_VENDOR_PROFILE = (params)=>post('user/updateVendorProfile',params)
+export const UPDATE_VENDOR_PROFILE = (params) => post('user/updateVendorProfile', params)
+
+// is favorite
+export const IS_FAVORITE = (params) => post('favorite/isFavorite', params)
