@@ -10,10 +10,11 @@
           <div class="nav-link-container">
             <router-link to="/home" exact>Home</router-link>
             <router-link to="/jobs" exact>Job Listings</router-link>
+            <router-link to="/deals" exact> Go Deals</router-link>
             <!--            <router-link to="/" exact> Industry News</router-link>-->
             <!--            <router-link to="/" exact>Blog</router-link>-->
-            <!--            <router-link to="/" exact> Contact</router-link>-->
-            <router-link to="/deals" exact> Go Deals</router-link>
+            <router-link to="/contact/us" exact> Contact</router-link>
+            <router-link to="/about/us" exact> About Us</router-link>
           </div>
         </el-col>
 
@@ -39,7 +40,7 @@
                 <div class="user-1-r">
                   <div class="user-name"> Hi, {{ username }}</div>
                   <div class="user-dropdown">
-                  <el-dropdown>
+                    <el-dropdown>
                     <span class="el-dropdown-link">
                         <template v-if="identity == 1">Educator</template>
                         <template v-if="identity == 2">Business</template>
@@ -49,9 +50,9 @@
 
                       <template #dropdown>
                         <el-dropdown-menu>
-                          <el-dropdown-item  @click="selectRole(1)">Educator</el-dropdown-item>
-                          <el-dropdown-item  @click="selectRole(2)">Business</el-dropdown-item>
-                          <el-dropdown-item  @click="selectRole(3)">Vendor</el-dropdown-item>
+                          <el-dropdown-item @click="selectRole(1)">Educator</el-dropdown-item>
+                          <el-dropdown-item @click="selectRole(2)">Business</el-dropdown-item>
+                          <el-dropdown-item @click="selectRole(3)">Vendor</el-dropdown-item>
                         </el-dropdown-menu>
                       </template>
                     </el-dropdown>
@@ -96,9 +97,9 @@
         title="Discount Card"
         width="30%"
     >
-     <div class="discount-card-container">
+      <div class="discount-card-container">
         <el-image :src="discountCardImg"></el-image>
-     </div>
+      </div>
     </el-dialog>
 
   </div>
@@ -120,23 +121,23 @@ export default {
       defaultAvatar,
       dialogSwitchAccountVisible: false,
       token: '',
-      dialogDiscountCardVisible:false
+      dialogDiscountCardVisible: false
     }
   },
-  computed:{
-    username:{
-      get(){
+  computed: {
+    username: {
+      get() {
         return this.$store.state.username
       }
     },
-    userAvatar:{
-      get(){
+    userAvatar: {
+      get() {
         return this.$store.state.userAvatar
       }
 
     },
-    identity:{
-      get(){
+    identity: {
+      get() {
         return this.$store.state.identity
       }
     }
@@ -198,9 +199,9 @@ export default {
           localStorage.setItem('name', firstName + ' ' + lastName)
           localStorage.setItem('avatar', avatar)
 
-          this.$store.commit('username',firstName + ' ' + lastName)
-          this.$store.commit('userAvatar',avatar)
-          this.$store.commit('identity',identity)
+          this.$store.commit('username', firstName + ' ' + lastName)
+          this.$store.commit('userAvatar', avatar)
+          this.$store.commit('identity', identity)
 
         }
       })
@@ -213,7 +214,7 @@ export default {
       this.$router.push('/')
       setTimeout(function () {
         location.reload()
-      },1500)
+      }, 1500)
     },
     turnProfilePage() {
       this.$router.push({path: '/overview', query: {identity: this.identity}})
@@ -285,7 +286,7 @@ export default {
       })
 
     },
-    turnHome(){
+    turnHome() {
       this.$router.push('/')
     }
   }
@@ -299,7 +300,7 @@ export default {
   border-bottom: 1px solid #eeeeee;
 }
 
-.header-row-container{
+.header-row-container {
 
 }
 
@@ -337,28 +338,32 @@ export default {
 .user-container span {
   cursor: pointer;
 }
-.user-container-1{
+
+.user-container-1 {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
 }
-.user-avatar{
+
+.user-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  box-shadow: 0 0 2px 0 rgba(0,0,0,0.4);
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.4);
   overflow: hidden;
   padding: 4px;
 }
-.user-avatar-img{
+
+.user-avatar-img {
   cursor: pointer;
 }
-.user-1-r{
+
+.user-1-r {
   margin-left: 10px;
 }
 
-.user-name{
+.user-name {
   width: 80px;
   text-align: left;
   white-space: nowrap;
@@ -404,7 +409,7 @@ export default {
   color: #FFFFFF;
 }
 
-.discount-card-container{
+.discount-card-container {
   width: 99%;
   margin: 0 auto;
 }

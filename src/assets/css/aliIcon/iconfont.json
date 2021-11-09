@@ -6,6 +6,27 @@
   "description": "element ui",
   "glyphs": [
     {
+      "icon_id": "924345",
+      "name": "education",
+      "font_class": "education",
+      "unicode": "e8c8",
+      "unicode_decimal": 59592
+    },
+    {
+      "icon_id": "7206106",
+      "name": "Connection",
+      "font_class": "connection",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "7824120",
+      "name": "list_list",
+      "font_class": "about-list",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
       "icon_id": "1190823",
       "name": "like",
       "font_class": "like",

@@ -235,6 +235,22 @@ const routes = [
                 meta: {
                     title: 'Privacy Policy'
                 }
+            },
+            {
+                path:'/contact/us',
+                name:'contactUs',
+                component:()=>import('@/views/contact/us'),
+                meta: {
+                    title: 'Contact Us'
+                }
+            },
+            {
+                path:'/about/us',
+                name:'aboutUs',
+                component:()=>import('@/views/about/us'),
+                meta: {
+                    title: 'About Us'
+                }
             }
 
         ],

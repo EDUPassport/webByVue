@@ -115,12 +115,10 @@
               <swiper-slide v-for="(item,index) in jobFeaturedListData" :key="index">
                 <!--                animate__animated  animate__backInUp-->
                 <div class="featured-jobs-card ">
-                  <!--                  <div class="hot-deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">-->
-                  <!--                    <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>-->
-                  <!--                  </div>-->
                   <div class="featured-jobs-card-images"
                        :style="item.logo !='' ? 'background-image:url('+ item.logo + ')' : ''">
-                    <div class="featured-jobs-card-image"></div>
+                    <div class="featured-jobs-card-image">
+                    </div>
                     <div class="featured-jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
                          @click="cancelJobFavorite(1,item.id,index)">
                       <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
@@ -1152,10 +1150,11 @@ export default {
   height: 240px;
   overflow: hidden;
   position: relative;
-  background-color: #EEEEEE;
-
+  /*background-color: #000000;*/
+  /*filter: blur(4px);*/
+  /*transform: scale(1);*/
   background-position: center;
-  background-size: 100% 100%;
+  background-size: 100% auto;
   background-repeat: no-repeat;
 }
 
