@@ -62,10 +62,10 @@
                     </template>
                   </div>
                   <div class="deals-item-t-r" v-if="item.is_favorite && item.is_favorite == 1"
-                       @click="cancelFavorite(2,item.id)">
+                       @click="cancelFavorite(2,item.id,index)">
                     <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
                   </div>
-                  <div class="deals-item-t-r" v-else @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
+                  <div class="deals-item-t-r" v-else @click="addFavorite(item.id,2,item.title,item.user_info.logo,index)">
                     <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export default {
       this.dealPage = e
       this.getDealsList(e, this.dealLimit,this.sCateId)
     },
-    addFavorite(id, type, title, url) {
+    addFavorite(id, type, title, url,index) {
       let params = {
         token: localStorage.getItem('token'),
         type: type,
@@ -265,12 +265,12 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.$message.success('Success')
-          this.getDealsList(this.dealPage,this.dealLimit,this.sCateId)
+          this.dealsListData[index]['is_favorite'] = 1
         }
       })
 
     },
-    cancelFavorite(type,typeId){
+    cancelFavorite(type,typeId,index){
       let params = {
         token:localStorage.getItem('token'),
         type:type,
@@ -279,13 +279,10 @@ export default {
       CANCEL_FAVORITE(params).then(res=>{
         console.log(res)
         if(res.code == 200){
-          this.getDealsList(this.dealPage,this.dealLimit,this.sCateId)
+          this.dealsListData[index]['is_favorite'] = 0
         }
       })
     }
-
-
-
 
   }
 }

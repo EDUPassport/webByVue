@@ -14,10 +14,10 @@
                  :style="item.logo !='' ? 'background-image:url('+ item.logo + ')' : ''">
               <div class="featured-jobs-card-image"></div>
               <div class="featured-jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                   @click="cancelFavorite(1,item.id)">
+                   @click="cancelFavorite(1,item.id,index)">
                 <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
               </div>
-              <div class="featured-jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo)">
+              <div class="featured-jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
                 <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
               </div>
             </div>
@@ -140,7 +140,7 @@ export default {
 
 
     },
-    addFavorite(id, type, title, url) {
+    addFavorite(id, type, title, url,index) {
       let params = {
         token: localStorage.getItem('token'),
         type: type,
@@ -152,12 +152,12 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.$message.success('Success')
-          this.getJobFeaturedList()
+          this.jobFeaturedListData[index]['is_favorite'] = 1
         }
       })
 
     },
-    cancelFavorite(type,typeId){
+    cancelFavorite(type,typeId,index){
       let params = {
         token:localStorage.getItem('token'),
         type:type,
@@ -166,7 +166,7 @@ export default {
       CANCEL_FAVORITE(params).then(res=>{
         console.log(res)
         if(res.code == 200){
-          this.getJobFeaturedList()
+          this.jobFeaturedListData[index]['is_favorite'] = 0
         }
       })
     },

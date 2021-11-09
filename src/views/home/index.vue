@@ -103,7 +103,7 @@
         </el-col>
       </el-row>
 
-      <el-row class="featured-jobs-row" :gutter="0" justify="center" align="middle" >
+      <el-row class="featured-jobs-row" :gutter="0" justify="center" align="middle">
 
         <el-col :xs="0" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="featured-jobs-slider">
@@ -115,17 +115,18 @@
               <swiper-slide v-for="(item,index) in jobFeaturedListData" :key="index">
                 <!--                animate__animated  animate__backInUp-->
                 <div class="featured-jobs-card ">
-<!--                  <div class="hot-deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">-->
-<!--                    <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>-->
-<!--                  </div>-->
+                  <!--                  <div class="hot-deals-item-t-r" @click="addFavorite(item.id,2,item.title,item.user_info.logo)">-->
+                  <!--                    <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>-->
+                  <!--                  </div>-->
                   <div class="featured-jobs-card-images"
                        :style="item.logo !='' ? 'background-image:url('+ item.logo + ')' : ''">
                     <div class="featured-jobs-card-image"></div>
                     <div class="featured-jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                         @click="cancelFavorite(1,item.id)">
+                         @click="cancelJobFavorite(1,item.id,index)">
                       <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
                     </div>
-                    <div class="featured-jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo)">
+                    <div class="featured-jobs-favorite" v-else
+                         @click="addJobFavorite(item.id,1,item.job_title,item.logo,index)">
                       <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                     </div>
                   </div>
@@ -337,16 +338,17 @@
                     </template>
                   </div>
                   <div class="hot-deals-item-t-r" v-if="item.is_favorite && item.is_favorite==1"
-                       @click="cancelFavorite(2,item.id)">
+                       @click="cancelDealFavorite(2,item.id,index)">
                     <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
                   </div>
-                  <div class="hot-deals-item-t-r" v-else @click="addFavorite(item.id,2,item.title,item.user_info.logo)">
+                  <div class="hot-deals-item-t-r" v-else
+                       @click="addDealFavorite(item.id,2,item.title,item.user_info.logo,index)">
                     <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                   </div>
                 </div>
-<!--                <div class="hot-deals-item-tag-container">-->
-<!--                  <div class="hot-deals-item-tag">Deal</div>-->
-<!--                </div>-->
+                <!--                <div class="hot-deals-item-tag-container">-->
+                <!--                  <div class="hot-deals-item-tag">Deal</div>-->
+                <!--                </div>-->
 
                 <div class="hot-deals-item-name-container">
                   <div class="hot-deals-item-title">
@@ -386,7 +388,8 @@
                 <span>Enjoy great discounts and deals where ver you go</span>
               </div>
               <div class="featured-deals-more">
-                <el-button class="featured-deals-more-btn" type="primary" round @click="turnDealsPage()">View More</el-button>
+                <el-button class="featured-deals-more-btn" type="primary" round @click="turnDealsPage()">View More
+                </el-button>
               </div>
             </div>
           </div>
@@ -418,7 +421,7 @@
             <swiper-slide class="popular-work-card" v-for="(item,i) in popularCityData" :key="i">
               <div class="popular-work-card-bg">
                 <div class="popular-work-card-name">
-                  <router-link :to="{path:'/jobs',query:{city:item.id}}">{{item.CityPinyin}}</router-link>
+                  <router-link :to="{path:'/jobs',query:{city:item.id}}">{{ item.CityPinyin }}</router-link>
                 </div>
               </div>
             </swiper-slide>
@@ -563,8 +566,8 @@ import teamImgSix from '@/assets/team/6.jpg'
 
 import {
   JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST, ADS_LIST, APPLY_JOBS,
-  FEATURED_DEALS_LIST, GET_SYSTEM_INFO, ADD_FAVORITE, SIX_LOGO_LIST,JOBS_AREA_LIST,
-  ADD_SUBSCRIBE_EMAIL,CANCEL_FAVORITE
+  FEATURED_DEALS_LIST, GET_SYSTEM_INFO, ADD_FAVORITE, SIX_LOGO_LIST, JOBS_AREA_LIST,
+  ADD_SUBSCRIBE_EMAIL, CANCEL_FAVORITE
 } from "@/api/api";
 // Import Swiper Vue.js components
 import {Swiper, SwiperSlide} from 'swiper/vue';
@@ -623,12 +626,12 @@ export default {
       articleListData: [],
       articleListLimitData: [],
       featuredDealsLogoData: [],
-      popularCityData:[],
+      popularCityData: [],
 
-      jobFeaturedShowStatus:true,
-      dealFeaturedShowStatus:true,
-      popularWorkShowStatus:true,
-      industryShowStatus:true
+      jobFeaturedShowStatus: true,
+      dealFeaturedShowStatus: true,
+      popularWorkShowStatus: true,
+      industryShowStatus: true
 
     }
   },
@@ -670,14 +673,14 @@ export default {
   },
   methods: {
 
-    getJobsAreaList(){
+    getJobsAreaList() {
       let params = {}
-      JOBS_AREA_LIST(params).then(res=>{
+      JOBS_AREA_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.popularCityData = res.message;
           let message = res.message;
-          if(message.length<=0){
+          if (message.length <= 0) {
             this.popularWorkShowStatus = false
           }
         }
@@ -720,8 +723,8 @@ export default {
         if (res.code === 200) {
           let message = res.message;
           this.jobFeaturedListData = res.message;
-          if(message.length<=0){
-            this.jobFeaturedShowStatus=false
+          if (message.length <= 0) {
+            this.jobFeaturedShowStatus = false
           }
         }
 
@@ -775,7 +778,7 @@ export default {
         if (res.code == 200) {
           this.featuredDealsList = res.message;
           let message = res.message;
-          if(message.length<=0){
+          if (message.length <= 0) {
             this.dealFeaturedShowStatus = false
           }
         }
@@ -809,8 +812,8 @@ export default {
             adsDataNews = adsData.filter(item => item.name == 'vendor_industry_news');
           }
           let articleListData = adsDataNews[0].data;
-          if(articleListData.length<=0){
-            this.industryShowStatus=false;
+          if (articleListData.length <= 0) {
+            this.industryShowStatus = false;
           }
           this.articleListData = articleListData;
           this.articleListLimitData = articleListData.slice(0, 2)
@@ -822,11 +825,11 @@ export default {
     },
     subscribe() {
       let params = {
-        email:this.subscribeEmail
+        email: this.subscribeEmail
       }
-      ADD_SUBSCRIBE_EMAIL(params).then(res=>{
+      ADD_SUBSCRIBE_EMAIL(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.$message.success('Subscribe Success')
           this.subscribeEmail = ''
         }
@@ -859,7 +862,7 @@ export default {
 
 
     },
-    addFavorite(id, type, title, url) {
+    addJobFavorite(id, type, title, url, index) {
       let params = {
         token: localStorage.getItem('token'),
         type: type,
@@ -871,29 +874,57 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.$message.success('Success')
-          this.getFeaturedDealsList()
-          this.getJobFeaturedList()
+          this.jobFeaturedListData[index]['is_favorite'] = 1
         }
       })
 
     },
-    cancelFavorite(type,typeId){
+    cancelJobFavorite(type, typeId, index) {
       let params = {
-        token:localStorage.getItem('token'),
-        type:type,
-        type_id:typeId
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
       }
-      CANCEL_FAVORITE(params).then(res=>{
+      CANCEL_FAVORITE(params).then(res => {
         console.log(res)
-        if(res.code == 200){
-          this.getFeaturedDealsList()
-          this.getJobFeaturedList()
+        if (res.code == 200) {
+          this.jobFeaturedListData[index]['is_favorite'] = 0
+        }
+      })
+    },
+    addDealFavorite(id, type, title, url, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.featuredDealsList[index]['is_favorite'] = 1
+        }
+      })
+
+    },
+    cancelDealFavorite(type, typeId, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.featuredDealsList[index]['is_favorite'] = 0
         }
       })
     },
 
-    searchNow(){
-      this.$router.push({path:'/search/result',query:{keyword:this.searchKeywordsValue}})
+    searchNow() {
+      this.$router.push({path: '/search/result', query: {keyword: this.searchKeywordsValue}})
     }
 
   }
@@ -1090,7 +1121,7 @@ export default {
 .featured-jobs-tips {
   text-align: center;
   color: #808080;
-  padding: 10px 0;
+  padding-bottom: 10px;
 }
 
 .featured-jobs-slider {
@@ -1128,7 +1159,7 @@ export default {
   background-repeat: no-repeat;
 }
 
-.featured-jobs-favorite{
+.featured-jobs-favorite {
   position: absolute;
   right: 10px;
   top: 10px;
@@ -1138,7 +1169,7 @@ export default {
 .featured-jobs-card-image {
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .featured-jobs-title {
@@ -1428,7 +1459,7 @@ export default {
 
 .featured-deals-tips {
   color: #808080;
-  padding: 20px 0;
+  padding-bottom: 10px;
 }
 
 .featured-deals-row {
@@ -1472,7 +1503,7 @@ export default {
   align-items: flex-start;
   justify-content: space-between;
   padding: 10px 10px 40px 10px;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .hot-deals-item-t-l {
@@ -1548,7 +1579,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding:4px 0;
+  padding: 4px 0;
 }
 
 .hot-deals-item-b-l {
@@ -1638,7 +1669,7 @@ export default {
 
 .popular-work-tips {
   color: #808080;
-  padding: 20px 0;
+  padding-bottom: 10px;
 }
 
 .popular-work-row {
@@ -1668,13 +1699,15 @@ export default {
   display: flex;
   align-items: center;
 }
-.popular-work-card-name{
+
+.popular-work-card-name {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.3);
   padding: 20px 0;
 }
-.popular-work-card-name a{
- text-decoration: none;
+
+.popular-work-card-name a {
+  text-decoration: none;
   font-size: 34px;
   font-weight: bold;
   color: #ffffff;
@@ -1860,7 +1893,8 @@ export default {
   color: #ffffff;
   padding: 40px 20px;
 }
-.xll-subscribe-container{
+
+.xll-subscribe-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1871,14 +1905,16 @@ export default {
 .xll-subscribe-input-container {
   width: 80%;
 }
-.xll-subscribe-input{
+
+.xll-subscribe-input {
 
 }
+
 .xll-subscribe-btn-container {
   width: 20%;
 }
 
-.xll-subscribe-btn{
+.xll-subscribe-btn {
   font-size: 12px;
 }
 

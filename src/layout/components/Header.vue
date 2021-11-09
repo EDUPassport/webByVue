@@ -19,7 +19,7 @@
 
         <el-col :xs="12" :sm="3" :md="5" :lg="5" :xl="5">
           <div class="user-container">
-            <template v-if="username!='' && username ">
+            <template v-if="token && token !='' ">
               <div class="user-container-1">
                 <div class="user-avatar">
                   <el-dropdown>
@@ -146,6 +146,7 @@ export default {
     // this.username = localStorage.getItem('name')
     // this.identity = localStorage.getItem('identity')
     let token = localStorage.getItem('token')
+    this.token = token;
     if (token) {
       this.getBasicInfo()
     }

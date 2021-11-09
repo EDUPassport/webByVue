@@ -422,7 +422,8 @@ export default {
 }
 
 .job-desc-label-underline {
-  width: 100px;
+  width: 40px;
+  margin-top: 4px;
   border: 1px solid #ff2870;
 }
 
@@ -463,7 +464,8 @@ export default {
 }
 
 .job-details-label-underline {
-  width: 100px;
+  width: 40px;
+  margin-top: 4px;
   border: 1px solid #ff2870;
 }
 
@@ -574,7 +576,8 @@ export default {
 }
 
 .compensation-label-underline {
-  width: 100px;
+  width: 40px;
+  margin-top: 4px;
   border: 1px solid #ff2870;
 }
 
@@ -656,7 +659,8 @@ export default {
 }
 
 .qua-label-underline {
-  width: 100px;
+  width: 40px;
+  margin-top: 4px;
   border: 1px solid #ff2870;
 }
 
@@ -725,7 +729,8 @@ export default {
 }
 
 .address-label-underline {
-  width: 100px;
+  width: 40px;
+  margin-top: 4px;
   border: 1px solid #ff2870;
 }
 
@@ -799,7 +804,8 @@ export default {
 }
 
 .company-bio-label-underline {
-  width: 100px;
+  width: 100%;
+  margin-top: 4px;
   border: 1px solid #ff2870;
 }
 

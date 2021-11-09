@@ -97,10 +97,10 @@
             <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
 
               <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                   @click="cancelFavorite(1,item.id)">
+                   @click="cancelFavorite(1,item.id,index)">
                 <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
               </div>
-              <div class="jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo)">
+              <div class="jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
                 <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
               </div>
               <div class="jobs-list-item-l">
@@ -286,7 +286,7 @@ export default {
     this.getJobList(this.jobPage, this.jobLimit)
   },
   methods: {
-    addFavorite(id, type, title, url) {
+    addFavorite(id, type, title, url,index) {
       let params = {
         token: localStorage.getItem('token'),
         type: type,
@@ -298,7 +298,7 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.$message.success('Success')
-          this.getJobList(this.jobPage, this.jobLimit)
+          this.jobListData[index]['is_favorite'] = 1
         }
       })
 
@@ -430,7 +430,7 @@ export default {
       this.studentAgeValue = e
       this.getJobList(this.jobPage, this.jobLimit)
     },
-    cancelFavorite(type,typeId){
+    cancelFavorite(type,typeId,index){
       let params = {
         token:localStorage.getItem('token'),
         type:type,
@@ -439,7 +439,7 @@ export default {
       CANCEL_FAVORITE(params).then(res=>{
         console.log(res)
         if(res.code == 200){
-          this.getJobList(this.jobPage, this.jobLimit)
+          this.jobListData[index]['is_favorite'] = 0
         }
       })
     }
