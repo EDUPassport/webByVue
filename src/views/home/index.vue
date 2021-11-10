@@ -107,7 +107,7 @@
 
         <el-col :xs="0" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="featured-jobs-slider">
-            <swiper :slidesPerView="3" :spaceBetween="30"
+            <swiper :slidesPerView="4" :spaceBetween="10"
                     :pagination='{"clickable": true}'
                     :autoplay='{"delay": 2500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
                     :navigation="false"
@@ -658,7 +658,7 @@ export default {
       skipJobsList
     };
   },
-  mounted() {
+  created() {
     this.getJobFeaturedList()
     // this.getBusinessList()
     // this.getDealsList()
@@ -668,6 +668,10 @@ export default {
     // this.getSystemInfo()
     this.getSixLogos()
     this.getJobsAreaList()
+
+  },
+  mounted() {
+
   },
   methods: {
 
@@ -721,6 +725,7 @@ export default {
         if (res.code === 200) {
           let message = res.message;
           this.jobFeaturedListData = res.message;
+
           if (message.length <= 0) {
             this.jobFeaturedShowStatus = false
           }
@@ -1083,7 +1088,6 @@ export default {
 
 }
 
-
 .search-btn {
   font-size: 16px;
   font-weight: bold;
@@ -1112,7 +1116,7 @@ export default {
 }
 
 .featured-jobs-row {
-  width: 1100px;
+  width: 1200px;
   margin: 0 auto;
 }
 
@@ -1127,16 +1131,16 @@ export default {
 }
 
 .mySwiper {
-  height: 520px;
+  height: 480px;
 }
 
 .featured-jobs-card {
   width: 98%;
   margin: 0 auto;
   background-color: #ffffff;
-  border-radius: 10px;
+  border-radius: 20px;
   /*cursor: pointer;*/
-  box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.47);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   border: 1px solid #eeeeee;
 }
@@ -1147,15 +1151,15 @@ export default {
 
 .featured-jobs-card-images {
   width: 100%;
-  height: 240px;
+  height: 200px;
   overflow: hidden;
   position: relative;
-  /*background-color: #000000;*/
-  /*filter: blur(4px);*/
+  background-color: #FFFFFF;
+  /*filter: blur(1px);*/
   /*transform: scale(1);*/
   background-position: center;
-  background-size: 100% auto;
-  background-repeat: no-repeat;
+  background-size:  auto;
+  background-repeat: repeat;
 }
 
 .featured-jobs-favorite {
@@ -1168,7 +1172,7 @@ export default {
 .featured-jobs-card-image {
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .featured-jobs-title {
@@ -1689,6 +1693,17 @@ export default {
   background-position: center;
   border-radius: 20px;
   overflow: hidden;
+}
+
+.popular-work-card:first-child {
+  background-image: url("../../assets/popular/beijing.jpg");
+}
+
+.popular-work-card:nth-child(2) {
+  background-image: url("../../assets/popular/shanghai.jpg");
+}
+.popular-work-card:nth-child(3) {
+  background-image: url("../../assets/popular/nanjing.jpg");
 }
 
 .popular-work-card-bg {

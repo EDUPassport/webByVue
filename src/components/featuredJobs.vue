@@ -210,7 +210,7 @@ export default {
   background-color: #ffffff;
   border-radius: 10px;
   cursor: pointer;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   border: 1px solid #eeeeee;
 
@@ -222,13 +222,13 @@ export default {
 
 .featured-jobs-card-images {
   width: 100%;
-  height: 240px;
+  height: 200px;
   overflow: hidden;
   position: relative;
   background-color: #EEEEEE;
 
   background-position: center;
-  background-size: 100% 100%;
+  background-size: auto;
   background-repeat: no-repeat;
 }
 
@@ -244,7 +244,7 @@ export default {
 .featured-jobs-card-image {
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.3);
 }
 
 .featured-jobs-title {

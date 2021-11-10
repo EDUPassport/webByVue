@@ -4,7 +4,7 @@ import {ElMessage} from "element-plus";
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
 //https://api.test.esl-passport.cn/api/
-let baseUrl = process.env.NODE_ENV === 'development' ? 'https://api.test.esl-passport.cn/api/' : 'https://dev.api.eslpassport.com/api/'
+let baseUrl = process.env.NODE_ENV === 'development' ? 'https://dev.api.eslpassport.com/api/' : 'https://dev.api.eslpassport.com/api/'
 // axios配置
 axios.defaults.baseURL = baseUrl
 // 设置请求最大时长
