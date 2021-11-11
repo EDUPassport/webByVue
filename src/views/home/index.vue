@@ -1,91 +1,66 @@
 <template>
   <div class="home-bg">
 
-    <div class="xll-search-container">
+    <el-row class="xll-slider-row" :gutter="0" align="middle" justify="center">
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="xll-slider-col">
+        <swiper
+            :pagination='{"clickable": true,"dynamicBullets": true}'
+            :autoplay='{"delay": 3500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
+            class="xllSwiper">
+          <swiper-slide v-for="(item,index) in xllSliderData" :key="index"
+                        :style="'background-image:url('+item.url+')'"
+                        class="xll-swiper-slider"
+          >
+            <div class="xll-swiper-1" ></div>
+          </swiper-slide>
+        </swiper>
 
-      <el-row class="xll-find-best-row" :gutter="0" align="middle" justify="center">
-
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <div class="changemakers-container">
-            <div class="changemakers-bg">
-              <h2>Find the best</h2>
-              <v-typical
-                  class="blink"
-                  :steps="['Jobs', 2000, 'Deals', 2000]"
-                  :loop="Infinity"
-                  :wrapper="'h1'"
-              ></v-typical>
-            </div>
+        <div class="xll-search-container">
+          <div class="xll-find-best-row">
+            <h2>Find the best</h2>
+            <v-typical
+                class="blink"
+                :steps="['Jobs', 2000, 'Deals', 2000]"
+                :loop="Infinity"
+                :wrapper="'h1'"
+            ></v-typical>
           </div>
-        </el-col>
-      </el-row>
-
-      <!--      <el-row class="xll-search-btn-row" :gutter="0" align="middle" justify="center">-->
-      <!--        <el-col class="xll-search-jobs-btn-container" :xs="6" :sm="6" :md="4" :lg="4" :xl="4">-->
-      <!--          <div class="xll-search-jobs-btn"-->
-      <!--               :class="searchCategoryValue == 1 ? 'xll-search-jobs-btn-active' : ''"-->
-      <!--               @click="chooseSearchCategory(1)">-->
-      <!--            Jobs-->
-      <!--          </div>-->
-      <!--          <div class="xll-search-btn-sj"-->
-      <!--               :class="searchCategoryValue == 1 ? 'xll-search-btn-sj-active' : ''"></div>-->
-      <!--        </el-col>-->
-      <!--        <el-col class="xll-search-deals-btn-container" :xs="6" :sm="6" :md="4" :lg="4" :xl="4">-->
-      <!--          <div class="xll-search-deals-btn"-->
-      <!--               :class="searchCategoryValue == 2 ? 'xll-search-deals-btn-active' : ''"-->
-      <!--               @click="chooseSearchCategory(2)">-->
-      <!--            Deals-->
-      <!--          </div>-->
-      <!--          <div class="xll-search-btn-sj"-->
-      <!--               :class="searchCategoryValue == 2 ? 'xll-search-btn-sj-active' : ''"></div>-->
-      <!--        </el-col>-->
-      <!--      </el-row>-->
-
-      <el-row class="search-container-row" :gutter="0" align="middle" justify="center">
-        <el-col class="search-container-col" :xs="22" :sm="22" :md="22" :lg="22" :xl="22">
+          <!--                <div class="xll-search-btn-row">-->
+          <!--                  <div class="xll-search-jobs-btn-container">-->
+          <!--                    <div class="xll-search-jobs-btn"-->
+          <!--                         :class="searchCategoryValue == 1 ? 'xll-search-jobs-btn-active' : ''"-->
+          <!--                         @click="chooseSearchCategory(1)">-->
+          <!--                      Jobs-->
+          <!--                    </div>-->
+          <!--                    <div class="xll-search-btn-sj"-->
+          <!--                         :class="searchCategoryValue == 1 ? 'xll-search-btn-sj-active' : ''"></div>-->
+          <!--                  </div>-->
+          <!--                  <div class="xll-search-deals-btn-container">-->
+          <!--                    <div class="xll-search-deals-btn"-->
+          <!--                         :class="searchCategoryValue == 2 ? 'xll-search-deals-btn-active' : ''"-->
+          <!--                         @click="chooseSearchCategory(2)">-->
+          <!--                      Deals-->
+          <!--                    </div>-->
+          <!--                    <div class="xll-search-btn-sj"-->
+          <!--                         :class="searchCategoryValue == 2 ? 'xll-search-btn-sj-active' : ''"></div>-->
+          <!--                  </div>-->
+          <!--                </div>-->
           <div class="search-container-bg">
-
             <div class="search-container">
-
               <div class="search-keywords">
                 <el-input class="search-keywords-input" placeholder="Enter Keyword..." size="medium"
                           v-model="searchKeywordsValue">
                 </el-input>
               </div>
-
-              <!--              <div class="service-category">-->
-              <!--                <el-select v-model="serviceCategoryValue" clearable placeholder="Location" size="medium">-->
-              <!--                  <el-option-->
-              <!--                      v-for="item in categoryOptions"-->
-              <!--                      :key="item.value"-->
-              <!--                      :label="item.label"-->
-              <!--                      :value="item.value"-->
-              <!--                  >-->
-              <!--                  </el-option>-->
-              <!--                </el-select>-->
-              <!--              </div>-->
-
-              <!--              <div class="search-tags">-->
-              <!--                <el-select v-model="searchTagsValue" clearable placeholder="Tags" size="medium">-->
-              <!--                  <el-option-->
-              <!--                      v-for="item in tagsOptions"-->
-              <!--                      :key="item.value"-->
-              <!--                      :label="item.label"-->
-              <!--                      :value="item.value"-->
-              <!--                  >-->
-              <!--                  </el-option>-->
-              <!--                </el-select>-->
-              <!--              </div>-->
-
               <div class="search-btn-container">
                 <el-button class="search-btn" type="primary" @click="searchNow()">Search Now</el-button>
               </div>
-
             </div>
           </div>
-        </el-col>
-      </el-row>
-    </div>
+        </div>
+
+      </el-col>
+    </el-row>
 
     <!--  featured jobs -->
     <div class="featured-jobs-bg" v-loading="jobFeaturedListData.length<=0" v-if="jobFeaturedShowStatus">
@@ -583,6 +558,10 @@ SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 import VTypical from 'vue-typical';
 import {useRouter} from "vue-router";
 
+import bgBeijingImg from '@/assets/bg/bg-beijing.jpg'
+import bgShanghaiImg from '@/assets/bg/bg-shanghai.jpg'
+import bgNanjingImg from '@/assets/bg/bg-nanjing.jpg'
+
 export default {
   name: "index",
   components: {
@@ -600,6 +579,20 @@ export default {
       teamImgSix,
 
       imgLogo,
+      xllSliderData:[
+        {
+          name:'beijing',
+          url:bgBeijingImg
+        },
+        {
+          name:'nanjing',
+          url:bgNanjingImg
+        },
+        {
+          name: 'shanghai',
+          url:bgShanghaiImg
+        }
+      ],
       searchCategoryValue: 1,
       subscribeEmail: '',
       searchKeywordsValue: '',
@@ -941,7 +934,7 @@ export default {
 }
 
 .home-bg {
-  background-image: url("../../assets/bg/bg-1.jpg");
+  /*background-image: url("../../assets/bg/bg-1.jpg");*/
   background-position: center;
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -949,17 +942,41 @@ export default {
 }
 
 .xll-search-container {
-  height: 700px;
-  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 100;
 }
 
 .xll-find-best-row {
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.xll-find-best-row h2 {
+  color: #ffffff;
+  font-size: 36px;
+}
+
+.xll-find-best-row h1 {
+  color: #ffffff;
+  margin-left: 10px;
+  text-decoration: underline;
+  font-size: 36px;
 }
 
 .xll-search-btn-row {
@@ -1021,42 +1038,9 @@ export default {
   border-color: #0AA0A8 transparent transparent transparent;
 }
 
-.changemakers-container {
-  height: 100%;
-}
-
-.changemakers-bg {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
-.changemakers-bg h2 {
-  color: #ffffff;
-  font-size: 36px;
-}
-
-.changemakers-bg h1 {
-  color: #ffffff;
-  margin-left: 10px;
-  text-decoration: underline;
-  font-size: 36px;
-}
-
-.search-container-row {
-  /*width: 100%;*/
+.search-container-bg {
   width: 1100px;
   margin-top: 20px;
-}
-
-.search-container-col {
-  height: 100px;
-}
-
-.search-container-bg {
   background-color: rgba(255, 255, 255, 0.3);
   padding: 10px;
   border-radius: 10px;
@@ -1932,15 +1916,39 @@ export default {
   font-size: 12px;
 }
 
+.xll-slider-row{
+
+}
+
+.xll-slider-col{
+  position: relative;
+}
+
+.xllSwiper{
+  width: 100%;
+  height:600px;
+}
+
+.xll-swiper-slider{
+  height: 100%;
+  background-position: center;
+  background-repeat: repeat;
+  background-size:100% auto;
+}
+
+.xll-swiper-1{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.4);
+}
+
+
 @media screen and (max-width: 768px) {
   .featured-jobs-label {
     font-size: 14px;
   }
-
-  .search-container-col {
-    /*display: none;*/
-  }
-
 }
 
 </style>
