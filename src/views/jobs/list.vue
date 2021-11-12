@@ -274,6 +274,16 @@ export default {
       skipJobsList
     };
   },
+  created() {
+    // this.getJobsAreaList()
+    // this.getUserObjectList()
+    // let cityValue= this.$route.query.city;
+    // if(cityValue && cityValue !=''){
+    //   this.locationValue = Number(cityValue)
+    // }
+    //
+    // this.getJobList(this.jobPage, this.jobLimit)
+  },
   mounted() {
     this.getJobsAreaList()
     this.getUserObjectList()

@@ -424,7 +424,7 @@ export default {
 .job-desc-label-underline {
   width: 40px;
   margin-top: 4px;
-  border: 1px solid #ff2870;
+  border-bottom: 2px solid #ff2870;
 }
 
 .job-desc-content {
@@ -466,7 +466,7 @@ export default {
 .job-details-label-underline {
   width: 40px;
   margin-top: 4px;
-  border: 1px solid #ff2870;
+  border-bottom: 2px solid #ff2870;
 }
 
 .job-details-content {
@@ -578,7 +578,7 @@ export default {
 .compensation-label-underline {
   width: 40px;
   margin-top: 4px;
-  border: 1px solid #ff2870;
+  border-bottom: 2px solid #ff2870;
 }
 
 .compensation-content {
@@ -661,7 +661,7 @@ export default {
 .qua-label-underline {
   width: 40px;
   margin-top: 4px;
-  border: 1px solid #ff2870;
+  border-bottom: 2px solid #ff2870;
 }
 
 .qua-content {
@@ -731,7 +731,7 @@ export default {
 .address-label-underline {
   width: 40px;
   margin-top: 4px;
-  border: 1px solid #ff2870;
+  border-bottom: 2px solid #ff2870;
 }
 
 .address-content {
@@ -806,7 +806,7 @@ export default {
 .company-bio-label-underline {
   width: 100%;
   margin-top: 4px;
-  border: 1px solid #ff2870;
+  border-bottom: 2px solid #ff2870;
 }
 
 .company-logo-container {

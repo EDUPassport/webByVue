@@ -5,7 +5,7 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="xll-slider-col">
         <swiper
             :pagination='{"clickable": true,"dynamicBullets": true}'
-            :autoplay='{"delay": 3500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
+            :autoplay='{"delay": 13500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
             class="xllSwiper">
           <swiper-slide v-for="(item,index) in xllSliderData" :key="index"
                         :style="'background-image:url('+item.url+')'"
