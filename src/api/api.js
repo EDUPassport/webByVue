@@ -147,3 +147,5 @@ export const UPDATE_VENDOR_PROFILE = (params) => post('user/updateVendorProfile'
 
 // is favorite
 export const IS_FAVORITE = (params) => post('favorite/isFavorite', params)
+
+export const MY_APPLY_JOBS = (params) => get('job/myApplyJobs', params)

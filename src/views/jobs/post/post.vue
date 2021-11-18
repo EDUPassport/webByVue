@@ -1476,7 +1476,9 @@ export default {
       //   that.form.job_id = this.jobId;
       // }
       console.log(that.jobForm);
-
+      this.$loading({
+        text:'Loading...'
+      })
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let data = Object.assign({}, that.jobForm);
@@ -1505,6 +1507,8 @@ export default {
               if (submitType == 3) {
                 // this.$router.push('/')
               }
+              this.$loading().close()
+              this.$router.push('/jobs/myJobs')
 
             }
           })

@@ -42,8 +42,8 @@
 <!--      <div class="l-item">-->
 <!--        <router-link to="/" exact>My Messages</router-link>-->
 <!--      </div>-->
-      <div class="l-item" v-if="identity == 2">
-        <router-link to="/" exact>My Applications</router-link>
+      <div class="l-item" v-if="identity == 1">
+        <router-link to="/me/applications" exact>My Applications</router-link>
       </div>
     </div>
 

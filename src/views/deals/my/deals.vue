@@ -12,7 +12,7 @@
             <div class="deals-list-t">
               <div class="deals-list-label">My Deals</div>
               <div class="deals-list-t-r">
-                <el-button type="default" class="post-deal-btn"  @click="postDeal()">Offer a Deal</el-button>
+                <el-button type="default" class="post-deal-btn" round @click="postDeal()">Offer a Deal</el-button>
               </div>
             </div>
             <div class="deals-list-content">
@@ -227,6 +227,7 @@ export default {
   border: 1px solid #eeeeee;
   background-color: #ffffff;
   position: relative;
+  box-shadow: 0px 0px 4px 0px rgba(50, 50, 50, 0.47);
 }
 
 .deals-item-bg {
@@ -234,11 +235,6 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
-}
-
-.deals-item:hover {
-  border: 1px solid #eeeeee;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
 }
 
 .deals-item-t {
@@ -299,6 +295,7 @@ export default {
 
 .deals-item-title:hover{
   text-decoration: underline;
+  font-size: 18px;
 }
 .deals-item-name {
   color: #ffffff;
@@ -344,10 +341,7 @@ export default {
   right: -60px;
   color: #FFFFFF;
   transform: rotate(30deg);
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 160px;
-  padding-right: 80px;
+  padding: 4px 80px 4px 160px;
   text-align: center;
   font-size:14px;
 }

@@ -101,6 +101,14 @@ const routes = [
                 }
             },
             {
+                path: '/me/applications',
+                name: 'myApplications',
+                component: () => import('@/views/me/applications'),
+                meta: {
+                    title: 'My Applications'
+                }
+            },
+            {
                 path: '/role/educator',
                 name: 'roleEducator',
                 component: () => import('@/views/role/educator'),

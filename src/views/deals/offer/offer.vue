@@ -473,12 +473,15 @@ export default {
           this.basicForm.tag = this.selectTagsList;
           this.basicForm.tags_cn = this.tagsCnData.join(',');
           this.basicForm.tags_en = this.tagsEnData.join(',');
-
+          this.$loading({
+            text:'Loading...'
+          })
           let params = Object.assign({}, this.basicForm);
           ADD_DEALS(params).then(res => {
             console.log(res)
             if(res.code == 200){
-              console.log('abs')
+              this.$router.push('/deals/myDeals')
+              this.$loading().close()
             }
           })
 

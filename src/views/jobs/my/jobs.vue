@@ -10,7 +10,7 @@
             <div class="jobs-list-t">
               <div class="jobs-list-label">My Posted Jobs</div>
               <div class="jobs-list-t-r">
-                <el-button type="default" class="post-job-btn"  @click="postJob()">Post a Job</el-button>
+                <el-button type="default" round class="post-job-btn"  @click="postJob()">Post a Job</el-button>
               </div>
             </div>
 
