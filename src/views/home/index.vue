@@ -1928,12 +1928,27 @@ export default {
   width: 100%;
   height:600px;
 }
+@keyframes scaleDraw {
+  0%{
+    transform: scale(1);
+  }
+  25%{
+    transform: scale(1.01);
+  }
+  50%{
+    transform: scale(1);
+  }
+  75%{
+    transform: scale(1.01);
+  }
+}
 
 .xll-swiper-slider{
   height: 100%;
   background-position: center;
   background-repeat: repeat;
   background-size:100% auto;
+  -webkit-animation:scaleDraw 5s ease-in-out infinite ;
 }
 
 .xll-swiper-1{

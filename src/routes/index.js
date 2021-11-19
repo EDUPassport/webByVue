@@ -259,6 +259,14 @@ const routes = [
                 meta: {
                     title: 'About Us'
                 }
+            },
+            {
+                path:'/industry/news',
+                name:'industryNews',
+                component:()=>import('@/views/industry/news'),
+                meta:{
+                    title: 'Industry News'
+                }
             }
 
         ],
