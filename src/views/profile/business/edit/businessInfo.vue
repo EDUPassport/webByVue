@@ -79,7 +79,6 @@
                 <el-button type="primary" @click="submitForm('basicForm')">
                   Submit
                 </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -91,7 +90,7 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {ALL_AREAS, ADD_BUSINESS_BASIC} from '@/api/api'
+import {ALL_AREAS, ADD_BUSINESS_BASIC,GET_BASIC_INFO} from '@/api/api'
 import {countriesData} from "../../../../utils/data";
 
 export default {
@@ -170,6 +169,9 @@ export default {
       selectEducatorTypeList: []
 
     }
+  },
+  created() {
+    this.getBasicInfo()
   },
   mounted() {
     // console.log(countriesData)
@@ -254,6 +256,67 @@ export default {
     districtChange(e) {
       console.log(e)
     },
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          let businessInfo = res.message.business_info;
+
+          let businessName = businessInfo.business_name;
+          let businessBio = businessInfo.business_bio;
+          let yearFounded = businessInfo.year_founded;
+          let website = businessInfo.website;
+          let businessPhone = businessInfo.business_phone;
+          let hiringValue = businessInfo.is_currently_hiring;
+          let province = businessInfo.province;
+          let city = businessInfo.city;
+          let district = businessInfo.district;
+
+          if (businessName) {
+            this.basicForm.business_name = businessName;
+          }
+          if (businessBio) {
+            this.basicForm.business_bio = businessBio;
+          }
+          if (yearFounded) {
+            this.basicForm.year_founded = yearFounded;
+          }
+          if (website) {
+            this.basicForm.website = website;
+          }
+          if (businessPhone) {
+            this.basicForm.business_phone = businessPhone;
+          }
+          this.basicForm.is_currently_hiring = hiringValue;
+
+          let provinces = businessInfo.provinces;
+          let citys = businessInfo.citys;
+          let districts = businessInfo.districts;
+          let language = localStorage.getItem('language');
+
+          if(provinces && citys && districts){
+            if(language == 'en-US'){
+              this.basicForm.location = districts.Pinyin + ', ' + citys.Pinyin + ', ' + provinces.Pinyin;
+            }
+            if(language == 'zh-CN'){
+              this.basicForm.location = districts.ShortName + ', ' + citys.ShortName + ', ' + provinces.ShortName;
+            }
+          }
+          this.basicForm.province = province;
+          this.basicForm.city = city;
+          this.basicForm.district = district;
+          this.basicForm.address = businessInfo.address;
+          this.basicForm.lat = businessInfo.lat;
+          this.basicForm.lng = businessInfo.lng;
+        }
+      })
+    }
+
 
 
   }

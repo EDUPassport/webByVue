@@ -50,7 +50,7 @@
                 <div class="object-tags-container" >
                   <div class="object-tags">
                     <div class="object-tags-item"
-                         :class=" selectStudentAgeList.indexOf(item) == -1 ? '' : 'tags-active' "
+                         :class=" selectStudentAgeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
                          v-for="(item,index) in editStudentAgeList" :key="index"
                          @click="selectStudentAge(item,1)">
                       {{ item.object_en}}
@@ -71,7 +71,7 @@
                   </div>
                   <div class="object-tags">
                     <div class="object-tags-item"
-                         :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                         :class=" selectSubjectList.findIndex((element)=>element==item) == -1 ? '' : 'tags-active' "
                          v-for="(item,index) in ownSubjectList" :key="index"
                          @click="selectSubject(item,2)">
                       {{ item.object_name }}
@@ -107,7 +107,7 @@
                 <div class="object-tags-container" >
                   <div class="object-tags">
                     <div class="object-tags-item"
-                         :class=" selectSchoolFacilitesList.indexOf(item) == -1 ? '' : 'tags-active' "
+                         :class=" selectSchoolFacilitesList.findIndex((element)=>element.id==item.id) == -1 ? '' : 'tags-active' "
                          v-for="(item,index) in editSchoolFacilitesList" :key="index"
                          @click="selectSchoolFacilites(item,1)">
                       {{ item.object_en}}
@@ -120,7 +120,7 @@
                 <el-button type="primary" @click="submitForm('basicForm')">
                   Submit
                 </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
+
               </el-form-item>
             </el-form>
 
@@ -133,7 +133,7 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {USER_OBJECT_LIST, ADD_BUSINESS_BASIC,ADD_PROFILE} from '@/api/api'
+import {USER_OBJECT_LIST, ADD_BUSINESS_BASIC,ADD_PROFILE,GET_BASIC_INFO} from '@/api/api'
 
 export default {
   name: "school",
@@ -197,6 +197,9 @@ export default {
       selectSchoolFacilitesArr: [],
 
     }
+  },
+  created() {
+    this.getBasicInfo()
   },
   mounted() {
     // console.log(countriesData)
@@ -427,6 +430,105 @@ export default {
     handleChange(e) {
       console.log(e)
     },
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          let businessInfo = res.message.business_info;
+          this.basicForm.curriculum = businessInfo.curriculum;
+          this.basicForm.technology_available = businessInfo.technology_available;
+          this.basicForm.staff_student_ratio = businessInfo.staff_student_ratio;
+          this.basicForm.felds_trips = businessInfo.felds_trips;
+          this.basicForm.is_events = businessInfo.is_events;
+          this.basicForm.is_special_needs = businessInfo.is_special_needs;
+          this.basicForm.tuition = businessInfo.tuition;
+          // that.form.is_school = businessInfo.is_school;
+
+          if (businessInfo.subject) {
+            let subjectList = businessInfo.subject;
+            let len = subjectList.length;
+
+            for (let i = 0; i < len; i++) {
+
+              if (subjectList[i].object_id == 0) {
+                let obj = {
+                  id: subjectList[i].object_id,
+                  object_pid: subjectList[i].object_pid,
+                  object_name: subjectList[i].object_en
+                }
+                this.ownSubjectList.push(obj);
+                this.selectSubjectList.push(obj)
+              } else {
+                let obj = {
+                  id: subjectList[i].object_id,
+                  pid: subjectList[i].object_pid,
+                  object_en: subjectList[i].object_en,
+                  object_cn: subjectList[i].object_cn
+                }
+                this.selectSubjectList.push(obj)
+              }
+            }
+          }
+          if (businessInfo.Student_Age) {
+            let studentAgeList = businessInfo.Student_Age;
+            let len = studentAgeList.length;
+
+            for (let i = 0; i < len; i++) {
+              if (studentAgeList[i].object_id == 0) {
+                let obj = {
+                  id: studentAgeList[i].object_id,
+                  object_pid: studentAgeList[i].object_pid,
+                  object_name: studentAgeList[i].object_en
+                }
+                this.ownStudentAgeList.push(obj);
+                this.selectStudentAgeList.push(obj)
+              } else {
+                let obj = {
+                  id: studentAgeList[i].object_id,
+                  pid: studentAgeList[i].object_pid,
+                  object_en: studentAgeList[i].object_en,
+                  object_cn: studentAgeList[i].object_cn
+                }
+                this.selectStudentAgeList.push(obj)
+              }
+            }
+          }
+          console.log(this.selectStudentAgeList)
+          if (businessInfo.facilities) {
+            let facilitiesList = businessInfo.facilities;
+            let len = facilitiesList.length;
+
+            for (let i = 0; i < len; i++) {
+
+              if (facilitiesList[i].object_id == 0) {
+                let obj = {
+                  id: facilitiesList[i].object_id,
+                  object_pid: facilitiesList[i].object_pid,
+                  object_name: facilitiesList[i].object_en
+                }
+                this.selectSchoolFacilitesList.push(obj)
+              } else {
+                let obj = {
+                  id: facilitiesList[i].object_id,
+                  pid: facilitiesList[i].object_pid,
+                  object_en: facilitiesList[i].object_en,
+                  object_cn: facilitiesList[i].object_cn
+                }
+                this.selectSchoolFacilitesList.push(obj)
+              }
+            }
+          }
+
+        }
+      })
+    }
+
+
   }
 }
 </script>

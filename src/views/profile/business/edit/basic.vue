@@ -102,7 +102,6 @@
                 <el-button type="primary" @click="submitForm('basicForm')">
                   Submit
                 </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
               </el-form-item>
             </el-form>
 
@@ -115,7 +114,7 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {SUB_CATE_LIST, ADD_BUSINESS_BASIC} from '@/api/api'
+import {SUB_CATE_LIST, ADD_BUSINESS_BASIC,GET_BASIC_INFO} from '@/api/api'
 import {countriesData} from "../../../../utils/data";
 
 export default {
@@ -193,6 +192,9 @@ export default {
 
     }
   },
+  created() {
+    this.getBasicInfo()
+  },
   mounted() {
     // console.log(countriesData)
 
@@ -257,6 +259,38 @@ export default {
         this.selectHobbyInfoList.splice(index, 1);
       }
     },
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          let businessUserInfo = res.message.business_info;
+
+
+          this.basicForm.nickname = businessUserInfo.nickname;
+          this.basicForm.first_name = businessUserInfo.first_name;
+          this.basicForm.last_name = businessUserInfo.last_name;
+          this.basicForm.sex = res.message.sex ;
+
+          this.basicForm.nationality = businessUserInfo.nationality;
+
+          this.basicForm.job_title = businessUserInfo.job_title;
+          this.basicForm.bio = businessUserInfo.bio;
+          this.basicForm.wx_id = businessUserInfo.wx_id;
+          this.basicForm.contact_phone = businessUserInfo.contact_phone;
+
+          let hobbies = businessUserInfo.hobbies;
+          if (hobbies != '') {
+            this.infoList = hobbies.split(',');
+            this.selectHobbyInfoList = hobbies.split(',');
+          }
+        }
+      })
+    }
 
 
   }

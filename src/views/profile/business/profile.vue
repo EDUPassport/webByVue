@@ -10,8 +10,10 @@
           <div class="educator-r-container">
             <div class="basic-info-container">
               <div class="basic-info-t">
-                <div class="basic-info-label">Basic Info</div>
-                <div class="basic-info-edit" @click="editBasicInfo()">Edit</div>
+                <div class="basic-info-label">Your Basic Info</div>
+                <div class="basic-info-edit" @click="editBasicInfo()">
+                  <el-icon><edit /></el-icon>
+                </div>
               </div>
 
               <div class="basic-info-content">
@@ -53,7 +55,9 @@
             <div class="languages-container">
               <div class="languages-t">
                 <div class="languages-label">Languages</div>
-                <div class="languages-edit" @click="editLanguages()">Edit</div>
+                <div class="languages-edit" @click="editLanguages()">
+                  <el-icon><edit /></el-icon>
+                </div>
               </div>
               <div class="languages-content" v-if="businessInfo.languages">
                 <div class="languages-item" v-for="(item,i) in businessInfo.languages" :key="i">
@@ -73,10 +77,32 @@
             <div class="business-info-container">
               <div class="business-info-t">
                 <div class="business-info-label">Business Information</div>
-                <div class="business-info-edit" @click="editBusinessInfo()">Edit</div>
+                <div class="business-info-edit" @click="editBusinessInfo()">
+                  <el-icon><edit /></el-icon>
+                </div>
               </div>
 
               <div class="business-info-content">
+                <div class="business-info-logo-name-container">
+                  <div class="business-info-logo">
+                    <el-upload
+                        class="logo-uploader"
+                        :action="uploadActionUrl"
+                        :headers="uploadHeaders"
+                        :data="uploadData"
+                        :show-file-list="false"
+                        name="file[]"
+                        :on-success="handleLogoPhotoSuccess"
+                        :before-upload="beforeLogoPhotoUpload"
+                    >
+                      <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="logo-avatar" ></el-image>
+                      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                  </div>
+                  <div class="business-info-name">
+                    {{ businessInfo.business_name }}
+                  </div>
+                </div>
                 <div class="business-info-item">
                   Business Name: <span>{{ businessInfo.business_name }} </span>
                 </div>
@@ -103,80 +129,40 @@
                   Currently Hiring:
                   <el-switch v-model="businessInfo.is_currently_hiring" :active-value="1" disabled></el-switch>
                 </div>
+                <div class="business-info-background-banner-container">
+                  <div class="business-info-background-banner-label">
+                    Business Profile Banner
+                  </div>
+                  <div class="business-info-background-banner">
+                    <el-upload
+                        class="background-uploader"
+                        :action="uploadActionUrl"
+                        :headers="uploadHeaders"
+                        :data="uploadData"
+                        :show-file-list="false"
+                        name="file[]"
+                        :on-success="handleBackgroundSuccess"
+                        :before-upload="beforeBackgroundUpload"
+                    >
+                      <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar" ></el-image>
+                      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                  </div>
+
+                </div>
 
               </div>
             </div>
-            <div class="b-tabs-container">
-              <el-tabs v-model="activeName" @tab-click="handleTabsClick">
-                <el-tab-pane label="I am School" name="first">
 
-                  <div class="school-info-container">
-                    <div class="school-info-t">
-                      <div class="school-info-label">School Information</div>
-                      <div class="school-info-edit" @click="editSchoolInfo()">Edit</div>
-                    </div>
-
-                    <div class="school-info-content">
-                      <div class="school-info-item">
-                        Curriculum: <span>{{ businessInfo.curriculum }} </span>
-                      </div>
-                      <div class="school-info-item">
-                        Technology Available: <span>{{ businessInfo.technology_available }}</span>
-                      </div>
-                      <div class="school-info-item">
-                        Average class size: <span>{{ businessInfo.staff_student_ratio }}</span>
-                      </div>
-                      <div class="school-info-item">
-                        Tuition: <span>{{ businessInfo.tuition }}</span>
-                      </div>
-                      <div class="school-info-item">
-                        Field Trips:
-                        <el-switch v-model="businessInfo.felds_trips" :active-value="1" disabled></el-switch>
-                      </div>
-                      <div class="school-info-item">
-                        Events:
-                        <el-switch v-model="businessInfo.is_events" :active-value="1" disabled></el-switch>
-                      </div>
-                      <div class="school-info-item">
-                        Special Needs:
-                        <el-switch v-model="businessInfo.is_special_needs" :active-value="1" disabled></el-switch>
-                      </div>
-                      <div class="school-info-item-tags">
-                        Our Students Age:
-                        <template v-for="(item,i) in studentAgeList" :key="i">
-                          <span>{{item.object_en}}</span>
-                        </template>
-                      </div>
-                      <div class="school-info-item-tags">
-                        Subject We Teach:
-                        <template v-for="(item,i) in subjectList" :key="i">
-                          <span>{{item.object_en}}</span>
-                        </template>
-                      </div>
-                      <div class="school-info-item-tags">
-                        School Facilities:
-                        <template v-for="(item,i) in facilitiesList" :key="i">
-                          <span>{{item.object_en}}</span>
-                        </template>
-                      </div>
-
-                    </div>
-                  </div>
-
-                </el-tab-pane>
-                <el-tab-pane label="I am a Recruiter" name="second">
-                  I am a Recruiter
-                </el-tab-pane>
-              </el-tabs>
-
-            </div>
             <div class="preferences-container">
               <div class="preferences-label">Company Policies</div>
               <div class="preferences-content">
                 <div class="p-job-type-container">
                   <div class="p-job-type-t">
                     <div class="p-job-type-t-label">Preferred Job Type</div>
-                    <div class="p-job-type-t-edit" @click="turnIndexList(3)" v-if="canEditJobType===false">Edit</div>
+                    <div class="p-job-type-t-edit" @click="turnIndexList(3)" v-if="canEditJobType===false">
+                      <el-icon><edit /></el-icon>
+                    </div>
                     <div class="p-job-type-t-edit"  @click="jobTypeConfirm" v-if="canEditJobType">Confirm</div>
                   </div>
                   <div class="p-job-type-content">
@@ -233,7 +219,9 @@
                 <div class="p-benefits-container">
                   <div class="p-benefits-t">
                     <div class="p-benefits-t-label">Employment Benefits</div>
-                    <div class="p-benefits-t-edit"  @click="turnIndexList(6)" v-if="canEditBenefits===false">Edit</div>
+                    <div class="p-benefits-t-edit"  @click="turnIndexList(6)" v-if="canEditBenefits===false">
+                      <el-icon><edit /></el-icon>
+                    </div>
                     <div class="p-benefits-t-edit" @click="benefitsConfirm" v-if="canEditBenefits">Confirm</div>
                   </div>
                   <div class="p-benefits-content">
@@ -290,7 +278,78 @@
               </div>
             </div>
 
+
+            <div class="b-tabs-container">
+              <el-tabs v-model="activeName" @tab-click="handleTabsClick">
+                <el-tab-pane label="I am School" name="first">
+
+                  <div class="school-info-container">
+                    <div class="school-info-t">
+                      <div class="school-info-label">School Information</div>
+                      <div class="school-info-edit" @click="editSchoolInfo()">
+                        <el-icon><edit /></el-icon>
+                      </div>
+                    </div>
+
+                    <div class="school-info-content">
+                      <div class="school-info-item">
+                        Curriculum: <span>{{ businessInfo.curriculum }} </span>
+                      </div>
+                      <div class="school-info-item">
+                        Technology Available: <span>{{ businessInfo.technology_available }}</span>
+                      </div>
+                      <div class="school-info-item">
+                        Average class size: <span>{{ businessInfo.staff_student_ratio }}</span>
+                      </div>
+                      <div class="school-info-item">
+                        Tuition: <span>{{ businessInfo.tuition }}</span>
+                      </div>
+                      <div class="school-info-item">
+                        Field Trips:
+                        <el-switch v-model="businessInfo.felds_trips" :active-value="1" disabled></el-switch>
+                      </div>
+                      <div class="school-info-item">
+                        Events:
+                        <el-switch v-model="businessInfo.is_events" :active-value="1" disabled></el-switch>
+                      </div>
+                      <div class="school-info-item">
+                        Special Needs:
+                        <el-switch v-model="businessInfo.is_special_needs" :active-value="1" disabled></el-switch>
+                      </div>
+                      <div class="school-info-item-tags">
+                        Our Students Age:
+                        <template v-for="(item,i) in studentAgeList" :key="i">
+                          <span>{{item.object_en}}</span>
+                        </template>
+                      </div>
+                      <div class="school-info-item-tags">
+                        Subject We Teach:
+                        <template v-for="(item,i) in subjectList" :key="i">
+                          <span>{{item.object_en}}</span>
+                        </template>
+                      </div>
+                      <div class="school-info-item-tags">
+                        School Facilities:
+                        <template v-for="(item,i) in facilitiesList" :key="i">
+                          <span>{{item.object_en}}</span>
+                        </template>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </el-tab-pane>
+                <el-tab-pane label="I am a Recruiter" name="second">
+                  I am a Recruiter
+                </el-tab-pane>
+              </el-tabs>
+
+            </div>
+
             <div class="media-container">
+              <div class="media-label">
+                Account Media
+              </div>
               <div class="profile-photo-container">
                 <div class="profile-photo-t">
                   <div class="profile-photo-t-label">Profile Photo</div>
@@ -311,50 +370,51 @@
                   </el-upload>
                 </div>
               </div>
-              <div class="logo-photo-container">
-                <div class="logo-photo-t">
-                  <div class="logo-photo-t-label">Business Logo</div>
-                </div>
-                <div class="logo-photo-content">
-                  <el-upload
-                      class="logo-uploader"
-                      :action="uploadActionUrl"
-                      :headers="uploadHeaders"
-                      :data="uploadData"
-                      :show-file-list="false"
-                      name="file[]"
-                      :on-success="handleLogoPhotoSuccess"
-                      :before-upload="beforeLogoPhotoUpload"
-                  >
-                    <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="logo-avatar" ></el-image>
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
-                </div>
-              </div>
-              <div class="background-banner-container">
-                <div class="background-banner-t">
-                  <div class="background-banner-t-label">Background Banner</div>
-                </div>
-                <div class="background-banner-content">
-                  <el-upload
-                      class="background-uploader"
-                      :action="uploadActionUrl"
-                      :headers="uploadHeaders"
-                      :data="uploadData"
-                      :show-file-list="false"
-                      name="file[]"
-                      :on-success="handleBackgroundSuccess"
-                      :before-upload="beforeBackgroundUpload"
-                  >
-                    <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar" ></el-image>
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
+<!--              <div class="logo-photo-container">-->
+<!--                <div class="logo-photo-t">-->
+<!--                  <div class="logo-photo-t-label">Business Logo</div>-->
+<!--                </div>-->
+<!--                <div class="logo-photo-content">-->
+<!--                  <el-upload-->
+<!--                      class="logo-uploader"-->
+<!--                      :action="uploadActionUrl"-->
+<!--                      :headers="uploadHeaders"-->
+<!--                      :data="uploadData"-->
+<!--                      :show-file-list="false"-->
+<!--                      name="file[]"-->
+<!--                      :on-success="handleLogoPhotoSuccess"-->
+<!--                      :before-upload="beforeLogoPhotoUpload"-->
+<!--                  >-->
+<!--                    <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="logo-avatar" ></el-image>-->
+<!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                  </el-upload>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="background-banner-container">-->
+<!--                <div class="background-banner-t">-->
+<!--                  <div class="background-banner-t-label">Background Banner</div>-->
+<!--                </div>-->
+<!--                <div class="background-banner-content">-->
+<!--                  <el-upload-->
+<!--                      class="background-uploader"-->
+<!--                      :action="uploadActionUrl"-->
+<!--                      :headers="uploadHeaders"-->
+<!--                      :data="uploadData"-->
+<!--                      :show-file-list="false"-->
+<!--                      name="file[]"-->
+<!--                      :on-success="handleBackgroundSuccess"-->
+<!--                      :before-upload="beforeBackgroundUpload"-->
+<!--                  >-->
+<!--                    <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar" ></el-image>-->
+<!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                  </el-upload>-->
 
-                </div>
-              </div>
+<!--                </div>-->
+<!--              </div>-->
               <div class="account-images-container">
                 <div class="account-images-t">
-                  <div class="account-images-t-label">Account Images(6 max)</div>
+                  <div class="account-images-t-label">Marketing Photos:</div>
+                  <div class="account-images-t-tips">Add more pictures to attract better talent</div>
                 </div>
                 <div class="account-images-content">
                   <el-upload
@@ -379,7 +439,7 @@
               </div>
               <div class="intro-video-container">
                 <div class="intro-video-t">
-                  <div class="intro-video-t-label">Intro Video</div>
+                  <div class="intro-video-t-label">Introduction Video:</div>
                 </div>
                 <div class="intro-video-content">
                   <el-upload
@@ -1284,6 +1344,11 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
+.basic-info-label:after{
+  content: "———";
+  color: #ff2870;
+  display: block;
+}
 
 .basic-info-edit {
   font-size: 14px;
@@ -1297,14 +1362,15 @@ export default {
 
 .basic-info-content {
   padding: 10px 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*flex-wrap: wrap;*/
+  /*align-items: center;*/
+  /*justify-content: space-between;*/
 }
 
 .basic-info-item {
+  font-size: 14px;
   margin: 10px;
   color: #808080;
 }
@@ -1332,6 +1398,11 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
+.business-info-label:after{
+  content: "———";
+  color: #00b3d2;
+  display: block;
+}
 
 .business-info-edit {
   font-size: 14px;
@@ -1345,21 +1416,47 @@ export default {
 
 .business-info-content {
   padding: 10px 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  /*flex-wrap: wrap;*/
+  /*align-items: flex-start;*/
+  /*justify-content: space-between;*/
 }
-
+.business-info-logo-name-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.business-info-logo{
+  padding: 10px;
+}
+.business-info-name{
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
 .business-info-item {
   margin: 10px;
-  color: #808080;
+  color: #00b3d2;
+  font-size: 14px;
 }
 
 .business-info-item span {
   color: #000000;
 }
+
+.business-info-background-banner-container{
+  margin: 10px;
+}
+.business-info-background-banner-label{
+  font-size: 14px;
+  font-weight: bold;
+}
+.business-info-background-banner{
+  margin-top: 10px;
+}
+
 .b-tabs-container{
   margin-top: 40px;
   padding: 20px;
@@ -1396,16 +1493,17 @@ export default {
 
 .school-info-content {
   padding: 10px 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*flex-wrap: wrap;*/
+  /*align-items: center;*/
+  /*justify-content: space-between;*/
 }
 
 .school-info-item {
   margin: 10px;
   color: #808080;
+  font-size: 14px;
 }
 
 .school-info-item span {
@@ -1414,6 +1512,7 @@ export default {
 .school-info-item-tags{
   margin: 10px;
   color: #808080;
+  font-size: 14px;
 }
 
 .school-info-item-tags span{
@@ -1444,6 +1543,11 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
+.languages-label:after{
+  content: "———";
+  color: #ff2870;
+  display: block;
+}
 
 .languages-edit {
   font-size: 14px;
@@ -1461,6 +1565,7 @@ export default {
   align-items: center;
   justify-content: flex-start;
   margin: 10px;
+  font-size: 14px;
 }
 
 .languages-item-l {
@@ -1478,6 +1583,16 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+}
+.media-label{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.media-label:after{
+  content: "———";
+  color: #ff2870;
+  display: block;
 }
 
 .profile-photo-container{
@@ -1624,15 +1739,20 @@ export default {
 }
 
 .account-images-t{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*align-items: center;*/
+  /*justify-content: space-between;*/
 }
 .account-images-t-label{
   font-size: 14px;
   font-weight: bold;
 
+}
+
+.account-images-t-tips{
+  font-size: 14px;
+  color: #808080;
 }
 .account-images-content{
   padding: 10px;
@@ -1744,12 +1864,15 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
+.preferences-label:after{
+  content: "———";
+  color: #ff2870;
+  display: block;
+}
 
 .preferences-content {
   padding: 10px 0;
 }
-
-
 
 .p-job-type-container {
   margin-top: 10px;
