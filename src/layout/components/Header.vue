@@ -11,10 +11,10 @@
             <router-link to="/home" exact>Home</router-link>
             <router-link to="/jobs" exact>Job Listings</router-link>
             <router-link to="/deals" exact> Go Deals</router-link>
-            <router-link to="/industry/news" exact> Industry News</router-link>
+<!--            <router-link to="/industry/news" exact> Industry News</router-link>-->
             <!--            <router-link to="/" exact>Blog</router-link>-->
-            <router-link to="/contact/us" exact> Contact</router-link>
-            <router-link to="/about/us" exact> About Us</router-link>
+<!--            <router-link to="/contact/us" exact> Contact</router-link>-->
+<!--            <router-link to="/about/us" exact> About Us</router-link>-->
           </div>
         </el-col>
 

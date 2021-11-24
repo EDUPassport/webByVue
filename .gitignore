@@ -2,7 +2,8 @@
 node_modules
 /dist
 /dev
-
+/devCN
+/distCN
 # local env files
 .env.local
 .env.*.local
