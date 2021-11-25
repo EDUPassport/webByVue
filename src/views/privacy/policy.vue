@@ -5,10 +5,9 @@
         <meSideMenu></meSideMenu>
       </el-col>
       <el-col :xs="20" :sm="20" :md="20" :lg="20" :xl="20">
-<!--        https://www.unilei.cn/policy.pdf-->
-        <iframe width="90%" height="800" src="https://www.unilei.cn/policy.pdf" frameborder="0">
-
-        </iframe>
+        <div class="policy-container">
+          <p>lsjaflas</p>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -34,5 +33,10 @@ export default {
   width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
+}
+.policy-container{
+  text-align: left;
+  padding: 0 40px;
+  font-size: 14px;
 }
 </style>

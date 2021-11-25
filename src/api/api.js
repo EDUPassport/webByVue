@@ -149,3 +149,9 @@ export const UPDATE_VENDOR_PROFILE = (params) => post('user/updateVendorProfile'
 export const IS_FAVORITE = (params) => post('favorite/isFavorite', params)
 
 export const MY_APPLY_JOBS = (params) => get('job/myApplyJobs', params)
+
+export const BLOG_LIST = (params) => get('home/blogList', params)
+
+export const BLOG_DETAIL = (params) => get('home/blog', params)
+
+export const ADD_BLOG_COMMENT = (params)=>post('home/addBlogComment',params)

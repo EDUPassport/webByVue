@@ -149,7 +149,8 @@ export default {
 }
 
 .list-item-l-img{
-  width: 50%;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   border: 1px solid #EEEEEE;
 }

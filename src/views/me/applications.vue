@@ -17,7 +17,7 @@
               </div>
               <div class="list-item-r">
                 <div class="list-item-r-t">
-                  <router-link  :to="{path:'/jobs/detail',query:{id:item.id}}">
+                  <router-link  :to="{path:'/jobs/detail',query:{id:item.job_id}}">
                     {{ item.job_title }}
                   </router-link>
                 </div>
@@ -157,7 +157,8 @@ export default {
 }
 
 .list-item-l-img {
-  width: 50%;
+  width: 100px;
+  height:100px;
   border-radius: 50%;
   border: 1px solid #EEEEEE;
 }
