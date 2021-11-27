@@ -20,7 +20,7 @@
             <div class="social-share-icon-container"
                  @click="showSocialShareExpandStatus = !showSocialShareExpandStatus"
                  @mouseover="showSocialShareExpandStatus=true" >
-              <el-icon size="30">
+              <el-icon :size="30">
                 <Share />
               </el-icon>
             </div>
@@ -187,12 +187,16 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-         this.basicForm.blog_id = this.$route.query.id
+          this.$loading({
+            text:'Loading'
+          })
+          this.basicForm.blog_id = this.$route.query.id
           let params = Object.assign({}, this.basicForm)
           ADD_BLOG_COMMENT(params).then(res => {
             console.log(res)
             if (res.code == 200) {
-                console.log('a')
+              this.$loading().close()
+              this.getBlogDetail(this.$route.query.id)
             }
           })
 
@@ -333,6 +337,7 @@ export default {
 
 .comment-item-l{
   width: 20%;
+  text-align: left;
 }
 
 .comment-item-r{

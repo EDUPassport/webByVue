@@ -21,6 +21,7 @@ import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit} from '@el
 
 import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
+import VueSocialSharing from 'vue-social-sharing'
 
 const messages = {
     en: {
@@ -56,7 +57,7 @@ app.use(i18n)
 app.use(VTypical, {
     /* options */
 })
-
+app.use(VueSocialSharing)
 
 app.config.globalProperties.$filters = {
     newsDateFormat(value){

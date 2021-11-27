@@ -6,6 +6,20 @@
   "description": "element ui",
   "glyphs": [
     {
+      "icon_id": "1203447",
+      "name": "twitter",
+      "font_class": "twitter",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "18986713",
+      "name": "linkedin",
+      "font_class": "linkedin",
+      "unicode": "e8ca",
+      "unicode_decimal": 59594
+    },
+    {
       "icon_id": "924345",
       "name": "education",
       "font_class": "education",

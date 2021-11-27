@@ -46,6 +46,7 @@
     "vue-mapbox": "^0.4.1",
     "vue-mapbox-geocoder": "^0.2.0",
     "vue-router": "^4.0.11",
+    "vue-social-sharing": "^4.0.0-alpha4",
     "vue-typical": "^2.1.0",
     "vue3-country-intl": "^1.0.1",
     "vuex": "^4.0.2"

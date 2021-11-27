@@ -2,9 +2,9 @@
   font-family: "iconfont"; /* Project id 2814433 */
   /* Color fonts */
   src: 
-       url('iconfont.woff2?t=1636457898260') format('woff2'),
-       url('iconfont.woff?t=1636457898260') format('woff'),
-       url('iconfont.ttf?t=1636457898260') format('truetype');
+       url('iconfont.woff2?t=1637910126646') format('woff2'),
+       url('iconfont.woff?t=1637910126646') format('woff'),
+       url('iconfont.ttf?t=1637910126646') format('truetype');
 }
 
 .iconfont {
@@ -13,6 +13,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-alitwitter:before {
+  content: "\e602";
+}
+
+.el-icon-alilinkedin:before {
+  content: "\e8ca";
 }
 
 .el-icon-alieducation:before {

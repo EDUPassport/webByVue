@@ -5,16 +5,16 @@
         <h1>Industry News</h1>
       </el-col>
     </el-row>
-    <el-row   class="news-container" align="middle" justify="center" v-loading="articleListData.length<= 0">
+    <el-row   class="news-container" align="middle" justify="center" v-loading="blogListData.length<= 0">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <div class="news-t">
           <div class="news-left-line"></div>
           <div class="news-label">Industry News</div>
         </div>
         <div class="news-content">
-          <div class="news-item" v-for="(item,i) in articleListData" :key="i">
+          <div class="news-item" v-for="(item,i) in blogListData" :key="i">
             <div class="news-item-img-container">
-              <el-image class="news-item-img" :src="item.user_url !='' ? item.user_url : item.url"
+              <el-image class="news-item-img" :src="item.image_url"
                         fit="cover"></el-image>
             </div>
             <div class="news-item-title">
@@ -25,7 +25,7 @@
             </div>
             <div class="news-item-operation">
               <div class="news-item-readmore">
-                <el-button type="primary" round @click="turnDetail(item.link)">Continue Reading</el-button>
+                <el-button type="primary" round @click="turnDetail(item.id)">Continue Reading</el-button>
               </div>
               <div class="news-item-share">
                 <el-button type="primary" icon="el-icon-share" circle></el-button>
@@ -42,56 +42,35 @@
 </template>
 
 <script>
-import {ADS_LIST} from "@/api/api";
+import {BLOG_LIST} from "@/api/api";
 
 export default {
-  name: "list",
+  name: "news",
   data(){
     return {
-      articleListData:[]
+      blogListData:[]
     }
   },
   mounted() {
-    this.getAdsList()
+    this.getBlogList()
   },
   methods:{
-    getAdsList() {
-      let identity = localStorage.getItem('identity')
-
+    getBlogList() {
       let params = {
         page: 1,
         limit: 10000
       }
-      ADS_LIST(params).then(res => {
+      BLOG_LIST(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let adsData = res.message;
-          // console.log(adsData);
-
-          let adsDataNews = [];
-
-          if (identity == 0 || !identity) {
-            adsDataNews = adsData.filter(item => item.name == 'guest_industry_news');
-          }
-          if (identity == 1) {
-            adsDataNews = adsData.filter(item => item.name == 'educator_industry_news');
-          }
-          if (identity == 2) {
-            adsDataNews = adsData.filter(item => item.name == 'business_industry_news');
-          }
-          if (identity == 3) {
-            adsDataNews = adsData.filter(item => item.name == 'vendor_industry_news');
-          }
-          let articleListData = adsDataNews[0].data;
-
-          this.articleListData = articleListData;
+          this.blogListData = res.message.data;
 
         }
       })
 
     },
-    turnDetail(link){
-      window.open(link, '_blank');
+    turnDetail(id){
+      this.$router.push({path:'/blog/detail',query:{id:id}})
     }
 
   }

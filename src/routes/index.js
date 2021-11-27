@@ -283,6 +283,14 @@ const routes = [
                 meta:{
                     title: 'Blog List'
                 }
+            },
+            {
+                path:'/blog/detail',
+                name:'blogDetail',
+                component:()=>import('@/views/blog/detail'),
+                meta:{
+                    title: 'Blog Detail'
+                }
             }
 
         ],
