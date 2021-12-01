@@ -27,9 +27,7 @@
               <div class="news-item-readmore">
                 <el-button type="primary" round @click="turnDetail(item.link)">Continue Reading</el-button>
               </div>
-              <div class="news-item-share">
-                <el-button type="primary" icon="el-icon-share" circle></el-button>
-              </div>
+
             </div>
 
           </div>
@@ -121,7 +119,7 @@ export default {
 }
 
 .news-container{
-  width: 600px;
+  width: 900px;
   padding: 20px;
   margin: 0 auto;
 }
@@ -154,10 +152,15 @@ export default {
 }
 
 .news-item-img-container{
+  width: 100%;
+  height: 300px;
+  border: 1px solid #EEEEEE;
+  overflow: hidden;
   border-radius: 20px;
-  overflow:hidden;
+
 }
 .news-item-img{
+  width: 100%;
   border-radius: 20px;
 }
 
@@ -165,6 +168,7 @@ export default {
   font-size: 16px;
   font-weight: bold;
   text-align: left;
+  padding-top:10px;
 }
 
 .news-item-desc{

@@ -118,8 +118,12 @@
       <el-row class="footer-b" :gutter="0" align="middle" justify="center">
         <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="9">
           <div class="footer-b-l">
-            <div class="footer-b-l-item">Terms of Use</div>
-            <div class="footer-b-l-item footer-b-l-item-margin">Privacy Policy</div>
+            <div class="footer-b-l-item">
+              <router-link to="/">Terms of Use</router-link>
+            </div>
+            <div class="footer-b-l-item footer-b-l-item-margin">
+              <router-link to="/privacy/policy">Privacy Policy</router-link>
+            </div>
           </div>
         </el-col>
         <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="9">
@@ -182,11 +186,12 @@ export default {
   background-color: rgba(0, 0, 0, 0.8);
   color: #ffffff;
   text-align: left;
-  padding: 20px 40px;
+
 }
 .footer-row{
   width: 1100px;
   margin: 0 auto;
+  padding: 20px 40px;
 }
 .esl-logo {
   width: 80px;
@@ -345,6 +350,7 @@ export default {
   width: 1100px;
   margin: 0 auto;
   text-align: left;
+  padding: 0px 40px 20px 40px;
 }
 
 .footer-b-l {
@@ -355,10 +361,14 @@ export default {
 }
 
 .footer-b-l-item {
+
+}
+.footer-b-l-item a{
+  text-decoration: none;
   line-height: 30px;
   font-size: 14px;
+  color: #ffffff;
 }
-
 .footer-b-l-item-margin {
   margin-left: 20px;
 }

@@ -75,6 +75,8 @@ import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import {CONTACT_US} from "../../api/api";
+
 export default {
   name: "us",
   data(){
@@ -143,6 +145,15 @@ export default {
       this.submitLoadingStatus = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          let params = Object.assign({},this.usForm)
+          CONTACT_US(params).then(res=>{
+            console.log(res)
+            if(res.code == 200){
+              this.$message.success('Success')
+              this.submitLoadingStatus = false;
+            }
+
+          })
          console.log('submit')
         } else {
           console.log('error submit!!')

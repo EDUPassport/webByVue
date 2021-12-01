@@ -7,10 +7,11 @@
             :pagination='{"clickable": true,"dynamicBullets": true}'
             :autoplay='{"delay": 13500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
             class="xllSwiper">
-          <swiper-slide v-for="(item,index) in xllSliderData" :key="index"
-                        :style="'background-image:url('+item.url+')'"
-                        class="xll-swiper-slider"
-          >
+<!--          :style="'background-image:url('+item.url+')'"  class="xll-swiper-slider"-->
+          <swiper-slide v-for="(item,index) in xllSliderData" :key="index" class="xll-swiper-slider">
+            <div class="xll-swiper-image-container">
+              <el-image class="xll-swiper-image" :src="item.url" fit="cover"></el-image>
+            </div>
             <div class="xll-swiper-1" ></div>
           </swiper-slide>
         </swiper>
@@ -49,6 +50,7 @@
             <div class="search-container">
               <div class="search-keywords">
                 <el-input class="search-keywords-input" placeholder="Enter Keyword..." size="medium"
+                          @change="searchNow()"
                           v-model="searchKeywordsValue">
                 </el-input>
               </div>
@@ -558,9 +560,9 @@ SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
 import VTypical from 'vue-typical';
 import {useRouter} from "vue-router";
 
-import bgBeijingImg from '@/assets/bg/bg-beijing.jpg'
-import bgShanghaiImg from '@/assets/bg/bg-shanghai.jpg'
-import bgNanjingImg from '@/assets/bg/bg-nanjing.jpg'
+import bgBeijingImg from '@/assets/bg/bg-beijing-1.jpg'
+import bgShanghaiImg from '@/assets/bg/bg-shanghai-1.jpg'
+import bgNanjingImg from '@/assets/bg/bg-nanjing-1.jpg'
 
 export default {
   name: "index",
@@ -1928,6 +1930,16 @@ export default {
   width: 100%;
   height:600px;
 }
+
+.xll-swiper-image-container{
+  width:100%;
+  overflow: hidden;
+}
+.xll-swiper-image{
+  width:100%;
+  -webkit-animation:scaleDraw 13.5s ease-in-out infinite ;
+
+}
 @keyframes scaleDraw {
   0%{
     transform: scale(1);
@@ -1936,26 +1948,34 @@ export default {
     transform: scale(1.01);
   }
   50%{
-    transform: scale(1);
+    transform: scale(1.05);
   }
   75%{
-    transform: scale(1.01);
+    transform: scale(1.06);
   }
 }
 
 .xll-swiper-slider{
   height: 100%;
-  background-position: center;
-  background-repeat: repeat;
-  background-size:100% auto;
-  -webkit-animation:scaleDraw 5s ease-in-out infinite ;
+  position: relative;
+  /*background-position: center;*/
+  /*background-repeat: repeat;*/
+  /*background-size:100% auto;*/
+  /*-webkit-animation:scaleDraw 13.5s ease-in-out infinite ;*/
 }
 
 .xll-swiper-1{
+  position: absolute;
+  width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index:1;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  /*display: flex;*/
+  /*align-items: center;*/
+  /*justify-content: center;*/
   background-color: rgba(0,0,0,0.4);
 }
 

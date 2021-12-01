@@ -101,8 +101,8 @@ export default {
 .banner-bg {
   height: 300px;
   background-color: #000000;
-  background-image: url("../../assets/about/about-us-bg.jpg");
-  background-size: auto;
+  background-image: url("../../assets/about/about-us-bg-1.jpg");
+  background-size: 100%;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -149,7 +149,7 @@ export default {
 .about-desc{
   font-size: 14px;
   color: #808080;
-  padding: 20px 0;
+  padding: 10px 0;
 }
 .about-content-r{
   width: 100%;

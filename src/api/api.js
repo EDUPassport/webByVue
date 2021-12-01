@@ -154,4 +154,8 @@ export const BLOG_LIST = (params) => get('home/blogList', params)
 
 export const BLOG_DETAIL = (params) => get('home/blog', params)
 
-export const ADD_BLOG_COMMENT = (params)=>post('home/addBlogComment',params)
+export const ADD_BLOG_COMMENT = (params) => post('home/addBlogComment', params)
+
+export const BLOG_CATEGORY_LIST = (params) => get('home/blogCategoryList', params)
+
+export const CONTACT_US = (params) => post('contact/contactUs', params)

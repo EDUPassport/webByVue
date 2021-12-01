@@ -2,9 +2,9 @@
   font-family: "iconfont"; /* Project id 2814433 */
   /* Color fonts */
   src: 
-       url('iconfont.woff2?t=1637910126646') format('woff2'),
-       url('iconfont.woff?t=1637910126646') format('woff'),
-       url('iconfont.ttf?t=1637910126646') format('truetype');
+       url('iconfont.woff2?t=1638172131692') format('woff2'),
+       url('iconfont.woff?t=1638172131692') format('woff'),
+       url('iconfont.ttf?t=1638172131692') format('truetype');
 }
 
 .iconfont {
@@ -13,6 +13,22 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-alidate:before {
+  content: "\e60b";
+}
+
+.el-icon-alitag:before {
+  content: "\e61f";
+}
+
+.el-icon-alicomment:before {
+  content: "\e64a";
+}
+
+.el-icon-alitag1:before {
+  content: "\e6a5";
 }
 
 .el-icon-alitwitter:before {
