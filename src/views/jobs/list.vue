@@ -283,6 +283,7 @@ export default {
     // }
     //
     // this.getJobList(this.jobPage, this.jobLimit)
+    console.log(this.$route.query)
   },
   mounted() {
     this.getJobsAreaList()

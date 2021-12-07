@@ -15,6 +15,7 @@
             <router-link to="/blog/list" exact>Blog</router-link>
             <router-link to="/contact/us" exact> Contact</router-link>
             <router-link to="/about/us" exact> About Us</router-link>
+            <span class="nav-china-jobs" @click="turnChinaJobs()">China Jobs</span>
           </div>
         </el-col>
 
@@ -154,6 +155,36 @@ export default {
 
   },
   methods: {
+    turnChinaJobs(){
+
+      let token = localStorage.getItem('token')
+      if(token ){
+        let domain = ''
+        let envName = process.env.VUE_APP_ENV_NAME
+
+        if(envName === 'developmentCN'){
+          domain = 'test.esl-passport.cn'
+        }
+        if(envName === 'development'){
+          domain = 'dev.eslpassport.com'
+        }
+        if(envName === 'productionCN'){
+          domain = 'www.esl-passport.cn'
+        }
+        if(envName === 'production'){
+          domain = 'www.eslpassport.com'
+        }
+        let email = localStorage.getItem('email')
+        let uid = localStorage.getItem('uid')
+        let navUrl = 'https://'+domain + '/jobs?uid='+uid + '&email='+email + '&from=foreign'
+        console.log(navUrl)
+        window.open(navUrl,'_blank')
+      }else {
+        this.$router.push('/login')
+      }
+
+
+    },
     getBasicInfo() {
       let uid = localStorage.getItem('uid')
       let params = {
@@ -328,6 +359,19 @@ export default {
 }
 
 .nav-link-container a:hover {
+  color: #00b3d2;
+}
+
+.nav-china-jobs{
+  margin-left: 20px;
+  color: #000000;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.nav-china-jobs:hover{
   color: #00b3d2;
 }
 
