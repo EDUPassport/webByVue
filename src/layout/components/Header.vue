@@ -176,7 +176,7 @@ export default {
         }
         let email = localStorage.getItem('email')
         let uid = localStorage.getItem('uid')
-        let navUrl = 'https://'+domain + '/jobs?uid='+uid + '&email='+email + '&from=foreign'
+        let navUrl = 'https://'+domain + '/exchange/account?uid='+uid + '&email='+email + '&from=foreign'
         console.log(navUrl)
         window.open(navUrl,'_blank')
       }else {

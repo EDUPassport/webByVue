@@ -304,6 +304,14 @@ const routes = [
         }
     },
     {
+        path: '/exchange/account',
+        name: 'exchangeAccount',
+        component: () => import('@/views/exchange/account'),
+        meta: {
+            title: 'Exchange Information'
+        }
+    },
+    {
         path: '/login',
         name: 'login',
         component: () => import('@/views/login/index.vue'),
