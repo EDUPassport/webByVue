@@ -79,6 +79,9 @@ export default {
           // console.log(res.message.data)
           this.totalNum = res.message.total
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -101,6 +104,9 @@ export default {
          if(res.code == 200){
            this.getFavoriteList()
          }
+       }).catch(err=>{
+         console.log(err)
+         this.$message.error(err.msg)
        })
     }
 

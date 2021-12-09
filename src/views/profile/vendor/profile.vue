@@ -479,6 +479,9 @@ export default {
 
           }
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getBasicInfo() {
@@ -489,6 +492,9 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     handleLanguagesClose(e) {
@@ -504,6 +510,9 @@ export default {
         if (res.code == 200) {
           this.languagesData = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addCustomLanguage(formName) {
@@ -608,7 +617,11 @@ export default {
           this.languagesDrawer = false
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
@@ -625,6 +638,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -652,6 +668,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -678,6 +697,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -704,6 +726,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     beforeBackgroundUpload(file) {
@@ -724,6 +749,9 @@ export default {
         if(res.code == 200){
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     handleAccountImagePreview(file) {
@@ -760,8 +788,10 @@ export default {
         if(res.code == 200){
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
-
 
     },
     handleIntroVideoSuccess(res, file) {
@@ -779,7 +809,11 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     beforeIntroVideoUpload(file) {
       console.log(file)
@@ -797,7 +831,11 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     beforeResumeUpload(file) {
       console.log(file)

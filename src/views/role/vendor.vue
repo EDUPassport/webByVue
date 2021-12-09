@@ -308,6 +308,9 @@ export default {
         if (res.code == 200) {
           this.provinceOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getAllCitys(pid) {
@@ -319,6 +322,9 @@ export default {
         if (res.code == 200) {
           this.cityOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getAllDistricts(pid) {
@@ -330,6 +336,9 @@ export default {
         if (res.code == 200) {
           this.districtOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     provinceChange(e) {
@@ -353,6 +362,9 @@ export default {
         if (res.code == 200) {
           this.subCateOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     selectVendorType(item) {
@@ -387,6 +399,9 @@ export default {
               // this.$router.push('/educator/profile')
               this.changeIdentity(3)
             }
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
         } else {
           console.log('error submit!!')
@@ -410,6 +425,9 @@ export default {
           localStorage.setItem('identity',identity)
           this.$router.push('/home')
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     }

@@ -150,6 +150,9 @@ export default {
         } else {
           console.log(res.msg)
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -175,6 +178,9 @@ export default {
           }
 
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
   }

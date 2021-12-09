@@ -681,6 +681,9 @@ export default {
             this.popularWorkShowStatus = false
           }
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getSixLogos() {
@@ -690,6 +693,9 @@ export default {
         if (res.code == 200) {
           this.featuredDealsLogoData = res.message;
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     chooseSearchCategory(value) {
@@ -708,6 +714,9 @@ export default {
           let imgData = res.message.data;
           this.featuredDealsLogoData = imgData.filter(item => item.sys_key == '16')
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getJobFeaturedList() {
@@ -726,6 +735,9 @@ export default {
           }
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -742,6 +754,9 @@ export default {
         } else {
           console.log(res.msg)
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -753,6 +768,9 @@ export default {
       BUSINESS_LIST(params).then(res => {
         console.log(res)
         this.businessListData = res.message.data;
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getDealsList() {
@@ -765,8 +783,9 @@ export default {
         if (res.code == 200) {
           this.dealsListData = res.message.data;
         }
-      }).catch(err => {
-        console.log(err.response)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getFeaturedDealsList() {
@@ -780,6 +799,9 @@ export default {
             this.dealFeaturedShowStatus = false
           }
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getAdsList() {
@@ -818,6 +840,9 @@ export default {
 
 
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -831,6 +856,9 @@ export default {
           this.$message.success('Subscribe Success')
           this.subscribeEmail = ''
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     turnJobsList() {
@@ -852,6 +880,9 @@ export default {
           if (res.code == 200) {
             this.$message.success('Apply Success')
           }
+        }).catch(err=>{
+          console.log(err)
+          this.$message.error(err.msg)
         })
 
       } else {
@@ -874,6 +905,9 @@ export default {
           this.$message.success('Success')
           this.jobFeaturedListData[index]['is_favorite'] = 1
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -888,6 +922,9 @@ export default {
         if (res.code == 200) {
           this.jobFeaturedListData[index]['is_favorite'] = 0
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addDealFavorite(id, type, title, url, index) {
@@ -904,6 +941,9 @@ export default {
           this.$message.success('Success')
           this.featuredDealsList[index]['is_favorite'] = 1
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -918,6 +958,9 @@ export default {
         if (res.code == 200) {
           this.featuredDealsList[index]['is_favorite'] = 0
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
 

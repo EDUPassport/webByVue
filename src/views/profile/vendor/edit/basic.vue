@@ -166,6 +166,9 @@ export default {
             if(res.code == 200){
               this.$router.push('/vendor/profile')
             }
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
 
         } else {
@@ -184,7 +187,7 @@ export default {
       if (this.selectFirstLanguageList.indexOf(item) == -1) {
         this.selectFirstLanguageList.splice(0, 1, item);
       }
-      console.log(this.selectFirstLanguageList)
+      // console.log(this.selectFirstLanguageList)
     }
 
 

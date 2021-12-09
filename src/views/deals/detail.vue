@@ -174,6 +174,9 @@ export default {
           let userId = res.message.user_id
           this.getCompanyJobList(userId)
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -192,6 +195,9 @@ export default {
           this.otherJobsData = res.message.data
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -209,6 +215,9 @@ export default {
           this.$message.success('Success')
           this.isFavoriteValue = 1
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -223,6 +232,9 @@ export default {
         if(res.code == 200){
           this.isFavoriteValue = 0
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     isFavorite(type,typeId){
@@ -236,6 +248,9 @@ export default {
         if(res.code == 200){
           this.isFavoriteValue = res.data;
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
 

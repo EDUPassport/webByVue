@@ -210,6 +210,9 @@ export default {
             if(res.code == 200){
               this.$router.push('/business/profile')
             }
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
 
         } else {
@@ -234,6 +237,9 @@ export default {
         if (res.code == 200) {
           this.subCateOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addOwnHobby() {
@@ -289,9 +295,12 @@ export default {
             this.selectHobbyInfoList = hobbies.split(',');
           }
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
-    }
 
+    }
 
   }
 }

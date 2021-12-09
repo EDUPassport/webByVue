@@ -866,6 +866,9 @@ export default {
           }
 
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getAllAreas(pid) {
@@ -877,6 +880,9 @@ export default {
         if (res.code == 200) {
           this.provinceOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getAllCitys(pid) {
@@ -888,6 +894,9 @@ export default {
         if (res.code == 200) {
           this.cityOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getAllDistricts(pid) {
@@ -899,6 +908,9 @@ export default {
         if (res.code == 200) {
           this.districtOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     provinceChange(e) {
@@ -1204,6 +1216,9 @@ export default {
         if (res.code == 200) {
           console.log('benefits--submit--' + res.data);
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     submitAgeToTeach(jobId) {
@@ -1234,8 +1249,9 @@ export default {
           console.log(res.msg);
         }
 
-      }).catch(error => {
-        console.log(error)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     submitSubject(jobId) {
@@ -1267,8 +1283,9 @@ export default {
           console.log(res.msg);
         }
 
-      }).catch(error => {
-        console.log(error)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     submitEmploymentType(jobId) {
@@ -1299,8 +1316,9 @@ export default {
           console.log(res.msg)
         }
 
-      }).catch(error => {
-        console.log(error)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     submitTeachingCertificate(jobId) {
@@ -1331,8 +1349,9 @@ export default {
           console.log(res.msg);
         }
 
-      }).catch(error => {
-        console.log(error)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     submitLanguages(jobId) {
@@ -1363,8 +1382,9 @@ export default {
           console.log(res.msg);
         }
 
-      }).catch(error => {
-        console.log(error)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getUserObjectList() {
@@ -1389,6 +1409,9 @@ export default {
           this.subjectList = res.message.filter(item => item.pid === 1); //subject
           this.ageList = res.message.filter(item => item.pid === 131); //age list
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addWorkingHours() {
@@ -1511,6 +1534,9 @@ export default {
               this.$router.push('/jobs/myJobs')
 
             }
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
 
         } else {

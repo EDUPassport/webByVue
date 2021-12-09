@@ -193,6 +193,9 @@ export default {
         if(res.code  == 200){
           this.subCateData = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -206,6 +209,9 @@ export default {
         if(res.code == 200){
           this.tagsData = res.message.data;
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getDealsList(page,limit,sCateId) {
@@ -233,8 +239,9 @@ export default {
           this.dealTotalNum = res.message.total
           this.showLoadingStatus=false
         }
-      }).catch(err => {
-        console.log(err.response)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getDealsAreaList(){
@@ -243,6 +250,9 @@ export default {
         if(res.code == 200){
           this.locationOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     dealPageSizeChange(e){
@@ -267,6 +277,9 @@ export default {
           this.$message.success('Success')
           this.dealsListData[index]['is_favorite'] = 1
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -281,6 +294,9 @@ export default {
         if(res.code == 200){
           this.dealsListData[index]['is_favorite'] = 0
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     }
 

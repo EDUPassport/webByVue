@@ -174,6 +174,9 @@ export default {
           this.$message.success('Subscribe Success')
           this.subscribeEmail = ''
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     }
   }

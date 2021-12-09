@@ -231,9 +231,11 @@ export default {
           this.editSchoolFacilitesList = res.message;
         }
 
-      }).catch(error => {
-        console.log(error)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     selectStudentAge(value, type) {
       let index;
@@ -281,6 +283,9 @@ export default {
           this.canEditStudentAge = false;
           // this.getBasicInfo();
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -351,6 +356,9 @@ export default {
           this.canEditSubject = false;
           // this.getBasicInfo();
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     selectSchoolFacilites(value, type) {
@@ -361,7 +369,6 @@ export default {
 
       if (index == -1) {
         this.selectSchoolFacilitesList.push(value);
-
       } else {
         this.selectSchoolFacilitesList.splice(index, 1);
       }
@@ -392,6 +399,9 @@ export default {
           // this.getBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     submitForm(formName) {
@@ -416,6 +426,9 @@ export default {
               },1200)
 
             }
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
 
         } else {
@@ -525,9 +538,12 @@ export default {
           }
 
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
-    }
 
+    }
 
   }
 }

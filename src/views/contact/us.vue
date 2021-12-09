@@ -153,6 +153,9 @@ export default {
               this.submitLoadingStatus = false;
             }
 
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
          console.log('submit')
         } else {

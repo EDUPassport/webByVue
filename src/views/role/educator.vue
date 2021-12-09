@@ -137,6 +137,9 @@ export default {
               // this.$router.push('/educator/profile')
               this.changeIdentity(1)
             }
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
         } else {
           console.log('error submit!!')
@@ -160,6 +163,9 @@ export default {
           localStorage.setItem('identity',identity)
           this.$router.push('/home')
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     }

@@ -645,7 +645,11 @@ export default {
       }
       UPDATE_BUSINESS_PROFILE(params).then(res=>{
         console.log(res)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     editBasicInfo() {
       this.$router.push('/business/edit/basic')
@@ -728,7 +732,11 @@ export default {
 
           }
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     getBasicInfo() {
       let uid = localStorage.getItem('uid')
@@ -738,7 +746,11 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     handleLanguagesClose(e) {
       console.log(e)
@@ -753,7 +765,11 @@ export default {
         if (res.code == 200) {
           this.languagesData = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     addCustomLanguage(formName) {
       this.$refs[formName].validate((valid) => {
@@ -857,6 +873,9 @@ export default {
           this.languagesDrawer = false
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     turnIndexList(type) {
@@ -960,8 +979,9 @@ export default {
           this.canEditBenefits = true;
         }
 
-      }).catch(error => {
-        console.log(error)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     handleProfilePhotoSuccess(res, file) {
@@ -979,6 +999,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -1006,6 +1029,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -1032,7 +1058,11 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     beforeBackgroundUpload(file) {
       console.log(file)
@@ -1052,7 +1082,11 @@ export default {
         if(res.code == 200){
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     handleAccountImagePreview(file) {
       // console.log(file)
@@ -1089,8 +1123,10 @@ export default {
 
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
-
 
     },
     handleIntroVideoSuccess(res, file) {
@@ -1108,7 +1144,11 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     beforeIntroVideoUpload(file) {
       console.log(file)
@@ -1174,6 +1214,9 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -1237,8 +1280,11 @@ export default {
           this.canEditJobType = false;
           this.getVisitorBasicInfo();
         }
-
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     addOwnBenefits() {
       this.addBenefitsStatus = false;
@@ -1301,7 +1347,11 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
     handleTabsClick(tab, event) {
       console.log(tab, event)

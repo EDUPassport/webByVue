@@ -175,6 +175,9 @@ export default {
         if (res.code == 200) {
           this.tagsData = res.message.data;
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     search(keyword) {
@@ -242,6 +245,9 @@ export default {
           }
           this.searchLoadingStatus = false
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },

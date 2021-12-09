@@ -1,6 +1,6 @@
 // 一、配置axios
 import axios from 'axios'
-import {ElMessage} from "element-plus";
+// import {ElMessage} from "element-plus";
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
 //https://api.test.esl-passport.cn/api/
@@ -9,13 +9,13 @@ let baseUrl = process.env.VUE_APP_URL
 // axios配置
 axios.defaults.baseURL = baseUrl
 // 设置请求最大时长
-axios.defaults.timeout = 16000
+axios.defaults.timeout = 30000
 // axios.defaults.withCredentials = true
 // 请求拦截器，设置token
 axios.interceptors.request.use(config => {
     const token = localStorage.getItem('token');
 
-    if (token && token !='' ) {
+    if (token && token != '') {
         config.headers.token = token
         // token && (config.headers.Authorization = token)
     }
@@ -28,30 +28,41 @@ axios.interceptors.request.use(config => {
 })
 
 // 添加响应拦截器
+// axios.interceptors.response.use(response => {
+//         return Promise.resolve(response.data)
+//     }
+//     )
+
+// 响应拦截器
 axios.interceptors.response.use(response => {
-        return response.data
-    },
-    error => {
-        // console.log(error)
-        if (error.response) {
-            if (error.response.status == 401) {
-                return window.location.href = '/login'
-            } else {
-                let errResponse = error.response;
+    // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
+    // 否则的话抛出错误
+    if(response && response.data){
+        return Promise.resolve(response.data)
+    }else{
+        location.reload()
+    }
 
-                return  ElMessage({
-                    message: errResponse.data.msg,
-                    type: 'error'
-                })
-                // return Promise.reject(error.response);
-            }
-        }
-        // 对响应错误做点什么
-        if (!error.response) {
-            return Promise.reject(error);
-        }
+}, error => {
+    // 我们可以在这里对异常状态作统一处理
 
-    })
+    let errResponse = error.response
+
+    if(errResponse){
+        let status = errResponse.status
+        if (status === 401) {
+            return window.location.href = '/login'
+        } else {
+            return Promise.reject(error.response.data);
+        }
+    }
+
+    // 对响应错误做点什么
+    if (!errResponse) {
+        location.reload()
+        // return Promise.reject(error);
+    }
+})
 
 // 2、封装请求方式
 // @param url 接口地址

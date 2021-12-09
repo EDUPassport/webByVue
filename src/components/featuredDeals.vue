@@ -99,6 +99,9 @@ export default {
         if(res.code == 200){
           this.dealsListData = res.message;
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getDealsList() {
@@ -111,8 +114,9 @@ export default {
         if (res.code == 200) {
           this.dealsListData = res.message.data;
         }
-      }).catch(err => {
-        console.log(err.response)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addFavorite(id, type, title, url,index) {
@@ -129,6 +133,9 @@ export default {
           this.$message.success('Success')
           this.dealsListData[index]['is_favorite'] = 1
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -143,6 +150,9 @@ export default {
         if(res.code == 200){
           this.dealsListData[index]['is_favorite'] = 0
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
 

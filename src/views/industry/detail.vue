@@ -194,6 +194,9 @@ export default {
             if (res.code == 200) {
                 console.log('a')
             }
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
 
         } else {
@@ -212,6 +215,9 @@ export default {
         if (res.code == 200) {
           this.detailData = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -223,6 +229,9 @@ export default {
 
       BLOG_LIST(params).then(res => {
         console.log(res)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     }

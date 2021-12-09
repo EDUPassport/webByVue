@@ -314,7 +314,7 @@ export default {
 
         }).catch(err=>{
           console.log(err)
-          self.sendCodeLoading = false
+          this.$message.error(err.msg)
         })
 
       }
@@ -348,22 +348,31 @@ export default {
                   let firstName = res.message.educator.first_name;
                   let lastName = res.message.educator.last_name;
                   localStorage.setItem('name',firstName+' '+ lastName)
+                  localStorage.setItem('first_name',firstName)
+                  localStorage.setItem('last_name',lastName)
                 }
                 if(identity == 2){
                   let firstName = res.message.business.first_name;
                   let lastName = res.message.business.last_name;
                   localStorage.setItem('name',firstName+' '+ lastName)
+                  localStorage.setItem('first_name',firstName)
+                  localStorage.setItem('last_name',lastName)
                 }
                 if(identity == 3){
                   let firstName = res.message.vendor.first_name;
                   let lastName = res.message.vendor.last_name;
                   localStorage.setItem('name',firstName+' '+ lastName)
+                  localStorage.setItem('first_name',firstName)
+                  localStorage.setItem('last_name',lastName)
                 }
                 setTimeout(function () {
                   self.skipHomePage()
                   self.submitLoginLoadingStatus = false
                 }, 1500)
               }
+            }).catch(err=>{
+              console.log(err)
+              this.$message.error(err.msg)
             })
 
           } else {
@@ -394,6 +403,9 @@ export default {
               location.reload()
             }
 
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
 
           setTimeout(function () {

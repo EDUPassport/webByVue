@@ -116,6 +116,9 @@ export default {
         } else {
           console.log(res.msg)
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -132,6 +135,9 @@ export default {
           if (res.code == 200) {
             this.$message.success('Apply Success')
           }
+        }).catch(err=>{
+          console.log(err)
+          this.$message.error(err.msg)
         })
 
       } else {
@@ -154,6 +160,9 @@ export default {
           this.$message.success('Success')
           this.jobFeaturedListData[index]['is_favorite'] = 1
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -168,6 +177,9 @@ export default {
         if(res.code == 200){
           this.jobFeaturedListData[index]['is_favorite'] = 0
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
 

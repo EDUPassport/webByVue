@@ -89,6 +89,9 @@ export default {
           // console.log(res.message.data)
           this.totalNum = res.message.total
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },

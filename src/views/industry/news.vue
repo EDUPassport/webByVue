@@ -85,6 +85,9 @@ export default {
           this.articleListData = articleListData;
 
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },

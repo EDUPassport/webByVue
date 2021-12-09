@@ -158,25 +158,29 @@ export default {
     turnChinaJobs(){
 
       let token = localStorage.getItem('token')
+      let firstName = localStorage.getItem('first_name')
+      let lastName = localStorage.getItem('last_name')
       if(token ){
         let domain = ''
         let envName = process.env.VUE_APP_ENV_NAME
 
         if(envName === 'developmentCN'){
-          domain = 'test.esl-passport.cn'
+          domain = 'https://test.esl-passport.cn'
         }
         if(envName === 'development'){
-          domain = 'dev.eslpassport.com'
+          // domain = 'https://dev.eslpassport.com'
+          domain = 'http://localhost:8080'
         }
         if(envName === 'productionCN'){
-          domain = 'www.esl-passport.cn'
+          domain = 'https://www.esl-passport.cn'
         }
         if(envName === 'production'){
-          domain = 'www.eslpassport.com'
+          domain = 'https://www.eslpassport.com'
         }
         let email = localStorage.getItem('email')
         let uid = localStorage.getItem('uid')
-        let navUrl = 'https://'+domain + '/exchange/account?uid='+uid + '&email='+email + '&from=foreign'
+        let navUrl = domain + '/exchange/account?uid='+uid + '&email='+email + '&from=foreign'+'&first_name='+firstName
+        +'&last_name='+lastName
         console.log(navUrl)
         window.open(navUrl,'_blank')
       }else {
@@ -229,12 +233,17 @@ export default {
 
           localStorage.setItem('name', firstName + ' ' + lastName)
           localStorage.setItem('avatar', avatar)
+          localStorage.setItem('first_name',firstName)
+          localStorage.setItem('last_name',lastName)
 
           this.$store.commit('username', firstName + ' ' + lastName)
           this.$store.commit('userAvatar', avatar)
           this.$store.commit('identity', identity)
 
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     login() {
@@ -296,6 +305,9 @@ export default {
           }
 
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     changeIdentity(identity) {
@@ -314,6 +326,9 @@ export default {
             path: '/overview', query: {identity: identity}
           })
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },

@@ -159,3 +159,5 @@ export const ADD_BLOG_COMMENT = (params) => post('home/addBlogComment', params)
 export const BLOG_CATEGORY_LIST = (params) => get('home/blogCategoryList', params)
 
 export const CONTACT_US = (params) => post('contact/contactUs', params)
+
+export const INTERNATIONAL_REGISTER = (params)=>get('international/register',params)

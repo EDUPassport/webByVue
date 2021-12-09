@@ -1080,6 +1080,9 @@ export default {
       }
       UPDATE_EDUCATOR_PROFILE(params).then(res=>{
         console.log(res)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     editBasicInfo() {
@@ -1182,6 +1185,9 @@ export default {
 
           }
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getBasicInfo() {
@@ -1192,6 +1198,9 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     handleLanguagesClose(e) {
@@ -1207,6 +1216,9 @@ export default {
         if (res.code == 200) {
           this.languagesData = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addCustomLanguage(formName) {
@@ -1311,6 +1323,9 @@ export default {
           this.languagesDrawer = false
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     turnIndexList(type) {
@@ -1624,8 +1639,9 @@ export default {
           this.canEditCountriesLived = true;
         }
 
-      }).catch(error => {
-        console.log(error)
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addOwnCertifications() {
@@ -1696,6 +1712,9 @@ export default {
           this.getVisitorBasicInfo()
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
 
@@ -1775,6 +1794,9 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
 
@@ -1846,6 +1868,9 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
 
@@ -1917,6 +1942,9 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -1966,6 +1994,9 @@ export default {
           this.canEditHobby = false;
           this.hobbiesList = this.selectHobbyInfoList;
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -1984,6 +2015,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -2010,6 +2044,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     beforeBackgroundUpload(file) {
@@ -2030,6 +2067,9 @@ export default {
         if(res.code == 200){
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     handleAccountImagePreview(file) {
@@ -2066,6 +2106,9 @@ export default {
         if(res.code == 200){
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
 
@@ -2085,6 +2128,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     beforeIntroVideoUpload(file) {
@@ -2103,6 +2149,9 @@ export default {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     beforeResumeUpload(file) {
@@ -2169,6 +2218,9 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     },
@@ -2234,6 +2286,9 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addOwnJobType() {
@@ -2297,6 +2352,9 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addOwnAgeToTeach() {
@@ -2360,6 +2418,9 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     addOwnRegion() {
@@ -2423,7 +2484,10 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      })
+      }).catch(err=>{
+       console.log(err)
+       this.$message.error(err.msg)
+     })
     },
     addOwnBenefits() {
       this.addBenefitsStatus = false;
@@ -2486,7 +2550,11 @@ export default {
           this.getVisitorBasicInfo();
         }
 
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
+
     },
 
   }

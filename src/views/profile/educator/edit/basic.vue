@@ -248,6 +248,9 @@ export default {
             if(res.code == 200){
               this.$router.push('/educator/profile')
             }
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
 
         } else {
@@ -271,6 +274,9 @@ export default {
         if (res.code == 200) {
           this.provinceOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getAllCitys(pid) {
@@ -282,6 +288,9 @@ export default {
         if (res.code == 200) {
           this.cityOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     getAllDistricts(pid) {
@@ -293,6 +302,9 @@ export default {
         if (res.code == 200) {
           this.districtOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     provinceChange(e) {
@@ -316,6 +328,9 @@ export default {
         if (res.code == 200) {
           this.subCateOptions = res.message
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
     selectEducatorType(item) {

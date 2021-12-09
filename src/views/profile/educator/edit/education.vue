@@ -129,6 +129,9 @@ export default {
             if(res.code == 200){
               this.$router.push('/educator/profile')
             }
+          }).catch(err=>{
+            console.log(err)
+            this.$message.error(err.msg)
           })
         } else {
           console.log('error submit!!')
@@ -162,6 +165,9 @@ export default {
           // console.log(this.basicForm)
 
         }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
       })
     },
 

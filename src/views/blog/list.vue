@@ -157,6 +157,9 @@
                         this.showLoadingStatus= false
 
                     }
+                }).catch(err=>{
+                  console.log(err)
+                  this.$message.error(err.msg)
                 })
 
             },
