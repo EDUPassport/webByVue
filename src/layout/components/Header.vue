@@ -9,13 +9,20 @@
         <el-col :xs="0" :sm="18" :md="16" :lg="17" :xl="17">
           <div class="nav-link-container">
             <router-link to="/home" exact>Home</router-link>
-            <router-link to="/jobs" exact>Job Listings</router-link>
-            <router-link to="/deals" exact> Go Deals</router-link>
-            <router-link to="/industry/news" exact> Industry News</router-link>
+            <router-link to="/jobs" exact>Jobs</router-link>
+            <router-link to="/deals" exact> Edu Deals</router-link>
+            <router-link to="/industry/news" exact>News</router-link>
             <router-link to="/blog/list" exact>Blog</router-link>
             <router-link to="/contact/us" exact> Contact</router-link>
-            <router-link to="/about/us" exact> About Us</router-link>
-            <span class="nav-china-jobs" @click="turnChinaJobs()">China Jobs</span>
+            <router-link to="/about/us" exact> About</router-link>
+            <template v-if="envName === 'development' || envName === 'production'">
+              <span v-if="!identity || identity == 1"
+                    class="nav-china-jobs" @click="turnEnvJobs(envName)">China Jobs</span>
+            </template>
+            <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
+              <span v-if="!identity || identity == 1"
+                    class="nav-china-jobs" @click="turnEnvJobs(envName)">International Jobs</span>
+            </template>
           </div>
         </el-col>
 
@@ -64,7 +71,6 @@
             </template>
             <template v-else>
               <el-button type="primary" @click="login">Login</el-button>
-              <!--              <router-link to="/login">Login</router-link>-->
             </template>
           </div>
         </el-col>
@@ -122,7 +128,8 @@ export default {
       defaultAvatar,
       dialogSwitchAccountVisible: false,
       token: '',
-      dialogDiscountCardVisible: false
+      dialogDiscountCardVisible: false,
+      envName: process.env.VUE_APP_ENV_NAME
     }
   },
   computed: {
@@ -155,38 +162,43 @@ export default {
 
   },
   methods: {
-    turnChinaJobs(){
+    turnEnvJobs(envName){
 
       let token = localStorage.getItem('token')
-      let firstName = localStorage.getItem('first_name')
-      let lastName = localStorage.getItem('last_name')
-      if(token ){
-        let domain = ''
-        let envName = process.env.VUE_APP_ENV_NAME
 
-        if(envName === 'developmentCN'){
-          domain = 'https://test.esl-passport.cn'
-        }
-        if(envName === 'development'){
-          // domain = 'https://dev.eslpassport.com'
-          domain = 'http://localhost:8080'
-        }
-        if(envName === 'productionCN'){
-          domain = 'https://www.esl-passport.cn'
-        }
-        if(envName === 'production'){
-          domain = 'https://www.eslpassport.com'
-        }
+
+      let domain = ''
+
+      if(envName === 'developmentCN'){
+        // domain = 'https://test.esl-passport.cn'
+        domain = 'https://dev.eslpassport.com'
+      }
+      if(envName === 'development'){
+        domain = 'https://dev.esl-passport.cn/'
+        // domain = 'https://dev.eslpassport.com'
+        // domain = 'http://localhost:8080'
+      }
+      if(envName === 'productionCN'){
+        // domain = 'https://www.esl-passport.cn'
+        domain = 'https://www.eslpassport.com'
+      }
+
+      if(envName === 'production'){
+        domain = 'https://www.eslpassport.com'
+      }
+
+      if(token ){
+        let firstName = localStorage.getItem('first_name')
+        let lastName = localStorage.getItem('last_name')
         let email = localStorage.getItem('email')
         let uid = localStorage.getItem('uid')
-        let navUrl = domain + '/exchange/account?uid='+uid + '&email='+email + '&from=foreign'+'&first_name='+firstName
+        let navUrl = domain + '/exchange/account?uid='+uid + '&email='+email +'&first_name='+firstName
         +'&last_name='+lastName
         console.log(navUrl)
         window.open(navUrl,'_blank')
       }else {
-        this.$router.push('/login')
+        window.open(domain,'_blank')
       }
-
 
     },
     getBasicInfo() {

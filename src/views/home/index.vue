@@ -18,10 +18,10 @@
 
         <div class="xll-search-container">
           <div class="xll-find-best-row">
-            <h2>Find the best</h2>
+            <h2>Find new Education</h2>
             <v-typical
                 class="blink"
-                :steps="['Jobs', 2000, 'Deals', 2000]"
+                :steps="['Jobs', 2000, 'Deals', 2000,'Opportunities',2000,'News',2000,'Tools',2000,'Business',2000]"
                 :loop="Infinity"
                 :wrapper="'h1'"
             ></v-typical>
