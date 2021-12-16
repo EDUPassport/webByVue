@@ -70,7 +70,8 @@
               </div>
             </template>
             <template v-else>
-              <el-button type="primary" @click="login">Login</el-button>
+              <router-link class="login-btn" :to="{path:'/login',query:{type:1}}">Login</router-link>
+              <el-button class="sign-up-btn" type="default" @click="signUp()">Sign Up</el-button>
             </template>
           </div>
         </el-col>
@@ -162,6 +163,9 @@ export default {
 
   },
   methods: {
+    signUp(){
+      this.$router.push({path:'/login',query:{type:2}})
+    },
     turnEnvJobs(envName){
 
       let token = localStorage.getItem('token')
@@ -170,21 +174,18 @@ export default {
       let domain = ''
 
       if(envName === 'developmentCN'){
-        // domain = 'https://test.esl-passport.cn'
         domain = 'https://dev.eslpassport.com'
       }
       if(envName === 'development'){
         domain = 'https://dev.esl-passport.cn/'
-        // domain = 'https://dev.eslpassport.com'
         // domain = 'http://localhost:8080'
       }
       if(envName === 'productionCN'){
-        // domain = 'https://www.esl-passport.cn'
         domain = 'https://www.eslpassport.com'
       }
 
       if(envName === 'production'){
-        domain = 'https://www.eslpassport.com'
+        domain = 'https://www.esl-passport.cn'
       }
 
       if(token ){
@@ -483,5 +484,19 @@ export default {
 .discount-card-container {
   width: 99%;
   margin: 0 auto;
+}
+
+.login-btn{
+  font-size: 14px;
+  text-decoration: none;
+  color: #00b3d2;
+  font-weight: bold;
+  padding: 0 10px;
+}
+.sign-up-btn{
+  background-color: #B1C452;
+  color: #FFFFFF;
+  font-weight: bold;
+  font-size: 14px;
 }
 </style>

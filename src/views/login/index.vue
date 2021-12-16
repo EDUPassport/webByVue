@@ -11,6 +11,9 @@
             </div>
           </el-col>
         </el-row>
+        <div class="go-home-container">
+          <el-button class="go-home-btn" type="primary" round @click="goHome()">Home</el-button>
+        </div>
       </el-header>
       <el-main>
         <el-row class="xll-login-row-container" justify="center" align="middle" v-if="showValue == 1">
@@ -274,12 +277,23 @@ export default {
       )
     }
 
+    let value = route.query.type;
+    const showType = value ? value : 1
+
     return {
       getParams,
-      skipHomePage
+      skipHomePage,
+      showType
     }
   },
+  created() {
+    this.showValue = this.showType
+    console.log(this.showValue)
+  },
   methods: {
+    goHome(){
+      this.$router.push('/home')
+    },
     remeberChange(e) {
       console.log(e)
     },
@@ -454,6 +468,16 @@ export default {
 
 .container-1 {
   padding-top: 20px;
+  position: relative;
+}
+
+.go-home-container{
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+.go-home-btn{
+  font-size: 14px;
 }
 
 .logo-container {

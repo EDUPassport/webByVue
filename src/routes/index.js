@@ -353,8 +353,24 @@ const router = createRouter({
 const defaultTitle = 'Home';
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title ? to.meta.title : defaultTitle;
+    let envName = process.env.VUE_APP_ENV_NAME
     if (isPhone()) {
-        window.location.href = 'https://esl-passport.cn/'
+        let domain = ''
+        if(envName === 'developmentCN'){
+            domain = 'https://test.esl-passport.cn/'
+        }
+        if(envName === 'development'){
+            domain = 'https://test.esl-passport.cn/'
+        }
+        if(envName === 'productionCN'){
+            domain = 'https://esl-passport.cn/'
+        }
+
+        if(envName === 'production'){
+            domain = 'https://esl-passport.cn/'
+        }
+
+        window.location.href = domain
     }
     next();
 });
