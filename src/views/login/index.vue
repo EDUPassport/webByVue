@@ -547,14 +547,16 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   border-bottom: 1px solid #EEEEEE;
 }
 
 .login-label{
+  width:50%;
   font-size: 16px;
   padding: 10px;
   cursor: pointer;
+  text-align: center;
 }
 .login-label:hover{
   background-color: #0AA0A8;
@@ -567,6 +569,8 @@ export default {
 }
 
 .register-label{
+  width: 50%;
+  text-align: center;
   font-size: 16px;
   padding:10px;
   cursor: pointer;

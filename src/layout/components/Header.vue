@@ -177,7 +177,7 @@ export default {
         domain = 'https://dev.eslpassport.com'
       }
       if(envName === 'development'){
-        domain = 'https://dev.esl-passport.cn/'
+        domain = 'https://dev.esl-passport.cn'
         // domain = 'http://localhost:8080'
       }
       if(envName === 'productionCN'){
