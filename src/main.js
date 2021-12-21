@@ -17,7 +17,7 @@ import 'animate.css'
 import VTypical from 'vue-typical'
 // import './assets/font/font.css'
 
-import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit} from '@element-plus/icons'
+import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown } from '@element-plus/icons'
 
 import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
@@ -49,6 +49,7 @@ app.component('Calendar',Calendar )
 app.component('ArrowRightBold',ArrowRightBold )
 app.component('Share',Share)
 app.component('edit',Edit)
+app.component('ArrowDown',ArrowDown)
 
 app.use(router)
 app.use(store)

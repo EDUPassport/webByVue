@@ -410,7 +410,7 @@
     <!-- articles industry news   -->
     <div class="industry-news-container" v-loading="articleListData.length<=0" v-if="industryShowStatus">
       <el-row class="industry-news-row" :gutter="0" align="middle" justify="center">
-        <el-col :xs="24" :sm="7" :md="7" :lg="7" :xl="8">
+        <el-col :xs="7" :sm="7" :md="7" :lg="7" :xl="8">
           <div class="industry-articles-label">Articles</div>
           <div class="industry-news-label">Industry News</div>
           <div class="industry-news-link-container">
@@ -424,7 +424,7 @@
           <!--            <el-button type="primary">Read More ></el-button>-->
           <!--          </div>-->
         </el-col>
-        <el-col :xs="24" :sm="{span:7,offset:1}" :md="{span:7,offset:1}" :lg="{span:7,offset:1}" :xl="{span:7,offset:1}"
+        <el-col :xs="{span:7,offset:1}" :sm="{span:7,offset:1}" :md="{span:7,offset:1}" :lg="{span:7,offset:1}" :xl="{span:7,offset:1}"
                 v-for="(item,index) in articleListLimitData" :key="index"
         >
           <div class="industry-item" v-if="index<2">
@@ -471,22 +471,22 @@
     <!-- vendor six logos    -->
     <div class="vendor-logos-container">
       <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgOne"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgTwo"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgThree"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgFour"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgFive"></el-image>
         </el-col>
-        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="2">
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
           <el-image class="vendor-logo" :src="teamImgSix"></el-image>
         </el-col>
 
@@ -979,7 +979,6 @@ export default {
 }
 
 .home-bg {
-  /*background-image: url("../../assets/bg/bg-1.jpg");*/
   background-position: center;
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -1025,8 +1024,6 @@ export default {
 }
 
 .xll-search-btn-row {
-  /*width: 100%;*/
-  width: 1100px;
   margin-top: 100px;
 }
 
@@ -1083,8 +1080,8 @@ export default {
   border-color: #0AA0A8 transparent transparent transparent;
 }
 
+
 .search-container-bg {
-  width: 1100px;
   margin-top: 20px;
   background-color: rgba(255, 255, 255, 0.3);
   padding: 10px;
@@ -1338,8 +1335,8 @@ export default {
   padding: 20px 0;
 }
 
+
 .featured-schools-content-container {
-  width: 1100px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -1494,8 +1491,8 @@ export default {
   padding-bottom: 10px;
 }
 
+
 .featured-deals-row {
-  width: 1100px;
   margin: 0 auto;
 }
 
@@ -1704,8 +1701,8 @@ export default {
   padding-bottom: 10px;
 }
 
+
 .popular-work-row {
-  width: 1100px;
   margin: 0 auto;
 }
 
@@ -1763,7 +1760,6 @@ export default {
 }
 
 .industry-news-row {
-  width: 1100px;
   margin: 0 auto;
 }
 
@@ -1926,7 +1922,6 @@ export default {
 }
 
 .subscribe-input-row, .subscribe-label-row {
-  width: 1100px;
   margin: 0 auto;
 }
 
@@ -2001,10 +1996,6 @@ export default {
 .xll-swiper-slider{
   height: 100%;
   position: relative;
-  /*background-position: center;*/
-  /*background-repeat: repeat;*/
-  /*background-size:100% auto;*/
-  /*-webkit-animation:scaleDraw 13.5s ease-in-out infinite ;*/
 }
 
 .xll-swiper-1{
@@ -2016,9 +2007,6 @@ export default {
   bottom:0;
   left:0;
   right:0;
-  /*display: flex;*/
-  /*align-items: center;*/
-  /*justify-content: center;*/
   background-color: rgba(0,0,0,0.4);
 }
 
@@ -2027,6 +2015,58 @@ export default {
   .featured-jobs-label {
     font-size: 14px;
   }
+  .xllSwiper{
+    height:240px;
+  }
+  .xll-find-best-row h2{
+    font-size: 14px;
+  }
+  .xll-find-best-row h1{
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 992px){
+  .xllSwiper{
+    height:300px;
+  }
+
+}
+
+@media screen and (min-width: 993px) and (max-width: 1200px){
+  .xllSwiper{
+    height:340px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+
+  .search-container-bg{
+    width: 1100px;
+  }
+  .featured-schools-content-container {
+    width: 1100px;
+  }
+  .featured-deals-row {
+    width: 1100px;
+  }
+
+  .popular-work-row {
+    width: 1100px;
+  }
+  .industry-news-row {
+    width: 1100px;
+  }
+
+  .xll-search-btn-row {
+    width: 1100px;
+  }
+
+  .subscribe-input-row, .subscribe-label-row {
+    width: 1100px;
+    margin: 0 auto;
+  }
+
 }
 
 </style>

@@ -192,7 +192,7 @@ export default {
 
 }
 .footer-row{
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 0 auto;
   padding: 20px 40px;
 }
@@ -350,7 +350,7 @@ export default {
 }
 
 .footer-b {
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 0 auto;
   text-align: left;
   padding: 0px 40px 20px 40px;
@@ -374,5 +374,15 @@ export default {
 }
 .footer-b-l-item-margin {
   margin-left: 20px;
+}
+
+@media screen and (min-width: 1200px) {
+
+  .footer-row{
+    width: 1100px;
+  }
+  .footer-b {
+    width: 1100px;
+  }
 }
 </style>

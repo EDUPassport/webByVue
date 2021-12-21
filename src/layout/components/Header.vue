@@ -2,11 +2,11 @@
   <div>
     <el-header class="header-container" height="auto">
       <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
-        <el-col class="logo-container" :xs="12" :sm="3" :md="3" :lg="2" :xl="2">
+        <el-col class="logo-container" :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
           <el-image class="logo-img" :src="logoImg" fit="fill" @click="turnHome()"></el-image>
         </el-col>
 
-        <el-col :xs="0" :sm="18" :md="16" :lg="17" :xl="17">
+        <el-col :xs="0" :sm="0" :md="0" :lg="17" :xl="17">
           <div class="nav-link-container">
             <router-link to="/home" exact>Home</router-link>
             <router-link to="/jobs" exact>Jobs</router-link>
@@ -26,7 +26,51 @@
           </div>
         </el-col>
 
-        <el-col :xs="12" :sm="3" :md="5" :lg="5" :xl="5">
+        <el-col :xs="4" :sm="4" :md="4" :lg="0" :xl="0">
+          <el-dropdown>
+            <el-button type="primary">
+              Menu<el-icon class="el-icon--right"><arrow-down /></el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item class="nav-link-item">
+                  <router-link  to="/home" exact>Home</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item class="nav-link-item">
+                  <router-link  to="/jobs" exact>Jobs</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item class="nav-link-item">
+                  <router-link  to="/deals" exact> Edu Deals</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item class="nav-link-item">
+                  <router-link  to="/industry/news" exact>News</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item class="nav-link-item" >
+                  <router-link to="/blog/list" exact>Blog</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item class="nav-link-item">
+                  <router-link  to="/contact/us" exact> Contact</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item class="nav-link-item">
+                  <router-link  to="/about/us" exact> About</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item class="nav-link-item">
+                  <template v-if="envName === 'development' || envName === 'production'">
+                    <span v-if="!identity || identity == 1"
+                     @click="turnEnvJobs(envName)">China Jobs</span>
+                  </template>
+                  <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
+                     <span v-if="!identity || identity == 1"
+                     @click="turnEnvJobs(envName)">International Jobs</span>
+                  </template>
+                </el-dropdown-item>
+
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </el-col>
+
+        <el-col :xs="16" :sm="16" :md="18" :lg="5" :xl="5">
           <div class="user-container">
             <template v-if="token && token !='' ">
               <div class="user-container-1">
@@ -493,10 +537,27 @@ export default {
   font-weight: bold;
   padding: 0 10px;
 }
+
 .sign-up-btn{
   background-color: #B1C452;
   color: #FFFFFF;
   font-weight: bold;
   font-size: 14px;
+}
+
+.nav-link-item{
+  cursor: pointer;
+  padding: 10px;
+  color: #000000;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+}
+.nav-link-item a{
+  text-decoration: none;
+  color: #000000;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
 }
 </style>
