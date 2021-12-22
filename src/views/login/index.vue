@@ -508,7 +508,7 @@ export default {
   font-weight: bold;
 }
 .xll-login-row-container{
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 0 auto;
   border-radius: 20px;
   background-color: #DAEBCF;
@@ -530,7 +530,7 @@ export default {
 }
 
 .xll-register-row-container{
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 0 auto;
 }
 .xll-register-container{
@@ -684,4 +684,14 @@ export default {
   height: 100%;
 }
 
+@media screen and (min-width: 1200px){
+  .xll-login-row-container{
+    width: 1100px;
+  }
+
+  .xll-register-row-container{
+    width: 1100px;
+  }
+
+}
 </style>

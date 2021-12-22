@@ -122,7 +122,7 @@ export default {
 }
 
 .news-container{
-  width: 900px;
+  /*width: 900px;*/
   padding: 20px;
   margin: 0 auto;
 }
@@ -191,6 +191,13 @@ export default {
 }
 .news-item-share{
   margin-left: 10px;
+}
+
+@media screen and (min-width: 1000px) {
+  .news-container{
+    width: 900px;
+  }
+
 }
 
 </style>

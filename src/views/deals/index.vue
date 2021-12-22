@@ -309,7 +309,7 @@ export default {
   background-color: #f5f6f7;
 }
 .xll-container{
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 0 auto;
 }
 .sub-cate-container{
@@ -505,6 +505,12 @@ export default {
 
 .deals-pagination{
   margin-top: 20px;
+}
+
+@media screen and (min-width: 1200px){
+  .xll-container{
+    width: 1100px;
+  }
 }
 
 </style>

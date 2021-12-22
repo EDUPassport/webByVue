@@ -554,6 +554,7 @@ export default {
   line-height: 20px;
 }
 .nav-link-item a{
+  display: block;
   text-decoration: none;
   color: #000000;
   font-weight: bold;

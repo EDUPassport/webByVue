@@ -194,7 +194,7 @@
     }
 
     .news-container {
-        width: 900px;
+        /*width: 900px;*/
         padding: 20px;
         margin: 0 auto;
     }
@@ -315,6 +315,11 @@
     .xll-icon {
         font-size: 30px;
     }
+    @media screen and (min-width: 1000px) {
+      .news-container{
+        width: 900px;
+      }
 
+    }
 
 </style>

@@ -1142,7 +1142,7 @@ export default {
 }
 
 .featured-jobs-row {
-  width: 1200px;
+  /*width: 1200px;*/
   margin: 0 auto;
 }
 
@@ -2043,6 +2043,9 @@ export default {
 
   .search-container-bg{
     width: 1100px;
+  }
+  .featured-jobs-row {
+    width: 1200px;
   }
   .featured-schools-content-container {
     width: 1100px;

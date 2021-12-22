@@ -117,7 +117,7 @@ export default {
 }
 
 .about-content-row {
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 40px auto;
   background-color: #FFFFFF;
   height: 500px;
@@ -164,7 +164,7 @@ export default {
 }
 
 .we-do-row{
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 20px auto;
 }
 .we-do-label{
@@ -205,5 +205,15 @@ export default {
 
 .xll-icon{
   font-size: 140px;
+}
+
+@media screen and (min-width: 1200px){
+  .about-content-row {
+    width: 1100px;
+  }
+  .we-do-row{
+    width: 1100px;
+  }
+
 }
 </style>

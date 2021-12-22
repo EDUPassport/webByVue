@@ -1,7 +1,7 @@
 <template>
   <div class="bg" v-loading="showLoadingStatus">
     <el-row class="bg-container" align="top" justify="center" >
-      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+      <el-col :xs="22" :sm="22" :md="8" :lg="8" :xl="8">
         <div class="jobs-filter-container">
           <div class="jobs-filter-label">Find a job</div>
           <div class="jobs-filter-location">
@@ -483,7 +483,7 @@ export default {
 }
 
 .bg-container {
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 0 auto;
   padding-top: 40px;
 }
@@ -679,5 +679,11 @@ export default {
 
 .jobs-list-pagination {
   margin-top: 20px;
+}
+
+@media screen  and (min-width: 1200px){
+  .bg-container{
+    width:1100px;
+  }
 }
 </style>

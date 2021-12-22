@@ -193,7 +193,7 @@ export default {
 }
 
 .map-row{
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 0 auto;
 }
 
@@ -210,7 +210,7 @@ export default {
 }
 
 .contact-form-row{
-  width: 1100px;
+  /*width: 1100px;*/
   margin: 40px auto;
   background-color: #FFFFFF;
   height: 500px;
@@ -269,5 +269,15 @@ export default {
   font-size: 16px;
   color: #FFFFFF;
   margin-top: 40px;
+}
+
+@media screen and (min-width: 1200px){
+  .map-row{
+    width: 1100px;
+  }
+  .contact-form-row{
+    width: 1100px;
+  }
+
 }
 </style>
