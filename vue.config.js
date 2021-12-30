@@ -31,6 +31,9 @@ module.exports = {
             ]
         },
         devServer:{
+            allowedHosts: [
+                'hnnj4q.natappfree.cc'
+            ],
             proxy:{
                 '/hcaptcha':{
                     target:'https://hcaptcha.com',
@@ -41,6 +44,7 @@ module.exports = {
                     }
                 }
             }
+
         }
 
 

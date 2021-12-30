@@ -3,131 +3,162 @@
     <el-backtop/>
     <el-footer height="auto" class="footer-bg">
       <el-row class="footer-row" :gutter="0" align="top" justify="center">
-        <el-col :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
+        <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
           <div class="esl-logo-container">
             <el-image class="esl-logo" :src="imgLogo"></el-image>
           </div>
-          <div class="esl-address">
-            San Antonio, Texas, 78266
-          </div>
-          <div class="esl-email">
-            contact@eslpassport.com
-          </div>
-          <div class="esl-phone">
-            (+1) 131 2275 4880
-          </div>
-          <div class="esl-url">
-            <el-link class="esl-url-link"
-                     href="https://www.eslpassport.com" target="_blank" :underline="false">
-              www.eslpassport.com
-            </el-link>
+          <div class="esl-intro">
+            Platform for today's education needs, people, and businesses.
           </div>
         </el-col>
         <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
-          <div class="popular-searches">
-            Popular Searches
+          <div class="footer-nav-label">
+            Services
           </div>
-          <div class="popular-searches-item">
-            <router-link to="/jobs">ESL Jobs</router-link>
+          <div class="footer-nav-item">
+            <router-link to="/jobs">Free Job Posting</router-link>
           </div>
-          <div class="popular-searches-item">
-            <router-link to="/deals"> Deals</router-link>
+          <div class="footer-nav-item">
+            <router-link to="/deals">Free Deal Posting</router-link>
           </div>
-          <div class="popular-searches-item">
-            <router-link to="#"> Events</router-link>
+          <div class="footer-nav-item">
+            <router-link to="#">Job Featuring</router-link>
           </div>
-          <div class="popular-searches-item">
-            <router-link to="#">  Business Listings</router-link>
+          <div class="footer-nav-item">
+            <router-link to="#">Pricing</router-link>
           </div>
-          <div class="popular-searches-item">
-            <router-link to="#"> Industry News</router-link>
+          <div class="footer-nav-item">
+            <router-link to="#">Wechat Mini Program</router-link>
           </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Start-Up Program</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Women Owned Program</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Equal Opportunity Employers</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">More Services</router-link>
+          </div>
+
         </el-col>
         <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
-          <div class="quick-links">
-            Quick links
+          <div class="footer-nav-label">
+            Consulting
           </div>
-          <div class="terms-of-use">
-            Terms of Use
+          <div class="footer-nav-item">
+            <router-link to="/">Marketing & Branding</router-link>
           </div>
-          <div class="privacy">
-            Privacy Policy
+          <div class="footer-nav-item">
+            <router-link to="/">Tech Solutions</router-link>
           </div>
-          <div class="contact-support">
-            Contact Support
+          <div class="footer-nav-item">
+            <router-link to="#">Food For Education</router-link>
           </div>
-          <div class="careers">
-            Careers
+          <div class="footer-nav-item">
+            <router-link to="#">Schedule a Meeting</router-link>
           </div>
+
         </el-col>
-        <el-col :xs="24" :sm="{span:6,offset:2}" :md="{span:6,offset:2}" :lg="{span:6,offset:2}" :xl="{span:6,offset:2}">
-          <div class="sign-up">
-            Sign Up for Our Newsletter
+        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
+          <div class="footer-nav-label">
+            Company
           </div>
-          <div class="sign-up-tips">
-            Be the first to be notified of new trends and changes and what's hot in the industry
+          <div class="footer-nav-item">
+            <router-link to="/">About Us</router-link>
           </div>
-          <div class="sign-up-form">
-
-            <div class="subscribe-container">
-              <div class="xll-subscribe-container">
-                <div class="xll-subscribe-input-container">
-                  <el-input
-                      v-model="subscribeEmail"
-                      placeholder="Your Email"
-                      class="xll-subscribe-input"
-                  >
-                  </el-input>
-                </div>
-                <div class="xll-subscribe-btn-container">
-                  <el-button class="xll-subscribe-btn" type="primary" @click="subscribe()">Subscribe</el-button>
-                </div>
-              </div>
-            </div>
-
-            <div class="social-media">
-              <div class="social-media-item">
-                <el-link class="social-media-item-link"
-                         href="https://www.eslpassport.com" target="_blank" :underline="false">
-                  <el-image  class="social-media-item-img" :src="twitterImg"></el-image>
-                </el-link>
-
-              </div>
-              <div class="social-media-item">
-                <el-link class="social-media-item-link"
-                         href="https://web.facebook.com/eslpassport/?_rdc=1&_rdr" target="_blank" :underline="false">
-                  <el-image  class="social-media-item-img" :src="facebookImg"></el-image>
-                </el-link>
-              </div>
-              <div class="social-media-item">
-                <el-link class="social-media-item-link"
-                         href="https://www.eslpassport.com" target="_blank" :underline="false">
-                  <el-image  class="social-media-item-img" :src="instagramImg"></el-image>
-                </el-link>
-              </div>
-              <div class="social-media-item">
-                <el-link class="social-media-item-link"
-                         href="https://www.linkedin.com/company/esl-passport/" target="_blank" :underline="false">
-                  <el-image class="social-media-item-img" :src="linkedinImg"></el-image>
-                </el-link>
-              </div>
-            </div>
+          <div class="footer-nav-item">
+            <router-link to="/">Careers</router-link>
           </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Meet The Team</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Media Kit</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Community Support</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Industry News</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Our Blog</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Sitemap</router-link>
+          </div>
+
+        </el-col>
+        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
+          <div class="footer-nav-label">
+            Get Help
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="/">Contact Support</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="/">Contact Sales</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Schedule A Demo</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">ESL Passport Academy</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Intro Webinars</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="/privacy/policy">Privacy</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="/privacy/policy">Terms</router-link>
+          </div>
+          <div class="footer-nav-item">
+            <router-link to="#">Feedback</router-link>
+          </div>
+
         </el-col>
       </el-row>
-      <el-row class="footer-b" :gutter="0" align="middle" justify="center">
+
+      <el-row class="footer-b" :gutter="0" align="middle" justify="space-between">
         <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="9">
-          <div class="footer-b-l">
-            <div class="footer-b-l-item">
-              <router-link to="/">Terms of Use</router-link>
+          <div class="social-media">
+            <div class="social-media-item">
+              <el-link class="social-media-item-link"
+                       href="https://www.eslpassport.com" target="_blank" :underline="false">
+                <el-image  class="social-media-item-img" :src="twitterImg"></el-image>
+              </el-link>
+
             </div>
-            <div class="footer-b-l-item footer-b-l-item-margin">
-              <router-link to="/privacy/policy">Privacy Policy</router-link>
+            <div class="social-media-item">
+              <el-link class="social-media-item-link"
+                       href="https://web.facebook.com/eslpassport/?_rdc=1&_rdr" target="_blank" :underline="false">
+                <el-image  class="social-media-item-img" :src="facebookImg"></el-image>
+              </el-link>
+            </div>
+            <div class="social-media-item">
+              <el-link class="social-media-item-link"
+                       href="https://www.eslpassport.com" target="_blank" :underline="false">
+                <el-image  class="social-media-item-img" :src="instagramImg"></el-image>
+              </el-link>
+            </div>
+            <div class="social-media-item">
+              <el-link class="social-media-item-link"
+                       href="https://www.linkedin.com/company/esl-passport/" target="_blank" :underline="false">
+                <el-image class="social-media-item-img" :src="linkedinImg"></el-image>
+              </el-link>
             </div>
           </div>
+
         </el-col>
         <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="9">
-
+          <div class="footer-b-tips">
+            We are global education change-markers. <span>©2021 ESL Passport</span>
+          </div>
         </el-col>
       </el-row>
     </el-footer>
@@ -186,13 +217,13 @@ export default {
 <style scoped>
 
 .footer-bg {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: #162028;
   color: #ffffff;
   text-align: left;
 
 }
 .footer-row{
-  /*width: 1100px;*/
+  border-bottom: 2px solid #545B61;
   margin: 0 auto;
   padding: 20px 40px;
 }
@@ -201,133 +232,25 @@ export default {
   height: 80px;
 }
 
-.esl-address {
-  line-height: 30px;
-  font-size: 14px;
+.esl-intro{
+  font-size: 16px;
+  font-weight: bold;
 }
 
-.esl-email {
-  line-height: 30px;
-  font-size: 14px;
-}
-
-.esl-phone {
-  line-height: 30px;
-  font-size: 14px;
-}
-
-.esl-url-link {
-  line-height: 30px;
-  font-size: 14px;
-  color: #ffffff;
-}
-
-.popular-searches {
+.footer-nav-label{
   font-weight: bold;
   font-size: 18px;
   line-height: 40px;
 
 }
 
-.popular-searches-item {
+.footer-nav-item {
   line-height: 30px;
   font-size: 14px;
 }
-.popular-searches-item a{
+.footer-nav-item a{
   text-decoration: none;
-  color: #ffffff;
-}
-.esl-deals {
-  line-height: 30px;
-  font-size: 14px;
-}
-.esl-deals a{
-  text-decoration: none;
-  color: #ffffff;
-}
-
-.esl-events {
-  line-height: 30px;
-  font-size: 14px;
-}
-
-.esl-business-list {
-  line-height: 30px;
-  font-size: 14px;
-}
-
-.esl-industry-news {
-  line-height: 30px;
-  font-size: 14px;
-}
-
-.quick-links {
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 40px;
-
-}
-
-.terms-of-use {
-  line-height: 30px;
-  font-size: 14px;
-}
-
-.privacy {
-  line-height: 30px;
-  font-size: 14px;
-}
-
-.contact-support {
-  line-height: 30px;
-  font-size: 14px;
-}
-
-.careers {
-  line-height: 30px;
-  font-size: 14px;
-}
-
-.sign-up {
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 40px;
-}
-
-.sign-up-tips {
-  font-size: 14px;
-  color: #808080;
-}
-
-.sign-up-form {
-
-}
-
-.subscribe-container {
-  margin-top: 20px;
-}
-
-.xll-subscribe-container{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-
-}
-
-.xll-subscribe-input-container {
-  width: 60%;
-}
-.xll-subscribe-input{
-
-}
-.xll-subscribe-btn-container {
-  width: 40%;
-  padding-left: 10px;
-}
-
-.xll-subscribe-btn{
-  font-size: 12px;
+  color: #C8C8CA;
 }
 
 .social-media {
@@ -341,6 +264,7 @@ export default {
 .social-media-item {
   margin: 10px;
 }
+
 .social-media-item-link{
   text-decoration: none;
 }
@@ -355,27 +279,13 @@ export default {
   text-align: left;
   padding: 0px 40px 20px 40px;
 }
-
-.footer-b-l {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.footer-b-l-item {
-
-}
-.footer-b-l-item a{
-  text-decoration: none;
-  line-height: 30px;
+.footer-b-tips{
+  text-align: right;
   font-size: 14px;
-  color: #ffffff;
 }
-.footer-b-l-item-margin {
-  margin-left: 20px;
+.footer-b-tips span{
+  color: #ADAEB1;
 }
-
 @media screen and (min-width: 1200px) {
 
   .footer-row{

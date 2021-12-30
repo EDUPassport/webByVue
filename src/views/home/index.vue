@@ -493,44 +493,26 @@
       </el-row>
     </div>
 
-    <!-- subscribe container   -->
-    <div class="subscribe-container">
-      <div class="subscribe-container-bg">
-        <el-row class="subscribe-label-row" :gutter="0" align="middle" justify="center">
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-            <div class="subscribe-label">
-              Subscribe to newsletter to receive exclusive offers and the latest news
-            </div>
-          </el-col>
-        </el-row>
-
-        <el-row class="subscribe-input-row" :gutter="0" align="middle" justify="center">
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <div class="xll-subscribe-container">
-              <div class="xll-subscribe-input-container">
-                <el-input
-                    v-model="subscribeEmail"
-                    placeholder="Email"
-                    class="xll-subscribe-input"
-                >
-                </el-input>
-              </div>
-              <div class="xll-subscribe-btn-container">
-                <el-button class="xll-subscribe-btn" type="primary" @click="subscribe()">Subscribe</el-button>
-              </div>
-            </div>
-
-          </el-col>
-        </el-row>
+    <div class="get-started-container">
+      <h3>Get started with Education Hub</h3>
+      <div class="get-started-tips">
+        Want to learn what Education Hub can do for you? See for yourself for free
+        we look forward to seeing you succeed!
       </div>
-
+      <div class="get-started-btn-container">
+        <el-button class="get-started-btn" type="primary">Sign Up</el-button>
+      </div>
     </div>
+
+    <!-- subscribe container   -->
+    <SubscribeComponent></SubscribeComponent>
 
   </div>
 </template>
 
 <script>
 // import TeamComponent from '@/layout/components/Team'
+import SubscribeComponent from "../../layout/components/Subscribe";
 import imgLogo from '@/assets/logo.png'
 import teamImgOne from '@/assets/team/1.jpg'
 import teamImgTwo from '@/assets/team/2.jpg'
@@ -541,8 +523,7 @@ import teamImgSix from '@/assets/team/6.jpg'
 
 import {
   JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST, ADS_LIST, APPLY_JOBS,
-  FEATURED_DEALS_LIST, GET_SYSTEM_INFO, ADD_FAVORITE, SIX_LOGO_LIST, JOBS_AREA_LIST,
-  ADD_SUBSCRIBE_EMAIL, CANCEL_FAVORITE
+  FEATURED_DEALS_LIST, GET_SYSTEM_INFO, ADD_FAVORITE, SIX_LOGO_LIST, JOBS_AREA_LIST, CANCEL_FAVORITE
 } from "@/api/api";
 // Import Swiper Vue.js components
 import {Swiper, SwiperSlide} from 'swiper/vue';
@@ -569,7 +550,8 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
-    VTypical
+    VTypical,
+    SubscribeComponent
   },
   data() {
     return {
@@ -596,7 +578,6 @@ export default {
         }
       ],
       searchCategoryValue: 1,
-      subscribeEmail: '',
       searchKeywordsValue: '',
       serviceCategoryValue: '',
       categoryOptions: [
@@ -846,21 +827,7 @@ export default {
       })
 
     },
-    subscribe() {
-      let params = {
-        email: this.subscribeEmail
-      }
-      ADD_SUBSCRIBE_EMAIL(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Subscribe Success')
-          this.subscribeEmail = ''
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
+
     turnJobsList() {
       this.skipJobsList()
     },
@@ -1907,54 +1874,6 @@ export default {
   width: 80px;
 }
 
-.subscribe-container {
-  background-image: url("../../assets/bg/double-bubble-dark.png");
-  background-size: 20%;
-  background-repeat: repeat;
-  background-position: center;
-  height: 300px;
-
-}
-
-.subscribe-container-bg {
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
-.subscribe-input-row, .subscribe-label-row {
-  margin: 0 auto;
-}
-
-.subscribe-label {
-  font-size: 34px;
-  font-weight: bold;
-  color: #ffffff;
-  padding: 40px 20px;
-}
-
-.xll-subscribe-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-
-}
-
-.xll-subscribe-input-container {
-  width: 80%;
-}
-
-.xll-subscribe-input {
-
-}
-
-.xll-subscribe-btn-container {
-  width: 20%;
-}
-
-.xll-subscribe-btn {
-  font-size: 12px;
-}
 
 .xll-slider-row{
 
@@ -2010,6 +1929,26 @@ export default {
   background-color: rgba(0,0,0,0.4);
 }
 
+.get-started-container{
+  border-top: 1px solid #EEEEEE;
+  padding:80px 20px;
+}
+.get-started-container h3{
+  color: #217CA3;
+}
+.get-started-tips{
+  color: #7F7F7F;
+  font-size: 14px;
+}
+.get-started-btn-container{
+  margin-top: 40px;
+}
+.get-started-btn{
+  padding: 0 40px;
+    line-height: 40px;
+  font-size: 18px;
+  font-weight: bold;
+}
 
 @media screen and (max-width: 768px) {
   .featured-jobs-label {
@@ -2065,10 +2004,6 @@ export default {
     width: 1100px;
   }
 
-  .subscribe-input-row, .subscribe-label-row {
-    width: 1100px;
-    margin: 0 auto;
-  }
 
 }
 

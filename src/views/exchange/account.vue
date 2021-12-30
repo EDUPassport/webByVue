@@ -52,7 +52,7 @@ export default {
           }
 
           setTimeout(function () {
-            self.$router.push('/home')
+            self.$router.push('/jobs')
           }, 1500)
 
         }

@@ -65,14 +65,19 @@
                   </el-form-item>
                 </el-form>
 
+<!--                <div class="facebook-btn-container">-->
+<!--                  <el-button @click="linkedinSignIn()" class="apple-btn" plain round icon="iconfont  el-icon-alifacebook">-->
+<!--                    Facebook Sign in-->
+<!--                  </el-button>-->
+<!--                </div>-->
                 <div class="facebook-btn-container">
-                  <el-button class="apple-btn" plain round icon="iconfont  el-icon-alifacebook">
-                    Facebook Sign in
+                  <el-button @click="linkedinSignIn()" class="linkedin-btn" plain round icon="iconfont  el-icon-alilinkedin">
+                    Linkedin Sign in
                   </el-button>
                 </div>
 
                 <div class="google-btn-container">
-                  <el-button class="google-btn" plain round icon="iconfont  el-icon-aligoogle">
+                  <el-button @click="googleSignIn()" class="google-btn" plain round icon="iconfont  el-icon-aligoogle">
                     Google Sign in
                   </el-button>
                 </div>
@@ -157,9 +162,14 @@
                     </el-button>
                   </el-form-item>
                 </el-form>
+<!--                <div class="facebook-btn-container">-->
+<!--                  <el-button class="apple-btn" plain round icon="iconfont  el-icon-alifacebook">-->
+<!--                    Facebook Sign in-->
+<!--                  </el-button>-->
+<!--                </div>-->
                 <div class="facebook-btn-container">
-                  <el-button class="apple-btn" plain round icon="iconfont  el-icon-alifacebook">
-                    Facebook Sign in
+                  <el-button @click="linkedinSignIn()" class="linkedin-btn" plain round icon="iconfont  el-icon-alilinkedin">
+                    Linkedin Sign in
                   </el-button>
                 </div>
                 <div class="google-btn-container">
@@ -196,11 +206,13 @@
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
 import imgLogo from '@/assets/logo.png'
 import {EMAIL_LOGIN, EMAIL_REGISTER} from "@/api/api";
-
+//LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
 import axios from "axios";
 import {SEND_EMAIL_CODE} from "@/api/api";
 import shanghaiImg  from '@/assets/bg/bg-shanghai.jpg'
+import {randomString} from '@/utils/index'
+
 
 export default {
   name: "index",
@@ -289,6 +301,16 @@ export default {
   created() {
     this.showValue = this.showType
     console.log(this.showValue)
+    let linkedinCode = this.$route.query.code;
+    console.log(linkedinCode)
+    // if(linkedinCode){
+    //   let params = {
+    //     code:linkedinCode
+    //   }
+    //   LINKEDIN_CODE(params).then(res=>{
+    //     console.log(res)
+    //   })
+    // }
   },
   methods: {
     goHome(){
@@ -457,8 +479,59 @@ export default {
     },
     switchLoginRegister(value){
       this.showValue = value
-    }
-  }
+    },
+    async googleSignIn(){
+      try {
+        const googleUser = await this.$gAuth.signIn();
+        if (!googleUser) {
+          return null;
+        }
+        console.log("googleUser", googleUser);
+        this.user = googleUser.getBasicProfile().getEmail();
+        console.log("getId", this.user);
+        console.log("getBasicProfile", googleUser.getBasicProfile());
+        console.log("getAuthResponse", googleUser.getAuthResponse());
+        console.log(
+            "getAuthResponse",
+            this.$gAuth.instance.currentUser.get().getAuthResponse()
+        );
+
+      } catch (error) {
+        //on fail do something
+        console.error(error);
+        return null;
+      }
+    },
+    async handleClickGetAuthCode(){
+      // console.log('google sign in')
+      // const googleUser =  this.$gAuth.signIn();
+      // console.log(googleUser)
+
+      try {
+        const authCode = await this.$gAuth.getAuthCode();
+        console.log("authCode", authCode);
+      } catch(error) {
+        //on fail do something
+        console.error(error);
+        return null;
+      }
+    },
+    linkedinSignIn(){
+        let client_id = '86ox4wvc281nwt'
+      let response_type = 'code'
+      let redirect_uri = 'http://hnnj4q.natappfree.cc/login'
+      let state = randomString()
+      let scope = 'r_liteprofile%20r_emailaddress%20w_member_social'
+
+      let authUrl = 'https://www.linkedin.com/oauth/v2/authorization?response_type='+ response_type +'&client_id='+client_id
+          +'&redirect_uri='+redirect_uri+'&state='+state+'&scope='+scope
+      window.location.href = authUrl
+
+    },
+
+
+
+}
 
 }
 
@@ -596,6 +669,12 @@ export default {
 }
 
 .apple-btn {
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 26px;
+}
+.linkedin-btn{
   width: 100%;
   font-size: 16px;
   font-weight: bold;

@@ -160,4 +160,6 @@ export const BLOG_CATEGORY_LIST = (params) => get('home/blogCategoryList', param
 
 export const CONTACT_US = (params) => post('contact/contactUs', params)
 
-export const INTERNATIONAL_REGISTER = (params)=>get('international/register',params)
+export const INTERNATIONAL_REGISTER = (params) => get('international/register', params)
+
+export const LINKEDIN_CODE = (params) => get('home/linkedin', params)
