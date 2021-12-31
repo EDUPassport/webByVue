@@ -517,10 +517,12 @@ export default {
       }
     },
     linkedinSignIn(){
-        let client_id = '86ox4wvc281nwt'
+      let client_id = '86ox4wvc281nwt'
       let response_type = 'code'
-      let redirect_uri = 'http://hnnj4q.natappfree.cc/login'
+      let redirect_uri = 'http://hqkrgk.natappfree.cc/login/linkedin'
+      // let redirect_uri = 'https://dev.esl-passport.cn/login/linkedin'
       let state = randomString()
+
       let scope = 'r_liteprofile%20r_emailaddress%20w_member_social'
 
       let authUrl = 'https://www.linkedin.com/oauth/v2/authorization?response_type='+ response_type +'&client_id='+client_id

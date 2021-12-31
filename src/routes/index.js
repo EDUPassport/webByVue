@@ -314,10 +314,18 @@ const routes = [
     {
         path: '/login',
         name: 'login',
-        component: () => import('@/views/login/index.vue'),
+        component: () => import('@/views/login/index'),
         meta: {
             title: 'Login'
         },
+    },
+    {
+        path: '/login/linkedin',
+        name: 'linkedinLogin',
+        component: () => import('@/views/login/linkedin'),
+        meta: {
+            title: 'Linkedin Login'
+        }
     },
 
     {
