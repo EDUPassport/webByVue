@@ -7,12 +7,12 @@
             :pagination='{"clickable": true,"dynamicBullets": true}'
             :autoplay='{"delay": 13500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
             class="xllSwiper">
-<!--          :style="'background-image:url('+item.url+')'"  class="xll-swiper-slider"-->
+          <!--          :style="'background-image:url('+item.url+')'"  class="xll-swiper-slider"-->
           <swiper-slide v-for="(item,index) in xllSliderData" :key="index" class="xll-swiper-slider">
             <div class="xll-swiper-image-container">
               <el-image class="xll-swiper-image" :src="item.url" fit="cover"></el-image>
             </div>
-            <div class="xll-swiper-1" ></div>
+            <div class="xll-swiper-1"></div>
           </swiper-slide>
         </swiper>
 
@@ -82,9 +82,9 @@
 
       <el-row class="featured-jobs-row" :gutter="0" justify="center" align="middle">
 
-        <el-col :xs="0" :sm="24" :md="24" :lg="24" :xl="24">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="featured-jobs-slider">
-            <swiper :slidesPerView="4" :spaceBetween="10"
+            <swiper :slidesPerView="featuredJobSliderNum" :spaceBetween="10"
                     :pagination='{"clickable": true}'
                     :autoplay='{"delay": 2500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
                     :navigation="false"
@@ -300,7 +300,7 @@
 
       <el-row class="featured-deals-row" :gutter="0" justify="center" align="middle">
 
-        <el-col :xs="0" :sm="24" :md="24" :lg="24" :xl="24">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="hot-deals-container">
             <div class="hot-deals-item" v-for="(item,index) in featuredDealsList" :key="index">
 
@@ -424,7 +424,8 @@
           <!--            <el-button type="primary">Read More ></el-button>-->
           <!--          </div>-->
         </el-col>
-        <el-col :xs="{span:7,offset:1}" :sm="{span:7,offset:1}" :md="{span:7,offset:1}" :lg="{span:7,offset:1}" :xl="{span:7,offset:1}"
+        <el-col :xs="{span:7,offset:1}" :sm="{span:7,offset:1}" :md="{span:7,offset:1}" :lg="{span:7,offset:1}"
+                :xl="{span:7,offset:1}"
                 v-for="(item,index) in articleListLimitData" :key="index"
         >
           <div class="industry-item" v-if="index<2">
@@ -500,7 +501,7 @@
         we look forward to seeing you succeed!
       </div>
       <div class="get-started-btn-container">
-        <el-button class="get-started-btn" type="primary">Sign Up</el-button>
+        <el-button class="get-started-btn" type="primary" @click="signUp()">Sign Up</el-button>
       </div>
     </div>
 
@@ -563,18 +564,19 @@ export default {
       teamImgSix,
 
       imgLogo,
-      xllSliderData:[
+      featuredJobSliderNum: 4,
+      xllSliderData: [
         {
-          name:'beijing',
-          url:bgBeijingImg
+          name: 'beijing',
+          url: bgBeijingImg
         },
         {
-          name:'nanjing',
-          url:bgNanjingImg
+          name: 'nanjing',
+          url: bgNanjingImg
         },
         {
           name: 'shanghai',
-          url:bgShanghaiImg
+          url: bgShanghaiImg
         }
       ],
       searchCategoryValue: 1,
@@ -647,7 +649,41 @@ export default {
 
   },
   mounted() {
+    let screenWidth = document.body.clientWidth
 
+    if (Math.floor(screenWidth) < 768) {
+      this.featuredJobSliderNum = 2
+    }
+    if (Math.floor(screenWidth) >= 768 && Math.floor(screenWidth) < 992) {
+      this.featuredJobSliderNum = 2
+    }
+    if (Math.floor(screenWidth) >= 992 && Math.floor(screenWidth) < 1200) {
+      this.featuredJobSliderNum = 3
+    }
+    if (Math.floor(screenWidth) >= 1200) {
+      this.featuredJobSliderNum = 4
+    }
+
+    window.onresize = () => {
+      let screenWidth2 = document.body.clientWidth
+      if (Math.floor(screenWidth2) < 768) {
+        this.featuredJobSliderNum = 2
+      }
+      if (Math.floor(screenWidth2) >= 768 && Math.floor(screenWidth2) < 992) {
+        this.featuredJobSliderNum = 2
+      }
+      if (Math.floor(screenWidth2) >= 992 && Math.floor(screenWidth2) < 1200) {
+        this.featuredJobSliderNum = 3
+      }
+      if (Math.floor(screenWidth2) >= 1200) {
+        this.featuredJobSliderNum = 4
+      }
+
+      // console.log(document.body.clientWidth)
+    }
+  },
+  unmounted() {
+    window.onresize = null
   },
   methods: {
 
@@ -662,7 +698,7 @@ export default {
             this.popularWorkShowStatus = false
           }
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -674,7 +710,7 @@ export default {
         if (res.code == 200) {
           this.featuredDealsLogoData = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -695,7 +731,7 @@ export default {
           let imgData = res.message.data;
           this.featuredDealsLogoData = imgData.filter(item => item.sys_key == '16')
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -716,7 +752,7 @@ export default {
           }
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -735,7 +771,7 @@ export default {
         } else {
           console.log(res.msg)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -749,7 +785,7 @@ export default {
       BUSINESS_LIST(params).then(res => {
         console.log(res)
         this.businessListData = res.message.data;
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -764,7 +800,7 @@ export default {
         if (res.code == 200) {
           this.dealsListData = res.message.data;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -780,7 +816,7 @@ export default {
             this.dealFeaturedShowStatus = false
           }
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -821,7 +857,7 @@ export default {
 
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -847,7 +883,7 @@ export default {
           if (res.code == 200) {
             this.$message.success('Apply Success')
           }
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err)
           this.$message.error(err.msg)
         })
@@ -872,7 +908,7 @@ export default {
           this.$message.success('Success')
           this.jobFeaturedListData[index]['is_favorite'] = 1
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -889,7 +925,7 @@ export default {
         if (res.code == 200) {
           this.jobFeaturedListData[index]['is_favorite'] = 0
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -908,7 +944,7 @@ export default {
           this.$message.success('Success')
           this.featuredDealsList[index]['is_favorite'] = 1
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -925,7 +961,7 @@ export default {
         if (res.code == 200) {
           this.featuredDealsList[index]['is_favorite'] = 0
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -933,6 +969,9 @@ export default {
 
     searchNow() {
       this.$router.push({path: '/search/result', query: {keyword: this.searchKeywordsValue}})
+    },
+    signUp() {
+      this.$router.push({path: '/login', query: {type: 2}})
     }
 
   }
@@ -1151,7 +1190,7 @@ export default {
   /*filter: blur(1px);*/
   /*transform: scale(1);*/
   background-position: center;
-  background-size:  auto;
+  background-size: auto;
   background-repeat: repeat;
 }
 
@@ -1695,6 +1734,7 @@ export default {
 .popular-work-card:nth-child(2) {
   background-image: url("../../assets/popular/shanghai.jpg");
 }
+
 .popular-work-card:nth-child(3) {
   background-image: url("../../assets/popular/nanjing.jpg");
 }
@@ -1875,77 +1915,83 @@ export default {
 }
 
 
-.xll-slider-row{
+.xll-slider-row {
 
 }
 
-.xll-slider-col{
+.xll-slider-col {
   position: relative;
 }
 
-.xllSwiper{
+.xllSwiper {
   width: 100%;
-  height:600px;
+  height: 600px;
 }
 
-.xll-swiper-image-container{
-  width:100%;
+.xll-swiper-image-container {
+  width: 100%;
   overflow: hidden;
 }
-.xll-swiper-image{
-  width:100%;
-  -webkit-animation:scaleDraw 13.5s ease-in-out infinite ;
+
+.xll-swiper-image {
+  width: 100%;
+  -webkit-animation: scaleDraw 13.5s ease-in-out infinite;
 
 }
+
 @keyframes scaleDraw {
-  0%{
+  0% {
     transform: scale(1);
   }
-  25%{
+  25% {
     transform: scale(1.01);
   }
-  50%{
+  50% {
     transform: scale(1.05);
   }
-  75%{
+  75% {
     transform: scale(1.06);
   }
 }
 
-.xll-swiper-slider{
+.xll-swiper-slider {
   height: 100%;
   position: relative;
 }
 
-.xll-swiper-1{
+.xll-swiper-1 {
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index:1;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  background-color: rgba(0,0,0,0.4);
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-.get-started-container{
+.get-started-container {
   border-top: 1px solid #EEEEEE;
-  padding:80px 20px;
+  padding: 80px 20px;
 }
-.get-started-container h3{
+
+.get-started-container h3 {
   color: #217CA3;
 }
-.get-started-tips{
+
+.get-started-tips {
   color: #7F7F7F;
   font-size: 14px;
 }
-.get-started-btn-container{
+
+.get-started-btn-container {
   margin-top: 40px;
 }
-.get-started-btn{
+
+.get-started-btn {
   padding: 0 40px;
-    line-height: 40px;
+  line-height: 40px;
   font-size: 18px;
   font-weight: bold;
 }
@@ -1954,41 +2000,59 @@ export default {
   .featured-jobs-label {
     font-size: 14px;
   }
-  .xllSwiper{
-    height:240px;
+
+  .xllSwiper {
+    height: 240px;
   }
-  .xll-find-best-row h2{
+
+  .xll-find-best-row h2 {
     font-size: 14px;
   }
-  .xll-find-best-row h1{
+
+  .xll-find-best-row h1 {
     font-size: 16px;
   }
+  .hot-deals-item {
+    width: 48%;
+  }
+  .hot-deals-item-more{
+    width: 48%;
+  }
 }
 
-@media screen and (min-width: 769px) and (max-width: 992px){
-  .xllSwiper{
-    height:300px;
+@media screen and (min-width: 769px) and (max-width: 992px) {
+  .xllSwiper {
+    height: 300px;
+  }
+  .hot-deals-item {
+    width: 48%;
+  }
+  .hot-deals-item-more{
+    width: 48%;
   }
 
 }
 
-@media screen and (min-width: 993px) and (max-width: 1200px){
-  .xllSwiper{
-    height:340px;
+@media screen and (min-width: 993px) and (max-width: 1200px) {
+  .xllSwiper {
+    height: 340px;
   }
 }
 
 @media screen and (min-width: 1200px) {
 
-  .search-container-bg{
+  .search-container-bg {
     width: 1100px;
   }
+
   .featured-jobs-row {
     width: 1200px;
   }
+
   .featured-schools-content-container {
     width: 1100px;
   }
+
   .featured-deals-row {
     width: 1100px;
   }
@@ -1996,6 +2060,7 @@ export default {
   .popular-work-row {
     width: 1100px;
   }
+
   .industry-news-row {
     width: 1100px;
   }

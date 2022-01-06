@@ -34,40 +34,34 @@
     <el-row class="we-do-row" :gutter="0" align="middle" justify="center">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <div class="we-do-label">
-          What <span>We Do?</span>
+          What <span>we do?</span>
         </div>
         <div class="we-do-content">
           <div class="we-do-item">
             <div class="we-do-icon-container">
               <i class="iconfont el-icon-aliconnection xll-icon"></i>
             </div>
-            <div class="we-do-item-label">Connection</div>
+            <div class="we-do-item-label">CONNECTION</div>
             <div class="we-do-item-tips">
-              Connection Connection Connection Connection Connection Connection
-              Connection Connection Connection Connection Connection Connection Connection Connection Connection
-              Connection Connection Connection Connection Connection
+              An education hub connecting professionals to education institutions
             </div>
           </div>
           <div class="we-do-item">
             <div class="we-do-icon-container">
               <i class="iconfont el-icon-aliabout-list xll-icon"></i>
             </div>
-            <div class="we-do-item-label">Listings</div>
+            <div class="we-do-item-label">LISTINGS</div>
             <div class="we-do-item-tips">
-              Connection Connection Connection Connection Connection Connection
-              Connection Connection Connection Connection Connection Connection Connection Connection Connection
-              Connection Connection Connection Connection Connection
+              An organized registery of professional opportunities worldwide
             </div>
           </div>
           <div class="we-do-item">
             <div class="we-do-icon-container">
               <i class="iconfont el-icon-alieducation xll-icon"></i>
             </div>
-            <div class="we-do-item-label">Education</div>
+            <div class="we-do-item-label">EDUCATION</div>
             <div class="we-do-item-tips">
-              Connection Connection Connection Connection Connection Connection
-              Connection Connection Connection Connection Connection Connection Connection Connection Connection
-              Connection Connection Connection Connection Connection
+              Promoting education every step of the way; and we do it well
             </div>
           </div>
         </div>

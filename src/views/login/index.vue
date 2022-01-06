@@ -517,17 +517,15 @@ export default {
       }
     },
     linkedinSignIn(){
-      let client_id = '86ox4wvc281nwt'
-      let response_type = 'code'
-      let redirect_uri = 'http://hqkrgk.natappfree.cc/login/linkedin'
+      let client_id = process.env.VUE_APP_LINKEDIN_CLIENT_ID
+      let response_type = process.env.VUE_APP_LINKEDIN_RESPONSE_TYPE
+      let redirect_uri = process.env.VUE_APP_LINKEDIN_REDIRECT_URI
       // let redirect_uri = 'https://dev.esl-passport.cn/login/linkedin'
       let state = randomString()
+      let scope = process.env.VUE_APP_LINKEDIN_SCOPE
 
-      let scope = 'r_liteprofile%20r_emailaddress%20w_member_social'
-
-      let authUrl = 'https://www.linkedin.com/oauth/v2/authorization?response_type='+ response_type +'&client_id='+client_id
+      window.location.href = 'https://www.linkedin.com/oauth/v2/authorization?response_type='+ response_type +'&client_id='+client_id
           +'&redirect_uri='+redirect_uri+'&state='+state+'&scope='+scope
-      window.location.href = authUrl
 
     },
 

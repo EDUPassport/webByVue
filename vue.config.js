@@ -32,7 +32,7 @@ module.exports = {
         },
         devServer:{
             allowedHosts: [
-                'hqkrgk.natappfree.cc'
+                'g6y74n.natappfree.cc'
             ],
             proxy:{
                 '/hcaptcha':{

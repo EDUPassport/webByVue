@@ -327,6 +327,14 @@ const routes = [
             title: 'Linkedin Login'
         }
     },
+    {
+        path: '/login/google',
+        name: 'googleLogin',
+        component: () => import('@/views/login/google'),
+        meta: {
+            title: 'Google Login'
+        }
+    },
 
     {
         path: '/noFound',

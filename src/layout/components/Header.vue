@@ -26,50 +26,6 @@
           </div>
         </el-col>
 
-        <el-col :xs="4" :sm="4" :md="4" :lg="0" :xl="0">
-          <el-dropdown>
-            <el-button type="primary">
-              Menu<el-icon class="el-icon--right"><arrow-down /></el-icon>
-            </el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item class="nav-link-item">
-                  <router-link  to="/home" exact>Home</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item class="nav-link-item">
-                  <router-link  to="/jobs" exact>Jobs</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item class="nav-link-item">
-                  <router-link  to="/deals" exact> Edu Deals</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item class="nav-link-item">
-                  <router-link  to="/industry/news" exact>News</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item class="nav-link-item" >
-                  <router-link to="/blog/list" exact>Blog</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item class="nav-link-item">
-                  <router-link  to="/contact/us" exact> Contact</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item class="nav-link-item">
-                  <router-link  to="/about/us" exact> About</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item class="nav-link-item">
-                  <template v-if="envName === 'development' || envName === 'production'">
-                    <span v-if="!identity || identity == 1"
-                     @click="turnEnvJobs(envName)">China Jobs</span>
-                  </template>
-                  <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
-                     <span v-if="!identity || identity == 1"
-                     @click="turnEnvJobs(envName)">International Jobs</span>
-                  </template>
-                </el-dropdown-item>
-
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </el-col>
-
         <el-col :xs="16" :sm="16" :md="18" :lg="5" :xl="5">
           <div class="user-container">
             <template v-if="token && token !='' ">
@@ -118,6 +74,59 @@
               <el-button class="sign-up-btn" type="default" @click="signUp()">Sign Up</el-button>
             </template>
           </div>
+        </el-col>
+
+        <el-col :xs="4" :sm="4" :md="4" :lg="0" :xl="0">
+          <div @click="menuDrawerStatus = true">
+            <el-icon :size="40">
+              <Menu />
+            </el-icon>
+          </div>
+          <el-drawer
+            v-model="menuDrawerStatus"
+            direction="rtl"
+            size="60%"
+
+          >
+            <div class="nav-link-item">
+              <router-link to="/home" exact>Home</router-link>
+            </div>
+            <div class="nav-link-item">
+              <router-link to="/jobs" exact>Jobs</router-link>
+            </div>
+            <div class="nav-link-item">
+              <router-link to="/deals" exact> Edu Deals</router-link>
+            </div>
+            <div class="nav-link-item">
+              <router-link to="/industry/news" exact>News</router-link>
+            </div>
+            <div class="nav-link-item">
+              <router-link to="/blog/list" exact>Blog</router-link>
+            </div>
+            <div class="nav-link-item">
+              <router-link to="/contact/us" exact> Contact</router-link>
+            </div>
+            <div class="nav-link-item">
+              <router-link to="/about/us" exact> About</router-link>
+            </div>
+            <div class="nav-link-item">
+              <template v-if="envName === 'development' || envName === 'production'">
+                            <span v-if="!identity || identity == 1"
+                                  @click="turnEnvJobs(envName)">China Jobs</span>
+              </template>
+              <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
+                             <span v-if="!identity || identity == 1"
+                                   @click="turnEnvJobs(envName)">International Jobs</span>
+              </template>
+            </div>
+            <div class="nav-link-item">
+              <router-link  :to="{path:'/login',query:{type:1}}">Login</router-link>
+            </div>
+            <div class="nav-link-item">
+              <router-link  :to="{path: '/login', query: {type: 2}}">Sign Up</router-link>
+            </div>
+
+          </el-drawer>
         </el-col>
 
       </el-row>
@@ -171,6 +180,7 @@ export default {
       logoImg,
       discountCardImg,
       defaultAvatar,
+      menuDrawerStatus:false,
       dialogSwitchAccountVisible: false,
       token: '',
       dialogDiscountCardVisible: false,
@@ -207,42 +217,42 @@ export default {
 
   },
   methods: {
-    signUp(){
-      this.$router.push({path:'/login',query:{type:2}})
+    signUp() {
+      this.$router.push({path: '/login', query: {type: 2}})
     },
-    turnEnvJobs(envName){
+    turnEnvJobs(envName) {
 
       let token = localStorage.getItem('token')
 
 
       let domain = ''
 
-      if(envName === 'developmentCN'){
+      if (envName === 'developmentCN') {
         domain = 'https://dev.eslpassport.com'
       }
-      if(envName === 'development'){
+      if (envName === 'development') {
         domain = 'https://dev.esl-passport.cn'
         // domain = 'http://localhost:8080'
       }
-      if(envName === 'productionCN'){
+      if (envName === 'productionCN') {
         domain = 'https://www.eslpassport.com'
       }
 
-      if(envName === 'production'){
+      if (envName === 'production') {
         domain = 'https://www.esl-passport.cn'
       }
 
-      if(token ){
+      if (token) {
         let firstName = localStorage.getItem('first_name')
         let lastName = localStorage.getItem('last_name')
         let email = localStorage.getItem('email')
         let uid = localStorage.getItem('uid')
-        let navUrl = domain + '/exchange/account?uid='+uid + '&email='+email +'&first_name='+firstName
-        +'&last_name='+lastName
+        let navUrl = domain + '/exchange/account?uid=' + uid + '&email=' + email + '&first_name=' + firstName
+            + '&last_name=' + lastName
         console.log(navUrl)
-        window.open(navUrl,'_blank')
-      }else {
-        window.open(domain,'_blank')
+        window.open(navUrl, '_blank')
+      } else {
+        window.open(domain, '_blank')
       }
 
     },
@@ -290,15 +300,15 @@ export default {
 
           localStorage.setItem('name', firstName + ' ' + lastName)
           localStorage.setItem('avatar', avatar)
-          localStorage.setItem('first_name',firstName)
-          localStorage.setItem('last_name',lastName)
+          localStorage.setItem('first_name', firstName)
+          localStorage.setItem('last_name', lastName)
 
           this.$store.commit('username', firstName + ' ' + lastName)
           this.$store.commit('userAvatar', avatar)
           this.$store.commit('identity', identity)
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -362,7 +372,7 @@ export default {
           }
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -383,7 +393,7 @@ export default {
             path: '/overview', query: {identity: identity}
           })
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -434,7 +444,7 @@ export default {
   color: #00b3d2;
 }
 
-.nav-china-jobs{
+.nav-china-jobs {
   margin-left: 20px;
   color: #000000;
   font-weight: bold;
@@ -443,7 +453,7 @@ export default {
   cursor: pointer;
 }
 
-.nav-china-jobs:hover{
+.nav-china-jobs:hover {
   color: #00b3d2;
 }
 
@@ -530,35 +540,49 @@ export default {
   margin: 0 auto;
 }
 
-.login-btn{
+.login-btn {
   font-size: 14px;
   text-decoration: none;
   color: #00b3d2;
   font-weight: bold;
   padding: 0 10px;
+  display: none;
 }
 
-.sign-up-btn{
+.sign-up-btn {
   background-color: #B1C452;
   color: #FFFFFF;
   font-weight: bold;
   font-size: 14px;
+  display: none;
 }
 
-.nav-link-item{
+.nav-link-item {
   cursor: pointer;
   padding: 10px;
   color: #000000;
   font-weight: bold;
   font-size: 16px;
   line-height: 20px;
+  border-bottom: 1px solid #EEEEEE;
 }
-.nav-link-item a{
+
+.nav-link-item a {
   display: block;
   text-decoration: none;
   color: #000000;
   font-weight: bold;
   font-size: 16px;
   line-height: 20px;
+}
+
+@media screen and  (min-width: 1200px){
+  .login-btn {
+    display: inline;
+  }
+
+  .sign-up-btn {
+    display: inline;
+  }
 }
 </style>
