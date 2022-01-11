@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ChatComponent></ChatComponent>
     <el-backtop/>
     <el-footer height="auto" class="footer-bg">
       <el-row class="footer-row" :gutter="0" align="top" justify="center">
@@ -172,6 +173,9 @@ import linkedinImg from '@/assets/footer/linkedin.png'
 import facebookImg from '@/assets/footer/facebook.png'
 import instagramImg from '@/assets/footer/instagram-fill.png'
 import {ADD_SUBSCRIBE_EMAIL} from '@/api/api'
+import ChatComponent from '@/components/chat/chat'
+
+
 export default {
   name: "Footer",
   data() {
@@ -182,6 +186,7 @@ export default {
       facebookImg,
       instagramImg,
       subscribeEmail: '',
+
       ruleForm: {
         email: ''
       },
@@ -190,9 +195,13 @@ export default {
           {required: true, message: 'Please fill out your email address.', trigger: 'blur'}
         ]
       },
-      submitLoadingStatus: false
+      submitLoadingStatus: false,
+
 
     }
+  },
+  components:{
+    ChatComponent
   },
   methods:{
     subscribe(){
@@ -209,7 +218,8 @@ export default {
         console.log(err)
         this.$message.error(err.msg)
       })
-    }
+    },
+
   }
 }
 </script>
@@ -295,4 +305,6 @@ export default {
     width: 1100px;
   }
 }
+
+
 </style>

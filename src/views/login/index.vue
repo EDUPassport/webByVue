@@ -23,11 +23,13 @@
                 <div class="login-label"
                      :class="showValue==1 ? 'login-tab-active' : ''"
                      @click="switchLoginRegister(1)"
-                >Login</div>
+                >Login
+                </div>
                 <div class="register-label"
                      :class="showValue==2 ? 'login-tab-active' : ''"
                      @click="switchLoginRegister(2)"
-                >Register</div>
+                >Register
+                </div>
               </div>
               <div class="xll-login-form-container">
                 <el-form
@@ -65,13 +67,14 @@
                   </el-form-item>
                 </el-form>
 
-<!--                <div class="facebook-btn-container">-->
-<!--                  <el-button @click="linkedinSignIn()" class="apple-btn" plain round icon="iconfont  el-icon-alifacebook">-->
-<!--                    Facebook Sign in-->
-<!--                  </el-button>-->
-<!--                </div>-->
+                <!--                <div class="facebook-btn-container">-->
+                <!--                  <el-button @click="linkedinSignIn()" class="apple-btn" plain round icon="iconfont  el-icon-alifacebook">-->
+                <!--                    Facebook Sign in-->
+                <!--                  </el-button>-->
+                <!--                </div>-->
                 <div class="facebook-btn-container">
-                  <el-button @click="linkedinSignIn()" class="linkedin-btn" plain round icon="iconfont  el-icon-alilinkedin">
+                  <el-button @click="linkedinSignIn()" class="linkedin-btn" plain round
+                             icon="iconfont  el-icon-alilinkedin">
                     Linkedin Sign in
                   </el-button>
                 </div>
@@ -86,7 +89,7 @@
           </el-col>
           <el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">
             <div class="xll-ads-container">
-<!--              <el-image :src="shanghaiImg" class="ads-image" ></el-image>-->
+              <!--              <el-image :src="shanghaiImg" class="ads-image" ></el-image>-->
             </div>
           </el-col>
         </el-row>
@@ -98,13 +101,15 @@
                 <div class="login-label"
                      :class="showValue==1 ? 'login-tab-active' : ''"
                      @click="switchLoginRegister(1)"
-                >Login</div>
+                >Login
+                </div>
                 <div class="register-label"
                      :class="showValue==2 ? 'login-tab-active' : ''"
                      @click="switchLoginRegister(2)"
-                >Register</div>
+                >Register
+                </div>
               </div>
-              <div class="xll-register-form-container" >
+              <div class="xll-register-form-container">
                 <el-form
                     :model="registerForm"
                     :rules="registerRules"
@@ -123,7 +128,8 @@
                     <el-input size="medium" placeholder="name@domain.com"
                               v-model="registerForm.email">
                       <template #append>
-                        <el-button class="send-code-btn"  :loading="sendCodeLoading" @click="sendEmailCode">Send Code</el-button>
+                        <el-button class="send-code-btn" :loading="sendCodeLoading" @click="sendEmailCode">Send Code
+                        </el-button>
                       </template>
                     </el-input>
                   </el-form-item>
@@ -132,7 +138,8 @@
                               v-model="registerForm.code"></el-input>
                   </el-form-item>
                   <el-form-item label="Password" prop="password" required>
-                    <el-input size="medium" type="password" placeholder="Password" v-model="registerForm.password"></el-input>
+                    <el-input size="medium" type="password" placeholder="Password"
+                              v-model="registerForm.password"></el-input>
                   </el-form-item>
                   <el-form-item label="Confirm Password" prop="c_password" required>
                     <el-input size="medium" type="password" placeholder="Confirm"
@@ -143,13 +150,16 @@
                     <div class="identity-content">
                       <div class="identity-btn"
                            :class="identityValue == 1 ? 'identity-educator-active' : '' "
-                           @click="selectedIdentity(1)">Educator</div>
+                           @click="selectedIdentity(1)">Educator
+                      </div>
                       <div class="identity-btn identity-btn-margin"
                            :class="identityValue == 2 ? 'identity-business-active' : '' "
-                           @click="selectedIdentity(2)">Business</div>
+                           @click="selectedIdentity(2)">Business
+                      </div>
                       <div class="identity-btn identity-btn-margin"
                            :class="identityValue == 3 ? 'identity-vendor-active' : '' "
-                           @click="selectedIdentity(3)">Vendor</div>
+                           @click="selectedIdentity(3)">Vendor
+                      </div>
                     </div>
                   </div>
                   <el-form-item>
@@ -162,13 +172,14 @@
                     </el-button>
                   </el-form-item>
                 </el-form>
-<!--                <div class="facebook-btn-container">-->
-<!--                  <el-button class="apple-btn" plain round icon="iconfont  el-icon-alifacebook">-->
-<!--                    Facebook Sign in-->
-<!--                  </el-button>-->
-<!--                </div>-->
+                <!--                <div class="facebook-btn-container">-->
+                <!--                  <el-button class="apple-btn" plain round icon="iconfont  el-icon-alifacebook">-->
+                <!--                    Facebook Sign in-->
+                <!--                  </el-button>-->
+                <!--                </div>-->
                 <div class="facebook-btn-container">
-                  <el-button @click="linkedinSignIn()" class="linkedin-btn" plain round icon="iconfont  el-icon-alilinkedin">
+                  <el-button @click="linkedinSignIn()" class="linkedin-btn" plain round
+                             icon="iconfont  el-icon-alilinkedin">
                     Linkedin Sign in
                   </el-button>
                 </div>
@@ -210,9 +221,9 @@ import {EMAIL_LOGIN, EMAIL_REGISTER} from "@/api/api";
 import {useRoute, useRouter} from "vue-router";
 import axios from "axios";
 import {SEND_EMAIL_CODE} from "@/api/api";
-import shanghaiImg  from '@/assets/bg/bg-shanghai.jpg'
+import shanghaiImg from '@/assets/bg/bg-shanghai.jpg'
 import {randomString} from '@/utils/index'
-
+import {useStore} from 'vuex'
 
 export default {
   name: "index",
@@ -232,7 +243,7 @@ export default {
         ]
       },
       submitLoginLoadingStatus: false,
-      submitRegisterLoadingStatus:false,
+      submitRegisterLoadingStatus: false,
       humanVerifyStatus: true,
       remeberValue: false,
       registerForm: {
@@ -264,14 +275,12 @@ export default {
         ]
       },
       identityValue: 0,
-      sendCodeLoading:false,
-      showValue:1
+      sendCodeLoading: false,
+      showValue: 1
 
     }
   },
-  components: {
-
-  },
+  components: {},
   setup() {
     //hcaptcha,
     let router = useRouter()
@@ -292,10 +301,15 @@ export default {
     let value = route.query.type;
     const showType = value ? value : 1
 
+    const store = useStore()
+    const setCurrentUser = (data) => store.commit('currentUser', data)
+
     return {
       getParams,
       skipHomePage,
-      showType
+      showType,
+      setCurrentUser,
+
     }
   },
   created() {
@@ -303,17 +317,10 @@ export default {
     console.log(this.showValue)
     let linkedinCode = this.$route.query.code;
     console.log(linkedinCode)
-    // if(linkedinCode){
-    //   let params = {
-    //     code:linkedinCode
-    //   }
-    //   LINKEDIN_CODE(params).then(res=>{
-    //     console.log(res)
-    //   })
-    // }
+
   },
   methods: {
-    goHome(){
+    goHome() {
       this.$router.push('/home')
     },
     remeberChange(e) {
@@ -323,7 +330,7 @@ export default {
       // console.log(response);
       console.log(responseKey);
       this.$loading({
-        text:'Loading...'
+        text: 'Loading...'
       })
       let params = new FormData()
       params.append('secret', '0x55587f4f237ef6B48A96284Ee257D0AA3d828508')
@@ -365,14 +372,11 @@ export default {
               self.sendCodeLoading = false
               self.$message.success('Success')
             }, 1500)
-
           }
-
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err)
           this.$message.error(err.msg)
         })
-
       }
 
     },
@@ -382,7 +386,7 @@ export default {
     },
     submitLoginForm(formName) {
       let self = this;
-      if(self.humanVerifyStatus){
+      if (self.humanVerifyStatus) {
         this.submitLoginLoadingStatus = true;
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -391,42 +395,65 @@ export default {
               // console.log(res)
               if (res.code == 200) {
                 localStorage.setItem('token', res.message.token)
-                localStorage.setItem('uid',res.message.id)
+                localStorage.setItem('uid', res.message.id)
                 localStorage.setItem('identity', res.message.identity)
                 localStorage.setItem('language', res.message.language)
                 localStorage.setItem('email', res.message.email)
 
-                let identity  = res.message.identity
-                if(identity == 0){
-                  localStorage.setItem('name','Guest')
+                let identity = res.message.identity
+                if (identity == 0) {
+                  localStorage.setItem('name', 'Guest')
                 }
-                if(identity == 1){
-                  let firstName = res.message.educator.first_name;
-                  let lastName = res.message.educator.last_name;
-                  localStorage.setItem('name',firstName+' '+ lastName)
-                  localStorage.setItem('first_name',firstName)
-                  localStorage.setItem('last_name',lastName)
+                let firstName = ''
+                let lastName = ''
+                let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
+
+                if (identity == 1) {
+                  firstName = res.message.educator.first_name
+                  lastName = res.message.educator.last_name
+                  if(res.message.educator.profile_photo){
+                    currentAvatar = res.message.educator.profile_photo
+                  }
+
                 }
-                if(identity == 2){
-                  let firstName = res.message.business.first_name;
-                  let lastName = res.message.business.last_name;
-                  localStorage.setItem('name',firstName+' '+ lastName)
-                  localStorage.setItem('first_name',firstName)
-                  localStorage.setItem('last_name',lastName)
+
+                if (identity == 2) {
+                  firstName = res.message.business.first_name
+                  lastName = res.message.business.last_name
+                  if(res.message.business.profile_photo){
+                    currentAvatar = res.message.business.profile_photo
+                  }
+
                 }
-                if(identity == 3){
-                  let firstName = res.message.vendor.first_name;
-                  let lastName = res.message.vendor.last_name;
-                  localStorage.setItem('name',firstName+' '+ lastName)
-                  localStorage.setItem('first_name',firstName)
-                  localStorage.setItem('last_name',lastName)
+                if (identity == 3) {
+                  firstName = res.message.vendor.first_name
+                  lastName = res.message.vendor.last_name
+                  if(res.message.vendor.profile_photo){
+                    currentAvatar = res.message.vendor.profile_photo
+                  }
                 }
+
+                localStorage.setItem('name', firstName + ' ' + lastName)
+                localStorage.setItem('first_name', firstName)
+                localStorage.setItem('last_name', lastName)
+
+                let currentUser = {
+                  uuid: res.message.id,
+                  identity: identity,
+                  name: firstName + ' ' + lastName,
+                  avatar: currentAvatar,
+                }
+                // console.log(currentUser)
+
+                this.setCurrentUser(currentUser)
+                // localStorage.setItem('currentUser',JSON.stringify(currentUser));
+
                 setTimeout(function () {
                   self.skipHomePage()
                   self.submitLoginLoadingStatus = false
                 }, 1500)
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
               this.$message.error(err.msg)
             })
@@ -448,18 +475,18 @@ export default {
         if (valid) {
           // console.log(valid)
           let params = Object.assign({
-            identity:self.identityValue
-          },this.registerForm)
-          EMAIL_REGISTER(params).then(res=>{
+            identity: self.identityValue
+          }, this.registerForm)
+          EMAIL_REGISTER(params).then(res => {
             console.log(res)
-            if(res.code == 200){
+            if (res.code == 200) {
               // let userInfo = res.message
               // localStorage.setItem('uid',res.message.id)
               this.$message.success('Registration completed!')
               location.reload()
             }
 
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$message.error(err.msg)
           })
@@ -477,10 +504,10 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    switchLoginRegister(value){
+    switchLoginRegister(value) {
       this.showValue = value
     },
-    async googleSignIn(){
+    async googleSignIn() {
       try {
         const googleUser = await this.$gAuth.signIn();
         if (!googleUser) {
@@ -502,7 +529,7 @@ export default {
         return null;
       }
     },
-    async handleClickGetAuthCode(){
+    async handleClickGetAuthCode() {
       // console.log('google sign in')
       // const googleUser =  this.$gAuth.signIn();
       // console.log(googleUser)
@@ -510,13 +537,13 @@ export default {
       try {
         const authCode = await this.$gAuth.getAuthCode();
         console.log("authCode", authCode);
-      } catch(error) {
+      } catch (error) {
         //on fail do something
         console.error(error);
         return null;
       }
     },
-    linkedinSignIn(){
+    linkedinSignIn() {
       let client_id = process.env.VUE_APP_LINKEDIN_CLIENT_ID
       let response_type = process.env.VUE_APP_LINKEDIN_RESPONSE_TYPE
       let redirect_uri = process.env.VUE_APP_LINKEDIN_REDIRECT_URI
@@ -524,14 +551,13 @@ export default {
       let state = randomString()
       let scope = process.env.VUE_APP_LINKEDIN_SCOPE
 
-      window.location.href = 'https://www.linkedin.com/oauth/v2/authorization?response_type='+ response_type +'&client_id='+client_id
-          +'&redirect_uri='+redirect_uri+'&state='+state+'&scope='+scope
+      window.location.href = 'https://www.linkedin.com/oauth/v2/authorization?response_type=' + response_type + '&client_id=' + client_id
+          + '&redirect_uri=' + redirect_uri + '&state=' + state + '&scope=' + scope
 
     },
 
 
-
-}
+  }
 
 }
 
@@ -544,12 +570,13 @@ export default {
   position: relative;
 }
 
-.go-home-container{
+.go-home-container {
   position: absolute;
   left: 20px;
   top: 20px;
 }
-.go-home-btn{
+
+.go-home-btn {
   font-size: 14px;
 }
 
@@ -580,7 +607,8 @@ export default {
   padding: 10px;
   font-weight: bold;
 }
-.xll-login-row-container{
+
+.xll-login-row-container {
   /*width: 1100px;*/
   margin: 0 auto;
   border-radius: 20px;
@@ -593,30 +621,32 @@ export default {
   background-repeat: no-repeat;
 }
 
-.xll-login-container{
+.xll-login-container {
   overflow: hidden;
   background-color: #FFFFFF;
 }
 
-.xll-login-form-container{
-  padding:20px 20px 40px 20px;
+.xll-login-form-container {
+  padding: 20px 20px 40px 20px;
 }
 
-.xll-register-row-container{
+.xll-register-row-container {
   /*width: 1100px;*/
   margin: 0 auto;
 }
-.xll-register-container{
+
+.xll-register-container {
   overflow: hidden;
   background-color: #FFFFFF;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
   border-radius: 20px;
 }
-.xll-register-form-container{
-  padding:20px 20px 40px 20px;
+
+.xll-register-form-container {
+  padding: 20px 20px 40px 20px;
 }
 
-.login-tabs-container{
+.login-tabs-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -624,43 +654,46 @@ export default {
   border-bottom: 1px solid #EEEEEE;
 }
 
-.login-label{
-  width:50%;
+.login-label {
+  width: 50%;
   font-size: 16px;
   padding: 10px;
   cursor: pointer;
   text-align: center;
 }
-.login-label:hover{
+
+.login-label:hover {
   background-color: #0AA0A8;
   color: #FFFFFF;
 }
 
-.login-tab-active{
+.login-tab-active {
   background-color: #0AA0A8;
   color: #FFFFFF;
 }
 
-.register-label{
+.register-label {
   width: 50%;
   text-align: center;
   font-size: 16px;
-  padding:10px;
+  padding: 10px;
   cursor: pointer;
 }
 
-.register-label:hover{
+.register-label:hover {
   background-color: #0AA0A8;
   color: #FFFFFF;
 }
 
 
-.facebook-btn-container{
+.facebook-btn-container {
   margin-top: 20px;
 }
-.google-btn-container{
+
+.google-btn-container {
   margin-top: 20px;
 }
+
 .google-btn {
   width: 100%;
   font-size: 16px;
@@ -674,7 +707,8 @@ export default {
   font-weight: bold;
   line-height: 26px;
 }
-.linkedin-btn{
+
+.linkedin-btn {
   width: 100%;
   font-size: 16px;
   font-weight: bold;
@@ -725,50 +759,53 @@ export default {
   justify-content: flex-start;
 }
 
-.identity-btn{
+.identity-btn {
   background-color: #f5f6f7;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
 }
-.identity-btn-margin{
+
+.identity-btn-margin {
   margin-left: 10px;
 }
 
-.identity-educator-active{
+.identity-educator-active {
   background-color: #00b3d2;
   color: #ffffff;
 }
-.identity-business-active{
+
+.identity-business-active {
   background-color: #d2005b;
   color: #ffffff;
 }
-.identity-vendor-active{
+
+.identity-vendor-active {
   background-color: #b1c452;
   color: #ffffff;
 }
 
-.send-code-btn{
+.send-code-btn {
   background-color: #0AA0A8 !important;
   color: #ffffff !important;
   padding: 10px;
 }
 
-.xll-ads-container{
+.xll-ads-container {
   height: 100%;
 }
 
-.ads-image{
+.ads-image {
   width: 100%;
   height: 100%;
 }
 
-@media screen and (min-width: 1200px){
-  .xll-login-row-container{
+@media screen and (min-width: 1200px) {
+  .xll-login-row-container {
     width: 1100px;
   }
 
-  .xll-register-row-container{
+  .xll-register-row-container {
     width: 1100px;
   }
 

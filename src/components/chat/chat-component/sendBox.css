@@ -1,0 +1,90 @@
+.send-box{
+  width: 100%;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  position: relative;
+}
+
+.send-box-top{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  background:#f3f4f7;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.send-box-item{
+  display: flex;
+  flex-direction: column;
+
+  margin-right: 10px;
+  align-items: center;
+  position: relative;
+  cursor:pointer;
+}
+
+
+.img-input{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:0;
+  left:0;
+  opacity: 0;
+}
+
+.send-box-textarea{
+  width: 100%;
+}
+
+.send-box-top .message-record-container{
+  width: 210px;
+}
+
+.send-box-top .message-record-container .record-button{
+  width: 210px;
+
+  border-radius: 6px;
+  font-size: 14px;
+  background: #cccccc;
+  color: #ffffff;
+  text-align: center;
+}
+
+.action-icon-container{
+  text-align: right;
+}
+.send-btn{
+  font-size: 12px;
+}
+
+.send-box-bottom{
+  width: 90%;
+  height: 200px;
+
+  background-color: #FFFFFF;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+  position: absolute;
+  top: -200px;
+  left: 20px;
+  overflow: auto;
+  border-radius: 6px;
+}
+
+.emoji-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.emoji-item{
+  width: 20px;
+  margin: 10px;
+  cursor: pointer;
+}

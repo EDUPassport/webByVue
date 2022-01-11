@@ -17,13 +17,16 @@ import 'animate.css'
 import VTypical from 'vue-typical'
 // import './assets/font/font.css'
 
-import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu } from '@element-plus/icons'
+import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu,ChatLineSquare,
+    MoreFilled, Mic,Picture, VideoCamera ,Folder} from '@element-plus/icons'
 
 import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
 import VueSocialSharing from 'vue-social-sharing'
 
 import gAuthPlugin from 'vue3-google-oauth2'
+import GoEasy from "goeasy";
+import IMService from "./assets/lib/imservice";
 
 const messages = {
     en: {
@@ -43,6 +46,11 @@ const i18n = createI18n({
     // ...
 })
 
+const goEasy = GoEasy.getInstance({
+    host:'hangzhou.goeasy.io',//应用所在的区域地址: [hangzhou.goeasy.io, 新加坡暂不支持IM，敬请期待]
+    appkey: 'BC-875758c621384be0b4072dff74c062fd',// common key
+    modules:["im"]
+});
 
 const app = createApp(App)
 app.component('LocationFilled',LocationFilled )
@@ -53,6 +61,12 @@ app.component('Share',Share)
 app.component('edit',Edit)
 app.component('ArrowDown',ArrowDown)
 app.component('Menu',Menu)
+app.component('ChatLineSquare',ChatLineSquare)
+app.component('MoreFilled',MoreFilled)
+app.component('Mic',Mic)
+app.component('Picture',Picture)
+app.component('VideoCamera',VideoCamera)
+app.component('Folder',Folder)
 
 app.use(router)
 app.use(store)
@@ -81,4 +95,21 @@ app.config.globalProperties.$filters = {
         return howLong(eParse,'en-US')
     }
 }
+app.config.globalProperties.formatDate = function (t) {
+    t = t || Date.now();
+    let time = new Date(t);
+    let str = time.getMonth() < 9 ? ('0' + (time.getMonth() + 1)) : (time.getMonth() + 1);
+    str += '-';
+    str += time.getDate() < 10 ? ('0' + time.getDate()) : time.getDate();
+    str += ' ';
+    str += time.getHours();
+    str += ':';
+    str += time.getMinutes() < 10 ? ('0' + time.getMinutes()) : time.getMinutes();
+    return str;
+}
+
+app.config.globalProperties.GoEasy = GoEasy
+app.config.globalProperties.goEasy = goEasy
+app.config.globalProperties.service = new IMService(goEasy,GoEasy)
+
 app.mount('#app')
