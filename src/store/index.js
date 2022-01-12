@@ -8,7 +8,9 @@ const store = createStore({
             username: localStorage.getItem('name'),
             userAvatar: localStorage.getItem('avatar'),
             identity: localStorage.getItem('identity'),
-            currentUser:currentUserStr ?  JSON.parse(currentUserStr) : ''
+            currentUser:currentUserStr ?  JSON.parse(currentUserStr) : '',
+            nowChatUserInfo:{},
+            showChatStatus:false
         }
     },
     mutations: {
@@ -24,8 +26,17 @@ const store = createStore({
         currentUser(state, data){
             localStorage.setItem('currentUser',JSON.stringify(data))
             state.currentUser = data
+        },
+        nowChatUserInfo(state, data){
+            state.nowChatUserInfo = data
+        },
+        showChatStatus(state,data){
+            state.showChatStatus = data
         }
     },
+    actions:{
+
+    }
 
 })
 

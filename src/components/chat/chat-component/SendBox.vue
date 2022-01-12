@@ -95,7 +95,8 @@ export default {
           type: this.type,
           data: {
             name: this.to.name,
-            avatar: this.to.avatar
+            avatar: this.to.avatar,
+            identity:this.to.identity
           }
         },
         file: file,
@@ -114,7 +115,8 @@ export default {
           type: this.type,
           data: {
             name: this.to.name,
-            avatar: this.to.avatar
+            avatar: this.to.avatar,
+            identity:this.to.identity
           }
         },
         file: file,
@@ -133,7 +135,8 @@ export default {
           type: this.type,
           data: {
             name: this.to.name,
-            avatar: this.to.avatar
+            avatar: this.to.avatar,
+            identity:this.to.identity
           }
         },
         file: file,
@@ -152,7 +155,8 @@ export default {
           type: this.type,
           data: {
             name: this.to.name,
-            avatar: this.to.avatar
+            avatar: this.to.avatar,
+            identity:this.to.identity
           }
         },
         file: file,
@@ -172,7 +176,8 @@ export default {
             type: this.type,
             data: {
               name: this.to.name,
-              avatar: this.to.avatar
+              avatar: this.to.avatar,
+              identity:this.to.identity
             }
           }
         });
@@ -190,7 +195,7 @@ export default {
       } else {
         localHistory = this.service.getGroupMessages(toId);
       }
-      console.log(localHistory)
+      // console.log(localHistory)
       localHistory.push(message)
 
       this.goEasy.im.sendMessage({

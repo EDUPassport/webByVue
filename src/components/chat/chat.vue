@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="chat-container">
-      <div class="chat-icon-container" @click="showChatStatus=!showChatStatus">
-        <el-icon :size="30"><chat-line-square /></el-icon>
+      <div class="chat-icon-container" @click="setShowChatStatus()">
+        <i class="xll-im-icon iconfont el-icon-aliimmessage"></i>
       </div>
     </div>
     <div class="chat-content-container" v-if="showChatStatus">
@@ -20,19 +20,20 @@
         <div class="conversations">
           <div class="conversations-box">
             <div v-if="conversationsData.length !==0">
-
-              <div class="scroll-item" v-for="(conversation, key) in conversationsData" :key="key">
+              <div class="scroll-item" v-for="(conversation, key) in conversationsData" :key="key"
+              :class="activeConversationKey === conversation.userId+'_'+conversation.data.identity ? 'conversation-active' : ''"
+              >
                 <div class="item-head">
                   <el-image :src="conversation.data.avatar"  class="head-icon"/>
                   <div class="item-head_unread" v-if="conversation.unread">{{conversation.unread}}</div>
                 </div>
-                <div class="scroll-item_info">
-                  <div class="item-info-top">
+                <div class="scroll-item_info" @click="navigateToChat(conversation)">
+                  <div class="item-info-top" >
                     <span class="item-info-top_name">{{conversation.data.name}}</span>
                     <div class="item-info-top_time">{{formatDate(conversation.lastMessage.timestamp)}}</div>
                   </div>
                   <div class="item-info-bottom">
-                    <div class="item-info-bottom-item" @click="navigateToChat(conversation)">
+                    <div class="item-info-bottom-item" >
                       <div class="item-info-top_content">
                         <span v-if="conversation.lastMessage.type == 'text'" class="text-conversation">
                           {{conversation.lastMessage.payload.text}}
@@ -44,8 +45,29 @@
                         <span v-else-if="conversation.lastMessage.type == 'order'">[Order Message]</span>
                         <span v-else>[Unidentified content]</span>
                       </div>
-                      <div class="item-info-bottom_action" @click.stop="showAction(conversation)">
-                        <el-icon><more-filled /></el-icon>
+                      <div class="item-info-bottom_action" >
+                        <el-popover
+                            :visible="activeActionKey === key"
+                            placement="right"
+                            :width="150"
+                            trigger="click"
+                        >
+                          <template #reference>
+                            <el-icon @click="showAction(conversation,key)"><more-filled /></el-icon>
+                          </template>
+                          <div class="item-info-bottom_action-btn" v-if="action.show">
+                            <div>
+                              <el-button type="primary" @click="topConversation">
+                                {{action.conversation.top ? 'Unpin' : 'Pin chat to the top'}}
+                              </el-button>
+                            </div>
+                            <div class="item-info-bottom_delete_btn">
+                              <el-button type="warning" @click="removeConversation">
+                                Delete Chat
+                              </el-button>
+                            </div>
+                          </div>
+                        </el-popover>
                       </div>
                     </div>
                   </div>
@@ -53,34 +75,27 @@
               </div>
             </div>
             <div class="no-conversation" v-else>
-              当前没有会话
+              No Chat Currently
             </div>
-            <div class="action-container" v-if="action.show">
-              <div class="layer" @click="action.show = false"></div>
-              <div class="action-box">
-                <div class="action-item" @click="topConversation">{{action.conversation.top ? '取消置顶' : '置顶聊天'}}</div>
-                <div class="action-item" @click="removeConversation">删除聊天</div>
-              </div>
-            </div>
-            <div class="action-toast" v-if="action.showToast">
-              {{action.toastMessage}}
-            </div>
+
           </div>
           <div class="mask" v-show="showLoading">
-            <!--              <img src="/static/images/pending.gif"/>-->
-          </div>
 
+          </div>
         </div>
 
       </div>
       <div class="chat-chat-container" v-if="friend">
         <div class="chat-chat-header">
-          <span class="chat-chat-title">{{friend.name}}</span>
+          <span class="chat-chat-title" >{{friend.name}}</span>
+          <div class="chat-chat-close" @click="setShowChatStatus()">
+            <el-icon :size="30" color="#808080"><circle-close /></el-icon>
+          </div>
         </div>
-        <div class="chat-message-container">
+        <div class="chat-message-container" >
           <div class="scroll-view" ref="scrollView">
-            <div class="history-load-tip" @click="loadMoreHistoryMessage">
-              {{allHistoryLoaded ? '已经没有更多的历史消息' : '点击获取历史消息'}}
+            <div class="history-load-tip" @click="loadMoreHistoryMessage()">
+              {{allHistoryLoaded ? 'History has no more messages' : 'Click to get history messages'}}
             </div>
             <div v-for="(message, index) in messages" :key="index">
               <div class="time-lag"
@@ -94,7 +109,7 @@
         <send-box :to="friend" :type="type" @onSent="scrollToBottom"/>
 
         <div class="img-layer" @click="image.show = false" v-show="image.show">
-          <img :src="image.url">
+          <el-image :src="image.url"></el-image>
         </div>
       </div>
 
@@ -119,8 +134,15 @@ export default {
     const store = useStore()
 
     const currentUser = computed(()=>store.state.currentUser)
+    const nowChatUserInfo = computed(()=>store.state.nowChatUserInfo)
+    const showChatStatus = computed(()=>store.state.showChatStatus)
+    const setShowChatStatus = () => store.commit('showChatStatus',!store.state.showChatStatus)
+
     return {
-      currentUser
+      currentUser,
+      nowChatUserInfo,
+      showChatStatus,
+      setShowChatStatus
     }
 
   },
@@ -131,7 +153,7 @@ export default {
   data(){
     return {
       imgLogo,
-      showChatStatus:true,
+
       showLoading : false,
       action : {
         conversation : null,
@@ -139,7 +161,9 @@ export default {
         toastMessage : '',
         showToast : false
       },
+
       conversationsData:[],
+      activeConversationKey:undefined,
 
       friendId: undefined ,
       chatType: '',
@@ -152,14 +176,19 @@ export default {
         show : false,
         url : ''
       },
-      type: ""
+      type: "",
+      unreadTotal:0,
+      showBottomActionStatus:false,
+      activeActionKey:undefined
+
     }
   },
   beforeMount() {
     let self = this;
     this.showLoading = true;
-    // let user = JSON.parse(localStorage.getItem("user"));
+
     let user = this.currentUser
+    this.type = this.GoEasy.IM_SCENE.PRIVATE;
 
     if(user){
       if (this.goEasy.getConnectionStatus() === 'disconnected') {
@@ -167,6 +196,19 @@ export default {
       }
       //监听会话列表变化
       this.goEasy.im.on(this.GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, (conversations) => {
+        let nowChatUserInfo = this.nowChatUserInfo
+
+        if(JSON.stringify(nowChatUserInfo) !== '{}'){
+          this.messages = this.service.getPrivateMessages(nowChatUserInfo.uuid);
+          this.friend = nowChatUserInfo;
+          this.activeConversationKey = nowChatUserInfo.uuid + '_'+nowChatUserInfo.identity
+          this.scrollToBottom();
+          this.initialPrivateListeners();
+          if(this.messages.length !== 0) {
+            this.markMessageAsRead(nowChatUserInfo.uuid);
+          }
+        }
+
         this.conversationsData = conversations.conversations || [];
         this.unreadTotal = conversations.unreadTotal;
       });
@@ -174,52 +216,36 @@ export default {
       //加载会话列表
       this.goEasy.im.latestConversations({
         onSuccess: function (res) {
-          // console.log(res.content)
           let content = res.content;
-          self.showLoading = false;
-          // self.$parent.$data.unreadTotal = content.unreadTotal;
-          // self.$parent.$data.conversations = content.conversations;
+
           self.conversationsData = content.conversations;
+          self.unreadTotal = content.unreadTotal
         },
         onFailed: function (error) {
-          this.showLoading = false;
           console.log("失败获取最新会话列表, code:" + error.code + " content:" + error.content);
         }
       });
-      // this.initialPrivateListeners();
-      //  pri
-      // let friendId = 459;
-      // // this.loadMoreHistoryMessage()
-      // this.type = this.GoEasy.IM_SCENE.PRIVATE;
-      // this.currentUser = this.service.currentUser;
-      // this.friend = this.service.findFriendById(friendId);
-      // this.messages = this.service.getPrivateMessages(friendId);
-      // this.scrollToBottom();
-      // this.initialPrivateListeners();
-      // if(this.messages.length !== 0) {
-      //   this.markMessageAsRead(friendId);
-      // }
+
     }
 
   },
   unmounted() {
-    // this.service.onNewPrivateMessageReceive = function(){};
+    this.service.onNewPrivateMessageReceive = function(){};
   },
   methods:{
     topConversation() {
       let self = this;
-      this.showLoading = true;
       let conversation = this.action.conversation;
-      let failedDescription = conversation.top ? '取消置顶失败' : '置顶失败';
+      let failedDescription = conversation.top ? 'Cancel Failed' : 'Pin Failed';
       if(conversation.type === this.GoEasy.IM_SCENE.PRIVATE){
         this.goEasy.im.topPrivateConversation({
           userId: conversation.userId,
           top: !conversation.top,
           onSuccess: function () {
-            self.showLoading = false;
+            console.log('pin success')
           },
           onFailed: function (error) {
-            self.showToast(failedDescription);
+            self.$message.error(failedDescription)
             console.log(error);
           }
         });
@@ -228,29 +254,29 @@ export default {
           groupId: conversation.groupId,
           top: !conversation.top,
           onSuccess: function () {
-            self.showLoading = false;
+            console.log('pin fail')
           },
           onFailed: function (error) {
-            self.showToast(failedDescription);
+            self.$message.error(failedDescription)
             console.log(error);
           }
         });
       }
       this.action.show = false;
+      self.activeActionKey = undefined
     },
     removeConversation() {
       let self = this;
-      this.showLoading = true;
       let conversation = this.action.conversation;
-      let failedDescription = "删除失败";
+      let failedDescription = "delete failed";
       if(conversation.type === this.GoEasy.IM_SCENE.PRIVATE){
         this.goEasy.im.removePrivateConversation({
           userId: conversation.userId,
           onSuccess: function () {
-            self.showLoading = false;
+            console.log('delete success')
           },
           onFailed: function (error) {
-            self.showToast(failedDescription);
+            self.$message.error(failedDescription)
             console.log(error);
           }
         });
@@ -258,54 +284,51 @@ export default {
         this.goEasy.im.removeGroupConversation({
           groupId: conversation.groupId,
           onSuccess: function () {
-            self.showLoading = false;
+            console.log('delete failed')
           },
           onFailed: function (error) {
-            this.showToast(failedDescription);
+            self.$message.error(failedDescription)
             console.log(error);
           }
         });
       }
       this.action.show = false;
+      self.activeActionKey = undefined
     },
     async navigateToChat(conversation) {
       let id = conversation.userId || conversation.groupId;
-      // console.log(id)
-      let identity = 1;
+      this.activeConversationKey = conversation.userId +'_'+ conversation.data.identity
+
+      let identity = conversation.data.identity;
+      // console.log(identity)
+
       this.friendId = id;
       this.chatType = conversation.type;
-      // this.loadMoreHistoryMessage()
-
-      this.type = this.GoEasy.IM_SCENE.PRIVATE;
-      // this.currentUser = this.service.currentUser;
-      // console.log(this.service.currentUser)
 
       this.friend = await this.service.findFriendById(id,identity);
-      // console.log(this.friend)
 
       this.messages =await this.service.getPrivateMessages(id);
+      // console.log(this.messages)
+      // this.loadMoreHistoryMessage()
 
       this.scrollToBottom();
 
       this.initialPrivateListeners();
+
       if(this.messages.length !== 0) {
         this.markMessageAsRead(id);
       }
 
     },
-    showToast (failedDescription) {
-      this.showLoading = false;
-      this.action.toastMessage = failedDescription;
-      this.action.showToast = true;
-      setTimeout(() => {
-        this.action.showToast = false;
-      },2000);
-    },
-    showAction (conversation) {
+    showAction (conversation, key) {
+      if(this.activeActionKey === key){
+        this.activeActionKey = undefined
+      }else{
+        this.activeActionKey = key
+      }
       this.action.conversation = conversation;
       this.action.show = true
     },
-
     initialPrivateListeners () {
       //传入监听器，收到一条私聊消息总是滚到到页面底部
       this.service.onNewPrivateMessageReceive =  (friendId,message)=> {
@@ -320,11 +343,12 @@ export default {
       let self = this;
       let lastMessageTimeStamp = Date.now();
       let lastMessage = this.messages[0];
+
       if (lastMessage) {
         lastMessageTimeStamp = lastMessage.timestamp;
       }
       let currentLength = this.messages.length;
-      // console.log(self.friend)
+
       this.goEasy.im.history({
         userId: self.friend.uuid,
         lastTimestamp: lastMessageTimeStamp,
@@ -340,7 +364,9 @@ export default {
           if (localHistory.length === currentLength) {
             self.allHistoryLoaded = true;
           }
+          self.messages = {}
           self.messages = localHistory;
+          // console.log(self.messages)
         },
         onFailed: function (error) {
           //获取失败
@@ -372,7 +398,9 @@ export default {
     },
     scrollToBottom () {
       this.$nextTick(() => {
-        this.$refs.scrollView.scrollTo(0, this.$refs.scrollView.scrollHeight)
+        let height = this.$refs.scrollView.scrollHeight
+        // console.log(height)
+        this.$refs.scrollView.scrollTo(0, height)
       })
     }
   }
@@ -420,12 +448,11 @@ export default {
 }
 
 .chat-side-container{
-  border-right: 1px solid #EEEEEE;
   width: 30%;
   height: 100%;
-  padding:0 10px;
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
 }
+
 .chat-side-t-container{
   height: 30%;
 }
@@ -438,7 +465,9 @@ export default {
   width: 60px;
   height: 60px;
 }
-
+.chat-side-search{
+  padding: 0 10px;
+}
 .conversations {
   display: flex;
   flex-direction: column;
@@ -459,12 +488,12 @@ export default {
 .conversations-box .scroll-item {
   display: flex;
   align-items: center;
-  padding: 4px 0;
+  padding: 4px ;
 }
 
 .conversations-box .scroll-item_info {
-  width: 100%;
-
+  width: 70%;
+  cursor: pointer;
   box-sizing: border-box;
   border-bottom: 1px solid #EFEFEF;
 }
@@ -500,7 +529,6 @@ export default {
 .conversations-box .item-info-bottom-item {
   display: flex;
   justify-content: space-between;
-  cursor: pointer;
 }
 
 .item-info-bottom .item-info-top_content {
@@ -558,8 +586,7 @@ export default {
 
 .item-head{
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 30%;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -568,10 +595,12 @@ export default {
 
 }
 .conversations-box .scroll-item .head-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  border: 1px solid #EEEEEE;
 }
+
 .item-head .item-head_unread{
   padding:2px 5px;
   background-color: #EE593C;
@@ -584,6 +613,7 @@ export default {
   top:0;
   right: 0;
 }
+
 .conversations .item-info-bottom-item{
   display: flex;
   justify-content: space-between;
@@ -596,55 +626,16 @@ export default {
   flex-shrink: 0;
   cursor: pointer;
 }
-
-.action-container{
+.item-info-bottom_action-btn{
   width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
-.action-container .layer{
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: rgba(51, 51, 51, 0.5);
-  width: 100%;
-  height: 100%;
-  z-index: 99;
-}
-.action-box{
 
-  background: #ffffff;
-  position: relative;
-  z-index: 100;
-  border-radius: 10px;
-  overflow: hidden;
-}
-.action-item{
-  text-align: center;
-  line-height: 60px;
-  font-size: 17px;
-  color: #262628;
-  border-bottom: 1px solid #EFEFEF;
-
-}
-.action-toast{
-  position: absolute;
-  width: 200px;
-  height: 50px;
-  text-align: center;
-  font-size: 15px;
-  line-height: 50px;
-  background: #9D9D9D;
-  border-radius: 10px;
-  top:50%;
-  left: 50%;
-  margin: 25px -10px;
-  color: #262628;
+.item-info-bottom_delete_btn{
+  margin-top: 10px;
 }
 
 .conversations .text-conversation{
@@ -659,7 +650,6 @@ export default {
 }
 
 
-
 .chat-chat-container{
   height: 100%;
   width:70%;
@@ -667,16 +657,25 @@ export default {
 .chat-chat-header{
   width: 100%;
   height: 10%;
-  font-size: 18px;
-  text-align: center;
+
   background: rgb(243, 244, 247);
-  color: #000000;
-  font-weight: bold;
+  border-top-right-radius: 10px;
   position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .chat-chat-title{
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.chat-chat-close{
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
 }
 .chat-message-container{
   overflow: hidden;
@@ -733,7 +732,13 @@ export default {
   max-height: 100%;
 }
 
-
+.conversation-active{
+  background-color: #EEEEEE;
+}
+.xll-im-icon{
+  font-size: 30px;
+  color: #B1C452;
+}
 
 @media screen and (max-width: 768px) {
   .chat-content-container{

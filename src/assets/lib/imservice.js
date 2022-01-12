@@ -7,10 +7,11 @@ function Friend(uuid, name, avatar,identity) {
     this.identity = identity;
 }
 
-function Group(uuid, name, avatar) {
+function Group(uuid, name, avatar,identity) {
     this.uuid = uuid;
     this.name = name;
     this.avatar = avatar;
+    this.identity = identity;
 }
 
 function IMService(goEasy,GoEasy) {

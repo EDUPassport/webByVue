@@ -18,7 +18,7 @@ import VTypical from 'vue-typical'
 // import './assets/font/font.css'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu,ChatLineSquare,
-    MoreFilled, Mic,Picture, VideoCamera ,Folder} from '@element-plus/icons'
+    MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose} from '@element-plus/icons'
 
 import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
@@ -67,6 +67,7 @@ app.component('Mic',Mic)
 app.component('Picture',Picture)
 app.component('VideoCamera',VideoCamera)
 app.component('Folder',Folder)
+app.component('CircleClose',CircleClose)
 
 app.use(router)
 app.use(store)

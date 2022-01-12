@@ -167,7 +167,7 @@
                 Hi I am {{ detailData.business.first_name }} from {{ detailData.business.business_name }}.
               </div>
               <div class="contact-r-b">
-                <el-button type="primary">Let's Chat!</el-button>
+                <el-button type="primary" @click="chat(detailData.user_id)">Let's Chat!</el-button>
               </div>
             </div>
           </div>
@@ -207,11 +207,25 @@ import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import {COMPANY_JOB_LIST, JOB_DETAIL,APPLY_JOBS,ADD_FAVORITE,IS_FAVORITE,CANCEL_FAVORITE} from "@/api/api";
+import {COMPANY_JOB_LIST, JOB_DETAIL,APPLY_JOBS,ADD_FAVORITE,IS_FAVORITE,
+  CANCEL_FAVORITE,ADD_TO_CHAT} from "@/api/api";
 import latestIndustryNews from "@/components/latestIndustryNews";
+import {useStore} from 'vuex'
 
 export default {
   name: "detail",
+  setup(){
+    const store = useStore()
+
+    const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
+    const setShowChatStatus = () => store.commit('showChatStatus', true)
+
+    return {
+      setNowChatUserInfo,
+      setShowChatStatus
+    }
+
+  },
   data() {
     return {
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
@@ -379,7 +393,79 @@ export default {
         console.log(err)
         this.$message.error(err.msg)
       })
+    },
+    chat(userId){
+      console.log(userId)
+      let token = localStorage.getItem('token')
+      if(!token || token === ''){
+        return this.$router.push('/login')
+      }
+      let businessInfo = this.detailData.business;
+
+      let type = this.GoEasy.IM_SCENE.PRIVATE;
+      let name = businessInfo.first_name+' '+ businessInfo.last_name;
+      let avatar = businessInfo.profile_photo ? businessInfo.profile_photo : 'https://oss.esl-passport.cn/educator.png';
+
+      let nowUserInfo = {
+        uuid:userId,
+        name:name,
+        avatar:avatar,
+        identity:2
+      }
+
+      let textMessage = this.goEasy.im.createTextMessage({
+        text: 'Hello',
+        to: {
+          id: userId,
+          type: type,
+          data: {
+            name: name,
+            avatar: avatar,
+            identity:2
+          }
+        }
+      });
+
+      let localHistory;
+      if (type === this.GoEasy.IM_SCENE.PRIVATE) {
+        localHistory = this.service.getPrivateMessages(userId);
+      } else {
+        localHistory = this.service.getGroupMessages(userId);
+      }
+      // console.log(localHistory)
+      localHistory.push(textMessage)
+
+      this.goEasy.im.sendMessage({
+        message: textMessage,
+        onSuccess: function (message) {
+          console.log("发送成功.", message);
+        },
+        onFailed: function (error) {
+          console.log("发送失败:", error);
+        }
+      });
+
+      this.setShowChatStatus()
+      this.setNowChatUserInfo(nowUserInfo)
+
+    },
+    addUserToChat(userId,toIdentity,identity){
+      let params = {
+        identity:identity,
+        to_identity:toIdentity,
+        to_user_id: userId
+      }
+
+      ADD_TO_CHAT(params).then(res=>{
+        if(res.code === 200){
+          console.log('add Chat successfuly')
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
     }
+
   }
 }
 </script>

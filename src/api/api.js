@@ -163,3 +163,5 @@ export const CONTACT_US = (params) => post('contact/contactUs', params)
 export const INTERNATIONAL_REGISTER = (params) => get('international/register', params)
 
 export const LINKEDIN_CODE = (params) => get('home/linkedin', params)
+
+export const ADD_TO_CHAT = (params) => post('chat/addChat', params)

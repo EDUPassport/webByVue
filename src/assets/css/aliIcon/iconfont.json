@@ -6,6 +6,13 @@
   "description": "element ui",
   "glyphs": [
     {
+      "icon_id": "9928002",
+      "name": "message",
+      "font_class": "immessage",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
       "icon_id": "15838533",
       "name": "smile",
       "font_class": "smile",

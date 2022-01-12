@@ -90,7 +90,7 @@ RestApi.prototype.findUserById =async function (userId,identity) {
     }
     let user = {};
     let res = await  VISITOR_USER_INFO(data)
-    console.log(res)
+    // console.log(res)
 
     if (res.code == 200) {
         let message = res.message;
