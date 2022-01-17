@@ -6,6 +6,13 @@
   "description": "element ui",
   "glyphs": [
     {
+      "icon_id": "1410460",
+      "name": "phone",
+      "font_class": "phone",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
       "icon_id": "9928002",
       "name": "message",
       "font_class": "immessage",

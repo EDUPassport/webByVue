@@ -165,3 +165,7 @@ export const INTERNATIONAL_REGISTER = (params) => get('international/register', 
 export const LINKEDIN_CODE = (params) => get('home/linkedin', params)
 
 export const ADD_TO_CHAT = (params) => post('chat/addChat', params)
+
+export const H5_LOGIN = (params) => post('h5/login', params)
+
+export const WEIXIN_SEND_SMS = (params)=> get('weixin/sendSms', params)
