@@ -69,120 +69,121 @@
                     </el-form-item>
                   </el-form>
                 </template>
+                <template v-if="loginPhoneStatus">
+                  <!--                手机号 验证码登录-->
+                  <template v-if="loginByPhoneWithSmsStatus">
+                    <el-form
+                            :model="loginPhoneSmsForm"
+                            :rules="loginPhoneSmsRules"
+                            ref="loginPhoneSmsForm"
+                            :hide-required-asterisk="true"
+                            label-position="top"
+                            class="demo-ruleForm"
+                    >
+                      <el-form-item label="Phone #" prop="phone">
+                        <template #label>
+                          <span class="login-require-star">*</span>
+                          <span class="login-label-text">Phone #</span>
+                        </template>
+                        <el-input size="medium" placeholder="Phone #"
+                                  type="number"
+                                  v-model.number="loginPhoneSmsForm.phone"></el-input>
+                      </el-form-item>
 
-                <!--                手机号 验证码登录-->
-                <template v-if="loginByPhoneWithSmsStatus">
-                  <el-form
-                      :model="loginPhoneSmsForm"
-                      :rules="loginPhoneSmsRules"
-                      ref="loginPhoneSmsForm"
-                      :hide-required-asterisk="true"
-                      label-position="top"
-                      class="demo-ruleForm"
-                  >
-                    <el-form-item label="Phone #" prop="phone">
-                      <template #label>
-                        <span class="login-require-star">*</span>
-                        <span class="login-label-text">Phone #</span>
-                      </template>
-                      <el-input size="medium" placeholder="Phone #"
-                                type="number"
-                                v-model.number="loginPhoneSmsForm.phone"></el-input>
-                    </el-form-item>
+                      <el-form-item  label="6 Digit Code" prop="phone_code">
+                        <template #label >
+                          <div class="password-container">
+                            <div class="password-l">
+                              <span class="login-require-star">*</span>
+                              <span class="login-label-text">6 Digit Code</span>
+                            </div>
+                            <div class="password-r">
+                              <el-button type="text" @click="switchToPhoneBySms()">
+                                Log in via password
+                              </el-button>
+                            </div>
+                          </div>
+                        </template>
+                        <div class="xll-input-container">
+                          <div class="xll-input-input">
+                            <el-input size="medium" placeholder="Code" type="number"
+                                      v-model="loginPhoneSmsForm.phone_code">
+                            </el-input>
+                          </div>
+                          <el-button class="xll-input-btn" type="primary" round
+                                     :loading="checkCodeBtn.loading"
+                                     :disabled="checkCodeBtn.disabled"
+                                     @click="getCheckCode()"
+                          >{{checkCodeBtn.text}}</el-button>
+                        </div>
+                      </el-form-item>
 
-                    <el-form-item  label="6 Digit Code" prop="phone_code">
-                      <template #label >
-                        <div class="password-container">
-                          <div class="password-l">
-                            <span class="login-require-star">*</span>
-                            <span class="login-label-text">6 Digit Code</span>
-                          </div>
-                          <div class="password-r">
-                            <el-button type="text" @click="switchToPhoneBySms()">
-                              Log in via password
-                            </el-button>
-                          </div>
-                        </div>
-                      </template>
-                      <div class="xll-input-container">
-                        <div class="xll-input-input">
-                          <el-input size="medium" placeholder="Code" type="number"
-                                    v-model="loginPhoneSmsForm.phone_code">
-                          </el-input>
-                        </div>
-                        <el-button class="xll-input-btn" type="primary" round
-                                   :loading="checkCodeBtn.loading"
-                                   :disabled="checkCodeBtn.disabled"
-                                   @click="getCheckCode()"
-                        >{{checkCodeBtn.text}}</el-button>
+                      <div class="remeber-container">
+                        <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
                       </div>
-                    </el-form-item>
 
-                    <div class="remeber-container">
-                      <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
-                    </div>
+                      <el-form-item>
+                        <el-button class="submit-btn"
+                                   round
+                                   type="primary"
+                                   @click="submitLoginPhoneSmsForm('loginPhoneSmsForm')">
+                          Login
+                        </el-button>
+                      </el-form-item>
+                    </el-form>
+                  </template>
 
-                    <el-form-item>
-                      <el-button class="submit-btn"
-                                 round
-                                 type="primary"
-                                 @click="submitLoginPhoneSmsForm('loginPhoneSmsForm')">
-                        Login
-                      </el-button>
-                    </el-form-item>
-                  </el-form>
-                </template>
+                  <!--               手机号码密码登录-->
+                  <template v-if="loginByPhoneWithPasswordStatus">
+                    <el-form
+                            :model="loginPhonePassForm"
+                            :rules="loginPhonePassRules"
+                            ref="loginPhonePassForm"
+                            :hide-required-asterisk="true"
+                            label-position="top"
+                            class="demo-ruleForm"
+                    >
+                      <el-form-item label="Phone #" prop="phone">
+                        <template #label>
+                          <span class="login-require-star">*</span>
+                          <span class="login-label-text">Phone #</span>
+                        </template>
+                        <el-input size="medium" placeholder="Phone #"
+                                  type="number"
+                                  v-model.number="loginPhonePassForm.phone"></el-input>
+                      </el-form-item>
 
-                <!--               手机号码密码登录-->
-                <template v-if="loginByPhoneWithPasswordStatus">
-                  <el-form
-                      :model="loginPhonePassForm"
-                      :rules="loginPhonePassRules"
-                      ref="loginPhonePassForm"
-                      :hide-required-asterisk="true"
-                      label-position="top"
-                      class="demo-ruleForm"
-                  >
-                    <el-form-item label="Phone #" prop="phone">
-                      <template #label>
-                        <span class="login-require-star">*</span>
-                        <span class="login-label-text">Phone #</span>
-                      </template>
-                      <el-input size="medium" placeholder="Phone #"
-                                type="number"
-                                v-model.number="loginPhonePassForm.phone"></el-input>
-                    </el-form-item>
-
-                    <el-form-item  label="Password" prop="password">
-                      <template #label >
-                        <div class="password-container">
-                          <div class="password-l">
-                            <span class="login-require-star">*</span>
-                            <span class="login-label-text">Password</span>
+                      <el-form-item  label="Password" prop="password">
+                        <template #label >
+                          <div class="password-container">
+                            <div class="password-l">
+                              <span class="login-require-star">*</span>
+                              <span class="login-label-text">Password</span>
+                            </div>
+                            <div class="password-r">
+                              <el-button type="text" @click="switchToPhoneBySms()">
+                                Log in via SMS verification code
+                              </el-button>
+                            </div>
                           </div>
-                          <div class="password-r">
-                            <el-button type="text" @click="switchToPhoneBySms()">
-                              Log in via SMS verification code
-                            </el-button>
-                          </div>
-                        </div>
-                      </template>
-                      <el-input size="medium" placeholder="Password" type="password"
-                                v-model="loginPhonePassForm.password"></el-input>
-                    </el-form-item>
+                        </template>
+                        <el-input size="medium" placeholder="Password" type="password"
+                                  v-model="loginPhonePassForm.password"></el-input>
+                      </el-form-item>
 
-                    <div class="remeber-container">
-                      <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
-                    </div>
-                    <el-form-item>
-                      <el-button class="submit-btn"
-                                 round
-                                 type="primary"
-                                 @click="submitLoginPhonePassForm('loginPhonePassForm')">
-                        Login
-                      </el-button>
-                    </el-form-item>
-                  </el-form>
+                      <div class="remeber-container">
+                        <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
+                      </div>
+                      <el-form-item>
+                        <el-button class="submit-btn"
+                                   round
+                                   type="primary"
+                                   @click="submitLoginPhonePassForm('loginPhonePassForm')">
+                          Login
+                        </el-button>
+                      </el-form-item>
+                    </el-form>
+                  </template>
                 </template>
 
 
@@ -387,10 +388,10 @@ export default {
       },
       loginPhoneSmsRules: {
         phone: [
-          {required: true, message: 'Please fill out your phone number.', trigger: 'blur'}
+          {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
         ],
         phone_code: [
-          {required: true, message: 'Please fill out your phone number.', trigger: 'blur'}
+          {required: true, message: 'Please enter 6 digit code.', trigger: 'blur'}
         ],
       },
       loginPhonePassForm: {
@@ -399,7 +400,7 @@ export default {
       },
       loginPhonePassRules: {
         phone: [
-          {required: true, message: 'Please fill out your phone number.', trigger: 'blur'}
+          {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
         ],
         password: [
           {required:true, message: 'Please enter your password', trigger: 'blur'}
@@ -750,7 +751,7 @@ export default {
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
 
                 setTimeout(function () {
-                  // self.skipHomePage()
+                  self.skipHomePage()
                   self.submitLoginLoadingStatus = false
                 }, 1500)
               }
