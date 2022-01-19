@@ -25,8 +25,9 @@ import store from "./store";
 import VueSocialSharing from 'vue-social-sharing'
 
 import gAuthPlugin from 'vue3-google-oauth2'
+
 import GoEasy from "goeasy";
-import IMService from "./assets/lib/imservice";
+import IMService from "./assets/lib/imservice"
 
 const messages = {
     en: {

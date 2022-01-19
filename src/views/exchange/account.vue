@@ -66,7 +66,7 @@ export default {
             callback: (action) => {
                 console.log(action)
               if(action === 'confirm'){
-                self.$router.push('/login')
+                self.$router.push({path:'/login',query:{email:email}})
               }
             }
           })

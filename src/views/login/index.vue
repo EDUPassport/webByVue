@@ -365,8 +365,9 @@ export default {
     return {
       imgLogo,
       shanghaiImg,
-      loginPhoneStatus:true,
-      loginEmailStatus:false,
+      loginPhoneStatus:false,
+      loginEmailStatus:true,
+
       loginByPhoneWithPasswordStatus:false,
       loginByPhoneWithSmsStatus:true,
 
@@ -514,6 +515,12 @@ export default {
       setCurrentUser,
       checkCodeBtn,
       getCheckCodeTimer
+    }
+  },
+  mounted() {
+    let email = this.$route.query.email
+    if(email){
+      this.loginForm.email = email
     }
   },
   created() {

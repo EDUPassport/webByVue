@@ -22,7 +22,7 @@
 
     </div>
     <div class="send-box-textarea">
-      <el-input class="message-input" type="textarea" maxlength="700" placeholder="发送消息"
+      <el-input class="message-input" type="textarea" maxlength="700" placeholder="Send Message"
                 @focus="messageInputFocusin"
                 v-model="content"></el-input>
     </div>
@@ -167,7 +167,8 @@ export default {
       this.sendMessage(fileMessage);
       this.$emit('onSent');
     },
-    sendTextMessage() {
+     async sendTextMessage() {
+
       if (this.content.trim().length !== 0) {
         let textMessage = this.goEasy.im.createTextMessage({
           text: this.content,
@@ -181,8 +182,13 @@ export default {
             }
           }
         });
-        this.sendMessage(textMessage);
-        this.$emit('onSent');
+        await this.sendMessage(textMessage);
+        await this.$emit('onSent');
+        await  this.$emit('onSuccess',this.to.uuid)
+        // setTimeout(function (){
+        //
+        // },1000)
+
         this.content = ''
       }
     },
@@ -195,7 +201,7 @@ export default {
       } else {
         localHistory = this.service.getGroupMessages(toId);
       }
-      // console.log(localHistory)
+
       localHistory.push(message)
 
       this.goEasy.im.sendMessage({

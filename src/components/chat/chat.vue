@@ -2,7 +2,9 @@
   <div>
     <div class="chat-container">
       <div class="chat-icon-container" @click="setShowChatStatus()">
-        <i class="xll-im-icon iconfont el-icon-aliimmessage"></i>
+        <el-button icon="xll-im-icon iconfont el-icon-aliimmessage" circle></el-button>
+<!--        <i class="xll-im-icon iconfont el-icon-aliimmessage"></i>-->
+        <div class="xll-im-unread-total"></div>
       </div>
     </div>
     <div class="chat-content-container" v-if="showChatStatus">
@@ -102,11 +104,13 @@
                    v-if="index == 0 || (messages[index].timestamp - messages[index - 1].timestamp > 5 * 60 * 1000)">
                 {{formatDate(message.timestamp)}}
               </div>
-              <chat-message :message="message" :to="friend" :currentUser="currentUser" :type="type" @showImageFullScreen="showImageFullScreen"/>
+              <chat-message :message="message" :messageStatus="message.status" :to="friend"
+                            :currentUser="currentUser" :type="type"
+                            @showImageFullScreen="showImageFullScreen"/>
             </div>
           </div>
         </div>
-        <send-box :to="friend" :type="type" @onSent="scrollToBottom"/>
+        <send-box :to="friend" :type="type" @onSent="scrollToBottom" @onSuccess="sendSuccess" />
 
         <div class="img-layer" @click="image.show = false" v-show="image.show">
           <el-image :src="image.url"></el-image>
@@ -116,7 +120,6 @@
     </div>
 
   </div>
-
 
 </template>
 
@@ -196,21 +199,22 @@ export default {
       }
       //监听会话列表变化
       this.goEasy.im.on(this.GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, (conversations) => {
-        let nowChatUserInfo = this.nowChatUserInfo
+        let nowChatUserInfo = self.nowChatUserInfo
 
         if(JSON.stringify(nowChatUserInfo) !== '{}'){
-          this.messages = this.service.getPrivateMessages(nowChatUserInfo.uuid);
-          this.friend = nowChatUserInfo;
-          this.activeConversationKey = nowChatUserInfo.uuid + '_'+nowChatUserInfo.identity
-          this.scrollToBottom();
-          this.initialPrivateListeners();
-          if(this.messages.length !== 0) {
-            this.markMessageAsRead(nowChatUserInfo.uuid);
+          self.messages = self.service.getPrivateMessages(nowChatUserInfo.uuid);
+          self.friend = nowChatUserInfo;
+          self.activeConversationKey = nowChatUserInfo.uuid + '_'+nowChatUserInfo.identity
+          self.scrollToBottom();
+          self.initialPrivateListeners();
+          if(self.messages.length !== 0) {
+            self.markMessageAsRead(nowChatUserInfo.uuid);
           }
         }
 
-        this.conversationsData = conversations.conversations || [];
-        this.unreadTotal = conversations.unreadTotal;
+        self.conversationsData = conversations.conversations || [];
+        self.unreadTotal = conversations.unreadTotal;
+        // console.log(self.conversationsData)
       });
 
       //加载会话列表
@@ -225,6 +229,7 @@ export default {
           console.log("失败获取最新会话列表, code:" + error.code + " content:" + error.content);
         }
       });
+      this.initialPrivateListeners()
 
     }
 
@@ -330,12 +335,16 @@ export default {
       this.action.show = true
     },
     initialPrivateListeners () {
+      let self = this
       //传入监听器，收到一条私聊消息总是滚到到页面底部
       this.service.onNewPrivateMessageReceive =  (friendId,message)=> {
+        console.log('传入监听器，收到一条私聊消息总是滚到到页面底部')
         console.log(message)
         if (friendId === this.friend.uuid) {
           this.markMessageAsRead(friendId);
-          this.scrollToBottom()
+          setTimeout(function () {
+            self.scrollToBottom()
+          },1000)
         }
       };
     },
@@ -389,9 +398,6 @@ export default {
         }
       });
     },
-    navigateBack() {//返回
-      this.$router.go(-1);
-    },
     showImageFullScreen (message) {
       this.image.url = message.payload.url;
       this.image.show = true;
@@ -402,6 +408,14 @@ export default {
         // console.log(height)
         this.$refs.scrollView.scrollTo(0, height)
       })
+    },
+    async sendSuccess(e){
+      console.log(e)
+      // await this.friend = await this.service.findFriendById(e,identity);
+     await this.$nextTick(()=>{
+        this.messages =  this.service.getPrivateMessages(e);
+      })
+
     }
   }
 }
@@ -411,7 +425,7 @@ export default {
 
 .chat-container{
   position: fixed;
-  bottom: 140px;
+  bottom: 120px;
   right: 0px;
   z-index: 1000;
 
@@ -421,18 +435,28 @@ export default {
   padding: 4px;
   border-radius: 10px;
   text-align: center;
-
+  position: relative;
 
   cursor: pointer;
   border: 1px solid #EEEEEE;
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
 }
 
+.xll-im-unread-total{
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background-color: #f60441;
+}
+
 .chat-content-container{
   position: fixed;
-  bottom: 180px;
+  bottom: 168px;
   right: 0px;
-  z-index: 1000;
+  z-index: 1100;
 
   background-color: #FFFFFF;
   border-top-left-radius: 10px;
@@ -736,7 +760,7 @@ export default {
   background-color: #EEEEEE;
 }
 .xll-im-icon{
-  font-size: 30px;
+  font-size: 24px;
   color: #B1C452;
 }
 
