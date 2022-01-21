@@ -116,6 +116,14 @@
           <el-image :src="image.url"></el-image>
         </div>
       </div>
+      <div class="chat-chat-container" v-else>
+        <div class="chat-chat-header">
+          <span class="chat-chat-title" ></span>
+          <div class="chat-chat-close" @click="setShowChatStatus()">
+            <el-icon :size="30" color="#808080"><circle-close /></el-icon>
+          </div>
+        </div>
+      </div>
 
     </div>
 

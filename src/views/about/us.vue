@@ -11,7 +11,7 @@
           About <span>ESL Passport</span>
         </div>
         <div class="about-label-underline"></div>
-        <div class="about-desc">
+        <p class="about-desc">
           Education professionals around the world face the same problems. As businesses grapple with high staff turnover rates, broken contracts, and increasing competition, educators dodge scams, battle with discrimination, and fight for equal pay - it's the same story everywhere.
 
           ESL Passport is on a mission to put a stop to practices like these and redefine the international education market. We're the world's first hub of information, resources, and impartial support aimed at anyone and everyone in the industry. Our digital platform sets new standards of transparency and accountability, and our in-person services support your professional growth.
@@ -21,7 +21,7 @@
           We're not here to find you a job or send you a teacher. We don't accept commission. And we're not your competition.
 
           Our aim is simply to make the international education market a more ethical and reliable place for everyone in it.
-        </div>
+        </p>
         <div class="about-read-more">
           <el-button type="primary">Read More...</el-button>
         </div>
@@ -43,7 +43,7 @@
             </div>
             <div class="we-do-item-label">CONNECTION</div>
             <div class="we-do-item-tips">
-              An education hub connecting professionals to education institutions
+              An education hub connecting professionals <br> to education institutions
             </div>
           </div>
           <div class="we-do-item">
@@ -52,7 +52,7 @@
             </div>
             <div class="we-do-item-label">LISTINGS</div>
             <div class="we-do-item-tips">
-              An organized registery of professional opportunities worldwide
+              An organized registery of professional <br> opportunities worldwide
             </div>
           </div>
           <div class="we-do-item">
@@ -61,7 +61,7 @@
             </div>
             <div class="we-do-item-label">EDUCATION</div>
             <div class="we-do-item-tips">
-              Promoting education every step of the way; and we do it well
+              Promoting education every step of the way; <br> and we do it well
             </div>
           </div>
         </div>
@@ -142,6 +142,7 @@ export default {
 
 .about-desc{
   font-size: 14px;
+  line-height: 20px;
   color: #808080;
   padding: 10px 0;
 }
@@ -162,13 +163,13 @@ export default {
   margin: 20px auto;
 }
 .we-do-label{
-  font-size: 18px;
+  font-size: 20px;
   color: #FE2060;
   font-weight: bold;
 }
 
 .we-do-label span{
-  font-size: 22px;
+  font-size: 26px;
   color: #003B48;
 }
 .we-do-content{
@@ -192,6 +193,8 @@ export default {
 }
 
 .we-do-item-tips{
+  width:60%;
+  margin:0 auto;
   font-size: 12px;
   color: #808080;
   padding: 10px;

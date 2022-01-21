@@ -5,7 +5,9 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 // import '../theme/index.css'
 import './style/index.css'
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
+// import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import en from 'element-plus/es/locale/lang/en'
+
 // import 'element-plus/theme-chalk/index.css'
 
 import {createI18n} from 'vue-i18n'
@@ -72,7 +74,7 @@ app.component('CircleClose',CircleClose)
 
 app.use(router)
 app.use(store)
-app.use(ElementPlus, {locale: zhCn, size: 'small', zIndex: 2000})
+app.use(ElementPlus, {locale: en, size: 'small', zIndex: 2000})
 app.use(i18n)
 app.use(VTypical, {
     /* options */
@@ -83,6 +85,7 @@ let gAuthClientId = '898474067102-m3svsfqjshsqcuv2dde0sbmlb1rsq0ca.apps.googleus
 const gAuthOptions = {clientId:gAuthClientId,scope:'email',prompt:'consent',fetch_basic_profile:false}
 app.use(gAuthPlugin,gAuthOptions)
 
+app.config.globalProperties.$store = store
 app.config.globalProperties.$filters = {
     newsDateFormat(value){
         let eParse = new Date(value)

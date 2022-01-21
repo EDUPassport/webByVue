@@ -1,5 +1,10 @@
 <template>
   <div class="bg" v-loading="showLoadingStatus">
+
+    <template v-if="exchangeAccountInfo">
+      <ExchangeAccountInfo :info="exchangeAccountInfo" ></ExchangeAccountInfo>
+    </template>
+
     <el-row class="bg-container" align="top" justify="center" >
       <el-col :xs="22" :sm="22" :md="8" :lg="8" :xl="8">
         <div class="jobs-filter-container">
@@ -175,11 +180,12 @@
 
 <script>
 
-import {useRouter} from "vue-router";
+import {useRouter,useRoute} from "vue-router";
 import {JOB_LIST, USER_OBJECT_LIST,JOBS_AREA_LIST,ADD_FAVORITE,CANCEL_FAVORITE} from "@/api/api";
 
 import featuredJobs from "@/components/featuredJobs";
 import latestIndustryNews from "@/components/latestIndustryNews";
+import ExchangeAccountInfo from '@/components/jobs/exchangeInfo';
 
 export default {
   name: "list",
@@ -247,12 +253,15 @@ export default {
   },
   components: {
     featuredJobs,
-    latestIndustryNews
+    latestIndustryNews,
+    ExchangeAccountInfo
   },
   setup() {
     let router = useRouter()
-    // let route = useRoute()
+    let route = useRoute()
 
+    const exchangeAccountInfo = route.query.exchange_job
+    console.log(exchangeAccountInfo)
     const onSwiper = (swiper) => {
       console.log(swiper);
     };
@@ -271,7 +280,8 @@ export default {
     return {
       onSwiper,
       onSlideChange,
-      skipJobsList
+      skipJobsList,
+      exchangeAccountInfo
     };
   },
   created() {

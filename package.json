@@ -30,6 +30,7 @@
     "goeasy": "^2.2.5",
     "graceful-fs": "^4.2.8",
     "gulp": "^4.0.2",
+    "js-base64": "^3.7.2",
     "js-md5": "^0.7.3",
     "list-stream": "^2.0.0",
     "lodash.template": "^4.5.0",

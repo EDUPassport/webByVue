@@ -9,7 +9,8 @@ const routes = [
         component: layout,
         redirect: '/home',
         meta: {
-            title: 'Home'
+            titleC: 'China Home',
+            titleG:'Global Home'
         },
         children: [
             {
@@ -17,7 +18,8 @@ const routes = [
                 name: 'home',
                 component: () => import('@/views/home/index'),
                 meta: {
-                    title: 'Home'
+                    titleC: 'China Home',
+                    titleG: 'Global Home'
                 },
             },
             {
@@ -25,7 +27,8 @@ const routes = [
                 name: 'jobs',
                 component: () => import('@/views/jobs/list'),
                 meta: {
-                    title: 'Jobs Lists'
+                    titleC: 'China Jobs Lists',
+                    titleG: 'Global Jobs Lists'
                 }
             },
             {
@@ -33,7 +36,8 @@ const routes = [
                 name: 'jobsDetail',
                 component: () => import('@/views/jobs/detail'),
                 meta: {
-                    title: 'Jobs Detail'
+                    titleC: 'China Jobs Detail',
+                    titleG: 'Global Jobs Detail'
                 }
             },
             {
@@ -41,7 +45,8 @@ const routes = [
                 name: 'postJob',
                 component: () => import('@/views/jobs/post/post'),
                 meta: {
-                    title: 'Post a Job'
+                    titleC: 'China Post a Job',
+                    titleG: 'Global Post a Job',
                 }
             },
             {
@@ -49,7 +54,8 @@ const routes = [
                 name: 'myJobs',
                 component: () => import('@/views/jobs/my/jobs'),
                 meta: {
-                    title: 'My Posted Jobs'
+                    titleC: 'China My Posted Jobs',
+                    titleG: 'Global My Posted Jobs',
                 }
             },
             {
@@ -57,7 +63,8 @@ const routes = [
                 name: 'deals',
                 component: () => import('@/views/deals/index'),
                 meta: {
-                    title: 'Deals List'
+                    titleC: 'China Deals List',
+                    titleG: 'Global Deals List',
                 }
             },
             {
@@ -65,7 +72,8 @@ const routes = [
                 name: 'dealsOffer',
                 component: () => import('@/views/deals/offer/offer'),
                 meta: {
-                    title: 'Offer a Deal'
+                    titleC: 'China Offer a Deal',
+                    titleG: 'Global Offer a Deal',
                 }
             },
             {
@@ -73,7 +81,8 @@ const routes = [
                 name: 'myDeals',
                 component: () => import('@/views/deals/my/deals'),
                 meta: {
-                    title: 'My Deals'
+                    titleC: 'China My Deals',
+                    titleG: 'Global My Deals',
                 }
             },
             {
@@ -81,7 +90,8 @@ const routes = [
                 name: 'dealDetail',
                 component: () => import('@/views/deals/detail'),
                 meta: {
-                    title: 'Deal Detail'
+                    titleC: 'China Deal Detail',
+                    titleG: 'Global Deal Detail',
                 }
             },
             {
@@ -89,7 +99,8 @@ const routes = [
                 name: 'overview',
                 component: () => import('@/views/profile/overview'),
                 meta: {
-                    title: 'Overview'
+                    titleC: 'China Overview',
+                    titleG: 'Global Overview',
                 }
             },
             {
@@ -97,7 +108,8 @@ const routes = [
                 name: 'favorites',
                 component: () => import('@/views/me/favorites'),
                 meta: {
-                    title: 'My Favorites'
+                    titleC: 'China My Favorites',
+                    titleG: 'Global My Favorites'
                 }
             },
             {
@@ -105,7 +117,8 @@ const routes = [
                 name: 'myApplications',
                 component: () => import('@/views/me/applications'),
                 meta: {
-                    title: 'My Applications'
+                    titleC: 'China My Applications',
+                    titleG: 'Global My Applications',
                 }
             },
             {
@@ -113,7 +126,8 @@ const routes = [
                 name: 'roleEducator',
                 component: () => import('@/views/role/educator'),
                 meta: {
-                    title: 'Educator'
+                    titleC: 'China Educator',
+                    titleG: 'Global Educator',
                 }
             },
             {
@@ -121,7 +135,8 @@ const routes = [
                 name: 'roleBusiness',
                 component: () => import('@/views/role/business'),
                 meta: {
-                    title: 'Business'
+                    titleC: 'China Business',
+                    titleG: 'Global Business',
                 }
             },
             {
@@ -129,7 +144,8 @@ const routes = [
                 name: 'roleVendor',
                 component: () => import('@/views/role/vendor'),
                 meta: {
-                    title: 'Vendor'
+                    titleC: 'China Vendor',
+                    titleG: 'Global Vendor',
                 }
             },
             {
@@ -137,7 +153,8 @@ const routes = [
                 name: 'educatorProfile',
                 component: () => import('@/views/profile/educator/profile'),
                 meta: {
-                    title: 'My Profile'
+                    titleC: 'China My Profile',
+                    titleG: 'Global My Profile',
                 }
             },
             {
@@ -145,7 +162,8 @@ const routes = [
                 name: 'editEducatorBasic',
                 component: () => import('@/views/profile/educator/edit/basic'),
                 meta: {
-                    title: 'Edit Basic Info'
+                    titleC: 'China Edit Basic Info',
+                    titleG: 'Global Edit Basic Info',
                 }
             },
             {
@@ -153,7 +171,8 @@ const routes = [
                 name: 'editEducatorEducation',
                 component: () => import('@/views/profile/educator/edit/education'),
                 meta: {
-                    title: 'Education'
+                    titleC: 'China Education',
+                    titleG: 'Global Education',
                 }
             },
             {
@@ -161,7 +180,8 @@ const routes = [
                 name: 'editEducatorWork',
                 component: () => import('@/views/profile/educator/edit/work'),
                 meta: {
-                    title: 'Work Experience'
+                    titleC: 'China Work Experience',
+                    titleG: 'Global Work Experience',
                 }
             },
             {
@@ -169,7 +189,8 @@ const routes = [
                 name: 'businessProfile',
                 component: () => import('@/views/profile/business/profile'),
                 meta: {
-                    title: 'My Profile'
+                    titleC: 'China My Profile',
+                    titleG: 'Global My Profile',
                 }
             },
             {
@@ -177,7 +198,8 @@ const routes = [
                 name: 'editBusinessBasic',
                 component: () => import('@/views/profile/business/edit/basic'),
                 meta: {
-                    title: 'Edit Basic Info'
+                    titleC: 'China Edit Basic Info',
+                    titleG: 'Global Edit Basic Info',
                 }
             },
             {
@@ -185,7 +207,8 @@ const routes = [
                 name: 'editBusinessInfo',
                 component: () => import('@/views/profile/business/edit/businessInfo'),
                 meta: {
-                    title: 'Edit Business Information'
+                    titleC: 'China Edit Business Information',
+                    titleG: 'Global Edit Business Information',
                 }
             },
             {
@@ -193,7 +216,8 @@ const routes = [
                 name: 'editSchoolInfo',
                 component: () => import('@/views/profile/business/edit/school'),
                 meta: {
-                    title: 'Edit School Information'
+                    titleC: 'China Edit School Information',
+                    titleG: 'Global Edit School Information',
                 }
             },
             {
@@ -201,7 +225,8 @@ const routes = [
                 name: 'vendorProfile',
                 component: () => import('@/views/profile/vendor/profile'),
                 meta: {
-                    title: 'My Profile'
+                    titleC: 'China My Profile',
+                    titleG: 'Global My Profile',
                 }
             },
             {
@@ -209,7 +234,8 @@ const routes = [
                 name: 'editVendorBasic',
                 component: () => import('@/views/profile/vendor/edit/basic'),
                 meta: {
-                    title: 'Edit Basic Info'
+                    titleC: 'China Edit Basic Info',
+                    titleG: 'Global Edit Basic Info',
                 }
             },
             {
@@ -217,7 +243,8 @@ const routes = [
                 name: 'editVendorInfo',
                 component: () => import('@/views/profile/vendor/edit/vendorInfo'),
                 meta: {
-                    title: 'Edit Company General Info'
+                    titleC: 'China Edit Company General Info',
+                    titleG: 'Global Edit Company General Info',
                 }
             },
             {
@@ -225,7 +252,8 @@ const routes = [
                 name: 'editLegalInfo',
                 component: () => import('@/views/profile/vendor/edit/legalInfo'),
                 meta: {
-                    title: 'Edit Company Legal Info'
+                    titleC: 'China Edit Company Legal Info',
+                    titleG: 'Global Edit Company Legal Info',
                 }
             },
             {
@@ -233,7 +261,8 @@ const routes = [
                 name: 'searchResult',
                 component: () => import('@/views/search/result'),
                 meta: {
-                    title: 'Search Result'
+                    titleC: 'China Search Result',
+                    titleG: 'Global Search Result',
                 }
             },
             {
@@ -241,7 +270,8 @@ const routes = [
                 name: 'privacyPolicy',
                 component: () => import('@/views/privacy/policy'),
                 meta: {
-                    title: 'Privacy Policy'
+                    titleC: 'China Privacy Policy',
+                    titleG: 'Global Privacy Policy',
                 }
             },
             {
@@ -249,7 +279,8 @@ const routes = [
                 name: 'contactUs',
                 component: () => import('@/views/contact/us'),
                 meta: {
-                    title: 'Contact Us'
+                    titleC: 'China Contact Us',
+                    titleG: 'Global Contact Us',
                 }
             },
             {
@@ -257,7 +288,8 @@ const routes = [
                 name: 'aboutUs',
                 component: () => import('@/views/about/us'),
                 meta: {
-                    title: 'About Us'
+                    titleC: 'China About Us',
+                    titleG: 'Global About Us',
                 }
             },
             {
@@ -265,7 +297,8 @@ const routes = [
                 name:'industryNews',
                 component:()=>import('@/views/industry/news'),
                 meta:{
-                    title: 'Industry News'
+                    titleC: 'China Industry News',
+                    titleG: 'Global Industry News',
                 }
             },
             {
@@ -273,7 +306,8 @@ const routes = [
                 name:'industryDetail',
                 component:()=>import('@/views/industry/detail'),
                 meta:{
-                    title: 'Industry News Detail'
+                    titleC: 'China Industry News Detail',
+                    titleG: 'Global Industry News Detail'
                 }
             },
             {
@@ -281,7 +315,8 @@ const routes = [
                 name:'blogList',
                 component:()=>import('@/views/blog/list'),
                 meta:{
-                    title: 'Blog List'
+                    titleC: 'China Blog List',
+                    titleG: 'Global Blog List',
                 }
             },
             {
@@ -289,7 +324,8 @@ const routes = [
                 name:'blogDetail',
                 component:()=>import('@/views/blog/detail'),
                 meta:{
-                    title: 'Blog Detail'
+                    titleC: 'China Blog Detail',
+                    titleG: 'Global Blog Detail',
                 }
             }
 
@@ -300,7 +336,8 @@ const routes = [
         name: 'comeSoon',
         component: () => import('@/views/comeSoon'),
         meta: {
-            title: 'Coming Soon'
+            titleC: 'China Coming Soon',
+            titleG: 'Global Coming Soon'
         }
     },
     {
@@ -308,7 +345,8 @@ const routes = [
         name: 'exchangeAccount',
         component: () => import('@/views/exchange/account'),
         meta: {
-            title: 'Exchange Information'
+            titleC: 'China Exchange Information',
+            titleG: 'Global Exchange Information',
         }
     },
     {
@@ -316,7 +354,8 @@ const routes = [
         name: 'login',
         component: () => import('@/views/login/index'),
         meta: {
-            title: 'Login'
+            titleC: 'China Login',
+            titleG: 'Global Login',
         },
     },
     {
@@ -324,7 +363,8 @@ const routes = [
         name: 'linkedinLogin',
         component: () => import('@/views/login/linkedin'),
         meta: {
-            title: 'Linkedin Login'
+            titleC: 'China Linkedin Login',
+            titleG: 'Global Linkedin Login',
         }
     },
     {
@@ -332,7 +372,8 @@ const routes = [
         name: 'googleLogin',
         component: () => import('@/views/login/google'),
         meta: {
-            title: 'Google Login'
+            titleC: 'China Google Login',
+            titleG: 'Global Google Login',
         }
     },
 
@@ -341,7 +382,8 @@ const routes = [
         name: 'noFound',
         component: () => import(/* webpackChunkName: "noFound" */ '@/views/noFound.vue'),
         meta: {
-            title: 'NOT FOUND'
+            titleC: 'China Not Found',
+            titleG: 'Global Not Found',
         },
     },
     {
@@ -349,7 +391,8 @@ const routes = [
         name: 'noFound',
         component: () => import(/* webpackChunkName: "noFound" */ '@/views/noFound.vue'),
         meta: {
-            title: 'NOT FOUND'
+            titleC: 'China Not Found',
+            titleG: 'Global Not Found',
         },
     },
 ]
@@ -367,14 +410,25 @@ const router = createRouter({
 })
 
 const defaultTitle = 'Home';
+
 router.beforeEach((to, from, next) => {
-    document.title = to.meta.title ? to.meta.title : defaultTitle;
+
     let envName = process.env.VUE_APP_ENV_NAME
+
+    if(envName === 'developmentCN' || envName === 'productionCN'){
+        document.title = to.meta.titleC ? to.meta.titleC : defaultTitle;
+    }
+
+    if(envName === 'development' || envName === 'production'){
+        document.title = to.meta.titleG ? to.meta.titleG : defaultTitle;
+    }
+
     if (isPhone()) {
         let domain = ''
         if(envName === 'developmentCN'){
             domain = 'https://test.esl-passport.cn/'
         }
+
         if(envName === 'development'){
             domain = 'https://test.esl-passport.cn/'
         }

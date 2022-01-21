@@ -172,6 +172,7 @@ import {CHANGE_IDENTITY_LANGUAGE, GET_BASIC_INFO} from '@/api/api'
 import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
 import discountCardImg from '@/assets/discountcard/discountCard.png'
+import {encode,decode} from 'js-base64'
 
 export default {
   name: "Header",
@@ -247,12 +248,30 @@ export default {
         let lastName = localStorage.getItem('last_name')
         let email = localStorage.getItem('email')
         let uid = localStorage.getItem('uid')
-        let navUrl = domain + '/exchange/account?uid=' + uid + '&email=' + email + '&first_name=' + firstName
-            + '&last_name=' + lastName
-        console.log(navUrl)
-        window.open(navUrl, '_blank')
+
+        let navObj = {
+          uid:uid,
+          email:email,
+          first_name:firstName,
+          last_name:lastName
+        }
+
+        let navObjStr = JSON.stringify(navObj)
+        // console.log(encode(navObjStr))
+
+        let a = encode(navObjStr)
+
+        // console.log(decode(a))
+        let b = decode(a)
+
+        console.log(JSON.parse(b))
+
+        let navUrl = domain + '/jobs?exchange_job='+a
+        // console.log(navUrl)
+        window.open(navUrl,'_self')
       } else {
-        window.open(domain, '_blank')
+        let adomain = domain + '/jobs'
+        window.open(adomain, '_self')
       }
 
     },
