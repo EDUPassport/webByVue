@@ -358,6 +358,7 @@ import shanghaiImg from '@/assets/bg/bg-shanghai.jpg'
 import {randomString} from '@/utils/index'
 import {useStore} from 'vuex'
 import {reactive} from "vue";
+import {decode} from "js-base64";
 
 export default {
   name: "index",
@@ -459,11 +460,14 @@ export default {
     }
 
     const skipHomePage = () => {
-      return router.push(
-          {
-            path: '/'
-          }
-      )
+      let a = route.query.redirect_params
+      if(a){
+        let b = JSON.parse(decode(a))
+        if(b.path){
+          return router.push({path: b.path,query:b.query})
+        }
+      }
+      return router.push({path: '/home'})
     }
 
     let value = route.query.type;
@@ -525,8 +529,8 @@ export default {
   },
   created() {
     this.showValue = this.showType
-    let linkedinCode = this.$route.query.code;
-    console.log(linkedinCode)
+    // let linkedinCode = this.$route.query.code;
+    // console.log(linkedinCode)
   },
   methods: {
     getCheckCode(){

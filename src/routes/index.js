@@ -23,6 +23,15 @@ const routes = [
                 },
             },
             {
+                path: '/services/price',
+                name: 'servicesPrice',
+                component: () => import('@/views/services/price'),
+                meta: {
+                    titleC: 'China Pricing',
+                    titleG: 'Global Pricing'
+                },
+            },
+            {
                 path: '/jobs',
                 name: 'jobs',
                 component: () => import('@/views/jobs/list'),

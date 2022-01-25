@@ -4,7 +4,7 @@
     <el-backtop/>
     <el-footer height="auto" class="footer-bg">
       <el-row class="footer-row" :gutter="0" align="top" justify="center">
-        <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
+        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="3">
           <div class="esl-logo-container">
             <el-image class="esl-logo" :src="imgLogo"></el-image>
           </div>
@@ -12,7 +12,7 @@
             Platform for today's education needs, people, and businesses.
           </div>
         </el-col>
-        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
+        <el-col :xs="24" :sm="{span:5,offset:1}" :md="{span:5,offset:1}" :lg="{span:5,offset:1}" :xl="{span:5,offset:1}">
           <div class="footer-nav-label">
             Services
           </div>
@@ -25,11 +25,12 @@
           <div class="footer-nav-item">
             <router-link to="#">Job Featuring</router-link>
           </div>
-          <div class="footer-nav-item">
-            <router-link to="#">Pricing</router-link>
+          <div class="footer-nav-item" v-if="identity==2 || identity == 3">
+            <router-link to="/services/price">Pricing</router-link>
           </div>
           <div class="footer-nav-item">
-            <router-link to="#">Wechat Mini Program</router-link>
+            <el-link href="weixin://dl/business/?t=6eaAd7x8him">Wechat Mini Program</el-link>
+<!--            <router-link to="#">Wechat Mini Program</router-link>-->
           </div>
           <div class="footer-nav-item">
             <router-link to="#">Start-Up Program</router-link>
@@ -68,7 +69,7 @@
             Company
           </div>
           <div class="footer-nav-item">
-            <router-link to="/">About Us</router-link>
+            <router-link to="/about/us">About Us</router-link>
           </div>
           <div class="footer-nav-item">
             <router-link to="/">Careers</router-link>
@@ -83,10 +84,10 @@
             <router-link to="#">Community Support</router-link>
           </div>
           <div class="footer-nav-item">
-            <router-link to="#">Industry News</router-link>
+            <router-link to="/industry/news">Industry News</router-link>
           </div>
           <div class="footer-nav-item">
-            <router-link to="#">Our Blog</router-link>
+            <router-link to="/blog/list">Our Blog</router-link>
           </div>
           <div class="footer-nav-item">
             <router-link to="#">Sitemap</router-link>
@@ -175,9 +176,18 @@ import instagramImg from '@/assets/footer/instagram-fill.png'
 import {ADD_SUBSCRIBE_EMAIL} from '@/api/api'
 import ChatComponent from '@/components/chat/chat'
 
-
 export default {
   name: "Footer",
+  setup(){
+
+  },
+  computed:{
+    identity:{
+      get(){
+        return this.$store.state.identity
+      }
+    }
+  },
   data() {
     return {
       imgLogo,
@@ -243,7 +253,7 @@ export default {
 }
 
 .esl-intro{
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -261,6 +271,11 @@ export default {
 .footer-nav-item a{
   text-decoration: none;
   color: #C8C8CA;
+}
+
+.footer-nav-item a:hover{
+  color: #00b3d2;
+  border-bottom: 1px solid #00b3d2;
 }
 
 .social-media {

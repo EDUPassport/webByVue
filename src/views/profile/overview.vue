@@ -9,15 +9,15 @@
           <div class="dashboard-container">
             <div class="dashboard-label">Dashboard</div>
             <div class="dashboard-content">
-              <div class="dashboard-item jobs-bg">
+              <div class="dashboard-item jobs-bg" v-if="identity == 2">
                 <div class="dashboard-item-l">
                   <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                 </div>
                 <div class="dashboard-item-r">
-                  <router-link to="/jobs">Job Posts</router-link>
+                  <router-link to="/jobs">Job Posts </router-link>
                 </div>
               </div>
-              <div class="dashboard-item deals-bg">
+              <div class="dashboard-item deals-bg" v-if="identity == 3">
                 <div class="dashboard-item-l">
                   <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                 </div>
@@ -84,12 +84,24 @@ import {VISITOR_USER_INFO} from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
 import { onBeforeRouteUpdate } from "vue-router";
+import {useStore} from "vuex";
+import {computed} from "vue";
 
 export default {
   name: "index",
   components: {
     meSideMenu,
     accountInfo
+  },
+  setup(){
+    const store = useStore()
+    const identity1 = computed(()=>{
+      return store.state.identity
+    })
+
+    return {
+      identity1
+    }
   },
   data() {
     return {

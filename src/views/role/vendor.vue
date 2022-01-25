@@ -423,6 +423,7 @@ export default {
         if (res.code == 200) {
           console.log('success')
           localStorage.setItem('identity',identity)
+          this.$store.commit('identity',identity)
           this.$router.push('/home')
         }
       }).catch(err=>{

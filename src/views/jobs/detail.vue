@@ -139,6 +139,9 @@
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+        <div class="post-a-job">
+          <el-button class="post-a-job-btn" type="primary" round @click="postJob()">Post a Job</el-button>
+        </div>
         <div class="company-bio-container">
           <div class="company-bio-label">Company Bio</div>
           <div class="company-bio-label-underline"></div>
@@ -208,9 +211,11 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import {COMPANY_JOB_LIST, JOB_DETAIL,APPLY_JOBS,ADD_FAVORITE,IS_FAVORITE,
-  CANCEL_FAVORITE,ADD_TO_CHAT} from "@/api/api";
+  CANCEL_FAVORITE,ADD_TO_CHAT,GET_BASIC_INFO,CHANGE_IDENTITY_LANGUAGE} from "@/api/api";
 import latestIndustryNews from "@/components/latestIndustryNews";
 import {useStore} from 'vuex'
+import {randomString} from "@/utils";
+import {encode } from "js-base64";
 
 export default {
   name: "detail",
@@ -232,7 +237,8 @@ export default {
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       detailData: {},
       otherJobsData:[],
-      isFavoriteValue:0
+      isFavoriteValue:0,
+      versionTime:randomString()
     }
   },
   components:{
@@ -462,6 +468,143 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
+      })
+
+    },
+    postJob(){
+      let token = localStorage.getItem('token')
+      let self = this
+
+      if(!token || token == ''){
+        return this.$msgbox({
+          title:'Post a Job',
+          message:'Before posting a job, you need to log in',
+          type:'warning',
+          confirmButtonText:'Log in',
+          callback(action){
+            console.log(action)
+            if(action==='confirm'){
+              let redirectParamsObj = {
+                path:'/jobs/detail',
+                query:{
+                  id:self.$route.query.id
+                }
+              }
+
+              let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
+
+              self.$router.push({path:'/login',query:{redirect_params:redirectParamsStr}})
+
+            }
+          }
+        })
+      }
+
+      let identity = localStorage.getItem('identity')
+
+      if(identity != 2){
+          this.selectRole(2)
+      }
+
+      self.$router.push({path:'/jobs/post',query:{version_time:self.versionTime}})
+
+    },
+    selectRole(e) {
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        let isEducator = res.message.is_educator;
+        let isBusiness = res.message.is_business;
+        let isVendor = res.message.is_vendor;
+        // let isOther = res.message.is_other;
+        // let identity = res.message.identity;
+
+        if (e == 1) {
+          if (isEducator >= 10) {
+            let firstName = res.message.educator_info.first_name;
+            let lastName = res.message.educator_info.last_name;
+            let avatar = res.message.educator_info.profile_photo;
+
+            localStorage.setItem('name', firstName + ' ' + lastName)
+            localStorage.setItem('avatar', avatar)
+            localStorage.setItem('first_name', firstName)
+            localStorage.setItem('last_name', lastName)
+
+            this.$store.commit('username', firstName + ' ' + lastName)
+            this.$store.commit('userAvatar', avatar)
+
+            this.changeIdentity(1)
+          } else {
+            this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push('/role/educator')
+          }
+
+        }
+        if (e == 2) {
+          if (isBusiness >= 10) {
+            let firstName = res.message.business_info.first_name;
+            let lastName = res.message.business_info.last_name;
+            let avatar = res.message.business_info.profile_photo;
+            localStorage.setItem('name', firstName + ' ' + lastName)
+            localStorage.setItem('avatar', avatar)
+            localStorage.setItem('first_name', firstName)
+            localStorage.setItem('last_name', lastName)
+
+            this.$store.commit('username', firstName + ' ' + lastName)
+            this.$store.commit('userAvatar', avatar)
+
+            this.changeIdentity(2)
+          } else {
+            this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push('/role/business')
+          }
+
+        }
+        if (e == 3) {
+          if (isVendor >= 10) {
+            let firstName = res.message.vendor_info.first_name;
+            let lastName = res.message.vendor_info.last_name;
+            let avatar = res.message.vendor_info.profile_photo;
+
+            localStorage.setItem('name', firstName + ' ' + lastName)
+            localStorage.setItem('avatar', avatar)
+            localStorage.setItem('first_name', firstName)
+            localStorage.setItem('last_name', lastName)
+
+            this.$store.commit('username', firstName + ' ' + lastName)
+            this.$store.commit('userAvatar', avatar)
+
+            this.changeIdentity(3)
+          } else {
+            this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push('/role/vendor')
+          }
+
+        }
+
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    changeIdentity(identity) {
+      let params = {
+        token: localStorage.getItem('token'),
+        identity: identity
+      }
+
+      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          localStorage.setItem('identity', identity)
+          this.$store.commit('identity',identity)
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
       })
 
     }
@@ -893,6 +1036,15 @@ export default {
   font-size: 34px;
 }
 
+.post-a-job{
+  width: 100%;
+  text-align: center;
+  padding-top: 20px;
+}
+.post-a-job-btn{
+  width: 90%;
+  font-size: 14px;
+}
 
 .company-bio-container {
   background-color: #ffffff;

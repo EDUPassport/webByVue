@@ -88,11 +88,11 @@
 
                         let msgBoxMsg = 'China'
 
-                        if (self.envName === 'developmentCN' || self.envName  === 'development') {
+                        if (self.envName === 'developmentCN' || self.envName  === 'productionCN') {
                             msgBoxMsg = 'China'
                         }
 
-                        if (self.envName  === 'productionCN' || self.envName  === 'production') {
+                        if (self.envName  === 'development' || self.envName  === 'production') {
                             msgBoxMsg = 'Global'
                         }
 

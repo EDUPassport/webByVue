@@ -199,6 +199,7 @@ export default {
     this.showLoading = true;
 
     let user = this.currentUser
+
     this.type = this.GoEasy.IM_SCENE.PRIVATE;
 
     if(user){
