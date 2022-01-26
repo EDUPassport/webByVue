@@ -49,6 +49,47 @@
             <div class="deals-favorite" v-else @click="addFavorite(detailData.id,2,detailData.title,detailData.userInfo.logo)">
               <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
             </div>
+
+            <div class="social-share-container">
+
+              <div class="social-share-icon-container"
+                   @click="showSocialShareExpandStatus = !showSocialShareExpandStatus"
+                   @mouseover="showSocialShareExpandStatus=true">
+                <el-icon :size="24">
+                  <Share/>
+                </el-icon>
+              </div>
+
+              <div class="social-share-icon-expand" v-if="showSocialShareExpandStatus"
+                   @mouseleave="showSocialShareExpandStatus = false"
+              >
+                <ShareNetwork
+                    network="Twitter"
+                    :url="locationUrl"
+                    :title="detailData.title == undefined ? '' : detailData.title"
+                >
+                  <i class="iconfont el-icon-alitwitter xll-icon"></i>
+                </ShareNetwork>
+                <ShareNetwork
+                    network="LinkedIn"
+                    :url="locationUrl"
+                    :title="detailData.title == undefined ? '' : detailData.title"
+                >
+                  <i class="iconfont el-icon-alilinkedin xll-icon"></i>
+                </ShareNetwork>
+                <ShareNetwork
+                    network="Facebook"
+                    :url="locationUrl"
+                    :title="detailData.title == undefined ? '' : detailData.title"
+                    :description="detailData.desc == undefined ? '' : detailData.desc"
+                    :quote="detailData.title == undefined ? '' : detailData.title"
+                >
+                  <i class="iconfont el-icon-alifacebook xll-icon"></i>
+                </ShareNetwork>
+              </div>
+
+            </div>
+
           </div>
 
           <!--          <div class="apply-btn-container">-->
@@ -117,10 +158,11 @@ export default {
 
     const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
     const setShowChatStatus = () => store.commit('showChatStatus', true)
-
+    const locationUrl  = window.location.href;
     return {
       setNowChatUserInfo,
-      setShowChatStatus
+      setShowChatStatus,
+      locationUrl
     }
 
   },
@@ -130,7 +172,8 @@ export default {
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       detailData: {},
       otherJobsData:[],
-      isFavoriteValue:0
+      isFavoriteValue:0,
+      showSocialShareExpandStatus:false
     }
   },
   components:{
@@ -805,5 +848,50 @@ export default {
   font-size: 34px;
 }
 
+.social-share-container {
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 20px;
+}
+
+.social-share-icon-container {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #1E7AA2;
+  background-color: #FFFFFF;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.social-share-icon-expand {
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.social-share-icon-expand >>> a {
+  margin-left: -6px;
+  background-color: #FFFFFF;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #000000;
+  display: flex;
+  border-radius: 30px;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.xll-icon {
+  font-size: 24px;
+}
 
 </style>

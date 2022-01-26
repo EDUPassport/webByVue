@@ -885,11 +885,16 @@ export default {
           }
         }).catch(err => {
           console.log(err)
-          this.$message.error(err.msg)
+          if(err.code === 400){
+            this.$message.error('Please complete your profile in order to apply')
+          }else{
+            this.$message.error(err.msg)
+          }
+
         })
 
       } else {
-        this.$message.warning('Only Educator Can Apply')
+        this.$message.warning('Please switch to am educator profile to be able to apply')
       }
 
 

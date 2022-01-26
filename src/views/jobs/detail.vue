@@ -136,9 +136,51 @@
             <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
           </div>
 
+          <div class="social-share-container">
+
+            <div class="social-share-icon-container"
+                 @click="showSocialShareExpandStatus = !showSocialShareExpandStatus"
+                 @mouseover="showSocialShareExpandStatus=true">
+              <el-icon :size="24">
+                <Share/>
+              </el-icon>
+            </div>
+
+            <div class="social-share-icon-expand" v-if="showSocialShareExpandStatus"
+                 @mouseleave="showSocialShareExpandStatus = false"
+            >
+              <ShareNetwork
+                  network="Twitter"
+                  :url="locationUrl"
+                  :title="detailData.job_title == undefined ? '' : detailData.job_title"
+              >
+                <i class="iconfont el-icon-alitwitter xll-icon"></i>
+              </ShareNetwork>
+              <ShareNetwork
+                  network="LinkedIn"
+                  :url="locationUrl"
+                  :title="detailData.job_title == undefined ? '' : detailData.job_title"
+              >
+                <i class="iconfont el-icon-alilinkedin xll-icon"></i>
+              </ShareNetwork>
+              <ShareNetwork
+                  network="Facebook"
+                  :url="locationUrl"
+                  :title="detailData.job_title == undefined ? '' : detailData.job_title"
+                  :description="detailData.desc == undefined ? '' : detailData.desc"
+                  :quote="detailData.job_title == undefined ? '' : detailData.job_title"
+              >
+                <i class="iconfont el-icon-alifacebook xll-icon"></i>
+              </ShareNetwork>
+            </div>
+
+          </div>
+
+
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+
         <div class="post-a-job">
           <el-button class="post-a-job-btn" type="primary" round @click="postJob()">Post a Job</el-button>
         </div>
@@ -224,10 +266,11 @@ export default {
 
     const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
     const setShowChatStatus = () => store.commit('showChatStatus', true)
-
+    const locationUrl  = window.location.href;
     return {
       setNowChatUserInfo,
-      setShowChatStatus
+      setShowChatStatus,
+      locationUrl
     }
 
   },
@@ -238,7 +281,8 @@ export default {
       detailData: {},
       otherJobsData:[],
       isFavoriteValue:0,
-      versionTime:randomString()
+      versionTime:randomString(),
+      showSocialShareExpandStatus:false
     }
   },
   components:{
@@ -355,11 +399,16 @@ export default {
           }
         }).catch(err=>{
           console.log(err)
-          this.$message.error(err.msg)
+          if(err.code === 400){
+            this.$message.error('Please complete your profile in order to apply')
+          }else{
+            this.$message.error(err.msg)
+          }
+
         })
 
       } else {
-        this.$message.warning('Only Educator Can Apply')
+        this.$message.warning('Please switch to am educator profile to be able to apply')
       }
 
 
@@ -1199,5 +1248,51 @@ export default {
 .basemap{
   width: 100%;
   height: 100%;
+}
+
+.social-share-container {
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 20px;
+}
+
+.social-share-icon-container {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #1E7AA2;
+  background-color: #FFFFFF;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.social-share-icon-expand {
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.social-share-icon-expand >>> a {
+  margin-left: -6px;
+  background-color: #FFFFFF;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #000000;
+  display: flex;
+  border-radius: 30px;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.xll-icon {
+  font-size: 24px;
 }
 </style>

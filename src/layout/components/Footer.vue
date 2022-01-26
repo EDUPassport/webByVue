@@ -127,7 +127,7 @@
       </el-row>
 
       <el-row class="footer-b" :gutter="0" align="middle" justify="space-between">
-        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="9">
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
           <div class="social-media">
             <div class="social-media-item">
               <el-link class="social-media-item-link"
@@ -157,7 +157,7 @@
           </div>
 
         </el-col>
-        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="9">
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
           <div class="footer-b-tips">
             We are global education change-markers. <span>©2021 ESL Passport</span>
           </div>

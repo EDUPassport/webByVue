@@ -25,26 +25,40 @@
                       v-model="isInternationalName "
                       type="border-card" @tab-click="handleIsInternationalClick">
                     <el-tab-pane label="China" name="first">
-                      <el-form-item label="Job Location">
-                        <el-select v-model="jobForm.province"
-                                   @change="provinceChange"
-                                   placeholder="Select Province">
-                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
-                                     :value="item.id"></el-option>
-                        </el-select>
-                        <el-select v-model="jobForm.city"
-                                   @change="cityChange"
-                                   placeholder="Select City">
-                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                     :value="item.id"></el-option>
-                        </el-select>
-                        <el-select v-model="jobForm.district"
-                                   @change="districtChange"
-                                   placeholder="Select District">
-                          <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                     :value="item.id"></el-option>
-                        </el-select>
-                      </el-form-item>
+                      <template v-if="envName==='developmentCN' || envName==='productionCN' ">
+                        <el-form-item label="Job Location">
+                          <el-select v-model="jobForm.province"
+                                     @change="provinceChange"
+                                     placeholder="Select Province">
+                            <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
+                                       :value="item.id"></el-option>
+                          </el-select>
+                          <el-select v-model="jobForm.city"
+                                     @change="cityChange"
+                                     placeholder="Select City">
+                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
+                                       :value="item.id"></el-option>
+                          </el-select>
+                          <el-select v-model="jobForm.district"
+                                     @change="districtChange"
+                                     placeholder="Select District">
+                            <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
+                                       :value="item.id"></el-option>
+                          </el-select>
+                        </el-form-item>
+                      </template>
+                      <template v-if="envName==='development' || envName==='production' ">
+                        <h4>
+                          Oops.. sorry, due to data laws, to post a job on the [chinese/global] platform, you first need to redirect to and post a job there
+                        </h4>
+                        <div class="job-detail-china-btn-container">
+                          <el-button class="job-detail-china-btn" type="primary" @click="letGo()">OK, let's go</el-button>
+                        </div>
+                        <div class="job-detail-china-tips">
+                          Not clear? Need help setting up? <el-link href="#">Account Management</el-link> is here !
+                        </div>
+                      </template>
+
                     </el-tab-pane>
                     <el-tab-pane label="International" name="second">
                       <el-form-item label="Job Location">
@@ -566,11 +580,40 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 import meSideMenu from "@/components/meSideMenu";
 import {VISITOR_USER_INFO, ALL_AREAS, USER_OBJECT_LIST,ADD_JOB,JOB_ADD_PROFILE} from '@/api/api';
+import {ref} from "vue";
 
 export default {
   name: "post",
   components: {
     meSideMenu
+  },
+  setup(){
+    const envName = process.env.VUE_APP_ENV_NAME
+
+    let domain = ref('')
+
+    if (envName === 'developmentCN') {
+       domain = 'https://dev.eslpassport.com'
+    }
+    if (envName === 'development') {
+       domain = 'https://dev.esl-passport.cn'
+      // domain = 'http://localhost:8080'
+    }
+    if (envName === 'productionCN') {
+       domain = 'https://www.eslpassport.com'
+    }
+
+    if (envName === 'production') {
+       domain = 'https://www.esl-passport.cn'
+    }
+    const goDomain = domain
+
+    return {
+      envName,
+      goDomain
+
+    }
+
   },
   data() {
     return {
@@ -838,8 +881,8 @@ export default {
       })
 
     },
-    handleIsInternationalClick(tab, event) {
-      console.log(tab, event)
+    handleIsInternationalClick(tab) {
+      console.log(tab)
     },
     getVisitorBasicInfo() {
       let uid = localStorage.getItem('uid')
@@ -1546,6 +1589,9 @@ export default {
       })
 
 
+    },
+    letGo(){
+      window.open(this.goDomain,'_blank')
     }
 
 
@@ -1783,4 +1829,29 @@ export default {
 .submit-container{
   margin-top: 20px;
 }
+
+.job-detail-china-btn-container{
+  margin-top: 10px;
+}
+.job-detail-china-btn{
+  font-size: 14px;
+}
+
+.job-detail-china-tips{
+  font-size: 14px;
+  margin-top: 10px;
+  color: #808080;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.job-detail-china-tips a{
+  color: #00b3d2;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0  10px;
+}
+
 </style>

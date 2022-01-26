@@ -131,17 +131,23 @@ export default {
           job_id: id,
           token: token
         }
+
         APPLY_JOBS(params).then(res => {
           if (res.code == 200) {
             this.$message.success('Apply Success')
           }
         }).catch(err=>{
           console.log(err)
-          this.$message.error(err.msg)
+          if(err.code === 400){
+            this.$message.error('Please complete your profile in order to apply')
+          }else{
+            this.$message.error(err.msg)
+          }
+
         })
 
       } else {
-        this.$message.warning('Only Educator Can Apply')
+        this.$message.warning('Please switch to am educator profile to be able to apply')
       }
 
 
