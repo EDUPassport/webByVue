@@ -57,7 +57,7 @@
             <router-link to="/">Tech Solutions</router-link>
           </div>
           <div class="footer-nav-item">
-            <router-link to="#">Food For Education</router-link>
+            <router-link to="/consulting/foodEducation">Food For Education</router-link>
           </div>
           <div class="footer-nav-item">
             <router-link to="#">Schedule a Meeting</router-link>

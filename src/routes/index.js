@@ -32,6 +32,15 @@ const routes = [
                 },
             },
             {
+                path: '/consulting/foodEducation',
+                name: 'consultingFoodEducation',
+                component: () => import('@/views/consulting/foodEducation'),
+                meta: {
+                    titleC: 'China Partners',
+                    titleG: 'Global Partners'
+                },
+            },
+            {
                 path: '/jobs',
                 name: 'jobs',
                 component: () => import('@/views/jobs/list'),
