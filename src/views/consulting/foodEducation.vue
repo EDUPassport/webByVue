@@ -7,25 +7,24 @@
                 </div>
             </div>
             <div class="my-wrapper">
-                <div class="section-one-content">
-                    <div class="section-one-label">
-                        TRUSTED BY SCHOOLS COUNTRYWIDE
+                <div class="section-one-label">
+                    TRUSTED BY SCHOOLS COUNTRYWIDE
+                </div>
+                <div class="section-one-tags">
+                    <div class="section-one-tag">
+                        <el-image class="section-one-tag-img" :src="section1logo1Img" fit="cover"></el-image>
                     </div>
-                    <div class="section-one-tags">
-                        <div class="section-one-tag">
-                            <el-image class="section-one-tag-img" :src="section1logo1Img" fit="cover"></el-image>
-                        </div>
-                        <div class="section-one-tag">
-                            <el-image class="section-one-tag-img" :src="section1logo2Img" fit="cover"></el-image>
-                        </div>
-                        <div class="section-one-tag">
-                            <el-image class="section-one-tag-img" :src="section1logo3Img" fit="cover"></el-image>
-                        </div>
-                        <div class="section-one-tag">
-                            <el-image class="section-one-tag-img" :src="section1logo4Img" fit="cover"></el-image>
-                        </div>
+                    <div class="section-one-tag">
+                        <el-image class="section-one-tag-img" :src="section1logo2Img" fit="cover"></el-image>
+                    </div>
+                    <div class="section-one-tag">
+                        <el-image class="section-one-tag-img" :src="section1logo3Img" fit="cover"></el-image>
+                    </div>
+                    <div class="section-one-tag">
+                        <el-image class="section-one-tag-img" :src="section1logo4Img" fit="cover"></el-image>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -225,21 +224,21 @@
                     },
                     {
                         id:2,
-                        url:section1logo3Img,
+                        url:section41Img,
                         text:'honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honestyhonesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty',
                         name:'Kangkang',
                         intro:'GM at Hacksons Internations!'
                     },
                     {
                         id:3,
-                        url:section1logo2Img,
+                        url:section41Img,
                         text:'honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty',
                         name:'Faker',
                         intro:'GM at Hacksons Internations!'
                     },
                     {
                         id:4,
-                        url:section1logo4Img,
+                        url:section41Img,
                         text:'honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty honesty',
                         name:'Memberory',
                         intro:'GM at Hacksons Internations!'
@@ -308,21 +307,15 @@
         background-repeat: no-repeat;
 
         display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-end;
-        padding: 80px;
-    }
-
-    .section-one-content {
-
-        width: 50%;
-        padding: 20px;
-        text-align: right;
-
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 80px 0 40px 0;
     }
 
     .section-one-label {
+        width:50%;
+        padding-top: 40px;
         font-size: 16px;
         text-align: center;
         font-weight: bold;
@@ -330,8 +323,8 @@
     }
 
     .section-one-tags {
-        margin-top: 40px;
-        padding-right: 40px;
+        width:60%;
+        padding:40px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -340,9 +333,10 @@
 
     .section-one-tag {
         /*font-size: 24px;*/
+        width:120px;
         color: #434750;
         /*font-weight: bold;*/
-        margin-left: 10px;
+        /*margin-left: 40px;*/
         background-color: #ffffff;
         border-radius: 10px;
         padding: 10px;
@@ -470,7 +464,7 @@
         background-color: #0a1e76;
         border-radius: 20px;
         overflow: hidden;
-        -webkit-box-reflect: below 10px -webkit-linear-gradient(transparent,transparent 50%, rgba(255,255,255,0.6) ) ;
+        /*-webkit-box-reflect: below 10px -webkit-linear-gradient(transparent,transparent 50%, rgba(255,255,255,0.6) ) ;*/
         position: relative;
     }
     .section-three-r-mask{
