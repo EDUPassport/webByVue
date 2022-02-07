@@ -1,7 +1,7 @@
 <template>
   <div>
     <ChatComponent></ChatComponent>
-    <el-backtop/>
+    <el-backtop :right="10"  :bottom="74" />
     <el-footer height="auto" class="footer-bg">
       <el-row class="footer-row" :gutter="0" align="top" justify="center">
         <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="3">
@@ -302,8 +302,9 @@ export default {
   /*width: 1100px;*/
   margin: 0 auto;
   text-align: left;
-  padding: 0px 40px 20px 40px;
+  padding: 0px 40px 60px 40px;
 }
+
 .footer-b-tips{
   text-align: right;
   font-size: 14px;
