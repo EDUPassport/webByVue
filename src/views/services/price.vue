@@ -487,10 +487,11 @@ export default {
       let desc = level_en
       let levelId = id
       let identity = this.identity
+      let userId = localStorage.getItem('uid')
 
       let apiDomain = process.env.VUE_APP_URL
       this.paypalUrl = apiDomain + 'pay/paypal?product='+product + '&price='+amount + '&shipping='+shipping+'&desc='+desc
-      +'&level_id='+levelId+'&identity='+identity
+      +'&level_id='+levelId+'&identity='+identity + '&user_id='+userId
 
       // loadScript({
       //       "client-id": "ARBRiffHCNjNTHo1cO6wmW7TPlEWOW84VqW1o_5wG6koeavGacLIaROjXXbbvwb2uT0A7suHDHzbi0w8",
