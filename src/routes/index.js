@@ -345,6 +345,15 @@ const routes = [
                     titleC: 'China Blog Detail',
                     titleG: 'Global Blog Detail',
                 }
+            },
+            {
+                path:'/payment/paypal/callback',
+                name:'paypalCallback',
+                component:()=>import('@/views/payment/paypal/callback'),
+                meta:{
+                    titleC: 'China Paypal',
+                    titleG: 'Global Paypal',
+                }
             }
 
         ],

@@ -111,10 +111,10 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="submitForm('basicForm')">
+                <el-button type="primary" :loading="submitLoadingValue" @click="submitForm('basicForm')">
                   Submit
                 </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
+
               </el-form-item>
             </el-form>
           </div>
@@ -127,10 +127,23 @@
 <script>
 import {countriesData} from "../../utils/data";
 import {CHANGE_IDENTITY_LANGUAGE, ADD_BUSINESS_BASIC, SUB_CATE_LIST, ALL_AREAS} from '@/api/api'
+import {ref} from 'vue'
+import {useStore} from "vuex";
 
 export default {
   name: "business",
   components: {},
+  setup(){
+    const submitLoadingValue = ref(false)
+    const store = useStore()
+    const setIdentity = (data)=>{
+      store.commit('identity',data)
+    }
+    return {
+      submitLoadingValue,
+      setIdentity
+    }
+  },
   data() {
     return {
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
@@ -243,11 +256,14 @@ export default {
   methods: {
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
+      this.$loading().close()
       this.profilePhotoUrl = URL.createObjectURL(file.raw)
       this.basicForm.profile_photo = res.data[0]['file_url']
     },
     beforeProfilePhotoUpload(file) {
-
+      this.$loading({
+        text:'Uploading...'
+      })
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -256,13 +272,16 @@ export default {
       return isLt2M
     },
     handleLogoSuccess(res, file) {
+      this.$loading().close()
       // console.log(res.data[0]['file_url'])
       this.logoPhotoUrl = URL.createObjectURL(file.raw)
       this.basicForm.logo = res.data[0]['file_url']
 
     },
     beforeLogoUpload(file) {
-
+      this.$loading({
+        text:'Uploading...'
+      })
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -352,7 +371,7 @@ export default {
 
     },
     submitForm(formName) {
-
+      this.submitLoadingValue = true
       let businessTypeId;
       let businessTypeName;
       let businessTypeNameCn;
@@ -378,9 +397,11 @@ export default {
           }).catch(err=>{
             console.log(err)
             this.$message.error(err.msg)
+            this.submitLoadingValue=false
           })
         } else {
           console.log('error submit!!')
+          this.submitLoadingValue=false
           return false
         }
       })
@@ -397,12 +418,15 @@ export default {
       CHANGE_IDENTITY_LANGUAGE(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          console.log('success')
+          // console.log('success')
           localStorage.setItem('identity',identity)
+          this.setIdentity(identity)
           this.$router.push('/home')
+          this.submitLoadingValue=false
         }
       }).catch(err=>{
         console.log(err)
+        this.submitLoadingValue=false
         this.$message.error(err.msg)
       })
     }

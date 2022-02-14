@@ -16,6 +16,7 @@
   "dependencies": {
     "@element-plus/icons": "^0.0.11",
     "@mapbox/mapbox-gl-geocoder": "^4.7.4",
+    "@paypal/paypal-js": "^5.0.2",
     "@shubhamranjan/vue-hcaptcha": "^0.1.4",
     "animate.css": "^4.1.1",
     "ansi-colors": "^4.1.1",

@@ -327,12 +327,12 @@
 
                 <div class="hot-deals-item-name-container">
                   <div class="hot-deals-item-title">
-                    <router-link :to="{path:'/deals/detail',query:{id:item.id}}">{{ item.desc }}</router-link>
+                    <router-link :to="{path:'/deals/detail',query:{id:item.id}}">
+                      {{ item.title }}
+                    </router-link>
                   </div>
                   <div class="hot-deals-item-name">
-                    <template v-if="item.user_info">
-                      {{ item.user_info.vendor_name_en }}
-                    </template>
+                    {{item.desc}}
                   </div>
                 </div>
               </div>
@@ -345,7 +345,10 @@
                   <!--                  {{ item.vendor_type_name }}-->
                 </div>
                 <div class="hot-deals-item-b-r">
-                  {{ item.location }}
+<!--                  {{ item.location }}-->
+                  <template v-if="item.user_info">
+                    {{ item.user_info.vendor_name_en }}
+                  </template>
                 </div>
               </div>
 
@@ -1591,6 +1594,7 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: #FFFFFF;
   padding: 4px 0;
 }
 
@@ -1607,11 +1611,13 @@ export default {
 }
 
 .hot-deals-item-name {
+  width: 100%;
   color: #ffffff;
   font-size: 14px;
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .hot-deals-item-b {

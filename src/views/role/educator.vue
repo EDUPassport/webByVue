@@ -44,10 +44,10 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="submitForm('basicForm')">
+                <el-button type="primary" :loading="submitLoadingValue" @click="submitForm('basicForm')">
                   Submit
                 </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
+
               </el-form-item>
             </el-form>
           </div>
@@ -60,10 +60,25 @@
 <script>
 import {countriesData} from "../../utils/data";
 import {CHANGE_IDENTITY_LANGUAGE, ADD_EDU_BASIC} from '@/api/api'
+import {useStore} from "vuex";
+import {ref} from "vue";
 
 export default {
   name: "educator",
   components: {},
+  setup(){
+    const store = useStore()
+
+    const setIdentity = (data)=>{
+          store.commit('identity',data)
+    }
+    const submitLoadingValue = ref(false)
+
+    return {
+      setIdentity,
+      submitLoadingValue
+    }
+  },
   data() {
     return {
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
@@ -114,11 +129,14 @@ export default {
   methods: {
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
+      this.$loading().close()
       this.profilePhotoUrl = URL.createObjectURL(file.raw)
       this.basicForm.profile_photo = res.data[0]['file_url']
     },
     beforeProfilePhotoUpload(file) {
-
+      this.$loading({
+        text:'Uploading...'
+      })
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -127,6 +145,7 @@ export default {
       return isLt2M
     },
     submitForm(formName) {
+      this.submitLoadingValue=true
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.basicForm)
@@ -140,10 +159,13 @@ export default {
           }).catch(err=>{
             console.log(err)
             this.$message.error(err.msg)
+            this.submitLoadingValue=false
           })
         } else {
           console.log('error submit!!')
+          this.submitLoadingValue=false
           return false
+
         }
       })
     },
@@ -161,10 +183,13 @@ export default {
         if (res.code == 200) {
           console.log('success')
           localStorage.setItem('identity',identity)
+          this.setIdentity(identity)
+          this.submitLoadingValue=false
           this.$router.push('/home')
         }
       }).catch(err=>{
         console.log(err)
+        this.submitLoadingValue=false
         this.$message.error(err.msg)
       })
 

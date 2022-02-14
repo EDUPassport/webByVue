@@ -1,7 +1,7 @@
 <template>
   <div class="profile-l-container">
     <div class="profile-photo-container">
-      <el-image class="profile-photo" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-image>
+      <el-image class="profile-photo" :src="userAvatar !='' ? userAvatar : defaultAvatar" fit="cover"></el-image>
       <div>
         <span>{{username}}</span>
       </div>
@@ -134,8 +134,10 @@ export default {
 }
 .profile-photo-container{
   padding: 30px;
+
 }
 .profile-photo{
+
   width: 100px;
   height: 100px;
   border-radius: 50%;

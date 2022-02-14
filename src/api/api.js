@@ -168,4 +168,10 @@ export const ADD_TO_CHAT = (params) => post('chat/addChat', params)
 
 export const H5_LOGIN = (params) => post('h5/login', params)
 
-export const WEIXIN_SEND_SMS = (params)=> get('weixin/sendSms', params)
+export const WEIXIN_SEND_SMS = (params) => get('weixin/sendSms', params)
+
+export const PAY_PAYPAL = (params) => get('pay/paypal', params)
+
+export const PAY_PAYPAL_CALLBACK = (params) => get('paypal/callback', params)
+
+export const MEMBER_VIP_LIST = (params) => get('home/vipList', params)

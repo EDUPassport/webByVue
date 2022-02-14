@@ -35,12 +35,10 @@
 
                   <div class="deals-item-name-container">
                     <div class="deals-item-title"  @click="turnDealDetail(item.id)">
-                      {{ item.desc }}
+                      {{ item.title }}
                     </div>
                     <div class="deals-item-name">
-                      <template v-if="item.user_info">
-                        {{ item.user_info.vendor_name_en }}
-                      </template>
+                      {{item.desc}}
                     </div>
                   </div>
 
@@ -53,7 +51,9 @@
                     </template>
                   </div>
                   <div class="deals-item-b-r">
-                    {{item.location}}
+                    <template v-if="item.user_info">
+                      {{ item.user_info.vendor_name_en }}
+                    </template>
                   </div>
                 </div>
 
@@ -307,6 +307,9 @@ export default {
   color: #ffffff;
   font-size: 16px;
   text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .deals-item-b {

@@ -20,7 +20,7 @@ import VTypical from 'vue-typical'
 // import './assets/font/font.css'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu,ChatLineSquare,
-    MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose} from '@element-plus/icons'
+    MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose,SuccessFilled,Failed} from '@element-plus/icons'
 
 import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
@@ -30,6 +30,16 @@ import gAuthPlugin from 'vue3-google-oauth2'
 
 import GoEasy from "goeasy";
 import IMService from "./assets/lib/imservice"
+
+// const version = process.env.VERSION
+// const localVersion = localStorage.getItem('projectVersion')
+//
+// if (!localVersion || Number(version)  !== Number(localVersion)) {
+//     // localStorage.clear()
+//     localStorage.setItem('projectVersion', version)
+//     window.location.reload()
+//     console.log('version:'+version)
+// }
 
 const messages = {
     en: {
@@ -71,6 +81,8 @@ app.component('Picture',Picture)
 app.component('VideoCamera',VideoCamera)
 app.component('Folder',Folder)
 app.component('CircleClose',CircleClose)
+app.component('SuccessFilled',SuccessFilled)
+app.component('Failed',Failed)
 
 app.use(router)
 app.use(store)

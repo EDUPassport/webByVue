@@ -1,175 +1,423 @@
 <template>
   <div class="price-bg">
-    <el-row class="banner-row" :gutter="0" align="middle" justify="center">
-      <el-col class="banner-bg" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <h1>Pricing</h1>
-      </el-col>
-    </el-row>
+<!--    <el-row class="banner-row" :gutter="0" align="middle" justify="center">-->
+<!--      <el-col class="banner-bg" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
+<!--        <h1>Our Pricing & Plans</h1>-->
+<!--      </el-col>-->
+<!--    </el-row>-->
 
     <el-row class="price-row" :gutter="0" align="middle" justify="center">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-<!--        v-if="identity == 2"-->
-        <div class="price-label" >
-          <div class="price-label-icon"></div>
-          <h1>Pricing Table</h1>
+
+        <div class="price-label-container">
+          <h1>Our Pricing & Plans</h1>
+          <div class="price-label-tips">
+            We have different prices and functions according to different identities
+          </div>
         </div>
+
+        <div class="switch-identity-container">
+          <div class="switch-identity-item"
+               :class="identity == 1 ? 'switch-identity-item-active' : ''"
+               @click="switchIdentity(1)"
+          >
+            Educators
+          </div>
+          <div class="switch-identity-item"
+               :class="identity == 2 ? 'switch-identity-item-active' : ''"
+               @click="switchIdentity(2)"
+          >
+            Edu-Businesses
+          </div>
+          <div class="switch-identity-item"
+               :class="identity == 3 ? 'switch-identity-item-active' : ''"
+               @click="switchIdentity(3)"
+          >
+            Vendors
+          </div>
+        </div>
+
+        <div class="price-container" v-if="identity == 1">
+          <template v-for="(item,i) in vipListData" :key="i">
+            <div class="price-item price-basic" v-if="item.level == 1">
+              <div class="price-item-label">BASIC</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar * 10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Basic Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">Unlimited Membership Length</div>
+                  <div class="price-item-content-item">Use Deals</div>
+                  <div class="price-item-content-item">Apply Jobs</div>
+                  <div class="price-item-content-item">Educator Profile</div>
+                  <div class="price-item-content-item">Customer Service</div>
+                </div>
+              </div>
+
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" color="#b1c452" round>Get Started</el-button>
+              </div>
+            </div>
+            <div class="price-item price-pro" v-if="item.level == 2">
+              <div class="price-item-label">PRO</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Pro Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">1 year Membership Length</div>
+                  <div class="price-item-content-item">Everything Basic</div>
+                  <div class="price-item-content-item">Account Manager</div>
+                  <div class="price-item-content-item">5 Profile Features</div>
+                  <div class="price-item-content-item">5% Discount of ESLP Partners</div>
+                  <div class="price-item-content-item">10% discount for online/offline event discount</div>
+                  <div class="price-item-content-item">qualified for extra featuring add ons</div>
+
+                </div>
+              </div>
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
+              </div>
+            </div>
+            <div class="price-item price-plus" v-if="item.level == 3">
+              <div class="price-item-label">PLUS</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Plus Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">1 year Membership Length</div>
+                  <div class="price-item-content-item">Everything Pro</div>
+                  <div class="price-item-content-item">Counseling (est. hours)</div>
+                  <div class="price-item-content-item">Coaching (est. hours)</div>
+                  <div class="price-item-content-item">Labour Law Consultant</div>
+                  <div class="price-item-content-item">10 Profile Features</div>
+                  <div class="price-item-content-item">Mock Job Interview</div>
+                  <div class="price-item-content-item">10% Discount of ESLP Partners</div>
+                  <div class="price-item-content-item">25% discount for online/offline event discount</div>
+
+                </div>
+              </div>
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
+              </div>
+            </div>
+            <div class="price-item price-plus" v-if="item.level == 4">
+              <div class="price-item-label">LIFETIME</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Lifetime Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">Unlimited Membership Length</div>
+                  <div class="price-item-content-item">Everything Plus</div>
+                </div>
+              </div>
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round>Get Started</el-button>
+              </div>
+            </div>
+
+          </template>
+
+        </div>
+
+
         <div class="price-container" v-if="identity == 2">
-          <div class="price-item price-basic">
-            <div class="price-item-label">Basic</div>
-            <div class="price-item-money-mask">
-              $0
+
+          <template v-for="(item,i) in vipListData" :key="i">
+            <div class="price-item price-basic" v-if="item.level == 1">
+              <div class="price-item-label">BASIC</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Basic Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">Job Refresh</div>
+                  <div class="price-item-content-item">See Job Post Views</div>
+                  <div class="price-item-content-item">Business Profile</div>
+                  <div class="price-item-content-item">In-app Messaging</div>
+                  <div class="price-item-content-item">Notification for expired job posts</div>
+
+                </div>
+              </div>
+
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round>Get Started</el-button>
+              </div>
             </div>
-            <div class="price-item-content">
-              <div class="price-item-content-label">Basic Membership Includes:</div>
-              <div class="price-item-content-content">
-                <div class="price-item-content-item">Billingual Support</div>
-                <div class="price-item-content-item">1 Job Post / Month</div>
-                <div class="price-item-content-item">See Job Post Views</div>
-                <div class="price-item-content-item">See Applications</div>
-                <div class="price-item-content-item">Business Profile</div>
-                <div class="price-item-content-item">WeChat Share</div>
-                <div class="price-item-content-item">Share To Refresh Jobs</div>
-                <div class="price-item-content-item">In-APP Messaging</div>
+            <div class="price-item price-pro" v-if="item.level == 2">
+              <div class="price-item-label">PRO</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Pro Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">7d/month In-Platform Job Featuring Credit</div>
+                  <div class="price-item-content-item">Multi Job Post</div>
+                  <div class="price-item-content-item">Dedicated Account Manager</div>
+                  <div class="price-item-content-item">Bilingual Support</div>
+                  <div class="price-item-content-item">Job Refresh</div>
+                  <div class="price-item-content-item">See Job Post Views</div>
+                  <div class="price-item-content-item">Business Profile</div>
+                  <div class="price-item-content-item">In-app Messaging</div>
+                  <div class="price-item-content-item">Notification for expired job posts</div>
+                  <div class="price-item-content-item">20% Discount for Anything Else</div>
+
+                </div>
+              </div>
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
+              </div>
+            </div>
+            <div class="price-item price-plus" v-if="item.level == 3">
+              <div class="price-item-label">PLUS</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Plus Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">14d/month In-Platform Job Featuring Credit</div>
+                  <div class="price-item-content-item">Email Blast Advert</div>
+                  <div class="price-item-content-item">Social Media Dedicated Article</div>
+                  <div class="price-item-content-item">Social Media New Member Announcement Package</div>
+                  <div class="price-item-content-item">Multi Job Post</div>
+                  <div class="price-item-content-item">Dedicated Account Manager</div>
+                  <div class="price-item-content-item">Bilingual Support</div>
+                  <div class="price-item-content-item">Job Refresh</div>
+                  <div class="price-item-content-item">See Job Post Views</div>
+                  <div class="price-item-content-item">Business Profile</div>
+                  <div class="price-item-content-item">In-app Messaging</div>
+                  <div class="price-item-content-item">Notification for expired job posts</div>
+                  <div class="price-item-content-item">40% Discount for Anything Else</div>
+                </div>
+              </div>
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
+              </div>
+            </div>
+            <div class="price-item price-plus" v-if="item.level == 4">
+              <div class="price-item-label">LIFETIME</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Lifetime Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">Everything Plus</div>
+                </div>
+              </div>
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round>Get Started</el-button>
               </div>
             </div>
 
-            <div class="price-purchase">
-              <el-button  class="price-purchase-btn" round :disabled="true">Purchase</el-button>
-            </div>
-          </div>
-          <div class="price-item price-pro">
-            <div class="price-item-label">Pro</div>
-            <div class="price-item-money-mask">
-              $300
-            </div>
-            <div class="price-item-content">
-              <div class="price-item-content-label">Basic Membership Includes:</div>
-              <div class="price-item-content-content">
-                <div class="price-item-content-item">Annual membership</div>
-                <div class="price-item-content-item">8 Job Post / Month</div>
-                <div class="price-item-content-item">1 Collective Member Article</div>
-                <div class="price-item-content-item">1 WeChat Moment Post</div>
-                <div class="price-item-content-item">1 WeChat Channel Post</div>
-                <div class="price-item-content-item">1 WeChat Group Job Blast</div>
-                <div class="price-item-content-item">Dedicated Account Manager</div>
-                <div class="price-item-content-item">Job Expiration Notice</div>
-                <div class="price-item-content-item">CSV Uploads</div>
-                <div class="price-item-content-item">Direct Job Refresh</div>
-                <div class="price-item-content-item">Discount Card </div>
-                <div class="price-item-content-item">Advertising Discounts</div>
-                <div class="price-item-content-item">Event Discounts</div>
-              </div>
-            </div>
-            <div class="price-purchase">
-              <el-button  class="price-purchase-btn" round :disabled="true">Purchase</el-button>
-            </div>
-          </div>
-          <div class="price-item price-plus">
-            <div class="price-item-label">Plus</div>
-            <div class="price-item-money-mask">
-              $350
-            </div>
-            <div class="price-item-content">
-              <div class="price-item-content-label">Pro Membership Includes:</div>
-              <div class="price-item-content-content">
-                <div class="price-item-content-item">Unlimited Job Posts</div>
-                <div class="price-item-content-item">1 Event Advert</div>
-                <div class="price-item-content-item">1 Dedicated Article</div>
-                <div class="price-item-content-item">1 Month Banner - Home pg.</div>
-                <div class="price-item-content-item">1 Banner Advert - Job pg.</div>
-                <div class="price-item-content-item">3 Job Features - Home pg.</div>
-                <div class="price-item-content-item">12 Job Features - Job pg.</div>
-                <div class="price-item-content-item">5 WeChat Group Job Blasts</div>
-                <div class="price-item-content-item">10 Top 3 Rankings</div>
-                <div class="price-item-content-item">VIP Job Posting Options</div>
-                <div class="price-item-content-item">Translation Services</div>
-                <div class="price-item-content-item">Job Group Access</div>
-                <div class="price-item-content-item">Priority Support</div>
-              </div>
-            </div>
-            <div class="price-purchase">
-              <el-button  class="price-purchase-btn" round :disabled="true">Purchase</el-button>
-            </div>
-          </div>
+          </template>
+
+
         </div>
 
-<!--        vendor-->
-        <div class="price-container" v-if="identity == 3" >
-          <div class="price-item price-basic">
-            <div class="price-item-label">Basic</div>
-            <div class="price-item-money-mask">
-              $0
+        <!--        vendor-->
+        <div class="price-container" v-if="identity == 3">
+
+          <template v-for="(item,i) in vipListData " :key="i">
+            <div class="price-item price-basic" v-if="item.level == 1">
+              <div class="price-item-label">BASIC</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Basic Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">1 Deal</div>
+                </div>
+              </div>
+
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round>Get Started</el-button>
+              </div>
             </div>
-            <div class="price-item-content">
-              <div class="price-item-content-label">Basic Membership Includes:</div>
-              <div class="price-item-content-content">
-                <div class="price-item-content-item">1 Deal</div>
-                <div class="price-item-content-item">Annual Membership</div>
-                <div class="price-item-content-item">Dedicated Account Manager</div>
-                <div class="price-item-content-item">Deal Program Visibility</div>
-                <div class="price-item-content-item">Discount Card Access</div>
-                <div class="price-item-content-item">In-APP Messaging</div>
-                <div class="price-item-content-item">WeChat Share</div>
+            <div class="price-item price-pro" v-if="item.level == 2">
+              <div class="price-item-label">PRO</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Pro Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">2 Deals</div>
+                  <div class="price-item-content-item">Dedicated Account Manager</div>
+                  <div class="price-item-content-item">Onboarding Setup</div>
+                  <div class="price-item-content-item">6 Post & Promote Event</div>
+                  <div class="price-item-content-item">2 Banner & Flyer Design</div>
+                  <div class="price-item-content-item">
+                    Social Media New Vendor Announcement Package:12 Monthly Moment Push, 1 Featured Article
+                  </div>
+                  <div class="price-item-content-item">2 Weeks Home Page Graphic Advert</div>
+                  <div class="price-item-content-item">7 Days Deal Page Top 3 Ranking</div>
+                  <div class="price-item-content-item">20% Discount for Anything Else</div>
+
+                </div>
+              </div>
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
+              </div>
+
+            </div>
+            <div class="price-item price-plus" v-if="item.level==3">
+              <div class="price-item-label">PLUS</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Plus Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">3 Deals</div>
+                  <div class="price-item-content-item">Dedicated Account Manager</div>
+                  <div class="price-item-content-item">Onboarding Setup</div>
+                  <div class="price-item-content-item">12 Post & Promote Event</div>
+                  <div class="price-item-content-item">4 Banner & Flyer Design</div>
+                  <div class="price-item-content-item">
+                    Social Media New Vendor Announcement Package:12 Monthly Moment Push, 1 Featured Article
+                  </div>
+                  <div class="price-item-content-item">1 Month Home Page Graphic Advert</div>
+                  <div class="price-item-content-item">14 Days Deal Page Top 3 Ranking</div>
+                  <div class="price-item-content-item">Email Blast Graphic Advert</div>
+                  <div class="price-item-content-item">1 Social Media Dedicated Article</div>
+                  <div class="price-item-content-item">40% Discount for Anything Else</div>
+
+                </div>
+              </div>
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
+              </div>
+
+            </div>
+            <div class="price-item price-plus" v-if="item.level == 4">
+              <div class="price-item-label">LIFETIME</div>
+              <div class="price-item-money-mask">
+                <div class="price-item-money-mask-money">${{item.dollar}}</div>
+                <div class="price-item-money-mask-sjx"></div>
+              </div>
+              <div class="price-item-actual-money">
+                Actual Value: ${{item.dollar*10}}
+              </div>
+              <div class="price-item-content">
+                <div class="price-item-content-label">Lifetime Membership Includes:</div>
+                <div class="price-item-content-content">
+                  <div class="price-item-content-item">Everything Plus</div>
+
+                </div>
+              </div>
+              <div class="price-purchase">
+                <el-button class="price-purchase-btn" round>Get Started</el-button>
               </div>
             </div>
 
-            <div class="price-purchase">
-              <el-button  class="price-purchase-btn" round :disabled="true">Purchase</el-button>
-            </div>
-          </div>
-          <div class="price-item price-pro">
-            <div class="price-item-label">Pro</div>
-            <div class="price-item-money-mask">
-              $300
-            </div>
-            <div class="price-item-content">
-              <div class="price-item-content-label">Basic Membership Includes:</div>
-              <div class="price-item-content-content">
-                <div class="price-item-content-item">2 Deals</div>
-                <div class="price-item-content-item">8 Event Postings</div>
-                <div class="price-item-content-item">1 Collective Member Article</div>
-                <div class="price-item-content-item">Quarterly WeChat Moments</div>
-                <div class="price-item-content-item">1 WeChat Channel Post</div>
-                <div class="price-item-content-item">1 Month Article Banner</div>
-                <div class="price-item-content-item">2 Social Media Posts</div>
-                <div class="price-item-content-item">3 Days APP Top Ranking</div>
-                <div class="price-item-content-item">Sponsorship Discounts</div>
-                <div class="price-item-content-item">Start-Up & Female Owned Discounts</div>
+          </template>
 
-              </div>
-            </div>
-            <div class="price-purchase">
-              <el-button  class="price-purchase-btn" round :disabled="true">Purchase</el-button>
-            </div>
-
-          </div>
-          <div class="price-item price-plus">
-            <div class="price-item-label">Plus</div>
-            <div class="price-item-money-mask">
-              $350
-            </div>
-            <div class="price-item-content">
-              <div class="price-item-content-label">Pro Membership Includes:</div>
-              <div class="price-item-content-content">
-                <div class="price-item-content-item">3 Deals</div>
-                <div class="price-item-content-item">15 Event Postings</div>
-                <div class="price-item-content-item">1 Dedicated Member Article</div>
-                <div class="price-item-content-item">Monthly WeChat Moments</div>
-                <div class="price-item-content-item">Quarterly WeChat Channel</div>
-                <div class="price-item-content-item">3 Months Article Banner</div>
-                <div class="price-item-content-item">1 Month Banner - Deal pg.</div>
-                <div class="price-item-content-item">1 Month Feature - Home pg.</div>
-                <div class="price-item-content-item">1 Week Top 3 Ranking</div>
-                <div class="price-item-content-item">Priority Support</div>
-
-              </div>
-            </div>
-            <div class="price-purchase">
-              <el-button  class="price-purchase-btn" round :disabled="true">Purchase</el-button>
-            </div>
-
-          </div>
         </div>
+
+        <div class="price-help-container">
+          Need a higher level plan? <span>Contact us</span> for enterprise plan
+        </div>
+
+      </el-col>
+    </el-row>
+
+    <el-row class="faq-row" :gutter="0" align="middle" justify="center">
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+        <div class="faq-label-container">
+          <h1>FAQ</h1>
+        </div>
+        <div class="faq-content-container">
+          <el-collapse accordion>
+            <el-collapse-item name="1">
+              <template #title>
+                Do I need to pay to apply to a job?
+              </template>
+              <div>
+                No. It's free.
+              </div>
+            </el-collapse-item>
+            <el-collapse-item name="2">
+              <template #title>
+                How to I find out all the data you have on me?
+              </template>
+              <div>
+                Please contact us.
+              </div>
+
+            </el-collapse-item>
+            <el-collapse-item name="3">
+              <template #title>
+                What do I need to be a vendor?
+              </template>
+              <div>
+                You just need to register our platform.
+              </div>
+            </el-collapse-item>
+
+          </el-collapse>
+        </div>
+
+        <el-dialog v-model="paypalVisible" title="Click to pay" width="30%" center>
+<!--          <div id="paypal-id"></div>-->
+            <div class="paypal-btn" @click="paypalToPay()">
+              <el-image class="paypal-logo-img" :src="paypalLogoImg"></el-image>
+            </div>
+        </el-dialog>
 
 
       </el-col>
@@ -180,68 +428,209 @@
 
 <script>
 import {useStore} from "vuex";
+import {ref} from "vue";
+// import {loadScript} from '@paypal/paypal-js'
+import {MEMBER_VIP_LIST} from "../../api/api";
+import paypalLogoImg from '@/assets/pay/paypal-logo.png'
 
 export default {
   name: "price",
-  setup(){
+  setup() {
     const store = useStore()
-    const identity = store.state.identity
-    console.log(identity)
+    const identity = ref(store.state.identity)
+    const paypalVisible = ref(false)
+
     return {
-      identity
+      identity,
+      paypalVisible
+    }
+  },
+  data(){
+    return {
+      paypalLogoImg,
+      paypalUrl:'',
+      vipListData:[]
+    }
+  },
+  mounted() {
+    this.getVipList(this.identity)
+  },
+  methods: {
+    getVipList(identity){
+      let params = {
+        identity:identity,
+        token:localStorage.getItem('token')
+      }
+      MEMBER_VIP_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.vipListData = res.message
+        }
+
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    switchIdentity(value) {
+      // console.log(value)
+      this.identity = value
+      this.getVipList(value)
+    },
+    paypalToPay(){
+      window.open(this.paypalUrl,'_blank')
+    },
+    purchase(id,amount,level_en){
+      this.paypalVisible=true
+
+      let product = id
+      let shipping = 0
+      let desc = level_en
+      let levelId = id
+      let identity = this.identity
+
+      let apiDomain = process.env.VUE_APP_URL
+      this.paypalUrl = apiDomain + 'pay/paypal?product='+product + '&price='+amount + '&shipping='+shipping+'&desc='+desc
+      +'&level_id='+levelId+'&identity='+identity
+
+      // loadScript({
+      //       "client-id": "ARBRiffHCNjNTHo1cO6wmW7TPlEWOW84VqW1o_5wG6koeavGacLIaROjXXbbvwb2uT0A7suHDHzbi0w8",
+      //       "intent":"authorize"
+      //     })
+      //     .then((paypal) => {
+      //       paypal
+      //           .Buttons(
+      //               {
+      //                 style: {
+      //                   layout: 'vertical',
+      //                   color: 'blue',
+      //                   shape: 'rect',
+      //                   label: 'paypal'
+      //                 },
+      //                 createOrder: function (data, actions) {
+      //                   // Set up the transaction
+      //                   return actions.order.create({
+      //                     purchase_units: [{
+      //                       amount: {
+      //                         value: amount
+      //                       }
+      //                     }]
+      //                   });
+      //                 },
+      //                 onApprove: function (data, actions) {
+      //                   // Authorize the transaction
+      //                   actions.order.authorize().then(function(authorization) {
+      //                     // Get the authorization id
+      //                     var authorizationID = authorization.purchase_units[0].payments.authorizations[0].id
+      //                     alert('You have authorized this transaction. Order ID:  ' + data.orderID + ', Authorization ID: ' + authorizationID); // Optional message given to purchaser
+      //                     // Call your server to validate and capture the transaction
+      //
+      //                   });
+      //
+      //                   // This function captures the funds from the transaction.
+      //                   // return actions.order.capture().then(function (details) {
+      //                   //   console.log(details)
+      //                   //   // This function shows a transaction success message to your buyer.
+      //                   //   alert('Transaction completed by ' + details.payer.name.given_name);
+      //                   // });
+      //                 },
+      //                 onCancel: function (data) {
+      //                   // Show a cancel page, or return to cart
+      //                   console.log(data)
+      //                 },
+      //                 onError: function (err) {
+      //                   // For example, redirect to a specific error page
+      //                   console.log(err)
+      //                 }
+      //
+      //               }
+      //           )
+      //           .render("#paypal-id")
+      //           .catch((error) => {
+      //             console.error("failed to render the PayPal Buttons", error);
+      //           });
+      //     })
+      //     .catch((error) => {
+      //       console.error("failed to load the PayPal JS SDK script", error);
+      //     });
+
     }
   }
 }
 </script>
 
 <style scoped>
-.price-bg{
+.price-bg {
   background-color: #f5f6f7;
 }
 
-.banner-bg{
+.banner-bg {
   height: 200px;
   background-image: url("../../assets/bg/wheat.png");
-  background-size:50%;
+  background-size: 50%;
   background-repeat: repeat;
   background-position: center;
 }
 
-.banner-bg h1{
+.banner-bg h1 {
   height: 100%;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   font-size: 28px;
   font-weight: bold;
   color: #FFFFFF;
   line-height: 200px;
 }
 
-.price-row{
-  width: 1100px;
+.price-row {
   margin: 0 auto;
   padding: 40px 0 100px 0;
 }
 
-.price-label{
+@media screen and (min-width: 1400px) {
+  .price-row {
+    width: 1400px;
+  }
+
+}
+
+.price-label-container {
+  margin-top: 40px;
+}
+
+.price-label-container h1 {
+
+}
+
+.price-label-tips {
+  color: #808080;
+}
+
+.switch-identity-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  padding: 40px;
+  justify-content: center;
+  margin-top: 40px;
 }
 
-.price-label-icon{
-  width: 6px;
-  height: 40px;
-  border-radius: 6px;
+.switch-identity-item {
+  margin: 10px;
+  line-height: 40px;
+  border-radius: 40px;
+  background-color: #FFFFFF;
+  padding: 0 40px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.switch-identity-item-active {
   background-color: #00b3d2;
+  color: #ffffff;
 }
 
-.price-label h1{
-  margin-left: 10px;
-}
 
-.price-container{
+.price-container {
+  margin-top: 40px;
   padding: 20px 80px;
   display: flex;
   flex-direction: row;
@@ -249,72 +638,146 @@ export default {
   justify-content: center;
 }
 
-.price-item{
+.price-item {
   flex: 1;
   margin: 10px;
   border-radius: 20px;
-  box-shadow: 2px 17px 21px 4px rgba(0,0,0,0.81);
-  color: #FFFFFF;
+  box-shadow: 2px 17px 21px 4px rgba(120, 120, 120, 0.4);
+  border: 1px solid rgba(128, 128, 128, 0.2);
   position: relative;
   cursor: pointer;
   padding: 20px 0;
+  background-color: #FFFFFF;
 }
 
-.price-item:hover{
-  transform: scale(1.2);
+.price-item:hover {
+  transform: scale(1.05);
   z-index: 1000;
+  background-color: #00b3d2;
+  color: #FFFFFF;
 }
 
-.price-basic{
-  background-color: #FF2870;
+.price-item:hover .price-item-actual-money{
+  color: #FFFFFF;
 }
-.price-pro{
-  background-color: #00B2D2;
+.price-item:hover .price-item-content-item{
+  border-bottom: 1px dashed #FFFFFF;
 }
-.price-plus{
-  background-color: #8E134C;
+
+.price-basic {
+  /*background-color: #FF2870;*/
 }
-.price-item-label{
+
+.price-pro {
+  /*background-color: #00B2D2;*/
+}
+
+.price-plus {
+  /*background-color: #8E134C;*/
+}
+
+.price-item-label {
   font-size: 24px;
   font-weight: bold;
   padding: 20px 0 10px 0;
 }
-.price-item-money-mask{
-  background-color: rgba(255,255,255,0.2);
+
+.price-item-money-mask {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.price-item-money-mask-money {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
   font-size: 22px;
   padding: 10px 0;
   font-weight: bold;
 }
 
-.price-item-content{
+.price-item-money-mask-sjx {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 10px 0 10px;
+  border-color: rgba(0, 0, 0, 0.1) transparent transparent transparent;
+}
+
+.price-item-actual-money {
+  color: #3588AB;
+  font-size: 12px;
+}
+
+.price-item-content {
   padding: 20px;
   text-align: left;
 }
 
-.price-item-content-label{
-  font-size: 16px;
+.price-item-content-label {
+  font-size: 14px;
   font-weight: bold;
 }
-.price-item-content-item{
-  padding:4px 0 4px 20px;
-  font-size: 16px;
 
+.price-item-content-item {
+  padding: 6px 0 6px 6px;
+  font-size: 12px;
+  border-bottom: 1px dashed #EEEEEE;
 }
 
-.price-purchase{
+.price-purchase {
   position: absolute;
-
   bottom: -20px;
   left: 0;
   right: 0;
-  margin:  auto;
-
+  margin: auto;
 }
 
-.price-purchase-btn{
+.price-purchase-btn {
   font-size: 14px;
   font-weight: bold;
   padding: 0 60px;
+  background-color: #B1C452;
+  color: #FFFFFF;
+}
+
+.price-help-container {
+  margin-top: 40px;
+  font-size: 14px;
+
+}
+
+.price-help-container span {
+  color: #00b3d2;
+  text-decoration: underline;
+}
+
+.faq-row {
+  background-color: #FFFFFF;
+  padding: 40px;
+}
+
+.faq-content-container {
+  width: 60%;
+  margin: 40px auto 0;
+}
+
+.paypal-btn{
+  border: 1px solid #EEEEEE;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.paypal-btn:hover{
+  border: 1px solid #00b3d2;
+}
+
+.paypal-logo-img{
+  width: 100%;
+  transform: scale(0.8);
 }
 
 </style>

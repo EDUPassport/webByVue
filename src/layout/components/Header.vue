@@ -15,6 +15,7 @@
             <router-link to="/blog/list" exact>Blog</router-link>
             <router-link to="/contact/us" exact> Contact</router-link>
             <router-link to="/about/us" exact> About</router-link>
+            <router-link to="/services/price" exact> Pricing</router-link>
             <template v-if="envName === 'development' || envName === 'production'">
               <span v-if="!identity || identity == 1"
                     class="nav-china-jobs" @click="turnEnvJobs(envName)">China Jobs</span>
@@ -32,7 +33,9 @@
               <div class="user-container-1">
                 <div class="user-avatar">
                   <el-dropdown>
-                    <el-image class="user-avatar-img" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-image>
+                    <el-image class="user-avatar-img" :src="userAvatar !='' ? userAvatar : defaultAvatar"
+                    fit="cover"
+                    ></el-image>
                     <template #dropdown>
                       <el-dropdown-menu>
                         <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>
@@ -50,6 +53,7 @@
                   <div class="user-dropdown">
                     <el-dropdown>
                     <span class="el-dropdown-link">
+                        <template v-if="identity == 0">Guest</template>
                         <template v-if="identity == 1">Educator</template>
                         <template v-if="identity == 2">Business</template>
                         <template v-if="identity == 3">Vendor</template>
@@ -109,6 +113,10 @@
             <div class="nav-link-item">
               <router-link to="/about/us" exact> About</router-link>
             </div>
+            <div class="nav-link-item">
+              <router-link to="/services/price" exact> Pricing</router-link>
+            </div>
+
             <div class="nav-link-item">
               <template v-if="envName === 'development' || envName === 'production'">
                             <span v-if="!identity || identity == 1"
@@ -208,6 +216,7 @@ export default {
 
   },
   mounted() {
+    console.log('I am Lei . I am a developer')
     // this.username = localStorage.getItem('name')
     // this.identity = localStorage.getItem('identity')
     let token = localStorage.getItem('token')
@@ -231,6 +240,7 @@ export default {
       if (envName === 'developmentCN') {
         domain = 'https://dev.eslpassport.com'
       }
+
       if (envName === 'development') {
         domain = 'https://dev.esl-passport.cn'
         // domain = 'http://localhost:8080'
@@ -349,6 +359,9 @@ export default {
       this.$router.push({path: '/overview', query: {identity: this.identity}})
     },
     selectRole(e) {
+      this.$loading({
+        text:'Loading...'
+      })
       let uid = localStorage.getItem('uid')
       let params = {
         id: uid,
@@ -365,6 +378,7 @@ export default {
           if (isEducator >= 10) {
             this.changeIdentity(1)
           } else {
+            this.$loading().close()
             this.$message.warning('Oops!.. Your profile is incomplete. ')
             this.$router.push('/role/educator')
             this.dialogSwitchAccountVisible = false
@@ -375,6 +389,7 @@ export default {
           if (isBusiness >= 10) {
             this.changeIdentity(2)
           } else {
+            this.$loading().close()
             this.$message.warning('Oops!.. Your profile is incomplete. ')
             this.$router.push('/role/business')
             this.dialogSwitchAccountVisible = false
@@ -385,14 +400,18 @@ export default {
           if (isVendor >= 10) {
             this.changeIdentity(3)
           } else {
+            this.$loading().close()
             this.$message.warning('Oops!.. Your profile is incomplete. ')
             this.$router.push('/role/vendor')
             this.dialogSwitchAccountVisible = false
           }
 
         }
+
+
       }).catch(err => {
         console.log(err)
+        this.$loading().close()
         this.$message.error(err.msg)
       })
     },
@@ -407,6 +426,8 @@ export default {
         if (res.code == 200) {
           localStorage.setItem('identity', identity)
           this.dialogSwitchAccountVisible = false
+          this.$loading().close()
+
           this.getBasicInfo()
           this.$router.push({
             path: '/overview', query: {identity: identity}
@@ -414,6 +435,7 @@ export default {
         }
       }).catch(err => {
         console.log(err)
+        this.$loading().close()
         this.$message.error(err.msg)
       })
 
@@ -501,6 +523,9 @@ export default {
 }
 
 .user-avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
   cursor: pointer;
 }
 

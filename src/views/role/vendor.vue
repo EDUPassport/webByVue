@@ -116,10 +116,10 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="submitForm('basicForm')">
+                <el-button type="primary" :loading="submitLoadingValue" @click="submitForm('basicForm')">
                   Submit
                 </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
+<!--                <el-button @click="resetForm('basicForm')">Reset</el-button>-->
               </el-form-item>
             </el-form>
           </div>
@@ -132,10 +132,23 @@
 <script>
 import {countriesData} from "../../utils/data";
 import {CHANGE_IDENTITY_LANGUAGE,ADD_VENDOR_BASIC , SUB_CATE_LIST, ALL_AREAS} from '@/api/api'
+import {ref} from 'vue'
+import {useStore} from "vuex";
 
 export default {
   name: "vendor",
   components: {},
+  setup(){
+    const submitLoadingValue = ref(false)
+    const store = useStore()
+    const setIdentity = (data)=>{
+      store.commit('identity',data)
+    }
+    return {
+      submitLoadingValue,
+      setIdentity
+    }
+  },
   data() {
     return {
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
@@ -272,11 +285,14 @@ export default {
   methods: {
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
+      this.$loading().close()
       this.profilePhotoUrl = URL.createObjectURL(file.raw)
       this.basicForm.profile_photo = res.data[0]['file_url']
     },
     beforeProfilePhotoUpload(file) {
-
+      this.$loading({
+        text:'Uploading...'
+      })
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -285,13 +301,16 @@ export default {
       return isLt2M
     },
     handleLogoSuccess(res, file) {
+      this.$loading().close()
       // console.log(res.data[0]['file_url'])
       this.logoPhotoUrl = URL.createObjectURL(file.raw)
       this.basicForm.logo = res.data[0]['file_url']
 
     },
     beforeLogoUpload(file) {
-
+      this.$loading({
+        text:'Uploading...'
+      })
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -382,6 +401,7 @@ export default {
       console.log(this.selectVendorTypeList);
     },
     submitForm(formName) {
+      this.submitLoadingValue = true
 
       this.selectVendorTypeList.forEach(item => {
         this.basicForm.vendor_type_id = item.id;
@@ -391,19 +411,21 @@ export default {
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.basicForm)
+          // console.log(this.basicForm)
           let params = Object.assign({}, this.basicForm)
           ADD_VENDOR_BASIC(params).then(res => {
-            console.log(res)
+            // console.log(res)
             if (res.code == 200) {
               // this.$router.push('/educator/profile')
               this.changeIdentity(3)
             }
           }).catch(err=>{
             console.log(err)
+            this.submitLoadingValue=false
             this.$message.error(err.msg)
           })
         } else {
+          this.submitLoadingValue=false
           console.log('error submit!!')
           return false
         }
@@ -422,12 +444,14 @@ export default {
         console.log(res)
         if (res.code == 200) {
           console.log('success')
+          this.submitLoadingValue=false
           localStorage.setItem('identity',identity)
-          this.$store.commit('identity',identity)
+          this.setIdentity(identity)
           this.$router.push('/home')
         }
       }).catch(err=>{
         console.log(err)
+        this.submitLoadingValue=false
         this.$message.error(err.msg)
       })
 

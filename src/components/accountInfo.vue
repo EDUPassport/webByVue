@@ -9,10 +9,13 @@
       <div class="account-info-b">
         <div class="account-info-photo">
           <template v-if="identity == 1">
-            <el-image class="account-photo-img" :src="info.profile_photo !='' ? info.profile_photo : defaultAvatar"></el-image>
+            <el-image class="account-photo-img"
+                      :src="info.profile_photo !='' ? info.profile_photo : defaultAvatar"
+                      fit="cover"
+            ></el-image>
           </template>
           <template v-if="identity == 2 || identity == 3 ">
-            <el-image class="account-photo-img" :src="info.logo"></el-image>
+            <el-image class="account-photo-img" :src="info.logo !='' ? info.logo : defaultAvatar" fit="cover"></el-image>
           </template>
         </div>
         <div class="account-info-tags">
@@ -35,8 +38,10 @@
             <span v-if="info.level == 1">Basic Member</span>
             <span v-if="info.level == 2">Pro Member</span>
             <span v-if="info.level == 3">Plus Member</span>
+
+            <el-button type="primary" round @click="turnUpgrade()">Upgrade</el-button>
           </div>
-          <div class="account-info-tag" v-if=" info.vip_due_time && info.vip_due_time!=''">
+          <div class="account-info-tag" v-if="info.vip_due_time && info.vip_due_time!=''">
             Membership Expiration Date:
             <span>{{info.vip_due_time}}</span>
           </div>
@@ -74,7 +79,9 @@ export default {
 
   },
   methods:{
-
+    turnUpgrade(){
+      this.$router.push('/services/price')
+    }
   }
 }
 </script>

@@ -86,7 +86,6 @@
                           <span class="login-label-text">Phone #</span>
                         </template>
                         <el-input size="medium" placeholder="Phone #"
-                                  type="number"
                                   v-model.number="loginPhoneSmsForm.phone"></el-input>
                       </el-form-item>
 
@@ -106,7 +105,7 @@
                         </template>
                         <div class="xll-input-container">
                           <div class="xll-input-input">
-                            <el-input size="medium" placeholder="Code" type="number"
+                            <el-input size="medium" placeholder="Code"
                                       v-model="loginPhoneSmsForm.phone_code">
                             </el-input>
                           </div>
@@ -149,7 +148,6 @@
                           <span class="login-label-text">Phone #</span>
                         </template>
                         <el-input size="medium" placeholder="Phone #"
-                                  type="number"
                                   v-model.number="loginPhonePassForm.phone"></el-input>
                       </el-form-item>
 
@@ -655,6 +653,7 @@ export default {
                   }
 
                 }
+
                 if (identity == 3) {
                   firstName = res.message.vendor.first_name
                   lastName = res.message.vendor.last_name
