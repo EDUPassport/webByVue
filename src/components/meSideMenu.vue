@@ -45,6 +45,9 @@
       <div class="l-item" v-if="identity == 1">
         <router-link to="/me/applications" exact>My Applications</router-link>
       </div>
+      <div class="l-item">
+        <router-link to="/faq/list" exact>FAQ</router-link>
+      </div>
     </div>
 
   </div>

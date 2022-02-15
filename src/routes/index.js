@@ -354,6 +354,15 @@ const routes = [
                     titleC: 'China Paypal',
                     titleG: 'Global Paypal',
                 }
+            },
+            {
+                path:'/faq/list',
+                name:'faqList',
+                component:()=>import('@/views/faq/list'),
+                meta:{
+                    titleC: 'China FAQ',
+                    titleG: 'Global FAQ',
+                }
             }
 
         ],

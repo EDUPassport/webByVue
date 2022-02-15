@@ -6,25 +6,31 @@
           <meSideMenu></meSideMenu>
         </el-col>
         <el-col class="list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
-          <div class="list-container" v-if="favoriteData.length>0">
-            <div class="list-item" v-for="(item,i) in favoriteData" :key="i">
-              <div class="list-item-l">
-                <el-image class="list-item-l-img" :src="item.type_url"></el-image>
-              </div>
-              <div class="list-item-r">
-                <div class="list-item-r-t">
-                 <router-link v-if="item.type==1" :to="{path:'/jobs/detail',query:{id:item.type_id}}"> {{item.type_title}}</router-link>
-                 <router-link v-if="item.type==2" :to="{path:'/deals/detail',query:{id:item.type_id}}"> {{item.type_title}}</router-link>
+          <div class="list-container" >
+            <template v-if="favoriteData.length>0">
+              <div class="list-item" v-for="(item,i) in favoriteData" :key="i">
+                <div class="list-item-l">
+                  <el-image class="list-item-l-img" :src="item.type_url"></el-image>
+                </div>
+                <div class="list-item-r">
+                  <div class="list-item-r-t">
+                    <router-link v-if="item.type==1" :to="{path:'/jobs/detail',query:{id:item.type_id}}"> {{item.type_title}}</router-link>
+                    <router-link v-if="item.type==2" :to="{path:'/deals/detail',query:{id:item.type_id}}"> {{item.type_title}}</router-link>
+                  </div>
+                </div>
+                <div class="list-item-type">
+                  <span v-if="item.type==1">Job</span>
+                  <span v-if="item.type==2">Deal</span>
+                </div>
+                <div class="list-item-favorite-icon-container" @click="cancelFavorite(item.type,item.type_id)">
+                  <i class="iconfont el-icon-alixll-heart-filled list-item-favorite-icon"></i>
                 </div>
               </div>
-              <div class="list-item-type">
-                <span v-if="item.type==1">Job</span>
-                <span v-if="item.type==2">Deal</span>
-              </div>
-              <div class="list-item-favorite-icon-container" @click="cancelFavorite(item.type,item.type_id)">
-                <i class="iconfont el-icon-alixll-heart-filled list-item-favorite-icon"></i>
-              </div>
-            </div>
+
+            </template>
+            <template v-else>
+              <div class="empty-tips">No Data</div>
+            </template>
           </div>
           <div class="list-pagination" v-if="favoriteData.length>0">
             <el-pagination layout="prev, pager, next" :default-current-page="1"
@@ -204,6 +210,11 @@ export default {
 
 .ads-container {
   margin-top: 20px;
+}
+
+.empty-tips{
+  font-size: 14px;
+  color: #808080;
 }
 
 </style>

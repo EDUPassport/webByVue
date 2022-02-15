@@ -6,35 +6,41 @@
           <meSideMenu></meSideMenu>
         </el-col>
         <el-col class="list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
-          <div class="list-container" v-if="jobsData.length>0">
+          <div class="list-container" >
             <div class="list-label">
               My Job Applications
             </div>
             <div class="list-label-underline"></div>
-            <div class="list-item" v-for="(item,i) in jobsData" :key="i">
-              <div class="list-item-l">
-                <el-image class="list-item-l-img" :src="item.logo"></el-image>
-              </div>
-              <div class="list-item-r">
-                <div class="list-item-r-t">
-                  <router-link  :to="{path:'/jobs/detail',query:{id:item.job_id}}">
-                    {{ item.job_title }}
-                  </router-link>
+            <template v-if="jobsData.length>0">
+              <div class="list-item" v-for="(item,i) in jobsData" :key="i">
+                <div class="list-item-l">
+                  <el-image class="list-item-l-img" :src="item.logo"></el-image>
                 </div>
-                <div class="list-item-r-mid">
-                  {{item.job.business_name}}
-                </div>
-                <div class="list-item-r-b">
-                  <div class="list-item-r-b-l">
-                    {{item.job.job_location}}
+                <div class="list-item-r">
+                  <div class="list-item-r-t">
+                    <router-link  :to="{path:'/jobs/detail',query:{id:item.job_id}}">
+                      {{ item.job_title }}
+                    </router-link>
                   </div>
-                  <div class="list-item-r-b-r">
-                    ¥ {{item.job.salary_min}} - {{item.job.salary_max}}
+                  <div class="list-item-r-mid">
+                    {{item.job.business_name}}
+                  </div>
+                  <div class="list-item-r-b">
+                    <div class="list-item-r-b-l">
+                      {{item.job.job_location}}
+                    </div>
+                    <div class="list-item-r-b-r">
+                      ¥ {{item.job.salary_min}} - {{item.job.salary_max}}
+                    </div>
                   </div>
                 </div>
+
               </div>
 
-            </div>
+            </template>
+            <template v-else>
+              <div class="empty-tips"> No Data</div>
+            </template>
           </div>
           <div class="list-pagination" v-if="jobsData.length>0">
             <el-pagination layout="prev, pager, next" :default-current-page="1"
@@ -220,5 +226,8 @@ export default {
 .ads-container {
   margin-top: 20px;
 }
-
+.empty-tips{
+  color: #808080;
+  font-size: 14px;
+}
 </style>
