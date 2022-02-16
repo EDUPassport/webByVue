@@ -6,6 +6,13 @@
   "description": "element ui",
   "glyphs": [
     {
+      "icon_id": "10330635",
+      "name": "hamburger-menu",
+      "font_class": "hamburger-menu",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
       "icon_id": "1410460",
       "name": "phone",
       "font_class": "phone",

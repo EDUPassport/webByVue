@@ -399,7 +399,7 @@
             <swiper-slide class="popular-work-card" v-for="(item,i) in popularCityData" :key="i">
               <div class="popular-work-card-bg">
                 <div class="popular-work-card-name">
-                  <router-link :to="{path:'/jobs',query:{city:item.id}}">{{ item.CityPinyin }}</router-link>
+                  <router-link :to="{path:'/jobs',query:{city:item.id}}">{{ item.CityPinyin }}-China</router-link>
                 </div>
               </div>
             </swiper-slide>

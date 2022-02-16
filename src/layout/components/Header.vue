@@ -82,9 +82,7 @@
 
         <el-col :xs="4" :sm="4" :md="4" :lg="0" :xl="0">
           <div @click="menuDrawerStatus = true">
-            <el-icon :size="40">
-              <Menu />
-            </el-icon>
+            <i class="iconfont el-icon-alihamburger-menu xll-icon-size"></i>
           </div>
           <el-drawer
             v-model="menuDrawerStatus"
@@ -628,5 +626,10 @@ export default {
   .sign-up-btn {
     display: inline;
   }
+}
+
+.xll-icon-size{
+  font-size: 40px;
+  cursor: pointer;
 }
 </style>
