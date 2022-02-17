@@ -761,7 +761,8 @@ export default {
 
 .faq-content-container {
   width: 60%;
-  margin: 40px auto 0;
+  margin: 40px auto 80px ;
+
 }
 
 .paypal-btn{

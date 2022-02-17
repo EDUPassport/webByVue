@@ -285,7 +285,7 @@
                       </div>
                       <div class="identity-btn identity-btn-margin"
                            :class="identityValue == 2 ? 'identity-business-active' : '' "
-                           @click="selectedIdentity(2)">Business
+                           @click="selectedIdentity(2)">Edu-Business
                       </div>
                       <div class="identity-btn identity-btn-margin"
                            :class="identityValue == 3 ? 'identity-vendor-active' : '' "

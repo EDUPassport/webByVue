@@ -18,7 +18,7 @@
           <el-input
               v-model="subscribeEmail"
               placeholder="Email"
-              :input-style="{height:'60px',border:'none','background-color':'#2F2F4D'}"
+              :input-style="{height:'60px',border:'none','background-color':'#2F2F4D','color':'#ffffff'}"
               class="xll-subscribe-input"
           >
             <template #append>
