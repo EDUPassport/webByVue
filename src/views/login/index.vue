@@ -285,7 +285,7 @@
                       </div>
                       <div class="identity-btn identity-btn-margin"
                            :class="identityValue == 2 ? 'identity-business-active' : '' "
-                           @click="selectedIdentity(2)">Edu-Business
+                           @click="selectedIdentity(2)">Education-Business
                       </div>
                       <div class="identity-btn identity-btn-margin"
                            :class="identityValue == 3 ? 'identity-vendor-active' : '' "
@@ -298,7 +298,7 @@
                                type="primary"
                                round
                                :loading="submitRegisterLoadingStatus"
-                               @click="submitRegisterForm('registerForm')">
+                               @click="submitRegisterForm1('registerForm')">
                       Submit
                     </el-button>
                   </el-form-item>
@@ -863,6 +863,49 @@ export default {
 
       }
     },
+    submitRegisterForm1(){
+
+      let params = Object.assign({
+        identity: this.identityValue
+      }, this.registerForm)
+
+      let formData = new FormData();
+
+      formData.append('xnQsjsdp','4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2')
+      formData.append('zc_gad','')
+      formData.append('xmIwtLD','97a36bab5c5de21168555ee8ab3cfe6d18f88e7ed1182c9e6e5c9ec5ec7d2149')
+      formData.append('actionType','TGVhZHM=')
+      formData.append('returnURL','https://dev.eslpassport.com/home')
+      formData.append('ldeskuid','')
+      formData.append('LDTuvid','')
+      formData.append('Last Name',params.last_name)
+      // formData.append('First Name',params.first_name)
+      // formData.append('Email',params.email)
+      // let identityStr = ''
+      // if(params.identity == 1){
+      //   identityStr = 'Educator'
+      // }
+      // if(params.identity == 2){
+      //   identityStr = 'Edu-Business'
+      // }
+      // if(params.identity == 3){
+      //   identityStr = 'Vendor'
+      // }
+      // formData.append('CONTACTCF2',identityStr)
+      // formData.append('Lead Source','Online Store')
+
+      axios.post('/crm/WebToContactForm', formData, {
+        headers: {
+
+        },
+        baseURL: '/crm',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      })
+
+    },
     submitRegisterForm(formName) {
       let self = this;
       this.submitRegisterLoadingStatus = true;
@@ -872,6 +915,7 @@ export default {
           let params = Object.assign({
             identity: self.identityValue
           }, this.registerForm)
+
           EMAIL_REGISTER(params).then(res => {
             console.log(res)
             if (res.code == 200) {
