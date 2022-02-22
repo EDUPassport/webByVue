@@ -43,7 +43,7 @@ module.exports = {
         },
         devServer: {
             allowedHosts: [
-                'e3xr9k.natappfree.cc'
+                'esl.vaiwan.cn'
             ],
             proxy: {
                 '/hcaptcha': {

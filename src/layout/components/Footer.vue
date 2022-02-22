@@ -25,7 +25,7 @@
           <div class="footer-nav-item">
             <router-link to="#">Job Featuring</router-link>
           </div>
-          <div class="footer-nav-item" v-if="identity==1 || identity==2 || identity == 3">
+          <div class="footer-nav-item">
             <router-link to="/services/price">Pricing</router-link>
           </div>
           <div class="footer-nav-item">

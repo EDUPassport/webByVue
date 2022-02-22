@@ -1,10 +1,5 @@
 <template>
   <div class="price-bg">
-<!--    <el-row class="banner-row" :gutter="0" align="middle" justify="center">-->
-<!--      <el-col class="banner-bg" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
-<!--        <h1>Our Pricing & Plans</h1>-->
-<!--      </el-col>-->
-<!--    </el-row>-->
 
     <el-row class="price-row" :gutter="0" align="middle" justify="center">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -60,7 +55,7 @@
               </div>
 
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" color="#b1c452" round>Get Started</el-button>
+                <el-button class="price-purchase-btn" color="#b1c452" @click="zohoContactUs()"  round>Get Started</el-button>
               </div>
             </div>
             <div class="price-item price-pro" v-if="item.level == 2">
@@ -134,7 +129,7 @@
                 </div>
               </div>
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round>Get Started</el-button>
+                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>
               </div>
             </div>
 
@@ -168,7 +163,7 @@
               </div>
 
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round>Get Started</el-button>
+                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>
               </div>
             </div>
             <div class="price-item price-pro" v-if="item.level == 2">
@@ -247,7 +242,7 @@
                 </div>
               </div>
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round>Get Started</el-button>
+                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>
               </div>
             </div>
 
@@ -277,7 +272,7 @@
               </div>
 
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round>Get Started</el-button>
+                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>
               </div>
             </div>
             <div class="price-item price-pro" v-if="item.level == 2">
@@ -361,7 +356,7 @@
                 </div>
               </div>
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round>Get Started</el-button>
+                <el-button class="price-purchase-btn" @click="zohoContactUs()" round>Get Started</el-button>
               </div>
             </div>
 
@@ -370,7 +365,7 @@
         </div>
 
         <div class="price-help-container">
-          Need a higher level plan? <span>Contact us</span> for enterprise plan
+          Need a higher level plan? <span @click="zohoContactUs()">Contact us</span> for enterprise plan
         </div>
 
       </el-col>
@@ -453,7 +448,15 @@ export default {
     }
   },
   mounted() {
-    this.getVipList(this.identity)
+    let token = localStorage.getItem('token')
+
+    if(token){
+      this.getVipList(this.identity)
+    }else{
+      this.identity = 1
+      this.getVipList(1)
+    }
+
   },
   methods: {
     getVipList(identity){
@@ -461,6 +464,7 @@ export default {
         identity:identity,
         token:localStorage.getItem('token')
       }
+
       MEMBER_VIP_LIST(params).then(res=>{
         console.log(res)
         if(res.code == 200){
@@ -480,6 +484,16 @@ export default {
       window.open(this.paypalUrl,'_blank')
     },
     purchase(id,amount,level_en){
+
+      let token = localStorage.getItem('token')
+
+      if(!token || token === ''){
+        return this.$router.push({
+          path:'/login',
+          query:{type:1}
+        })
+      }
+
       this.paypalVisible=true
 
       let product = id
@@ -554,6 +568,9 @@ export default {
       //       console.error("failed to load the PayPal JS SDK script", error);
       //     });
 
+    },
+    zohoContactUs(){
+      window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4','_blank')
     }
   }
 }
@@ -746,12 +763,12 @@ export default {
 .price-help-container {
   margin-top: 40px;
   font-size: 14px;
-
 }
 
 .price-help-container span {
   color: #00b3d2;
   text-decoration: underline;
+  cursor:pointer;
 }
 
 .faq-row {

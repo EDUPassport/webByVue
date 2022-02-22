@@ -298,7 +298,7 @@
                                type="primary"
                                round
                                :loading="submitRegisterLoadingStatus"
-                               @click="submitRegisterForm1('registerForm')">
+                               @click="submitRegisterForm('registerForm')">
                       Submit
                     </el-button>
                   </el-form-item>
@@ -874,29 +874,30 @@ export default {
       formData.append('xnQsjsdp','4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2')
       formData.append('zc_gad','')
       formData.append('xmIwtLD','97a36bab5c5de21168555ee8ab3cfe6d18f88e7ed1182c9e6e5c9ec5ec7d2149')
-      formData.append('actionType','TGVhZHM=')
+      formData.append('actionType','Q29udGFjdHM=')
       formData.append('returnURL','https://dev.eslpassport.com/home')
       formData.append('ldeskuid','')
       formData.append('LDTuvid','')
       formData.append('Last Name',params.last_name)
-      // formData.append('First Name',params.first_name)
-      // formData.append('Email',params.email)
-      // let identityStr = ''
-      // if(params.identity == 1){
-      //   identityStr = 'Educator'
-      // }
-      // if(params.identity == 2){
-      //   identityStr = 'Edu-Business'
-      // }
-      // if(params.identity == 3){
-      //   identityStr = 'Vendor'
-      // }
-      // formData.append('CONTACTCF2',identityStr)
-      // formData.append('Lead Source','Online Store')
+      formData.append('First Name',params.first_name)
+      formData.append('Email',params.email)
+
+      let identityStr = ''
+      if(params.identity == 1){
+        identityStr = 'Educator'
+      }
+      if(params.identity == 2){
+        identityStr = 'Education Business'
+      }
+      if(params.identity == 3){
+        identityStr = 'Vendor'
+      }
+      formData.append('CONTACTCF2',identityStr)
+      formData.append('Lead Source','Web App')
 
       axios.post('/crm/WebToContactForm', formData, {
         headers: {
-
+          "Content-Type": "multipart/form-data"
         },
         baseURL: '/crm',
         timeout: 100000
@@ -908,7 +909,9 @@ export default {
     },
     submitRegisterForm(formName) {
       let self = this;
+
       this.submitRegisterLoadingStatus = true;
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // console.log(valid)
@@ -921,18 +924,20 @@ export default {
             if (res.code == 200) {
               // let userInfo = res.message
               // localStorage.setItem('uid',res.message.id)
+              this.submitRegisterForm1()
               this.$message.success('Registration completed!')
-              location.reload()
+              this.$router.push({path:'/login',query:{type:1}})
+              this.showValue = 1
+              // window.location.reload()
+              self.submitRegisterLoadingStatus = false
             }
 
           }).catch(err => {
             console.log(err)
+            self.submitRegisterLoadingStatus = false
             this.$message.error(err.msg)
           })
 
-          setTimeout(function () {
-            self.submitRegisterLoadingStatus = false
-          }, 2000)
         } else {
           console.log('error submit!!')
           this.submitRegisterLoadingStatus = false

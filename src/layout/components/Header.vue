@@ -42,7 +42,7 @@
                         <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>
                         <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
                         <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
-                        <el-dropdown-item divided @click="loginOut">Log Out</el-dropdown-item>
+                        <el-dropdown-item divided @click="loginOut()">Log Out</el-dropdown-item>
                       </el-dropdown-menu>
                     </template>
                   </el-dropdown>
@@ -344,6 +344,9 @@ export default {
       this.$router.push('/login')
     },
     loginOut() {
+      this.$loading({
+        text:'Loading...'
+      })
       localStorage.clear()
       this.$router.push('/')
       setTimeout(function () {
