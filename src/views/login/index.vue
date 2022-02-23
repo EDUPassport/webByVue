@@ -215,6 +215,10 @@
                     Google Sign in
                   </el-button>
                 </div>
+
+                <div class="forgot-password-container">
+                  <el-button type="text" class="forgot-password-btn" @click="forgotPassword()" >Forgot Password</el-button>
+                </div>
               </div>
             </div>
           </el-col>
@@ -339,6 +343,8 @@
       </el-footer>
     </el-container>
 
+    <ForgotPassword :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
+
   </div>
 
 
@@ -355,8 +361,9 @@ import axios from "axios";
 import shanghaiImg from '@/assets/bg/bg-shanghai.jpg'
 import {randomString} from '@/utils/index'
 import {useStore} from 'vuex'
-import {reactive} from "vue";
+import {reactive,ref} from "vue";
 import {decode} from "js-base64";
+import ForgotPassword from '@/components/forgotPassword'
 
 export default {
   name: "index",
@@ -445,7 +452,9 @@ export default {
 
     }
   },
-  components: {},
+  components: {
+    ForgotPassword
+  },
   setup(props,context) {
     //hcaptcha,
     console.log(props)
@@ -456,6 +465,8 @@ export default {
       console.log(route.query)
       return route.query;
     }
+
+    const forgotDialogVisible = ref(false)
 
     const skipHomePage = () => {
       let a = route.query.redirect_params
@@ -516,7 +527,8 @@ export default {
       showType,
       setCurrentUser,
       checkCodeBtn,
-      getCheckCodeTimer
+      getCheckCodeTimer,
+      forgotDialogVisible
     }
   },
   mounted() {
@@ -1007,6 +1019,12 @@ export default {
     switchToPhoneBySms(){
       this.loginByPhoneWithSmsStatus = !this.loginByPhoneWithSmsStatus
       this.loginByPhoneWithPasswordStatus = !this.loginByPhoneWithPasswordStatus
+    },
+    forgotPassword(){
+      this.forgotDialogVisible = true
+    },
+    closeForgotDialog(){
+      this.forgotDialogVisible = false
     }
 
 
@@ -1069,7 +1087,7 @@ export default {
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
   overflow: hidden;
   background-image: url("../../assets/bg/bg-shanghai.jpg");
-  background-size: 100% auto;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -1080,7 +1098,7 @@ export default {
 }
 
 .xll-login-form-container {
-  padding: 20px 20px 40px 20px;
+  padding: 20px 20px 20px 20px;
 }
 
 .xll-register-row-container {
@@ -1148,6 +1166,14 @@ export default {
 
 .google-btn-container {
   margin-top: 10px;
+}
+
+.forgot-password-container{
+  margin-top: 10px;
+}
+.forgot-password-btn{
+  font-size: 16px;
+  text-decoration: underline;
 }
 
 .google-btn {

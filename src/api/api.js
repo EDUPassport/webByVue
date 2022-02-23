@@ -175,3 +175,7 @@ export const PAY_PAYPAL = (params) => get('pay/paypal', params)
 export const PAY_PAYPAL_CALLBACK = (params) => get('paypal/callback', params)
 
 export const MEMBER_VIP_LIST = (params) => get('home/vipList', params)
+
+export const FOND_PASSWORD_BY_PHONE = (params) => post('user/findPassword', params)
+
+export const FOND_PASSWORD_BY_EMAIL = (params) => post('email/findPassword', params)
