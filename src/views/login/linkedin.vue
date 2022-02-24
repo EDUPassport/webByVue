@@ -110,4 +110,8 @@ export default {
   padding: 80px;
 }
 
+h1{
+  text-align: center;
+}
+
 </style>

@@ -1143,6 +1143,7 @@ export default {
   font-size: 34px;
   font-weight: bold;
   line-height: 40px;
+  text-align: center;
 }
 
 .featured-jobs-more {
@@ -1487,6 +1488,7 @@ export default {
   font-size: 34px;
   font-weight: bold;
   line-height: 40px;
+  text-align: center;
 }
 
 .featured-deals-more {
@@ -1503,6 +1505,7 @@ export default {
 .featured-deals-tips {
   color: #808080;
   padding-bottom: 10px;
+  text-align: center;
 }
 
 
@@ -1711,11 +1714,13 @@ export default {
   font-size: 34px;
   font-weight: bold;
   line-height: 40px;
+  text-align: center;
 }
 
 .popular-work-tips {
   color: #808080;
   padding-bottom: 10px;
+  text-align: center;
 }
 
 
@@ -1762,6 +1767,7 @@ export default {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.3);
   padding: 20px 0;
+  text-align: center;
 }
 
 .popular-work-card-name a {
@@ -1985,6 +1991,7 @@ export default {
 .get-started-container {
   border-top: 1px solid #EEEEEE;
   padding: 80px 20px;
+  text-align: center;
 }
 
 .get-started-container h3 {

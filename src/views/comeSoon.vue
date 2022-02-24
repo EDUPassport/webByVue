@@ -40,7 +40,7 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-
+  text-align: center;
 }
 .container{
   background-color: rgba(0,0,0,0.6);

@@ -19,23 +19,23 @@
                   First & Last Name: <span>{{ vendorInfo.first_name }} {{ vendorInfo.last_name }}</span>
                 </div>
                
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="vendorInfo.wx_id">
                   Wechat ID: <span>{{ vendorInfo.wx_id }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="basicUserInfo.sex">
                   Gender:
                   <span v-if="basicUserInfo.sex == 1">Male</span>
                   <span v-if="basicUserInfo.sex == 2">Female</span>
                   <span v-if="basicUserInfo.sex == 3">No Gender Requirements</span>
 
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="vendorInfo.nationality">
                   Nationality: <span>{{ vendorInfo.nationality }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="vendorInfo.job_title">
                   Job Title: <span>{{  vendorInfo.job_title}}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="vendorInfo.first_language">
                   Preferred Language: <span>{{ vendorInfo.first_language }}</span>
                 </div>
                
@@ -69,18 +69,18 @@
               </div>
 
               <div class="legal-info-content">
-                <div class="legal-info-item">
+                <div class="legal-info-item" v-if="vendorInfo.vendor_name_en">
                   Company Name: <span>{{ vendorInfo.vendor_name_en }}</span>
                 </div>
 
-                <div class="legal-info-item">
+                <div class="legal-info-item" v-if="vendorInfo.legal_company_name">
                   Legal Company Name: <span>{{ vendorInfo.legal_company_name }}</span>
                 </div>
 
-                <div class="legal-info-item">
+                <div class="legal-info-item" v-if="vendorInfo.busin_reg_num">
                   Business Registration ID: <span>{{ vendorInfo.busin_reg_num }}</span>
                 </div>
-                <div class="legal-info-item">
+                <div class="legal-info-item" v-if="vendorInfo.busin_reg_img">
                   Business License:
                   <el-image style="width: 200px" :src="vendorInfo.busin_reg_img"></el-image>
                 </div>
@@ -95,25 +95,24 @@
               </div>
 
               <div class="vendor-info-content">
-                <div class="vendor-info-item">
+                <div class="vendor-info-item" v-if="vendorInfo.vendor_bio">
                   Vendor Introduction: <span>{{ vendorInfo.vendor_bio }}</span>
                 </div>
 
-                <div class="vendor-info-item">
+                <div class="vendor-info-item" v-if="vendorInfo.wechat_public_name">
                   WeChat Official Account ID: <span>{{ vendorInfo.wechat_public_name }}</span>
                 </div>
-                <div class="vendor-info-item">
+                <div class="vendor-info-item" v-if="vendorInfo.website">
                   Website: <span>{{ vendorInfo.website }}</span>
                 </div>
-                <div class="vendor-info-item">
+                <div class="vendor-info-item" v-if="vendorInfo.phone">
                   Phone #: <span>{{  vendorInfo.phone}}</span>
                 </div>
-                <div class="business-info-item">
+                <div class="business-info-item"
+                     v-if="vendorInfo.provinces && vendorInfo.citys && vendorInfo.districts"
+                >
                   Location:
-                  <template v-if="vendorInfo.provinces && vendorInfo.citys && vendorInfo.districts">
-                    <span>{{vendorInfo.provinces.Pinyin}}, {{vendorInfo.citys.Pinyin}}, {{vendorInfo.districts.Pinyin}}</span>
-                  </template>
-
+                  <span>{{vendorInfo.provinces.Pinyin}}, {{vendorInfo.citys.Pinyin}}, {{vendorInfo.districts.Pinyin}}</span>
                 </div>
                 <div class="business-info-item">
                   Dog Friendly:
@@ -857,7 +856,7 @@ export default {
 }
 
 .educator-r-container {
-  padding: 20px;
+  padding:10px 20px;
 }
 
 .basic-info-container {
@@ -865,6 +864,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .basic-info-t {
@@ -908,11 +908,12 @@ export default {
 }
 
 .legal-info-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .legal-info-t {
@@ -956,11 +957,12 @@ export default {
 }
 
 .vendor-info-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .vendor-info-t {
@@ -1004,11 +1006,12 @@ export default {
 }
 
 .languages-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .languages-t {
@@ -1049,14 +1052,13 @@ export default {
   margin-left: 10px;
 }
 
-
-
 .media-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .profile-photo-container{

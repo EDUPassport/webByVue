@@ -163,6 +163,7 @@ export default {
 
 .list-item-l {
   width: 20%;
+  text-align: center;
 }
 
 .list-item-l-img {
@@ -225,9 +226,11 @@ export default {
 
 .ads-container {
   margin-top: 20px;
+  text-align: center;
 }
 .empty-tips{
   color: #808080;
   font-size: 14px;
+  text-align: center;
 }
 </style>

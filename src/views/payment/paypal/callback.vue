@@ -100,6 +100,7 @@ export default {
 .bg-container{
   padding: 80px 40px 220px 40px;
   background-color: #f5f6f7;
+  text-align: center;
 }
 
 .success-container{

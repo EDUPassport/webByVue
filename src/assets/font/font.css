@@ -1,9 +1,13 @@
 @font-face {
-    font-family: 'Damascus1';
-    src:url('.DamascusPUA-02.ttf');
+    font-family: 'ArimoBold';
+    src:url('Arimo-Bold.ttf');
 }
 
 @font-face {
-    font-family: 'DamascusLocal';
-    src:url('DamascusBold-07.ttf');
+    font-family: 'ArimoRegular';
+    src:url('Arimo-Regular.ttf');
+}
+@font-face {
+    font-family: 'Henriette';
+    src:url('Henriette Compressed.otf');
 }

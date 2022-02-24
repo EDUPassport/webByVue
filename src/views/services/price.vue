@@ -612,6 +612,7 @@ export default {
 
 .price-label-container {
   margin-top: 40px;
+  text-align: center;
 }
 
 .price-label-container h1 {
@@ -666,6 +667,7 @@ export default {
   cursor: pointer;
   padding: 20px 0;
   background-color: #FFFFFF;
+  text-align: center;
 }
 
 .price-item:hover {
@@ -763,6 +765,7 @@ export default {
 .price-help-container {
   margin-top: 40px;
   font-size: 14px;
+  text-align: center;
 }
 
 .price-help-container span {
@@ -774,6 +777,9 @@ export default {
 .faq-row {
   background-color: #FFFFFF;
   padding: 40px;
+}
+.faq-label-container{
+  text-align: center;
 }
 
 .faq-content-container {

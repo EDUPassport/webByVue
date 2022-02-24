@@ -25,12 +25,10 @@ html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, l
   padding: 0;
 }
 
-#app {
-  font-family:sans-serif, Avenir, Helvetica, Arial;
+* {
+  font-family:ArimoRegular,sans-serif, Avenir, Helvetica, Arial;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  background-color: #ffffff;
 }
 
 </style>

@@ -99,13 +99,14 @@
                 </div>
               </el-form-item>
 
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('basicForm')">
-                  Submit
-                </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
-              </el-form-item>
             </el-form>
+
+            <div class="submit-xll-container">
+              <el-button type="primary" @click="submitForm('basicForm')">
+                Submit
+              </el-button>
+              <el-button @click="resetForm('basicForm')">Reset</el-button>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -416,5 +417,10 @@ export default {
   background-color: #00b3d2;
   color: #FFFFFF;
 }
+
+.submit-xll-container{
+  text-align: center;
+}
+
 
 </style>

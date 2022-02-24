@@ -1,8 +1,8 @@
 <template>
   <div class="profile-l-container">
     <div class="profile-photo-container">
-      <el-image class="profile-photo" :src="userAvatar !='' ? userAvatar : defaultAvatar" fit="cover"></el-image>
-      <div>
+      <el-avatar :size="120" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
+      <div class="profile-xll-username">
         <span>{{username}}</span>
       </div>
     </div>
@@ -145,7 +145,11 @@ export default {
   height: 100px;
   border-radius: 50%;
 }
-.profile-photo-container span{
+.profile-xll-username{
+  text-align: center;
+}
+
+.profile-xll-username span{
   font-size: 14px;
   color: #ffffff;
 }

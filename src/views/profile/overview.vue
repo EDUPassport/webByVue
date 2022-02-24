@@ -181,6 +181,8 @@ export default {
   margin-top: 20px;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -221,6 +223,7 @@ export default {
 .ads-container {
   margin-top: 20px;
   padding:0 20px;
+  text-align: center;
 }
 .ads-img{
   width: 100%;

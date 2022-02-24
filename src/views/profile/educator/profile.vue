@@ -18,29 +18,29 @@
                 <div class="basic-info-item">
                   First & Last Name: <span>{{ educatorInfo.first_name }} {{ educatorInfo.last_name }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="educatorInfo.email">
                   Email: <span>{{ educatorInfo.email }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="educatorInfo.wx_id">
                   Wechat ID: <span>{{ educatorInfo.wx_id }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="basicUserInfo.sex">
                   Gender:
                   <span v-if="basicUserInfo.sex == 1">Male</span>
                   <span v-if="basicUserInfo.sex == 2">Female</span>
                   <span v-if="basicUserInfo.sex == 3">No Gender Requirements</span>
 
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="educatorInfo.nationality">
                   Nationality: <span>{{ educatorInfo.nationality }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="basicUserInfo.birthday">
                   Birthdate: <span>{{ basicUserInfo.birthday }}</span>
                 </div>
                 <!--                <div class="basic-info-item">-->
                 <!--                  Location: <span>shangqiu, shangqiu , henan</span>-->
                 <!--                </div>-->
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="educatorInfo.sub_identity_name">
                   Educator Category: <span>{{ educatorInfo.sub_identity_name }}</span>
                 </div>
                 <div class="basic-info-item">
@@ -162,9 +162,12 @@
                         </div>
                       </div>
                     </template>
-                    <div class="show-more" v-if="showMoreEducationStatus " @click="showMoreEducation">
-                      Show More
-                    </div>
+                    <template v-if="educationInfo.length>0">
+                      <div class="show-more" v-if="showMoreEducationStatus " @click="showMoreEducation">
+                        Show More
+                      </div>
+                    </template>
+
                   </div>
 
                 </div>
@@ -361,9 +364,12 @@
 
                       </div>
                     </div>
-                    <div class="show-more" v-if="showMoreWorkExpStatus" @click="showMoreWorkExp">
-                      Show More
-                    </div>
+                    <template v-if="workInfo.length>0">
+                      <div class="show-more" v-if="showMoreWorkExpStatus" @click="showMoreWorkExp">
+                        Show More
+                      </div>
+                    </template>
+
                   </div>
                 </div>
               </div>
@@ -853,7 +859,7 @@
           <el-form-item prop="languageValue">
             <el-input v-model="languagesForm.languageValue" placeholder="Add your language"></el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item >
             <el-button type="primary" @click="addCustomLanguage('languagesForm')">
               Add
             </el-button>
@@ -2573,7 +2579,7 @@ export default {
 }
 
 .educator-r-container {
-  padding: 20px;
+  padding:10px 20px;
 }
 
 .basic-info-container {
@@ -2581,6 +2587,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .basic-info-t {
@@ -2624,11 +2631,12 @@ export default {
 }
 
 .credentials-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .credentials-label {
@@ -2815,11 +2823,12 @@ export default {
 }
 
 .experience-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .experience-label {
@@ -3012,11 +3021,12 @@ export default {
 }
 
 .interest-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .interest-t {
@@ -3047,11 +3057,12 @@ export default {
 }
 
 .media-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .profile-photo-container{
@@ -3262,11 +3273,12 @@ export default {
 }
 
 .preferences-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .preferences-label {

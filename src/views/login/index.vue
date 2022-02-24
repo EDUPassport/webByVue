@@ -1170,10 +1170,10 @@ export default {
 
 .forgot-password-container{
   margin-top: 10px;
+  text-align: center;
 }
 .forgot-password-btn{
   font-size: 16px;
-  text-decoration: underline;
 }
 
 .google-btn {

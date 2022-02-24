@@ -35,15 +35,16 @@
           <el-input size="medium" type="textarea" placeholder="Message" v-model="usForm.message"></el-input>
         </el-form-item>
 
-        <el-form-item>
-          <el-button class="submit-btn"
-                     type="primary"
-                     :loading="submitLoadingStatus"
-                     @click="submitForm('usForm')">
-            Submit
-          </el-button>
-        </el-form-item>
       </el-form>
+
+      <div class="submit-btn-container">
+        <el-button class="submit-btn"
+                   type="primary"
+                   :loading="submitLoadingStatus"
+                   @click="submitForm('usForm')">
+          Submit
+        </el-button>
+      </div>
 
     </el-col>
     <el-col class="contact-detail-bg" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
@@ -177,7 +178,7 @@ export default {
 
 .banner-bg{
   height: 200px;
-  background-image: url("../../assets/bg/wheat.png");
+  background-image: url("../../assets/bg/prism.png");
   background-size:50%;
   background-repeat: repeat;
   background-position: center;
@@ -190,6 +191,7 @@ export default {
   font-weight: bold;
   color: #FFFFFF;
   line-height: 200px;
+  text-align: center;
 }
 
 .map-row{
@@ -279,5 +281,13 @@ export default {
     width: 1100px;
   }
 
+}
+
+.submit-btn-container{
+  text-align: center;
+}
+
+.submit-btn{
+  font-size: 14px;
 }
 </style>

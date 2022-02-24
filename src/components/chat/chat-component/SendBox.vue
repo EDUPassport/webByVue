@@ -1,9 +1,9 @@
 <template>
   <div class="send-box">
     <div class="send-box-top">
-      <div class="send-box-item" >
-        <GoEasyRecorder @onComplete="onRecordComplete" />
-      </div>
+<!--      <div class="send-box-item" >-->
+<!--        <GoEasyRecorder @onComplete="onRecordComplete" />-->
+<!--      </div>-->
       <div class="send-box-item" @click="showEmoji">
         <i class="iconfont el-icon-alismile emoji-icon"></i>
       </div>
@@ -48,13 +48,14 @@
 </template>
 
 <script>
-import GoEasyRecorder from "../GoEasyRecorder/GoEasyRecorder";
+// import GoEasyRecorder from "../GoEasyRecorder/GoEasyRecorder";
+// GoEasyRecorder
 
 export default {
   name: "SendBox",
   props: ['to', 'type'],
   components: {
-    GoEasyRecorder
+
   },
   setup(){
 

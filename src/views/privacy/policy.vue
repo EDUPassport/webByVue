@@ -4,7 +4,7 @@
       <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
         <meSideMenu></meSideMenu>
       </el-col>
-      <el-col :xs="20" :sm="20" :md="20" :lg="20" :xl="20">
+      <el-col class="policy-row-container" :xs="20" :sm="20" :md="20" :lg="20" :xl="20">
         <div class="policy-container">
           <p>
             This Privacy Policy describes how your personal information is collected, used, and shared when
@@ -253,10 +253,17 @@ export default {
   margin: 0 auto;
   padding: 20px 0;
 }
+
+.policy-row-container{
+  padding:0 20px;
+}
 .policy-container{
   text-align: left;
-  padding: 0 40px;
+  padding: 20px 40px;
   font-size: 14px;
+  background-color: #f5f6f7;
+  border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
   p{
     font-size: 14px;

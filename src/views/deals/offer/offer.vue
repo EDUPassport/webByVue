@@ -139,13 +139,15 @@
                 </div>
               </el-form-item>
 
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('basicForm')">
-                  Submit
-                </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
-              </el-form-item>
+
             </el-form>
+
+            <div class="xll-submit-container">
+              <el-button type="primary" @click="submitForm('basicForm')">
+                Submit
+              </el-button>
+              <el-button @click="resetForm('basicForm')">Reset</el-button>
+            </div>
 
           </div>
 
@@ -526,6 +528,7 @@ export default {
   margin: 0 auto;
   padding: 20px 0;
 }
+
 .jobs-r-container{
   padding: 0 20px;
 }
@@ -591,11 +594,13 @@ export default {
   margin-top: 10px;
   width: 100%;
   height: 300px;
+  text-align: center;
 }
 
 .basemap{
   width: 100%;
   height: 100%;
+
 }
 
 .tags-tips{
@@ -613,5 +618,9 @@ export default {
   text-align: left;
   font-size: 12px;
   color: #00b3d2;
+}
+
+.xll-submit-container{
+  text-align: center;
 }
 </style>

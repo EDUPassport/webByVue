@@ -290,10 +290,12 @@ export default {
 
 .result-label {
   font-size: 24px;
+  text-align: center;
   font-weight: bold;
 }
 
 .result-tips {
+  text-align: center;
   font-size: 22px;
 }
 

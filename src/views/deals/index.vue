@@ -509,6 +509,7 @@ export default {
 
 .deals-pagination{
   margin-top: 20px;
+  text-align: center;
 }
 
 @media screen and (min-width: 1200px){

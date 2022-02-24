@@ -108,6 +108,7 @@ export default {
   font-weight: bold;
   color: #FFFFFF;
   line-height: 300px;
+  text-align: center;
 }
 
 .about-content-row {
@@ -166,6 +167,7 @@ export default {
   font-size: 20px;
   color: #FE2060;
   font-weight: bold;
+  text-align: center;
 }
 
 .we-do-label span{
@@ -185,6 +187,7 @@ export default {
   margin: 10px;
   padding: 20px;
   border-radius: 10px;
+  text-align: center;
 }
 
 .we-do-item-label{

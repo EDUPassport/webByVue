@@ -6,13 +6,18 @@
           <meSideMenu></meSideMenu>
         </el-col>
         <el-col :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+
           <accountInfo :info="businessInfo" :phone="basicUserInfo.phone"></accountInfo>
+
           <div class="educator-r-container">
             <div class="basic-info-container">
               <div class="basic-info-t">
-                <div class="basic-info-label">Your Basic Info</div>
+                <div class="basic-info-label">
+                  <div class="basic-info-label-text">Your Basic Info</div>
+                  <div class="profile-underline-1"></div>
+                </div>
                 <div class="basic-info-edit" @click="editBasicInfo()">
-                  <el-icon><edit /></el-icon>
+                  <el-icon :size="18"><edit /></el-icon>
                 </div>
               </div>
 
@@ -20,43 +25,46 @@
                 <div class="basic-info-item">
                   First & Last Name: <span>{{ businessInfo.first_name }} {{ businessInfo.last_name }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="businessInfo.contact_phone">
                   Contact Phone #: <span>{{ businessInfo.contact_phone }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="businessInfo.wx_id">
                   Wechat ID: <span>{{ businessInfo.wx_id }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="basicUserInfo.sex">
                   Gender:
                   <span v-if="basicUserInfo.sex == 1">Male</span>
                   <span v-if="basicUserInfo.sex == 2">Female</span>
                   <span v-if="basicUserInfo.sex == 3">No Gender Requirements</span>
 
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="businessInfo.nationality">
                   Nationality: <span>{{ businessInfo.nationality }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="businessInfo.job_title">
                   Job Title: <span>{{ businessInfo.job_title }}</span>
                 </div>
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="businessInfo.bio">
                   Short Bio: <span>{{ businessInfo.bio }}</span>
                 </div>
                 <!--                <div class="basic-info-item">-->
                 <!--                  Location: <span>shangqiu, shangqiu , henan</span>-->
                 <!--                </div>-->
-                <div class="basic-info-item">
+                <div class="basic-info-item" v-if="businessInfo.business_type_name">
                   Business Category: <span>{{ businessInfo.business_type_name }}</span>
                 </div>
 
               </div>
             </div>
 
-            <div class="languages-container">
+            <div class="languages-container" >
               <div class="languages-t">
-                <div class="languages-label">Languages</div>
+                <div class="languages-label">
+                  <div class="languages-label-text">Languages</div>
+                  <div class="profile-underline-1"></div>
+                </div>
                 <div class="languages-edit" @click="editLanguages()">
-                  <el-icon><edit /></el-icon>
+                  <el-icon :size="18"><edit /></el-icon>
                 </div>
               </div>
               <div class="languages-content" v-if="businessInfo.languages">
@@ -76,9 +84,12 @@
 
             <div class="business-info-container">
               <div class="business-info-t">
-                <div class="business-info-label">Business Information</div>
+                <div class="business-info-label">
+                  <div class="business-info-label-text">Business Information</div>
+                  <div class="profile-underline-2"></div>
+                </div>
                 <div class="business-info-edit" @click="editBusinessInfo()">
-                  <el-icon><edit /></el-icon>
+                  <el-icon :size="18"><edit /></el-icon>
                 </div>
               </div>
 
@@ -99,30 +110,29 @@
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </div>
-                  <div class="business-info-name">
+                  <div class="business-info-name" v-if="businessInfo.business_name">
                     {{ businessInfo.business_name }}
                   </div>
                 </div>
-                <div class="business-info-item">
+                <div class="business-info-item" v-if="businessInfo.business_name">
                   Business Name: <span>{{ businessInfo.business_name }} </span>
                 </div>
-                <div class="business-info-item">
+                <div class="business-info-item" v-if="businessInfo.business_bio">
                   Business Introduction #: <span>{{ businessInfo.business_bio }}</span>
                 </div>
-                <div class="business-info-item">
+                <div class="business-info-item" v-if="businessInfo.year_founded ">
                   Year Founded: <span>{{ businessInfo.year_founded }}</span>
                 </div>
-                <div class="business-info-item">
+                <div class="business-info-item"
+                     v-if="businessInfo.provinces && businessInfo.citys && businessInfo.districts"
+                >
                   Business Location:
-                  <template v-if="businessInfo.provinces && businessInfo.citys && businessInfo.districts">
-                    <span>{{businessInfo.provinces.Pinyin}}, {{businessInfo.citys.Pinyin}}, {{businessInfo.districts.Pinyin}}</span>
-                  </template>
-
+                  <span>{{businessInfo.provinces.Pinyin}}, {{businessInfo.citys.Pinyin}}, {{businessInfo.districts.Pinyin}}</span>
                 </div>
-                <div class="business-info-item">
+                <div class="business-info-item" v-if="businessInfo.website">
                   Website: <span>{{ businessInfo.website }}</span>
                 </div>
-                <div class="business-info-item">
+                <div class="business-info-item" v-if="businessInfo.business_phone">
                   Business Phone #: <span>{{ businessInfo.business_phone }}</span>
                 </div>
                 <div class="business-info-item">
@@ -155,15 +165,24 @@
             </div>
 
             <div class="preferences-container">
-              <div class="preferences-label">Company Policies</div>
+              <div class="preferences-label">
+                <div class="preferences-label-text">Company Policies</div>
+                <div class="profile-underline-1"></div>
+              </div>
               <div class="preferences-content">
                 <div class="p-job-type-container">
                   <div class="p-job-type-t">
-                    <div class="p-job-type-t-label">Preferred Job Type</div>
-                    <div class="p-job-type-t-edit" @click="turnIndexList(3)" v-if="canEditJobType===false">
-                      <el-icon><edit /></el-icon>
+                    <div class="p-job-type-t-label">
+                      Preferred Job Type
                     </div>
-                    <div class="p-job-type-t-edit"  @click="jobTypeConfirm" v-if="canEditJobType">Confirm</div>
+                    <div class="p-job-type-t-edit"
+                         @click="turnIndexList(3)"
+                         v-if="canEditJobType===false">
+                      <el-icon :size="18"><edit /></el-icon>
+                    </div>
+                    <div class="p-job-type-t-edit"
+                         @click="jobTypeConfirm"
+                         v-if="canEditJobType">Confirm</div>
                   </div>
                   <div class="p-job-type-content">
                     <!--                    展示 -->
@@ -219,10 +238,14 @@
                 <div class="p-benefits-container">
                   <div class="p-benefits-t">
                     <div class="p-benefits-t-label">Employment Benefits</div>
-                    <div class="p-benefits-t-edit"  @click="turnIndexList(6)" v-if="canEditBenefits===false">
-                      <el-icon><edit /></el-icon>
+                    <div class="p-benefits-t-edit"
+                         @click="turnIndexList(6)"
+                         v-if="canEditBenefits===false">
+                      <el-icon :size="18"><edit /></el-icon>
                     </div>
-                    <div class="p-benefits-t-edit" @click="benefitsConfirm" v-if="canEditBenefits">Confirm</div>
+                    <div class="p-benefits-t-edit"
+                         @click="benefitsConfirm"
+                         v-if="canEditBenefits">Confirm</div>
                   </div>
                   <div class="p-benefits-content">
                     <!--                    展示 -->
@@ -287,21 +310,21 @@
                     <div class="school-info-t">
                       <div class="school-info-label">School Information</div>
                       <div class="school-info-edit" @click="editSchoolInfo()">
-                        <el-icon><edit /></el-icon>
+                        <el-icon :size="18"><edit /></el-icon>
                       </div>
                     </div>
 
                     <div class="school-info-content">
-                      <div class="school-info-item">
+                      <div class="school-info-item" v-if="businessInfo.curriculum">
                         Curriculum: <span>{{ businessInfo.curriculum }} </span>
                       </div>
-                      <div class="school-info-item">
+                      <div class="school-info-item" v-if="businessInfo.technology_available">
                         Technology Available: <span>{{ businessInfo.technology_available }}</span>
                       </div>
-                      <div class="school-info-item">
+                      <div class="school-info-item" v-if="businessInfo.staff_student_ratio">
                         Average class size: <span>{{ businessInfo.staff_student_ratio }}</span>
                       </div>
-                      <div class="school-info-item">
+                      <div class="school-info-item" v-if="businessInfo.tuition">
                         Tuition: <span>{{ businessInfo.tuition }}</span>
                       </div>
                       <div class="school-info-item">
@@ -316,19 +339,19 @@
                         Special Needs:
                         <el-switch v-model="businessInfo.is_special_needs" :active-value="1" disabled></el-switch>
                       </div>
-                      <div class="school-info-item-tags">
+                      <div class="school-info-item-tags" v-if="studentAgeList.length>0">
                         Our Students Age:
                         <template v-for="(item,i) in studentAgeList" :key="i">
                           <span>{{item.object_en}}</span>
                         </template>
                       </div>
-                      <div class="school-info-item-tags">
+                      <div class="school-info-item-tags" v-if="subjectList.length>0">
                         Subject We Teach:
                         <template v-for="(item,i) in subjectList" :key="i">
                           <span>{{item.object_en}}</span>
                         </template>
                       </div>
-                      <div class="school-info-item-tags">
+                      <div class="school-info-item-tags" v-if="facilitiesList.length>0">
                         School Facilities:
                         <template v-for="(item,i) in facilitiesList" :key="i">
                           <span>{{item.object_en}}</span>
@@ -343,12 +366,12 @@
                   I am a Recruiter
                 </el-tab-pane>
               </el-tabs>
-
             </div>
 
             <div class="media-container">
               <div class="media-label">
-                Account Media
+                <div class="media-label-text">Account Media</div>
+                <div class="profile-underline-1"></div>
               </div>
               <div class="profile-photo-container">
                 <div class="profile-photo-t">
@@ -1373,7 +1396,7 @@ export default {
 }
 
 .educator-r-container {
-  padding: 20px;
+  padding:10px 20px;
 }
 
 .basic-info-container {
@@ -1381,6 +1404,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .basic-info-t {
@@ -1391,13 +1415,18 @@ export default {
 }
 
 .basic-info-label {
+
+}
+
+.basic-info-label-text{
   font-size: 16px;
   font-weight: bold;
 }
-.basic-info-label:after{
-  content: "———";
-  color: #ff2870;
-  display: block;
+
+.profile-underline-1{
+  margin-top: 8px;
+  width:60px;
+  border-bottom: 2px solid #ff2870;
 }
 
 .basic-info-edit {
@@ -1430,11 +1459,12 @@ export default {
 }
 
 .business-info-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .business-info-t {
@@ -1448,11 +1478,13 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
-.business-info-label:after{
-  content: "———";
-  color: #00b3d2;
-  display: block;
+
+.profile-underline-2{
+  width:60px;
+  margin-top: 8px;
+  border-bottom:2px solid #00b3d2;
 }
+
 
 .business-info-edit {
   font-size: 14px;
@@ -1508,14 +1540,15 @@ export default {
 }
 
 .b-tabs-container{
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 .school-info-container {
-  padding: 20px 0;
+  padding-top: 20px;
   text-align: left;
 }
 
@@ -1575,11 +1608,12 @@ export default {
 }
 
 .languages-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .languages-t {
@@ -1590,13 +1624,12 @@ export default {
 }
 
 .languages-label {
+
+}
+
+.languages-label-text{
   font-size: 16px;
   font-weight: bold;
-}
-.languages-label:after{
-  content: "———";
-  color: #ff2870;
-  display: block;
 }
 
 .languages-edit {
@@ -1628,24 +1661,20 @@ export default {
 
 
 .media-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
-.media-label{
+.media-label-text{
   font-size: 16px;
   font-weight: bold;
 }
 
-.media-label:after{
-  content: "———";
-  color: #ff2870;
-  display: block;
-}
-
 .profile-photo-container{
+  margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
@@ -1903,22 +1932,19 @@ export default {
 }
 
 .preferences-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
-.preferences-label {
+.preferences-label-text {
   font-size: 16px;
   font-weight: bold;
 }
-.preferences-label:after{
-  content: "———";
-  color: #ff2870;
-  display: block;
-}
+
 
 .preferences-content {
   padding: 10px 0;

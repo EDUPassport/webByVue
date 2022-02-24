@@ -492,6 +492,7 @@ export default {
 
 .chat-side-logo-container{
   padding-top: 10px;
+  text-align: center;
 }
 
 .chat-side-logo{

@@ -68,6 +68,7 @@ export default {
 .subscribe-container {
   background-color: #272641;
   padding: 80px 20px;
+  text-align: center;
 }
 
 .subscribe-input-row, .subscribe-label-row {

@@ -1828,6 +1828,7 @@ export default {
 }
 .submit-container{
   margin-top: 20px;
+  text-align: center;
 }
 
 .job-detail-china-btn-container{

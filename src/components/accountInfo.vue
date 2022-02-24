@@ -6,14 +6,10 @@
       <div class="account-info-b">
         <div class="account-info-photo">
           <template v-if="identity == 1">
-            <el-image class="account-photo-img"
-                      :src="info.profile_photo !='' ? info.profile_photo : defaultAvatar"
-                      fit="cover"
-            ></el-image>
+            <el-avatar :size="120" :src="info.profile_photo !='' ? info.profile_photo : defaultAvatar"></el-avatar>
           </template>
           <template v-if="identity == 2 || identity == 3 ">
-            <el-image class="account-photo-img" :src="info.logo !='' ? info.logo : defaultAvatar"
-                      fit="cover"></el-image>
+            <el-avatar :size="120" :src="info.logo !='' ? info.logo : defaultAvatar"></el-avatar>
           </template>
         </div>
 
@@ -143,6 +139,7 @@ export default {
 .account-info-container {
   padding: 10px 20px;
   text-align: left;
+
 }
 
 .account-info-label {
@@ -154,6 +151,7 @@ export default {
   margin-top: 20px;
   background-color: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .account-info-b {

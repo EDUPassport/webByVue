@@ -342,6 +342,7 @@ export default {
 
 .deals-pagination{
   margin-top: 20px;
+  text-align: center;
 }
 
 .list-item-tag {

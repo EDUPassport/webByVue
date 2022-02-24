@@ -106,10 +106,11 @@ export default {
 
 .banner-bg{
   height: 200px;
-  background-image: url("../../assets/bg/wheat.png");
+  background-image: url("../../assets/bg/vintage-wallpaper.png");
   background-size:50%;
   background-repeat: repeat;
   background-position: center;
+
 }
 
 .banner-bg h1{
@@ -119,6 +120,7 @@ export default {
   font-weight: bold;
   color: #FFFFFF;
   line-height: 200px;
+  text-align: center;
 }
 
 .news-container{

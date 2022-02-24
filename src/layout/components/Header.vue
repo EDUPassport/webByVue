@@ -33,9 +33,8 @@
               <div class="user-container-1">
                 <div class="user-avatar">
                   <el-dropdown>
-                    <el-image class="user-avatar-img" :src="userAvatar !='' ? userAvatar : defaultAvatar"
-                    fit="cover"
-                    ></el-image>
+                    <el-avatar :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
+
                     <template #dropdown>
                       <el-dropdown-menu>
                         <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>
@@ -55,7 +54,7 @@
                     <span class="el-dropdown-link">
                         <template v-if="identity == 0">Guest</template>
                         <template v-if="identity == 1">Educator</template>
-                        <template v-if="identity == 2">Business</template>
+                        <template v-if="identity == 2">Edu-Business</template>
                         <template v-if="identity == 3">Vendor</template>
                        <i class="el-icon-arrow-down el-icon--right"></i>
                      </span>
@@ -63,7 +62,7 @@
                       <template #dropdown>
                         <el-dropdown-menu>
                           <el-dropdown-item @click="selectRole(1)">Educator</el-dropdown-item>
-                          <el-dropdown-item @click="selectRole(2)">Business</el-dropdown-item>
+                          <el-dropdown-item @click="selectRole(2)">Edu-Business</el-dropdown-item>
                           <el-dropdown-item @click="selectRole(3)">Vendor</el-dropdown-item>
                         </el-dropdown-menu>
                       </template>

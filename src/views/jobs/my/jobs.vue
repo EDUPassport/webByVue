@@ -306,10 +306,12 @@ export default {
 
 .jobs-list-item-gender {
   font-size: 12px;
+  margin-left: 10px;
 }
 
 .jobs-list-item-work-exp {
   font-size: 12px;
+  margin-left: 10px;
 }
 
 .jobs-list-item-date {
@@ -324,6 +326,7 @@ export default {
 
 .jobs-list-pagination {
   margin-top: 20px;
+  text-align: center;
 }
 
 .list-item-tag {

@@ -17,7 +17,7 @@ import router from "./routes"
 import './assets/css/aliIcon/iconfont.css'
 import 'animate.css'
 import VTypical from 'vue-typical'
-// import './assets/font/font.css'
+import './assets/font/font.css'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu,ChatLineSquare,
     MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose,SuccessFilled,Failed} from '@element-plus/icons'

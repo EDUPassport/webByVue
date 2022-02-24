@@ -520,6 +520,7 @@ export default {
 
 .comment-show-more {
   margin-top: 20px;
+  text-align: center;
 }
 
 .comment-show-more-btn {

@@ -84,4 +84,9 @@ export default {
 .bg{
   padding: 40px;
 }
+
+h1{
+  text-align: center;
+}
+
 </style>
