@@ -61,6 +61,14 @@ module.exports = {
                     pathRewrite: {
                         '^/crm': '/'
                     }
+                },
+                '/zohoPublic': {
+                    target: 'https://forms.zohopublic.com',
+                    ws: true,
+                    changeOrigin: true,
+                    pathRewrite: {
+                        '^/zohoPublic': '/'
+                    }
                 }
             }
 

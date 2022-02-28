@@ -80,8 +80,9 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import { ADD_VENDOR_BASIC} from '@/api/api'
-import {countriesData} from "../../../../utils/data";
+import { ADD_VENDOR_BASIC,GET_BASIC_INFO} from '@/api/api'
+import {countriesData} from "@/utils/data";
+import axios from "axios";
 
 export default {
   name: "basic",
@@ -148,12 +149,13 @@ export default {
       firstLanguageList: ['中文/Chinese', '英语/English'],
       selectFirstLanguageList: [],
       selectFirstLanguageListIndex: [],
+      vendorInfo:{}
 
     }
   },
   mounted() {
     // console.log(countriesData)
-
+    this.getBasicInfo()
   },
   methods: {
     submitForm(formName) {
@@ -164,6 +166,7 @@ export default {
           ADD_VENDOR_BASIC(params).then(res => {
             console.log(res)
             if(res.code == 200){
+              this.submitVendorCompanyForm()
               this.$router.push('/vendor/profile')
             }
           }).catch(err=>{
@@ -188,7 +191,110 @@ export default {
         this.selectFirstLanguageList.splice(0, 1, item);
       }
       // console.log(this.selectFirstLanguageList)
+    },
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          let vendorInfo = res.message.vendor_info;
+          this.vendorInfo = vendorInfo
+          // first_name: '',
+          // last_name: '',
+          //     sex: '',
+          //     nationality: '',
+          //     job_title: '',
+          //     first_contact: '',
+          //     first_language: '',
+          //     wx_id: '',
+          //     proposed_deal: '',
+
+          this.basicForm.first_name = vendorInfo.first_name;
+          this.basicForm.last_name = vendorInfo.last_name;
+          this.basicForm.sex = res.message.sex ;
+
+          this.basicForm.nationality = vendorInfo.nationality;
+
+          this.basicForm.job_title = vendorInfo.job_title;
+
+          this.basicForm.first_contact = vendorInfo.first_contact;
+
+          if(vendorInfo.first_language){
+            this.basicForm.first_language = vendorInfo.first_language;
+            this.selectFirstLanguageList.push(vendorInfo.first_language)
+          }
+
+          this.basicForm.wx_id = vendorInfo.wx_id;
+          this.basicForm.proposed_deal = vendorInfo.proposed_deal;
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    async submitVendorCompanyForm(){
+
+      let params = Object.assign({}, this.basicForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+      let vendorInfo = this.vendorInfo
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',vendorInfo.vendor_name_en) //vendor company name
+
+      formData.append('Dropdown2',vendorInfo.vendor_type_name) //Vendor Category
+      formData.append('SingleLine5',userId) //UserID
+
+      formData.append('Number2','' ) //Company Number
+      formData.append('SingleLine1', params.last_name ) //Vendor Company Contact
+
+      formData.append('PhoneNumber_countrycode','') //Vendor Company Phone
+      formData.append('Email','') // vendor company  email
+
+      formData.append('Dropdown','Vendor') // company type
+      formData.append('Number','')  //Number of Employees
+      formData.append('Number1','')  //Membership Duration
+      formData.append('Dropdown1','' ) //Membership Type
+
+      formData.append('Address_AddressLine1','' ) //Street Address
+      formData.append('Address_City','' ) //City
+      formData.append('Address_Region','' ) //State/Region/Province
+      formData.append('Address_Country','' ) //Country
+
+      formData.append('SingleLine4','' ) //Business Registration No.
+      formData.append('MultiLine','' ) //Company Intro
+      formData.append('SingleLine3',params.wx_id ) //WeChat ID
+
+      formData.append('Website1','') // Business License Link
+      formData.append('Website2','' ) //Company Logo Link
+      formData.append('Website3','' ) //Header Image Link
+
+      await axios.post('/edupassport/form/VendorCompanyForm/formperma/otYlWrLwckw-vUm696qIUsMkRlofpZHCqZgodVcl6_c/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
     }
+
+
 
 
   }

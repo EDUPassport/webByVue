@@ -85,7 +85,8 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import { ALL_AREAS,ADD_VENDOR_BASIC} from '@/api/api'
+import {ALL_AREAS, ADD_VENDOR_BASIC, GET_BASIC_INFO} from '@/api/api'
+import axios from "axios";
 
 export default {
   name: "vendorInfo",
@@ -125,12 +126,14 @@ export default {
       provinceOptions: [],
       cityOptions: [],
       districtOptions: [],
+      vendorInfo:{}
 
     }
   },
   mounted() {
     // console.log(countriesData)
     this.getAllAreas(0)
+    this.getBasicInfo()
   },
   methods: {
     getAllAreas(pid) {
@@ -203,6 +206,7 @@ export default {
           ADD_VENDOR_BASIC(params).then(res => {
             console.log(res)
             if(res.code == 200){
+              this.submitVendorCompanyForm()
               this.$router.push('/vendor/profile')
             }
           }).catch(err=>{
@@ -222,6 +226,95 @@ export default {
     handleChange(e) {
       console.log(e)
     },
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          let vendorInfo = res.message.vendor_info;
+          this.vendorInfo = vendorInfo
+
+          this.basicForm.vendor_bio = vendorInfo.vendor_bio;
+          // this.basicForm.country = vendorInfo.country;
+          // this.basicForm.location = vendorInfo.location ;
+          // this.basicForm.province = vendorInfo.province;
+          this.basicForm.phone = vendorInfo.phone;
+          // this.basicForm.city = vendorInfo.city;
+          // this.basicForm.district = vendorInfo.district;
+          // this.basicForm.address = vendorInfo.address;
+          this.basicForm.website = vendorInfo.website;
+          this.basicForm.wechat_public_name = vendorInfo.wechat_public_name;
+          this.basicForm.is_events = vendorInfo.is_events;
+          this.basicForm.is_dog_friendly = vendorInfo.is_dog_friendly;
+          this.basicForm.lat = vendorInfo.lat;
+          this.basicForm.lng = vendorInfo.lng;
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    async submitVendorCompanyForm(){
+
+      let params = Object.assign({}, this.basicForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+      let vendorInfo = this.vendorInfo
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',vendorInfo.vendor_name_en) //vendor company name
+
+      formData.append('Dropdown2',vendorInfo.vendor_type_name) //Vendor Category
+      formData.append('SingleLine5',userId) //UserID
+
+      formData.append('Number2','' ) //Company Number
+      formData.append('SingleLine1', '' ) //Vendor Company Contact
+
+      formData.append('PhoneNumber_countrycode','') //Vendor Company Phone
+      formData.append('Email','') // vendor company  email
+
+      formData.append('Dropdown','Vendor') // company type
+      formData.append('Number','')  //Number of Employees
+      formData.append('Number1','')  //Membership Duration
+      formData.append('Dropdown1','' ) //Membership Type
+
+      formData.append('Address_AddressLine1','' ) //Street Address
+      formData.append('Address_City','' ) //City
+      formData.append('Address_Region','' ) //State/Region/Province
+      formData.append('Address_Country','' ) //Country
+
+      formData.append('SingleLine4','' ) //Business Registration No.
+      formData.append('MultiLine',params.vendor_bio ) //Company Intro
+      formData.append('SingleLine3','' ) //WeChat ID
+
+      formData.append('Website1','') // Business License Link
+      formData.append('Website2','' ) //Company Logo Link
+      formData.append('Website3','' ) //Header Image Link
+
+      await axios.post('/edupassport/form/VendorCompanyForm/formperma/otYlWrLwckw-vUm696qIUsMkRlofpZHCqZgodVcl6_c/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
 
   }
 }

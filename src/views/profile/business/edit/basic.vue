@@ -115,7 +115,8 @@
 <script>
 import meSideMenu from "@/components/meSideMenu";
 import {SUB_CATE_LIST, ADD_BUSINESS_BASIC,GET_BASIC_INFO} from '@/api/api'
-import {countriesData} from "../../../../utils/data";
+import {countriesData} from "@/utils/data";
+import axios from "axios";
 
 export default {
   name: "basic",
@@ -189,6 +190,7 @@ export default {
       ownHobbyInfoList: [],
       selectHobbyInfoList: [],
       selectHobbyInfoArr: [],
+      businessInfo:{}
 
     }
   },
@@ -208,6 +210,7 @@ export default {
           ADD_BUSINESS_BASIC(params).then(res => {
             console.log(res)
             if(res.code == 200){
+              this.submitEduBusinessCompanyForm()
               this.$router.push('/business/profile')
             }
           }).catch(err=>{
@@ -276,6 +279,7 @@ export default {
         if(res.code == 200){
           let businessUserInfo = res.message.business_info;
 
+          this.businessInfo = res.message.business_info;
 
           this.basicForm.nickname = businessUserInfo.nickname;
           this.basicForm.first_name = businessUserInfo.first_name;
@@ -300,7 +304,68 @@ export default {
         this.$message.error(err.msg)
       })
 
+    },
+    async submitEduBusinessCompanyForm(){
+
+      let params = Object.assign({}, this.basicForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',this.businessInfo.business_name) // Education Business Name
+
+      formData.append('Dropdown2',this.businessInfo.business_type_name) //Education Business Category
+      formData.append('Dropdown','Education Business') //Company Type
+      formData.append('Website','') //Education Business Website
+      formData.append('SingleLine1',params.last_name) // Education Business Contact
+      formData.append('Number2','') //  Company Number
+
+      formData.append('SingleLine5',userId) //UserID
+
+      formData.append('PhoneNumber_countrycode',params.contact_phone) //Education Business Phone
+      formData.append('Email','') // Education Business Email
+      formData.append('Number','')  //Number of Employees
+      formData.append('Number1','')  //Membership Duration
+      formData.append('Dropdown1','' ) //Membership Type
+
+      formData.append('Address_AddressLine1','' ) //Street Address
+      formData.append('Address_City','' ) //City
+      formData.append('Address_Region','' ) //State/Region/Province
+      formData.append('Address_Country','' ) //Country
+
+      formData.append('SingleLine4','' ) //   Business Registration No.
+      formData.append('MultiLine', params.bio ) //Company Intro
+      formData.append('SingleLine3',params.wx_id ) //WeChat ID
+
+      formData.append('Number3','') //  Number of Branches
+      formData.append('Number4','') //    Number of Students
+      formData.append('MultipleChoice','') //    Students Ages
+      formData.append('MultiLine1','') //     Curriculum Subjects
+      formData.append('MultiLine2','') //     School Facilities
+
+      formData.append('Website1','') // Business License Link
+      formData.append('Website2','' ) //Company Logo Link
+      formData.append('Website3','' ) //Header Image Link
+
+      await axios.post('/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
     }
+
 
   }
 }

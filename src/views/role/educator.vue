@@ -23,6 +23,9 @@
               <el-form-item label="First Name" prop="first_name">
                 <el-input v-model="basicForm.first_name" placeholder="First Name"></el-input>
               </el-form-item>
+              <el-form-item label="Last Name" prop="last_name">
+                <el-input v-model="basicForm.last_name" placeholder="Last Name"></el-input>
+              </el-form-item>
               <el-form-item label="Wechat ID" prop="wx_id">
                 <el-input v-model="basicForm.wx_id" placeholder="Wechat ID"></el-input>
               </el-form-item>
@@ -62,6 +65,7 @@ import {countriesData} from "../../utils/data";
 import {CHANGE_IDENTITY_LANGUAGE, ADD_EDU_BASIC} from '@/api/api'
 import {useStore} from "vuex";
 import {ref} from "vue";
+import axios from "axios";
 
 export default {
   name: "educator",
@@ -93,6 +97,7 @@ export default {
       nationalityOptions: countriesData,
       basicForm: {
         first_name: "",
+        last_name:'',
         wx_id: '',
         profile_photo: '',
         token: localStorage.getItem('token')
@@ -102,6 +107,13 @@ export default {
           {
             required: true,
             message: 'First Name',
+            trigger: 'blur',
+          }
+        ],
+        last_name: [
+          {
+            required: true,
+            message: 'Last Name',
             trigger: 'blur',
           }
         ],
@@ -148,12 +160,15 @@ export default {
       this.submitLoadingValue=true
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.basicForm)
+          // console.log(this.basicForm)
           let params = Object.assign({}, this.basicForm)
           ADD_EDU_BASIC(params).then(res => {
-            console.log(res)
+            // console.log(res)
             if (res.code == 200) {
               // this.$router.push('/educator/profile')
+              this.submitEducatorContactForm()
+              this.submitCompanyContactForm()
+
               this.changeIdentity(1)
             }
           }).catch(err=>{
@@ -193,8 +208,100 @@ export default {
         this.$message.error(err.msg)
       })
 
-    }
+    },
+    async submitEducatorContactForm(){
 
+      let params = Object.assign({}, this.basicForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',userId) //UserID
+      formData.append('SingleLine1',params.first_name) // First Name
+      formData.append('SingleLine2',params.last_name) //  Last Name
+      formData.append('Dropdown','') //  Gender
+      formData.append('Date','') //   Date of Birth dd-MMM-yyyy
+      formData.append('SingleLine3','') //   Title
+      formData.append('Email','') //   Email
+      formData.append('PhoneNumber_countrycode','') //   Phone
+      formData.append('SingleLine4','') //   Nationality
+      formData.append('Dropdown1','') //   Membership Type
+      formData.append('MultiLine','') //   Languages Spoken
+      formData.append('Number','') //   Membership Duration
+      formData.append('SingleLine5','') //   City
+      formData.append('SingleLine6','') //   Province
+      formData.append('SingleLine7','') //   Country
+      formData.append('Dropdown2','') //   Educator Type
+      formData.append('MultiLine1','') //   Education
+      formData.append('MultiLine2','') //    Work History
+      formData.append('Dropdown3','') //    Teaching Experience
+      formData.append('MultiLine3','') //   Certifications
+      formData.append('MultiLine4','') //   Educator Intro
+      formData.append('Website',params.profile_photo) //   Contact image Link
+      formData.append('Website1','') //   Intro Video Link
+
+      await axios.post('/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
+    async submitCompanyContactForm(){
+
+      let params = Object.assign({}, this.basicForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',userId) //UserID
+      formData.append('SingleLine1',params.first_name) // First Name
+      formData.append('SingleLine2',params.last_name) //  Last Name
+      formData.append('Dropdown','') //  Gender
+      formData.append('Date','') //   Date of Birth dd-MMM-yyyy
+      formData.append('SingleLine3','') //   Title
+      formData.append('Email','') //   Email
+      formData.append('PhoneNumber_countrycode','') //   Phone
+      formData.append('SingleLine4','') //   Nationality
+
+      formData.append('Dropdown1','') //   Membership Type
+
+      formData.append('Number','') //   Membership Duration
+      formData.append('SingleLine5','') //   City
+      formData.append('SingleLine6','') //   Province
+      formData.append('SingleLine7','') //   Country
+
+      formData.append('Website',params.profile_photo) //   Contact image Link
+
+      await axios.post('/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
 
   }
 }

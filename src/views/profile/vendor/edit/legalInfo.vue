@@ -65,7 +65,8 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import { ADD_VENDOR_BASIC} from '@/api/api'
+import {ADD_VENDOR_BASIC, GET_BASIC_INFO} from '@/api/api'
+import axios from "axios";
 
 export default {
   name: "legalInfo",
@@ -98,13 +99,14 @@ export default {
           }
         ],
 
-      }
+      },
+      vendorInfo:{}
 
     }
   },
   mounted() {
     // console.log(countriesData)
-
+    this.getBasicInfo()
   },
   methods: {
     handleProfilePhotoSuccess(res, file) {
@@ -129,6 +131,7 @@ export default {
           ADD_VENDOR_BASIC(params).then(res => {
             console.log(res)
             if(res.code == 200){
+              this.submitVendorCompanyForm()
               this.$router.push('/vendor/profile')
             }
           }).catch(err=>{
@@ -148,6 +151,90 @@ export default {
     handleChange(e) {
       console.log(e)
     },
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          let vendorInfo = res.message.vendor_info;
+          this.vendorInfo = vendorInfo
+          // vendor_name_en: '',
+          //     legal_company_name: '',
+          //     busin_reg_num: '',
+          //     busin_reg_img: '',
+
+          this.basicForm.vendor_name_en = vendorInfo.vendor_name_en;
+          this.basicForm.legal_company_name = vendorInfo.legal_company_name;
+          this.basicForm.busin_reg_num = vendorInfo.busin_reg_num ;
+          this.basicForm.busin_reg_img = vendorInfo.busin_reg_img;
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    async submitVendorCompanyForm(){
+
+      let params = Object.assign({}, this.basicForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+      let vendorInfo = this.vendorInfo
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',params.vendor_name_en) //vendor company name
+
+      formData.append('Dropdown2',vendorInfo.vendor_type_name) //Vendor Category
+      formData.append('SingleLine5',userId) //UserID
+
+      formData.append('Number2','' ) //Company Number
+      formData.append('SingleLine1', '' ) //Vendor Company Contact
+
+      formData.append('PhoneNumber_countrycode','') //Vendor Company Phone
+      formData.append('Email','') // vendor company  email
+
+      formData.append('Dropdown','Vendor') // company type
+      formData.append('Number','')  //Number of Employees
+      formData.append('Number1','')  //Membership Duration
+      formData.append('Dropdown1','' ) //Membership Type
+
+      formData.append('Address_AddressLine1','' ) //Street Address
+      formData.append('Address_City','' ) //City
+      formData.append('Address_Region','' ) //State/Region/Province
+      formData.append('Address_Country','' ) //Country
+
+      formData.append('SingleLine4',params.busin_reg_num ) //Business Registration No.
+      formData.append('MultiLine','' ) //Company Intro
+      formData.append('SingleLine3','' ) //WeChat ID
+
+      formData.append('Website1',params.busin_reg_img) // Business License Link
+      formData.append('Website2','' ) //Company Logo Link
+      formData.append('Website3','' ) //Header Image Link
+
+      await axios.post('/edupassport/form/VendorCompanyForm/formperma/otYlWrLwckw-vUm696qIUsMkRlofpZHCqZgodVcl6_c/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
+
 
 
 

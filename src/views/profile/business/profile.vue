@@ -566,6 +566,7 @@ import accountInfo from "../../../components/accountInfo";
 import {VISITOR_USER_INFO, GET_BASIC_INFO, USER_OBJECT_LIST,
   ADD_LANGUAGE_SCORE, ADD_PROFILE,ADD_USER_INFO,ADD_USER_IMG,
   UPDATE_BUSINESS_PROFILE} from '@/api/api'
+import axios from "axios";
 
 export default {
   name: "profile",
@@ -654,6 +655,7 @@ export default {
       ownBenefitsList: [],
       selectBenefitsList: [],
       selectBenefitsArr: [],
+
     }
   },
   mounted() {
@@ -1040,6 +1042,7 @@ export default {
     handleLogoPhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
       this.logoPhotoUrl = URL.createObjectURL(file.raw)
+      let logoLink = res.data[0]['file_url']
       let params = {
         logo:res.data[0]['file_url'],
         identity:2,
@@ -1049,6 +1052,7 @@ export default {
       ADD_USER_INFO(params).then(res=>{
         console.log(res)
         if(res.code == 200){
+          this.submitEduBusinessCompanyForm(logoLink,'')
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
@@ -1069,6 +1073,7 @@ export default {
     },
     handleBackgroundSuccess(res, file) {
       this.backgroundUrl = URL.createObjectURL(file.raw)
+      let headerLink = res.data[0]['file_url']
       let params = {
         header_photo:res.data[0]['file_url'],
         identity:2,
@@ -1078,6 +1083,7 @@ export default {
       ADD_USER_INFO(params).then(res=>{
         console.log(res)
         if(res.code == 200){
+          this.submitEduBusinessCompanyForm('',headerLink)
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
@@ -1379,6 +1385,66 @@ export default {
     handleTabsClick(tab, event) {
       console.log(tab, event)
     },
+    async submitEduBusinessCompanyForm(logoLink,headerLink){
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',this.businessInfo.business_name) // Education Business Name
+
+      formData.append('Dropdown2',this.businessInfo.business_type_name) //Education Business Category
+      formData.append('Dropdown','Education Business') //Company Type
+      formData.append('Website','') //Education Business Website
+      formData.append('SingleLine1','') // Education Business Contact
+      formData.append('Number2','') //  Company Number
+
+      formData.append('SingleLine5',userId) //UserID
+
+      formData.append('PhoneNumber_countrycode','') //Education Business Phone
+      formData.append('Email','') // Education Business Email
+      formData.append('Number','')  //Number of Employees
+      formData.append('Number1','')  //Membership Duration
+      formData.append('Dropdown1','' ) //Membership Type
+
+      formData.append('Address_AddressLine1','' ) //Street Address
+      formData.append('Address_City','' ) //City
+      formData.append('Address_Region','' ) //State/Region/Province
+      formData.append('Address_Country','' ) //Country
+
+      formData.append('SingleLine4','' ) //   Business Registration No.
+      formData.append('MultiLine', '' ) //Company Intro
+      formData.append('SingleLine3','' ) //WeChat ID
+
+      formData.append('Number3','') //  Number of Branches
+      formData.append('Number4','') //    Number of Students
+
+      formData.append('MultipleChoice','') //    Students Ages
+      formData.append('MultiLine1','') //     Curriculum Subjects
+      formData.append('MultiLine2','') //     School Facilities
+
+      formData.append('Website1','') // Business License Link
+      formData.append('Website2',logoLink ) //Company Logo Link
+      formData.append('Website3',headerLink ) //Header Image Link
+
+      await axios.post('/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
+
 
   }
 }

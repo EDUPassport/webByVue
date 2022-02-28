@@ -882,6 +882,7 @@ export default {
       }, this.registerForm)
 
       let formData = new FormData();
+      let userId = localStorage.getItem('uid')
 
       formData.append('xnQsjsdp','4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2')
       formData.append('zc_gad','')
@@ -893,16 +894,63 @@ export default {
       formData.append('Last Name',params.last_name)
       formData.append('First Name',params.first_name)
       formData.append('Email',params.email)
+      formData.append('CONTACTCF154', userId)//userId
 
       let identityStr = ''
       if(params.identity == 1){
         identityStr = 'Educator'
       }
       if(params.identity == 2){
-        identityStr = 'Education Business'
+        identityStr = 'Edu-Business Contact'
       }
       if(params.identity == 3){
-        identityStr = 'Vendor'
+        identityStr = 'Vendor Contact'
+      }
+      formData.append('CONTACTCF2',identityStr)
+      formData.append('Lead Source','Web App')
+
+      axios.post('/crm/WebToContactForm', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/crm',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      })
+
+    },
+    submitRegisterForm2(){
+
+      let params = Object.assign({
+        identity: this.identityValue
+      }, this.registerForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+
+      formData.append('xnQsjsdp','4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2')
+      formData.append('zc_gad','')
+      formData.append('xmIwtLD','97a36bab5c5de21168555ee8ab3cfe6d037c8611da3e03b743498f3f5ee37b59')
+      formData.append('actionType','Q29udGFjdHM=')
+      formData.append('returnURL','https://dev.eslpassport.com/home')
+      formData.append('ldeskuid','')
+      formData.append('LDTuvid','')
+      formData.append('Last Name',params.last_name)
+      formData.append('First Name',params.first_name)
+      formData.append('Email',params.email)
+      formData.append('CONTACTCF154', userId)//userId
+
+      let identityStr = ''
+      if(params.identity == 1){
+        identityStr = 'Educator'
+      }
+      if(params.identity == 2){
+        identityStr = 'Edu-Business Contact'
+      }
+      if(params.identity == 3){
+        identityStr = 'Vendor Contact'
       }
       formData.append('CONTACTCF2',identityStr)
       formData.append('Lead Source','Web App')
@@ -936,7 +984,13 @@ export default {
             if (res.code == 200) {
               // let userInfo = res.message
               // localStorage.setItem('uid',res.message.id)
-              this.submitRegisterForm1()
+              if(self.identityValue == 1){
+                this.submitRegisterForm2()
+              }
+              if(self.identityValue == 2 || self.identityValue == 3){
+                this.submitRegisterForm1()
+              }
+
               this.$message.success('Registration completed!')
               this.$router.push({path:'/login',query:{type:1}})
               this.showValue = 1

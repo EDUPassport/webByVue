@@ -108,17 +108,17 @@
                 <div class="vendor-info-item" v-if="vendorInfo.phone">
                   Phone #: <span>{{  vendorInfo.phone}}</span>
                 </div>
-                <div class="business-info-item"
+                <div class="vendor-info-item"
                      v-if="vendorInfo.provinces && vendorInfo.citys && vendorInfo.districts"
                 >
                   Location:
                   <span>{{vendorInfo.provinces.Pinyin}}, {{vendorInfo.citys.Pinyin}}, {{vendorInfo.districts.Pinyin}}</span>
                 </div>
-                <div class="business-info-item">
+                <div class="vendor-info-item">
                   Dog Friendly:
                   <el-switch v-model="vendorInfo.is_dog_friendly" :active-value="1" disabled></el-switch>
                 </div>
-                <div class="business-info-item">
+                <div class="vendor-info-item">
                   Events:
                   <el-switch v-model="vendorInfo.is_events" :active-value="1" disabled></el-switch>
                 </div>
@@ -895,7 +895,7 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .basic-info-item {
@@ -944,7 +944,7 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .legal-info-item {
@@ -993,7 +993,7 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .vendor-info-item {
@@ -1320,6 +1320,7 @@ export default {
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
+  margin-top: 10px;
 }
 
 .logo-photo-t{
@@ -1365,6 +1366,7 @@ export default {
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
+  margin-top: 10px;
 }
 
 .qrcode-photo-t{

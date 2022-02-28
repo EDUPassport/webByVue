@@ -916,6 +916,7 @@ import accountInfo from "../../../components/accountInfo";
 import {VISITOR_USER_INFO, GET_BASIC_INFO, USER_OBJECT_LIST,
   ADD_LANGUAGE_SCORE, ADD_PROFILE,ADD_EDU_BASIC,ADD_USER_INFO,ADD_USER_IMG,
   UPDATE_EDUCATOR_PROFILE} from '@/api/api'
+import axios from "axios";
 
 export default {
   name: "profile",
@@ -2009,6 +2010,7 @@ export default {
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
       this.profilePhotoUrl = URL.createObjectURL(file.raw)
+      let profileLink = res.data[0]['file_url']
       let params = {
         profile_photo:res.data[0]['file_url'],
         identity:1,
@@ -2018,6 +2020,7 @@ export default {
       ADD_USER_INFO(params).then(res=>{
         console.log(res)
         if(res.code == 200){
+          this.submitEducatorContactForm(profileLink,'')
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
@@ -2116,12 +2119,12 @@ export default {
         console.log(err)
         this.$message.error(err.msg)
       })
-
-
+      
     },
     handleIntroVideoSuccess(res, file) {
       // console.log(res)
       this.introVideoUrl = URL.createObjectURL(file.raw)
+      let introLink = res.data[0]['file_url']
       let params = {
         video_url:res.data[0]['file_url'],
         identity:1,
@@ -2131,6 +2134,7 @@ export default {
       ADD_USER_INFO(params).then(res=>{
         console.log(res)
         if(res.code == 200){
+          this.submitEducatorContactForm('',introLink)
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
@@ -2562,6 +2566,56 @@ export default {
       })
 
     },
+    async submitEducatorContactForm(contactImageLink,introLink){
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',userId) //UserID
+      formData.append('SingleLine1',this.educatorInfo.first_name) // First Name
+      formData.append('SingleLine2',this.educatorInfo.last_name) //  Last Name
+      formData.append('Dropdown','') //  Gender
+      formData.append('Date','') //   Date of Birth dd-MMM-yyyy
+      formData.append('SingleLine3','') //   Title
+      formData.append('Email','') //   Email
+      formData.append('PhoneNumber_countrycode','') //   Phone
+      formData.append('SingleLine4','') //   Nationality
+      formData.append('Dropdown1','') //   Membership Type
+      formData.append('MultiLine','') //   Languages Spoken
+      formData.append('Number','') //   Membership Duration
+
+      formData.append('SingleLine5','') //   City
+      formData.append('SingleLine6','') //   Province
+      formData.append('SingleLine7','') //   Country
+
+      formData.append('Dropdown2','') //   Educator Type
+
+      formData.append('MultiLine1','') //   Education
+      formData.append('MultiLine2','') //    Work History
+      formData.append('Dropdown3','') //    Teaching Experience
+      formData.append('MultiLine3','') //   Certifications
+      formData.append('MultiLine4','') //   Educator Intro
+      formData.append('Website',contactImageLink) //   Contact image Link
+      formData.append('Website1',introLink) //   Intro Video Link
+
+      await axios.post('/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
 
   }
 }

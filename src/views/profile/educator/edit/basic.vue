@@ -116,8 +116,9 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {ALL_AREAS, SUB_CATE_LIST, ADD_EDU_BASIC} from '@/api/api'
+import {ALL_AREAS, SUB_CATE_LIST, ADD_EDU_BASIC, GET_BASIC_INFO} from '@/api/api'
 import {countriesData} from "../../../../utils/data";
+import axios from "axios";
 
 export default {
   name: "basic",
@@ -208,7 +209,8 @@ export default {
       cityOptions: [],
       districtOptions: [],
       subCateOptions: [],
-      selectEducatorTypeList: []
+      selectEducatorTypeList: [],
+      educatorInfo:{}
 
     }
   },
@@ -216,6 +218,7 @@ export default {
     // console.log(countriesData)
     this.getAllAreas(0)
     this.getSubCateList()
+    this.getBasicInfo()
   },
   methods: {
     submitForm(formName) {
@@ -247,6 +250,8 @@ export default {
           ADD_EDU_BASIC(params).then(res => {
             console.log(res)
             if(res.code == 200){
+              this.submitEducatorContactForm()
+              this.submitCompanyContactForm()
               this.$router.push('/educator/profile')
             }
           }).catch(err=>{
@@ -348,6 +353,168 @@ export default {
         this.selectEducatorTypeList.splice(this.selectEducatorTypeList.findIndex(element => element.id === item.id), 1);
       }
     },
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          let educatorInfo = res.message.educator_info;
+          this.educatorInfo = educatorInfo
+          // first_name: '',
+          //     last_name: '',
+          //     email: '',
+          //     sex: '',
+          //     nationality: '',
+          //     birthday: '',
+          //     location: '',
+          //     country: '',
+          //     province: '',
+          //     city: '',
+          //     district: '',
+          //     address: '',
+          //     is_seeking: 0,
+          //     is_public: 0,
+          //     wx_id: '',
+          //     sub_identity: '',
+
+          this.basicForm.first_name = educatorInfo.first_name;
+          this.basicForm.last_name = educatorInfo.last_name;
+          this.basicForm.email = educatorInfo.email ;
+          this.basicForm.sex = res.message.sex;
+
+          this.basicForm.nationality = educatorInfo.nationality;
+
+          // this.basicForm.birthday = educatorInfo.birthday;
+          // this.basicForm.location = educatorInfo.location;
+          // this.basicForm.country = educatorInfo.country;
+          // this.basicForm.province = educatorInfo.province;
+          // this.basicForm.city = educatorInfo.city;
+          // this.basicForm.district = educatorInfo.district;
+          // this.basicForm.address = educatorInfo.address;
+
+          this.basicForm.is_seeking = educatorInfo.is_seeking;
+          this.basicForm.is_public = educatorInfo.is_public;
+          this.basicForm.wx_id = educatorInfo.wx_id;
+          // this.basicForm.sub_identity = educatorInfo.sub_identity;
+
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    async submitEducatorContactForm(){
+
+      let params = Object.assign({}, this.basicForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',userId) //UserID
+      formData.append('SingleLine1',params.first_name) // First Name
+      formData.append('SingleLine2',params.last_name) //  Last Name
+      formData.append('Dropdown',params.sex) //  Gender
+      formData.append('Date','') //   Date of Birth dd-MMM-yyyy
+      formData.append('SingleLine3','') //   Title
+      formData.append('Email',params.email) //   Email
+      formData.append('PhoneNumber_countrycode','') //   Phone
+      formData.append('SingleLine4',params.nationality) //   Nationality
+      formData.append('Dropdown1','') //   Membership Type
+      formData.append('MultiLine','') //   Languages Spoken
+      formData.append('Number','') //   Membership Duration
+
+      formData.append('SingleLine5','') //   City
+      formData.append('SingleLine6','') //   Province
+      formData.append('SingleLine7','') //   Country
+
+      let selectTypeList = this.selectEducatorTypeList;
+      let educatorTypeIdArr = [];
+      selectTypeList.forEach(item => {
+        educatorTypeIdArr.push(item.identity_name)
+      })
+
+      if(educatorTypeIdArr.length>0){
+        formData.append('Dropdown2',educatorTypeIdArr.join(',')) //   Educator Type
+      }else{
+        formData.append('Dropdown2','') //   Educator Type
+      }
+
+      formData.append('MultiLine1','') //   Education
+      formData.append('MultiLine2','') //    Work History
+      formData.append('Dropdown3','') //    Teaching Experience
+      formData.append('MultiLine3','') //   Certifications
+      formData.append('MultiLine4','') //   Educator Intro
+      formData.append('Website',this.educatorInfo.profile_photo) //   Contact image Link
+      formData.append('Website1','') //   Intro Video Link
+
+      await axios.post('/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
+    async submitCompanyContactForm(){
+
+      let params = Object.assign({}, this.basicForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',userId) //UserID
+      formData.append('SingleLine1',params.first_name) // First Name
+      formData.append('SingleLine2',params.last_name) //  Last Name
+      formData.append('Dropdown',params.sex) //  Gender
+      formData.append('Date','') //   Date of Birth dd-MMM-yyyy params.birthday
+      formData.append('SingleLine3','') //   Title
+      formData.append('Email',params.email) //   Email
+      formData.append('PhoneNumber_countrycode','') //   Phone
+      formData.append('SingleLine4',params.nationality) //   Nationality
+
+      formData.append('Dropdown1','') //   Membership Type
+
+      formData.append('Number','') //   Membership Duration
+      formData.append('SingleLine5','') //   City
+      formData.append('SingleLine6','') //   Province
+      formData.append('SingleLine7','') //   Country
+
+      formData.append('Website',this.educatorInfo.profile_photo) //   Contact image Link
+
+      await axios.post('/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
 
   }
 }

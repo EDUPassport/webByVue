@@ -134,6 +134,7 @@
 <script>
 import meSideMenu from "@/components/meSideMenu";
 import {USER_OBJECT_LIST, ADD_BUSINESS_BASIC,ADD_PROFILE,GET_BASIC_INFO} from '@/api/api'
+import axios from "axios";
 
 export default {
   name: "school",
@@ -195,6 +196,7 @@ export default {
       ownSchoolFacilitesList: [],
       selectSchoolFacilitesList: [],
       selectSchoolFacilitesArr: [],
+      businessInfo:{}
 
     }
   },
@@ -412,6 +414,7 @@ export default {
           ADD_BUSINESS_BASIC(params).then(res => {
             console.log(res)
             if (res.code == 200) {
+
               if(this.selectStudentAgeList.length>0){
                 this.studentAgeConfirm();
               }
@@ -421,6 +424,7 @@ export default {
              if(this.selectSchoolFacilitesList.length>0){
                this.schoolFacilitesConfirm();
              }
+             this.submitEduBusinessCompanyForm()
               setTimeout(function (){
                 self.$router.push('/business/profile')
               },1200)
@@ -453,6 +457,8 @@ export default {
         console.log(res)
         if(res.code == 200){
           let businessInfo = res.message.business_info;
+          this.businessInfo = res.message.business_info;
+
           this.basicForm.curriculum = businessInfo.curriculum;
           this.basicForm.technology_available = businessInfo.technology_available;
           this.basicForm.staff_student_ratio = businessInfo.staff_student_ratio;
@@ -543,7 +549,69 @@ export default {
         this.$message.error(err.msg)
       })
 
+    },
+    async submitEduBusinessCompanyForm(){
+
+      let params = Object.assign({}, this.basicForm)
+
+      let formData = new FormData();
+      let userId = localStorage.getItem('uid')
+
+      formData.append('zf_referrer_name','')
+      formData.append('zf_redirect_url','')
+      formData.append('zc_gad','')
+
+      formData.append('SingleLine',this.businessInfo.business_name) // Education Business Name
+
+      formData.append('Dropdown2',this.businessInfo.business_type_name) //Education Business Category
+      formData.append('Dropdown','Education Business') //Company Type
+      formData.append('Website','') //Education Business Website
+      formData.append('SingleLine1','') // Education Business Contact
+      formData.append('Number2','') //  Company Number
+
+      formData.append('SingleLine5',userId) //UserID
+
+      formData.append('PhoneNumber_countrycode','') //Education Business Phone
+      formData.append('Email','') // Education Business Email
+      formData.append('Number','')  //Number of Employees
+      formData.append('Number1','')  //Membership Duration
+      formData.append('Dropdown1','' ) //Membership Type
+
+      formData.append('Address_AddressLine1','' ) //Street Address
+      formData.append('Address_City','' ) //City
+      formData.append('Address_Region','' ) //State/Region/Province
+      formData.append('Address_Country','' ) //Country
+
+      formData.append('SingleLine4','' ) //   Business Registration No.
+      formData.append('MultiLine', '' ) //Company Intro
+      formData.append('SingleLine3','' ) //WeChat ID
+
+      formData.append('Number3','') //  Number of Branches
+      formData.append('Number4',params.staff_student_ratio) //    Number of Students
+
+      formData.append('MultipleChoice',this.selectStudentAgeList) //    Students Ages
+      formData.append('MultiLine1',this.selectSubjectList) //     Curriculum Subjects
+      formData.append('MultiLine2',this.selectSchoolFacilitesList) //     School Facilities
+
+      formData.append('Website1','') // Business License Link
+      formData.append('Website2','' ) //Company Logo Link
+      formData.append('Website3','' ) //Header Image Link
+
+      await axios.post('/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        baseURL: '/zohoPublic',
+        timeout: 100000
+      }).then(res => {
+        console.log(res)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
     }
+
 
   }
 }
