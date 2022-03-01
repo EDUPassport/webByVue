@@ -179,3 +179,9 @@ export const MEMBER_VIP_LIST = (params) => get('home/vipList', params)
 export const FOND_PASSWORD_BY_PHONE = (params) => post('user/findPassword', params)
 
 export const FOND_PASSWORD_BY_EMAIL = (params) => post('email/findPassword', params)
+
+export const SYNC_GET_BUSINESS_INFO = (params) => get('sync/syncBusinessInfo', params)
+
+export const SYNC_BUSINESS_INFO = (params) => post('sync/businessInfo', params)
+
+export const ZOHO_SYNC = (params) => post('/zoho/sync',params)

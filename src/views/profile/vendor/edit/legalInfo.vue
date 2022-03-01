@@ -25,10 +25,10 @@
               <el-form-item label="Company Name" prop="vendor_name_en">
                 <el-input v-model="basicForm.vendor_name_en" placeholder="Company Name"></el-input>
               </el-form-item>
-              <el-form-item label="Legal Company Name" >
+              <el-form-item label="Legal Company Name">
                 <el-input v-model="basicForm.legal_company_name" placeholder="Legal Company Name"></el-input>
               </el-form-item>
-              <el-form-item label="Business Registration ID" >
+              <el-form-item label="Business Registration ID">
                 <el-input v-model="basicForm.busin_reg_num" placeholder="Business Registration ID"></el-input>
               </el-form-item>
               <el-form-item label="Business License">
@@ -42,7 +42,7 @@
                     :on-success="handleProfilePhotoSuccess"
                     :before-upload="beforeProfilePhotoUpload"
                 >
-                  <el-image v-if="businessRegImgUrl" :src="businessRegImgUrl" class="profile-avatar" ></el-image>
+                  <el-image v-if="businessRegImgUrl" :src="businessRegImgUrl" class="profile-avatar"></el-image>
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
 
@@ -65,8 +65,8 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {ADD_VENDOR_BASIC, GET_BASIC_INFO} from '@/api/api'
-import axios from "axios";
+import {ADD_VENDOR_BASIC, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
+
 
 export default {
   name: "legalInfo",
@@ -75,20 +75,20 @@ export default {
   },
   data() {
     return {
-      uploadActionUrl:process.env.VUE_APP_UPLOAD_ACTION_URL,
-      uploadHeaders:{
-        platform:4
+      uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
+      uploadHeaders: {
+        platform: 4
       },
-      uploadData:{
-        token:localStorage.getItem('token')
+      uploadData: {
+        token: localStorage.getItem('token')
       },
-      businessRegImgUrl:'',
+      businessRegImgUrl: '',
       basicForm: {
         vendor_name_en: '',
         legal_company_name: '',
         busin_reg_num: '',
         busin_reg_img: '',
-        token:localStorage.getItem('token')
+        token: localStorage.getItem('token')
       },
       basicRules: {
         vendor_name_en: [
@@ -100,7 +100,7 @@ export default {
         ],
 
       },
-      vendorInfo:{}
+      vendorInfo: {}
 
     }
   },
@@ -130,11 +130,11 @@ export default {
           let params = Object.assign({}, this.basicForm)
           ADD_VENDOR_BASIC(params).then(res => {
             console.log(res)
-            if(res.code == 200){
+            if (res.code == 200) {
               this.submitVendorCompanyForm()
               this.$router.push('/vendor/profile')
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$message.error(err.msg)
           })
@@ -159,7 +159,7 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let vendorInfo = res.message.vendor_info;
           this.vendorInfo = vendorInfo
           // vendor_name_en: '',
@@ -169,73 +169,70 @@ export default {
 
           this.basicForm.vendor_name_en = vendorInfo.vendor_name_en;
           this.basicForm.legal_company_name = vendorInfo.legal_company_name;
-          this.basicForm.busin_reg_num = vendorInfo.busin_reg_num ;
+          this.basicForm.busin_reg_num = vendorInfo.busin_reg_num;
           this.basicForm.busin_reg_img = vendorInfo.busin_reg_img;
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    async submitVendorCompanyForm(){
+    async submitVendorCompanyForm() {
 
       let params = Object.assign({}, this.basicForm)
 
-      let formData = new FormData();
+      let zohoData = [];
       let userId = localStorage.getItem('uid')
       let vendorInfo = this.vendorInfo
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      zohoData['zf_referrer_name'] = ''
+      zohoData['zf_redirect_url'] = ''
+      zohoData['zc_gad'] = ''
 
-      formData.append('SingleLine',params.vendor_name_en) //vendor company name
+      zohoData['SingleLine'] = params.vendor_name_en  //vendor company name
 
-      formData.append('Dropdown2',vendorInfo.vendor_type_name) //Vendor Category
-      formData.append('SingleLine5',userId) //UserID
+      zohoData['Dropdown2'] = vendorInfo.vendor_type_name  //Vendor Category
+      zohoData['SingleLine5'] = userId  //UserID
 
-      formData.append('Number2','' ) //Company Number
-      formData.append('SingleLine1', '' ) //Vendor Company Contact
+      zohoData['Number2'] = ''   //Company Number
+      zohoData['SingleLine1'] = ''   //Vendor Company Contact
 
-      formData.append('PhoneNumber_countrycode','') //Vendor Company Phone
-      formData.append('Email','') // vendor company  email
+      zohoData['PhoneNumber_countrycode'] = ''  //Vendor Company Phone
+      zohoData['Email'] = ''  // vendor company  email
 
-      formData.append('Dropdown','Vendor') // company type
-      formData.append('Number','')  //Number of Employees
-      formData.append('Number1','')  //Membership Duration
-      formData.append('Dropdown1','' ) //Membership Type
+      zohoData['Dropdown'] = 'Vendor'  // company type
+      zohoData['Number'] = ''   //Number of Employees
+      zohoData['Number1'] = ''   //Membership Duration
+      zohoData['Dropdown1'] = ''   //Membership Type
 
-      formData.append('Address_AddressLine1','' ) //Street Address
-      formData.append('Address_City','' ) //City
-      formData.append('Address_Region','' ) //State/Region/Province
-      formData.append('Address_Country','' ) //Country
+      zohoData['Address_AddressLine1'] = ''   //Street Address
+      zohoData['Address_City'] = ''   //City
+      zohoData['Address_Region'] = ''   //State/Region/Province
+      zohoData['Address_Country'] = ''   //Country
 
-      formData.append('SingleLine4',params.busin_reg_num ) //Business Registration No.
-      formData.append('MultiLine','' ) //Company Intro
-      formData.append('SingleLine3','' ) //WeChat ID
+      zohoData['SingleLine4'] = params.busin_reg_num   //Business Registration No.
+      zohoData['MultiLine'] = ''   //Company Intro
+      zohoData['SingleLine3'] = ''   //WeChat ID
 
-      formData.append('Website1',params.busin_reg_img) // Business License Link
-      formData.append('Website2','' ) //Company Logo Link
-      formData.append('Website3','' ) //Header Image Link
+      zohoData['Website1'] = params.busin_reg_img  // Business License Link
+      zohoData['Website2'] = ''   //Company Logo Link
+      zohoData['Website3'] = ''   //Header Image Link
 
-      await axios.post('/edupassport/form/VendorCompanyForm/formperma/otYlWrLwckw-vUm696qIUsMkRlofpZHCqZgodVcl6_c/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/VendorCompanyForm/formperma/otYlWrLwckw-vUm696qIUsMkRlofpZHCqZgodVcl6_c/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
+
     }
-
-
 
 
   }
@@ -304,6 +301,7 @@ export default {
   background-color: #00b3d2;
   color: #FFFFFF;
 }
+
 .object-show-container {
   display: flex;
   flex-direction: row;
@@ -367,19 +365,22 @@ export default {
 }
 
 
-.basic-breadcrumb-container{
+.basic-breadcrumb-container {
   padding: 10px;
 }
-/deep/ .profile-uploader .el-upload{
+
+/deep/ .profile-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .profile-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -389,7 +390,7 @@ export default {
   text-align: center;
 }
 
-.profile-avatar{
+.profile-avatar {
   width: 178px;
   height: 178px;
   display: block;

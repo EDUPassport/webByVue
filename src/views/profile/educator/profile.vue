@@ -338,28 +338,30 @@
                   </div>
                 </div>
                 <div class="work-exp-container">
-                    <div class="work-exp-t">
-                      <div class="work-exp-t-label">Work Experience</div>
-                      <div class="work-exp-t-edit" @click="addEducationWork()">Add+</div>
-                    </div>
+                  <div class="work-exp-t">
+                    <div class="work-exp-t-label">Work Experience</div>
+                    <div class="work-exp-t-edit" @click="addEducationWork()">Add+</div>
+                  </div>
                   <div class="work-exp-content">
                     <div v-for="(work,i) in workInfo" :key="i">
                       <div class="work-exp-b-item" v-if="i<=workExpNum">
                         <div class="work-exp-item-1">
-                          {{work.company_name}}
+                          {{ work.company_name }}
                         </div>
                         <div class="work-exp-item-2">
                           <div class="work-exp-job-title"
-                               @click="turnEditWorkExperience(work)">{{work.title}}</div>
+                               @click="turnEditWorkExperience(work)">{{ work.title }}
+                          </div>
                           <div class="work-exp-date">
-                            {{$filters.ymdFormatTimestamp(work.work_time_from) }} - {{
-                              $filters.ymdFormatTimestamp(work.work_time_to) }}
+                            {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
+                              $filters.ymdFormatTimestamp(work.work_time_to)
+                            }}
                           </div>
                         </div>
-                        <div class="work-exp-item-3">{{work.location}}</div>
+                        <div class="work-exp-item-3">{{ work.location }}</div>
 
                         <div class="work-exp-item-4">
-                          {{work.teaching_experience}}
+                          {{ work.teaching_experience }}
                         </div>
 
                       </div>
@@ -378,8 +380,8 @@
             <div class="interest-container">
               <div class="interest-t">
                 <div class="interest-label">Interest</div>
-                <div class="interest-edit"  @click="canEditHobby=true" v-if="canEditHobby===false">Edit</div>
-                <div class="interest-edit"  @click="hobbyConfirm()" v-if="canEditHobby">Confirm</div>
+                <div class="interest-edit" @click="canEditHobby=true" v-if="canEditHobby===false">Edit</div>
+                <div class="interest-edit" @click="hobbyConfirm()" v-if="canEditHobby">Confirm</div>
               </div>
 
               <div class="interest-content">
@@ -449,7 +451,7 @@
                       :on-success="handleProfilePhotoSuccess"
                       :before-upload="beforeProfilePhotoUpload"
                   >
-                    <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar" ></el-image>
+                    <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
                 </div>
@@ -469,7 +471,7 @@
                       :on-success="handleBackgroundSuccess"
                       :before-upload="beforeBackgroundUpload"
                   >
-                    <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar" ></el-image>
+                    <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar"></el-image>
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
 
@@ -515,7 +517,7 @@
                       :on-success="handleIntroVideoSuccess"
                       :before-upload="beforeIntroVideoUpload"
                   >
-                    <video v-if="introVideoUrl" :src="introVideoUrl" controls class="intro-video-avatar" />
+                    <video v-if="introVideoUrl" :src="introVideoUrl" controls class="intro-video-avatar"/>
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
                 </div>
@@ -535,7 +537,7 @@
                       :on-success="handleResumeSuccess"
                       :before-upload="beforeResumeUpload"
                   >
-                    <a v-if="resumeUrl" :href="resumeUrl" class="resume-avatar" >[PDF] Click to Preview</a>
+                    <a v-if="resumeUrl" :href="resumeUrl" class="resume-avatar">[PDF] Click to Preview</a>
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
                 </div>
@@ -662,7 +664,7 @@
                   <div class="p-job-type-t">
                     <div class="p-job-type-t-label">Preferred Job Type</div>
                     <div class="p-job-type-t-edit" @click="turnIndexList(3)" v-if="canEditJobType===false">Edit</div>
-                    <div class="p-job-type-t-edit"  @click="jobTypeConfirm" v-if="canEditJobType">Confirm</div>
+                    <div class="p-job-type-t-edit" @click="jobTypeConfirm" v-if="canEditJobType">Confirm</div>
                   </div>
                   <div class="p-job-type-content">
                     <!--                    展示 -->
@@ -719,7 +721,7 @@
                   <div class="age-teach-t">
                     <div class="age-teach-t-label"> Preferred Age To Teach</div>
                     <div class="age-teach-t-edit" @click="turnIndexList(4)" v-if="canEditAgeToTeach===false">Edit</div>
-                    <div class="age-teach-t-edit"  @click="ageToTeachConfirm" v-if="canEditAgeToTeach">Confirm</div>
+                    <div class="age-teach-t-edit" @click="ageToTeachConfirm" v-if="canEditAgeToTeach">Confirm</div>
                   </div>
                   <div class="age-teach-content">
                     <!--                    展示 -->
@@ -775,7 +777,7 @@
                 <div class="p-benefits-container">
                   <div class="p-benefits-t">
                     <div class="p-benefits-t-label">Preferred Benefits</div>
-                    <div class="p-benefits-t-edit"  @click="turnIndexList(6)" v-if="canEditBenefits===false">Edit</div>
+                    <div class="p-benefits-t-edit" @click="turnIndexList(6)" v-if="canEditBenefits===false">Edit</div>
                     <div class="p-benefits-t-edit" @click="benefitsConfirm" v-if="canEditBenefits">Confirm</div>
                   </div>
                   <div class="p-benefits-content">
@@ -859,7 +861,7 @@
           <el-form-item prop="languageValue">
             <el-input v-model="languagesForm.languageValue" placeholder="Add your language"></el-input>
           </el-form-item>
-          <el-form-item >
+          <el-form-item>
             <el-button type="primary" @click="addCustomLanguage('languagesForm')">
               Add
             </el-button>
@@ -913,10 +915,12 @@
 <script>
 import meSideMenu from "@/components/meSideMenu";
 import accountInfo from "../../../components/accountInfo";
-import {VISITOR_USER_INFO, GET_BASIC_INFO, USER_OBJECT_LIST,
-  ADD_LANGUAGE_SCORE, ADD_PROFILE,ADD_EDU_BASIC,ADD_USER_INFO,ADD_USER_IMG,
-  UPDATE_EDUCATOR_PROFILE} from '@/api/api'
-import axios from "axios";
+import {
+  VISITOR_USER_INFO, GET_BASIC_INFO, USER_OBJECT_LIST,
+  ADD_LANGUAGE_SCORE, ADD_PROFILE, ADD_EDU_BASIC, ADD_USER_INFO, ADD_USER_IMG,
+  UPDATE_EDUCATOR_PROFILE, ZOHO_SYNC
+} from '@/api/api'
+
 
 export default {
   name: "profile",
@@ -926,12 +930,12 @@ export default {
   },
   data() {
     return {
-      uploadActionUrl:process.env.VUE_APP_UPLOAD_ACTION_URL,
-      uploadHeaders:{
-        platform:4
+      uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
+      uploadHeaders: {
+        platform: 4
       },
-      uploadData:{
-        token:localStorage.getItem('token')
+      uploadData: {
+        token: localStorage.getItem('token')
       },
       educatorInfo: {},
       basicUserInfo: {},
@@ -969,7 +973,7 @@ export default {
       educationNum: 1,
       showMoreEducationStatus: true,
 
-      teachExpList:[],
+      teachExpList: [],
       canEditTeachExp: false,
       editTeachExpList: [],
       addTeachExpStatus: false,
@@ -978,18 +982,18 @@ export default {
       selectTeachExpList: [],
       selectTeachExpArr: [],
 
-      countriesLivedList:[],
-      countriesTraveledList:[],
-      languagesList:[],
-      locationList:[],
-      jobTypeList:[],
-      ageToTeachList:[],
-      regionList:[],
-      benefitsList:[],
-      subjectList:[],
-      userImagesList:[],
-      workInfo:[],
-      hobbiesList:[],
+      countriesLivedList: [],
+      countriesTraveledList: [],
+      languagesList: [],
+      locationList: [],
+      jobTypeList: [],
+      ageToTeachList: [],
+      regionList: [],
+      benefitsList: [],
+      subjectList: [],
+      userImagesList: [],
+      workInfo: [],
+      hobbiesList: [],
 
       canEditCountriesTraveled: false,
       editCountriesTraveledList: [],
@@ -1007,8 +1011,8 @@ export default {
       selectCountriesLivedList: [],
       selectCountriesLivedArr: [],
 
-      workExpNum:1,
-      showMoreWorkExpStatus:true,
+      workExpNum: 1,
+      showMoreWorkExpStatus: true,
 
       canEditHobby: false,
       editHobbyInfoList: ['Fitness', 'Photography', 'Travel'],
@@ -1018,13 +1022,13 @@ export default {
       selectHobbyInfoList: [],
       selectHobbyInfoArr: [],
 
-      profilePhotoUrl:'',
-      backgroundUrl:'',
-      dialogAccountImageUrl:'',
-      dialogAccountImageVisible:false,
-      accountImageFileList:[],
-      introVideoUrl:'',
-      resumeUrl:'',
+      profilePhotoUrl: '',
+      backgroundUrl: '',
+      dialogAccountImageUrl: '',
+      dialogAccountImageVisible: false,
+      accountImageFileList: [],
+      introVideoUrl: '',
+      resumeUrl: '',
 
       canEditSubject: false,
       editSubjectList: [],
@@ -1081,13 +1085,13 @@ export default {
     this.updateEducatorProfile()
   },
   methods: {
-    updateEducatorProfile(){
+    updateEducatorProfile() {
       let params = {
-        token:localStorage.getItem('token')
+        token: localStorage.getItem('token')
       }
-      UPDATE_EDUCATOR_PROFILE(params).then(res=>{
+      UPDATE_EDUCATOR_PROFILE(params).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1148,7 +1152,7 @@ export default {
             if (res.message.educator_info.subject) {
               this.subjectList = res.message.educator_info.subject;
             }
-            if(res.message.educator_info.user_images){
+            if (res.message.educator_info.user_images) {
               this.userImagesList = res.message.educator_info.user_images;
             }
             if (res.message.educator_info.work_info) {
@@ -1164,18 +1168,18 @@ export default {
               this.hobbiesList = hobbies.split(',');
             }
 
-            if(res.message.educator_info.profile_photo){
+            if (res.message.educator_info.profile_photo) {
               this.profilePhotoUrl = res.message.educator_info.profile_photo
             }
-            if(res.message.educator_info.header_photo){
-              this.backgroundUrl  = res.message.educator_info.header_photo
+            if (res.message.educator_info.header_photo) {
+              this.backgroundUrl = res.message.educator_info.header_photo
             }
             let userImages = res.message.educator_info.user_images
-            if(userImages){
-              userImages.forEach(item=>{
+            if (userImages) {
+              userImages.forEach(item => {
                 let userImageObj = {
-                  name:'',
-                  url:item.url
+                  name: '',
+                  url: item.url
                 }
                 this.accountImageFileList.push(userImageObj)
               })
@@ -1183,16 +1187,16 @@ export default {
 
             let videoUrl = res.message.educator_info.video_url
             let resumePdf = res.message.educator_info.resume_pdf
-            if(videoUrl){
+            if (videoUrl) {
               this.introVideoUrl = videoUrl
             }
-            if(resumePdf){
+            if (resumePdf) {
               this.resumeUrl = resumePdf
             }
 
           }
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1205,7 +1209,7 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1223,7 +1227,7 @@ export default {
         if (res.code == 200) {
           this.languagesData = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1330,7 +1334,7 @@ export default {
           this.languagesDrawer = false
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1646,7 +1650,7 @@ export default {
           this.canEditCountriesLived = true;
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1719,7 +1723,7 @@ export default {
           this.getVisitorBasicInfo()
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1752,17 +1756,17 @@ export default {
       // 	this.selectTeachExpList.splice(index, 1);
       // }
 
-      this.selectTeachExpList.splice(index, 1,obj);
+      this.selectTeachExpList.splice(index, 1, obj);
       this.ownTeachExpList.push(obj);
       this.ownTeachExpValue = '';
     },
     selectTeachExp(value, type) {
       let index;
       if (type == 1) {
-         index = this.selectTeachExpList.findIndex((element) => element.id === value.id);
+        index = this.selectTeachExpList.findIndex((element) => element.id === value.id);
       }
       if (type == 2) {
-         index = this.selectTeachExpList.findIndex((element) => element === value);
+        index = this.selectTeachExpList.findIndex((element) => element === value);
       }
 
       // if (index == -1) {
@@ -1772,7 +1776,7 @@ export default {
       // 	this.selectTeachExpList.splice(index, 1);
       // }
 
-      this.selectTeachExpList.splice(index, 1,value);
+      this.selectTeachExpList.splice(index, 1, value);
 
       console.log(this.selectTeachExpList)
     },
@@ -1801,7 +1805,7 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1829,12 +1833,12 @@ export default {
 
     },
     selectCountriesTraveled(value, type) {
-      let index ;
+      let index;
       if (type == 1) {
-         index = this.selectCountriesTraveledList.findIndex((element) => element.id === value.id);
+        index = this.selectCountriesTraveledList.findIndex((element) => element.id === value.id);
       }
       if (type == 2) {
-         index = this.selectCountriesTraveledList.findIndex((element) => element === value);
+        index = this.selectCountriesTraveledList.findIndex((element) => element === value);
       }
 
       if (index == -1) {
@@ -1875,7 +1879,7 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1903,12 +1907,12 @@ export default {
 
     },
     selectCountriesLived(value, type) {
-      let index ;
+      let index;
       if (type == 1) {
-         index = this.selectCountriesLivedList.findIndex((element) => element.id === value.id);
+        index = this.selectCountriesLivedList.findIndex((element) => element.id === value.id);
       }
       if (type == 2) {
-         index = this.selectCountriesLivedList.findIndex((element) => element === value);
+        index = this.selectCountriesLivedList.findIndex((element) => element === value);
       }
 
       if (index == -1) {
@@ -1949,13 +1953,13 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    addEducationWork(){
+    addEducationWork() {
       this.$router.push('/educator/edit/work')
     },
     showMoreWorkExp() {
@@ -1963,7 +1967,7 @@ export default {
       this.showMoreWorkExpStatus = false;
     },
     turnEditWorkExperience(work) {
-      this.$router.push({path:'/educator/edit/work',query:{workId:work.id,type:2}})
+      this.$router.push({path: '/educator/edit/work', query: {workId: work.id, type: 2}})
     },
     addOwnHobby() {
       this.addHobbyInfoStatus = false;
@@ -2001,7 +2005,7 @@ export default {
           this.canEditHobby = false;
           this.hobbiesList = this.selectHobbyInfoList;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2012,19 +2016,19 @@ export default {
       this.profilePhotoUrl = URL.createObjectURL(file.raw)
       let profileLink = res.data[0]['file_url']
       let params = {
-        profile_photo:res.data[0]['file_url'],
-        identity:1,
-        token:localStorage.getItem('token')
+        profile_photo: res.data[0]['file_url'],
+        identity: 1,
+        token: localStorage.getItem('token')
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res=>{
+      ADD_USER_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
-          this.submitEducatorContactForm(profileLink,'')
+        if (res.code == 200) {
+          this.submitEducatorContactForm(profileLink, '')
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2042,18 +2046,18 @@ export default {
     handleBackgroundSuccess(res, file) {
       this.backgroundUrl = URL.createObjectURL(file.raw)
       let params = {
-        header_photo:res.data[0]['file_url'],
-        identity:1,
-        token:localStorage.getItem('token')
+        header_photo: res.data[0]['file_url'],
+        identity: 1,
+        token: localStorage.getItem('token')
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res=>{
+      ADD_USER_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2064,19 +2068,19 @@ export default {
     handleAccountImageRemove(file, fileList) {
       console.log(file, fileList)
       let accountImagesArr = []
-      fileList.forEach(item=>{
+      fileList.forEach(item => {
         accountImagesArr.push(item.url)
       })
       let params = {
-        token:localStorage.getItem('token'),
-        identity:1,
-        img:accountImagesArr
+        token: localStorage.getItem('token'),
+        identity: 1,
+        img: accountImagesArr
       }
-      ADD_USER_IMG(params).then(res=>{
-        if(res.code == 200){
+      ADD_USER_IMG(params).then(res => {
+        if (res.code == 200) {
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2086,18 +2090,18 @@ export default {
       this.dialogAccountImageUrl = file.url
       this.dialogAccountImageVisible = true
     },
-    handleAccountImageSuccess(res, file){
+    handleAccountImageSuccess(res, file) {
       let accountImages = this.accountImageFileList
       let name = res.data[0]['file_name']
       let url = res.data[0]['file_url']
       let obj = {
-        name:name,
-        url:url
+        name: name,
+        url: url
       }
       this.accountImageFileList.push(obj)
 
       let accountImagesArr = []
-      accountImages.forEach(item=>{
+      accountImages.forEach(item => {
         accountImagesArr.push(item.url)
       })
       // console.log(accountImages)
@@ -2106,39 +2110,39 @@ export default {
       // console.log(file)
       this.accoutImageUrl = URL.createObjectURL(file.raw)
       let params = {
-        token:localStorage.getItem('token'),
-        identity:1,
-        img:accountImagesArr
+        token: localStorage.getItem('token'),
+        identity: 1,
+        img: accountImagesArr
       }
-      ADD_USER_IMG(params).then(res=>{
+      ADD_USER_IMG(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
-      
+
     },
     handleIntroVideoSuccess(res, file) {
       // console.log(res)
       this.introVideoUrl = URL.createObjectURL(file.raw)
       let introLink = res.data[0]['file_url']
       let params = {
-        video_url:res.data[0]['file_url'],
-        identity:1,
-        token:localStorage.getItem('token')
+        video_url: res.data[0]['file_url'],
+        identity: 1,
+        token: localStorage.getItem('token')
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res=>{
+      ADD_USER_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
-          this.submitEducatorContactForm('',introLink)
+        if (res.code == 200) {
+          this.submitEducatorContactForm('', introLink)
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2149,17 +2153,17 @@ export default {
     handleResumeSuccess(res, file) {
       this.resumeUrl = URL.createObjectURL(file.raw)
       let params = {
-        resume_pdf:res.data[0]['file_url'],
-        token:localStorage.getItem('token')
+        resume_pdf: res.data[0]['file_url'],
+        token: localStorage.getItem('token')
       }
       // console.log(params)
-      ADD_EDU_BASIC(params).then(res=>{
+      ADD_EDU_BASIC(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2187,10 +2191,10 @@ export default {
     selectSubject(value, type) {
       let index;
       if (type == 1) {
-         index = this.selectSubjectList.findIndex((element) => element.id === value.id);
+        index = this.selectSubjectList.findIndex((element) => element.id === value.id);
       }
       if (type == 2) {
-         index = this.selectSubjectList.findIndex((element) => element === value);
+        index = this.selectSubjectList.findIndex((element) => element === value);
       }
 
       if (index == -1) {
@@ -2228,7 +2232,7 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2255,10 +2259,10 @@ export default {
     selectLocation(value, type) {
       let index;
       if (type == 1) {
-         index = this.selectLocationList.findIndex((element) => element.id === value.id);
+        index = this.selectLocationList.findIndex((element) => element.id === value.id);
       }
       if (type == 2) {
-         index = this.selectLocationList.findIndex((element) => element === value);
+        index = this.selectLocationList.findIndex((element) => element === value);
       }
 
       if (index == -1) {
@@ -2296,7 +2300,7 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2321,10 +2325,10 @@ export default {
     selectJobType(value, type) {
       let index;
       if (type == 1) {
-         index = this.selectJobTypeList.findIndex((element) => element.id === value.id);
+        index = this.selectJobTypeList.findIndex((element) => element.id === value.id);
       }
       if (type == 2) {
-         index = this.selectJobTypeList.findIndex((element) => element === value);
+        index = this.selectJobTypeList.findIndex((element) => element === value);
       }
 
       if (index == -1) {
@@ -2362,7 +2366,7 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2385,12 +2389,12 @@ export default {
 
     },
     selectAgeToTeach(value, type) {
-      let index ;
+      let index;
       if (type == 1) {
-         index = this.selectAgeToTeachList.findIndex((element) => element.id === value.id);
+        index = this.selectAgeToTeachList.findIndex((element) => element.id === value.id);
       }
       if (type == 2) {
-         index = this.selectAgeToTeachList.findIndex((element) => element === value);
+        index = this.selectAgeToTeachList.findIndex((element) => element === value);
       }
 
       if (index == -1) {
@@ -2428,7 +2432,7 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -2453,10 +2457,10 @@ export default {
     selectRegion(value, type) {
       let index;
       if (type == 1) {
-         index = this.selectRegionList.findIndex((element) => element.id === value.id);
+        index = this.selectRegionList.findIndex((element) => element.id === value.id);
       }
       if (type == 2) {
-         index = this.selectRegionList.findIndex((element) => element === value);
+        index = this.selectRegionList.findIndex((element) => element === value);
       }
 
       if (index == -1) {
@@ -2487,17 +2491,17 @@ export default {
         expand: expand
       }
 
-     ADD_PROFILE(data).then(res => {
+      ADD_PROFILE(data).then(res => {
         if (res.code == 200) {
           console.log('region--submit--' + res.data);
           this.canEditRegion = false;
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
-       console.log(err)
-       this.$message.error(err.msg)
-     })
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
     },
     addOwnBenefits() {
       this.addBenefitsStatus = false;
@@ -2519,10 +2523,10 @@ export default {
     selectBenefits(value, type) {
       let index;
       if (type == 1) {
-         index = this.selectBenefitsList.findIndex((element) => element.id === value.id);
+        index = this.selectBenefitsList.findIndex((element) => element.id === value.id);
       }
       if (type == 2) {
-         index = this.selectBenefitsList.findIndex((element) => element === value);
+        index = this.selectBenefitsList.findIndex((element) => element === value);
       }
 
       if (index == -1) {
@@ -2547,7 +2551,7 @@ export default {
       })
 
       let data = {
-        token:localStorage.getItem('token'),
+        token: localStorage.getItem('token'),
         object_pid: 6,
         object_id: objectArr,
         expand: expand
@@ -2560,58 +2564,56 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    async submitEducatorContactForm(contactImageLink,introLink){
+    async submitEducatorContactForm(contactImageLink, introLink) {
 
-      let formData = new FormData();
+      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      zohoData['zf_referrer_name'] = ''
+      zohoData['zf_redirect_url'] = ''
+      zohoData['zc_gad'] = ''
 
-      formData.append('SingleLine',userId) //UserID
-      formData.append('SingleLine1',this.educatorInfo.first_name) // First Name
-      formData.append('SingleLine2',this.educatorInfo.last_name) //  Last Name
-      formData.append('Dropdown','') //  Gender
-      formData.append('Date','') //   Date of Birth dd-MMM-yyyy
-      formData.append('SingleLine3','') //   Title
-      formData.append('Email','') //   Email
-      formData.append('PhoneNumber_countrycode','') //   Phone
-      formData.append('SingleLine4','') //   Nationality
-      formData.append('Dropdown1','') //   Membership Type
-      formData.append('MultiLine','') //   Languages Spoken
-      formData.append('Number','') //   Membership Duration
+      zohoData['SingleLine'] = userId //UserID
+      zohoData['SingleLine1'] = this.educatorInfo.first_name // First Name
+      zohoData['SingleLine2'] = this.educatorInfo.last_name //  Last Name
+      zohoData['Dropdown'] = '' //  Gender
+      zohoData['Date'] = '' //   Date of Birth dd-MMM-yyyy
+      zohoData['SingleLine3'] = '' //   Title
+      zohoData['Email'] = '' //   Email
+      zohoData['PhoneNumber_countrycode'] = '' //   Phone
+      zohoData['SingleLine4'] = '' //   Nationality
+      zohoData['Dropdown1'] = '' //   Membership Type
+      zohoData['MultiLine'] = '' //   Languages Spoken
+      zohoData['Number'] = '' //   Membership Duration
 
-      formData.append('SingleLine5','') //   City
-      formData.append('SingleLine6','') //   Province
-      formData.append('SingleLine7','') //   Country
+      zohoData['SingleLine5'] = '' //   City
+      zohoData['SingleLine6'] = '' //   Province
+      zohoData['SingleLine7'] = '' //   Country
 
-      formData.append('Dropdown2','') //   Educator Type
+      zohoData['Dropdown2'] = '' //   Educator Type
 
-      formData.append('MultiLine1','') //   Education
-      formData.append('MultiLine2','') //    Work History
-      formData.append('Dropdown3','') //    Teaching Experience
-      formData.append('MultiLine3','') //   Certifications
-      formData.append('MultiLine4','') //   Educator Intro
-      formData.append('Website',contactImageLink) //   Contact image Link
-      formData.append('Website1',introLink) //   Intro Video Link
+      zohoData['MultiLine1'] = '' //   Education
+      zohoData['MultiLine2'] = '' //    Work History
+      zohoData['Dropdown3'] = '' //    Teaching Experience
+      zohoData['MultiLine3'] = '' //   Certifications
+      zohoData['MultiLine4'] = '' //   Educator Intro
+      zohoData['Website'] = contactImageLink //   Contact image Link
+      zohoData['Website1'] = introLink //   Intro Video Link
 
-      await axios.post('/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
@@ -2633,7 +2635,7 @@ export default {
 }
 
 .educator-r-container {
-  padding:10px 20px;
+  padding: 10px 20px;
 }
 
 .basic-info-container {
@@ -2641,7 +2643,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .basic-info-t {
@@ -2690,7 +2692,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .credentials-label {
@@ -2882,7 +2884,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .experience-label {
@@ -3059,7 +3061,7 @@ export default {
   justify-content: space-between;
   font-size: 14px;
   color: #808080;
-  padding: 10px 0 ;
+  padding: 10px 0;
 }
 
 .work-exp-item-3 {
@@ -3080,7 +3082,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .interest-t {
@@ -3116,39 +3118,44 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
-.profile-photo-container{
+.profile-photo-container {
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.profile-photo-t{
+.profile-photo-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.profile-photo-t-label{
+
+.profile-photo-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.profile-photo-content{
+
+.profile-photo-content {
   padding: 10px;
 }
-/deep/ .profile-uploader .el-upload{
+
+/deep/ .profile-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .profile-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -3158,43 +3165,48 @@ export default {
   text-align: center;
 }
 
-.profile-avatar{
+.profile-avatar {
   width: 178px;
   height: 178px;
   display: block;
 }
 
-.background-banner-container{
+.background-banner-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.background-banner-t{
+.background-banner-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.background-banner-t-label{
+
+.background-banner-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.background-banner-content{
+
+.background-banner-content {
   padding: 10px;
 }
-/deep/ .background-uploader .el-upload{
+
+/deep/ .background-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .background-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -3204,65 +3216,72 @@ export default {
   text-align: center;
 }
 
-.background-avatar{
+.background-avatar {
   width: 378px;
   height: 178px;
   display: block;
 }
 
-.account-images-container{
+.account-images-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.account-images-t{
+.account-images-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.account-images-t-label{
+
+.account-images-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.account-images-content{
+
+.account-images-content {
   padding: 10px;
 }
 
-.intro-video-container{
+.intro-video-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.intro-video-t{
+.intro-video-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.intro-video-t-label{
+
+.intro-video-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.intro-video-content{
+
+.intro-video-content {
   padding: 10px;
 }
-/deep/ .intro-video-uploader .el-upload{
+
+/deep/ .intro-video-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .intro-video-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -3272,43 +3291,48 @@ export default {
   text-align: center;
 }
 
-.intro-video-avatar{
+.intro-video-avatar {
   width: 378px;
   height: 178px;
   display: block;
 }
 
-.my-resume-container{
+.my-resume-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.my-resume-t{
+.my-resume-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.my-resume-t-label{
+
+.my-resume-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.my-resume-content{
+
+.my-resume-content {
   padding: 10px;
 }
-/deep/ .resume-uploader .el-upload{
+
+/deep/ .resume-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .resume-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -3318,7 +3342,7 @@ export default {
   text-align: center;
 }
 
-.resume-avatar{
+.resume-avatar {
   width: 378px;
   /*height: 178px;*/
   display: block;
@@ -3332,7 +3356,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .preferences-label {
@@ -3492,7 +3516,6 @@ export default {
 .p-benefits-content {
 
 }
-
 
 
 .languages-drawer {

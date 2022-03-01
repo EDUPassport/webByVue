@@ -579,7 +579,7 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 import meSideMenu from "@/components/meSideMenu";
-import {VISITOR_USER_INFO, ALL_AREAS, USER_OBJECT_LIST,ADD_JOB,JOB_ADD_PROFILE} from '@/api/api';
+import {VISITOR_USER_INFO, ALL_AREAS, USER_OBJECT_LIST,ADD_JOB,JOB_ADD_PROFILE,SYNC_GET_BUSINESS_INFO} from '@/api/api';
 import {ref} from "vue";
 
 export default {
@@ -1588,10 +1588,34 @@ export default {
         }
       })
 
-
     },
     letGo(){
-      window.open(this.goDomain,'_blank')
+      let uid = localStorage.getItem('uid')
+
+      let params = {
+        user_id:uid
+      }
+
+      SYNC_GET_BUSINESS_INFO(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+      // window.open(this.goDomain,'_blank')
+    },
+    getSyncBusinessInfo(uid){
+      let params = {
+        user_id:uid
+      }
+
+      SYNC_GET_BUSINESS_INFO(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+
     }
 
 

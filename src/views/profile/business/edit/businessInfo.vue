@@ -26,9 +26,10 @@
                 <el-input v-model="basicForm.business_name" placeholder="Business Name"></el-input>
               </el-form-item>
               <el-form-item label="Business Introduction" prop="business_bio">
-                <el-input v-model="basicForm.business_bio" type="textarea" placeholder="Business Introduction"></el-input>
+                <el-input v-model="basicForm.business_bio" type="textarea"
+                          placeholder="Business Introduction"></el-input>
               </el-form-item>
-              <el-form-item label="Year Founded" >
+              <el-form-item label="Year Founded">
                 <el-date-picker
                     v-model="basicForm.year_founded"
                     type="year"
@@ -57,18 +58,18 @@
                              :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
-<!--              <el-form-item label="Add Location Pin" >-->
-<!--                <el-input v-model="basicForm.address" placeholder="Add Location Pin"></el-input>-->
-<!--                <GMapAutocomplete-->
-<!--                    placeholder="This is a placeholder"-->
-<!--                    @place_changed="setPlace"-->
-<!--                >-->
-<!--                </GMapAutocomplete>-->
-<!--              </el-form-item>-->
-              <el-form-item label="Website" >
+              <!--              <el-form-item label="Add Location Pin" >-->
+              <!--                <el-input v-model="basicForm.address" placeholder="Add Location Pin"></el-input>-->
+              <!--                <GMapAutocomplete-->
+              <!--                    placeholder="This is a placeholder"-->
+              <!--                    @place_changed="setPlace"-->
+              <!--                >-->
+              <!--                </GMapAutocomplete>-->
+              <!--              </el-form-item>-->
+              <el-form-item label="Website">
                 <el-input v-model="basicForm.website" placeholder="www.eslpassport.com"></el-input>
               </el-form-item>
-              <el-form-item label="Business Phone #" >
+              <el-form-item label="Business Phone #">
                 <el-input v-model="basicForm.business_phone" placeholder="Business Phone #"></el-input>
               </el-form-item>
               <el-form-item label="Currently Hiring">
@@ -90,9 +91,9 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {ALL_AREAS, ADD_BUSINESS_BASIC,GET_BASIC_INFO} from '@/api/api'
-import {countriesData} from "../../../../utils/data";
-import axios from "axios";
+import {ALL_AREAS, ADD_BUSINESS_BASIC, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
+import {countriesData} from "@/utils/data";
+
 
 export default {
   name: "businessInfo",
@@ -125,7 +126,7 @@ export default {
         address: '',
         lat: '',
         lng: '',
-        token:localStorage.getItem('token')
+        token: localStorage.getItem('token')
       },
       basicRules: {
         business_name: [
@@ -168,7 +169,7 @@ export default {
       districtOptions: [],
       subCateOptions: [],
       selectEducatorTypeList: [],
-      businessInfo:{}
+      businessInfo: {}
 
     }
   },
@@ -181,7 +182,7 @@ export default {
 
   },
   methods: {
-    setPlace(e){
+    setPlace(e) {
       console.log(e)
     },
     submitForm(formName) {
@@ -197,11 +198,11 @@ export default {
           let params = Object.assign({}, this.basicForm);
           ADD_BUSINESS_BASIC(params).then(res => {
             console.log(res)
-            if(res.code == 200){
+            if (res.code == 200) {
               this.submitEduBusinessCompanyForm()
               this.$router.push('/business/profile')
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$message.error(err.msg)
           })
@@ -227,7 +228,7 @@ export default {
         if (res.code == 200) {
           this.provinceOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -241,7 +242,7 @@ export default {
         if (res.code == 200) {
           this.cityOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -255,7 +256,7 @@ export default {
         if (res.code == 200) {
           this.districtOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -279,7 +280,7 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let businessInfo = res.message.business_info;
           this.businessInfo = res.message.business_info;
 
@@ -315,11 +316,11 @@ export default {
           let districts = businessInfo.districts;
           let language = localStorage.getItem('language');
 
-          if(provinces && citys && districts){
-            if(language == 'en-US'){
+          if (provinces && citys && districts) {
+            if (language == 'en-US') {
               this.basicForm.location = districts.Pinyin + ', ' + citys.Pinyin + ', ' + provinces.Pinyin;
             }
-            if(language == 'zh-CN'){
+            if (language == 'zh-CN') {
               this.basicForm.location = districts.ShortName + ', ' + citys.ShortName + ', ' + provinces.ShortName;
             }
           }
@@ -330,68 +331,66 @@ export default {
           this.basicForm.lat = businessInfo.lat;
           this.basicForm.lng = businessInfo.lng;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    async submitEduBusinessCompanyForm(){
+    async submitEduBusinessCompanyForm() {
 
       let params = Object.assign({}, this.basicForm)
 
-      let formData = new FormData();
+      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      zohoData['zf_referrer_name'] = ''
+      zohoData['zf_redirect_url'] = ''
+      zohoData['zc_gad'] = ''
 
-      formData.append('SingleLine',params.business_name) // Education Business Name
+      zohoData['SingleLine'] = params.business_name  // Education Business Name
 
-      formData.append('Dropdown2',this.businessInfo.business_type_name) //Education Business Category
-      formData.append('Dropdown','Education Business') //Company Type
-      formData.append('Website',params.website) //Education Business Website
-      formData.append('SingleLine1',params.last_name) // Education Business Contact
-      formData.append('Number2','') //  Company Number
+      zohoData['Dropdown2'] = this.businessInfo.business_type_name  //Education Business Category
+      zohoData['Dropdown'] = 'Education Business'  //Company Type
+      zohoData['Website'] = params.website  //Education Business Website
+      zohoData['SingleLine1'] = params.last_name  // Education Business Contact
+      zohoData['Number2'] = ''  //  Company Number
 
-      formData.append('SingleLine5',userId) //UserID
+      zohoData['SingleLine5'] = userId  //UserID
 
-      formData.append('PhoneNumber_countrycode',params.business_phone) //Education Business Phone
-      formData.append('Email','') // Education Business Email
-      formData.append('Number','')  //Number of Employees
-      formData.append('Number1','')  //Membership Duration
-      formData.append('Dropdown1','' ) //Membership Type
+      zohoData['PhoneNumber_countrycode'] = params.business_phone  //Education Business Phone
+      zohoData['Email'] = ''  // Education Business Email
+      zohoData['Number'] = ''   //Number of Employees
+      zohoData['Number1'] = ''   //Membership Duration
+      zohoData['Dropdown1'] = ''   //Membership Type
 
-      formData.append('Address_AddressLine1','' ) //Street Address
-      formData.append('Address_City','' ) //City
-      formData.append('Address_Region','' ) //State/Region/Province
-      formData.append('Address_Country','' ) //Country
+      zohoData['Address_AddressLine1'] = ''   //Street Address
+      zohoData['Address_City'] = ''   //City
+      zohoData['Address_Region'] = ''   //State/Region/Province
+      zohoData['Address_Country'] = ''   //Country
 
-      formData.append('SingleLine4','' ) //   Business Registration No.
-      formData.append('MultiLine', '' ) //Company Intro
-      formData.append('SingleLine3','' ) //WeChat ID
+      zohoData['SingleLine4'] = ''   //   Business Registration No.
+      zohoData['MultiLine'] = ''   //Company Intro
+      zohoData['SingleLine3'] = ''   //WeChat ID
 
-      formData.append('Number3','') //  Number of Branches
-      formData.append('Number4','') //    Number of Students
-      formData.append('MultipleChoice','') //    Students Ages
-      formData.append('MultiLine1','') //     Curriculum Subjects
-      formData.append('MultiLine2','') //     School Facilities
+      zohoData['Number3'] = ''  //  Number of Branches
+      zohoData['Number4'] = ''  //    Number of Students
+      zohoData['MultipleChoice'] = ''  //    Students Ages
+      zohoData['MultiLine1'] = ''  //     Curriculum Subjects
+      zohoData['MultiLine2'] = ''  //     School Facilities
 
-      formData.append('Website1','') // Business License Link
-      formData.append('Website2','' ) //Company Logo Link
-      formData.append('Website3','' ) //Header Image Link
+      zohoData['Website1'] = ''  // Business License Link
+      zohoData['Website2'] = ''   //Company Logo Link
+      zohoData['Website3'] = ''   //Header Image Link
 
-      await axios.post('/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
@@ -464,7 +463,8 @@ export default {
   background-color: #00b3d2;
   color: #FFFFFF;
 }
-.basic-breadcrumb-container{
+
+.basic-breadcrumb-container {
   padding: 10px;
 }
 

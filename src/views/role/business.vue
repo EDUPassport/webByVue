@@ -125,11 +125,10 @@
 </template>
 
 <script>
-import {countriesData} from "../../utils/data";
-import {CHANGE_IDENTITY_LANGUAGE, ADD_BUSINESS_BASIC, SUB_CATE_LIST, ALL_AREAS} from '@/api/api'
+import {countriesData} from "@/utils/data";
+import {CHANGE_IDENTITY_LANGUAGE, ADD_BUSINESS_BASIC, SUB_CATE_LIST, ALL_AREAS, ZOHO_SYNC} from '@/api/api'
 import {ref} from 'vue'
 import {useStore} from "vuex";
-import axios from "axios";
 
 export default {
   name: "business",
@@ -436,57 +435,54 @@ export default {
 
       let params = Object.assign({}, this.basicForm)
 
-      let formData = new FormData();
       let userId = localStorage.getItem('uid')
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      let zohoData = []
 
-      formData.append('SingleLine',params.business_name) // Education Business Name
+      zohoData['zf_referrer_name'] = ''
+      zohoData['zf_redirect_url'] = ''
+      zohoData['zc_gad'] = ''
+      zohoData['SingleLine'] = params.business_name // Education Business Name
+      zohoData['Dropdown2'] = params.business_type_name //Education Business Category
+      zohoData['Dropdown'] = 'Education Business' //Company Type
+      zohoData['Website'] = '' //Education Business Website
+      zohoData['SingleLine1'] = '' // Education Business Contact
+      zohoData['Number2'] = '' //  Company Number
+      zohoData['SingleLine5'] = userId  //UserID
+      zohoData['PhoneNumber_countrycode'] = '' //Education Business Phone
+      zohoData['Email'] = params.work_email //   Education Business Email
 
-      formData.append('Dropdown2',params.business_type_name) //Education Business Category
-      formData.append('Dropdown','Education Business') //Company Type
-      formData.append('Website','') //Education Business Website
-      formData.append('SingleLine1','') // Education Business Contact
-      formData.append('Number2','') //  Company Number
+      zohoData['Number'] = '' //Number of Employees
+      zohoData['Number1'] = '' //  Membership Duration
+      zohoData['Dropdown1'] = '' // Membership Type
+      zohoData['Email'] = params.work_email //   Education Business Email
 
-      formData.append('SingleLine5',userId) //UserID
+      zohoData['Address_AddressLine1']=''  //Street Address
+      zohoData['Address_City']=''  //City
+      zohoData['Address_Region']=''  //State/Region/Province
+      zohoData['Address_Country']=''  //Country
 
-      formData.append('PhoneNumber_countrycode','') //Education Business Phone
-      formData.append('Email',params.work_email) // Education Business Email
-      formData.append('Number','')  //Number of Employees
-      formData.append('Number1','')  //Membership Duration
-      formData.append('Dropdown1','' ) //Membership Type
+      zohoData['SingleLine4']=''  //   Business Registration No.
+      zohoData['MultiLine']= ''  //Company Intro
+      zohoData['SingleLine3']=''  //WeChat ID
 
-      formData.append('Address_AddressLine1','' ) //Street Address
-      formData.append('Address_City','' ) //City
-      formData.append('Address_Region','' ) //State/Region/Province
-      formData.append('Address_Country','' ) //Country
+      zohoData['Number3']='' //  Number of Branches
+      zohoData['Number4']='' //    Number of Students
+      zohoData['MultipleChoice']='' //    Students Ages
+      zohoData['MultiLine1']='' //     Curriculum Subjects
+      zohoData['MultiLine2']='' //     School Facilities
 
-      formData.append('SingleLine4','' ) //   Business Registration No.
-      formData.append('MultiLine', '' ) //Company Intro
-      formData.append('SingleLine3','' ) //WeChat ID
+      zohoData['Website1']='' // Business License Link
+      zohoData['Website2']=params.logo  //Company Logo Link
+      zohoData['Website3']=''  //Header Image Link
 
-      formData.append('Number3','') //  Number of Branches
-      formData.append('Number4','') //    Number of Students
-      formData.append('MultipleChoice','') //    Students Ages
-      formData.append('MultiLine1','') //     Curriculum Subjects
-      formData.append('MultiLine2','') //     School Facilities
+      let zohoParams = {
+        zoho_data:zohoData,
+        zoho_url:'https://forms.zohopublic.com/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit'
+      }
 
-      formData.append('Website1','') // Business License Link
-      formData.append('Website2',params.logo ) //Company Logo Link
-      formData.append('Website3','' ) //Header Image Link
-
-      await axios.post('/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      await ZOHO_SYNC(zohoParams).then(res=>{
         console.log(res)
-
       }).catch(err=>{
         console.log(err)
       })

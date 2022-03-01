@@ -61,11 +61,10 @@
 </template>
 
 <script>
-import {countriesData} from "../../utils/data";
-import {CHANGE_IDENTITY_LANGUAGE, ADD_EDU_BASIC} from '@/api/api'
+import {countriesData} from "@/utils/data";
+import {CHANGE_IDENTITY_LANGUAGE, ADD_EDU_BASIC, ZOHO_SYNC} from '@/api/api'
 import {useStore} from "vuex";
 import {ref} from "vue";
-import axios from "axios";
 
 export default {
   name: "educator",
@@ -213,46 +212,43 @@ export default {
 
       let params = Object.assign({}, this.basicForm)
 
-      let formData = new FormData();
       let userId = localStorage.getItem('uid')
+      let zohoData = []
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      zohoData['zf_referrer_name'] = ''
+      zohoData['zf_redirect_url'] = ''
+      zohoData['zc_gad'] = ''
+      zohoData['SingleLine'] = userId  //UserID
+      zohoData['SingleLine1'] = params.first_name // First Name
+      zohoData['SingleLine2'] = params.last_name //  Last Name
+      zohoData['Dropdown'] = ''  //  Gender
+      zohoData['Date'] = ''  //   Date of Birth dd-MMM-yyyy
+      zohoData['SingleLine3'] = ''  //   Title
+      zohoData['Email'] = ''  //   Email
+      zohoData['PhoneNumber_countrycode'] = ''  //   Phone
+      zohoData['SingleLine4'] = ''  //   Nationality
+      zohoData['Dropdown1'] = ''  //  Membership Type
+      zohoData['MultiLine'] = ''  //  Languages Spoken
+      zohoData['Number'] = ''  //  Membership Duration
+      zohoData['SingleLine5'] = ''  //  City
+      zohoData['SingleLine6'] = ''  //  Province
+      zohoData['SingleLine7'] = ''  //  Country
+      zohoData['Dropdown2'] = ''  //  Educator Type
+      zohoData['MultiLine1'] = ''  //  Education
+      zohoData['MultiLine2'] = ''  //   Work History
+      zohoData['Dropdown3'] = ''  //  Teaching Experience
+      zohoData['MultiLine3'] = ''  //  Certifications
+      zohoData['MultiLine4'] = ''  //  Educator Intro
+      zohoData['Website'] = params.profile_photo  //   Contact image Link
+      zohoData['Website1'] = ''  //   Intro Video Link
 
-      formData.append('SingleLine',userId) //UserID
-      formData.append('SingleLine1',params.first_name) // First Name
-      formData.append('SingleLine2',params.last_name) //  Last Name
-      formData.append('Dropdown','') //  Gender
-      formData.append('Date','') //   Date of Birth dd-MMM-yyyy
-      formData.append('SingleLine3','') //   Title
-      formData.append('Email','') //   Email
-      formData.append('PhoneNumber_countrycode','') //   Phone
-      formData.append('SingleLine4','') //   Nationality
-      formData.append('Dropdown1','') //   Membership Type
-      formData.append('MultiLine','') //   Languages Spoken
-      formData.append('Number','') //   Membership Duration
-      formData.append('SingleLine5','') //   City
-      formData.append('SingleLine6','') //   Province
-      formData.append('SingleLine7','') //   Country
-      formData.append('Dropdown2','') //   Educator Type
-      formData.append('MultiLine1','') //   Education
-      formData.append('MultiLine2','') //    Work History
-      formData.append('Dropdown3','') //    Teaching Experience
-      formData.append('MultiLine3','') //   Certifications
-      formData.append('MultiLine4','') //   Educator Intro
-      formData.append('Website',params.profile_photo) //   Contact image Link
-      formData.append('Website1','') //   Intro Video Link
+      let zohoParams = {
+        zoho_data:zohoData,
+        zoho_url:'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
+      }
 
-      await axios.post('/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      await ZOHO_SYNC(zohoParams).then(res=>{
         console.log(res)
-
       }).catch(err=>{
         console.log(err)
       })
@@ -262,41 +258,36 @@ export default {
 
       let params = Object.assign({}, this.basicForm)
 
-      let formData = new FormData();
       let userId = localStorage.getItem('uid')
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      let zohoData = []
 
-      formData.append('SingleLine',userId) //UserID
-      formData.append('SingleLine1',params.first_name) // First Name
-      formData.append('SingleLine2',params.last_name) //  Last Name
-      formData.append('Dropdown','') //  Gender
-      formData.append('Date','') //   Date of Birth dd-MMM-yyyy
-      formData.append('SingleLine3','') //   Title
-      formData.append('Email','') //   Email
-      formData.append('PhoneNumber_countrycode','') //   Phone
-      formData.append('SingleLine4','') //   Nationality
+      zohoData['zf_referrer_name'] = ''
+      zohoData['zf_redirect_url'] = ''
+      zohoData['zc_gad'] = ''
+      zohoData['SingleLine'] = userId  //UserID
+      zohoData['SingleLine1'] = params.first_name // First Name
+      zohoData['SingleLine2'] = params.last_name //  Last Name
+      zohoData['Dropdown'] = ''  //  Gender
+      zohoData['Date'] = ''  //   Date of Birth dd-MMM-yyyy
+      zohoData['SingleLine3'] = ''  //   Title
+      zohoData['Email'] = ''  //   Email
+      zohoData['PhoneNumber_countrycode'] = ''  //   Phone
+      zohoData['SingleLine4'] = ''  //   Nationality
+      zohoData['Dropdown1'] = ''  //  Membership Type
+      zohoData['Number'] = ''  //  Membership Duration
+      zohoData['SingleLine5'] = ''  //  City
+      zohoData['SingleLine6'] = ''  //  Province
+      zohoData['SingleLine7'] = ''  //  Country
+      zohoData['Website'] = params.profile_photo  //   Contact image Link
 
-      formData.append('Dropdown1','') //   Membership Type
+      let zohoParams = {
+        zoho_data:zohoData,
+        zoho_url:'https://forms.zohopublic.com//edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit'
+      }
 
-      formData.append('Number','') //   Membership Duration
-      formData.append('SingleLine5','') //   City
-      formData.append('SingleLine6','') //   Province
-      formData.append('SingleLine7','') //   Country
-
-      formData.append('Website',params.profile_photo) //   Contact image Link
-
-      await axios.post('/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      await ZOHO_SYNC(zohoParams).then(res=>{
         console.log(res)
-
       }).catch(err=>{
         console.log(err)
       })

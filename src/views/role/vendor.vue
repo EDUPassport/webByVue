@@ -80,7 +80,8 @@
               </el-form-item>
 
               <el-form-item label="Proposed Deal" prop="proposed_deal">
-                <el-input v-model="basicForm.proposed_deal" type="textarea" placeholder="10% off all set meals"></el-input>
+                <el-input v-model="basicForm.proposed_deal" type="textarea"
+                          placeholder="10% off all set meals"></el-input>
               </el-form-item>
 
               <el-form-item label="Profile Photo" prop="profile_photo">
@@ -119,7 +120,7 @@
                 <el-button type="primary" :loading="submitLoadingValue" @click="submitForm('basicForm')">
                   Submit
                 </el-button>
-<!--                <el-button @click="resetForm('basicForm')">Reset</el-button>-->
+                <!--                <el-button @click="resetForm('basicForm')">Reset</el-button>-->
               </el-form-item>
             </el-form>
           </div>
@@ -131,19 +132,18 @@
 
 <script>
 import {countriesData} from "@/utils/data";
-import {CHANGE_IDENTITY_LANGUAGE,ADD_VENDOR_BASIC , SUB_CATE_LIST, ALL_AREAS} from '@/api/api'
+import {CHANGE_IDENTITY_LANGUAGE, ADD_VENDOR_BASIC, SUB_CATE_LIST, ALL_AREAS, ZOHO_SYNC} from '@/api/api'
 import {ref} from 'vue'
 import {useStore} from "vuex";
-import axios from "axios";
 
 export default {
   name: "vendor",
   components: {},
-  setup(){
+  setup() {
     const submitLoadingValue = ref(false)
     const store = useStore()
-    const setIdentity = (data)=>{
-      store.commit('identity',data)
+    const setIdentity = (data) => {
+      store.commit('identity', data)
     }
     return {
       submitLoadingValue,
@@ -177,7 +177,7 @@ export default {
         proposed_deal: '',
         vendor_type_id: '',
         vendor_type_name: '',
-        vendor_type_name_cn:'',
+        vendor_type_name_cn: '',
         vendor_name_en: '',
         legal_company_name: '',
         token: localStorage.getItem('token')
@@ -292,7 +292,7 @@ export default {
     },
     beforeProfilePhotoUpload(file) {
       this.$loading({
-        text:'Uploading...'
+        text: 'Uploading...'
       })
       const isLt2M = file.size / 1024 / 1024 < 20
 
@@ -310,7 +310,7 @@ export default {
     },
     beforeLogoUpload(file) {
       this.$loading({
-        text:'Uploading...'
+        text: 'Uploading...'
       })
       const isLt2M = file.size / 1024 / 1024 < 20
 
@@ -328,7 +328,7 @@ export default {
         if (res.code == 200) {
           this.provinceOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -342,7 +342,7 @@ export default {
         if (res.code == 200) {
           this.cityOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -356,7 +356,7 @@ export default {
         if (res.code == 200) {
           this.districtOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -382,7 +382,7 @@ export default {
         if (res.code == 200) {
           this.subCateOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -423,13 +423,13 @@ export default {
               this.changeIdentity(3)
 
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
-            this.submitLoadingValue=false
+            this.submitLoadingValue = false
             this.$message.error(err.msg)
           })
         } else {
-          this.submitLoadingValue=false
+          this.submitLoadingValue = false
           console.log('error submit!!')
           return false
         }
@@ -448,67 +448,66 @@ export default {
         console.log(res)
         if (res.code == 200) {
           console.log('success')
-          this.submitLoadingValue=false
-          localStorage.setItem('identity',identity)
+          this.submitLoadingValue = false
+          localStorage.setItem('identity', identity)
           this.setIdentity(identity)
           this.$router.push('/home')
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        this.submitLoadingValue=false
+        this.submitLoadingValue = false
         this.$message.error(err.msg)
       })
 
     },
-    async submitVendorCompanyForm(){
+    async submitVendorCompanyForm() {
 
       let params = Object.assign({}, this.basicForm)
 
-      let formData = new FormData();
       let userId = localStorage.getItem('uid')
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      let zohoData = []
 
-      formData.append('SingleLine',params.vendor_name_en) //vendor company name
+      zohoData['zf_referrer_name'] = ''
+      zohoData['zf_redirect_url'] = ''
+      zohoData['zc_gad'] = ''
 
-      formData.append('Dropdown2',params.vendor_type_name) //Vendor Category
-      formData.append('SingleLine5',userId) //UserID
+      zohoData['SingleLine'] = params.vendor_name_en //vendor company name
 
-      formData.append('Number2','' ) //Company Number
-      formData.append('SingleLine1', '' ) //Vendor Company Contact
+      zohoData['Dropdown2'] = params.vendor_type_name //Vendor Category
+      zohoData['SingleLine5'] = userId //UserID
 
-      formData.append('PhoneNumber_countrycode',params.phone) //Vendor Company Phone
-      formData.append('Email',params.work_email) // vendor company  email
+      zohoData['Number2'] = ''  //Company Number
+      zohoData['SingleLine1'] = ''  //Vendor Company Contact
 
-      formData.append('Dropdown','Vendor') // company type
-      formData.append('Number','')  //Number of Employees
-      formData.append('Number1','')  //Membership Duration
-      formData.append('Dropdown1','' ) //Membership Type
+      zohoData['PhoneNumber_countrycode'] = params.phone //Vendor Company Phone
+      zohoData['Email'] = params.work_email // vendor company  email
 
-      formData.append('Address_AddressLine1','' ) //Street Address
-      formData.append('Address_City','' ) //City
-      formData.append('Address_Region','' ) //State/Region/Province
-      formData.append('Address_Country','' ) //Country
+      zohoData['Dropdown'] = 'Vendor' // company type
+      zohoData['Number'] = ''  //Number of Employees
+      zohoData['Number1'] = ''  //Membership Duration
+      zohoData['Dropdown1'] = ''  //Membership Type
 
-      formData.append('SingleLine4','' ) //Business Registration No.
-      formData.append('MultiLine','' ) //Company Intro
-      formData.append('SingleLine3','' ) //WeChat ID
+      zohoData['Address_AddressLine1'] = ''  //Street Address
+      zohoData['Address_City'] = ''  //City
+      zohoData['Address_Region'] = ''  //State/Region/Province
+      zohoData['Address_Country'] = ''  //Country
 
-      formData.append('Website1','') // Business License Link
-      formData.append('Website2',params.logo ) //Company Logo Link
-      formData.append('Website3','' ) //Header Image Link
+      zohoData['SingleLine4'] = ''  //Business Registration No.
+      zohoData['MultiLine'] = ''  //Company Intro
+      zohoData['SingleLine3'] = ''  //WeChat ID
 
-      await axios.post('/edupassport/form/VendorCompanyForm/formperma/otYlWrLwckw-vUm696qIUsMkRlofpZHCqZgodVcl6_c/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      zohoData['Website1'] = '' // Business License Link
+      zohoData['Website2'] = params.logo  //Company Logo Link
+      zohoData['Website3'] = ''  //Header Image Link
+
+      let zohoParams = {
+        zoho_data:zohoData,
+        zoho_url:'https://forms.zohopublic.com/edupassport/form/VendorCompanyForm/formperma/otYlWrLwckw-vUm696qIUsMkRlofpZHCqZgodVcl6_c/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res=>{
         console.log(res)
-
       }).catch(err=>{
         console.log(err)
       })

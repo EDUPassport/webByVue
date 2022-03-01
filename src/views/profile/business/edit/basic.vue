@@ -28,7 +28,7 @@
               <el-form-item label="Last Name" prop="last_name">
                 <el-input v-model="basicForm.last_name" placeholder="Last Name"></el-input>
               </el-form-item>
-              <el-form-item label="Contact Phone #" >
+              <el-form-item label="Contact Phone #">
                 <el-input v-model="basicForm.contact_phone" placeholder="Contact Phone #"></el-input>
               </el-form-item>
               <el-form-item label="Wechat ID" prop="wx_id">
@@ -49,14 +49,14 @@
                              :value="item.name"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="Job Title" >
+              <el-form-item label="Job Title">
                 <el-input v-model="basicForm.job_title" placeholder="Job Title"></el-input>
               </el-form-item>
-              <el-form-item label="Short Bio" >
+              <el-form-item label="Short Bio">
                 <el-input v-model="basicForm.bio" type="textarea" placeholder="Short Bio"></el-input>
               </el-form-item>
               <el-form-item label="Hobbies">
-                <div class="object-tags-container" >
+                <div class="object-tags-container">
                   <div class="object-tags">
                     <div class="object-tags-item"
                          :class=" selectHobbyInfoList.indexOf(item) == -1 ? '' : 'tags-active' "
@@ -114,9 +114,8 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {SUB_CATE_LIST, ADD_BUSINESS_BASIC,GET_BASIC_INFO} from '@/api/api'
+import {SUB_CATE_LIST, ADD_BUSINESS_BASIC, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
 import {countriesData} from "@/utils/data";
-import axios from "axios";
 
 export default {
   name: "basic",
@@ -130,14 +129,14 @@ export default {
         last_name: '',
         nickname: '',
         sex: '',
-        sex_name:'',
+        sex_name: '',
         nationality: '',
         job_title: '',
         bio: '',
         hobbies: '',
         wx_id: '',
         contact_phone: '',
-        token:localStorage.getItem('token')
+        token: localStorage.getItem('token')
       },
       basicRules: {
         first_name: [
@@ -182,7 +181,7 @@ export default {
         }
       ],
       nationalityOptions: countriesData,
-      hobbiesList:[],
+      hobbiesList: [],
       canEditHobby: false,
       editHobbyInfoList: ['Fitness', 'Photography', 'Travel'],
       addHobbyInfoStatus: false,
@@ -190,7 +189,7 @@ export default {
       ownHobbyInfoList: [],
       selectHobbyInfoList: [],
       selectHobbyInfoArr: [],
-      businessInfo:{}
+      businessInfo: {}
 
     }
   },
@@ -209,11 +208,11 @@ export default {
           let params = Object.assign({}, this.basicForm)
           ADD_BUSINESS_BASIC(params).then(res => {
             console.log(res)
-            if(res.code == 200){
+            if (res.code == 200) {
               this.submitEduBusinessCompanyForm()
               this.$router.push('/business/profile')
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$message.error(err.msg)
           })
@@ -240,7 +239,7 @@ export default {
         if (res.code == 200) {
           this.subCateOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -276,7 +275,7 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let businessUserInfo = res.message.business_info;
 
           this.businessInfo = res.message.business_info;
@@ -284,7 +283,7 @@ export default {
           this.basicForm.nickname = businessUserInfo.nickname;
           this.basicForm.first_name = businessUserInfo.first_name;
           this.basicForm.last_name = businessUserInfo.last_name;
-          this.basicForm.sex = res.message.sex ;
+          this.basicForm.sex = res.message.sex;
 
           this.basicForm.nationality = businessUserInfo.nationality;
 
@@ -299,68 +298,66 @@ export default {
             this.selectHobbyInfoList = hobbies.split(',');
           }
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    async submitEduBusinessCompanyForm(){
+    async submitEduBusinessCompanyForm() {
 
       let params = Object.assign({}, this.basicForm)
 
-      let formData = new FormData();
+      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      zohoData.append['zf_referrer_name'] = ''
+      zohoData.append['zf_redirect_url'] = ''
+      zohoData.append['zc_gad'] = ''
 
-      formData.append('SingleLine',this.businessInfo.business_name) // Education Business Name
+      zohoData.append['SingleLine'] = this.businessInfo.business_name  // Education Business Name
 
-      formData.append('Dropdown2',this.businessInfo.business_type_name) //Education Business Category
-      formData.append('Dropdown','Education Business') //Company Type
-      formData.append('Website','') //Education Business Website
-      formData.append('SingleLine1',params.last_name) // Education Business Contact
-      formData.append('Number2','') //  Company Number
+      zohoData.append['Dropdown2'] = this.businessInfo.business_type_name  //Education Business Category
+      zohoData.append['Dropdown'] = 'Education Business'  //Company Type
+      zohoData.append['Website'] = ''  //Education Business Website
+      zohoData.append['SingleLine1'] = params.last_name  // Education Business Contact
+      zohoData.append['Number2'] = ''  //  Company Number
 
-      formData.append('SingleLine5',userId) //UserID
+      zohoData.append['SingleLine5'] = userId  //UserID
 
-      formData.append('PhoneNumber_countrycode',params.contact_phone) //Education Business Phone
-      formData.append('Email','') // Education Business Email
-      formData.append('Number','')  //Number of Employees
-      formData.append('Number1','')  //Membership Duration
-      formData.append('Dropdown1','' ) //Membership Type
+      zohoData.append['PhoneNumber_countrycode'] = params.contact_phone  //Education Business Phone
+      zohoData.append['Email'] = ''  // Education Business Email
+      zohoData.append['Number'] = ''   //Number of Employees
+      zohoData.append['Number1'] = ''   //Membership Duration
+      zohoData.append['Dropdown1'] = ''   //Membership Type
 
-      formData.append('Address_AddressLine1','' ) //Street Address
-      formData.append('Address_City','' ) //City
-      formData.append('Address_Region','' ) //State/Region/Province
-      formData.append('Address_Country','' ) //Country
+      zohoData.append['Address_AddressLine1'] = ''   //Street Address
+      zohoData.append['Address_City'] = ''   //City
+      zohoData.append['Address_Region'] = ''   //State/Region/Province
+      zohoData.append['Address_Country'] = ''   //Country
 
-      formData.append('SingleLine4','' ) //   Business Registration No.
-      formData.append('MultiLine', params.bio ) //Company Intro
-      formData.append('SingleLine3',params.wx_id ) //WeChat ID
+      zohoData.append['SingleLine4'] = ''   //   Business Registration No.
+      zohoData.append['MultiLine'] = params.bio   //Company Intro
+      zohoData.append['SingleLine3'] = params.wx_id   //WeChat ID
 
-      formData.append('Number3','') //  Number of Branches
-      formData.append('Number4','') //    Number of Students
-      formData.append('MultipleChoice','') //    Students Ages
-      formData.append('MultiLine1','') //     Curriculum Subjects
-      formData.append('MultiLine2','') //     School Facilities
+      zohoData.append['Number3'] = ''  //  Number of Branches
+      zohoData.append['Number4'] = ''  //    Number of Students
+      zohoData.append['MultipleChoice'] = ''  //    Students Ages
+      zohoData.append['MultiLine1'] = ''  //     Curriculum Subjects
+      zohoData.append['MultiLine2'] = ''  //     School Facilities
 
-      formData.append('Website1','') // Business License Link
-      formData.append('Website2','' ) //Company Logo Link
-      formData.append('Website3','' ) //Header Image Link
+      zohoData.append['Website1'] = ''  // Business License Link
+      zohoData.append['Website2'] = ''   //Company Logo Link
+      zohoData.append['Website3'] = ''   //Header Image Link
 
-      await axios.post('/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
@@ -433,6 +430,7 @@ export default {
   background-color: #00b3d2;
   color: #FFFFFF;
 }
+
 .object-show-container {
   display: flex;
   flex-direction: row;
@@ -496,7 +494,7 @@ export default {
 }
 
 
-.basic-breadcrumb-container{
+.basic-breadcrumb-container {
   padding: 10px;
 }
 

@@ -73,12 +73,12 @@
                   <!--                手机号 验证码登录-->
                   <template v-if="loginByPhoneWithSmsStatus">
                     <el-form
-                            :model="loginPhoneSmsForm"
-                            :rules="loginPhoneSmsRules"
-                            ref="loginPhoneSmsForm"
-                            :hide-required-asterisk="true"
-                            label-position="top"
-                            class="demo-ruleForm"
+                        :model="loginPhoneSmsForm"
+                        :rules="loginPhoneSmsRules"
+                        ref="loginPhoneSmsForm"
+                        :hide-required-asterisk="true"
+                        label-position="top"
+                        class="demo-ruleForm"
                     >
                       <el-form-item label="Phone #" prop="phone">
                         <template #label>
@@ -89,8 +89,8 @@
                                   v-model.number="loginPhoneSmsForm.phone"></el-input>
                       </el-form-item>
 
-                      <el-form-item  label="6 Digit Code" prop="phone_code">
-                        <template #label >
+                      <el-form-item label="6 Digit Code" prop="phone_code">
+                        <template #label>
                           <div class="password-container">
                             <div class="password-l">
                               <span class="login-require-star">*</span>
@@ -113,7 +113,8 @@
                                      :loading="checkCodeBtn.loading"
                                      :disabled="checkCodeBtn.disabled"
                                      @click="getCheckCode()"
-                          >{{checkCodeBtn.text}}</el-button>
+                          >{{ checkCodeBtn.text }}
+                          </el-button>
                         </div>
                       </el-form-item>
 
@@ -135,12 +136,12 @@
                   <!--               手机号码密码登录-->
                   <template v-if="loginByPhoneWithPasswordStatus">
                     <el-form
-                            :model="loginPhonePassForm"
-                            :rules="loginPhonePassRules"
-                            ref="loginPhonePassForm"
-                            :hide-required-asterisk="true"
-                            label-position="top"
-                            class="demo-ruleForm"
+                        :model="loginPhonePassForm"
+                        :rules="loginPhonePassRules"
+                        ref="loginPhonePassForm"
+                        :hide-required-asterisk="true"
+                        label-position="top"
+                        class="demo-ruleForm"
                     >
                       <el-form-item label="Phone #" prop="phone">
                         <template #label>
@@ -151,8 +152,8 @@
                                   v-model.number="loginPhonePassForm.phone"></el-input>
                       </el-form-item>
 
-                      <el-form-item  label="Password" prop="password">
-                        <template #label >
+                      <el-form-item label="Password" prop="password">
+                        <template #label>
                           <div class="password-container">
                             <div class="password-l">
                               <span class="login-require-star">*</span>
@@ -186,11 +187,11 @@
 
 
                 <!--                <div class="facebook-btn-container">-->
-<!--                  <el-button @click="linkedinSignIn()" class="apple-btn" plain round-->
-<!--                             icon="iconfont  el-icon-alifacebook">-->
-<!--                    Facebook Sign in-->
-<!--                  </el-button>-->
-<!--                </div>-->
+                <!--                  <el-button @click="linkedinSignIn()" class="apple-btn" plain round-->
+                <!--                             icon="iconfont  el-icon-alifacebook">-->
+                <!--                    Facebook Sign in-->
+                <!--                  </el-button>-->
+                <!--                </div>-->
                 <div class="phone-btn-container">
                   <el-button v-if="!loginPhoneStatus" @click="loginWithPhone()" class="login-option-btn" plain round
                              icon="iconfont xll-icon el-icon-aliphone">
@@ -217,7 +218,8 @@
                 </div>
 
                 <div class="forgot-password-container">
-                  <el-button type="text" class="forgot-password-btn" @click="forgotPassword()" >Forgot Password</el-button>
+                  <el-button type="text" class="forgot-password-btn" @click="forgotPassword()">Forgot Password
+                  </el-button>
                 </div>
               </div>
             </div>
@@ -312,17 +314,17 @@
                 <!--                    Facebook Sign in-->
                 <!--                  </el-button>-->
                 <!--                </div>-->
-<!--                <div class="facebook-btn-container">-->
-<!--                  <el-button @click="linkedinSignIn()" class="linkedin-btn" plain round-->
-<!--                             icon="iconfont  el-icon-alilinkedin">-->
-<!--                    Linkedin Sign in-->
-<!--                  </el-button>-->
-<!--                </div>-->
-<!--                <div class="google-btn-container">-->
-<!--                  <el-button class="google-btn" plain round icon="iconfont  el-icon-aligoogle">-->
-<!--                    Google Sign in-->
-<!--                  </el-button>-->
-<!--                </div>-->
+                <!--                <div class="facebook-btn-container">-->
+                <!--                  <el-button @click="linkedinSignIn()" class="linkedin-btn" plain round-->
+                <!--                             icon="iconfont  el-icon-alilinkedin">-->
+                <!--                    Linkedin Sign in-->
+                <!--                  </el-button>-->
+                <!--                </div>-->
+                <!--                <div class="google-btn-container">-->
+                <!--                  <el-button class="google-btn" plain round icon="iconfont  el-icon-aligoogle">-->
+                <!--                    Google Sign in-->
+                <!--                  </el-button>-->
+                <!--                </div>-->
               </div>
             </div>
 
@@ -354,14 +356,14 @@
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
 import imgLogo from '@/assets/logo.png'
 //WEIXIN_SEND_SMS
-import {EMAIL_LOGIN, EMAIL_REGISTER,SEND_EMAIL_CODE,H5_LOGIN,WEIXIN_SEND_SMS} from "@/api/api";
+import {EMAIL_LOGIN, EMAIL_REGISTER, SEND_EMAIL_CODE, H5_LOGIN, WEIXIN_SEND_SMS, ZOHO_SYNC} from "@/api/api";
 //LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
 import axios from "axios";
 import shanghaiImg from '@/assets/bg/bg-shanghai.jpg'
 import {randomString} from '@/utils/index'
 import {useStore} from 'vuex'
-import {reactive,ref} from "vue";
+import {reactive, ref} from "vue";
 import {decode} from "js-base64";
 import ForgotPassword from '@/components/forgotPassword'
 
@@ -371,15 +373,15 @@ export default {
     return {
       imgLogo,
       shanghaiImg,
-      loginPhoneStatus:false,
-      loginEmailStatus:true,
+      loginPhoneStatus: false,
+      loginEmailStatus: true,
 
-      loginByPhoneWithPasswordStatus:false,
-      loginByPhoneWithSmsStatus:true,
+      loginByPhoneWithPasswordStatus: false,
+      loginByPhoneWithSmsStatus: true,
 
       loginForm: {
         email: '',
-        password:''
+        password: ''
       },
       loginRules: {
         email: [
@@ -391,7 +393,7 @@ export default {
       },
       loginPhoneSmsForm: {
         phone: '',
-        phone_code:''
+        phone_code: ''
       },
       loginPhoneSmsRules: {
         phone: [
@@ -403,14 +405,14 @@ export default {
       },
       loginPhonePassForm: {
         phone: '',
-        password:'',
+        password: '',
       },
       loginPhonePassRules: {
         phone: [
           {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
         ],
         password: [
-          {required:true, message: 'Please enter your password', trigger: 'blur'}
+          {required: true, message: 'Please enter your password', trigger: 'blur'}
         ]
       },
 
@@ -455,7 +457,7 @@ export default {
   components: {
     ForgotPassword
   },
-  setup(props,context) {
+  setup(props, context) {
     //hcaptcha,
     console.log(props)
     console.log(context)
@@ -470,10 +472,10 @@ export default {
 
     const skipHomePage = () => {
       let a = route.query.redirect_params
-      if(a){
+      if (a) {
         let b = JSON.parse(decode(a))
-        if(b.path){
-          return router.push({path: b.path,query:b.query})
+        if (b.path) {
+          return router.push({path: b.path, query: b.query})
         }
       }
       return router.push({path: '/home'})
@@ -487,28 +489,28 @@ export default {
 
     let checkCodeBtn = reactive(
         {
-          text:'Get Code',
-          loading:false,
-          disabled:false,
-          duration:10,
-          timer:null
+          text: 'Get Code',
+          loading: false,
+          disabled: false,
+          duration: 10,
+          timer: null
         }
     )
 
-    const getCheckCodeTimer = ()=>{
-      if(checkCodeBtn.duration !== 10){
+    const getCheckCodeTimer = () => {
+      if (checkCodeBtn.duration !== 10) {
         checkCodeBtn.disabled = true
         checkCodeBtn.loading = true
       }
       // 清除定时器
       checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
       //开启定时器
-      checkCodeBtn.timer = setInterval(()=>{
+      checkCodeBtn.timer = setInterval(() => {
         const tmp = checkCodeBtn.duration--
         checkCodeBtn.text = `${tmp} S`
         checkCodeBtn.loading = true
         checkCodeBtn.disabled = true
-        if(tmp <= 0){
+        if (tmp <= 0) {
           //清除定时器
           clearInterval(checkCodeBtn.timer)
           checkCodeBtn.duration = 10
@@ -518,7 +520,7 @@ export default {
           checkCodeBtn.loading = false
         }
         console.log(checkCodeBtn)
-      },1000)
+      }, 1000)
     }
 
     return {
@@ -533,7 +535,7 @@ export default {
   },
   mounted() {
     let email = this.$route.query.email
-    if(email){
+    if (email) {
       this.loginForm.email = email
     }
   },
@@ -543,19 +545,19 @@ export default {
     // console.log(linkedinCode)
   },
   methods: {
-    getCheckCode(){
+    getCheckCode() {
 
       let params = {
-        phone:this.loginPhoneSmsForm.phone
+        phone: this.loginPhoneSmsForm.phone
       }
 
-      WEIXIN_SEND_SMS(params).then(res=>{
+      WEIXIN_SEND_SMS(params).then(res => {
         console.log(res)
-        if(res.code === 200){
+        if (res.code === 200) {
           this.getCheckCodeTimer()
           this.$message.success('Success')
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
 
@@ -651,7 +653,7 @@ export default {
                 if (identity == 1) {
                   firstName = res.message.educator.first_name
                   lastName = res.message.educator.last_name
-                  if(res.message.educator.profile_photo){
+                  if (res.message.educator.profile_photo) {
                     currentAvatar = res.message.educator.profile_photo
                   }
 
@@ -660,7 +662,7 @@ export default {
                 if (identity == 2) {
                   firstName = res.message.business.first_name
                   lastName = res.message.business.last_name
-                  if(res.message.business.profile_photo){
+                  if (res.message.business.profile_photo) {
                     currentAvatar = res.message.business.profile_photo
                   }
 
@@ -669,7 +671,7 @@ export default {
                 if (identity == 3) {
                   firstName = res.message.vendor.first_name
                   lastName = res.message.vendor.last_name
-                  if(res.message.vendor.profile_photo){
+                  if (res.message.vendor.profile_photo) {
                     currentAvatar = res.message.vendor.profile_photo
                   }
                 }
@@ -710,7 +712,7 @@ export default {
       }
 
     },
-    submitLoginPhoneSmsForm(formName){
+    submitLoginPhoneSmsForm(formName) {
       let self = this;
       if (self.humanVerifyStatus) {
         // this.submitLoginLoadingStatus = true;
@@ -737,7 +739,7 @@ export default {
                 if (identity == 1) {
                   firstName = res.message.educator.first_name
                   lastName = res.message.educator.last_name
-                  if(res.message.educator.profile_photo){
+                  if (res.message.educator.profile_photo) {
                     currentAvatar = res.message.educator.profile_photo
                   }
                 }
@@ -745,7 +747,7 @@ export default {
                 if (identity == 2) {
                   firstName = res.message.business.first_name
                   lastName = res.message.business.last_name
-                  if(res.message.business.profile_photo){
+                  if (res.message.business.profile_photo) {
                     currentAvatar = res.message.business.profile_photo
                   }
 
@@ -753,7 +755,7 @@ export default {
                 if (identity == 3) {
                   firstName = res.message.vendor.first_name
                   lastName = res.message.vendor.last_name
-                  if(res.message.vendor.profile_photo){
+                  if (res.message.vendor.profile_photo) {
                     currentAvatar = res.message.vendor.profile_photo
                   }
                 }
@@ -792,7 +794,7 @@ export default {
 
       }
     },
-    submitLoginPhonePassForm(formName){
+    submitLoginPhonePassForm(formName) {
       let self = this;
       if (self.humanVerifyStatus) {
         // this.submitLoginLoadingStatus = true;
@@ -819,7 +821,7 @@ export default {
                 if (identity == 1) {
                   firstName = res.message.educator.first_name
                   lastName = res.message.educator.last_name
-                  if(res.message.educator.profile_photo){
+                  if (res.message.educator.profile_photo) {
                     currentAvatar = res.message.educator.profile_photo
                   }
 
@@ -828,7 +830,7 @@ export default {
                 if (identity == 2) {
                   firstName = res.message.business.first_name
                   lastName = res.message.business.last_name
-                  if(res.message.business.profile_photo){
+                  if (res.message.business.profile_photo) {
                     currentAvatar = res.message.business.profile_photo
                   }
 
@@ -836,7 +838,7 @@ export default {
                 if (identity == 3) {
                   firstName = res.message.vendor.first_name
                   lastName = res.message.vendor.last_name
-                  if(res.message.vendor.profile_photo){
+                  if (res.message.vendor.profile_photo) {
                     currentAvatar = res.message.vendor.profile_photo
                   }
                 }
@@ -875,95 +877,97 @@ export default {
 
       }
     },
-    submitRegisterForm1(){
+    submitRegisterForm1() {
 
       let params = Object.assign({
         identity: this.identityValue
       }, this.registerForm)
 
-      let formData = new FormData();
+      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      formData.append('xnQsjsdp','4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2')
-      formData.append('zc_gad','')
-      formData.append('xmIwtLD','97a36bab5c5de21168555ee8ab3cfe6d18f88e7ed1182c9e6e5c9ec5ec7d2149')
-      formData.append('actionType','Q29udGFjdHM=')
-      formData.append('returnURL','https://dev.eslpassport.com/home')
-      formData.append('ldeskuid','')
-      formData.append('LDTuvid','')
-      formData.append('Last Name',params.last_name)
-      formData.append('First Name',params.first_name)
-      formData.append('Email',params.email)
-      formData.append('CONTACTCF154', userId)//userId
+      zohoData['xnQsjsdp'] = '4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2'
+      zohoData['zc_gad'] = ''
+      zohoData['xmIwtLD'] = '97a36bab5c5de21168555ee8ab3cfe6d18f88e7ed1182c9e6e5c9ec5ec7d2149'
+      zohoData['actionType'] = 'Q29udGFjdHM='
+      zohoData['returnURL'] = 'https://dev.eslpassport.com/home'
+      zohoData['ldeskuid'] = ''
+      zohoData['LDTuvid'] = ''
+      zohoData['Last Name'] = params.last_name
+      zohoData['First Name'] = params.first_name
+      zohoData['Email'] = params.email
+      zohoData['CONTACTCF154'] = userId //userId
 
       let identityStr = ''
-      if(params.identity == 1){
+      if (params.identity == 1) {
         identityStr = 'Educator'
       }
-      if(params.identity == 2){
+      if (params.identity == 2) {
         identityStr = 'Edu-Business Contact'
       }
-      if(params.identity == 3){
+      if (params.identity == 3) {
         identityStr = 'Vendor Contact'
       }
-      formData.append('CONTACTCF2',identityStr)
-      formData.append('Lead Source','Web App')
 
-      axios.post('/crm/WebToContactForm', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/crm',
-        timeout: 100000
-      }).then(res => {
+      zohoData['CONTACTCF2']= identityStr
+      zohoData['Lead Source']= 'Web App'
+
+      let zohoParams = {
+        zoho_data:zohoData,
+        zoho_url:'https://crm.zoho.com/crm/WebToContactForm'
+      }
+
+      ZOHO_SYNC(zohoParams).then(res=>{
         console.log(res)
-
+      }).catch(err=>{
+        console.log(err)
       })
 
     },
-    submitRegisterForm2(){
+    submitRegisterForm2() {
 
       let params = Object.assign({
         identity: this.identityValue
       }, this.registerForm)
 
-      let formData = new FormData();
+      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      formData.append('xnQsjsdp','4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2')
-      formData.append('zc_gad','')
-      formData.append('xmIwtLD','97a36bab5c5de21168555ee8ab3cfe6d037c8611da3e03b743498f3f5ee37b59')
-      formData.append('actionType','Q29udGFjdHM=')
-      formData.append('returnURL','https://dev.eslpassport.com/home')
-      formData.append('ldeskuid','')
-      formData.append('LDTuvid','')
-      formData.append('Last Name',params.last_name)
-      formData.append('First Name',params.first_name)
-      formData.append('Email',params.email)
-      formData.append('CONTACTCF154', userId)//userId
+      zohoData['xnQsjsdp']= '4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2'
+      zohoData['zc_gad']= ''
+      zohoData['xmIwtLD']= '97a36bab5c5de21168555ee8ab3cfe6d037c8611da3e03b743498f3f5ee37b59'
+      zohoData['actionType']= 'Q29udGFjdHM='
+      zohoData['returnURL']= 'https://dev.eslpassport.com/home'
+      zohoData['ldeskuid']= ''
+      zohoData['LDTuvid']= ''
+      zohoData['Last Name']= params.last_name
+      zohoData['First Name']= params.first_name
+      zohoData['Email']= params.email
+      zohoData['CONTACTCF154']= userId //userId
 
       let identityStr = ''
-      if(params.identity == 1){
+      if (params.identity == 1) {
         identityStr = 'Educator'
       }
-      if(params.identity == 2){
+      if (params.identity == 2) {
         identityStr = 'Edu-Business Contact'
       }
-      if(params.identity == 3){
+      if (params.identity == 3) {
         identityStr = 'Vendor Contact'
       }
-      formData.append('CONTACTCF2',identityStr)
-      formData.append('Lead Source','Web App')
 
-      axios.post('/crm/WebToContactForm', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/crm',
-        timeout: 100000
-      }).then(res => {
+      zohoData['CONTACTCF2']= identityStr
+      zohoData['Lead Source']= 'Web App'
+
+      let zohoParams = {
+        zoho_data:zohoData,
+        zoho_url:'https://crm.zoho.com/crm/WebToContactForm'
+      }
+
+      ZOHO_SYNC(zohoParams).then(res=>{
         console.log(res)
-
+      }).catch(err=>{
+        console.log(err)
       })
 
     },
@@ -984,15 +988,15 @@ export default {
             if (res.code == 200) {
               // let userInfo = res.message
               // localStorage.setItem('uid',res.message.id)
-              if(self.identityValue == 1){
+              if (self.identityValue == 1) {
                 this.submitRegisterForm2()
               }
-              if(self.identityValue == 2 || self.identityValue == 3){
+              if (self.identityValue == 2 || self.identityValue == 3) {
                 this.submitRegisterForm1()
               }
 
               this.$message.success('Registration completed!')
-              this.$router.push({path:'/login',query:{type:1}})
+              this.$router.push({path: '/login', query: {type: 1}})
               this.showValue = 1
               // window.location.reload()
               self.submitRegisterLoadingStatus = false
@@ -1065,19 +1069,19 @@ export default {
           + '&redirect_uri=' + redirect_uri + '&state=' + state + '&scope=' + scope
 
     },
-    loginWithPhone(){
+    loginWithPhone() {
       this.loginPhoneStatus = !this.loginPhoneStatus
       this.loginEmailStatus = !this.loginEmailStatus
 
     },
-    switchToPhoneBySms(){
+    switchToPhoneBySms() {
       this.loginByPhoneWithSmsStatus = !this.loginByPhoneWithSmsStatus
       this.loginByPhoneWithPasswordStatus = !this.loginByPhoneWithPasswordStatus
     },
-    forgotPassword(){
+    forgotPassword() {
       this.forgotDialogVisible = true
     },
-    closeForgotDialog(){
+    closeForgotDialog() {
       this.forgotDialogVisible = false
     }
 
@@ -1210,7 +1214,7 @@ export default {
   color: #FFFFFF;
 }
 
-.phone-btn-container{
+.phone-btn-container {
   margin-top: 10px;
 }
 
@@ -1222,11 +1226,12 @@ export default {
   margin-top: 10px;
 }
 
-.forgot-password-container{
+.forgot-password-container {
   margin-top: 10px;
   text-align: center;
 }
-.forgot-password-btn{
+
+.forgot-password-btn {
   font-size: 16px;
 }
 
@@ -1251,7 +1256,7 @@ export default {
   line-height: 26px;
 }
 
-.login-option-btn{
+.login-option-btn {
   width: 100%;
   font-size: 16px;
   font-weight: bold;
@@ -1346,19 +1351,19 @@ export default {
   height: 100%;
 }
 
-/deep/ .xll-icon{
+/deep/ .xll-icon {
   font-size: 24px;
 }
 
-.login-require-star{
+.login-require-star {
   color: #ff2870;
 }
 
-.login-label-text{
-  padding-left:4px;
+.login-label-text {
+  padding-left: 4px;
 }
 
-.password-container{
+.password-container {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -1366,18 +1371,18 @@ export default {
   justify-content: space-between;
 }
 
-.xll-input-container{
+.xll-input-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-.xll-input-input{
+.xll-input-input {
   width: 70%;
 }
 
-.xll-input-btn{
+.xll-input-btn {
   width: 26%;
 }
 

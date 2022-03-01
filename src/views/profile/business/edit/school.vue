@@ -23,12 +23,14 @@
                 class="demo-ruleForm"
             >
               <el-form-item label="Curriculum" prop="curriculum">
-                <el-input v-model="basicForm.curriculum" type="textarea" placeholder="Oxford Reading Tree, McGraw Hill,etc..."></el-input>
+                <el-input v-model="basicForm.curriculum" type="textarea"
+                          placeholder="Oxford Reading Tree, McGraw Hill,etc..."></el-input>
               </el-form-item>
               <el-form-item label="Technology Available" prop="technology_available">
-                <el-input v-model="basicForm.technology_available" type="textarea" placeholder="Computers, Smart screens, 3D Printing, etc..."></el-input>
+                <el-input v-model="basicForm.technology_available" type="textarea"
+                          placeholder="Computers, Smart screens, 3D Printing, etc..."></el-input>
               </el-form-item>
-              <el-form-item label="Average class size" >
+              <el-form-item label="Average class size">
                 <el-input v-model="basicForm.staff_student_ratio" type="number" placeholder="25 Students"></el-input>
               </el-form-item>
 
@@ -42,25 +44,25 @@
                 <el-switch v-model="basicForm.is_special_needs"></el-switch>
               </el-form-item>
 
-              <el-form-item label="Tuition (One Year)" >
+              <el-form-item label="Tuition (One Year)">
                 <el-input v-model="basicForm.tuition" type="number" placeholder="Tuition/Year"></el-input>
               </el-form-item>
 
               <el-form-item label="Our Students Age">
-                <div class="object-tags-container" >
+                <div class="object-tags-container">
                   <div class="object-tags">
                     <div class="object-tags-item"
                          :class=" selectStudentAgeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
                          v-for="(item,index) in editStudentAgeList" :key="index"
                          @click="selectStudentAge(item,1)">
-                      {{ item.object_en}}
+                      {{ item.object_en }}
                     </div>
                   </div>
                 </div>
               </el-form-item>
 
               <el-form-item label="Subjects We Teach">
-                <div class="object-tags-container" >
+                <div class="object-tags-container">
                   <div class="object-tags">
                     <div class="object-tags-item"
                          :class=" selectSubjectList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
@@ -104,13 +106,13 @@
               </el-form-item>
 
               <el-form-item label="School Facilities">
-                <div class="object-tags-container" >
+                <div class="object-tags-container">
                   <div class="object-tags">
                     <div class="object-tags-item"
                          :class=" selectSchoolFacilitesList.findIndex((element)=>element.id==item.id) == -1 ? '' : 'tags-active' "
                          v-for="(item,index) in editSchoolFacilitesList" :key="index"
                          @click="selectSchoolFacilites(item,1)">
-                      {{ item.object_en}}
+                      {{ item.object_en }}
                     </div>
                   </div>
                 </div>
@@ -133,8 +135,8 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {USER_OBJECT_LIST, ADD_BUSINESS_BASIC,ADD_PROFILE,GET_BASIC_INFO} from '@/api/api'
-import axios from "axios";
+import {USER_OBJECT_LIST, ADD_BUSINESS_BASIC, ADD_PROFILE, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
+
 
 export default {
   name: "school",
@@ -151,9 +153,9 @@ export default {
         technology_available: '',
         felds_trips: 0,
         is_events: 0,
-        is_school:1,
-        tuition:'',
-        token:localStorage.getItem('token')
+        is_school: 1,
+        tuition: '',
+        token: localStorage.getItem('token')
       },
       basicRules: {
         curriculum: [
@@ -196,7 +198,7 @@ export default {
       ownSchoolFacilitesList: [],
       selectSchoolFacilitesList: [],
       selectSchoolFacilitesArr: [],
-      businessInfo:{}
+      businessInfo: {}
 
     }
   },
@@ -233,7 +235,7 @@ export default {
           this.editSchoolFacilitesList = res.message;
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -285,7 +287,7 @@ export default {
           this.canEditStudentAge = false;
           // this.getBasicInfo();
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -358,7 +360,7 @@ export default {
           this.canEditSubject = false;
           // this.getBasicInfo();
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -401,7 +403,7 @@ export default {
           // this.getBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -415,22 +417,22 @@ export default {
             console.log(res)
             if (res.code == 200) {
 
-              if(this.selectStudentAgeList.length>0){
+              if (this.selectStudentAgeList.length > 0) {
                 this.studentAgeConfirm();
               }
-              if(this.selectSubjectList.length>0){
+              if (this.selectSubjectList.length > 0) {
                 this.subjectConfirm();
               }
-             if(this.selectSchoolFacilitesList.length>0){
-               this.schoolFacilitesConfirm();
-             }
-             this.submitEduBusinessCompanyForm()
-              setTimeout(function (){
+              if (this.selectSchoolFacilitesList.length > 0) {
+                this.schoolFacilitesConfirm();
+              }
+              this.submitEduBusinessCompanyForm()
+              setTimeout(function () {
                 self.$router.push('/business/profile')
-              },1200)
+              }, 1200)
 
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$message.error(err.msg)
           })
@@ -455,7 +457,7 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let businessInfo = res.message.business_info;
           this.businessInfo = res.message.business_info;
 
@@ -544,69 +546,67 @@ export default {
           }
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    async submitEduBusinessCompanyForm(){
+    async submitEduBusinessCompanyForm() {
 
       let params = Object.assign({}, this.basicForm)
 
-      let formData = new FormData();
+      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      zohoData['zf_referrer_name'] = ''
+      zohoData['zf_redirect_url'] = ''
+      zohoData['zc_gad'] = ''
 
-      formData.append('SingleLine',this.businessInfo.business_name) // Education Business Name
+      zohoData['SingleLine'] = this.businessInfo.business_name  // Education Business Name
 
-      formData.append('Dropdown2',this.businessInfo.business_type_name) //Education Business Category
-      formData.append('Dropdown','Education Business') //Company Type
-      formData.append('Website','') //Education Business Website
-      formData.append('SingleLine1','') // Education Business Contact
-      formData.append('Number2','') //  Company Number
+      zohoData['Dropdown2'] = this.businessInfo.business_type_name  //Education Business Category
+      zohoData['Dropdown'] = 'Education Business'  //Company Type
+      zohoData['Website'] = ''  //Education Business Website
+      zohoData['SingleLine1'] = ''  // Education Business Contact
+      zohoData['Number2'] = ''  //  Company Number
 
-      formData.append('SingleLine5',userId) //UserID
+      zohoData['SingleLine5'] = userId  //UserID
 
-      formData.append('PhoneNumber_countrycode','') //Education Business Phone
-      formData.append('Email','') // Education Business Email
-      formData.append('Number','')  //Number of Employees
-      formData.append('Number1','')  //Membership Duration
-      formData.append('Dropdown1','' ) //Membership Type
+      zohoData['PhoneNumber_countrycode'] = ''  //Education Business Phone
+      zohoData['Email'] = ''  // Education Business Email
+      zohoData['Number'] = ''   //Number of Employees
+      zohoData['Number1'] = ''   //Membership Duration
+      zohoData['Dropdown1'] = ''   //Membership Type
 
-      formData.append('Address_AddressLine1','' ) //Street Address
-      formData.append('Address_City','' ) //City
-      formData.append('Address_Region','' ) //State/Region/Province
-      formData.append('Address_Country','' ) //Country
+      zohoData['Address_AddressLine1'] = ''   //Street Address
+      zohoData['Address_City'] = ''   //City
+      zohoData['Address_Region'] = ''   //State/Region/Province
+      zohoData['Address_Country'] = ''   //Country
 
-      formData.append('SingleLine4','' ) //   Business Registration No.
-      formData.append('MultiLine', '' ) //Company Intro
-      formData.append('SingleLine3','' ) //WeChat ID
+      zohoData['SingleLine4'] = ''   //   Business Registration No.
+      zohoData['MultiLine'] = ''   //Company Intro
+      zohoData['SingleLine3'] = ''   //WeChat ID
 
-      formData.append('Number3','') //  Number of Branches
-      formData.append('Number4',params.staff_student_ratio) //    Number of Students
+      zohoData['Number3'] = ''  //  Number of Branches
+      zohoData['Number4'] = params.staff_student_ratio  //    Number of Students
 
-      formData.append('MultipleChoice',this.selectStudentAgeList) //    Students Ages
-      formData.append('MultiLine1',this.selectSubjectList) //     Curriculum Subjects
-      formData.append('MultiLine2',this.selectSchoolFacilitesList) //     School Facilities
+      zohoData['MultipleChoice'] = this.selectStudentAgeList  //    Students Ages
+      zohoData['MultiLine1'] = this.selectSubjectList  //     Curriculum Subjects
+      zohoData['MultiLine2'] = this.selectSchoolFacilitesList  //     School Facilities
 
-      formData.append('Website1','') // Business License Link
-      formData.append('Website2','' ) //Company Logo Link
-      formData.append('Website3','' ) //Header Image Link
+      zohoData['Website1'] = ''  // Business License Link
+      zohoData['Website2'] = ''   //Company Logo Link
+      zohoData['Website3'] = ''   //Header Image Link
 
-      await axios.post('/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
@@ -679,6 +679,7 @@ export default {
   background-color: #00b3d2;
   color: #FFFFFF;
 }
+
 .object-show-container {
   display: flex;
   flex-direction: row;
@@ -742,7 +743,7 @@ export default {
 }
 
 
-.basic-breadcrumb-container{
+.basic-breadcrumb-container {
   padding: 10px;
 }
 

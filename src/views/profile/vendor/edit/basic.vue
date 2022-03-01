@@ -80,7 +80,7 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import { ADD_VENDOR_BASIC,GET_BASIC_INFO} from '@/api/api'
+import {ADD_VENDOR_BASIC, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
 import {countriesData} from "@/utils/data";
 import axios from "axios";
 
@@ -242,59 +242,56 @@ export default {
 
       let params = Object.assign({}, this.basicForm)
 
-      let formData = new FormData();
+      let zohoData = [];
+
       let userId = localStorage.getItem('uid')
       let vendorInfo = this.vendorInfo
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      zohoData['zf_referrer_name']=''
+      zohoData['zf_redirect_url']=''
+      zohoData['zc_gad']=''
 
-      formData.append('SingleLine',vendorInfo.vendor_name_en) //vendor company name
+      zohoData['SingleLine']=vendorInfo.vendor_name_en  //vendor company name
 
-      formData.append('Dropdown2',vendorInfo.vendor_type_name) //Vendor Category
-      formData.append('SingleLine5',userId) //UserID
+      zohoData['Dropdown2']=vendorInfo.vendor_type_name  //Vendor Category
+      zohoData['SingleLine5']=userId  //UserID
 
-      formData.append('Number2','' ) //Company Number
-      formData.append('SingleLine1', params.last_name ) //Vendor Company Contact
+      zohoData['Number2']=''   //Company Number
+      zohoData['SingleLine1']= params.last_name   //Vendor Company Contact
 
-      formData.append('PhoneNumber_countrycode','') //Vendor Company Phone
-      formData.append('Email','') // vendor company  email
+      zohoData['PhoneNumber_countrycode']=''  //Vendor Company Phone
+      zohoData['Email']=''  // vendor company  email
 
-      formData.append('Dropdown','Vendor') // company type
-      formData.append('Number','')  //Number of Employees
-      formData.append('Number1','')  //Membership Duration
-      formData.append('Dropdown1','' ) //Membership Type
+      zohoData['Dropdown']='Vendor'  // company type
+      zohoData['Number']=''   //Number of Employees
+      zohoData['Number1']=''   //Membership Duration
+      zohoData['Dropdown1']=''   //Membership Type
 
-      formData.append('Address_AddressLine1','' ) //Street Address
-      formData.append('Address_City','' ) //City
-      formData.append('Address_Region','' ) //State/Region/Province
-      formData.append('Address_Country','' ) //Country
+      zohoData['Address_AddressLine1']=''   //Street Address
+      zohoData['Address_City']=''   //City
+      zohoData['Address_Region']=''   //State/Region/Province
+      zohoData['Address_Country']=''   //Country
 
-      formData.append('SingleLine4','' ) //Business Registration No.
-      formData.append('MultiLine','' ) //Company Intro
-      formData.append('SingleLine3',params.wx_id ) //WeChat ID
+      zohoData['SingleLine4']=''   //Business Registration No.
+      zohoData['MultiLine']=''   //Company Intro
+      zohoData['SingleLine3']=params.wx_id   //WeChat ID
 
-      formData.append('Website1','') // Business License Link
-      formData.append('Website2','' ) //Company Logo Link
-      formData.append('Website3','' ) //Header Image Link
+      zohoData['Website1']=''  // Business License Link
+      zohoData['Website2']=''   //Company Logo Link
+      zohoData['Website3']=''   //Header Image Link
 
-      await axios.post('/edupassport/form/VendorCompanyForm/formperma/otYlWrLwckw-vUm696qIUsMkRlofpZHCqZgodVcl6_c/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/VendorCompanyForm/formperma/otYlWrLwckw-vUm696qIUsMkRlofpZHCqZgodVcl6_c/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     }
-
-
 
 
   }

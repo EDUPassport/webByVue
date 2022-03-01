@@ -17,7 +17,9 @@
                   <div class="profile-underline-1"></div>
                 </div>
                 <div class="basic-info-edit" @click="editBasicInfo()">
-                  <el-icon :size="18"><edit /></el-icon>
+                  <el-icon :size="18">
+                    <edit/>
+                  </el-icon>
                 </div>
               </div>
 
@@ -57,14 +59,16 @@
               </div>
             </div>
 
-            <div class="languages-container" >
+            <div class="languages-container">
               <div class="languages-t">
                 <div class="languages-label">
                   <div class="languages-label-text">Languages</div>
                   <div class="profile-underline-1"></div>
                 </div>
                 <div class="languages-edit" @click="editLanguages()">
-                  <el-icon :size="18"><edit /></el-icon>
+                  <el-icon :size="18">
+                    <edit/>
+                  </el-icon>
                 </div>
               </div>
               <div class="languages-content" v-if="businessInfo.languages">
@@ -89,7 +93,9 @@
                   <div class="profile-underline-2"></div>
                 </div>
                 <div class="business-info-edit" @click="editBusinessInfo()">
-                  <el-icon :size="18"><edit /></el-icon>
+                  <el-icon :size="18">
+                    <edit/>
+                  </el-icon>
                 </div>
               </div>
 
@@ -106,7 +112,7 @@
                         :on-success="handleLogoPhotoSuccess"
                         :before-upload="beforeLogoPhotoUpload"
                     >
-                      <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="logo-avatar" ></el-image>
+                      <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="logo-avatar"></el-image>
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </div>
@@ -127,7 +133,7 @@
                      v-if="businessInfo.provinces && businessInfo.citys && businessInfo.districts"
                 >
                   Business Location:
-                  <span>{{businessInfo.provinces.Pinyin}}, {{businessInfo.citys.Pinyin}}, {{businessInfo.districts.Pinyin}}</span>
+                  <span>{{ businessInfo.provinces.Pinyin }}, {{ businessInfo.citys.Pinyin }}, {{ businessInfo.districts.Pinyin }}</span>
                 </div>
                 <div class="business-info-item" v-if="businessInfo.website">
                   Website: <span>{{ businessInfo.website }}</span>
@@ -154,7 +160,7 @@
                         :on-success="handleBackgroundSuccess"
                         :before-upload="beforeBackgroundUpload"
                     >
-                      <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar" ></el-image>
+                      <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar"></el-image>
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </div>
@@ -178,11 +184,14 @@
                     <div class="p-job-type-t-edit"
                          @click="turnIndexList(3)"
                          v-if="canEditJobType===false">
-                      <el-icon :size="18"><edit /></el-icon>
+                      <el-icon :size="18">
+                        <edit/>
+                      </el-icon>
                     </div>
                     <div class="p-job-type-t-edit"
                          @click="jobTypeConfirm"
-                         v-if="canEditJobType">Confirm</div>
+                         v-if="canEditJobType">Confirm
+                    </div>
                   </div>
                   <div class="p-job-type-content">
                     <!--                    展示 -->
@@ -241,11 +250,14 @@
                     <div class="p-benefits-t-edit"
                          @click="turnIndexList(6)"
                          v-if="canEditBenefits===false">
-                      <el-icon :size="18"><edit /></el-icon>
+                      <el-icon :size="18">
+                        <edit/>
+                      </el-icon>
                     </div>
                     <div class="p-benefits-t-edit"
                          @click="benefitsConfirm"
-                         v-if="canEditBenefits">Confirm</div>
+                         v-if="canEditBenefits">Confirm
+                    </div>
                   </div>
                   <div class="p-benefits-content">
                     <!--                    展示 -->
@@ -310,7 +322,9 @@
                     <div class="school-info-t">
                       <div class="school-info-label">School Information</div>
                       <div class="school-info-edit" @click="editSchoolInfo()">
-                        <el-icon :size="18"><edit /></el-icon>
+                        <el-icon :size="18">
+                          <edit/>
+                        </el-icon>
                       </div>
                     </div>
 
@@ -342,19 +356,19 @@
                       <div class="school-info-item-tags" v-if="studentAgeList.length>0">
                         Our Students Age:
                         <template v-for="(item,i) in studentAgeList" :key="i">
-                          <span>{{item.object_en}}</span>
+                          <span>{{ item.object_en }}</span>
                         </template>
                       </div>
                       <div class="school-info-item-tags" v-if="subjectList.length>0">
                         Subject We Teach:
                         <template v-for="(item,i) in subjectList" :key="i">
-                          <span>{{item.object_en}}</span>
+                          <span>{{ item.object_en }}</span>
                         </template>
                       </div>
                       <div class="school-info-item-tags" v-if="facilitiesList.length>0">
                         School Facilities:
                         <template v-for="(item,i) in facilitiesList" :key="i">
-                          <span>{{item.object_en}}</span>
+                          <span>{{ item.object_en }}</span>
                         </template>
                       </div>
 
@@ -388,52 +402,52 @@
                       :on-success="handleProfilePhotoSuccess"
                       :before-upload="beforeProfilePhotoUpload"
                   >
-                    <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar" ></el-image>
+                    <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
                 </div>
               </div>
-<!--              <div class="logo-photo-container">-->
-<!--                <div class="logo-photo-t">-->
-<!--                  <div class="logo-photo-t-label">Business Logo</div>-->
-<!--                </div>-->
-<!--                <div class="logo-photo-content">-->
-<!--                  <el-upload-->
-<!--                      class="logo-uploader"-->
-<!--                      :action="uploadActionUrl"-->
-<!--                      :headers="uploadHeaders"-->
-<!--                      :data="uploadData"-->
-<!--                      :show-file-list="false"-->
-<!--                      name="file[]"-->
-<!--                      :on-success="handleLogoPhotoSuccess"-->
-<!--                      :before-upload="beforeLogoPhotoUpload"-->
-<!--                  >-->
-<!--                    <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="logo-avatar" ></el-image>-->
-<!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-<!--                  </el-upload>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="background-banner-container">-->
-<!--                <div class="background-banner-t">-->
-<!--                  <div class="background-banner-t-label">Background Banner</div>-->
-<!--                </div>-->
-<!--                <div class="background-banner-content">-->
-<!--                  <el-upload-->
-<!--                      class="background-uploader"-->
-<!--                      :action="uploadActionUrl"-->
-<!--                      :headers="uploadHeaders"-->
-<!--                      :data="uploadData"-->
-<!--                      :show-file-list="false"-->
-<!--                      name="file[]"-->
-<!--                      :on-success="handleBackgroundSuccess"-->
-<!--                      :before-upload="beforeBackgroundUpload"-->
-<!--                  >-->
-<!--                    <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar" ></el-image>-->
-<!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-<!--                  </el-upload>-->
+              <!--              <div class="logo-photo-container">-->
+              <!--                <div class="logo-photo-t">-->
+              <!--                  <div class="logo-photo-t-label">Business Logo</div>-->
+              <!--                </div>-->
+              <!--                <div class="logo-photo-content">-->
+              <!--                  <el-upload-->
+              <!--                      class="logo-uploader"-->
+              <!--                      :action="uploadActionUrl"-->
+              <!--                      :headers="uploadHeaders"-->
+              <!--                      :data="uploadData"-->
+              <!--                      :show-file-list="false"-->
+              <!--                      name="file[]"-->
+              <!--                      :on-success="handleLogoPhotoSuccess"-->
+              <!--                      :before-upload="beforeLogoPhotoUpload"-->
+              <!--                  >-->
+              <!--                    <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="logo-avatar" ></el-image>-->
+              <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+              <!--                  </el-upload>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div class="background-banner-container">-->
+              <!--                <div class="background-banner-t">-->
+              <!--                  <div class="background-banner-t-label">Background Banner</div>-->
+              <!--                </div>-->
+              <!--                <div class="background-banner-content">-->
+              <!--                  <el-upload-->
+              <!--                      class="background-uploader"-->
+              <!--                      :action="uploadActionUrl"-->
+              <!--                      :headers="uploadHeaders"-->
+              <!--                      :data="uploadData"-->
+              <!--                      :show-file-list="false"-->
+              <!--                      name="file[]"-->
+              <!--                      :on-success="handleBackgroundSuccess"-->
+              <!--                      :before-upload="beforeBackgroundUpload"-->
+              <!--                  >-->
+              <!--                    <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar" ></el-image>-->
+              <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+              <!--                  </el-upload>-->
 
-<!--                </div>-->
-<!--              </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
               <div class="account-images-container">
                 <div class="account-images-t">
                   <div class="account-images-t-label">Marketing Photos:</div>
@@ -475,7 +489,7 @@
                       :on-success="handleIntroVideoSuccess"
                       :before-upload="beforeIntroVideoUpload"
                   >
-                    <video v-if="introVideoUrl" :src="introVideoUrl" controls class="intro-video-avatar" />
+                    <video v-if="introVideoUrl" :src="introVideoUrl" controls class="intro-video-avatar"/>
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
                 </div>
@@ -563,10 +577,12 @@
 <script>
 import meSideMenu from "@/components/meSideMenu";
 import accountInfo from "../../../components/accountInfo";
-import {VISITOR_USER_INFO, GET_BASIC_INFO, USER_OBJECT_LIST,
-  ADD_LANGUAGE_SCORE, ADD_PROFILE,ADD_USER_INFO,ADD_USER_IMG,
-  UPDATE_BUSINESS_PROFILE} from '@/api/api'
-import axios from "axios";
+import {
+  VISITOR_USER_INFO, GET_BASIC_INFO, USER_OBJECT_LIST,
+  ADD_LANGUAGE_SCORE, ADD_PROFILE, ADD_USER_INFO, ADD_USER_IMG,
+  UPDATE_BUSINESS_PROFILE, ZOHO_SYNC
+} from '@/api/api'
+
 
 export default {
   name: "profile",
@@ -577,12 +593,12 @@ export default {
   data() {
     return {
       activeName: 'first',
-      uploadActionUrl:process.env.VUE_APP_UPLOAD_ACTION_URL,
-      uploadHeaders:{
-        platform:4
+      uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
+      uploadHeaders: {
+        platform: 4
       },
-      uploadData:{
-        token:localStorage.getItem('token')
+      uploadData: {
+        token: localStorage.getItem('token')
       },
       businessInfo: {},
       basicUserInfo: {},
@@ -608,21 +624,21 @@ export default {
       },
       languagesObjArr: [],
 
-      jobTypeList:[],
-      ageToTeachList:[],
-      benefitsList:[],
-      subjectList:[],
-      studentAgeList:[],
-      userImagesList:[],
-      facilitiesList:[],
+      jobTypeList: [],
+      ageToTeachList: [],
+      benefitsList: [],
+      subjectList: [],
+      studentAgeList: [],
+      userImagesList: [],
+      facilitiesList: [],
 
-      profilePhotoUrl:'',
-      backgroundUrl:'',
-      dialogAccountImageUrl:'',
-      dialogAccountImageVisible:false,
-      accountImageFileList:[],
-      introVideoUrl:'',
-      logoPhotoUrl:'',
+      profilePhotoUrl: '',
+      backgroundUrl: '',
+      dialogAccountImageUrl: '',
+      dialogAccountImageVisible: false,
+      accountImageFileList: [],
+      introVideoUrl: '',
+      logoPhotoUrl: '',
 
       canEditSubject: false,
       editSubjectList: [],
@@ -664,13 +680,13 @@ export default {
     this.updateBusinessProfile()
   },
   methods: {
-    updateBusinessProfile(){
+    updateBusinessProfile() {
       let params = {
-        token:localStorage.getItem('token')
+        token: localStorage.getItem('token')
       }
-      UPDATE_BUSINESS_PROFILE(params).then(res=>{
+      UPDATE_BUSINESS_PROFILE(params).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -679,10 +695,10 @@ export default {
     editBasicInfo() {
       this.$router.push('/business/edit/basic')
     },
-    editBusinessInfo(){
+    editBusinessInfo() {
       this.$router.push('/business/edit/businessInfo')
     },
-    editSchoolInfo(){
+    editSchoolInfo() {
       this.$router.push('/business/edit/school')
     },
     editLanguages() {
@@ -703,7 +719,7 @@ export default {
           if (identity == 2 && res.message.business_info) {
             this.businessInfo = res.message.business_info
 
-            if(res.message.business_info.user_images){
+            if (res.message.business_info.user_images) {
               this.userImagesList = res.message.business_info.user_images;
             }
 
@@ -712,14 +728,14 @@ export default {
               this.hobbiesList = hobbies.split(',');
             }
 
-            if(res.message.business_info.profile_photo){
+            if (res.message.business_info.profile_photo) {
               this.profilePhotoUrl = res.message.business_info.profile_photo
             }
-            if(res.message.business_info.profile_photo){
+            if (res.message.business_info.profile_photo) {
               this.logoPhotoUrl = res.message.business_info.logo
             }
-            if(res.message.business_info.header_photo){
-              this.backgroundUrl  = res.message.business_info.header_photo
+            if (res.message.business_info.header_photo) {
+              this.backgroundUrl = res.message.business_info.header_photo
             }
             if (res.message.business_info.subject) {
               this.subjectList = res.message.business_info.subject;
@@ -738,11 +754,11 @@ export default {
             }
             let userImages = res.message.business_info.user_images
             this.accountImageFileList = []
-            if(userImages){
-              userImages.forEach(item=>{
+            if (userImages) {
+              userImages.forEach(item => {
                 let userImageObj = {
-                  name:'',
-                  url:item.url
+                  name: '',
+                  url: item.url
                 }
                 this.accountImageFileList.push(userImageObj)
               })
@@ -750,14 +766,14 @@ export default {
 
             let videoUrl = res.message.business_info.video_url
 
-            if(videoUrl){
+            if (videoUrl) {
               this.introVideoUrl = videoUrl
             }
 
 
           }
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -771,7 +787,7 @@ export default {
       }
       GET_BASIC_INFO(params).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -790,7 +806,7 @@ export default {
         if (res.code == 200) {
           this.languagesData = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -898,7 +914,7 @@ export default {
           this.languagesDrawer = false
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1004,7 +1020,7 @@ export default {
           this.canEditBenefits = true;
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1013,18 +1029,18 @@ export default {
       // console.log(res.data[0]['file_url'])
       this.profilePhotoUrl = URL.createObjectURL(file.raw)
       let params = {
-        profile_photo:res.data[0]['file_url'],
-        identity:2,
-        token:localStorage.getItem('token')
+        profile_photo: res.data[0]['file_url'],
+        identity: 2,
+        token: localStorage.getItem('token')
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res=>{
+      ADD_USER_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1044,19 +1060,19 @@ export default {
       this.logoPhotoUrl = URL.createObjectURL(file.raw)
       let logoLink = res.data[0]['file_url']
       let params = {
-        logo:res.data[0]['file_url'],
-        identity:2,
-        token:localStorage.getItem('token')
+        logo: res.data[0]['file_url'],
+        identity: 2,
+        token: localStorage.getItem('token')
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res=>{
+      ADD_USER_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
-          this.submitEduBusinessCompanyForm(logoLink,'')
+        if (res.code == 200) {
+          this.submitEduBusinessCompanyForm(logoLink, '')
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1075,19 +1091,19 @@ export default {
       this.backgroundUrl = URL.createObjectURL(file.raw)
       let headerLink = res.data[0]['file_url']
       let params = {
-        header_photo:res.data[0]['file_url'],
-        identity:2,
-        token:localStorage.getItem('token')
+        header_photo: res.data[0]['file_url'],
+        identity: 2,
+        token: localStorage.getItem('token')
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res=>{
+      ADD_USER_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
-          this.submitEduBusinessCompanyForm('',headerLink)
+        if (res.code == 200) {
+          this.submitEduBusinessCompanyForm('', headerLink)
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1099,19 +1115,19 @@ export default {
     handleAccountImageRemove(file, fileList) {
       console.log(file, fileList)
       let accountImagesArr = []
-      fileList.forEach(item=>{
+      fileList.forEach(item => {
         accountImagesArr.push(item.url)
       })
       let params = {
-        token:localStorage.getItem('token'),
-        identity:2,
-        img:accountImagesArr
+        token: localStorage.getItem('token'),
+        identity: 2,
+        img: accountImagesArr
       }
-      ADD_USER_IMG(params).then(res=>{
-        if(res.code == 200){
+      ADD_USER_IMG(params).then(res => {
+        if (res.code == 200) {
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1122,18 +1138,18 @@ export default {
       this.dialogAccountImageUrl = file.url
       this.dialogAccountImageVisible = true
     },
-    handleAccountImageSuccess(res, file){
+    handleAccountImageSuccess(res, file) {
       let accountImages = this.accountImageFileList
       let name = res.data[0]['file_name']
       let url = res.data[0]['file_url']
       let obj = {
-        name:name,
-        url:url
+        name: name,
+        url: url
       }
       this.accountImageFileList.push(obj)
 
       let accountImagesArr = []
-      accountImages.forEach(item=>{
+      accountImages.forEach(item => {
         accountImagesArr.push(item.url)
       })
       // console.log(accountImages)
@@ -1142,17 +1158,17 @@ export default {
       // console.log(file)
       this.accoutImageUrl = URL.createObjectURL(file.raw)
       let params = {
-        token:localStorage.getItem('token'),
-        identity:2,
-        img:accountImagesArr
+        token: localStorage.getItem('token'),
+        identity: 2,
+        img: accountImagesArr
       }
-      ADD_USER_IMG(params).then(res=>{
+      ADD_USER_IMG(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
 
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1162,18 +1178,18 @@ export default {
       // console.log(res)
       this.introVideoUrl = URL.createObjectURL(file.raw)
       let params = {
-        video_url:res.data[0]['file_url'],
-        identity:2,
-        token:localStorage.getItem('token')
+        video_url: res.data[0]['file_url'],
+        identity: 2,
+        token: localStorage.getItem('token')
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res=>{
+      ADD_USER_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1243,7 +1259,7 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1309,7 +1325,7 @@ export default {
           this.canEditJobType = false;
           this.getVisitorBasicInfo();
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1363,7 +1379,7 @@ export default {
       })
 
       let data = {
-        token:localStorage.getItem('token'),
+        token: localStorage.getItem('token'),
         object_pid: 6,
         object_id: objectArr,
         expand: expand
@@ -1376,7 +1392,7 @@ export default {
           this.getVisitorBasicInfo();
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1385,66 +1401,63 @@ export default {
     handleTabsClick(tab, event) {
       console.log(tab, event)
     },
-    async submitEduBusinessCompanyForm(logoLink,headerLink){
+    async submitEduBusinessCompanyForm(logoLink, headerLink) {
 
-      let formData = new FormData();
+      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      formData.append('zf_referrer_name','')
-      formData.append('zf_redirect_url','')
-      formData.append('zc_gad','')
+      zohoData['zf_referrer_name'] = ''
+      zohoData['zf_redirect_url'] = ''
+      zohoData['zc_gad'] = ''
 
-      formData.append('SingleLine',this.businessInfo.business_name) // Education Business Name
+      zohoData['SingleLine'] = this.businessInfo.business_name  // Education Business Name
 
-      formData.append('Dropdown2',this.businessInfo.business_type_name) //Education Business Category
-      formData.append('Dropdown','Education Business') //Company Type
-      formData.append('Website','') //Education Business Website
-      formData.append('SingleLine1','') // Education Business Contact
-      formData.append('Number2','') //  Company Number
+      zohoData['Dropdown2'] = this.businessInfo.business_type_name  //Education Business Category
+      zohoData['Dropdown'] = 'Education Business'  //Company Type
+      zohoData['Website'] = ''  //Education Business Website
+      zohoData['SingleLine1'] = ''  // Education Business Contact
+      zohoData['Number2'] = ''  //  Company Number
 
-      formData.append('SingleLine5',userId) //UserID
+      zohoData['SingleLine5'] = userId  //UserID
 
-      formData.append('PhoneNumber_countrycode','') //Education Business Phone
-      formData.append('Email','') // Education Business Email
-      formData.append('Number','')  //Number of Employees
-      formData.append('Number1','')  //Membership Duration
-      formData.append('Dropdown1','' ) //Membership Type
+      zohoData['PhoneNumber_countrycode'] = ''  //Education Business Phone
+      zohoData['Email'] = ''  // Education Business Email
+      zohoData['Number'] = ''   //Number of Employees
+      zohoData['Number1'] = ''   //Membership Duration
+      zohoData['Dropdown1'] = ''   //Membership Type
 
-      formData.append('Address_AddressLine1','' ) //Street Address
-      formData.append('Address_City','' ) //City
-      formData.append('Address_Region','' ) //State/Region/Province
-      formData.append('Address_Country','' ) //Country
+      zohoData['Address_AddressLine1'] = ''   //Street Address
+      zohoData['Address_City'] = ''   //City
+      zohoData['Address_Region'] = ''   //State/Region/Province
+      zohoData['Address_Country'] = ''   //Country
 
-      formData.append('SingleLine4','' ) //   Business Registration No.
-      formData.append('MultiLine', '' ) //Company Intro
-      formData.append('SingleLine3','' ) //WeChat ID
+      zohoData['SingleLine4'] = ''   //   Business Registration No.
+      zohoData['MultiLine'] = ''   //Company Intro
+      zohoData['SingleLine3'] = ''   //WeChat ID
 
-      formData.append('Number3','') //  Number of Branches
-      formData.append('Number4','') //    Number of Students
+      zohoData['Number3'] = ''  //  Number of Branches
+      zohoData['Number4'] = ''  //    Number of Students
 
-      formData.append('MultipleChoice','') //    Students Ages
-      formData.append('MultiLine1','') //     Curriculum Subjects
-      formData.append('MultiLine2','') //     School Facilities
+      zohoData['MultipleChoice'] = ''  //    Students Ages
+      zohoData['MultiLine1'] = ''  //     Curriculum Subjects
+      zohoData['MultiLine2'] = ''  //     School Facilities
 
-      formData.append('Website1','') // Business License Link
-      formData.append('Website2',logoLink ) //Company Logo Link
-      formData.append('Website3',headerLink ) //Header Image Link
+      zohoData['Website1'] = ''  // Business License Link
+      zohoData['Website2'] = logoLink   //Company Logo Link
+      zohoData['Website3'] = headerLink   //Header Image Link
 
-      await axios.post('/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        baseURL: '/zohoPublic',
-        timeout: 100000
-      }).then(res => {
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     }
-
 
   }
 }
@@ -1462,7 +1475,7 @@ export default {
 }
 
 .educator-r-container {
-  padding:10px 20px;
+  padding: 10px 20px;
 }
 
 .basic-info-container {
@@ -1470,7 +1483,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .basic-info-t {
@@ -1484,14 +1497,14 @@ export default {
 
 }
 
-.basic-info-label-text{
+.basic-info-label-text {
   font-size: 16px;
   font-weight: bold;
 }
 
-.profile-underline-1{
+.profile-underline-1 {
   margin-top: 8px;
-  width:60px;
+  width: 60px;
   border-bottom: 2px solid #ff2870;
 }
 
@@ -1530,7 +1543,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .business-info-t {
@@ -1545,10 +1558,10 @@ export default {
   font-weight: bold;
 }
 
-.profile-underline-2{
-  width:60px;
+.profile-underline-2 {
+  width: 60px;
   margin-top: 8px;
-  border-bottom:2px solid #00b3d2;
+  border-bottom: 2px solid #00b3d2;
 }
 
 
@@ -1570,20 +1583,24 @@ export default {
   /*align-items: flex-start;*/
   /*justify-content: space-between;*/
 }
-.business-info-logo-name-container{
+
+.business-info-logo-name-container {
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
 }
-.business-info-logo{
+
+.business-info-logo {
   padding: 10px;
 }
-.business-info-name{
+
+.business-info-name {
   padding: 10px;
   font-size: 14px;
   font-weight: bold;
 }
+
 .business-info-item {
   margin: 10px;
   color: #00b3d2;
@@ -1594,25 +1611,28 @@ export default {
   color: #000000;
 }
 
-.business-info-background-banner-container{
+.business-info-background-banner-container {
   margin: 10px;
 }
-.business-info-background-banner-label{
+
+.business-info-background-banner-label {
   font-size: 14px;
   font-weight: bold;
 }
-.business-info-background-banner{
+
+.business-info-background-banner {
   margin-top: 10px;
 }
 
-.b-tabs-container{
+.b-tabs-container {
   margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
+
 .school-info-container {
   padding-top: 20px;
   text-align: left;
@@ -1658,13 +1678,14 @@ export default {
 .school-info-item span {
   color: #000000;
 }
-.school-info-item-tags{
+
+.school-info-item-tags {
   margin: 10px;
   color: #808080;
   font-size: 14px;
 }
 
-.school-info-item-tags span{
+.school-info-item-tags span {
   background-color: rgba(0, 179, 210, 0.1);
   padding: 4px 10px;
   border-radius: 6px;
@@ -1679,7 +1700,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .languages-t {
@@ -1693,7 +1714,7 @@ export default {
 
 }
 
-.languages-label-text{
+.languages-label-text {
   font-size: 16px;
   font-weight: bold;
 }
@@ -1732,44 +1753,50 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
-.media-label-text{
+
+.media-label-text {
   font-size: 16px;
   font-weight: bold;
 }
 
-.profile-photo-container{
+.profile-photo-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.profile-photo-t{
+.profile-photo-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.profile-photo-t-label{
+
+.profile-photo-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.profile-photo-content{
+
+.profile-photo-content {
   padding: 10px;
 }
-/deep/ .profile-uploader .el-upload{
+
+/deep/ .profile-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .profile-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -1779,42 +1806,47 @@ export default {
   text-align: center;
 }
 
-.profile-avatar{
+.profile-avatar {
   width: 178px;
   height: 178px;
   display: block;
 }
 
-.logo-photo-container{
+.logo-photo-container {
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.logo-photo-t{
+.logo-photo-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.logo-photo-t-label{
+
+.logo-photo-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.logo-photo-content{
+
+.logo-photo-content {
   padding: 10px;
 }
-/deep/ .logo-uploader .el-upload{
+
+/deep/ .logo-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .logo-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -1824,43 +1856,48 @@ export default {
   text-align: center;
 }
 
-.logo-avatar{
+.logo-avatar {
   width: 178px;
   height: 178px;
   display: block;
 }
 
-.background-banner-container{
+.background-banner-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.background-banner-t{
+.background-banner-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.background-banner-t-label{
+
+.background-banner-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.background-banner-content{
+
+.background-banner-content {
   padding: 10px;
 }
-/deep/ .background-uploader .el-upload{
+
+/deep/ .background-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .background-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -1870,70 +1907,77 @@ export default {
   text-align: center;
 }
 
-.background-avatar{
+.background-avatar {
   width: 378px;
   height: 178px;
   display: block;
 }
 
-.account-images-container{
+.account-images-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.account-images-t{
+.account-images-t {
   /*display: flex;*/
   /*flex-direction: row;*/
   /*align-items: center;*/
   /*justify-content: space-between;*/
 }
-.account-images-t-label{
+
+.account-images-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
 
-.account-images-t-tips{
+.account-images-t-tips {
   font-size: 14px;
   color: #808080;
 }
-.account-images-content{
+
+.account-images-content {
   padding: 10px;
 }
 
-.intro-video-container{
+.intro-video-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.intro-video-t{
+.intro-video-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.intro-video-t-label{
+
+.intro-video-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.intro-video-content{
+
+.intro-video-content {
   padding: 10px;
 }
-/deep/ .intro-video-uploader .el-upload{
+
+/deep/ .intro-video-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .intro-video-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -1943,43 +1987,48 @@ export default {
   text-align: center;
 }
 
-.intro-video-avatar{
+.intro-video-avatar {
   width: 378px;
   height: 178px;
   display: block;
 }
 
-.my-resume-container{
+.my-resume-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
 }
 
-.my-resume-t{
+.my-resume-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.my-resume-t-label{
+
+.my-resume-t-label {
   font-size: 14px;
   font-weight: bold;
 
 }
-.my-resume-content{
+
+.my-resume-content {
   padding: 10px;
 }
-/deep/ .resume-uploader .el-upload{
+
+/deep/ .resume-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
 }
+
 /deep/ .resume-uploader .el-upload:hover {
   border-color: #0AA0A8;
 }
+
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -1989,7 +2038,7 @@ export default {
   text-align: center;
 }
 
-.resume-avatar{
+.resume-avatar {
   width: 378px;
   /*height: 178px;*/
   display: block;
@@ -2003,7 +2052,7 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .preferences-label-text {
@@ -2076,7 +2125,6 @@ export default {
 .p-benefits-content {
 
 }
-
 
 
 .languages-drawer {
