@@ -437,44 +437,101 @@ export default {
 
       let userId = localStorage.getItem('uid')
 
-      let zohoData = []
-
-      zohoData['zf_referrer_name'] = ''
-      zohoData['zf_redirect_url'] = ''
-      zohoData['zc_gad'] = ''
-      zohoData['SingleLine'] = params.business_name // Education Business Name
-      zohoData['Dropdown2'] = params.business_type_name //Education Business Category
-      zohoData['Dropdown'] = 'Education Business' //Company Type
-      zohoData['Website'] = '' //Education Business Website
-      zohoData['SingleLine1'] = '' // Education Business Contact
-      zohoData['Number2'] = '' //  Company Number
-      zohoData['SingleLine5'] = userId  //UserID
-      zohoData['PhoneNumber_countrycode'] = '' //Education Business Phone
-      zohoData['Email'] = params.work_email //   Education Business Email
-
-      zohoData['Number'] = '' //Number of Employees
-      zohoData['Number1'] = '' //  Membership Duration
-      zohoData['Dropdown1'] = '' // Membership Type
-      zohoData['Email'] = params.work_email //   Education Business Email
-
-      zohoData['Address_AddressLine1']=''  //Street Address
-      zohoData['Address_City']=''  //City
-      zohoData['Address_Region']=''  //State/Region/Province
-      zohoData['Address_Country']=''  //Country
-
-      zohoData['SingleLine4']=''  //   Business Registration No.
-      zohoData['MultiLine']= ''  //Company Intro
-      zohoData['SingleLine3']=''  //WeChat ID
-
-      zohoData['Number3']='' //  Number of Branches
-      zohoData['Number4']='' //    Number of Students
-      zohoData['MultipleChoice']='' //    Students Ages
-      zohoData['MultiLine1']='' //     Curriculum Subjects
-      zohoData['MultiLine2']='' //     School Facilities
-
-      zohoData['Website1']='' // Business License Link
-      zohoData['Website2']=params.logo  //Company Logo Link
-      zohoData['Website3']=''  //Header Image Link
+      let zohoData = [
+        {
+          'zf_referrer_name':''
+        },
+        {
+          'zf_redirect_url':''
+        },
+        {
+          'zc_gad':''
+        },
+        {
+          'SingleLine':params.business_name // Education Business Name
+        },
+        {
+          'Dropdown2': params.business_type_name //Education Business Category
+        },
+        {
+          'Dropdown':'Education Business' //Company Type
+        },
+        {
+          'Website':'' //Education Business Website
+        },
+        {
+          'SingleLine1':'' // Education Business Contact
+        },
+        {
+          'Number2':'' //  Company Number
+        },
+        {
+          'SingleLine5':userId //UserID
+        },
+        {
+          'PhoneNumber_countrycode':'' //Education Business Phone
+        },
+        {
+          'Email':params.work_email  //Education Business Email
+        },
+        {
+          'Number':'' //Number of Employees
+        },
+        {
+          'Number1':'' //  Membership Duration
+        },
+        {
+          'Dropdown1':'' // Membership Type
+        },
+        {
+          'Email': params.work_email  //Education Business Email
+        },
+        {
+          'Address_AddressLine1':'' //Street Address
+        },
+        {
+          'Address_City':'' //City
+        },
+        {
+          'Address_Region':'' //State/Region/Province
+        },
+        {
+          'Address_Country':'' //Country
+        },
+        {
+          'SingleLine4':'' //   Business Registration No.
+        },
+        {
+          'MultiLine':''  //Company Intro
+        },
+        {
+          'SingleLine3':'' //WeChat ID
+        },
+        {
+          'Number3':'' //  Number of Branches
+        },
+        {
+          'Number4':'' // Number of Students
+        },
+        {
+          'MultipleChoice':''  // Students Ages
+        },
+        {
+          'MultiLine1':'' //  Curriculum Subjects
+        },
+        {
+          'MultiLine2':''  //  School Facilities
+        },
+        {
+          'Website1':'' // Business License Link
+        },
+        {
+          'Website2': params.logo   //Company Logo Link
+        },
+        {
+          'Website3':''  //Header Image Link
+        }
+      ]
 
       let zohoParams = {
         zoho_data:zohoData,

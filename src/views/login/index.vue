@@ -877,26 +877,11 @@ export default {
 
       }
     },
-    submitRegisterForm1() {
+    submitRegisterForm1(userId) {
 
       let params = Object.assign({
         identity: this.identityValue
       }, this.registerForm)
-
-      let zohoData = [];
-      let userId = localStorage.getItem('uid')
-
-      zohoData['xnQsjsdp'] = '4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2'
-      zohoData['zc_gad'] = ''
-      zohoData['xmIwtLD'] = '97a36bab5c5de21168555ee8ab3cfe6d18f88e7ed1182c9e6e5c9ec5ec7d2149'
-      zohoData['actionType'] = 'Q29udGFjdHM='
-      zohoData['returnURL'] = 'https://dev.eslpassport.com/home'
-      zohoData['ldeskuid'] = ''
-      zohoData['LDTuvid'] = ''
-      zohoData['Last Name'] = params.last_name
-      zohoData['First Name'] = params.first_name
-      zohoData['Email'] = params.email
-      zohoData['CONTACTCF154'] = userId //userId
 
       let identityStr = ''
       if (params.identity == 1) {
@@ -909,41 +894,65 @@ export default {
         identityStr = 'Vendor Contact'
       }
 
-      zohoData['CONTACTCF2']= identityStr
-      zohoData['Lead Source']= 'Web App'
+      let zohoData = [
+        {
+          'xnQsjsdp': '4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2'
+        },
+        {
+          'zc_gad': ''
+        },
+        {
+          'xmIwtLD': '97a36bab5c5de21168555ee8ab3cfe6d18f88e7ed1182c9e6e5c9ec5ec7d2149'
+        },
+        {
+          'actionType': 'Q29udGFjdHM='
+        },
+        {
+          'returnURL': 'https://dev.eslpassport.com/home'
+        },
+        {
+          'ldeskuid': ''
+        },
+        {
+          'LDTuvid': ''
+        },
+        {
+          'Last Name': params.last_name
+        },
+        {
+          'First Name': params.first_name
+        },
+        {
+          'Email': params.email
+        },
+        {
+          'CONTACTCF154': userId
+        },
+        {
+          'CONTACTCF2': identityStr
+        },
+        {
+          'Lead Source': 'Web App'
+        }
+      ];
 
       let zohoParams = {
-        zoho_data:zohoData,
-        zoho_url:'https://crm.zoho.com/crm/WebToContactForm'
+        zoho_data: zohoData,
+        zoho_url: 'https://crm.zoho.com/crm/WebToContactForm'
       }
 
-      ZOHO_SYNC(zohoParams).then(res=>{
+      ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
-    submitRegisterForm2() {
+    submitRegisterForm2(userId) {
 
       let params = Object.assign({
         identity: this.identityValue
       }, this.registerForm)
-
-      let zohoData = [];
-      let userId = localStorage.getItem('uid')
-
-      zohoData['xnQsjsdp']= '4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2'
-      zohoData['zc_gad']= ''
-      zohoData['xmIwtLD']= '97a36bab5c5de21168555ee8ab3cfe6d037c8611da3e03b743498f3f5ee37b59'
-      zohoData['actionType']= 'Q29udGFjdHM='
-      zohoData['returnURL']= 'https://dev.eslpassport.com/home'
-      zohoData['ldeskuid']= ''
-      zohoData['LDTuvid']= ''
-      zohoData['Last Name']= params.last_name
-      zohoData['First Name']= params.first_name
-      zohoData['Email']= params.email
-      zohoData['CONTACTCF154']= userId //userId
 
       let identityStr = ''
       if (params.identity == 1) {
@@ -956,24 +965,64 @@ export default {
         identityStr = 'Vendor Contact'
       }
 
-      zohoData['CONTACTCF2']= identityStr
-      zohoData['Lead Source']= 'Web App'
+      let zohoData = [
+        {
+          'xnQsjsdp': '4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2'
+        },
+        {
+          'zc_gad': ''
+        },
+        {
+          'xmIwtLD': '97a36bab5c5de21168555ee8ab3cfe6d037c8611da3e03b743498f3f5ee37b59'
+        },
+        {
+          'actionType': 'Q29udGFjdHM='
+        },
+        {
+          'returnURL': 'https://dev.eslpassport.com/home'
+        },
+        {
+          'ldeskuid': ''
+        },
+        {
+          'LDTuvid': ''
+        },
+        {
+          'Last Name': params.last_name
+        },
+        {
+          'First Name': params.first_name
+        },
+        {
+          'Email': params.email
+        },
+        {
+          'CONTACTCF154': userId
+        },
+        {
+          'CONTACTCF2': identityStr
+        },
+        {
+          'Lead Source': 'Web App'
+        }
+
+      ]
 
       let zohoParams = {
-        zoho_data:zohoData,
-        zoho_url:'https://crm.zoho.com/crm/WebToContactForm'
+        zoho_data: zohoData,
+        zoho_url: 'https://crm.zoho.com/crm/WebToContactForm'
       }
 
-      ZOHO_SYNC(zohoParams).then(res=>{
+      ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
     submitRegisterForm(formName) {
-      let self = this;
 
+      let self = this;
       this.submitRegisterLoadingStatus = true;
 
       this.$refs[formName].validate((valid) => {
@@ -989,10 +1038,10 @@ export default {
               // let userInfo = res.message
               // localStorage.setItem('uid',res.message.id)
               if (self.identityValue == 1) {
-                this.submitRegisterForm2()
+                this.submitRegisterForm2(res.message.id)
               }
               if (self.identityValue == 2 || self.identityValue == 3) {
-                this.submitRegisterForm1()
+                this.submitRegisterForm1(res.message.id)
               }
 
               this.$message.success('Registration completed!')
@@ -1044,9 +1093,6 @@ export default {
       }
     },
     async handleClickGetAuthCode() {
-      // console.log('google sign in')
-      // const googleUser =  this.$gAuth.signIn();
-      // console.log(googleUser)
 
       try {
         const authCode = await this.$gAuth.getAuthCode();

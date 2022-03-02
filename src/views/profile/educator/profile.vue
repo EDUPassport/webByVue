@@ -2571,40 +2571,59 @@ export default {
 
     },
     async submitEducatorContactForm(contactImageLink, introLink) {
-
-      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      zohoData['zf_referrer_name'] = ''
-      zohoData['zf_redirect_url'] = ''
-      zohoData['zc_gad'] = ''
-
-      zohoData['SingleLine'] = userId //UserID
-      zohoData['SingleLine1'] = this.educatorInfo.first_name // First Name
-      zohoData['SingleLine2'] = this.educatorInfo.last_name //  Last Name
-      zohoData['Dropdown'] = '' //  Gender
-      zohoData['Date'] = '' //   Date of Birth dd-MMM-yyyy
-      zohoData['SingleLine3'] = '' //   Title
-      zohoData['Email'] = '' //   Email
-      zohoData['PhoneNumber_countrycode'] = '' //   Phone
-      zohoData['SingleLine4'] = '' //   Nationality
-      zohoData['Dropdown1'] = '' //   Membership Type
-      zohoData['MultiLine'] = '' //   Languages Spoken
-      zohoData['Number'] = '' //   Membership Duration
-
-      zohoData['SingleLine5'] = '' //   City
-      zohoData['SingleLine6'] = '' //   Province
-      zohoData['SingleLine7'] = '' //   Country
-
-      zohoData['Dropdown2'] = '' //   Educator Type
-
-      zohoData['MultiLine1'] = '' //   Education
-      zohoData['MultiLine2'] = '' //    Work History
-      zohoData['Dropdown3'] = '' //    Teaching Experience
-      zohoData['MultiLine3'] = '' //   Certifications
-      zohoData['MultiLine4'] = '' //   Educator Intro
-      zohoData['Website'] = contactImageLink //   Contact image Link
-      zohoData['Website1'] = introLink //   Intro Video Link
+      let zohoData = [
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {'SingleLine': userId //UserID
+        },
+        {'SingleLine1': this.educatorInfo.first_name // First Name
+        },
+        {'SingleLine2': this.educatorInfo.last_name //  Last Name
+        },
+        {'Dropdown': '' //  Gender
+        },
+        {'Date': '' //   Date of Birth dd-MMM-yyyy
+        },
+        {'SingleLine3': '' //   Title
+        },
+        {'Email': '' //   Email
+        },
+        {'PhoneNumber_countrycode': '' //   Phone
+        },
+        {'SingleLine4': '' //   Nationality
+        },
+        {'Dropdown1': '' //   Membership Type
+        },
+        {'MultiLine': '' //   Languages Spoken
+        },
+        {'Number': '' //   Membership Duration
+        },
+        {'SingleLine5': '' //   City
+        },
+        {'SingleLine6': '' //   Province
+        },
+        {'SingleLine7': '' //   Country
+        },
+        {'Dropdown2': '' //   Educator Type
+        },
+        {'MultiLine1': '' //   Education
+        },
+        {'MultiLine2': '' //    Work History
+        },
+        {'Dropdown3': '' //    Teaching Experience
+        },
+        {'MultiLine3': '' //   Certifications
+        },
+        {'MultiLine4': '' //   Educator Intro
+        },
+        {'Website': contactImageLink //   Contact image Link
+        },
+        {'Website1': introLink //   Intro Video Link
+        }
+      ]
 
       let zohoParams = {
         zoho_data: zohoData,

@@ -282,7 +282,7 @@ export default {
           this.basicForm.first_name = businessUserInfo.first_name;
           this.basicForm.last_name = businessUserInfo.last_name;
 
-          if(res.message.sex){
+          if (res.message.sex) {
             this.basicForm.sex = res.message.sex;
           }
 
@@ -308,48 +308,75 @@ export default {
     async submitEduBusinessCompanyForm() {
 
       let params = Object.assign({}, this.basicForm)
-
-      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      zohoData.append['zf_referrer_name'] = ''
-      zohoData.append['zf_redirect_url'] = ''
-      zohoData.append['zc_gad'] = ''
+      let zohoData = [
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
 
-      zohoData.append['SingleLine'] = this.businessInfo.business_name  // Education Business Name
+        {'SingleLine': this.businessInfo.business_name  // Education Business Name
+        },
 
-      zohoData.append['Dropdown2'] = this.businessInfo.business_type_name  //Education Business Category
-      zohoData.append['Dropdown'] = 'Education Business'  //Company Type
-      zohoData.append['Website'] = ''  //Education Business Website
-      zohoData.append['SingleLine1'] = params.last_name  // Education Business Contact
-      zohoData.append['Number2'] = ''  //  Company Number
+        {'Dropdown2': this.businessInfo.business_type_name  //Education Business Category
+        },
+        {'Dropdown': 'Education Business'  //Company Type
+        },
+        {'Website': ''  //Education Business Website
+        },
+        {'SingleLine1': params.last_name  // Education Business Contact
+        },
+        {'Number2': ''  //  Company Number
+        },
 
-      zohoData.append['SingleLine5'] = userId  //UserID
+        {'SingleLine5': userId  //UserID
+        },
 
-      zohoData.append['PhoneNumber_countrycode'] = params.contact_phone  //Education Business Phone
-      zohoData.append['Email'] = ''  // Education Business Email
-      zohoData.append['Number'] = ''   //Number of Employees
-      zohoData.append['Number1'] = ''   //Membership Duration
-      zohoData.append['Dropdown1'] = ''   //Membership Type
+        {'PhoneNumber_countrycode': params.contact_phone  //Education Business Phone
+        },
+        {'Email': ''  // Education Business Email
+        },
+        {'Number': ''   //Number of Employees
+        },
+        {'Number1': ''   //Membership Duration
+        },
+        {'Dropdown1': ''   //Membership Type
+        },
 
-      zohoData.append['Address_AddressLine1'] = ''   //Street Address
-      zohoData.append['Address_City'] = ''   //City
-      zohoData.append['Address_Region'] = ''   //State/Region/Province
-      zohoData.append['Address_Country'] = ''   //Country
+        {'Address_AddressLine1': ''   //Street Address
+        },
+        {'Address_City': ''   //City
+        },
+        {'Address_Region': ''   //State/Region/Province
+        },
+        {'Address_Country': ''   //Country
+        },
 
-      zohoData.append['SingleLine4'] = ''   //   Business Registration No.
-      zohoData.append['MultiLine'] = params.bio   //Company Intro
-      zohoData.append['SingleLine3'] = params.wx_id   //WeChat ID
+        {'SingleLine4': ''   //   Business Registration No.
+        },
+        {'MultiLine': params.bio   //Company Intro
+        },
+        {'SingleLine3': params.wx_id   //WeChat ID
+        },
 
-      zohoData.append['Number3'] = ''  //  Number of Branches
-      zohoData.append['Number4'] = ''  //    Number of Students
-      zohoData.append['MultipleChoice'] = ''  //    Students Ages
-      zohoData.append['MultiLine1'] = ''  //     Curriculum Subjects
-      zohoData.append['MultiLine2'] = ''  //     School Facilities
+        {'Number3': ''  //  Number of Branches
+        },
+        {'Number4': ''  //    Number of Students
+        },
+        {'MultipleChoice': ''  //    Students Ages
+        },
+        {'MultiLine1': ''  //     Curriculum Subjects
+        },
+        {'MultiLine2': ''  //     School Facilities
+        },
 
-      zohoData.append['Website1'] = ''  // Business License Link
-      zohoData.append['Website2'] = ''   //Company Logo Link
-      zohoData.append['Website3'] = ''   //Header Image Link
+        {'Website1': ''  // Business License Link
+        },
+        {'Website2': ''   //Company Logo Link
+        },
+        {'Website3': ''   //Header Image Link
+        }
+      ]
 
       let zohoParams = {
         zoho_data: zohoData,
@@ -365,8 +392,8 @@ export default {
     }
 
 
-  }
-}
+    }
+    }
 </script>
 
 <style scoped>

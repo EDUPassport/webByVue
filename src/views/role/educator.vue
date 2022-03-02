@@ -211,36 +211,59 @@ export default {
     async submitEducatorContactForm(){
 
       let params = Object.assign({}, this.basicForm)
-
       let userId = localStorage.getItem('uid')
-      let zohoData = []
 
-      zohoData['zf_referrer_name'] = ''
-      zohoData['zf_redirect_url'] = ''
-      zohoData['zc_gad'] = ''
-      zohoData['SingleLine'] = userId  //UserID
-      zohoData['SingleLine1'] = params.first_name // First Name
-      zohoData['SingleLine2'] = params.last_name //  Last Name
-      zohoData['Dropdown'] = ''  //  Gender
-      zohoData['Date'] = ''  //   Date of Birth dd-MMM-yyyy
-      zohoData['SingleLine3'] = ''  //   Title
-      zohoData['Email'] = ''  //   Email
-      zohoData['PhoneNumber_countrycode'] = ''  //   Phone
-      zohoData['SingleLine4'] = ''  //   Nationality
-      zohoData['Dropdown1'] = ''  //  Membership Type
-      zohoData['MultiLine'] = ''  //  Languages Spoken
-      zohoData['Number'] = ''  //  Membership Duration
-      zohoData['SingleLine5'] = ''  //  City
-      zohoData['SingleLine6'] = ''  //  Province
-      zohoData['SingleLine7'] = ''  //  Country
-      zohoData['Dropdown2'] = ''  //  Educator Type
-      zohoData['MultiLine1'] = ''  //  Education
-      zohoData['MultiLine2'] = ''  //   Work History
-      zohoData['Dropdown3'] = ''  //  Teaching Experience
-      zohoData['MultiLine3'] = ''  //  Certifications
-      zohoData['MultiLine4'] = ''  //  Educator Intro
-      zohoData['Website'] = params.profile_photo  //   Contact image Link
-      zohoData['Website1'] = ''  //   Intro Video Link
+      let zohoData = [
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {'SingleLine': userId  //UserID//
+        },
+        {'SingleLine1': params.first_name // First Name
+        },
+        {'SingleLine2': params.last_name //  Last Name
+        },
+        {'Dropdown': ''  //  Gender
+        },
+        {'Date': ''  //   Date of Birth dd-MMM-yyyy
+        },
+        {'SingleLine3': ''  //   Title
+        },
+        {'Email': ''  //   Email
+        },
+        {'PhoneNumber_countrycode': ''  //   Phone
+        },
+        {'SingleLine4': ''  //   Nationality
+        },
+        {'Dropdown1': ''  //  Membership Type
+        },
+        {'MultiLine': ''  //  Languages Spoken
+        },
+        {'Number': ''  //  Membership Duration
+        },
+        {'SingleLine5': ''  //  City
+        },
+        {'SingleLine6': ''  //  Province
+        },
+        {'SingleLine7': ''  //  Country
+        },
+        {'Dropdown2': ''  //  Educator Type
+        },
+        {'MultiLine1': ''  //  Education
+        },
+        {'MultiLine2': ''  //   Work History
+        },
+        {'Dropdown3': ''  //  Teaching Experience
+        },
+        {'MultiLine3': ''  //  Certifications
+        },
+        {'MultiLine4': ''  //  Educator Intro
+        },
+        {'Website': params.profile_photo  //   Contact image Link
+        },
+        {'Website1': ''  //   Intro Video Link
+        }
+      ]
 
       let zohoParams = {
         zoho_data:zohoData,
@@ -260,26 +283,41 @@ export default {
 
       let userId = localStorage.getItem('uid')
 
-      let zohoData = []
-
-      zohoData['zf_referrer_name'] = ''
-      zohoData['zf_redirect_url'] = ''
-      zohoData['zc_gad'] = ''
-      zohoData['SingleLine'] = userId  //UserID
-      zohoData['SingleLine1'] = params.first_name // First Name
-      zohoData['SingleLine2'] = params.last_name //  Last Name
-      zohoData['Dropdown'] = ''  //  Gender
-      zohoData['Date'] = ''  //   Date of Birth dd-MMM-yyyy
-      zohoData['SingleLine3'] = ''  //   Title
-      zohoData['Email'] = ''  //   Email
-      zohoData['PhoneNumber_countrycode'] = ''  //   Phone
-      zohoData['SingleLine4'] = ''  //   Nationality
-      zohoData['Dropdown1'] = ''  //  Membership Type
-      zohoData['Number'] = ''  //  Membership Duration
-      zohoData['SingleLine5'] = ''  //  City
-      zohoData['SingleLine6'] = ''  //  Province
-      zohoData['SingleLine7'] = ''  //  Country
-      zohoData['Website'] = params.profile_photo  //   Contact image Link
+      let zohoData = [
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {'SingleLine': userId //UserID
+        },
+        {'SingleLine1': params.first_name // First Name
+        },
+        {'SingleLine2': params.last_name //  Last Name
+        },
+        {'Dropdown': ''  //  Gender
+        },
+        {'Date': ''  //   Date of Birth dd-MMM-yyyy
+        },
+        {'SingleLine3': ''  //   Title
+        },
+        {'Email': ''  //   Email
+        },
+        {'PhoneNumber_countrycode': ''  //   Phone
+        },
+        {'SingleLine4': ''  //   Nationality
+        },
+        {'Dropdown1': ''  //  Membership Type
+        },
+        {'Number': ''  //  Membership Duration
+        },
+        {'SingleLine5': ''  //  City
+        },
+        {'SingleLine6': ''  //  Province
+        },
+        {'SingleLine7': ''  //  Country
+        },
+        {'Website': params.profile_photo  //   Contact image Link
+        }
+      ]
 
       let zohoParams = {
         zoho_data:zohoData,

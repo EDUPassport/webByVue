@@ -340,48 +340,68 @@ export default {
     async submitEduBusinessCompanyForm() {
 
       let params = Object.assign({}, this.basicForm)
-
-      let zohoData = [];
       let userId = localStorage.getItem('uid')
 
-      zohoData['zf_referrer_name'] = ''
-      zohoData['zf_redirect_url'] = ''
-      zohoData['zc_gad'] = ''
+      let zohoData = [
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {'SingleLine': params.business_name  // Education Business Name
+        },
+        {'Dropdown2': this.businessInfo.business_type_name  //Education Business Category
+        },
+        {'Dropdown': 'Education Business'  //Company Type
+        },
+        {'Website': params.website  //Education Business Website
+        },
+        {'SingleLine1': params.last_name  // Education Business Contact
+        },
+        {'Number2': ''  //  Company Number
+        },
+        {'SingleLine5': userId  //UserID
+        },
+        {'PhoneNumber_countrycode': params.business_phone  //Education Business Phone
+        },
+        {'Email': ''  // Education Business Email
+        },
+        {'Number': ''   //Number of Employees
+        },
+        {'Number1': ''   //Membership Duration
+        },
+        {'Dropdown1': ''   //Membership Type
+        },
+        {'Address_AddressLine1': ''   //Street Address
+        },
+        {'Address_City': ''   //City
+        },
+        {'Address_Region': ''   //State/Region/Province
+        },
+        {'Address_Country': ''   //Country
+        },
+        {'SingleLine4': ''   //   Business Registration No.
+        },
+        {'MultiLine': ''   //Company Intro
+        },
+        {'SingleLine3': ''   //WeChat ID
+        },
+        {'Number3': ''  //  Number of Branches
+        },
+        {'Number4': ''  //    Number of Students
+        },
+        {'MultipleChoice': ''  //    Students Ages
+        },
+        {'MultiLine1': ''  //     Curriculum Subjects
+        },
+        {'MultiLine2': ''  //     School Facilities
+        },
+        {'Website1': ''  // Business License Link
+        },
+        {'Website2': ''   //Company Logo Link
+        },
+        {'Website3': ''   //Header Image Link
+        }
 
-      zohoData['SingleLine'] = params.business_name  // Education Business Name
-
-      zohoData['Dropdown2'] = this.businessInfo.business_type_name  //Education Business Category
-      zohoData['Dropdown'] = 'Education Business'  //Company Type
-      zohoData['Website'] = params.website  //Education Business Website
-      zohoData['SingleLine1'] = params.last_name  // Education Business Contact
-      zohoData['Number2'] = ''  //  Company Number
-
-      zohoData['SingleLine5'] = userId  //UserID
-
-      zohoData['PhoneNumber_countrycode'] = params.business_phone  //Education Business Phone
-      zohoData['Email'] = ''  // Education Business Email
-      zohoData['Number'] = ''   //Number of Employees
-      zohoData['Number1'] = ''   //Membership Duration
-      zohoData['Dropdown1'] = ''   //Membership Type
-
-      zohoData['Address_AddressLine1'] = ''   //Street Address
-      zohoData['Address_City'] = ''   //City
-      zohoData['Address_Region'] = ''   //State/Region/Province
-      zohoData['Address_Country'] = ''   //Country
-
-      zohoData['SingleLine4'] = ''   //   Business Registration No.
-      zohoData['MultiLine'] = ''   //Company Intro
-      zohoData['SingleLine3'] = ''   //WeChat ID
-
-      zohoData['Number3'] = ''  //  Number of Branches
-      zohoData['Number4'] = ''  //    Number of Students
-      zohoData['MultipleChoice'] = ''  //    Students Ages
-      zohoData['MultiLine1'] = ''  //     Curriculum Subjects
-      zohoData['MultiLine2'] = ''  //     School Facilities
-
-      zohoData['Website1'] = ''  // Business License Link
-      zohoData['Website2'] = ''   //Company Logo Link
-      zohoData['Website3'] = ''   //Header Image Link
+      ]
 
       let zohoParams = {
         zoho_data: zohoData,

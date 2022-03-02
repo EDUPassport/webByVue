@@ -466,40 +466,54 @@ export default {
 
       let userId = localStorage.getItem('uid')
 
-      let zohoData = []
+      let zohoData = [
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {'SingleLine': params.vendor_name_en //vendor company name
+        },
+        {'Dropdown2': params.vendor_type_name //Vendor Category
+        },
+        {'SingleLine5': userId //UserID
+        },
+        {'Number2': ''  //Company Number
+        },
+        {'SingleLine1': ''  //Vendor Company Contact
+        },
+        {'PhoneNumber_countrycode': params.phone //Vendor Company Phone
+        },
+        {'Email': params.work_email // vendor company  email
+        },
+        {'Dropdown': 'Vendor' // company type
+        },
+        {'Number': ''  //Number of Employees
+        },
+        {'Number1': ''  //Membership Duration
+        },
+        {'Dropdown1': ''  //Membership Type
+        },
+        {'Address_AddressLine1': ''  //Street Address
+        },
+        {'Address_City': ''  //City
+        },
+        {'Address_Region': ''  //State/Region/Province
+        },
+        {'Address_Country': ''  //Country
+        },
+        {'SingleLine4': ''  //Business Registration No.
+        },
+        {'MultiLine': ''  //Company Intro
+        },
+        {'SingleLine3': ''  //WeChat ID
+        },
+        {'Website1': '' // Business License Link
+        },
+        {'Website2': params.logo  //Company Logo Link
+        },
+        {'Website3': ''  //Header Image Link
+        }
 
-      zohoData['zf_referrer_name'] = ''
-      zohoData['zf_redirect_url'] = ''
-      zohoData['zc_gad'] = ''
-
-      zohoData['SingleLine'] = params.vendor_name_en //vendor company name
-
-      zohoData['Dropdown2'] = params.vendor_type_name //Vendor Category
-      zohoData['SingleLine5'] = userId //UserID
-
-      zohoData['Number2'] = ''  //Company Number
-      zohoData['SingleLine1'] = ''  //Vendor Company Contact
-
-      zohoData['PhoneNumber_countrycode'] = params.phone //Vendor Company Phone
-      zohoData['Email'] = params.work_email // vendor company  email
-
-      zohoData['Dropdown'] = 'Vendor' // company type
-      zohoData['Number'] = ''  //Number of Employees
-      zohoData['Number1'] = ''  //Membership Duration
-      zohoData['Dropdown1'] = ''  //Membership Type
-
-      zohoData['Address_AddressLine1'] = ''  //Street Address
-      zohoData['Address_City'] = ''  //City
-      zohoData['Address_Region'] = ''  //State/Region/Province
-      zohoData['Address_Country'] = ''  //Country
-
-      zohoData['SingleLine4'] = ''  //Business Registration No.
-      zohoData['MultiLine'] = ''  //Company Intro
-      zohoData['SingleLine3'] = ''  //WeChat ID
-
-      zohoData['Website1'] = '' // Business License Link
-      zohoData['Website2'] = params.logo  //Company Logo Link
-      zohoData['Website3'] = ''  //Header Image Link
+      ]
 
       let zohoParams = {
         zoho_data:zohoData,
