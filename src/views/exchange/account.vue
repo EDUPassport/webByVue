@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import {INTERNATIONAL_REGISTER} from "../../api/api";
+import {INTERNATIONAL_REGISTER} from "@/api/api";
 import md5 from 'js-md5'
 
 export default {

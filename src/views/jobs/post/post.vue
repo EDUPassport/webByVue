@@ -49,13 +49,17 @@
                       </template>
                       <template v-if="envName==='development' || envName==='production' ">
                         <h4>
-                          Oops.. sorry, due to data laws, to post a job on the [chinese/global] platform, you first need to redirect to and post a job there
+                          Oops.. sorry, due to data laws, to post a job on the [chinese/global] platform, you first need
+                          to redirect to and post a job there
                         </h4>
                         <div class="job-detail-china-btn-container">
-                          <el-button class="job-detail-china-btn" type="primary" @click="letGo()">OK, let's go</el-button>
+                          <el-button class="job-detail-china-btn" type="primary" @click="letGo()">OK, let's go
+                          </el-button>
                         </div>
                         <div class="job-detail-china-tips">
-                          Not clear? Need help setting up? <el-link href="#">Account Management</el-link> is here !
+                          Not clear? Need help setting up?
+                          <el-link href="https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4" >Account Management</el-link>
+                          is here !
                         </div>
                       </template>
 
@@ -258,7 +262,8 @@
 
                   </el-form-item>
                   <el-form-item label="Additional Job information">
-                    <el-input v-model="jobForm.desc" type="textarea" placeholder="Please enter additional job information"></el-input>
+                    <el-input v-model="jobForm.desc" type="textarea"
+                              placeholder="Please enter additional job information"></el-input>
                   </el-form-item>
 
                 </div>
@@ -484,12 +489,12 @@
 
                   </el-form-item>
                   <el-form-item label="CPR Certified">
-                      <el-switch v-model="jobForm.is_cpr"></el-switch>
+                    <el-switch v-model="jobForm.is_cpr"></el-switch>
                   </el-form-item>
                   <el-form-item label="First Aid Certified">
                     <el-switch v-model="jobForm.is_first_aide"></el-switch>
                   </el-form-item>
-                  <el-form-item label="Teaching Experience" >
+                  <el-form-item label="Teaching Experience">
                     <el-switch v-model="jobForm.is_teaching_exp"></el-switch>
                   </el-form-item>
                   <el-form-item label="" v-if="jobForm.is_teaching_exp">
@@ -549,7 +554,7 @@
 
                   </el-form-item>
                   <el-form-item label="Age">
-                    <el-slider v-model="ageValue" range show-stops :max="100"> </el-slider>
+                    <el-slider v-model="ageValue" range show-stops :max="100"></el-slider>
                   </el-form-item>
                   <el-form-item label="Will you accept applicant of different skin colors?(Equal Opportunity)">
                     <el-switch v-model="jobForm.is_equal"></el-switch>
@@ -579,32 +584,36 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 import meSideMenu from "@/components/meSideMenu";
-import {VISITOR_USER_INFO, ALL_AREAS, USER_OBJECT_LIST,ADD_JOB,JOB_ADD_PROFILE,SYNC_GET_BUSINESS_INFO} from '@/api/api';
+import {
+  VISITOR_USER_INFO, ALL_AREAS, USER_OBJECT_LIST, ADD_JOB,
+  JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO
+} from '@/api/api';
 import {ref} from "vue";
+import axios from 'axios'
 
 export default {
   name: "post",
   components: {
     meSideMenu
   },
-  setup(){
+  setup() {
     const envName = process.env.VUE_APP_ENV_NAME
 
     let domain = ref('')
 
     if (envName === 'developmentCN') {
-       domain = 'https://dev.eslpassport.com'
+      domain = 'https://dev.eslpassport.com'
     }
     if (envName === 'development') {
-       domain = 'https://dev.esl-passport.cn'
+      domain = 'https://dev.esl-passport.cn'
       // domain = 'http://localhost:8080'
     }
     if (envName === 'productionCN') {
-       domain = 'https://www.eslpassport.com'
+      domain = 'https://www.eslpassport.com'
     }
 
     if (envName === 'production') {
-       domain = 'https://www.esl-passport.cn'
+      domain = 'https://www.esl-passport.cn'
     }
     const goDomain = domain
 
@@ -741,7 +750,7 @@ export default {
       workStartTime: '',
       workEndTime: '',
 
-      sexOptions:[
+      sexOptions: [
         {
           value: 1,
           object_en: 'Male',
@@ -758,9 +767,9 @@ export default {
           object_cn: '无性别要求'
         }
       ],
-      teachingExpList:[],
-      educationList:[],
-      ageValue:[18,60],
+      teachingExpList: [],
+      educationList: [],
+      ageValue: [18, 60],
 
       jobForm: {
         job_title: '',
@@ -809,7 +818,7 @@ export default {
         lng: '',
         international: 0,
         nation_address: '',
-        token:localStorage.getItem('token')
+        token: localStorage.getItem('token')
       },
       jobRules: {
         job_location: [
@@ -875,7 +884,7 @@ export default {
       })
       geocoder.on('clear', (e) => {
         console.log(e)
-        this.jobForm.address =''
+        this.jobForm.address = ''
         this.jobForm.lng = ''
         this.jobForm.lat = ''
       })
@@ -909,7 +918,7 @@ export default {
           }
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -923,7 +932,7 @@ export default {
         if (res.code == 200) {
           this.provinceOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -937,7 +946,7 @@ export default {
         if (res.code == 200) {
           this.cityOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -951,7 +960,7 @@ export default {
         if (res.code == 200) {
           this.districtOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -959,7 +968,7 @@ export default {
     provinceChange(e) {
       console.log(e)
       this.getAllCitys(e)
-      let data = this.provinceOptions.filter(item=>item.id==e)
+      let data = this.provinceOptions.filter(item => item.id == e)
       // console.log(data[0])
       this.provinceName = data[0]['Pinyin']
 
@@ -967,14 +976,14 @@ export default {
     cityChange(e) {
       console.log(e)
       this.getAllDistricts(e)
-      let data = this.cityOptions.filter(item=>item.id==e)
+      let data = this.cityOptions.filter(item => item.id == e)
       // console.log(data[0])
       this.cityName = data[0]['Pinyin']
 
     },
     districtChange(e) {
       console.log(e)
-      let data = this.districtOptions.filter(item=>item.id==e)
+      let data = this.districtOptions.filter(item => item.id == e)
       // console.log(data[0])
       this.districtName = data[0]['Pinyin']
     },
@@ -1259,7 +1268,7 @@ export default {
         if (res.code == 200) {
           console.log('benefits--submit--' + res.data);
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1292,7 +1301,7 @@ export default {
           console.log(res.msg);
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1326,7 +1335,7 @@ export default {
           console.log(res.msg);
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1359,7 +1368,7 @@ export default {
           console.log(res.msg)
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1392,7 +1401,7 @@ export default {
           console.log(res.msg);
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1425,7 +1434,7 @@ export default {
           console.log(res.msg);
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1452,7 +1461,7 @@ export default {
           this.subjectList = res.message.filter(item => item.pid === 1); //subject
           this.ageList = res.message.filter(item => item.pid === 131); //age list
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1494,7 +1503,7 @@ export default {
       console.log(this.selectWeekItemData)
 
     },
-    submitJob(formName,submitType) {
+    submitJob(formName, submitType) {
       let that = this;
 
       if (this.selectEmploymentTypeList.length <= 0) {
@@ -1543,7 +1552,7 @@ export default {
       // }
       console.log(that.jobForm);
       this.$loading({
-        text:'Loading...'
+        text: 'Loading...'
       })
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -1577,7 +1586,7 @@ export default {
               this.$router.push('/jobs/myJobs')
 
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$message.error(err.msg)
           })
@@ -1589,29 +1598,87 @@ export default {
       })
 
     },
-    letGo(){
+    letGo() {
       let uid = localStorage.getItem('uid')
+      this.$loading({
+        text:'Loading'
+      })
 
       let params = {
-        user_id:uid
+        user_id: uid
       }
 
-      SYNC_GET_BUSINESS_INFO(params).then(res=>{
+      SYNC_GET_BUSINESS_INFO(params).then(res => {
         console.log(res)
-      }).catch(err=>{
+        if (res.code == 200) {
+          let aParams = {
+            data: JSON.stringify(res.message)
+          }
+
+          let baseUrl =  process.env.VUE_APP_SYNC_BUSINESS_BASE_URL
+
+          axios.post('sync/businessInfo',aParams,{
+            baseURL:baseUrl,
+            timeout:10000
+          }).then(res=>{
+            console.log(res)
+            if(res.code == 200){
+              this.$loading().close()
+              this.$msgbox({
+                title: 'Success',
+                message:'Your information has been synchronized, please log in ',
+                type:'success',
+                confirmButtonText:'Login',
+                callback(action){
+                  console.log(action)
+                  if(action === 'confirm'){
+                    window.open(process.env.VUE_APP_EXCHANGE_DOMAIN,'_blank')
+                  }
+
+                }
+
+
+              })
+            }
+          }).catch(err=>{
+            console.log(err)
+            this.$loading().close()
+            this.$msgbox({
+              title:err.msg,
+              message:err.msg,
+              type:'success',
+              confirmButtonText:'Login',
+              callback(action){
+                console.log(action)
+                if(action === 'confirm'){
+                  window.open(process.env.VUE_APP_EXCHANGE_DOMAIN,'_blank')
+                }
+              }
+
+
+            })
+          })
+
+        } else {
+          this.$loading().close()
+          this.$message.error('Service Error')
+        }
+
+      }).catch(err => {
         console.log(err)
+        this.$loading().close()
       })
 
       // window.open(this.goDomain,'_blank')
     },
-    getSyncBusinessInfo(uid){
+    getSyncBusinessInfo(uid) {
       let params = {
-        user_id:uid
+        user_id: uid
       }
 
-      SYNC_GET_BUSINESS_INFO(params).then(res=>{
+      SYNC_GET_BUSINESS_INFO(params).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
@@ -1850,19 +1917,21 @@ export default {
   background-color: #00CE47;
   color: #FFFFFF;
 }
-.submit-container{
+
+.submit-container {
   margin-top: 20px;
   text-align: center;
 }
 
-.job-detail-china-btn-container{
+.job-detail-china-btn-container {
   margin-top: 10px;
 }
-.job-detail-china-btn{
+
+.job-detail-china-btn {
   font-size: 14px;
 }
 
-.job-detail-china-tips{
+.job-detail-china-tips {
   font-size: 14px;
   margin-top: 10px;
   color: #808080;
@@ -1872,11 +1941,11 @@ export default {
   justify-content: flex-start;
 }
 
-.job-detail-china-tips a{
+.job-detail-china-tips a {
   color: #00b3d2;
   font-size: 16px;
   font-weight: bold;
-  padding: 0  10px;
+  padding: 0 10px;
 }
 
 </style>

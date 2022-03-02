@@ -82,7 +82,6 @@
 import meSideMenu from "@/components/meSideMenu";
 import {ADD_VENDOR_BASIC, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
 import {countriesData} from "@/utils/data";
-import axios from "axios";
 
 export default {
   name: "basic",
@@ -215,7 +214,10 @@ export default {
 
           this.basicForm.first_name = vendorInfo.first_name;
           this.basicForm.last_name = vendorInfo.last_name;
-          this.basicForm.sex = res.message.sex ;
+
+          if(res.message.sex){
+            this.basicForm.sex = res.message.sex ;
+          }
 
           this.basicForm.nationality = vendorInfo.nationality;
 

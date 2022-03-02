@@ -383,7 +383,10 @@ export default {
           this.basicForm.first_name = educatorInfo.first_name;
           this.basicForm.last_name = educatorInfo.last_name;
           this.basicForm.email = educatorInfo.email ;
-          this.basicForm.sex = res.message.sex;
+
+          if(res.message.sex){
+            this.basicForm.sex = res.message.sex;
+          }
 
           this.basicForm.nationality = educatorInfo.nationality;
 

@@ -18,11 +18,11 @@
             <router-link to="/services/price" exact> Pricing</router-link>
             <template v-if="envName === 'development' || envName === 'production'">
               <span v-if="!identity || identity == 1"
-                    class="nav-china-jobs" @click="turnEnvJobs(envName)">China Jobs</span>
+                    class="nav-china-jobs" @click="turnEnvJobs()">China Jobs</span>
             </template>
             <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
               <span v-if="!identity || identity == 1"
-                    class="nav-china-jobs" @click="turnEnvJobs(envName)">International Jobs</span>
+                    class="nav-china-jobs" @click="turnEnvJobs()">International Jobs</span>
             </template>
           </div>
         </el-col>
@@ -117,11 +117,11 @@
             <div class="nav-link-item">
               <template v-if="envName === 'development' || envName === 'production'">
                             <span v-if="!identity || identity == 1"
-                                  @click="turnEnvJobs(envName)">China Jobs</span>
+                                  @click="turnEnvJobs()">China Jobs</span>
               </template>
               <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
                              <span v-if="!identity || identity == 1"
-                                   @click="turnEnvJobs(envName)">International Jobs</span>
+                                   @click="turnEnvJobs()">International Jobs</span>
               </template>
             </div>
             <div class="nav-link-item">
@@ -227,28 +227,10 @@ export default {
     signUp() {
       this.$router.push({path: '/login', query: {type: 2}})
     },
-    turnEnvJobs(envName) {
+    turnEnvJobs() {
 
       let token = localStorage.getItem('token')
-
-
-      let domain = ''
-
-      if (envName === 'developmentCN') {
-        domain = 'https://dev.eslpassport.com'
-      }
-
-      if (envName === 'development') {
-        domain = 'https://dev.esl-passport.cn'
-        // domain = 'http://localhost:8080'
-      }
-      if (envName === 'productionCN') {
-        domain = 'https://www.eslpassport.com'
-      }
-
-      if (envName === 'production') {
-        domain = 'https://www.esl-passport.cn'
-      }
+      let domain = process.env.VUE_APP_EXCHANGE_DOMAIN
 
       if (token) {
         let firstName = localStorage.getItem('first_name')
@@ -264,13 +246,9 @@ export default {
         }
 
         let navObjStr = JSON.stringify(navObj)
-        // console.log(encode(navObjStr))
 
         let a = encode(navObjStr)
-
-        // console.log(decode(a))
         let b = decode(a)
-
         console.log(JSON.parse(b))
 
         let navUrl = domain + '/jobs?exchange_job='+a

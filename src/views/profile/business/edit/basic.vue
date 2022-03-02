@@ -155,13 +155,11 @@ export default {
         ],
         wx_id: [
           {
-            required: true,
+            required: false,
             message: 'Please input wechat id',
             trigger: 'blur',
           },
         ]
-
-
       },
       sexOptions: [
         {
@@ -283,7 +281,10 @@ export default {
           this.basicForm.nickname = businessUserInfo.nickname;
           this.basicForm.first_name = businessUserInfo.first_name;
           this.basicForm.last_name = businessUserInfo.last_name;
-          this.basicForm.sex = res.message.sex;
+
+          if(res.message.sex){
+            this.basicForm.sex = res.message.sex;
+          }
 
           this.basicForm.nationality = businessUserInfo.nationality;
 
