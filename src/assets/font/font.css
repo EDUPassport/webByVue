@@ -11,3 +11,13 @@
     font-family: 'Henriette';
     src:url('Henriette Compressed.otf');
 }
+@font-face {
+    font-family: 'Lucida Handwriting';
+    src:url('Lucida Handwriting.ttf');
+}
+
+@font-face {
+    font-family: 'SourceSansPro-Regular';
+    src:url('SourceSansPro-Regular.ttf');
+}
+
