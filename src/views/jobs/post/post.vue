@@ -1614,10 +1614,9 @@ export default {
           let aParams = {
             data: JSON.stringify(res.message)
           }
-
           let baseUrl =  process.env.VUE_APP_SYNC_BUSINESS_BASE_URL
 
-          axios.post('sync/businessInfo',aParams,{
+          axios.post('home/syncUserInfo',aParams,{
             baseURL:baseUrl,
             timeout:10000
           }).then(res=>{
