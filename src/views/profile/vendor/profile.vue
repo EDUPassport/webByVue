@@ -62,68 +62,76 @@
               </div>
             </div>
 
-            <div class="legal-info-container">
-              <div class="legal-info-t">
-                <div class="legal-info-label">Company Legal Info</div>
-                <div class="legal-info-edit" @click="editLegalInfo()">Edit</div>
+            <div class="vendor-company-container">
+              <div class="vendor-company-t">
+                <div class="vendor-company-label">Company Information</div>
+                <div class="vendor-company-edit" @click="editCompanyInfo()">Edit</div>
+              </div>
+              <div class="vendor-company-content">
+
+                <div class="legal-info-container">
+                  <div class="legal-info-t">
+                    <div class="legal-info-label">Company Legal Info</div>
+                  </div>
+
+                  <div class="legal-info-content">
+                    <div class="legal-info-item" v-if="vendorInfo.vendor_name_en">
+                      Company Name: <span>{{ vendorInfo.vendor_name_en }}</span>
+                    </div>
+
+                    <div class="legal-info-item" v-if="vendorInfo.legal_company_name">
+                      Legal Company Name: <span>{{ vendorInfo.legal_company_name }}</span>
+                    </div>
+
+                    <div class="legal-info-item" v-if="vendorInfo.busin_reg_num">
+                      Business Registration ID: <span>{{ vendorInfo.busin_reg_num }}</span>
+                    </div>
+                    <div class="legal-info-item" v-if="vendorInfo.busin_reg_img">
+                      Business License:
+                      <el-image style="width: 200px" :src="vendorInfo.busin_reg_img"></el-image>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="vendor-info-container">
+                  <div class="vendor-info-t">
+                    <div class="vendor-info-label">Company General Info</div>
+                  </div>
+
+                  <div class="vendor-info-content">
+                    <div class="vendor-info-item" v-if="vendorInfo.vendor_bio">
+                      Vendor Introduction: <span>{{ vendorInfo.vendor_bio }}</span>
+                    </div>
+
+                    <div class="vendor-info-item" v-if="vendorInfo.wechat_public_name">
+                      WeChat Official Account ID: <span>{{ vendorInfo.wechat_public_name }}</span>
+                    </div>
+                    <div class="vendor-info-item" v-if="vendorInfo.website">
+                      Website: <span>{{ vendorInfo.website }}</span>
+                    </div>
+                    <div class="vendor-info-item" v-if="vendorInfo.phone">
+                      Phone #: <span>{{  vendorInfo.phone}}</span>
+                    </div>
+                    <div class="vendor-info-item"
+                         v-if="vendorInfo.provinces && vendorInfo.citys && vendorInfo.districts"
+                    >
+                      Location:
+                      <span>{{vendorInfo.provinces.Pinyin}}, {{vendorInfo.citys.Pinyin}}, {{vendorInfo.districts.Pinyin}}</span>
+                    </div>
+                    <div class="vendor-info-item">
+                      Dog Friendly:
+                      <el-switch v-model="vendorInfo.is_dog_friendly" :active-value="1" disabled></el-switch>
+                    </div>
+                    <div class="vendor-info-item">
+                      Events:
+                      <el-switch v-model="vendorInfo.is_events" :active-value="1" disabled></el-switch>
+                    </div>
+
+                  </div>
+                </div>
+
               </div>
 
-              <div class="legal-info-content">
-                <div class="legal-info-item" v-if="vendorInfo.vendor_name_en">
-                  Company Name: <span>{{ vendorInfo.vendor_name_en }}</span>
-                </div>
-
-                <div class="legal-info-item" v-if="vendorInfo.legal_company_name">
-                  Legal Company Name: <span>{{ vendorInfo.legal_company_name }}</span>
-                </div>
-
-                <div class="legal-info-item" v-if="vendorInfo.busin_reg_num">
-                  Business Registration ID: <span>{{ vendorInfo.busin_reg_num }}</span>
-                </div>
-                <div class="legal-info-item" v-if="vendorInfo.busin_reg_img">
-                  Business License:
-                  <el-image style="width: 200px" :src="vendorInfo.busin_reg_img"></el-image>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="vendor-info-container">
-              <div class="vendor-info-t">
-                <div class="vendor-info-label">Company General Info</div>
-                <div class="vendor-info-edit" @click="editVendorInfo()">Edit</div>
-              </div>
-
-              <div class="vendor-info-content">
-                <div class="vendor-info-item" v-if="vendorInfo.vendor_bio">
-                  Vendor Introduction: <span>{{ vendorInfo.vendor_bio }}</span>
-                </div>
-
-                <div class="vendor-info-item" v-if="vendorInfo.wechat_public_name">
-                  WeChat Official Account ID: <span>{{ vendorInfo.wechat_public_name }}</span>
-                </div>
-                <div class="vendor-info-item" v-if="vendorInfo.website">
-                  Website: <span>{{ vendorInfo.website }}</span>
-                </div>
-                <div class="vendor-info-item" v-if="vendorInfo.phone">
-                  Phone #: <span>{{  vendorInfo.phone}}</span>
-                </div>
-                <div class="vendor-info-item"
-                     v-if="vendorInfo.provinces && vendorInfo.citys && vendorInfo.districts"
-                >
-                  Location:
-                  <span>{{vendorInfo.provinces.Pinyin}}, {{vendorInfo.citys.Pinyin}}, {{vendorInfo.districts.Pinyin}}</span>
-                </div>
-                <div class="vendor-info-item">
-                  Dog Friendly:
-                  <el-switch v-model="vendorInfo.is_dog_friendly" :active-value="1" disabled></el-switch>
-                </div>
-                <div class="vendor-info-item">
-                  Events:
-                  <el-switch v-model="vendorInfo.is_events" :active-value="1" disabled></el-switch>
-                </div>
-
-              </div>
             </div>
 
             <div class="media-container">
@@ -410,6 +418,9 @@ export default {
     },
     editBasicInfo() {
       this.$router.push('/vendor/edit/basic')
+    },
+    editCompanyInfo(){
+      this.$router.push('/vendor/edit/vendorInfo')
     },
     editLegalInfo(){
       this.$router.push('/vendor/edit/legalInfo')
@@ -907,13 +918,51 @@ export default {
   color: #000000;
 }
 
-.legal-info-container {
+.vendor-company-container{
   margin-top: 20px;
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
   box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+}
+
+.vendor-company-t{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vendor-company-label{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.vendor-company-edit{
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.vendor-company-edit:hover {
+  color: #00b3d2;
+}
+
+.vendor-company-content {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+.legal-info-container {
+  padding: 10px 0;
+  text-align: left;
+  background-color: #ffffff;
 }
 
 .legal-info-t {
@@ -924,18 +973,9 @@ export default {
 }
 
 .legal-info-label {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.legal-info-edit {
   font-size: 14px;
   font-weight: bold;
-  cursor: pointer;
-}
-
-.legal-info-edit:hover {
-  color: #00b3d2;
+  color:#808080;
 }
 
 .legal-info-content {
@@ -957,12 +997,9 @@ export default {
 }
 
 .vendor-info-container {
-  margin-top: 20px;
-  padding: 20px;
+  padding: 10px 0;
   text-align: left;
   background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
 }
 
 .vendor-info-t {
@@ -973,18 +1010,9 @@ export default {
 }
 
 .vendor-info-label {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.vendor-info-edit {
   font-size: 14px;
   font-weight: bold;
-  cursor: pointer;
-}
-
-.vendor-info-edit:hover {
-  color: #00b3d2;
+  color:#808080;
 }
 
 .vendor-info-content {

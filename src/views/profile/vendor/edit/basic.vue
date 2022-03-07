@@ -165,7 +165,8 @@ export default {
           ADD_VENDOR_BASIC(params).then(res => {
             console.log(res)
             if(res.code == 200){
-              this.submitVendorCompanyForm()
+              // this.submitVendorCompanyForm()
+              this.submitCompanyContactForm()
               this.$router.push('/vendor/profile')
             }
           }).catch(err=>{
@@ -256,7 +257,7 @@ export default {
         },
         {'SingleLine5':userId  //UserID
         },
-        {'Number2':''   //Company Number
+        {'Number2':userId   //Company Number
         },
         {'SingleLine1': params.last_name   //Vendor Company Contact
         },
@@ -305,7 +306,62 @@ export default {
         console.log(err)
       })
 
+    },
+    async submitCompanyContactForm(){
+
+      let params = Object.assign({}, this.basicForm)
+      let userId = localStorage.getItem('uid')
+
+      let zohoData = [
+        {'zf_referrer_name':''},
+        {'zf_redirect_url':''},
+        {'zc_gad':''},
+        {'SingleLine':userId  //UserID
+        },
+        {'SingleLine1':params.first_name  // First Name
+        },
+        {'SingleLine2':params.last_name  //  Last Name
+        },
+        {'Dropdown':params.sex  //  Gender
+        },
+        {'Date':''  //   Date of Birth dd-MMM-yyyy params.birthday
+        },
+        {'SingleLine3': params.job_title  //   Title
+        },
+        {'Email': '' //   Email
+        },
+        {'PhoneNumber_countrycode': params.contact_phone  //   Phone
+        },
+        {'SingleLine4':params.nationality  //   Nationality
+        },
+        {'Dropdown1':''  //   Membership Type
+        },
+        {'Number':''  //   Membership Duration
+        },
+        {'SingleLine5':''  //   City
+        },
+        {'SingleLine6':''  //   Province
+        },
+        {'SingleLine7':''  //   Country
+        },
+        {'Website': '' //   Contact image Link
+        }
+
+      ]
+
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+
     }
+
 
 
   }

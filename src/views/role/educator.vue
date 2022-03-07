@@ -166,7 +166,6 @@ export default {
             if (res.code == 200) {
               // this.$router.push('/educator/profile')
               this.submitEducatorContactForm()
-              this.submitCompanyContactForm()
 
               this.changeIdentity(1)
             }
@@ -268,60 +267,6 @@ export default {
       let zohoParams = {
         zoho_data:zohoData,
         zoho_url:'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res=>{
-        console.log(res)
-      }).catch(err=>{
-        console.log(err)
-      })
-
-    },
-    async submitCompanyContactForm(){
-
-      let params = Object.assign({}, this.basicForm)
-
-      let userId = localStorage.getItem('uid')
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {'SingleLine': userId //UserID
-        },
-        {'SingleLine1': params.first_name // First Name
-        },
-        {'SingleLine2': params.last_name //  Last Name
-        },
-        {'Dropdown': ''  //  Gender
-        },
-        {'Date': ''  //   Date of Birth dd-MMM-yyyy
-        },
-        {'SingleLine3': ''  //   Title
-        },
-        {'Email': ''  //   Email
-        },
-        {'PhoneNumber_countrycode': ''  //   Phone
-        },
-        {'SingleLine4': ''  //   Nationality
-        },
-        {'Dropdown1': ''  //  Membership Type
-        },
-        {'Number': ''  //  Membership Duration
-        },
-        {'SingleLine5': ''  //  City
-        },
-        {'SingleLine6': ''  //  Province
-        },
-        {'SingleLine7': ''  //  Country
-        },
-        {'Website': params.profile_photo  //   Contact image Link
-        }
-      ]
-
-      let zohoParams = {
-        zoho_data:zohoData,
-        zoho_url:'https://forms.zohopublic.com//edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit'
       }
 
       await ZOHO_SYNC(zohoParams).then(res=>{

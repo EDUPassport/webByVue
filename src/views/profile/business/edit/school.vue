@@ -426,7 +426,7 @@ export default {
               if (this.selectSchoolFacilitesList.length > 0) {
                 this.schoolFacilitesConfirm();
               }
-              this.submitEduBusinessCompanyForm()
+              // this.submitEduBusinessCompanyForm()
               setTimeout(function () {
                 self.$router.push('/business/profile')
               }, 1200)

@@ -250,7 +250,7 @@ export default {
             console.log(res)
             if(res.code == 200){
               this.submitEducatorContactForm()
-              this.submitCompanyContactForm()
+              // this.submitCompanyContactForm()
               this.$router.push('/educator/profile')
             }
           }).catch(err=>{

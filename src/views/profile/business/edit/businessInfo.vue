@@ -76,12 +76,30 @@
                 <el-switch v-model="basicForm.is_currently_hiring"></el-switch>
               </el-form-item>
 
-              <el-form-item>
+              <el-form-item label="Edu-Business Categories (Choose 1)" prop="business_type_id" required>
+                <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
+                  <div v-if="item['children'].length>0" class="category-parent">
+                  </div>
+                  <div v-if="item['children'].length===0" class="categories-tags-item"
+                       :class="selectBusinessTypeList.findIndex(element=>element.id === item.id) == -1 ? '' : 'tag-active' "
+                       @click="selectBusinessType(item)">
+                    {{ item.identity_name }}
+                  </div>
+                  <div class="categories-tags-item" v-for="(child,key) in item['children']" :key="key"
+                       :class="selectBusinessTypeList.findIndex(element=>element.id === child.id) == -1 ? '' : 'tag-active' "
+                       @click="selectBusinessType(child)">
+                    {{ child.identity_name }}
+                  </div>
+                </div>
+              </el-form-item>
+
+              <el-form-item style="text-align: center;">
                 <el-button type="primary" @click="submitForm('basicForm')">
                   Submit
                 </el-button>
               </el-form-item>
             </el-form>
+
           </div>
         </el-col>
       </el-row>
@@ -91,7 +109,7 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {ALL_AREAS, ADD_BUSINESS_BASIC, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
+import {ALL_AREAS, ADD_BUSINESS_BASIC, GET_BASIC_INFO, ZOHO_SYNC, SUB_CATE_LIST} from '@/api/api'
 import {countriesData} from "@/utils/data";
 
 
@@ -126,6 +144,9 @@ export default {
         address: '',
         lat: '',
         lng: '',
+        business_type_id:'',
+        business_type_name:'',
+        business_type_name_cn:'',
         token: localStorage.getItem('token')
       },
       basicRules: {
@@ -142,7 +163,14 @@ export default {
             message: 'Please input ',
             trigger: 'blur',
           },
-        ]
+        ],
+        business_type_id: [
+          {
+            required: true,
+            message: "Edu-Business Categories (Choose 1) ",
+            trigger: 'change',
+          },
+        ],
 
 
       },
@@ -168,6 +196,7 @@ export default {
       cityOptions: [],
       districtOptions: [],
       subCateOptions: [],
+      selectBusinessTypeList: [],
       selectEducatorTypeList: [],
       businessInfo: {}
 
@@ -179,6 +208,7 @@ export default {
   mounted() {
     // console.log(countriesData)
     this.getAllAreas(0)
+    this.getSubCateList()
 
   },
   methods: {
@@ -186,6 +216,18 @@ export default {
       console.log(e)
     },
     submitForm(formName) {
+      let businessTypeId;
+      let businessTypeName;
+      let businessTypeNameCn;
+      this.selectBusinessTypeList.forEach(item => {
+        businessTypeId = item.id;
+        businessTypeName = item.identity_name;
+        businessTypeNameCn = item.identity_name_cn;
+      })
+      this.basicForm.business_type_id = businessTypeId;
+      this.basicForm.business_type_name = businessTypeName;
+      this.basicForm.business_type_name_cn = businessTypeNameCn;
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
@@ -272,6 +314,34 @@ export default {
     districtChange(e) {
       console.log(e)
     },
+    getSubCateList() {
+      let params = {
+        pid: 2,
+        tree: 1
+      }
+      SUB_CATE_LIST(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.subCateOptions = res.message
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    selectBusinessType(item) {
+      // console.log(item);
+      if (this.selectBusinessTypeList.indexOf(item) == -1) {
+        if (this.selectBusinessTypeList.length > 0) {
+          let len = this.selectBusinessTypeList.length - 1;
+          this.selectBusinessTypeList.splice(len, 1);
+        }
+        this.selectBusinessTypeList.push(item);
+      } else {
+        this.selectBusinessTypeList.splice(this.selectBusinessTypeList.indexOf(item), 1);
+      }
+
+    },
     getBasicInfo() {
       let uid = localStorage.getItem('uid')
       let params = {
@@ -348,7 +418,7 @@ export default {
         {'zc_gad': ''},
         {'SingleLine': params.business_name  // Education Business Name
         },
-        {'Dropdown2': this.businessInfo.business_type_name  //Education Business Category
+        {'Dropdown2': params.business_type_name  //Education Business Category
         },
         {'Dropdown': 'Education Business'  //Company Type
         },

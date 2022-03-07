@@ -10,7 +10,7 @@
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
               <el-breadcrumb-item :to="{ path: '/vendor/profile' }">Profile</el-breadcrumb-item>
-              <el-breadcrumb-item>Company Information</el-breadcrumb-item>
+              <el-breadcrumb-item>Company General Info</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           <div class="basic-form">
@@ -22,34 +22,8 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-
-              <el-form-item label="Company Name" prop="vendor_name_en">
-                <el-input v-model="basicForm.vendor_name_en" placeholder="Company Name"></el-input>
-              </el-form-item>
-              <el-form-item label="Legal Company Name">
-                <el-input v-model="basicForm.legal_company_name" placeholder="Legal Company Name"></el-input>
-              </el-form-item>
-              <el-form-item label="Business Registration ID">
-                <el-input v-model="basicForm.busin_reg_num" placeholder="Business Registration ID"></el-input>
-              </el-form-item>
-              <el-form-item label="Business License">
-                <el-upload
-                    class="profile-uploader"
-                    :action="uploadActionUrl"
-                    :headers="uploadHeaders"
-                    :data="uploadData"
-                    :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleProfilePhotoSuccess"
-                    :before-upload="beforeProfilePhotoUpload"
-                >
-                  <el-image v-if="businessRegImgUrl" :src="businessRegImgUrl" class="profile-avatar"></el-image>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-
-              </el-form-item>
               <el-form-item label="Vendor Introduction" >
-                <el-input v-model="basicForm.vendor_bio" type="textarea" placeholder="Vendor Introduction"></el-input>
+                <el-input v-model="basicForm.vendor_bio" placeholder="Vendor Introduction"></el-input>
               </el-form-item>
               <el-form-item label="WeChat Official Account ID" >
                 <el-input v-model="basicForm.wechat_public_name" placeholder="WeChat Official Account ID"></el-input>
@@ -94,24 +68,7 @@
                 <el-switch v-model="basicForm.is_events"></el-switch>
               </el-form-item>
 
-              <el-form-item label="Business Category (Choose 1)" prop="vendor_type_id">
-                <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
-                  <div v-if="item['children'].length>0" class="category-parent">
-                  </div>
-                  <div v-if="item['children'].length===0" class="categories-tags-item"
-                       :class="selectVendorTypeList.findIndex(element=>element.id === item.id) == -1 ? '' : 'tag-active' "
-                       @click="selectVendorType(item)">
-                    {{ item.identity_name }}
-                  </div>
-                  <div class="categories-tags-item" v-for="(child,key) in item['children']" :key="key"
-                       :class="selectVendorTypeList.findIndex(element=>element.id === child.id) == -1 ? '' : 'tag-active' "
-                       @click="selectVendorType(child)">
-                    {{ child.identity_name }}
-                  </div>
-                </div>
-              </el-form-item>
-
-              <el-form-item style="text-align: center;">
+              <el-form-item>
                 <el-button type="primary" @click="submitForm('basicForm')">
                   Submit
                 </el-button>
@@ -128,7 +85,7 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {ALL_AREAS, ADD_VENDOR_BASIC, GET_BASIC_INFO, ZOHO_SYNC, SUB_CATE_LIST} from '@/api/api'
+import {ALL_AREAS, ADD_VENDOR_BASIC, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
 
 export default {
   name: "vendorInfo",
@@ -137,20 +94,8 @@ export default {
   },
   data() {
     return {
-      uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
-      uploadHeaders: {
-        platform: 4
-      },
-      uploadData: {
-        token: localStorage.getItem('token')
-      },
-      businessRegImgUrl: '',
 
       basicForm: {
-        vendor_name_en: '',
-        legal_company_name: '',
-        busin_reg_num: '',
-        busin_reg_img: '',
         vendor_bio: '',
         country: '',
         location:'',
@@ -165,19 +110,9 @@ export default {
         is_dog_friendly: 0,
         lat:'',
         lng:'',
-        vendor_type_id:'',
-        vendor_type_name: '',
-        vendor_type_name_cn: '',
         token:localStorage.getItem('token')
       },
       basicRules: {
-        vendor_name_en: [
-          {
-            required: true,
-            message: 'Please input',
-            trigger: 'blur',
-          }
-        ],
         vendor_bio: [
           {
             required: true,
@@ -185,21 +120,12 @@ export default {
             trigger: 'blur',
           }
         ],
-        vendor_type_id: [
-          {
-            required: true,
-            message: "Business Category (Choose 1) ",
-            trigger: 'change',
-          },
-        ],
 
       },
       provinceOptions: [],
       cityOptions: [],
       districtOptions: [],
-      vendorInfo:{},
-      subCateOptions: [],
-      selectVendorTypeList: []
+      vendorInfo:{}
 
     }
   },
@@ -207,52 +133,8 @@ export default {
     // console.log(countriesData)
     this.getAllAreas(0)
     this.getBasicInfo()
-    this.getSubCateList()
   },
   methods: {
-    getSubCateList() {
-      let params = {
-        pid: 3,
-        tree: 1
-      }
-      SUB_CATE_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.subCateOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    selectVendorType(item) {
-      // console.log(item);
-      if (this.selectVendorTypeList.indexOf(item) == -1) {
-        if (this.selectVendorTypeList.length > 0) {
-          let len = this.selectVendorTypeList.length - 1;
-          this.selectVendorTypeList.splice(len, 1);
-        }
-        this.selectVendorTypeList.push(item);
-      } else {
-        this.selectVendorTypeList.splice(this.selectVendorTypeList.indexOf(item), 1);
-      }
-
-      console.log(this.selectVendorTypeList);
-    },
-    handleProfilePhotoSuccess(res, file) {
-      // console.log(res.data[0]['file_url'])
-      this.businessRegImgUrl = URL.createObjectURL(file.raw)
-      this.basicForm.busin_reg_img = res.data[0]['file_url']
-    },
-    beforeProfilePhotoUpload(file) {
-
-      const isLt2M = file.size / 1024 / 1024 < 20
-
-      if (!isLt2M) {
-        this.$message.error('Avatar picture size can not exceed 20MB')
-      }
-      return isLt2M
-    },
     getAllAreas(pid) {
       let params = {
         pid: pid
@@ -307,13 +189,6 @@ export default {
       console.log(e)
     },
     submitForm(formName) {
-
-      this.selectVendorTypeList.forEach(item => {
-        this.basicForm.vendor_type_id = item.id;
-        this.basicForm.vendor_type_name = item.identity_name;
-        this.basicForm.vendor_type_name_cn = item.identity_name_cn;
-      })
-
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.basicForm.is_dog_friendly) {
@@ -362,11 +237,6 @@ export default {
           let vendorInfo = res.message.vendor_info;
           this.vendorInfo = vendorInfo
 
-          this.basicForm.vendor_name_en = vendorInfo.vendor_name_en;
-          this.basicForm.legal_company_name = vendorInfo.legal_company_name;
-          this.basicForm.busin_reg_num = vendorInfo.busin_reg_num;
-          this.basicForm.busin_reg_img = vendorInfo.busin_reg_img;
-
           this.basicForm.vendor_bio = vendorInfo.vendor_bio;
           // this.basicForm.country = vendorInfo.country;
           // this.basicForm.location = vendorInfo.location ;
@@ -392,15 +262,14 @@ export default {
     async submitVendorCompanyForm(){
 
       let params = Object.assign({}, this.basicForm)
-      let userId = localStorage.getItem('uid')
 
       let zohoData = [
         {'zf_referrer_name': ''},
         {'zf_redirect_url': ''},
         {'zc_gad': ''},
-        {'SingleLine': params.vendor_name_en  //vendor company name
+        {'SingleLine': vendorInfo.vendor_name_en  //vendor company name
         },
-        {'Dropdown2': params.vendor_type_name  //Vendor Category
+        {'Dropdown2': vendorInfo.vendor_type_name  //Vendor Category
         },
         {'SingleLine5': userId  //UserID
         },
@@ -428,19 +297,22 @@ export default {
         },
         {'Address_Country': ''   //Country
         },
-        {'SingleLine4': params.busin_reg_num   //Business Registration No.
+        {'SingleLine4': ''   //Business Registration No.
         },
         {'MultiLine': params.vendor_bio   //Company Intro
         },
-        {'SingleLine3': params.wechat_public_name   //WeChat ID
+        {'SingleLine3': ''   //WeChat ID
         },
-        {'Website1': params.busin_reg_img  // Business License Link
+        {'Website1': ''  // Business License Link
         },
         {'Website2': ''   //Company Logo Link
         },
         {'Website3': ''   //Header Image Link
         }
       ]
+
+      let userId = localStorage.getItem('uid')
+      let vendorInfo = this.vendorInfo
 
       let zohoParams = {
         zoho_data: zohoData,

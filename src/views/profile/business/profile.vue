@@ -1058,7 +1058,7 @@ export default {
     handleLogoPhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
       this.logoPhotoUrl = URL.createObjectURL(file.raw)
-      let logoLink = res.data[0]['file_url']
+      // let logoLink = res.data[0]['file_url']
       let params = {
         logo: res.data[0]['file_url'],
         identity: 2,
@@ -1068,7 +1068,7 @@ export default {
       ADD_USER_INFO(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.submitEduBusinessCompanyForm(logoLink, '')
+          // this.submitEduBusinessCompanyForm(logoLink, '')
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }
@@ -1089,7 +1089,7 @@ export default {
     },
     handleBackgroundSuccess(res, file) {
       this.backgroundUrl = URL.createObjectURL(file.raw)
-      let headerLink = res.data[0]['file_url']
+      // let headerLink = res.data[0]['file_url']
       let params = {
         header_photo: res.data[0]['file_url'],
         identity: 2,
@@ -1099,7 +1099,7 @@ export default {
       ADD_USER_INFO(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.submitEduBusinessCompanyForm('', headerLink)
+          // this.submitEduBusinessCompanyForm('', headerLink)
           this.$message.success('Success')
           this.getVisitorBasicInfo()
         }

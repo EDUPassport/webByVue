@@ -349,7 +349,6 @@
 
   </div>
 
-
 </template>
 
 <script>
@@ -1020,6 +1019,127 @@ export default {
       })
 
     },
+    async submitEducatorContactForm(userId){
+
+      let params = Object.assign({}, this.registerForm)
+
+      let zohoData = [
+        {'zf_referrer_name':''},
+        {'zf_redirect_url':''},
+        {'zc_gad':''},
+        {'SingleLine':userId //UserID
+        },
+        {'SingleLine1':params.first_name // First Name
+        },
+        {'SingleLine2':params.last_name //  Last Name
+        },
+        {'Dropdown':'' //  Gender
+        },
+        {'Date':'' //   Date of Birth dd-MMM-yyyy
+        },
+        {'SingleLine3':'' //   Title
+        },
+        {'Email':params.email //   Email
+        },
+        {'PhoneNumber_countrycode':'' //   Phone
+        },
+        {'SingleLine4':'' //   Nationality
+        },
+        {'Dropdown1':'' //   Membership Type
+        },
+        {'MultiLine':'' //   Languages Spoken
+        },
+        {'Number':'' //   Membership Duration
+        },
+        {'SingleLine5':'' //   City
+        },
+        {'SingleLine6':'' //   Province
+        },
+        {'SingleLine7':'' //   Country
+        },
+        {'Dropdown2':'' //   Educator Type
+        },
+        {'MultiLine1':'' //   Education
+        },
+        {'MultiLine2':'' //    Work History
+        },
+        {'Dropdown3':'' //    Teaching Experience
+        },
+        {'MultiLine3':'' //   Certifications
+        },
+        {'MultiLine4':'' //   Educator Intro
+        },
+        {'Website':'' //   Contact image Link
+        },
+        {'Website1':'' //   Intro Video Link
+        }
+      ]
+
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+
+    },
+    async submitCompanyContactForm(userId){
+
+      let params = Object.assign({}, this.registerForm)
+
+      let zohoData = [
+        {'zf_referrer_name':''},
+        {'zf_redirect_url':''},
+        {'zc_gad':''},
+        {'SingleLine':userId  //UserID
+        },
+        {'SingleLine1':params.first_name  // First Name
+        },
+        {'SingleLine2':params.last_name  //  Last Name
+        },
+        {'Dropdown':'' //  Gender
+        },
+        {'Date':''  //   Date of Birth dd-MMM-yyyy params.birthday
+        },
+        {'SingleLine3':''  //   Title
+        },
+        {'Email':params.email  //   Email
+        },
+        {'PhoneNumber_countrycode':''  //   Phone
+        },
+        {'SingleLine4':''  //   Nationality
+        },
+        {'Dropdown1':''  //   Membership Type
+        },
+        {'Number':''  //   Membership Duration
+        },
+        {'SingleLine5':''  //   City
+        },
+        {'SingleLine6':''  //   Province
+        },
+        {'SingleLine7':''  //   Country
+        },
+        {'Website':'' //   Contact image Link
+        }
+
+      ]
+
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+
+    },
     submitRegisterForm(formName) {
 
       let self = this;
@@ -1038,10 +1158,10 @@ export default {
               // let userInfo = res.message
               // localStorage.setItem('uid',res.message.id)
               if (self.identityValue == 1) {
-                this.submitRegisterForm2(res.message.id)
+                this.submitEducatorContactForm(res.message.id)
               }
               if (self.identityValue == 2 || self.identityValue == 3) {
-                this.submitRegisterForm1(res.message.id)
+                this.submitCompanyContactForm(res.message.id)
               }
 
               this.$message.success('Registration completed!')

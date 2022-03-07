@@ -484,9 +484,6 @@ export default {
           'Dropdown1':'' // Membership Type
         },
         {
-          'Email': params.work_email  //Education Business Email
-        },
-        {
           'Address_AddressLine1':'' //Street Address
         },
         {
