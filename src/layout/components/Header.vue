@@ -428,6 +428,8 @@ export default {
 
 <style scoped>
 .header-container {
+  max-width: 1920px;
+  margin: 0 auto;
   padding: 10px 40px;
   border-bottom: 1px solid #eeeeee;
 }
