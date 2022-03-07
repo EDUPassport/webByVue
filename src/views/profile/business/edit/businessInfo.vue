@@ -174,23 +174,6 @@ export default {
 
 
       },
-      sexOptions: [
-        {
-          value: 1,
-          object_en: 'Male',
-          object_cn: '男'
-        },
-        {
-          value: 2,
-          object_en: 'Female',
-          object_cn: "女"
-        },
-        {
-          value: 3,
-          object_en: 'No Gender Requirements',
-          object_cn: '无性别要求'
-        }
-      ],
       nationalityOptions: countriesData,
       provinceOptions: [],
       cityOptions: [],

@@ -37,7 +37,7 @@
                   Gender:
                   <span v-if="basicUserInfo.sex == 1">Male</span>
                   <span v-if="basicUserInfo.sex == 2">Female</span>
-                  <span v-if="basicUserInfo.sex == 3">No Gender Requirements</span>
+                  <span v-if="basicUserInfo.sex == 3">Undisclosed</span>
 
                 </div>
                 <div class="basic-info-item" v-if="businessInfo.nationality">

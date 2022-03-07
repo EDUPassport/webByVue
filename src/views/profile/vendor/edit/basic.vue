@@ -140,8 +140,8 @@ export default {
         },
         {
           value: 3,
-          object_en: 'No Gender Requirements',
-          object_cn: '无性别要求'
+          object_en: 'Undisclosed',
+          object_cn: '未公开'
         }
       ],
       nationalityOptions: countriesData,
@@ -312,6 +312,17 @@ export default {
       let params = Object.assign({}, this.basicForm)
       let userId = localStorage.getItem('uid')
 
+      let sexStr = ''
+      if(params.sex == 1){
+        sexStr = 'Male'
+      }
+      if(params.sex == 2){
+        sexStr = 'Female'
+      }
+      if(params.sex == 3){
+        sexStr = 'Undisclosed'
+      }
+
       let zohoData = [
         {'zf_referrer_name':''},
         {'zf_redirect_url':''},
@@ -322,7 +333,7 @@ export default {
         },
         {'SingleLine2':params.last_name  //  Last Name
         },
-        {'Dropdown':params.sex  //  Gender
+        {'Dropdown': sexStr  //  Gender
         },
         {'Date':''  //   Date of Birth dd-MMM-yyyy params.birthday
         },
