@@ -7,7 +7,6 @@ import 'element-plus/dist/index.css'
 import './style/index.css'
 // import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import en from 'element-plus/es/locale/lang/en'
-
 // import 'element-plus/theme-chalk/index.css'
 
 import {createI18n} from 'vue-i18n'
@@ -30,6 +29,11 @@ import VueSocialSharing from 'vue-social-sharing'
 
 import GoEasy from "goeasy";
 import IMService from "./assets/lib/imservice"
+
+
+import Vue3CountryIntl from 'vue3-country-intl';
+// 引入css
+import 'vue3-country-intl/lib/vue3-country-intl.css'
 
 // const version = process.env.VERSION
 // const localVersion = localStorage.getItem('projectVersion')
@@ -83,6 +87,8 @@ app.component('Folder',Folder)
 app.component('CircleClose',CircleClose)
 app.component('SuccessFilled',SuccessFilled)
 app.component('Failed',Failed)
+
+app.component(Vue3CountryIntl.name, Vue3CountryIntl)
 
 app.use(router)
 app.use(store)

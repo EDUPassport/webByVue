@@ -15,7 +15,7 @@
           </div>
           <div class="basic-form">
             <el-form
-                ref="basicForm"
+                ref="basicForms"
                 :model="basicForm"
                 :rules="basicRules"
                 label-width="120px"
@@ -28,8 +28,33 @@
               <el-form-item label="Last Name" prop="last_name">
                 <el-input v-model="basicForm.last_name" placeholder="Last Name"></el-input>
               </el-form-item>
-              <el-form-item label="Contact Phone #">
-                <el-input v-model="basicForm.contact_phone" placeholder="Contact Phone #"></el-input>
+              <el-form-item label="Contact Phone #" prop="contact_phone" >
+                <div class="contact-phone-container">
+                  <div class="contact-phone-l">
+<!--                    @onChange="onDefaultChange"-->
+                    <Vue3CountryIntl
+                      schema="input"
+                      type="phone"
+                      placeholder="select phone area code "
+                      v-model="basicForm.area_code"
+                    >
+                  </Vue3CountryIntl>
+                  </div>
+                  <div class="contact-phone-r">
+                    <el-input v-model="basicForm.contact_phone" placeholder="Contact Phone #"></el-input>
+                  </div>
+                </div>
+              </el-form-item>
+              <el-form-item label="Nationality" prop="nationality" >
+                <el-select v-model="basicForm.nationality"
+                           filterable
+                           placeholder="Select your nationality">
+                  <el-option v-for="(item,i) in nationalityOptions" :key="i" :label="item.name"
+                             :value="item.name"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="Job Title" prop="job_title" >
+                <el-input v-model="basicForm.job_title" placeholder="Job Title"></el-input>
               </el-form-item>
               <el-form-item label="Wechat ID" prop="wx_id">
                 <el-input v-model="basicForm.wx_id" placeholder="Wechat ID"></el-input>
@@ -41,17 +66,6 @@
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="Nationality">
-                <el-select v-model="basicForm.nationality"
-                           filterable
-                           placeholder="Select your nationality">
-                  <el-option v-for="(item,i) in nationalityOptions" :key="i" :label="item.name"
-                             :value="item.name"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="Job Title">
-                <el-input v-model="basicForm.job_title" placeholder="Job Title"></el-input>
-              </el-form-item>
               <el-form-item label="Short Bio">
                 <el-input v-model="basicForm.bio" type="textarea" placeholder="Short Bio"></el-input>
               </el-form-item>
@@ -99,7 +113,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="submitForm('basicForm')">
+                <el-button type="primary" @click="submitForm('basicForms')">
                   Submit
                 </el-button>
               </el-form-item>
@@ -116,51 +130,92 @@
 import meSideMenu from "@/components/meSideMenu";
 import {SUB_CATE_LIST, ADD_BUSINESS_BASIC, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
 import {countriesData} from "@/utils/data";
+import {reactive, ref} from "vue";
 
 export default {
   name: "basic",
   components: {
-    meSideMenu
+    meSideMenu,
+  },
+  setup(){
+
+    let basicForms = ref(null)
+
+    const basicForm = reactive({
+      first_name: '',
+      last_name: '',
+      nickname: '',
+      sex: '',
+      sex_name: '',
+      nationality: '',
+      job_title: '',
+      bio: '',
+      hobbies: '',
+      wx_id: '',
+      contact_phone: '',
+      area_code:"86",
+      token: localStorage.getItem('token')
+    })
+
+    const checkContactPhone=(rule,value,callback)=>{
+      if(!value){
+        return callback(new Error('Please input contact phone'))
+      }
+      if(!basicForm.area_code){
+        return callback(new Error('Please input area code'))
+      }
+      callback()
+    }
+
+    const basicRules = reactive({
+      first_name: [
+        {
+          required: true,
+          message: 'Please input first name',
+          trigger: 'blur',
+        }
+      ],
+      last_name: [
+        {
+          required: true,
+          message: 'Please input last name',
+          trigger: 'blur',
+        },
+      ],
+      nationality: [
+        {
+          required: true,
+          message: 'Please select',
+          trigger: 'blur',
+        },
+      ],
+      job_title: [
+        {
+          required: true,
+          message: 'Please input',
+          trigger: 'blur',
+        },
+      ],
+      contact_phone: [
+        {
+          required: true,
+          validator:checkContactPhone,
+          trigger: 'blur',
+        },
+      ]
+    })
+
+    return {
+      basicForms,
+      basicForm,
+      basicRules
+    }
+
+
   },
   data() {
     return {
-      basicForm: {
-        first_name: '',
-        last_name: '',
-        nickname: '',
-        sex: '',
-        sex_name: '',
-        nationality: '',
-        job_title: '',
-        bio: '',
-        hobbies: '',
-        wx_id: '',
-        contact_phone: '',
-        token: localStorage.getItem('token')
-      },
-      basicRules: {
-        first_name: [
-          {
-            required: true,
-            message: 'Please input first name',
-            trigger: 'blur',
-          }
-        ],
-        last_name: [
-          {
-            required: true,
-            message: 'Please input last name',
-            trigger: 'blur',
-          },
-        ],
-        wx_id: [
-          {
-            required: false,
-            message: 'Please input wechat id',
-            trigger: 'blur',
-          },
-        ]
-      },
+
       sexOptions: [
         {
           value: 1,
@@ -199,8 +254,12 @@ export default {
 
   },
   methods: {
+
     submitForm(formName) {
+      console.log(this.basicForm)
+      console.log(this.$refs[formName])
       this.$refs[formName].validate((valid) => {
+        console.log(valid)
         if (valid) {
           this.basicForm.hobbies = this.selectHobbyInfoList.join(',')
           let params = Object.assign({}, this.basicForm)
@@ -288,7 +347,7 @@ export default {
           }
 
           this.basicForm.nationality = businessUserInfo.nationality;
-
+          this.basicForm.area_code = businessUserInfo.area_code;
           this.basicForm.job_title = businessUserInfo.job_title;
           this.basicForm.bio = businessUserInfo.bio;
           this.basicForm.wx_id = businessUserInfo.wx_id;
@@ -591,4 +650,26 @@ export default {
   padding: 10px;
 }
 
+.contact-phone-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contact-phone-l{
+    width:28%;
+}
+
+.contact-phone-r{
+  width:70%;
+}
+
+/deep/ .vue-country-intl-input .country-intl-input{
+  height: 32px;
+}
+
+/deep/ .vue-country-intl-input .country-intl-label{
+  padding: 0 15px;
+}
 </style>

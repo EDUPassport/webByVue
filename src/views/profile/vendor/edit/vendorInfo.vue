@@ -15,7 +15,7 @@
           </div>
           <div class="basic-form">
             <el-form
-                ref="basicForm"
+                ref="basicForms"
                 :model="basicForm"
                 :rules="basicRules"
                 label-width="120px"
@@ -58,7 +58,23 @@
                 <el-input v-model="basicForm.website" placeholder="Website"></el-input>
               </el-form-item>
               <el-form-item label="Phone #" >
-                <el-input v-model="basicForm.phone" placeholder="Phone #"></el-input>
+
+                <div class="contact-phone-container">
+                  <div class="contact-phone-l">
+                    <Vue3CountryIntl
+                        schema="input"
+                        type="phone"
+                        placeholder="select phone area code "
+                        v-model="basicForm.area_code"
+                    >
+                    </Vue3CountryIntl>
+                  </div>
+                  <div class="contact-phone-r">
+                    <el-input v-model="basicForm.phone" placeholder="Phone #"></el-input>
+                  </div>
+                </div>
+
+
               </el-form-item>
               <el-form-item label="Location">
                 <el-select v-model="basicForm.province"
@@ -112,10 +128,10 @@
               </el-form-item>
 
               <el-form-item style="text-align: center;">
-                <el-button type="primary" @click="submitForm('basicForm')">
+                <el-button type="primary" @click="submitForm('basicForms')">
                   Submit
                 </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
+                <el-button @click="resetForm('basicForms')">Reset</el-button>
               </el-form-item>
             </el-form>
 
@@ -129,11 +145,90 @@
 <script>
 import meSideMenu from "@/components/meSideMenu";
 import {ALL_AREAS, ADD_VENDOR_BASIC, GET_BASIC_INFO, ZOHO_SYNC, SUB_CATE_LIST} from '@/api/api'
+import {reactive, ref} from "vue";
 
 export default {
   name: "vendorInfo",
   components: {
     meSideMenu
+  },
+  setup(){
+    let basicForms = ref(null)
+
+    const basicForm = reactive({
+      vendor_name_en: '',
+      legal_company_name: '',
+      busin_reg_num: '',
+      busin_reg_img: '',
+      vendor_bio: '',
+      country: '',
+      location:'',
+      province: '',
+      city: '',
+      district: '',
+      address: '',
+      website: '',
+      wechat_public_name: '',
+      phone: '',
+      area_code:"86",
+      is_events: 0,
+      is_dog_friendly: 0,
+      lat:'',
+      lng:'',
+      vendor_type_id:'',
+      vendor_type_name: '',
+      vendor_type_name_cn: '',
+      token:localStorage.getItem('token')
+    })
+
+    const checkContactPhone=(rule,value,callback)=>{
+      if(!value){
+        return callback(new Error('Please input contact phone'))
+      }
+      if(!basicForm.area_code){
+        return callback(new Error('Please input area code'))
+      }
+      callback()
+    }
+
+    const basicRules = reactive({
+      vendor_name_en: [
+        {
+          required: true,
+          message: 'Please input',
+          trigger: 'blur',
+        }
+      ],
+      vendor_bio: [
+        {
+          required: true,
+          message: 'Please input',
+          trigger: 'blur',
+        }
+      ],
+      vendor_type_id: [
+        {
+          required: true,
+          message: "Business Category (Choose 1) ",
+          trigger: 'change',
+        },
+      ],
+      phone: [
+        {
+          required: true,
+          validator:checkContactPhone,
+          trigger: 'blur',
+        },
+      ]
+
+
+    })
+
+    return {
+      basicForms,
+      basicForm,
+      basicRules
+    }
   },
   data() {
     return {
@@ -146,54 +241,6 @@ export default {
       },
       businessRegImgUrl: '',
 
-      basicForm: {
-        vendor_name_en: '',
-        legal_company_name: '',
-        busin_reg_num: '',
-        busin_reg_img: '',
-        vendor_bio: '',
-        country: '',
-        location:'',
-        province: '',
-        city: '',
-        district: '',
-        address: '',
-        website: '',
-        wechat_public_name: '',
-        phone: '',
-        is_events: 0,
-        is_dog_friendly: 0,
-        lat:'',
-        lng:'',
-        vendor_type_id:'',
-        vendor_type_name: '',
-        vendor_type_name_cn: '',
-        token:localStorage.getItem('token')
-      },
-      basicRules: {
-        vendor_name_en: [
-          {
-            required: true,
-            message: 'Please input',
-            trigger: 'blur',
-          }
-        ],
-        vendor_bio: [
-          {
-            required: true,
-            message: 'Please input',
-            trigger: 'blur',
-          }
-        ],
-        vendor_type_id: [
-          {
-            required: true,
-            message: "Business Category (Choose 1) ",
-            trigger: 'change',
-          },
-        ],
-
-      },
       provinceOptions: [],
       cityOptions: [],
       districtOptions: [],
@@ -366,7 +413,7 @@ export default {
           this.basicForm.legal_company_name = vendorInfo.legal_company_name;
           this.basicForm.busin_reg_num = vendorInfo.busin_reg_num;
           this.basicForm.busin_reg_img = vendorInfo.busin_reg_img;
-
+          this.basicForm.area_code = vendorInfo.area_code;
           this.basicForm.vendor_bio = vendorInfo.vendor_bio;
           // this.basicForm.country = vendorInfo.country;
           // this.basicForm.location = vendorInfo.location ;
@@ -610,6 +657,31 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+
+
+
+.contact-phone-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contact-phone-l{
+  width:28%;
+}
+
+.contact-phone-r{
+  width:70%;
+}
+
+/deep/ .vue-country-intl-input .country-intl-input{
+  height: 32px;
+}
+
+/deep/ .vue-country-intl-input .country-intl-label{
+  padding: 0 15px;
 }
 
 </style>

@@ -28,7 +28,7 @@
                   First & Last Name: <span>{{ businessInfo.first_name }} {{ businessInfo.last_name }}</span>
                 </div>
                 <div class="basic-info-item" v-if="businessInfo.contact_phone">
-                  Contact Phone #: <span>{{ businessInfo.contact_phone }}</span>
+                  Contact Phone #: <span>+{{businessInfo.area_code}} {{ businessInfo.contact_phone }}</span>
                 </div>
                 <div class="basic-info-item" v-if="businessInfo.wx_id">
                   Wechat ID: <span>{{ businessInfo.wx_id }}</span>
@@ -52,9 +52,7 @@
                 <!--                <div class="basic-info-item">-->
                 <!--                  Location: <span>shangqiu, shangqiu , henan</span>-->
                 <!--                </div>-->
-                <div class="basic-info-item" v-if="businessInfo.business_type_name">
-                  Business Category: <span>{{ businessInfo.business_type_name }}</span>
-                </div>
+
 
               </div>
             </div>
@@ -122,6 +120,9 @@
                 </div>
                 <div class="business-info-item" v-if="businessInfo.business_name">
                   Business Name: <span>{{ businessInfo.business_name }} </span>
+                </div>
+                <div class="business-info-item" v-if="businessInfo.business_type_name">
+                  Business Category: <span>{{ businessInfo.business_type_name }}</span>
                 </div>
                 <div class="business-info-item" v-if="businessInfo.business_bio">
                   Business Introduction #: <span>{{ businessInfo.business_bio }}</span>

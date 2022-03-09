@@ -102,7 +102,9 @@
                     <div class="vendor-info-item" v-if="vendorInfo.vendor_bio">
                       Vendor Introduction: <span>{{ vendorInfo.vendor_bio }}</span>
                     </div>
-
+                    <div class="vendor-info-item" v-if="vendorInfo.vendor_type_name">
+                      Vendor Category: <span>{{ vendorInfo.vendor_type_name }}</span>
+                    </div>
                     <div class="vendor-info-item" v-if="vendorInfo.wechat_public_name">
                       WeChat Official Account ID: <span>{{ vendorInfo.wechat_public_name }}</span>
                     </div>
@@ -110,7 +112,7 @@
                       Website: <span>{{ vendorInfo.website }}</span>
                     </div>
                     <div class="vendor-info-item" v-if="vendorInfo.phone">
-                      Phone #: <span>{{  vendorInfo.phone}}</span>
+                      Phone #: <span>+{{vendorInfo.area_code}} {{  vendorInfo.phone}}</span>
                     </div>
                     <div class="vendor-info-item"
                          v-if="vendorInfo.provinces && vendorInfo.citys && vendorInfo.districts"

@@ -408,7 +408,7 @@ export default {
         })
 
       } else {
-        this.$message.warning('Please switch to am educator profile to be able to apply')
+        this.$message.warning('Please switch to an educator profile to be able to apply')
       }
 
 
