@@ -30,6 +30,31 @@
       </el-col>
     </el-row>
 
+    <el-dialog v-model="sdialogVisible" title="" width="60%"
+               custom-class="dialog-custom"
+               center>
+      <div class="dialog-container">
+        <h1>Thanks for Subscribing</h1>
+        <div class="dialog-tips">And how may we refer to you?</div>
+        <div class="dialog-input-container">
+          <el-input
+              v-model="subscribeName"
+              placeholder="Name"
+              :input-style="{'border-radius':'60px',height:'60px',border:'none','background-color':'#2F2F4D','color':'#ffffff'}"
+              class="xll-subscribe-input"
+          >
+
+          </el-input>
+        </div>
+        <div class="dialog-btn-container">
+          <el-button type="primary" round class="dialog-btn" @click="submit()">Submit</el-button>
+        </div>
+      </div>
+      <template #footer>
+
+      </template>
+    </el-dialog>
+
   </div>
 
 </template>
@@ -41,11 +66,19 @@ export default {
   name: "subscribe",
   data(){
     return {
-      subscribeEmail:''
+      subscribeEmail:'',
+      subscribeName:'',
+      sdialogVisible:false
     }
   },
   methods:{
     subscribe() {
+      if(!this.subscribeEmail){
+        return;
+      }
+      this.sdialogVisible = true
+    },
+    submit(){
       let params = {
         email: this.subscribeEmail
       }
@@ -54,12 +87,14 @@ export default {
         if (res.code == 200) {
           this.$message.success('Subscribe Success')
           this.subscribeEmail = ''
+          this.subscribeName = ''
+          this.sdialogVisible = false
         }
       }).catch(err=>{
         console.log(err)
         this.$message.error(err.msg)
       })
-    },
+    }
   }
 }
 </script>
@@ -114,6 +149,39 @@ export default {
     margin: 0 auto;
   }
 
+}
+/deep/ .dialog-custom{
+  border-radius: 20px;
+}
+.dialog-container{
+  padding:0 20px;
+}
+
+.dialog-container h1{
+  text-align: center;
+}
+
+.dialog-tips{
+  text-align: center;
+  margin-top: 20px;
+}
+.dialog-input-container{
+  padding: 20px 0;
+  margin-top: 20px;
+}
+
+.dialog-btn-container{
+  padding: 20px 0;
+  text-align: center;
+}
+
+.dialog-btn{
+  background-color: #0A1E76;
+  width: 40%;
+  height: 60px;
+  margin: 0 auto;
+  font-size: 18px;
+  border-radius: 60px;
 }
 
 </style>
