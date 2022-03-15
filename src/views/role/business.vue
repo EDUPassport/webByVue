@@ -13,7 +13,7 @@
           </div>
           <div class="basic-form">
             <el-form
-                ref="basicForm"
+                ref="basicForms"
                 :model="basicForm"
                 :rules="basicRules"
                 label-width="120px"
@@ -22,6 +22,9 @@
             >
               <el-form-item label="First Name" prop="first_name">
                 <el-input v-model="basicForm.first_name" placeholder="First Name"></el-input>
+              </el-form-item>
+              <el-form-item label="Last Name" prop="last_name">
+                <el-input v-model="basicForm.last_name" placeholder="Last Name"></el-input>
               </el-form-item>
               <el-form-item label="Job Title" prop="job_title">
                 <el-input v-model="basicForm.job_title" placeholder="Job Title"></el-input>
@@ -56,7 +59,7 @@
               <el-form-item label="Business/ Institution Name" prop="business_name">
                 <el-input v-model="basicForm.business_name" placeholder="Business/ Institution Name"></el-input>
               </el-form-item>
-              <el-form-item label="Location">
+              <el-form-item label="Location" prop="province">
                 <el-select v-model="basicForm.province"
                            @change="provinceChange"
                            placeholder="Select Province">
@@ -111,7 +114,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" :loading="submitLoadingValue" @click="submitForm('basicForm')">
+                <el-button type="primary" :loading="submitLoadingValue" @click="submitForm('basicForms')">
                   Submit
                 </el-button>
 
@@ -127,7 +130,7 @@
 <script>
 import {countriesData} from "@/utils/data";
 import {CHANGE_IDENTITY_LANGUAGE, ADD_BUSINESS_BASIC, SUB_CATE_LIST, ALL_AREAS, ZOHO_SYNC} from '@/api/api'
-import {ref} from 'vue'
+import {ref,reactive} from 'vue'
 import {useStore} from "vuex";
 
 export default {
@@ -139,9 +142,118 @@ export default {
     const setIdentity = (data)=>{
       store.commit('identity',data)
     }
+
+    let basicForms = ref(null)
+
+    const basicForm = reactive({
+      first_name: "",
+      last_name:'',
+      job_title: '',
+      work_email: '',
+      nationality: '',
+      profile_photo: '',
+      business_name: '',
+      location: '',
+      province: '',
+      city: '',
+      district: '',
+      business_type_id: '',
+      business_type_name: '',
+      business_type_name_cn: '',
+      logo: '',
+      token: localStorage.getItem('token')
+    })
+
+    const checkLocations=(rule,value,callback)=>{
+      if(!value){
+        return callback(new Error('Please select'))
+      }
+      if(!basicForm.province || !basicForm.city || !basicForm.district){
+        return callback(new Error('Please select'))
+      }
+      callback()
+    }
+
+    const basicRules = reactive({
+      first_name: [
+        {
+          required: true,
+          message: 'First Name',
+          trigger: 'blur',
+        }
+      ],
+      last_name: [
+        {
+          required: true,
+          message: 'Last Name',
+          trigger: 'blur',
+        }
+      ],
+      job_title: [
+        {
+          required: true,
+          message: "Job Title",
+          trigger: 'blur',
+        },
+      ],
+      work_email: [
+        {
+          required: true,
+          message: "Work Email",
+          trigger: 'blur',
+        },
+      ],
+      nationality: [
+        {
+          required: true,
+          message: "Nationality",
+          trigger: 'change',
+        },
+      ],
+      profile_photo: [
+        {
+          required: true,
+          message: "Choose Your Profile Photo",
+          trigger: 'change',
+        },
+      ],
+      business_name: [
+        {
+          required: true,
+          message: "Business/ Institution Name",
+          trigger: 'blur',
+        },
+      ],
+      province: [
+        {
+          required: true,
+          validator:checkLocations,
+          trigger: 'blur',
+        },
+      ],
+      business_type_id: [
+        {
+          required: true,
+          message: "Edu-Business Categories (Choose 1) ",
+          trigger: 'change',
+        },
+      ],
+      logo: [
+        {
+          required: true,
+          message: "Please upload",
+          trigger: 'change',
+        },
+      ]
+
+    })
+
     return {
       submitLoadingValue,
-      setIdentity
+      setIdentity,
+      basicForms,
+      basicForm,
+      basicRules
     }
   },
   data() {
@@ -156,90 +268,7 @@ export default {
       profilePhotoUrl: '',
       logoPhotoUrl: '',
       nationalityOptions: countriesData,
-      basicForm: {
-        first_name: "",
-        job_title: '',
-        work_email: '',
-        nationality: '',
-        profile_photo: '',
-        business_name: '',
-        location: '',
-        province: '',
-        city: '',
-        district: '',
-        business_type_id: '',
-        business_type_name: '',
-        business_type_name_cn: '',
-        logo: '',
-        token: localStorage.getItem('token')
-      },
-      basicRules: {
-        first_name: [
-          {
-            required: true,
-            message: 'First Name',
-            trigger: 'blur',
-          }
-        ],
-        job_title: [
-          {
-            required: true,
-            message: "Job Title",
-            trigger: 'blur',
-          },
-        ],
-        work_email: [
-          {
-            required: true,
-            message: "Work Email",
-            trigger: 'blur',
-          },
-        ],
-        nationality: [
-          {
-            required: true,
-            message: "Nationality",
-            trigger: 'change',
-          },
-        ],
-        profile_photo: [
-          {
-            required: true,
-            message: "Choose Your Profile Photo",
-            trigger: 'change',
-          },
-        ],
-        business_name: [
-          {
-            required: true,
-            message: "Business/ Institution Name",
-            trigger: 'blur',
-          },
-        ],
-        location: [
-          {
-            required: true,
-            message: "Please Select ",
-            trigger: 'change',
-          },
-        ],
-        business_type_id: [
-          {
-            required: true,
-            message: "Edu-Business Categories (Choose 1) ",
-            trigger: 'change',
-          },
-        ],
-        logo: [
-          {
-            required: true,
-            message: "Please upload",
-            trigger: 'change',
-          },
-        ]
 
-
-      },
       provinceOptions: [],
       cityOptions: [],
       districtOptions: [],

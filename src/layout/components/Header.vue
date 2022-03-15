@@ -334,7 +334,67 @@ export default {
       this.$router.push({path: '/overview', query: {identity: this.identity}})
     },
     turnEditProfile() {
-      this.$router.push({path: '/overview', query: {identity: this.identity}})
+
+      this.$loading({
+        text:'Loading...'
+      })
+      let identity = this.identity
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        let isEducator = res.message.is_educator;
+        let isBusiness = res.message.is_business;
+        let isVendor = res.message.is_vendor;
+        // let isOther = res.message.is_other;
+        // let identity = res.message.identity;
+
+        if (identity == 1) {
+          if (isEducator > 10) {
+            this.$router.push({path: '/overview', query: {identity: this.identity}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push('/role/educator')
+            this.dialogSwitchAccountVisible = false
+          }
+
+        }
+        if (identity == 2) {
+          if (isBusiness > 10) {
+            this.$router.push({path: '/overview', query: {identity: this.identity}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push('/role/business')
+            this.dialogSwitchAccountVisible = false
+          }
+
+        }
+        if (identity == 3) {
+          if (isVendor > 10) {
+            this.$router.push({path: '/overview', query: {identity: this.identity}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push('/role/vendor')
+            this.dialogSwitchAccountVisible = false
+          }
+
+        }
+
+
+      }).catch(err => {
+        console.log(err)
+        this.$loading().close()
+        this.$message.error(err.msg)
+      })
+
     },
     selectRole(e) {
       this.$loading({
@@ -353,7 +413,7 @@ export default {
         // let identity = res.message.identity;
 
         if (e == 1) {
-          if (isEducator >= 10) {
+          if (isEducator > 10) {
             this.changeIdentity(1)
           } else {
             this.$loading().close()
@@ -364,7 +424,7 @@ export default {
 
         }
         if (e == 2) {
-          if (isBusiness >= 10) {
+          if (isBusiness > 10) {
             this.changeIdentity(2)
           } else {
             this.$loading().close()
@@ -375,7 +435,7 @@ export default {
 
         }
         if (e == 3) {
-          if (isVendor >= 10) {
+          if (isVendor > 10) {
             this.changeIdentity(3)
           } else {
             this.$loading().close()

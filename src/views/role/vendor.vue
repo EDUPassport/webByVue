@@ -13,7 +13,7 @@
           </div>
           <div class="basic-form">
             <el-form
-                ref="basicForm"
+                ref="basicForms"
                 :model="basicForm"
                 :rules="basicRules"
                 label-width="120px"
@@ -42,7 +42,7 @@
                 <el-input v-model="basicForm.website" placeholder="Company Website"></el-input>
               </el-form-item>
 
-              <el-form-item label="Location">
+              <el-form-item label="Location" prop="province">
                 <el-select v-model="basicForm.province"
                            @change="provinceChange"
                            placeholder="Select Province">
@@ -117,7 +117,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" :loading="submitLoadingValue" @click="submitForm('basicForm')">
+                <el-button type="primary" :loading="submitLoadingValue" @click="submitForm('basicForms')">
                   Submit
                 </el-button>
                 <!--                <el-button @click="resetForm('basicForm')">Reset</el-button>-->
@@ -133,7 +133,7 @@
 <script>
 import {countriesData} from "@/utils/data";
 import {CHANGE_IDENTITY_LANGUAGE, ADD_VENDOR_BASIC, SUB_CATE_LIST, ALL_AREAS, ZOHO_SYNC} from '@/api/api'
-import {ref} from 'vue'
+import {reactive, ref} from 'vue'
 import {useStore} from "vuex";
 
 export default {
@@ -145,9 +145,134 @@ export default {
     const setIdentity = (data) => {
       store.commit('identity', data)
     }
+
+    let basicForms = ref(null)
+
+    const basicForm = reactive({
+      first_name: "",
+      phone: '',
+      job_title: '',
+      work_email: '',
+      profile_photo: '',
+      logo: '',
+      location: '',
+      province: '',
+      city: "",
+      district: '',
+      website: '',
+      proposed_deal: '',
+      vendor_type_id: '',
+      vendor_type_name: '',
+      vendor_type_name_cn: '',
+      vendor_name_en: '',
+      legal_company_name: '',
+      token: localStorage.getItem('token')
+    })
+
+    const checkLocations=(rule,value,callback)=>{
+      if(!value){
+        return callback(new Error('Please select'))
+      }
+      if(!basicForm.province || !basicForm.city || !basicForm.district){
+        return callback(new Error('Please select'))
+      }
+      callback()
+    }
+
+    const basicRules = reactive({
+      first_name: [
+        {
+          required: true,
+          message: 'First Name',
+          trigger: 'blur',
+        }
+      ],
+      phone: [
+        {
+          required: true,
+          message: "Phone #",
+          trigger: 'blur',
+        },
+      ],
+      job_title: [
+        {
+          required: true,
+          message: "Job Title",
+          trigger: 'blur',
+        },
+      ],
+      work_email: [
+        {
+          required: true,
+          message: "Work Email",
+          trigger: 'blur',
+        },
+      ],
+      vendor_name_en: [
+        {
+          required: true,
+          message: "Company Name (English)",
+          trigger: 'blur',
+        },
+      ],
+      legal_company_name: [
+        {
+          required: true,
+          message: "Company Name",
+          trigger: 'blur',
+        },
+      ],
+      website: [
+        {
+          required: true,
+          message: "Company Website ",
+          trigger: 'blur',
+        },
+      ],
+      proposed_deal: [
+        {
+          required: true,
+          message: "Proposed Deal",
+          trigger: 'blur',
+        },
+      ],
+      profile_photo: [
+        {
+          required: true,
+          message: "Please upload",
+          trigger: 'change',
+        },
+      ],
+      province: [
+        {
+          required: true,
+          validator:checkLocations,
+          trigger: 'blur',
+        },
+      ],
+      vendor_type_id: [
+        {
+          required: true,
+          message: "Business Category (Choose 1) ",
+          trigger: 'change',
+        },
+      ],
+      logo: [
+        {
+          required: true,
+          message: "Please upload",
+          trigger: 'change',
+        },
+      ]
+
+    })
+
     return {
       submitLoadingValue,
-      setIdentity
+      setIdentity,
+      basicForms,
+      basicForm,
+      basicRules
     }
   },
   data() {
@@ -162,114 +287,6 @@ export default {
       profilePhotoUrl: '',
       logoPhotoUrl: '',
       nationalityOptions: countriesData,
-      basicForm: {
-        first_name: "",
-        phone: '',
-        job_title: '',
-        work_email: '',
-        profile_photo: '',
-        logo: '',
-        location: '',
-        province: '',
-        city: "",
-        district: '',
-        website: '',
-        proposed_deal: '',
-        vendor_type_id: '',
-        vendor_type_name: '',
-        vendor_type_name_cn: '',
-        vendor_name_en: '',
-        legal_company_name: '',
-        token: localStorage.getItem('token')
-      },
-      basicRules: {
-        first_name: [
-          {
-            required: true,
-            message: 'First Name',
-            trigger: 'blur',
-          }
-        ],
-        phone: [
-          {
-            required: true,
-            message: "Phone #",
-            trigger: 'blur',
-          },
-        ],
-        job_title: [
-          {
-            required: true,
-            message: "Job Title",
-            trigger: 'blur',
-          },
-        ],
-        work_email: [
-          {
-            required: true,
-            message: "Work Email",
-            trigger: 'blur',
-          },
-        ],
-        vendor_name_en: [
-          {
-            required: true,
-            message: "Company Name (English)",
-            trigger: 'blur',
-          },
-        ],
-        legal_company_name: [
-          {
-            required: true,
-            message: "Company Name",
-            trigger: 'blur',
-          },
-        ],
-        website: [
-          {
-            required: true,
-            message: "Company Website ",
-            trigger: 'blur',
-          },
-        ],
-        proposed_deal: [
-          {
-            required: true,
-            message: "Proposed Deal",
-            trigger: 'blur',
-          },
-        ],
-        profile_photo: [
-          {
-            required: true,
-            message: "Please upload",
-            trigger: 'change',
-          },
-        ],
-        location: [
-          {
-            required: true,
-            message: "Please Select ",
-            trigger: 'change',
-          },
-        ],
-        vendor_type_id: [
-          {
-            required: true,
-            message: "Business Category (Choose 1) ",
-            trigger: 'change',
-          },
-        ],
-        logo: [
-          {
-            required: true,
-            message: "Please upload",
-            trigger: 'change',
-          },
-        ]
-
-
-      },
       provinceOptions: [],
       cityOptions: [],
       districtOptions: [],

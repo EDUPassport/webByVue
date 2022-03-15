@@ -57,7 +57,7 @@
               <el-form-item label="Website" >
                 <el-input v-model="basicForm.website" placeholder="Website"></el-input>
               </el-form-item>
-              <el-form-item label="Phone #" >
+              <el-form-item label="Phone #" prop="phone">
 
                 <div class="contact-phone-container">
                   <div class="contact-phone-l">

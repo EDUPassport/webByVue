@@ -28,6 +28,18 @@
               <el-form-item label="Last Name" prop="last_name">
                 <el-input v-model="basicForm.last_name" placeholder="Last Name"></el-input>
               </el-form-item>
+              <el-form-item label="Job Title" prop="job_title">
+                <el-input v-model="basicForm.job_title" placeholder="Job Title"></el-input>
+              </el-form-item>
+              <el-form-item label="Nationality" prop="nationality">
+                <el-select v-model="basicForm.nationality"
+                           filterable
+                           placeholder="Select your nationality">
+                  <el-option v-for="(item,i) in nationalityOptions" :key="i" :label="item.name"
+                             :value="item.name"></el-option>
+                </el-select>
+              </el-form-item>
+
               <el-form-item label="Wechat ID" prop="wx_id">
                 <el-input v-model="basicForm.wx_id" placeholder="Wechat ID"></el-input>
               </el-form-item>
@@ -37,19 +49,6 @@
                              :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
-
-              <el-form-item label="Nationality">
-                <el-select v-model="basicForm.nationality"
-                           filterable
-                           placeholder="Select your nationality">
-                  <el-option v-for="(item,i) in nationalityOptions" :key="i" :label="item.name"
-                             :value="item.name"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="Job Title" >
-                <el-input v-model="basicForm.job_title" placeholder="Job Title"></el-input>
-              </el-form-item>
-
               <el-form-item label="Preferred Language">
                 <div class="object-tags-container" >
                   <div class="object-tags">
@@ -119,8 +118,22 @@ export default {
         ],
         wx_id: [
           {
-            required: true,
+            required: false,
             message: 'Please input wechat id',
+            trigger: 'blur',
+          },
+        ],
+        nationality: [
+          {
+            required: true,
+            message: 'Please select',
+            trigger: 'blur',
+          },
+        ],
+        job_title: [
+          {
+            required: true,
+            message: 'Please input ',
             trigger: 'blur',
           },
         ]

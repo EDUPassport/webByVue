@@ -343,9 +343,9 @@ export default {
           let website = businessInfo.website;
           let businessPhone = businessInfo.business_phone;
           let hiringValue = businessInfo.is_currently_hiring;
-          let province = businessInfo.province;
-          let city = businessInfo.city;
-          let district = businessInfo.district;
+          // let province = businessInfo.province;
+          // let city = businessInfo.city;
+          // let district = businessInfo.district;
 
           if (businessName) {
             this.basicForm.business_name = businessName;
@@ -364,25 +364,26 @@ export default {
           }
           this.basicForm.is_currently_hiring = hiringValue;
 
-          let provinces = businessInfo.provinces;
-          let citys = businessInfo.citys;
-          let districts = businessInfo.districts;
-          let language = localStorage.getItem('language');
+          // let provinces = businessInfo.provinces;
+          // let citys = businessInfo.citys;
+          // let districts = businessInfo.districts;
+          // let language = localStorage.getItem('language');
 
-          if (provinces && citys && districts) {
-            if (language == 'en-US') {
-              this.basicForm.location = districts.Pinyin + ', ' + citys.Pinyin + ', ' + provinces.Pinyin;
-            }
-            if (language == 'zh-CN') {
-              this.basicForm.location = districts.ShortName + ', ' + citys.ShortName + ', ' + provinces.ShortName;
-            }
-          }
-          this.basicForm.province = province;
-          this.basicForm.city = city;
-          this.basicForm.district = district;
+          // if (provinces && citys && districts) {
+          //   if (language == 'en-US') {
+          //     this.basicForm.location = districts.Pinyin + ', ' + citys.Pinyin + ', ' + provinces.Pinyin;
+          //   }
+          //   if (language == 'zh-CN') {
+          //     this.basicForm.location = districts.ShortName + ', ' + citys.ShortName + ', ' + provinces.ShortName;
+          //   }
+          // }
+          // this.basicForm.province = province;
+          // this.basicForm.city = city;
+          // this.basicForm.district = district;
           this.basicForm.address = businessInfo.address;
           this.basicForm.lat = businessInfo.lat;
           this.basicForm.lng = businessInfo.lng;
+
         }
       }).catch(err => {
         console.log(err)
