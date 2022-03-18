@@ -275,12 +275,16 @@
                               v-model="registerForm.code"></el-input>
                   </el-form-item>
                   <el-form-item label="Password" prop="password" required>
-                    <el-input size="medium" type="password" placeholder="Password"
-                              v-model="registerForm.password"></el-input>
+                    <el-input size="medium" type="text" placeholder="Password"
+                              v-model="registerForm.password"
+                              @focus="changeType"
+                    ></el-input>
                   </el-form-item>
                   <el-form-item label="Confirm Password" prop="c_password" required>
-                    <el-input size="medium" type="password" placeholder="Confirm"
-                              v-model="registerForm.c_password"></el-input>
+                    <el-input size="medium" type="text" placeholder="Confirm"
+                              v-model="registerForm.c_password"
+                              @focus="changeType"
+                    ></el-input>
                   </el-form-item>
                   <div class="identity-container">
                     <div class="identity-label">I am a/an</div>
@@ -544,6 +548,9 @@ export default {
     // console.log(linkedinCode)
   },
   methods: {
+    changeType(e){
+      e.target.type = 'password'
+    },
     getCheckCode() {
 
       let params = {

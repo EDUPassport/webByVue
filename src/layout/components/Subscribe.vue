@@ -35,20 +35,49 @@
                center>
       <div class="dialog-container">
         <h1>Thanks for Subscribing</h1>
-        <div class="dialog-tips">And how may we refer to you?</div>
-        <div class="dialog-input-container">
-          <el-input
-              v-model="subscribeName"
-              placeholder="Name"
-              :input-style="{'border-radius':'60px',height:'60px',border:'none','background-color':'#2F2F4D','color':'#ffffff'}"
-              class="xll-subscribe-input"
-          >
 
-          </el-input>
+        <div class="dialog-form-container">
+          <div class="dialog-form-item">
+            <div class="dialog-form-item-label">How may we refer to you? </div>
+            <div class="dialog-form-item-content">
+              <el-input
+                  v-model="subscribeName"
+                  placeholder="Name"
+                  :input-style="{'border-radius':'60px',height:'60px',border:'none','background-color':'#2F2F4D','color':'#ffffff'}"
+                  class="xll-subscribe-input"
+              >
+
+              </el-input>
+            </div>
+          </div>
+
+          <div class="dialog-form-item">
+            <div class="dialog-form-item-label">Which best describes you? </div>
+            <div class="dialog-form-item-content">
+              <div class="identity-container">
+                <div class="identity-btn"
+                     :class="identityValue == 1 ? 'identity-educator-active' : '' "
+                     @click="selectedIdentity(1)">Educator
+                </div>
+                <div class="identity-btn identity-btn-margin"
+                     :class="identityValue == 2 ? 'identity-business-active' : '' "
+                     @click="selectedIdentity(2)">Education-Business
+                </div>
+                <div class="identity-btn identity-btn-margin"
+                     :class="identityValue == 3 ? 'identity-vendor-active' : '' "
+                     @click="selectedIdentity(3)">Vendor
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
+
         <div class="dialog-btn-container">
           <el-button type="primary" round class="dialog-btn" @click="submit()">Submit</el-button>
         </div>
+
       </div>
       <template #footer>
 
@@ -60,23 +89,87 @@
 </template>
 
 <script>
-import {ADD_SUBSCRIBE_EMAIL} from "@/api/api";
+import {ADD_SUBSCRIBE_EMAIL, ZOHO_SYNC} from "@/api/api";
+import {ref} from 'vue'
 
 export default {
   name: "subscribe",
+  setup(){
+
+    const identityValue = ref(localStorage.getItem('identity'))
+
+    const selectedIdentity = (value)=>{
+      identityValue.value = value
+    }
+
+    return {
+      identityValue,
+      selectedIdentity
+    }
+  },
   data(){
     return {
       subscribeEmail:'',
       subscribeName:'',
       sdialogVisible:false
+
     }
   },
   methods:{
+
     subscribe() {
       if(!this.subscribeEmail){
-        return;
+        return this.$message.error('Please input email');
       }
       this.sdialogVisible = true
+    },
+    async submitSubscribeForm(){
+
+      let userId = localStorage.getItem('uid')
+      let identityValue = this.identityValue
+      let identityName = ''
+
+      if(identityValue == 1){
+          identityName = 'Educator'
+      }
+      if(identityValue == 2){
+        identityName = 'Edu-Business'
+      }
+      if(identityValue == 3){
+        identityName = 'Vendor'
+      }
+
+      let zohoData = [
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {'SingleLine': this.subscribeName // name
+        },
+        {'Email': this.subscribeEmail // email
+        },
+        {
+          'Dropdown1':identityName
+        }
+      ]
+
+      if(userId){
+        zohoData.push(
+            {
+              'SingleLine1': userId  //  userId
+            })
+      }
+
+      let zohoParams = {
+        zoho_data:zohoData,
+        zoho_url:'https://forms.zohopublic.com/edupassport/form/EmailSubscription1/formperma/8jXGGCyyrWXDE4zTRQbpNa-BoSMquHc6am8owPPn4zA/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
     },
     submit(){
       let params = {
@@ -85,6 +178,8 @@ export default {
       ADD_SUBSCRIBE_EMAIL(params).then(res => {
         console.log(res)
         if (res.code == 200) {
+          this.submitSubscribeForm()
+
           this.$message.success('Subscribe Success')
           this.subscribeEmail = ''
           this.subscribeName = ''
@@ -153,25 +248,71 @@ export default {
 /deep/ .dialog-custom{
   border-radius: 20px;
 }
+
 .dialog-container{
-  padding:0 20px;
+  width:80%;
+  margin: 0 auto;
 }
 
 .dialog-container h1{
   text-align: center;
 }
 
-.dialog-tips{
-  text-align: center;
-  margin-top: 20px;
+.dialog-form-container{
+  margin-top: 40px;
 }
-.dialog-input-container{
-  padding: 20px 0;
+
+.dialog-form-item{
   margin-top: 20px;
 }
 
-.dialog-btn-container{
+.dialog-form-item-label{
+  font-size:14px;
+}
+
+.dialog-form-item-content{
+  margin-top: 10px;
+}
+
+.identity-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.identity-btn {
+  background-color: rgba(41, 75, 108, 0.1);
+  flex:1;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
   padding: 20px 0;
+}
+
+.identity-btn-margin {
+  margin-left: 10px;
+}
+
+.identity-educator-active {
+  background-color: #00b3d2;
+  color: #ffffff;
+}
+
+.identity-business-active {
+  background-color: #d2005b;
+  color: #ffffff;
+}
+
+.identity-vendor-active {
+  background-color: #b1c452;
+  color: #ffffff;
+}
+
+
+.dialog-btn-container{
+ margin-top: 40px;
   text-align: center;
 }
 
