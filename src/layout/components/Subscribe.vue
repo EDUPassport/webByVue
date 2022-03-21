@@ -149,6 +149,9 @@ export default {
         },
         {
           'Dropdown1':identityName
+        },
+        {
+          'Dropdown2':'Website Newsletter Subscription'
         }
       ]
 
@@ -157,18 +160,34 @@ export default {
             {
               'SingleLine1': userId  //  userId
             })
+
+        let zohoParams = {
+          zoho_data:zohoData,
+          zoho_url:'https://forms.zohopublic.com/edupassport/form/UserEmailSubscription/formperma/yIiE5T3qMFGCpLNETibhYb3Vk8Cj5xCFehie_faFf-g/htmlRecords/submit'
+        }
+
+        await ZOHO_SYNC(zohoParams).then(res=>{
+          console.log(res)
+        }).catch(err=>{
+          console.log(err)
+        })
+
+      }else{
+
+        let zohoParams = {
+          zoho_data:zohoData,
+          zoho_url:'https://forms.zohopublic.com/edupassport/form/EmailSubscription1/formperma/8jXGGCyyrWXDE4zTRQbpNa-BoSMquHc6am8owPPn4zA/htmlRecords/submit'
+        }
+
+        await ZOHO_SYNC(zohoParams).then(res=>{
+          console.log(res)
+        }).catch(err=>{
+          console.log(err)
+        })
+
       }
 
-      let zohoParams = {
-        zoho_data:zohoData,
-        zoho_url:'https://forms.zohopublic.com/edupassport/form/EmailSubscription1/formperma/8jXGGCyyrWXDE4zTRQbpNa-BoSMquHc6am8owPPn4zA/htmlRecords/submit'
-      }
 
-      await ZOHO_SYNC(zohoParams).then(res=>{
-        console.log(res)
-      }).catch(err=>{
-        console.log(err)
-      })
 
     },
     submit(){
