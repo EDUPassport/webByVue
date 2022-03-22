@@ -1,21 +1,30 @@
 <template>
-  <router-view></router-view>
+  <div :style="styleValue">
+    <router-view></router-view>
+  </div>
+
 </template>
 
 <script>
-
+import {ref} from 'vue'
 export default {
   name: 'App',
   components: {
 
   },
   setup(){
-    // const allTag = document.getElementsByTagName('*')
-    // const arrTag = Array.prototype.slice.call(allTag)
-    // arrTag.forEach(function (ele){
-    //   console.log(ele)
-    //   ele.style.fontFamily = 'ArimoBold !important'
-    // })
+    const envName = process.env.VUE_APP_ENV_NAME
+
+    console.log(envName)
+    const styleValue = ref('')
+
+    if(envName === 'development' || envName === 'developmentCN' || envName === 'productionCN'){
+       styleValue.value = 'max-width:1920px;margin:0 auto;'
+    }
+    // console.log(styleValue)
+    return {
+      styleValue
+    }
 
   },
   data(){
