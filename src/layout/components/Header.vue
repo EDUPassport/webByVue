@@ -1,56 +1,58 @@
 <template>
   <div>
-    <el-header class="header-container" height="auto">
-      <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
-        <el-col class="logo-container" :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
-          <el-image class="logo-img" :src="logoImg" fit="fill" @click="turnHome()"></el-image>
-        </el-col>
+    <el-affix :offset="0" :z-index="1000">
+      <el-header class="header-container" height="auto">
+        <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
+          <el-col class="logo-container" :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
+            <el-image class="logo-img" :src="logoImg" fit="fill" @click="turnHome()"></el-image>
+          </el-col>
 
-        <el-col :xs="0" :sm="0" :md="0" :lg="17" :xl="17">
-          <div class="nav-link-container">
-            <router-link to="/home" exact>Home</router-link>
-            <router-link to="/jobs" exact>Jobs</router-link>
-            <router-link to="/deals" exact> Edu Deals</router-link>
-            <router-link to="/industry/news" exact>News</router-link>
-            <router-link to="/blog/list" exact>Blog</router-link>
-            <router-link to="/contact/us" exact> Contact</router-link>
-            <router-link to="/about/us" exact> About</router-link>
-            <router-link to="/services/price" exact> Pricing</router-link>
-            <template v-if="envName === 'development' || envName === 'production'">
+          <el-col :xs="0" :sm="0" :md="0" :lg="17" :xl="17">
+            <div class="nav-link-container">
+              <router-link to="/home" exact>Home</router-link>
+              <router-link to="/jobs" exact>Jobs</router-link>
+              <router-link to="/deals" exact> Edu Deals</router-link>
+              <router-link to="/events/list" exact> Events</router-link>
+              <router-link to="/industry/news" exact>News</router-link>
+              <router-link to="/blog/list" exact>Blog</router-link>
+              <router-link to="/contact/us" exact> Contact</router-link>
+              <router-link to="/about/us" exact> About</router-link>
+              <router-link to="/services/price" exact> Pricing</router-link>
+              <template v-if="envName === 'development' || envName === 'production'">
               <span v-if="!identity || identity == 1"
                     class="nav-china-jobs" @click="turnEnvJobs()">China Jobs</span>
-            </template>
-            <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
+              </template>
+              <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
               <span v-if="!identity || identity == 1"
                     class="nav-china-jobs" @click="turnEnvJobs()">International Jobs</span>
-            </template>
-          </div>
-        </el-col>
+              </template>
+            </div>
+          </el-col>
 
-        <el-col :xs="16" :sm="16" :md="18" :lg="5" :xl="5">
-          <div class="user-container">
-            <template v-if="token && token !='' ">
-              <div class="user-container-1">
-                <div class="user-avatar">
-                  <el-dropdown>
-                    <el-avatar :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
-
-                    <template #dropdown>
-                      <el-dropdown-menu>
-                        <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>
-                        <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>
-                        <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
-                        <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
-                        <el-dropdown-item divided @click="loginOut()">Log Out</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </template>
-                  </el-dropdown>
-
-                </div>
-                <div class="user-1-r">
-                  <div class="user-name"> Hi, {{ username }}</div>
-                  <div class="user-dropdown">
+          <el-col :xs="16" :sm="16" :md="18" :lg="5" :xl="5">
+            <div class="user-container">
+              <template v-if="token && token !='' ">
+                <div class="user-container-1">
+                  <div class="user-avatar">
                     <el-dropdown>
+                      <el-avatar :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
+
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>
+                          <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>
+                          <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
+                          <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
+                          <el-dropdown-item divided @click="loginOut()">Log Out</el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+
+                  </div>
+                  <div class="user-1-r">
+                    <div class="user-name"> Hi, {{ username }}</div>
+                    <div class="user-dropdown">
+                      <el-dropdown>
                     <span class="el-dropdown-link">
                         <template v-if="identity == 0">Guest</template>
                         <template v-if="identity == 1">Educator</template>
@@ -59,83 +61,88 @@
                        <i class="el-icon-arrow-down el-icon--right"></i>
                      </span>
 
-                      <template #dropdown>
-                        <el-dropdown-menu>
-                          <el-dropdown-item @click="selectRole(1)">Educator</el-dropdown-item>
-                          <el-dropdown-item @click="selectRole(2)">Edu-Business</el-dropdown-item>
-                          <el-dropdown-item @click="selectRole(3)">Vendor</el-dropdown-item>
-                        </el-dropdown-menu>
-                      </template>
-                    </el-dropdown>
+                        <template #dropdown>
+                          <el-dropdown-menu>
+                            <el-dropdown-item @click="selectRole(1)">Educator</el-dropdown-item>
+                            <el-dropdown-item @click="selectRole(2)">Edu-Business</el-dropdown-item>
+                            <el-dropdown-item @click="selectRole(3)">Vendor</el-dropdown-item>
+                          </el-dropdown-menu>
+                        </template>
+                      </el-dropdown>
 
+                    </div>
                   </div>
                 </div>
+              </template>
+              <template v-else>
+                <router-link class="login-btn" :to="{path:'/login',query:{type:1}}">Login</router-link>
+                <el-button class="sign-up-btn" type="default" @click="signUp()">Sign Up</el-button>
+              </template>
+            </div>
+          </el-col>
+
+          <el-col :xs="4" :sm="4" :md="4" :lg="0" :xl="0">
+            <div @click="menuDrawerStatus = true">
+              <i class="iconfont el-icon-alihamburger-menu xll-icon-size"></i>
+            </div>
+            <el-drawer
+                v-model="menuDrawerStatus"
+                direction="rtl"
+                size="60%"
+
+            >
+              <div class="nav-link-item">
+                <router-link to="/home" exact>Home</router-link>
               </div>
-            </template>
-            <template v-else>
-              <router-link class="login-btn" :to="{path:'/login',query:{type:1}}">Login</router-link>
-              <el-button class="sign-up-btn" type="default" @click="signUp()">Sign Up</el-button>
-            </template>
-          </div>
-        </el-col>
+              <div class="nav-link-item">
+                <router-link to="/jobs" exact>Jobs</router-link>
+              </div>
+              <div class="nav-link-item">
+                <router-link to="/deals" exact> Edu Deals</router-link>
+              </div>
+              <div class="nav-link-item">
+                <router-link to="/events/list" exact> Events</router-link>
+              </div>
+              <div class="nav-link-item">
+                <router-link to="/industry/news" exact>News</router-link>
+              </div>
+              <div class="nav-link-item">
+                <router-link to="/blog/list" exact>Blog</router-link>
+              </div>
+              <div class="nav-link-item">
+                <router-link to="/contact/us" exact> Contact</router-link>
+              </div>
+              <div class="nav-link-item">
+                <router-link to="/about/us" exact> About</router-link>
+              </div>
+              <div class="nav-link-item">
+                <router-link to="/services/price" exact> Pricing</router-link>
+              </div>
 
-        <el-col :xs="4" :sm="4" :md="4" :lg="0" :xl="0">
-          <div @click="menuDrawerStatus = true">
-            <i class="iconfont el-icon-alihamburger-menu xll-icon-size"></i>
-          </div>
-          <el-drawer
-            v-model="menuDrawerStatus"
-            direction="rtl"
-            size="60%"
-
-          >
-            <div class="nav-link-item">
-              <router-link to="/home" exact>Home</router-link>
-            </div>
-            <div class="nav-link-item">
-              <router-link to="/jobs" exact>Jobs</router-link>
-            </div>
-            <div class="nav-link-item">
-              <router-link to="/deals" exact> Edu Deals</router-link>
-            </div>
-            <div class="nav-link-item">
-              <router-link to="/industry/news" exact>News</router-link>
-            </div>
-            <div class="nav-link-item">
-              <router-link to="/blog/list" exact>Blog</router-link>
-            </div>
-            <div class="nav-link-item">
-              <router-link to="/contact/us" exact> Contact</router-link>
-            </div>
-            <div class="nav-link-item">
-              <router-link to="/about/us" exact> About</router-link>
-            </div>
-            <div class="nav-link-item">
-              <router-link to="/services/price" exact> Pricing</router-link>
-            </div>
-
-            <div class="nav-link-item">
-              <template v-if="envName === 'development' || envName === 'production'">
+              <div class="nav-link-item">
+                <template v-if="envName === 'development' || envName === 'production'">
                             <span v-if="!identity || identity == 1"
                                   @click="turnEnvJobs()">China Jobs</span>
-              </template>
-              <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
+                </template>
+                <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
                              <span v-if="!identity || identity == 1"
                                    @click="turnEnvJobs()">International Jobs</span>
-              </template>
-            </div>
-            <div class="nav-link-item">
-              <router-link  :to="{path:'/login',query:{type:1}}">Login</router-link>
-            </div>
-            <div class="nav-link-item">
-              <router-link  :to="{path: '/login', query: {type: 2}}">Sign Up</router-link>
-            </div>
+                </template>
+              </div>
+              <div class="nav-link-item">
+                <router-link  :to="{path:'/login',query:{type:1}}">Login</router-link>
+              </div>
+              <div class="nav-link-item">
+                <router-link  :to="{path: '/login', query: {type: 2}}">Sign Up</router-link>
+              </div>
 
-          </el-drawer>
-        </el-col>
+            </el-drawer>
+          </el-col>
 
-      </el-row>
-    </el-header>
+        </el-row>
+      </el-header>
+
+    </el-affix>
 
     <el-dialog
         v-model="dialogSwitchAccountVisible"
@@ -491,7 +498,9 @@ export default {
   max-width: 1920px;
   margin: 0 auto;
   padding: 10px 40px;
-  border-bottom: 1px solid #eeeeee;
+  //border-bottom: 1px solid #eeeeee;
+  background-color:#1D2634;
+  color:#ffffff;
 }
 
 .header-row-container {
@@ -515,10 +524,11 @@ export default {
 .nav-link-container a {
   margin-left: 20px;
   text-decoration: none;
-  color: #000000;
+  color: #ffffff;
   font-weight: bold;
   font-size: 16px;
   line-height: 20px;
+
 }
 
 .nav-link-container a:hover {
@@ -527,7 +537,7 @@ export default {
 
 .nav-china-jobs {
   margin-left: 20px;
-  color: #000000;
+  color: #ffffff;
   font-weight: bold;
   font-size: 16px;
   line-height: 20px;
@@ -639,6 +649,7 @@ export default {
   font-weight: bold;
   font-size: 14px;
   display: none;
+  border:1px solid #B1C452;
 }
 
 .nav-link-item {
@@ -673,5 +684,6 @@ export default {
 .xll-icon-size{
   font-size: 40px;
   cursor: pointer;
+  color:#ffffff;
 }
 </style>

@@ -116,7 +116,33 @@ app.config.globalProperties.$filters = {
     howLongFormat(value){
         let eParse = Date.parse(value) / 1000
         return howLong(eParse,'en-US')
+    },
+    ymdFormatEvent(timeStr){
+        let monthArr = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Spt.", "Oct.", "Nov.", "Dec."];
+
+        let time = new Date(timeStr)
+        let year = time.getFullYear();
+        let month = monthArr[time.getMonth()];
+        let day = time.getDate();
+
+        return  month + ' ' + day + ', ' + year;
+    },
+    timeFormatEvent(startTimeStr,endTimeStr){
+
+        let startTime =  new Date(startTimeStr);
+        let endTime =  new Date(endTimeStr);
+
+        let startHourTag = startTime.getHours()>11 ? 'pm' : 'am';
+        let startHour = startTime.getHours() > 12 ? startTime.getHours()-12 : startTime.getHours();
+        let startMin = startTime.getMinutes() < 10 ? "0"+startTime.getMinutes() : startTime.getMinutes();
+
+        let endHourTag = endTime.getHours()>11 ? 'pm' : 'am';
+        let endHour = endTime.getHours() > 12 ? endTime.getHours()-12 : endTime.getHours();
+        let endMin = endTime.getMinutes() < 10 ? "0"+endTime.getMinutes() : endTime.getMinutes();
+
+        return  startHour+':'+startMin + '' + startHourTag + ' - '+ endHour+':'+endMin+''+endHourTag;
     }
+
 }
 app.config.globalProperties.formatDate = function (t) {
     t = t || Date.now();

@@ -436,7 +436,7 @@ export default {
   position: fixed;
   bottom: 120px;
   right: 0px;
-  z-index: 1000;
+  z-index: 900;
 
 }
 .chat-icon-container{
@@ -465,7 +465,7 @@ export default {
   position: fixed;
   bottom: 168px;
   right: 0px;
-  z-index: 1100;
+  z-index: 990;
 
   background-color: #FFFFFF;
   border-top-left-radius: 10px;
@@ -602,7 +602,7 @@ export default {
 
 .conversations .mask {
   position: fixed;
-  z-index: 1000;
+  z-index: 900;
   top:40%;
   left: 50%;
   margin:-15px -15px;

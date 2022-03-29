@@ -77,6 +77,24 @@ const routes = [
                 }
             },
             {
+                path:'/events/list',
+                name:'eventsList',
+                component:()=>import('@/views/events/list'),
+                meta:{
+                    titleC: 'China Events List',
+                    titleG: 'Global Events List',
+                }
+            },
+            {
+                path:'/events/detail',
+                name:'eventsDetail',
+                component:()=>import('@/views/events/detail'),
+                meta:{
+                    titleC: 'China Events Detail',
+                    titleG: 'Global Events Detail',
+                }
+            },
+            {
                 path: '/deals',
                 name: 'deals',
                 component: () => import('@/views/deals/index'),

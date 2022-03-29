@@ -658,6 +658,8 @@ export default {
 }
 
 .price-item {
+  height:350px;
+
   flex: 1;
   margin: 10px;
   border-radius: 20px;
@@ -672,7 +674,7 @@ export default {
 
 .price-item:hover {
   transform: scale(1.05);
-  z-index: 1000;
+  z-index: 990;
   background-color: #00b3d2;
   color: #FFFFFF;
 }
@@ -689,8 +691,17 @@ export default {
 }
 
 .price-pro {
-  /*background-color: #00B2D2;*/
+  background-color: #00B2D2;
+  transform: scale(1.05);
+  z-index: 990;
+  color:#ffffff;
 }
+
+
+.price-pro .price-item-actual-money{
+  color:#FFFFFF;
+}
+
 
 .price-plus {
   /*background-color: #8E134C;*/
@@ -739,6 +750,31 @@ export default {
   font-size: 14px;
   font-weight: bold;
 }
+
+.price-item-content-content{
+  height: 140px;
+  overflow-y: auto;
+}
+
+.price-item-content-content::-webkit-scrollbar {
+  width: 4px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 4px;
+  background-color: hsla(0, 0%, 100%, .5);
+}
+
+/*滚动条里面小方块*/
+.price-item-content-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+/*滚动条里面轨道*/
+.price-item-content-content::-webkit-scrollbar-track {
+  display: none;
+  border-radius: 10px;
+}
+
 
 .price-item-content-item {
   padding: 6px 0 6px 6px;

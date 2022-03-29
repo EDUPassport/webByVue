@@ -131,10 +131,10 @@
             <swiper
                 @slideChange="section4SlideChange"
                 :slidesPerView="3"
-                :initialSlide="1"
+                :initialSlide="2"
                 :centeredSlides="true"
                 :spaceBetween="20"
-                :loop="false"
+                :loop="true"
                 :autoplay='{"delay": 2500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
                 class="mySwiper">
               <swiper-slide class="mySwiper-slide" v-slot="{ isActive }"
@@ -149,7 +149,13 @@
             </swiper>
           </div>
           <div class="section-four-r">
-            <div class="section-four-r-icon"></div>
+            <div class="section-four-r-icon">
+              <el-image
+                  class="section-four-r-icon-img"
+                  src="https://cdn.jsdelivr.net/gh/unilei/images@master/20220323/xxx.7f6rn5poqqo0.webp"
+                  fit="contain"
+              ></el-image>
+            </div>
             <p>
               {{ section4SlideDetailData.text }}
             </p>
@@ -326,38 +332,31 @@ export default {
     const section4SlideData = [
       {
         id: 1,
-        url: 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220318/xxx.61fph34jhbs0.webp',
+        url: 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220323/xxx.4aunjyi0liq0.webp',
         text: 'I have known this supplier a long time and the food they make is made with lots of love and care. It gives you the warm feeling of being home.',
         name: 'Haixia',
         intro: 'Acekidz Principal'
       },
       {
         id: 2,
-        url: 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220318/xxx.7coo8ljmh7s0.webp',
-        text: 'I have known this supplier a long time and the food they make is made with lots of love and care. It gives you the warm feeling of being home.',
-        name: 'Kangkang',
-        intro: 'GM at Hacksons Internations!'
+        url: 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220323/xxx.34zreh2wawc0.webp',
+        text: 'Whether it is their hotdogs, pulled chicken sandwiches, or their lasagna, everything on their menu is superb. I strongly recommend them to anyone who needs any food services!',
+        name: 'Scott',
+        intro: 'RGIS Admin'
       },
       {
         id: 3,
-        url: 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220318/xxx.3urzbt0t2ee0.webp',
+        url: 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220323/xxx.4aunjyi0liq0.webp',
         text: 'I have known this supplier a long time and the food they make is made with lots of love and care. It gives you the warm feeling of being home.',
-        name: 'Faker',
-        intro: 'GM at Hacksons Internations!'
+        name: 'Haixia',
+        intro: 'Acekidz Principal'
       },
       {
         id: 4,
-        url: section41Img,
-        text: 'I have known this supplier a long time and the food they make is made with lots of love and care. It gives you the warm feeling of being home.',
-        name: 'Memberory',
-        intro: 'GM at Hacksons Internations!'
-      },
-      {
-        id: 5,
-        url: 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220318/xxx.1etkqched1s0.webp',
-        text: 'I have known this supplier a long time and the food they make is made with lots of love and care. It gives you the warm feeling of being home.',
-        name: 'Memberory',
-        intro: 'GM at Hacksons Internations!'
+        url: 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220323/xxx.34zreh2wawc0.webp',
+        text: 'Whether it is their hotdogs, pulled chicken sandwiches, or their lasagna, everything on their menu is superb. I strongly recommend them to anyone who needs any food services!',
+        name: 'Scott',
+        intro: 'RGIS Admin'
       }
 
     ]
@@ -706,7 +705,10 @@ export default {
   height: 400px;
   position: relative;
 }
-
+/deep/ .swiper-slide{
+  display:flex;
+  align-items: center;
+}
 .mySwiper-slide {
   position: relative;
   display: flex;
@@ -718,7 +720,7 @@ export default {
 .section-four-l-item {
   width: 100%;
   height: 200px;
-  overflow: hidden;
+  //overflow: hidden;
 
   display: flex;
   flex-direction: column;
@@ -731,7 +733,7 @@ export default {
   width: 100%;
   height: 300px;
   background-color: #ffffff;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #ececec;
   border-radius: 20px;
 
 }
@@ -739,7 +741,7 @@ export default {
 .section-four-l-item-active {
   transform: scale(1.4);
   position: absolute;
-  z-index: 10000;
+  z-index: 900;
 }
 
 .section-four-r {
@@ -751,18 +753,25 @@ export default {
 
 .section-four-r p {
   font-size: 16px;
+  margin-top: 10px;
 }
 
 .section-four-r-icon {
 
 }
+.section-four-r-icon-img{
+  width:60px;
+}
 
 .section-four-r-name {
   margin-top: 20px;
+  font-size: 16px;
 }
 
 .section-four-r-intro {
   color: #00B2D2;
+  font-size: 16px;
+  margin-top: 4px;
 }
 
 .section-six-bg {
