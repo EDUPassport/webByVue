@@ -4,24 +4,23 @@
       <el-col class="detail-container-col" :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
         <div class="detail-container">
           <div class="detail-title">{{ detailData.title }}</div>
-          <div class="detail-banner-image-container">
+          <div class="detail-banner-image-container" v-if="detailData.image_url">
             <el-image class="detail-banner-image" :src="detailData.image_url"></el-image>
           </div>
           <div class="detail-options-container">
-            <div class="detail-options">
+            <div class="detail-options" v-if="detailData.cate_name_en">
               <i class="iconfont el-icon-alitag"></i>
               <span>{{ detailData.cate_name_en }}</span>
-
             </div>
-            <div class="detail-options">
+            <div class="detail-options" v-if="detailData.tags">
               <i class="iconfont el-icon-alitag1"></i>
               <span> {{ detailData.tags }}</span>
             </div>
-            <div class="detail-options">
+            <div class="detail-options" v-if="detailData.c_time">
               <i class="iconfont el-icon-alidate"></i>
-              <span>{{ detailData.c_time }}</span>
+              <span> {{ $filters.ymdFormatEvent( detailData.c_time) }}</span>
             </div>
-            <div class="detail-options">
+            <div class="detail-options" v-if="detailData.comment_nums">
               <i class="iconfont el-icon-alicomment"></i>
               <span>{{ detailData.comment_nums }}</span>
             </div>

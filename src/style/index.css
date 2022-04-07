@@ -12,3 +12,7 @@
     --el-button-active-background-color: #00b3d2;
     --el-button-active-border-color: #00b3d2
 }
+
+.el-select__caret{
+    color:#0A1E76 !important;
+}

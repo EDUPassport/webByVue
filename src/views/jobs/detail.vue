@@ -127,6 +127,9 @@
           <el-button class="apply-btn" type="primary" round @click="applyJobs(detailData.id)">Apply Now!</el-button>
         </div>
 
+      </el-col>
+      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="job-xll-r-container">
+
         <div class="job-detail-share-container">
           <div class="jobs-favorite" v-if="isFavoriteValue == 1"
                @click="cancelFavorite(1,detailData.id)">
@@ -178,12 +181,7 @@
 
 
         </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
 
-        <div class="post-a-job">
-          <el-button class="post-a-job-btn" type="primary" round @click="postJob()">Post a Job</el-button>
-        </div>
         <div class="company-bio-container">
           <div class="company-bio-label">Company Bio</div>
           <div class="company-bio-label-underline"></div>
@@ -1067,13 +1065,16 @@ export default {
   font-size: 14px;
 }
 
+.job-xll-r-container{
+  padding-top:20px;
+}
 .job-detail-share-container{
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: #FFFFFF;
-  padding: 20px;
+  padding:10px 20px;
   border-radius: 10px;
 }
 
@@ -1112,6 +1113,10 @@ export default {
   width: 100%;
   margin-top: 4px;
   border-bottom: 2px solid #ff2870;
+}
+
+.company-bio-content{
+  padding-top:10px;
 }
 
 .company-logo-container {

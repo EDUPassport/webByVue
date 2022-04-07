@@ -49,7 +49,9 @@
                       </template>
                       <template v-if="envName==='development' || envName==='production' ">
                         <h4>
-                          Oops.. sorry, due to data laws, to post a job on the [chinese/global] platform, you first need
+                          Oops.. sorry, due to data laws, to post a job on the
+                          Chinese
+                          platform, you first need
                           to redirect to and post a job there
                         </h4>
                         <div class="job-detail-china-btn-container">

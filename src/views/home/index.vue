@@ -49,8 +49,9 @@
           <div class="search-container-bg">
             <div class="search-container">
               <div class="search-keywords">
-                <el-input class="search-keywords-input" placeholder="Enter Keyword..." size="medium"
-                          @change="searchNow()"
+                <!--                @change="searchNow()"-->
+                <el-input class="search-keywords-input" placeholder="Enter Keyword..."
+                          size="medium"
                           v-model="searchKeywordsValue">
                 </el-input>
               </div>
@@ -433,8 +434,11 @@
         >
           <div class="industry-item" v-if="index<2">
             <div class="industry-item-t">
-              <el-image class="industry-item-t-img" :src="item.user_url !='' ? item.user_url : item.url"
-                        fit="cover"></el-image>
+              <el-image class="industry-item-t-img"
+                        @click="turnArticleLink(item.link)"
+                        :src="item.user_url !='' ? item.user_url : item.url"
+                        fit="cover">
+              </el-image>
               <div class="industry-item-article-tag">ARTICLE</div>
             </div>
             <!--            <div class="industry-item-m">-->
@@ -443,7 +447,8 @@
             <!--            </div>-->
             <div class="industry-item-title">
               <el-link class="industry-item-title-link"
-                       :href="item.link" target="_blank" :underline="false">{{ item.title }}
+                       :href="item.link" target="_blank" :underline="false">
+                {{ item.title }}
               </el-link>
             </div>
             <div class="industry-item-intro">
@@ -980,6 +985,9 @@ export default {
     },
     signUp() {
       this.$router.push({path: '/login', query: {type: 2}})
+    },
+    turnArticleLink(link){
+      window.open(link,'_blank')
     }
 
   }
@@ -1220,6 +1228,11 @@ export default {
   text-align: left;
   padding: 0 20px;
   margin-top: 10px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 
 .featured-jobs-title a {
@@ -1227,6 +1240,8 @@ export default {
   color: #000000;
   font-weight: bold;
   text-decoration: none;
+
+
 }
 
 .featured-jobs-title a:hover {
@@ -1828,6 +1843,7 @@ export default {
 .industry-item-t-img {
   width: 100%;
   height: 100%;
+  cursor:pointer;
 }
 
 .industry-item-article-tag {

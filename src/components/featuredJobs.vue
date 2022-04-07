@@ -269,6 +269,10 @@ export default {
   padding: 0 20px;
   margin-top: 10px;
   text-align: left;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .featured-jobs-title a{

@@ -9,14 +9,17 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 
         <div class="events-filter-container">
-<!--          <el-select v-model="value" class="m-2" placeholder="Select" size="large">-->
-<!--            <el-option-->
-<!--                v-for="item in options"-->
-<!--                :key="item.value"-->
-<!--                :label="item.label"-->
-<!--                :value="item.value"-->
-<!--            />-->
-<!--          </el-select>-->
+          <el-select v-model="categoryId"
+                     clearable
+                     @change="getEventsList(eventPage,eventLimit)"
+                     placeholder="Category" size="large">
+            <el-option
+                v-for="item in categoryOptions"
+                :key="item.id"
+                :label="item.name_en"
+                :value="item.id"
+            />
+          </el-select>
         </div>
 
         <div class="events-list-container">
@@ -26,6 +29,7 @@
           >
             <div class="events-item-l">
               <el-image class="events-item-banner"
+
                         :src="item.file !='' ? item.file : 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220324/xxx.2ntb45gjv1g0.webp' "
               >
 
@@ -117,50 +121,48 @@
               </div>
 
               <div class="events-item-r">
+                <div class="events-item-r-content">
+                  <h3 class="event-r-title" v-if="item.name">{{item.name}}</h3>
+                  <div class="event-r-title-underline"></div>
+                  <div  class="event-r-desc-tag" >
+                    <p class="event-r-desc" v-if="item.desc">
+                      {{item.desc}}
+                    </p>
+                    <div class="event-r-tags">
+                      <div class="event-r-tag" v-if="item.is_online == 1">Online</div>
+                      <div class="event-r-tag" v-if="item.is_online == 2">Offline</div>
+                      <div class="event-r-tag" v-if="item.is_online == 3">Both</div>
 
-                <h3 class="event-r-title" v-if="item.name">{{item.name}}</h3>
-                <div class="event-r-title-underline"></div>
-                <div  class="event-r-desc-tag" >
-                  <p class="event-r-desc" v-if="item.desc">
-                    {{item.desc}} Education professionals around the world face the same problems. As businesses grapple with high staff turnover rates, broken contracts, and increasing competition, educators dodge scams, battle with discrimination, and fight for equal pay - it's the same story everywhere. ESL Passport is on a mission to put a stop to practices like these and redefine the international education market. We're the world's first hub of information, resources, and impartial support aimed at anyone and everyone in the industr
-                  </p>
-                  <div class="event-r-tags">
-                    <div class="event-r-tag" v-if="item.is_online == 1">Online</div>
-                    <div class="event-r-tag" v-if="item.is_online == 2">Offline</div>
-                    <div class="event-r-tag" v-if="item.is_online == 3">Both</div>
-
-                    <div class="event-r-tag" v-if="item.is_all == 1">Social</div>
-                    <div class="event-r-tag" v-if="item.is_all == 2">Professional</div>
+                      <div class="event-r-tag" v-if="item.is_all == 1">Social</div>
+                      <div class="event-r-tag" v-if="item.is_all == 2">Professional</div>
+                    </div>
+                  </div>
+                  <div class="event-r-category">
+                    <template v-if="item.identity == 3 && item.user_info">
+                      Category: {{ item.user_info.vendor_type_name }}
+                    </template>
+                    <template v-if="item.identity == 2 && item.business_info">
+                      Category: {{ item.business_info.business_type_name }}
+                    </template>
+                  </div>
+                  <div class="event-r-location">
+                    <template v-if="item.is_online == 2 || item.is_online == 3">
+                      Location: {{item.location}}
+                    </template>
+                  </div>
+                  <div class="event-r-date">
+                    Date: {{ $filters.ymdFormatEvent(item.date)  }}
+                  </div>
+                  <div class="event-r-time">
+                    Time: {{$filters.timeFormatEvent(item.start_time,item.end_time)}}
+                  </div>
+                  <div class="event-r-btn">
+                    <el-button class="event-r-btn-btn" type="default" round
+                               @click="turnDetail(item.id)"
+                    >RSVP</el-button>
                   </div>
                 </div>
-
-                <div class="event-r-category">
-                  <template v-if="item.identity == 3 && item.user_info">
-                    Category: {{ item.user_info.vendor_type_name }}
-                  </template>
-                  <template v-if="item.identity == 2 && item.business_info">
-                    Category: {{ item.business_info.business_type_name }}
-                  </template>
-                </div>
-                <div class="event-r-location">
-                  <template v-if="item.is_online == 2 || item.is_online == 3">
-                    Location: {{item.location}}
-                  </template>
-                </div>
-                <div class="event-r-date">
-                  Date: {{ $filters.ymdFormatEvent(item.date)  }}
-                </div>
-                <div class="event-r-time">
-                  Time: {{$filters.timeFormatEvent(item.start_time,item.end_time)}}
-                </div>
-                <div class="event-r-btn">
-                  <el-button class="event-r-btn-btn" type="default" round
-                    @click="turnDetail(item.id)"
-                  >RSVP</el-button>
-                </div>
               </div>
-
-
             </div>
 
           </div>
@@ -183,7 +185,7 @@
 
 <script>
 import bannerImg from '../../assets/events/banner.png'
-import {EVENTS_LIST} from "@/api/api";
+import {EVENTS_CATEGORY, EVENTS_LIST} from "@/api/api";
 
 export default {
   name: "list",
@@ -195,15 +197,30 @@ export default {
       eventTotalNum:0,
       showLoadingStatus:false,
       eventsList:[],
-      showVendorCompanyData:[]
+      showVendorCompanyData:[],
+      categoryOptions:[],
+      categoryId:undefined
 
     }
   },
   mounted() {
-
+    this.getEventCategories()
     this.getEventsList(this.eventPage,this.eventLimit)
   },
   methods:{
+
+    getEventCategories(){
+      let params = {
+        page: 1,
+        limit: 10000
+      }
+      EVENTS_CATEGORY(params).then(res=>{
+        this.categoryOptions = res.message.data;
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
     closeVendorCompany(i){
       let index = this.showVendorCompanyData.indexOf(i)
 
@@ -226,6 +243,9 @@ export default {
       let params = {
         page: page,
         limit: limit
+      }
+      if(this.categoryId){
+        params.category_id = this.categoryId
       }
 
       EVENTS_LIST(params).then(res=>{
@@ -271,13 +291,18 @@ export default {
 }
 .events-filter-container{
   margin-top: 40px;
-  padding-left: 20px;
+
 }
+
+.events-filter-container /deep/ input::placeholder {
+  color: #004956;
+}
+
 .events-list-container{
   display:flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap:wrap;
   margin-top:20px;
 }
@@ -285,42 +310,47 @@ export default {
 .events-item{
   width:48%;
   border-radius:10px;
-  //background-color: #FFFFFF;
-  margin:1%;
+
   overflow: hidden;
 
   display:flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
+  margin-top:20px;
 
 }
 
 .events-item-l{
   width:100%;
-  //height: 400px;
   position: relative;
 }
 
 .events-item-r{
   position: absolute;
-  width:38%;
+  width:40%;
   padding-right:2%;
   background-color:#FFFFFF;
   height: 100%;
   right: 0;
   top:0;
   border-radius: 20px;
+  border:1px solid #ffffff;
+  box-shadow: 0 0 8px 0 rgba(100,100,100,0.1);
+}
+.events-item-r-content{
+  padding-left:20px;
 }
 
 .events-item-banner{
   width:60%;
-  min-height:400px;
+  min-height:440px;
+  max-height:440px;
   border:1px solid #ffffff;
   border-radius:20px;
   z-index:100;
   background-color: #ececec;
-  box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 0 8px 0 rgba(100,100,100,0.1);
 }
 
 .events-item-l-tag{
@@ -421,10 +451,17 @@ export default {
   text-align: center;
 }
 .event-r-title{
-  padding: 20px 0 10px 20px;
+
+  padding: 20px 0 0 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .event-r-title-underline{
+  margin-top:4px;
   height: 3px;
   background-color:#B1C452;
   width:100%;

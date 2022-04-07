@@ -41,6 +41,13 @@
 
           </div>
 
+
+          <!--          <div class="apply-btn-container">-->
+<!--            <el-button class="apply-btn" type="info">Apply Now!</el-button>-->
+<!--          </div>-->
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+
           <div class="deals-detail-share-container">
             <div class="deals-favorite" v-if="isFavoriteValue == 1"
                  @click="cancelFavorite(2,detailData.id)">
@@ -92,14 +99,6 @@
 
           </div>
 
-          <!--          <div class="apply-btn-container">-->
-<!--            <el-button class="apply-btn" type="info">Apply Now!</el-button>-->
-<!--          </div>-->
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-          <div class="offer-deal">
-            <el-button class="offer-deal-btn" type="primary" @click="offerDeal()" round>Offer a Deal</el-button>
-          </div>
           <div class="company-bio-container">
             <div class="company-bio-label">Company Bio</div>
             <div class="company-bio-label-underline"></div>
@@ -696,6 +695,9 @@ export default {
   margin-top: 4px;
   border-bottom: 2px solid #ff2870;
 }
+.company-bio-content{
+  padding-top:10px;
+}
 
 .company-logo-container {
   float: left;
@@ -833,9 +835,9 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: #FFFFFF;
-  padding: 20px;
+  padding:10px 20px;
   border-radius: 10px;
   margin-top: 20px;
 }

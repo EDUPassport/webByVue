@@ -351,6 +351,8 @@
 
     <ForgotPassword :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
 
+
+
   </div>
 
 </template>
@@ -537,6 +539,7 @@ export default {
     }
   },
   mounted() {
+
     let email = this.$route.query.email
     if (email) {
       this.loginForm.email = email
@@ -618,7 +621,7 @@ export default {
 
             setTimeout(function () {
               self.sendCodeLoading = false
-              self.$message.success('Success')
+              self.$message.success('Activation Code Sent')
             }, 1500)
           }
         }).catch(err => {
@@ -704,7 +707,32 @@ export default {
               }
             }).catch(err => {
               console.log(err)
-              this.$message.error(err.msg)
+
+              if(err.message.status == 10001){
+
+                this.$msgbox({
+                  title:"Seems you dont have an account",
+                  message:"would you like to sign up?",
+                  dangerouslyUseHTMLString:false,
+                  type:"warning",
+                  center:true,
+                  showCancelButton:true,
+                  cancelButtonText:"No,thank you",
+                  confirmButtonText:"Sign Up",
+                  "round-button":true,
+                  callback(action){
+                    console.log(action)
+                    if(action==='confirm'){
+                      self.$router.push({path: '/login', query: {type: 2}})
+                      self.showValue = 2
+                    }
+                  }
+
+                })
+
+              }else{
+                this.$message.error(err.msg)
+              }
               this.submitLoginLoadingStatus = false
             })
 
@@ -788,7 +816,32 @@ export default {
               }
             }).catch(err => {
               console.log(err)
-              this.$message.error(err.msg)
+              if(err.message.status == 10001){
+
+                this.$msgbox({
+                  title:"Seems you dont have an account",
+                  message:"would you like to sign up?",
+                  dangerouslyUseHTMLString:false,
+                  type:"warning",
+                  center:true,
+                  showCancelButton:true,
+                  cancelButtonText:"No,thank you",
+                  confirmButtonText:"Sign Up",
+                  "round-button":true,
+                  callback(action){
+                    console.log(action)
+                    if(action==='confirm'){
+                      self.$router.push({path: '/login', query: {type: 2}})
+                      self.showValue = 2
+                    }
+                  }
+
+                })
+
+              }else{
+                this.$message.error(err.msg)
+              }
+
             })
 
           } else {
@@ -871,7 +924,32 @@ export default {
               }
             }).catch(err => {
               console.log(err)
-              this.$message.error(err.msg)
+              if(err.message.status == 10001){
+
+                this.$msgbox({
+                  title:"Seems you dont have an account",
+                  message:"would you like to sign up?",
+                  dangerouslyUseHTMLString:false,
+                  type:"warning",
+                  center:true,
+                  showCancelButton:true,
+                  cancelButtonText:"No,thank you",
+                  confirmButtonText:"Sign Up",
+                  "round-button":true,
+                  callback(action){
+                    console.log(action)
+                    if(action==='confirm'){
+                      self.$router.push({path: '/login', query: {type: 2}})
+                      self.showValue = 2
+                    }
+                  }
+
+                })
+
+              }else{
+                this.$message.error(err.msg)
+              }
+
             })
 
           } else {
@@ -1171,11 +1249,27 @@ export default {
                 this.submitCompanyContactForm(res.message.id)
               }
 
-              this.$message.success('Registration completed!')
-              this.$router.push({path: '/login', query: {type: 1}})
-              this.showValue = 1
-              // window.location.reload()
               self.submitRegisterLoadingStatus = false
+
+              this.$msgbox({
+                title:"All Set",
+                message:"Let's get you logged in!",
+                dangerouslyUseHTMLString:false,
+                type:"success",
+                center:true,
+                confirmButtonText:"OK",
+                "round-button":true,
+                callback(action){
+                  console.log(action)
+                  if(action==='confirm'){
+                    self.$router.push({path: '/login', query: {type: 1}})
+                    self.showValue = 1
+                  }
+                }
+
+              })
+              // window.location.reload()
+
             }
 
           }).catch(err => {

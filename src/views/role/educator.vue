@@ -62,7 +62,7 @@
 
 <script>
 import {countriesData} from "@/utils/data";
-import {CHANGE_IDENTITY_LANGUAGE, ADD_EDU_BASIC, ZOHO_SYNC} from '@/api/api'
+import {CHANGE_IDENTITY_LANGUAGE, UPDATE_EDUCATOR_PROFILE, ADD_EDU_BASIC, ZOHO_SYNC, GET_BASIC_INFO} from '@/api/api'
 import {useStore} from "vuex";
 import {ref} from "vue";
 
@@ -135,9 +135,41 @@ export default {
     }
   },
   mounted() {
-
+    this.getBasicInfo()
   },
   methods: {
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let token = localStorage.getItem('token')
+      let params = {
+        id: uid,
+        token: token
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          if(res.message.educator_info){
+            let educatorInfo = res.message.educator_info;
+            this.basicForm.first_name = educatorInfo.first_name;
+            this.basicForm.last_name = educatorInfo.last_name;
+            this.basicForm.email = educatorInfo.email ;
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    updateEduProfile(){
+      let params = {
+        token:localStorage.getItem('token')
+      }
+      UPDATE_EDUCATOR_PROFILE(params).then(res=>{
+        console.log(res)
+      })
+    },
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
       this.$loading().close()
@@ -197,6 +229,7 @@ export default {
           console.log('success')
           localStorage.setItem('identity',identity)
           this.setIdentity(identity)
+          this.updateEduProfile()
           this.submitLoadingValue=false
           this.$router.push('/home')
         }

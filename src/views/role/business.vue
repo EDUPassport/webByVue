@@ -129,7 +129,15 @@
 
 <script>
 import {countriesData} from "@/utils/data";
-import {CHANGE_IDENTITY_LANGUAGE, ADD_BUSINESS_BASIC, SUB_CATE_LIST, ALL_AREAS, ZOHO_SYNC} from '@/api/api'
+import {
+  CHANGE_IDENTITY_LANGUAGE,
+  UPDATE_BUSINESS_PROFILE,
+  ADD_BUSINESS_BASIC,
+  SUB_CATE_LIST,
+  ALL_AREAS,
+  ZOHO_SYNC,
+  GET_BASIC_INFO
+} from '@/api/api'
 import {ref,reactive} from 'vue'
 import {useStore} from "vuex";
 
@@ -280,9 +288,41 @@ export default {
   mounted() {
     this.getAllAreas(0)
     this.getSubCateList()
-
+    this.getBasicInfo()
   },
   methods: {
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let token = localStorage.getItem('token')
+      let params = {
+        id: uid,
+        token: token
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          if(res.message.business_info){
+            let businessInfo = res.message.business_info;
+            this.basicForm.first_name = businessInfo.first_name;
+            this.basicForm.last_name = businessInfo.last_name;
+
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    updateBusinessProfile(){
+      let params = {
+        token:localStorage.getItem('token')
+      }
+      UPDATE_BUSINESS_PROFILE(params).then(res=>{
+        console.log(res)
+      })
+    },
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
       this.$loading().close()
@@ -451,6 +491,7 @@ export default {
           // console.log('success')
           localStorage.setItem('identity',identity)
           this.setIdentity(identity)
+          this.updateBusinessProfile()
           this.$router.push('/home')
           this.submitLoadingValue=false
         }

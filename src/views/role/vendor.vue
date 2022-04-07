@@ -132,7 +132,15 @@
 
 <script>
 import {countriesData} from "@/utils/data";
-import {CHANGE_IDENTITY_LANGUAGE, ADD_VENDOR_BASIC, SUB_CATE_LIST, ALL_AREAS, ZOHO_SYNC} from '@/api/api'
+import {
+  CHANGE_IDENTITY_LANGUAGE,
+  UPDATE_VENDOR_PROFILE,
+  ADD_VENDOR_BASIC,
+  SUB_CATE_LIST,
+  ALL_AREAS,
+  ZOHO_SYNC,
+  GET_BASIC_INFO
+} from '@/api/api'
 import {reactive, ref} from 'vue'
 import {useStore} from "vuex";
 
@@ -298,9 +306,33 @@ export default {
   mounted() {
     this.getAllAreas(0)
     this.getSubCateList()
-
+    this.getBasicInfo()
   },
   methods: {
+    getBasicInfo() {
+      let uid = localStorage.getItem('uid')
+      let token = localStorage.getItem('token')
+      let params = {
+        id: uid,
+        token: token
+      }
+      GET_BASIC_INFO(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          if(res.message.vendor_info){
+            let vendorInfo = res.message.vendor_info;
+            this.basicForm.first_name = vendorInfo.first_name;
+            this.basicForm.last_name = vendorInfo.last_name;
+
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
       this.$loading().close()
@@ -452,6 +484,14 @@ export default {
         }
       })
     },
+    updateVendorProfile(){
+      let params = {
+        token:localStorage.getItem('token')
+      }
+      UPDATE_VENDOR_PROFILE(params).then(res=>{
+        console.log(res)
+      })
+    },
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
@@ -468,6 +508,7 @@ export default {
           this.submitLoadingValue = false
           localStorage.setItem('identity', identity)
           this.setIdentity(identity)
+          this.updateVendorProfile()
           this.$router.push('/home')
         }
       }).catch(err => {

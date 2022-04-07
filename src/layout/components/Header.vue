@@ -13,7 +13,7 @@
               <router-link to="/jobs" exact>Jobs</router-link>
               <router-link to="/deals" exact> Edu Deals</router-link>
               <router-link to="/events/list" exact> Events</router-link>
-              <router-link to="/industry/news" exact>News</router-link>
+<!--              <router-link to="/industry/news" exact>News</router-link>-->
               <router-link to="/blog/list" exact>Blog</router-link>
               <router-link to="/contact/us" exact> Contact</router-link>
               <router-link to="/about/us" exact> About</router-link>
@@ -103,9 +103,9 @@
               <div class="nav-link-item">
                 <router-link to="/events/list" exact> Events</router-link>
               </div>
-              <div class="nav-link-item">
-                <router-link to="/industry/news" exact>News</router-link>
-              </div>
+<!--              <div class="nav-link-item">-->
+<!--                <router-link to="/industry/news" exact>News</router-link>-->
+<!--              </div>-->
               <div class="nav-link-item">
                 <router-link to="/blog/list" exact>Blog</router-link>
               </div>

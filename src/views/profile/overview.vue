@@ -22,7 +22,7 @@
                   <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                 </div>
                 <div class="dashboard-item-r">
-                  <router-link to="/deals"> My Deals</router-link>
+                  <router-link to="/deals/myDeals"> My Deals</router-link>
                 </div>
               </div>
 
@@ -35,14 +35,14 @@
 <!--                </div>-->
 <!--              </div>-->
 
-<!--              <div class="dashboard-item events-bg">-->
-<!--                <div class="dashboard-item-l">-->
-<!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
-<!--                </div>-->
-<!--                <div class="dashboard-item-r">-->
-<!--                  <router-link to="/">Events</router-link>-->
-<!--                </div>-->
-<!--              </div>-->
+              <div class="dashboard-item events-bg">
+                <div class="dashboard-item-l">
+                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
+                </div>
+                <div class="dashboard-item-r">
+                  <router-link to="/events/myEvents">My Events</router-link>
+                </div>
+              </div>
 
               <div class="dashboard-item favorites-bg">
                 <div class="dashboard-item-l">
@@ -84,8 +84,8 @@ import {VISITOR_USER_INFO} from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
 import { onBeforeRouteUpdate } from "vue-router";
-import {useStore} from "vuex";
-import {computed} from "vue";
+// import {useStore} from "vuex";
+import {computed,ref} from "vue";
 
 export default {
   name: "index",
@@ -94,11 +94,14 @@ export default {
     accountInfo
   },
   setup(){
-    const store = useStore()
+    // const store = useStore()
+    const i = ref(localStorage.getItem('identity'))
+
     const identity1 = computed(()=>{
-      return store.state.identity
+      return i.value
     })
 
+    // console.log(identity1.value)
     return {
       identity1
     }

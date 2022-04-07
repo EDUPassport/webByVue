@@ -17,15 +17,45 @@
               <el-image class="news-item-img" :src="item.image_url"
                         fit="cover"></el-image>
             </div>
-            <div class="news-item-title">
+            <div class="news-item-title"  @click="turnDetail(item.id)">
               {{ item.title }}
             </div>
+
+            <div class="detail-options-container">
+              <div class="detail-options" v-if="item.cate_name_en">
+                <i class="iconfont el-icon-alitag"></i>
+                <span>{{ item.cate_name_en }}</span>
+
+              </div>
+              <div class="detail-options" v-if="item.tags">
+                <i class="iconfont el-icon-alitag1"></i>
+                <span> {{ item.tags }}</span>
+              </div>
+              <div class="detail-options" v-if="item.c_time">
+                <i class="iconfont el-icon-alidate"></i>
+                <span>{{ $filters.ymdFormatEvent(item.c_time)  }}</span>
+              </div>
+              <div class="detail-options" v-if="item.comment_nums">
+                <i class="iconfont el-icon-alicomment"></i>
+                <span>{{ item.comment_nums }}</span>
+              </div>
+              <div class="detail-options" v-if="item.blog_user">
+                <i class="iconfont el-icon-alilastname"></i>
+                <span>{{ item.blog_user.account }}</span>
+              </div>
+            </div>
+
             <div class="news-item-desc">
               {{ item.desc }}
             </div>
             <div class="news-item-operation">
               <div class="news-item-readmore">
-                <el-button type="primary" round @click="turnDetail(item.id)">Continue Reading
+                <el-button
+                    class="news-item-btn"
+                    plain
+                    round
+                    @click="turnDetail(item.id)">
+                  Continue Reading
                 </el-button>
               </div>
               <div class="social-share-container">
@@ -224,35 +254,58 @@ export default {
 }
 
 .news-item {
-  padding: 10px;
   margin-top: 20px;
-  border-bottom: 1px solid #EEEEEE;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+  border-radius:14px;
+  overflow: hidden;
 }
 
 .news-item-img-container {
   width: 100%;
   height: 300px;
-  border: 1px solid #EEEEEE;
   overflow: hidden;
-  border-radius: 20px;
 }
 
 .news-item-img {
   width: 100%;
-  border-radius: 20px;
 }
 
 .news-item-title {
   font-size: 16px;
   font-weight: bold;
   text-align: left;
-  padding-top: 10px;
+  padding:20px 0 0 20px;
+  cursor:pointer;
+}
+.news-item-title:hover{
+  text-decoration: underline;
+}
+
+
+.detail-options-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 0 0 0;
+  font-size: 14px;
+  color: #888888;
+}
+
+.detail-options {
+  margin-left: 20px;
+
+}
+
+.detail-options span {
+  margin-left: 4px;
 }
 
 .news-item-desc {
   font-size: 14px;
   color: #808080;
   text-align: left;
+  padding:20px 0 0 20px;
 }
 
 .news-item-operation {
@@ -260,11 +313,16 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  padding: 10px 0;
+  padding:20px 0 20px 20px;
 }
 
 .news-item-readmore {
 
+}
+.news-item-btn{
+  line-height:30px;
+  border-radius:30px;
+  font-size: 14px;
 }
 
 .news-item-share {

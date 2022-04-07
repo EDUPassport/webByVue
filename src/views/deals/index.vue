@@ -14,6 +14,11 @@
 
       <el-row class="content-container" align="top" justify="center">
         <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+          <div class="offer-deal">
+            <el-button class="offer-deal-btn" type="primary" @click="offerDeal()" round>
+              Offer a Deal
+            </el-button>
+          </div>
           <div class="deals-events-filter-container">
             <div class="deals-events-filter-label">Deals & Events</div>
             <div class="deals-events-filter-location">
@@ -119,7 +124,16 @@
 import featuredJobs from "@/components/featuredJobs";
 import featuredDeals from "@/components/featuredDeals";
 import latestIndustryNews from "@/components/latestIndustryNews";
-import {SUB_CATE_LIST, TAGS_LIST, DEALS_LIST, DEALS_AREA_LIST,ADD_FAVORITE,CANCEL_FAVORITE} from "@/api/api";
+import {
+  SUB_CATE_LIST,
+  TAGS_LIST,
+  DEALS_LIST,
+  DEALS_AREA_LIST,
+  ADD_FAVORITE,
+  CANCEL_FAVORITE,
+  GET_BASIC_INFO, CHANGE_IDENTITY_LANGUAGE
+} from "@/api/api";
+import {encode} from "js-base64";
 
 export default {
   name: "index",
@@ -298,6 +312,140 @@ export default {
         console.log(err)
         this.$message.error(err.msg)
       })
+    },
+    offerDeal(){
+      let token = localStorage.getItem('token')
+      let self = this
+      if(!token || token == ''){
+        return this.$msgbox({
+          title:'Offer a Deal',
+          message:'Before offer a deal, you need to log in',
+          type:'warning',
+          confirmButtonText:'Log in',
+          callback(action){
+            console.log(action)
+            if(action==='confirm'){
+              let redirectParamsObj = {
+                path:'/deals',
+                query:{
+                  id:self.$route.query.id
+                }
+              }
+
+              let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
+
+              self.$router.push({path:'/login',query:{redirect_params:redirectParamsStr}})
+            }
+          }
+        })
+      }
+
+      let identity = localStorage.getItem('identity')
+
+      if(identity != 3){
+        this.selectRole(3)
+      }
+
+      self.$router.push({path:'/deals/offer',query:{}})
+    },
+    selectRole(e) {
+      let uid = localStorage.getItem('uid')
+      let params = {
+        id: uid,
+        token: localStorage.getItem('token')
+      }
+      GET_BASIC_INFO(params).then(res => {
+        let isEducator = res.message.is_educator;
+        let isBusiness = res.message.is_business;
+        let isVendor = res.message.is_vendor;
+        // let isOther = res.message.is_other;
+        // let identity = res.message.identity;
+
+        if (e == 1) {
+          if (isEducator >= 10) {
+            let firstName = res.message.educator_info.first_name;
+            let lastName = res.message.educator_info.last_name;
+            let avatar = res.message.educator_info.profile_photo;
+
+            localStorage.setItem('name', firstName + ' ' + lastName)
+            localStorage.setItem('avatar', avatar)
+            localStorage.setItem('first_name', firstName)
+            localStorage.setItem('last_name', lastName)
+
+            this.$store.commit('username', firstName + ' ' + lastName)
+            this.$store.commit('userAvatar', avatar)
+
+            this.changeIdentity(1)
+          } else {
+            this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push('/role/educator')
+          }
+
+        }
+        if (e == 2) {
+          if (isBusiness >= 10) {
+            let firstName = res.message.business_info.first_name;
+            let lastName = res.message.business_info.last_name;
+            let avatar = res.message.business_info.profile_photo;
+            localStorage.setItem('name', firstName + ' ' + lastName)
+            localStorage.setItem('avatar', avatar)
+            localStorage.setItem('first_name', firstName)
+            localStorage.setItem('last_name', lastName)
+
+            this.$store.commit('username', firstName + ' ' + lastName)
+            this.$store.commit('userAvatar', avatar)
+
+            this.changeIdentity(2)
+          } else {
+            this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push('/role/business')
+          }
+
+        }
+        if (e == 3) {
+          if (isVendor >= 10) {
+            let firstName = res.message.vendor_info.first_name;
+            let lastName = res.message.vendor_info.last_name;
+            let avatar = res.message.vendor_info.profile_photo;
+
+            localStorage.setItem('name', firstName + ' ' + lastName)
+            localStorage.setItem('avatar', avatar)
+            localStorage.setItem('first_name', firstName)
+            localStorage.setItem('last_name', lastName)
+
+            this.$store.commit('username', firstName + ' ' + lastName)
+            this.$store.commit('userAvatar', avatar)
+
+            this.changeIdentity(3)
+          } else {
+            this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push('/role/vendor')
+          }
+
+        }
+
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    changeIdentity(identity) {
+      let params = {
+        token: localStorage.getItem('token'),
+        identity: identity
+      }
+
+      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          localStorage.setItem('identity', identity)
+          this.$store.commit('identity',identity)
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
     }
 
   }
@@ -346,9 +494,22 @@ export default {
 .content-container{
   padding: 20px;
 }
+
+.offer-deal{
+  width: 100%;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.offer-deal-btn{
+  width: 98%;
+  font-size: 14px;
+}
+
 .deals-events-filter-container{
   background-color: #ffffff;
   /*border: 1px solid #eeeeee;*/
+  margin-top:20px;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);

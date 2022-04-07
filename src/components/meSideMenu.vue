@@ -8,7 +8,12 @@
     </div>
     <div class="l-container">
       <div class="l-item">
-        <router-link to="/overview" exact>Overview</router-link>
+        <router-link :to="{path:'/overview',query:{identity:identity}}" exact>Overview</router-link>
+      </div>
+      <div class="l-item">
+        <div  class="l-item-msg"
+              :class="activeMsg ? 'l-item-msg-active' : ''"
+              @click="turnMyMessages()">My Messages</div>
       </div>
       <div class="l-item">
         <router-link to="/favorites" exact>My Favorites</router-link>
@@ -24,9 +29,6 @@
       <div class="l-item" v-if="identity == 2">
         <router-link to="/jobs/myJobs" exact>My Jobs</router-link>
       </div>
-<!--      <div class="l-item">-->
-<!--        <router-link to="/" exact>My Events</router-link>-->
-<!--      </div>-->
       <div class="l-item" v-if="identity == 3">
         <router-link to="/deals/myDeals" exact>My Deals</router-link>
       </div>
@@ -36,12 +38,15 @@
       <div class="l-item" v-if="identity == 3">
         <router-link to="/deals/offer" exact>Offer a Deal</router-link>
       </div>
+      <div class="l-item" v-if="identity == 3 || identity == 2">
+        <router-link to="/events/myEvents" exact>My Events</router-link>
+      </div>
+      <div class="l-item" v-if="identity == 3 || identity == 2">
+        <router-link to="/events/post" exact>Post Event</router-link>
+      </div>
       <div class="l-item">
         <router-link to="/privacy/policy" exact>Privacy Policy</router-link>
       </div>
-<!--      <div class="l-item">-->
-<!--        <router-link to="/" exact>My Messages</router-link>-->
-<!--      </div>-->
       <div class="l-item" v-if="identity == 1">
         <router-link to="/me/applications" exact>My Applications</router-link>
       </div>
@@ -55,17 +60,29 @@
 </template>
 
 <script>
-import {randomString} from "../utils";
+import {randomString} from "@/utils";
 import {GET_BASIC_INFO} from  '@/api/api'
 import defaultAvatar from '@/assets/default/avatar.png'
+import {useStore} from "vuex";
 export default {
   name: "meSideMenu",
+  setup(){
+    const store = useStore()
+
+    const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
+    const setShowChatStatus = () => store.commit('showChatStatus', true)
+    return {
+      setNowChatUserInfo,
+      setShowChatStatus
+    }
+  },
   data(){
     return {
       defaultAvatar,
       accountInfo:{},
       accountPhotoValue:'',
-      versionTime:randomString()
+      versionTime:randomString(),
+      activeMsg:false
     }
   },
   computed:{
@@ -92,6 +109,10 @@ export default {
     // this.getBasicInfo()
   },
   methods:{
+    turnMyMessages(){
+      // this.activeMsg = true
+      this.setShowChatStatus()
+    },
     getBasicInfo() {
       let uid = localStorage.getItem('uid')
       let identity = localStorage.getItem('identity')
@@ -161,6 +182,21 @@ export default {
 .l-item{
 
 }
+.l-item-msg{
+  background-color: #0A1E76;
+  font-size: 14px;
+  line-height: 40px;
+  padding-left: 20px;
+  color:#FFFFFF;
+  cursor:pointer;
+}
+.l-item-msg-active{
+  background-color: #0C1954;
+}
+.l-item-msg:hover{
+  background-color: #0C1954;
+}
+
 .l-item a:hover{
   background-color: #0C1954;
 }
