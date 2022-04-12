@@ -104,7 +104,7 @@ export default {
 .banner-bg h1 {
   height: 100%;
   background-color: rgba(30, 30, 30, 0.6);
-  font-size: 28px;
+  font-size: 44px;
   font-weight: bold;
   color: #FFFFFF;
   line-height: 300px;

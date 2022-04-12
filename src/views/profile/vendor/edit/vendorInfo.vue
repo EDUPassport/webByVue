@@ -284,7 +284,7 @@ export default {
         this.selectVendorTypeList.splice(this.selectVendorTypeList.indexOf(item), 1);
       }
 
-      console.log(this.selectVendorTypeList);
+      // console.log(this.selectVendorTypeList);
     },
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
@@ -428,6 +428,18 @@ export default {
           this.basicForm.is_dog_friendly = vendorInfo.is_dog_friendly;
           this.basicForm.lat = vendorInfo.lat;
           this.basicForm.lng = vendorInfo.lng;
+
+          let typeId = vendorInfo.vendor_type_id;
+          let typeNameEn = vendorInfo.vendor_type_name
+          let typeName = vendorInfo.vendor_type_name_cn
+
+          let typeObj = {
+            id:typeId,
+            identity_name:typeNameEn,
+            identity_name_cn:typeName
+          }
+
+          this.selectVendorTypeList.push(typeObj)
 
         }
       }).catch(err=>{

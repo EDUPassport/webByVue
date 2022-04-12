@@ -136,6 +136,10 @@
                   Business Location:
                   <span>{{ businessInfo.provinces.Pinyin }}, {{ businessInfo.citys.Pinyin }}, {{ businessInfo.districts.Pinyin }}</span>
                 </div>
+<!--                <div class="business-info-item">-->
+<!--                  Business Location:-->
+<!--                  <span>{{ businessInfo.location }}</span>-->
+<!--                </div>-->
                 <div class="business-info-item" v-if="businessInfo.website">
                   Website: <span>{{ businessInfo.website }}</span>
                 </div>
@@ -732,7 +736,7 @@ export default {
             if (res.message.business_info.profile_photo) {
               this.profilePhotoUrl = res.message.business_info.profile_photo
             }
-            if (res.message.business_info.profile_photo) {
+            if (res.message.business_info.logo) {
               this.logoPhotoUrl = res.message.business_info.logo
             }
             if (res.message.business_info.header_photo) {

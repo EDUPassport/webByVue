@@ -77,6 +77,15 @@ const routes = [
                 }
             },
             {
+                path: '/info/company',
+                name: 'companyInfo',
+                component: () => import('@/views/info/company'),
+                meta: {
+                    titleC: 'China Company Info',
+                    titleG: 'Global Company Info',
+                }
+            },
+            {
                 path:'/events/list',
                 name:'eventsList',
                 component:()=>import('@/views/events/list'),

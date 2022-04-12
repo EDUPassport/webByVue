@@ -11,6 +11,7 @@
     "build:stagecn": "vue-cli-service  build --mode cndevelopment",
     "build:prodcn": "vue-cli-service  build --mode cnproduction",
     "all": "vue-cli-service  build --mode cndevelopment && vue-cli-service build --mode cnproduction && vue-cli-service build --mode sjpdevelopment && vue-cli-service build --mode sjpproduction",
+    "all1": "vue-cli-service  build --mode cndevelopment && vue-cli-service build --mode cnproduction  && vue-cli-service build --mode sjpproduction",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

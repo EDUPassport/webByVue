@@ -29,7 +29,10 @@
 
             </template>
             <template v-else>
-              <div class="empty-tips">No Data</div>
+              <div class="empty-tips">
+                You have no favorites yet.
+                Click on the heartshapes on any job, event or deal to favorite it.
+              </div>
             </template>
           </div>
           <div class="list-pagination" v-if="favoriteData.length>0">

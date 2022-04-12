@@ -27,23 +27,29 @@
                     <el-tab-pane label="China" name="first">
                       <template v-if="envName==='developmentCN' || envName==='productionCN' ">
                         <el-form-item label="Job Location">
-                          <el-select v-model="jobForm.province"
+                          <el-select v-model="provinceObj"
+                                     filterable
+                                     value-key="id"
                                      @change="provinceChange"
                                      placeholder="Select Province">
                             <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
-                                       :value="item.id"></el-option>
+                                       :value="item"></el-option>
                           </el-select>
-                          <el-select v-model="jobForm.city"
+                          <el-select v-model="cityObj"
+                                     filterable
+                                     value-key="id"
                                      @change="cityChange"
                                      placeholder="Select City">
                             <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                       :value="item.id"></el-option>
+                                       :value="item"></el-option>
                           </el-select>
-                          <el-select v-model="jobForm.district"
+                          <el-select v-model="districtObj"
+                                     filterable
+                                     value-key="id"
                                      @change="districtChange"
                                      placeholder="Select District">
                             <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                       :value="item.id"></el-option>
+                                       :value="item"></el-option>
                           </el-select>
                         </el-form-item>
                       </template>
@@ -68,10 +74,52 @@
                     </el-tab-pane>
                     <el-tab-pane label="International" name="second">
                       <el-form-item label="Job Location">
-                        <el-input v-model="jobForm.nation_address" type="text" placeholder="Country, City"></el-input>
+                        <el-select v-model="countryObj"
+                                   filterable
+                                   value-key="id"
+                                   @change="countryChange"
+                                   placeholder="Select Country">
+                          <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.Pinyin"
+                                     :value="item"></el-option>
+                        </el-select>
+                        <template v-if="provinceOptions.length>0">
+                          <el-select v-model="provinceObj"
+                                     filterable
+                                     value-key="id"
+                                     @change="provinceForChange"
+                                     placeholder="Select Province">
+                            <el-option v-for="(item,i) in provinceOptions" :key="i"
+                                       :label="item.Pinyin"
+                                       :value="item"></el-option>
+                          </el-select>
+                        </template>
+                        <template v-if="cityOptions.length>0">
+                          <el-select v-model="cityObj"
+                                     filterable
+                                     value-key="id"
+                                     @change="cityForChange"
+                                     placeholder="Select City">
+                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
+                                       :value="item"></el-option>
+                          </el-select>
+                        </template>
+                        <template v-if="districtOptions.length>0">
+                          <el-select v-model="districtObj"
+                                     filterable
+                                     value-key="id"
+                                     @change="districtForChange"
+                                     placeholder="Select District">
+                            <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
+                                       :value="item"></el-option>
+                          </el-select>
+                        </template>
+<!--                        <el-input v-model="jobForm.nation_address" type="text" placeholder="Country, City"></el-input>-->
                       </el-form-item>
                     </el-tab-pane>
+
                   </el-tabs>
+
+<!--                  <el-button @click="testName()">test</el-button>-->
 
                   <el-form-item label="Add Location Pin">
                     <div class="map-container">
@@ -588,10 +636,11 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import meSideMenu from "@/components/meSideMenu";
 import {
   VISITOR_USER_INFO, ALL_AREAS, USER_OBJECT_LIST, ADD_JOB,
-  JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO
+  JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO, GET_COUNTRY_LIST
 } from '@/api/api';
 import {ref} from "vue";
 import axios from 'axios'
+import {encode} from "js-base64";
 
 export default {
   name: "post",
@@ -631,6 +680,7 @@ export default {
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       isInternationalName: 'first',
+      countryName:'',
       provinceOptions: [],
       provinceName: '',
       cityOptions: [],
@@ -776,6 +826,7 @@ export default {
       jobForm: {
         job_title: '',
         job_location: '',
+        country:'',
         province: '',
         city: '',
         district: '',
@@ -825,29 +876,128 @@ export default {
       jobRules: {
         job_location: [
           {
-            required: true,
+            required: false,
             message: 'Please input',
             trigger: 'change',
           },
         ],
       },
-
+      countryOptions:[],
+      sLocationType:1,
+      countryObj:{},
+      provinceObj:{},
+      cityObj:{},
+      districtObj:{}
 
     }
   },
   mounted() {
     this.initMap()
+    this.getAllCountry(0)
     this.getVisitorBasicInfo()
     this.getAllAreas(0)
     this.getUserObjectList()
   },
   methods: {
+    getAllCountry(pid){
+      let params = {
+        pid:pid
+      }
+      GET_COUNTRY_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.countryOptions = res.message;
+        }
+      }).catch(err=>{
+        this.$message.error(err.msg)
+      })
+    },
+    getAllForProvinces(pid){
+      let params = {
+        pid:pid
+      }
+      GET_COUNTRY_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.provinceOptions = res.message;
+        }
+      }).catch(err=>{
+        this.$message.error(err.msg)
+      })
+    },
+    getAllForCitys(pid){
+      let params = {
+        pid:pid
+      }
+      GET_COUNTRY_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.cityOptions = res.message;
+        }
+      }).catch(err=>{
+        this.$message.error(err.msg)
+      })
+    },
+    getAllForDistricts(pid){
+      let params = {
+        pid:pid
+      }
+
+      GET_COUNTRY_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.districtOptions = res.message;
+        }
+      }).catch(err=>{
+        this.$message.error(err.msg)
+      })
+    },
+    countryChange(e){
+      console.log(e)
+      this.jobForm.country = e.id
+      this.countryName = e.Pinyin
+
+      this.jobForm.province=undefined
+      this.jobForm.city = undefined
+      this.jobForm.district = undefined
+
+      if(e.id == 99999999){
+        this.isInternationalName = 'first'
+        this.getAllAreas(0)
+      }else{
+        this.isInternationalName= 'second'
+        this.getAllForProvinces(e.id)
+      }
+    },
+    provinceForChange(e) {
+      console.log(e)
+      this.jobForm.province = e.id
+      this.provinceName = e.Pinyin
+
+      this.jobForm.city = undefined
+      this.jobForm.district = undefined
+      this.getAllForCitys(e.id)
+    },
+    cityForChange(e) {
+      console.log(e)
+      this.jobForm.city = e.id
+      this.cityName = e.Pinyin
+
+      this.jobForm.district = undefined
+      this.getAllForDistricts(e.id)
+    },
+    districtForChange(e) {
+      this.jobForm.district = e.id
+      this.districtName = e.Pinyin
+
+      console.log(e)
+    },
     initMap() {
       mapboxgl.accessToken = this.accessToken;
 
       const map = new mapboxgl.Map({
         container: "mapContainer",
-        center: [115.64673, 34.42592],
+        center: [121.472644, 31.231706],
         style: this.mapStyle,
         zoom: 12
       });
@@ -893,7 +1043,37 @@ export default {
 
     },
     handleIsInternationalClick(tab) {
-      console.log(tab)
+      console.log(tab.paneName)
+      this.countryName = undefined;
+      this.provinceName = undefined;
+      this.cityName = undefined;
+      this.districtName = undefined;
+
+      this.countryObj = {}
+      this.provinceObj = {}
+      this.cityObj = {}
+      this.districtObj = {}
+
+      this.jobForm.country = undefined;
+      this.jobForm.province = undefined;
+      this.jobForm.city = undefined;
+      this.jobForm.district = undefined;
+
+      if(tab.paneName=='first'){
+        this.countryName = 'China'
+        this.getAllAreas(0)
+        this.cityOptions = []
+        this.districtOptions = []
+      }
+
+      if(tab.paneName=='second'){
+
+        this.getAllCountry(0)
+        this.provinceOptions = []
+        this.cityOptions = []
+        this.districtOptions = []
+      }
+
     },
     getVisitorBasicInfo() {
       let uid = localStorage.getItem('uid')
@@ -969,25 +1149,21 @@ export default {
     },
     provinceChange(e) {
       console.log(e)
-      this.getAllCitys(e)
-      let data = this.provinceOptions.filter(item => item.id == e)
-      // console.log(data[0])
-      this.provinceName = data[0]['Pinyin']
-
+      this.getAllCitys(e.id)
+      this.provinceName = e.Pinyin
+      this.jobForm.province = e.id
     },
     cityChange(e) {
       console.log(e)
-      this.getAllDistricts(e)
-      let data = this.cityOptions.filter(item => item.id == e)
-      // console.log(data[0])
-      this.cityName = data[0]['Pinyin']
+      this.getAllDistricts(e.id)
+      this.cityName = e.Pinyin
+      this.jobForm.city = e.id
 
     },
     districtChange(e) {
       console.log(e)
-      let data = this.districtOptions.filter(item => item.id == e)
-      // console.log(data[0])
-      this.districtName = data[0]['Pinyin']
+      this.jobForm.district = e.id
+      this.districtName = e.Pinyin
     },
     selectEmploymentType(value) {
 
@@ -1505,6 +1681,35 @@ export default {
       console.log(this.selectWeekItemData)
 
     },
+    testName(){
+      let jobLocationValue = ''
+      let countryName = this.countryName
+      let provinceName = this.provinceName
+      let cityName = this.cityName
+      let districtName = this.districtName
+
+      console.log(countryName)
+      console.log(provinceName)
+      console.log(cityName)
+      console.log(districtName)
+
+      if(countryName ){
+        jobLocationValue = countryName
+      }
+      if(countryName && provinceName ){
+        jobLocationValue = provinceName+', '+countryName
+      }
+
+      if(countryName && provinceName && cityName ){
+        jobLocationValue =  cityName + ', '+provinceName+', '+countryName
+      }
+
+      if(countryName && provinceName && cityName && districtName){
+        jobLocationValue = districtName + ', '+ cityName + ', '+provinceName+', '+countryName
+      }
+      console.log(jobLocationValue)
+
+    },
     submitJob(formName, submitType) {
       let that = this;
 
@@ -1519,6 +1724,34 @@ export default {
       if (this.selectCurrencyList.length <= 0) {
         return this.$message.warning('Currency')
       }
+
+      let jobLocationValue = ''
+      let countryName = this.countryName
+      let provinceName = this.provinceName
+      let cityName = this.cityName
+      let districtName = this.districtName
+
+      console.log(countryName)
+      console.log(provinceName)
+      console.log(cityName)
+      console.log(districtName)
+
+      if(countryName ){
+        jobLocationValue = countryName
+      }
+      if(countryName && provinceName ){
+        jobLocationValue = provinceName+', '+countryName
+      }
+
+      if(countryName && provinceName && cityName ){
+        jobLocationValue =  cityName + ', '+provinceName+', '+countryName
+      }
+
+      if(countryName && provinceName && cityName && districtName){
+        jobLocationValue = districtName + ', '+ cityName + ', '+provinceName+', '+countryName
+      }
+
+      this.jobForm.job_location  = jobLocationValue
 
       if (this.selectEmploymentTypeList.length > 0) {
         let employmentTypeList = this.selectEmploymentTypeList;
@@ -1601,6 +1834,7 @@ export default {
 
     },
     letGo() {
+      let self = this;
       let uid = localStorage.getItem('uid')
       this.$loading({
         text:'Loading'
@@ -1633,7 +1867,16 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action === 'confirm'){
-                    window.open(process.env.VUE_APP_EXCHANGE_DOMAIN,'_blank')
+                    let redirectParamsObj = {
+                      path:'/jobs/post',
+                      query:{
+                        version_time:self.$route.query.version_time
+                      }
+                    }
+
+                    let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
+                    let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=1&redirect_params='+redirectParamsStr
+                    window.open(exchange_domain,'_blank')
                   }
 
                 }
@@ -1652,7 +1895,16 @@ export default {
               callback(action){
                 console.log(action)
                 if(action === 'confirm'){
-                  window.open(process.env.VUE_APP_EXCHANGE_DOMAIN,'_blank')
+                  let redirectParamsObj = {
+                    path:'/jobs/post',
+                    query:{
+                      version_time:self.$route.query.version_time
+                    }
+                  }
+
+                  let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
+                  let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=1&redirect_params='+redirectParamsStr
+                  window.open(exchange_domain,'_blank')
                 }
               }
 

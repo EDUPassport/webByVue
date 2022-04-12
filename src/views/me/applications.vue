@@ -39,7 +39,9 @@
 
             </template>
             <template v-else>
-              <div class="empty-tips"> No Data</div>
+              <div class="empty-tips">
+                No Job Applications yet.
+              </div>
             </template>
           </div>
           <div class="list-pagination" v-if="jobsData.length>0">

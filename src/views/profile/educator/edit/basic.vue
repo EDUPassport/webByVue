@@ -363,22 +363,6 @@ export default {
         if(res.code == 200){
           let educatorInfo = res.message.educator_info;
           this.educatorInfo = educatorInfo
-          // first_name: '',
-          //     last_name: '',
-          //     email: '',
-          //     sex: '',
-          //     nationality: '',
-          //     birthday: '',
-          //     location: '',
-          //     country: '',
-          //     province: '',
-          //     city: '',
-          //     district: '',
-          //     address: '',
-          //     is_seeking: 0,
-          //     is_public: 0,
-          //     wx_id: '',
-          //     sub_identity: '',
 
           this.basicForm.first_name = educatorInfo.first_name;
           this.basicForm.last_name = educatorInfo.last_name;
@@ -401,8 +385,16 @@ export default {
           this.basicForm.is_seeking = educatorInfo.is_seeking;
           this.basicForm.is_public = educatorInfo.is_public;
           this.basicForm.wx_id = educatorInfo.wx_id;
-          // this.basicForm.sub_identity = educatorInfo.sub_identity;
 
+          let subIdentityStr = educatorInfo.sub_identity_id
+
+          let subIdentityArr = subIdentityStr.split(',')
+          let subData = []
+          subIdentityArr.forEach(item=>{
+            subData.push({id: Number(item) })
+          })
+          this.selectEducatorTypeList = subData
+          // console.log(this.selectEducatorTypeList)
 
         }
       }).catch(err=>{

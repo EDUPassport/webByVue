@@ -9,22 +9,54 @@
           <div class="dashboard-container">
             <div class="dashboard-label">Dashboard</div>
             <div class="dashboard-content">
-              <div class="dashboard-item jobs-bg" v-if="identity == 2">
-                <div class="dashboard-item-l">
-                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
+              <template v-if="identity == 1">
+                <div class="dashboard-item events-bg" @click="applicationsHref()">
+                  <div class="dashboard-item-l">
+                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
+                  </div>
+                  <div class="dashboard-item-r">
+                    <router-link to="/me/applications">My Applications</router-link>
+                  </div>
                 </div>
-                <div class="dashboard-item-r">
-                  <router-link to="/jobs">Job Posts </router-link>
+
+              </template>
+              <template v-if="identity == 2">
+                <div class="dashboard-item jobs-bg" @click="jobPostsHref()">
+                  <div class="dashboard-item-l">
+                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
+                  </div>
+                  <div class="dashboard-item-r">
+                    <router-link to="/jobs">Job Posts </router-link>
+                  </div>
                 </div>
-              </div>
-              <div class="dashboard-item deals-bg" v-if="identity == 3">
-                <div class="dashboard-item-l">
-                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
+                <div class="dashboard-item events-bg" @click="myEventsHref()">
+                  <div class="dashboard-item-l">
+                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
+                  </div>
+                  <div class="dashboard-item-r">
+                    <router-link to="/events/myEvents">My Events</router-link>
+                  </div>
                 </div>
-                <div class="dashboard-item-r">
-                  <router-link to="/deals/myDeals"> My Deals</router-link>
+
+              </template>
+              <template v-if="identity == 3">
+                <div class="dashboard-item deals-bg" @click="myDealsHref()">
+                  <div class="dashboard-item-l">
+                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
+                  </div>
+                  <div class="dashboard-item-r">
+                    <router-link to="/deals/myDeals"> My Deals</router-link>
+                  </div>
                 </div>
-              </div>
+                <div class="dashboard-item events-bg" @click="myEventsHref()">
+                  <div class="dashboard-item-l">
+                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
+                  </div>
+                  <div class="dashboard-item-r">
+                    <router-link to="/events/myEvents">My Events</router-link>
+                  </div>
+                </div>
+              </template>
 
 <!--              <div class="dashboard-item ads-bg">-->
 <!--                <div class="dashboard-item-l">-->
@@ -35,16 +67,7 @@
 <!--                </div>-->
 <!--              </div>-->
 
-              <div class="dashboard-item events-bg">
-                <div class="dashboard-item-l">
-                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                </div>
-                <div class="dashboard-item-r">
-                  <router-link to="/events/myEvents">My Events</router-link>
-                </div>
-              </div>
-
-              <div class="dashboard-item favorites-bg">
+              <div class="dashboard-item favorites-bg" @click="myFavoritesHref()">
                 <div class="dashboard-item-l">
                   <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                 </div>
@@ -126,6 +149,21 @@ export default {
     this.getVisitorBasicInfo()
   },
   methods: {
+    applicationsHref(){
+      this.$router.push({path:'/me/applications'})
+    },
+    jobPostsHref(){
+      this.$router.push({path:'/jobs'})
+    },
+    myEventsHref(){
+      this.$router.push({path:'/events/myEvents'})
+    },
+    myDealsHref(){
+      this.$router.push({path:'/deals/myDeals'})
+    },
+    myFavoritesHref(){
+      this.$router.push({path:'/favorites'})
+    },
     getVisitorBasicInfo() {
       let uid = localStorage.getItem('uid')
       let identity = localStorage.getItem('identity')
@@ -196,6 +234,7 @@ export default {
 
 .dashboard-item {
   width: 45%;
+  cursor:pointer;
   background-color: #EEEEEE;
   color: #ffffff;
   margin-top: 20px;

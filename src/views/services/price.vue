@@ -45,13 +45,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Basic Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">Unlimited Membership Length</div>
-                  <div class="price-item-content-item">Use Deals</div>
-                  <div class="price-item-content-item">Apply Jobs</div>
-                  <div class="price-item-content-item">Educator Profile</div>
-                  <div class="price-item-content-item">Customer Service</div>
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
 
               <div class="price-purchase">
@@ -69,16 +63,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Pro Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">1 year Membership Length</div>
-                  <div class="price-item-content-item">Everything Basic</div>
-                  <div class="price-item-content-item">Account Manager</div>
-                  <div class="price-item-content-item">5 Profile Features</div>
-                  <div class="price-item-content-item">5% Discount of ESLP Partners</div>
-                  <div class="price-item-content-item">10% discount for online/offline event discount</div>
-                  <div class="price-item-content-item">qualified for extra featuring add ons</div>
-
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
                 <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
@@ -95,18 +80,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Plus Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">1 year Membership Length</div>
-                  <div class="price-item-content-item">Everything Pro</div>
-                  <div class="price-item-content-item">Counseling (est. hours)</div>
-                  <div class="price-item-content-item">Coaching (est. hours)</div>
-                  <div class="price-item-content-item">Labour Law Consultant</div>
-                  <div class="price-item-content-item">10 Profile Features</div>
-                  <div class="price-item-content-item">Mock Job Interview</div>
-                  <div class="price-item-content-item">10% Discount of ESLP Partners</div>
-                  <div class="price-item-content-item">25% discount for online/offline event discount</div>
-
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
                 <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
@@ -123,10 +97,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Lifetime Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">Unlimited Membership Length</div>
-                  <div class="price-item-content-item">Everything Plus</div>
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
                 <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>
@@ -152,14 +123,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Basic Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">Job Refresh</div>
-                  <div class="price-item-content-item">See Job Post Views</div>
-                  <div class="price-item-content-item">Business Profile</div>
-                  <div class="price-item-content-item">In-app Messaging</div>
-                  <div class="price-item-content-item">Notification for expired job posts</div>
-
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
 
               <div class="price-purchase">
@@ -177,19 +141,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Pro Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">7d/month In-Platform Job Featuring Credit</div>
-                  <div class="price-item-content-item">Multi Job Post</div>
-                  <div class="price-item-content-item">Dedicated Account Manager</div>
-                  <div class="price-item-content-item">Bilingual Support</div>
-                  <div class="price-item-content-item">Job Refresh</div>
-                  <div class="price-item-content-item">See Job Post Views</div>
-                  <div class="price-item-content-item">Business Profile</div>
-                  <div class="price-item-content-item">In-app Messaging</div>
-                  <div class="price-item-content-item">Notification for expired job posts</div>
-                  <div class="price-item-content-item">20% Discount for Anything Else</div>
-
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
                 <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
@@ -206,21 +158,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Plus Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">14d/month In-Platform Job Featuring Credit</div>
-                  <div class="price-item-content-item">Email Blast Advert</div>
-                  <div class="price-item-content-item">Social Media Dedicated Article</div>
-                  <div class="price-item-content-item">Social Media New Member Announcement Package</div>
-                  <div class="price-item-content-item">Multi Job Post</div>
-                  <div class="price-item-content-item">Dedicated Account Manager</div>
-                  <div class="price-item-content-item">Bilingual Support</div>
-                  <div class="price-item-content-item">Job Refresh</div>
-                  <div class="price-item-content-item">See Job Post Views</div>
-                  <div class="price-item-content-item">Business Profile</div>
-                  <div class="price-item-content-item">In-app Messaging</div>
-                  <div class="price-item-content-item">Notification for expired job posts</div>
-                  <div class="price-item-content-item">40% Discount for Anything Else</div>
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
                 <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
@@ -237,9 +175,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Lifetime Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">Everything Plus</div>
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
                 <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>
@@ -266,9 +202,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Basic Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">1 Deal</div>
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
 
               <div class="price-purchase">
@@ -286,20 +220,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Pro Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">2 Deals</div>
-                  <div class="price-item-content-item">Dedicated Account Manager</div>
-                  <div class="price-item-content-item">Onboarding Setup</div>
-                  <div class="price-item-content-item">6 Post & Promote Event</div>
-                  <div class="price-item-content-item">2 Banner & Flyer Design</div>
-                  <div class="price-item-content-item">
-                    Social Media New Vendor Announcement Package:12 Monthly Moment Push, 1 Featured Article
-                  </div>
-                  <div class="price-item-content-item">2 Weeks Home Page Graphic Advert</div>
-                  <div class="price-item-content-item">7 Days Deal Page Top 3 Ranking</div>
-                  <div class="price-item-content-item">20% Discount for Anything Else</div>
-
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
                 <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
@@ -317,22 +238,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Plus Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">3 Deals</div>
-                  <div class="price-item-content-item">Dedicated Account Manager</div>
-                  <div class="price-item-content-item">Onboarding Setup</div>
-                  <div class="price-item-content-item">12 Post & Promote Event</div>
-                  <div class="price-item-content-item">4 Banner & Flyer Design</div>
-                  <div class="price-item-content-item">
-                    Social Media New Vendor Announcement Package:12 Monthly Moment Push, 1 Featured Article
-                  </div>
-                  <div class="price-item-content-item">1 Month Home Page Graphic Advert</div>
-                  <div class="price-item-content-item">14 Days Deal Page Top 3 Ranking</div>
-                  <div class="price-item-content-item">Email Blast Graphic Advert</div>
-                  <div class="price-item-content-item">1 Social Media Dedicated Article</div>
-                  <div class="price-item-content-item">40% Discount for Anything Else</div>
-
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
                 <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Purchase</el-button>
@@ -350,10 +256,7 @@
               </div>
               <div class="price-item-content">
                 <div class="price-item-content-label">Lifetime Membership Includes:</div>
-                <div class="price-item-content-content">
-                  <div class="price-item-content-item">Everything Plus</div>
-
-                </div>
+                <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
                 <el-button class="price-purchase-btn" @click="zohoContactUs()" round>Get Started</el-button>
@@ -754,6 +657,13 @@ export default {
 .price-item-content-content{
   height: 140px;
   overflow-y: auto;
+  padding-top:10px;
+  //font-size: 12px;
+  //line-height: 24px;
+  padding-left: 20px;
+  //text-decoration: underline;
+  //text-decoration-style: dotted;
+  //text-decoration-color: #ececec;
 }
 
 .price-item-content-content::-webkit-scrollbar {

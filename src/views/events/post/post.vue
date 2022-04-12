@@ -507,7 +507,7 @@ export default {
 
       const map = new mapboxgl.Map({
         container: "mapContainer",
-        center: [115.64673, 34.42592],
+        center: [121.472644, 31.231706],
         style: this.mapStyle,
         zoom: 12
       });
@@ -557,7 +557,7 @@ export default {
 
       const map = new mapboxgl.Map({
         container: "mapContainer1",
-        center: [115.64673, 34.42592],
+        center: [121.472644, 31.231706],
         style: this.mapStyle,
         zoom: 12
       });

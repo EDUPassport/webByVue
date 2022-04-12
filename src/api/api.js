@@ -199,3 +199,5 @@ export const EVENTS_MY_EVENT = (params) => get('myEvent', params)
 export const EVENTS_CATEGORY = (params) => get('home/eventCategory', params)
 
 export const EVENTS_TAGS = (params) => get('home/tagList', params)
+
+export const GET_COUNTRY_LIST = (params) => get('getCountry', params)

@@ -31,19 +31,20 @@
           <div class="job-details-label">Job Details</div>
           <div class="job-details-label-underline"></div>
           <div class="job-details-content">
-            <div class="application-deadline">
+            <div class="application-deadline"
+                 v-if="detailData.apply_due_date && detailData.apply_due_date !='0000-00-00'">
               <b>Application: </b>
               <span>{{detailData.apply_due_date}}</span>
             </div>
-            <div class="start-date">
+            <div class="start-date" v-if="detailData.entry_date">
               <b>Start Date: </b>
               <span>{{detailData.entry_date}}</span>
             </div>
-            <div class="number-vacancies">
+            <div class="number-vacancies" v-if="detailData.numbers">
               <b>Number of Vacancies: </b>
               <span>{{detailData.numbers}}</span>
             </div>
-            <div class="class-size">
+            <div class="class-size" v-if="detailData.class_size">
               <b>Class Size: </b>
               <span>{{detailData.class_size}} Students</span>
             </div>
@@ -55,8 +56,21 @@
 
             </div>
             <div class="student-ages" v-if="detailData.age_to_teach">
-              <b>Student Ages</b>
+              <b>Student Ages:</b>
               <span v-for="(item,i) in detailData.age_to_teach" :key="i">{{item.object_en}}</span>
+            </div>
+
+            <div class="job-location" v-if="detailData.job_location">
+              <b>Job Location: </b>
+              <span>{{detailData.job_location}}</span>
+<!--              <span v-if="detailData.country">{{detailData.country.Pinyin}}</span>-->
+<!--              <span v-if="detailData.foreign_provinces">, {{detailData.foreign_provinces.Pinyin}}</span>-->
+<!--              <span v-if="detailData.foreign_citys">, {{detailData.foreign_citys.Pinyin}}</span>-->
+<!--              <span v-if="detailData.foreign_districts">, {{detailData.foreign_districts.Pinyin}}</span>-->
+
+<!--              <span v-if="detailData.provinces">, {{detailData.provinces.Pinyin}}</span>-->
+<!--              <span v-if="detailData.citys">, {{detailData.citys.Pinyin}}</span>-->
+<!--              <span v-if="detailData.districts">, {{detailData.districts.Pinyin}}</span>-->
             </div>
 
           </div>
@@ -71,11 +85,11 @@
               <span> {{ detailData.currency }}{{ detailData.salary_min }} - {{ detailData.salary_max }}</span>
 
             </div>
-            <div class="compensation-payment">
+            <div class="compensation-payment" v-if="detailData.payment_period_en">
               <b>Payment: </b>
               <span>{{ detailData.payment_period_en }}</span>
             </div>
-            <div class="compensation-class-size">
+            <div class="compensation-class-size" v-if="detailData.class_size">
               <b>Class Size: </b>
               <span>{{ detailData.class_size }}</span>
             </div>
@@ -90,15 +104,15 @@
           <div class="qua-label">Qualification Requirements</div>
           <div class="qua-label-underline"></div>
           <div class="qua-content">
-            <div class="qua-teach-exp">
+            <div class="qua-teach-exp" v-if="detailData.teaching_times_en">
               <b>Teaching Experience: </b>
               <span>{{detailData.teaching_times_en}}</span>
             </div>
-            <div class="qua-age">
-              <b>Age: </b>
-              <span>{{ detailData.age_min }} - {{detailData.age_max}}</span>
-            </div>
-            <div class="qua-education-req">
+<!--            <div class="qua-age">-->
+<!--              <b>Age: </b>-->
+<!--              <span>{{ detailData.age_min }} - {{detailData.age_max}}</span>-->
+<!--            </div>-->
+            <div class="qua-education-req" v-if="detailData.education_en">
               <b>Minimum Education Requirements: </b>
               <span>{{detailData.education_en}}</span>
             </div>
@@ -178,8 +192,6 @@
             </div>
 
           </div>
-
-
         </div>
 
         <div class="company-bio-container">
@@ -193,9 +205,12 @@
             <div class="company-bio-text" v-if="detailData.business">
               {{ detailData.business.business_bio }}
             </div>
-<!--            <div class="view-profile-btn-container">-->
-<!--              <el-button class="view-profile-btn" type="primary" round>View Profile</el-button>-->
-<!--            </div>-->
+            <div class="view-profile-btn-container">
+              <el-button class="view-profile-btn" type="primary" round
+                         @click="viewCompanyProfile(detailData.business.user_id)">
+                View Profile
+              </el-button>
+            </div>
           </div>
         </div>
 
@@ -296,6 +311,9 @@ export default {
 
   },
   methods: {
+    viewCompanyProfile(id){
+      this.$router.push({path:'/info/company',query:{id:id,identity:2}})
+    },
     initMap(lng,lat){
       mapboxgl.accessToken = this.accessToken;
 
@@ -786,6 +804,20 @@ export default {
   font-size: 14px;
 }
 
+.job-location {
+  padding: 10px 0;
+}
+
+.job-location b {
+  font-size: 14px;
+}
+
+.job-location span {
+  color: #ff2870;
+  font-size: 14px;
+  //margin-left: 10px;
+}
+
 .start-date {
   padding: 10px 0;
 }
@@ -1132,21 +1164,14 @@ export default {
 }
 
 .company-bio-text {
-  /*height: 200px;*/
   min-height: 140px;
   font-size: 14px;
   word-wrap: break-word;
-  /*word-break: break-all;*/
-  /*overflow: hidden;*/
-  /*text-overflow: ellipsis;*/
-  /*display: -webkit-box;*/
-  /*-webkit-box-orient: vertical;*/
-  /*-webkit-box-orient: vertical;*/
-  /*-webkit-line-clamp: 15;*/
 }
 
 .view-profile-btn-container {
   padding: 10px 0;
+  text-align: right;
 }
 
 .view-profile-btn {

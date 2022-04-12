@@ -68,7 +68,9 @@
               </el-form-item>
               <el-form-item label="Deal Location">
 
-                <el-tabs class="deals-tabs-container" type="border-card" v-model="dealLocationTypeValue">
+                <el-tabs class="deals-tabs-container" type="border-card"
+                         @tab-click="dealLocationTypeChange"
+                         v-model="dealLocationTypeValue">
                   <el-tab-pane label="Online" name="1">
                     <div class="deals-tips">
                       This deal is only available online
@@ -96,7 +98,9 @@
                       </el-select>
                     </div>
 
-                    <div class="map-container">
+                    <div class="map-container"
+                         v-loading="mapLoading"
+                         v-if="dealLocationTypeValue == 2">
                       <div id="mapContainer" class="basemap"></div>
                     </div>
 
@@ -125,7 +129,9 @@
                                    :value="item.id"></el-option>
                       </el-select>
                     </div>
-                    <div class="map-container">
+                    <div class="map-container"
+                         v-loading="map1Loading"
+                         v-if="dealLocationTypeValue == 3">
                       <div id="mapContainer1" class="basemap"></div>
                     </div>
                   </el-tab-pane>
@@ -173,6 +179,8 @@ export default {
   },
   data() {
     return {
+      mapLoading:false,
+      map1Loading:false,
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       dealLocationTypeValue:"1",
@@ -233,16 +241,36 @@ export default {
     // this.getVisitorBasicInfo()
     this.getTagsList()
     this.getAllAreas(0)
-    this.initMap()
-    this.initMap1()
+    // this.initMap()
+    // this.initMap1()
   },
   methods: {
+    dealLocationTypeChange(e){
+      console.log(e.paneName)
+      let self =this
+      if(e.paneName == 2){
+        this.mapLoading=true
+        setTimeout(function () {
+          self.initMap()
+          self.mapLoading=false
+        },1000)
+      }
+
+      if(e.paneName== 3){
+        this.map1Loading=true
+        setTimeout(function () {
+          self.initMap1()
+          self.map1Loading=false
+        },1000)
+
+      }
+    },
     initMap() {
       mapboxgl.accessToken = this.accessToken;
 
       const map = new mapboxgl.Map({
         container: "mapContainer",
-        center: [115.64673, 34.42592],
+        center: [121.472644, 31.231706],
         style: this.mapStyle,
         zoom: 12
       });
@@ -265,9 +293,14 @@ export default {
 
       map.addControl(geocoder, 'top-left')
       const marker = new mapboxgl.Marker()
+
       // {
       //   draggable:true
       // }
+
+          // .setLngLat([121.47, 31.23])
+          // .addTo(map);
+
       // marker.on('dragend',(e)=>{
       //   console.log(e)
       // })
@@ -292,7 +325,7 @@ export default {
 
       const map = new mapboxgl.Map({
         container: "mapContainer1",
-        center: [115.64673, 34.42592],
+        center: [121.472644, 31.231706],
         style: this.mapStyle,
         zoom: 12
       });

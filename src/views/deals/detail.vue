@@ -110,9 +110,12 @@
               <div class="company-bio-text" v-if="detailData.userInfo">
                 {{ detailData.userInfo.vendor_bio }}
               </div>
-<!--              <div class="view-profile-btn-container">-->
-<!--                <el-button class="view-profile-btn" type="primary" round>View Profile</el-button>-->
-<!--              </div>-->
+              <div class="view-profile-btn-container">
+                <el-button class="view-profile-btn" type="primary" round
+                           @click="viewCompanyProfile(detailData.userInfo.user_id)">
+                  View Profile
+                </el-button>
+              </div>
             </div>
           </div>
 
@@ -188,6 +191,9 @@ export default {
 
   },
   methods: {
+    viewCompanyProfile(id){
+      this.$router.push({path:'/info/company',query:{id:id,identity:3}})
+    },
     initMap(lng,lat){
       mapboxgl.accessToken = this.accessToken;
 
@@ -712,22 +718,14 @@ export default {
 }
 
 .company-bio-text {
-  /*height: 200px;*/
   min-height: 140px;
   font-size: 14px;
   word-wrap: break-word;
-  /*overflow: hidden;*/
-  /*word-break: break-all;*/
-  /*overflow: hidden;*/
-  /*text-overflow: ellipsis;*/
-  /*display: -webkit-box;*/
-  /*-webkit-box-orient: vertical;*/
-  /*-webkit-box-orient: vertical;*/
-  /*-webkit-line-clamp: 15;*/
 }
 
 .view-profile-btn-container {
   padding: 10px 0;
+  text-align:right;
 }
 
 .view-profile-btn {

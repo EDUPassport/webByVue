@@ -527,7 +527,12 @@
                   <div class="my-resume-t-label">Your Resume</div>
                 </div>
                 <div class="my-resume-content">
+                  <a v-if="resumeUrl" :href="resumeUrl" target="_blank" class="resume-avatar">
+                    [PDF] Click to Preview
+                  </a>
                   <el-upload
+                       v-else
+                      drag
                       class="resume-uploader"
                       :action="uploadActionUrl"
                       :headers="uploadHeaders"
@@ -537,8 +542,18 @@
                       :on-success="handleResumeSuccess"
                       :before-upload="beforeResumeUpload"
                   >
-                    <a v-if="resumeUrl" :href="resumeUrl" class="resume-avatar">[PDF] Click to Preview</a>
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <el-icon class="el-icon--upload" :size="80">
+                      <upload-filled  />
+                    </el-icon>
+                    <div class="el-upload__text">
+                      Drop file here or <em>click to upload</em>
+                    </div>
+                    <template #tip>
+                      <div class="el-upload__tip">
+
+                      </div>
+                    </template>
+<!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
                   </el-upload>
                 </div>
               </div>
@@ -3339,18 +3354,14 @@ export default {
 .my-resume-content {
   padding: 10px;
 }
+/deep/ .resume-uploader .el-upload-dragger{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-/deep/ .resume-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
 }
 
-/deep/ .resume-uploader .el-upload:hover {
-  border-color: #0AA0A8;
-}
 
 /deep/ .avatar-uploader-icon {
   font-size: 28px;

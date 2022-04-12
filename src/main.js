@@ -19,7 +19,7 @@ import VTypical from 'vue-typical'
 import './assets/font/font.css'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu,ChatLineSquare,
-    MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose,SuccessFilled,Failed} from '@element-plus/icons'
+    MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose,SuccessFilled,Failed,UploadFilled} from '@element-plus/icons'
 
 import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
@@ -87,6 +87,7 @@ app.component('Folder',Folder)
 app.component('CircleClose',CircleClose)
 app.component('SuccessFilled',SuccessFilled)
 app.component('Failed',Failed)
+app.component('UploadFilled',UploadFilled)
 
 app.component(Vue3CountryIntl.name, Vue3CountryIntl)
 

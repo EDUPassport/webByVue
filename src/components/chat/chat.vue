@@ -2,8 +2,9 @@
   <div>
     <div class="chat-container">
       <div class="chat-icon-container" @click="setShowChatStatus()">
-        <el-button icon="xll-im-icon iconfont el-icon-aliimmessage" circle></el-button>
-<!--        <i class="xll-im-icon iconfont el-icon-aliimmessage"></i>-->
+        <div class="xll-chat-icon-container">
+          <el-image class="xll-chat-icon" :src="chatIcon"></el-image>
+        </div>
         <div class="xll-im-unread-total"></div>
       </div>
     </div>
@@ -133,6 +134,8 @@
 
 <script>
 import imgLogo from '@/assets/logo.png'
+import chatIcon from '@/assets/chat/chat-icon.png'
+import chatIcon1 from '@/assets/chat/chat-icon-1.png'
 import {useStore} from 'vuex'
 import {computed} from "vue";
 import SendBox from "./chat-component/SendBox";
@@ -164,7 +167,8 @@ export default {
   data(){
     return {
       imgLogo,
-
+      chatIcon,
+      chatIcon1,
       showLoading : false,
       action : {
         conversation : null,
@@ -434,43 +438,56 @@ export default {
 
 .chat-container{
   position: fixed;
-  bottom: 120px;
-  right: 0px;
-  z-index: 900;
+  bottom: 80px;
+  right: 10px;
+  z-index: 990;
 
 }
-.chat-icon-container{
-  background-color: #FFFFFF;
-  padding: 4px;
-  border-radius: 10px;
-  text-align: center;
-  position: relative;
 
+.chat-icon-container{
+  //background-color: #27799F;
+  border:none;
+  position: relative;
   cursor: pointer;
-  border: 1px solid #EEEEEE;
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  //box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
+}
+
+.xll-chat-icon-container{
+  height: 60px;
+  width: 60px;
+  border-radius: 60px;
+  overflow: hidden;
+}
+
+.xll-chat-icon{
+  width:100%;
+  height: 100%;
 }
 
 .xll-im-unread-total{
   position: absolute;
   right: 4px;
-  top: 4px;
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 14px;
   background-color: #f60441;
 }
 
 .chat-content-container{
   position: fixed;
-  bottom: 168px;
-  right: 0px;
+  bottom: 138px;
+  right: 10px;
   z-index: 990;
 
   background-color: #FFFFFF;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 10px;
+  //border-top-left-radius: 10px;
+  //border-top-right-radius: 10px;
+  //border-bottom-left-radius: 10px;
+  border-radius:10px;
   border: 1px solid #EEEEEE;
 
   display: flex;
