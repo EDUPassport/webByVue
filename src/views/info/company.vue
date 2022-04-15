@@ -1,7 +1,16 @@
 <template>
   <div class="bg">
     <el-row class="detail-row" align="top" justify="start">
+
       <el-col class="detail-l-col" :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+        <div class="back-container">
+          <el-button type="info" class="back-btn" @click="turnBack()" >
+            <el-icon :size="18">
+              <Back></Back>
+            </el-icon>
+            Back
+          </el-button>
+        </div>
         <div class="business-info-container">
           <div class="business-info-t">
             <div class="business-info-label">
@@ -57,11 +66,6 @@
             <div class="map-container" v-if="userInfo.lat && userInfo.lng">
               <div id="mapContainer" class="basemap"></div>
             </div>
-            <!--                <div class="business-info-item">-->
-            <!--                  Business Location:-->
-            <!--                  <span>{{ userInfo.location }}</span>-->
-            <!--                </div>-->
-            
 
           </div>
 
@@ -203,6 +207,9 @@ export default {
 
   },
   methods: {
+    turnBack(){
+      this.$router.go(-1)
+    },
     initMap(lng,lat){
       mapboxgl.accessToken = this.accessToken;
 
@@ -235,6 +242,8 @@ export default {
 
     },
     getVisitorBasicInfo(uid,identity) {
+      let self = this;
+
       let params = {
         id: uid,
         identity: identity
@@ -252,7 +261,9 @@ export default {
             let lng = res.message.business_info.lng
 
             if(lat && lng){
-              this.initMap(lng,lat)
+              setTimeout(function () {
+                self.initMap(lng,lat)
+              },1500)
             }
             if (res.message.business_info.logo) {
               this.logoPhotoUrl = res.message.business_info.logo
@@ -268,7 +279,9 @@ export default {
             let lng = res.message.vendor_info.lng
 
             if(lat && lng){
-              this.initMap(lng,lat)
+              setTimeout(function () {
+                self.initMap(lng,lat)
+              },1500)
             }
             if (res.message.vendor_info.logo) {
               this.logoPhotoUrl = res.message.vendor_info.logo
@@ -395,9 +408,13 @@ export default {
 }
 
 .detail-l-col {
-  padding: 20px;
+  padding:0 20px 20px 20px;
 }
 
+/deep/ .back-btn span{
+  display: flex;
+  align-items: center;
+}
 
 .business-info-container {
   margin-top: 20px;
@@ -480,7 +497,7 @@ export default {
 }
 
 .job-xll-r-container{
-  padding-top:20px;
+  padding-top:40px;
 }
 .job-detail-share-container{
   display: flex;

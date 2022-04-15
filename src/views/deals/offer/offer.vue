@@ -141,7 +141,7 @@
 
               <el-form-item label="Deal Agreement">
                 <div class="deal-agreement">
-                  I understand this deal will need ESL Passport's approval.
+                  I understand this deal will need EDU Passport's approval.
                 </div>
               </el-form-item>
 

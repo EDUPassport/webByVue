@@ -2,9 +2,9 @@
   font-family: "iconfont"; /* Project id 2814433 */
   /* Color fonts */
   src: 
-       url('iconfont.woff2?t=1644986445392') format('woff2'),
-       url('iconfont.woff?t=1644986445392') format('woff'),
-       url('iconfont.ttf?t=1644986445392') format('truetype');
+       url('iconfont.woff2?t=1649740217265') format('woff2'),
+       url('iconfont.woff?t=1649740217265') format('woff'),
+       url('iconfont.ttf?t=1649740217265') format('truetype');
 }
 
 .iconfont {
@@ -17,6 +17,10 @@
 
 .el-icon-alihamburger-menu:before {
   content: "\e65b";
+}
+
+.el-icon-alihamburger-menu-gray:before {
+  content: "\ea0e";
 }
 
 .el-icon-aliphone:before {

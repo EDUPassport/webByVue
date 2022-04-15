@@ -8,13 +8,13 @@
     <el-row class="about-content-row" :gutter="0" align="middle" justify="center">
       <el-col class="about-content-l" :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
         <div class="about-label">
-          About <span>ESL Passport</span>
+          About <span>EDU Passport</span>
         </div>
         <div class="about-label-underline"></div>
         <p class="about-desc">
           Education professionals around the world face the same problems. As businesses grapple with high staff turnover rates, broken contracts, and increasing competition, educators dodge scams, battle with discrimination, and fight for equal pay - it's the same story everywhere.
 
-          ESL Passport is on a mission to put a stop to practices like these and redefine the international education market. We're the world's first hub of information, resources, and impartial support aimed at anyone and everyone in the industry. Our digital platform sets new standards of transparency and accountability, and our in-person services support your professional growth.
+          EDU Passport is on a mission to put a stop to practices like these and redefine the international education market. We're the world's first hub of information, resources, and impartial support aimed at anyone and everyone in the industry. Our digital platform sets new standards of transparency and accountability, and our in-person services support your professional growth.
 
           By shining a light on the good and rebuilding the bad, we're erasing the uncertainty and mistrust that plague the sector and helping everyone - educators, recruiters, and businesses - reach their full potential.
 
@@ -126,7 +126,7 @@ export default {
 }
 
 .about-label{
-  font-size: 18px;
+  font-size: 22px;
   color: #FE2060;
   font-weight: bold;
 }

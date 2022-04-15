@@ -1,0 +1,84 @@
+@media (min-width: 1100px) {
+    .container {
+        width: 1280px;
+    }
+}
+.DiscussionListItem-info .item-excerpt>div{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+footer {
+    position: relative;
+}
+.site-footer {
+    position: absolute;
+    width: 100%;
+    top: calc(100% / 4 * 3);
+    transform: translateY(calc(-50% + 10%));
+    padding: 0;
+    box-sizing: inherit;
+    text-align: center;
+    font-size: 1em
+}
+
+@media (max-width:991px) {
+    .site-footer {
+        padding-top: 0px;
+        padding-bottom:60px;
+    }
+}
+
+.site-footer p {
+    margin: 0
+}
+
+.rm-link-color>p>a {
+    text-decoration: none;
+    color: #89898c
+}
+
+.rm-link-color>p>a:hover {
+    text-decoration: underline
+}
+
+.fly-fish {
+    z-index: -1;
+    line-height: 0px;
+    height: 200px;
+}
+.App .DiscussionListItem-author .Avatar{
+    background: var(--avatar-bg) !important;
+}
+
+
+.DiscussionList-discussions>li:nth-child(2n+1) .Avatar{
+    border-top-left-radius: 42% 57%;
+    border-top-right-radius: 58% 49%;
+    border-bottom-right-radius: 33% 51%;
+    border-bottom-left-radius: 67% 43%;
+}
+.DiscussionList-discussions>li:nth-child(2n) .Avatar{
+    border-top-left-radius: 43% 33%;
+    border-top-right-radius: 57% 50%;
+    border-bottom-right-radius: 68% 50%;
+    border-bottom-left-radius: 32% 67%;
+}
+.DiscussionList-discussions>li:nth-child(3n) .Avatar{
+    border-top-left-radius: 58% 48%;
+    border-top-right-radius: 42% 73%;
+    border-bottom-right-radius: 68% 27%;
+    border-bottom-left-radius: 32% 52%;
+}
+
+@media (min-width: 768px){
+    .DiscussionListItem{
+        box-shadow: 0 0 6px 0 rgba(43,74,91,0.2);
+        background: #eaedf1;
+        margin: 0 0 4px;
+        padding: 4px 10px;
+        border-radius: 14px;
+    }
+}
+

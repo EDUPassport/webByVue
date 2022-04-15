@@ -638,7 +638,7 @@ import {
   VISITOR_USER_INFO, ALL_AREAS, USER_OBJECT_LIST, ADD_JOB,
   JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO, GET_COUNTRY_LIST
 } from '@/api/api';
-import {ref} from "vue";
+// import {ref} from "vue";
 import axios from 'axios'
 import {encode} from "js-base64";
 
@@ -650,23 +650,7 @@ export default {
   setup() {
     const envName = process.env.VUE_APP_ENV_NAME
 
-    let domain = ref('')
-
-    if (envName === 'developmentCN') {
-      domain = 'https://dev.eslpassport.com'
-    }
-    if (envName === 'development') {
-      domain = 'https://dev.esl-passport.cn'
-      // domain = 'http://localhost:8080'
-    }
-    if (envName === 'productionCN') {
-      domain = 'https://www.eslpassport.com'
-    }
-
-    if (envName === 'production') {
-      domain = 'https://www.esl-passport.cn'
-    }
-    const goDomain = domain
+    const goDomain = process.env.VUE_APP_EXCHANGE_DOMAIN
 
     return {
       envName,

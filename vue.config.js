@@ -18,6 +18,10 @@ module.exports = {
             })()
             return args
         })
+        config.plugin('html').tap(args=>{
+            args[0].title = 'EDU Passport'
+            return args;
+        })
     },
     // 调整内部的 webpack 配置
     configureWebpack: {

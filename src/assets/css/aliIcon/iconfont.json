@@ -13,6 +13,13 @@
       "unicode_decimal": 58971
     },
     {
+      "icon_id": "28899304",
+      "name": "hamburger-menu",
+      "font_class": "hamburger-menu-gray",
+      "unicode": "ea0e",
+      "unicode_decimal": 59918
+    },
+    {
       "icon_id": "1410460",
       "name": "phone",
       "font_class": "phone",

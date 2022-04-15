@@ -14,11 +14,13 @@ axios.defaults.timeout = 30000
 // 请求拦截器，设置token
 axios.interceptors.request.use(config => {
     const token = localStorage.getItem('token');
+    const sourceUrl = window.location.href;
 
     if (token && token != '') {
         config.headers.token = token
         // token && (config.headers.Authorization = token)
     }
+    config.headers.source = sourceUrl;
     config.headers.platform = 4;
     return config
 }, error => {

@@ -10,8 +10,13 @@
     "build:prodsjp": "vue-cli-service  build --mode sjpproduction",
     "build:stagecn": "vue-cli-service  build --mode cndevelopment",
     "build:prodcn": "vue-cli-service  build --mode cnproduction",
+    "build:stageedusjp": "vue-cli-service  build --mode edusjpdevelopment",
+    "build:prodedusjp": "vue-cli-service  build --mode edusjpproduction",
+    "build:stageeducn": "vue-cli-service  build --mode educndevelopment",
+    "build:prodeducn": "vue-cli-service  build --mode educnproduction",
     "all": "vue-cli-service  build --mode cndevelopment && vue-cli-service build --mode cnproduction && vue-cli-service build --mode sjpdevelopment && vue-cli-service build --mode sjpproduction",
     "all1": "vue-cli-service  build --mode cndevelopment && vue-cli-service build --mode cnproduction  && vue-cli-service build --mode sjpproduction",
+    "all2": "vue-cli-service  build --mode educndevelopment && vue-cli-service build --mode educnproduction  && vue-cli-service build --mode edusjpproduction",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

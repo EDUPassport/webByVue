@@ -83,7 +83,7 @@
 
           <el-col :xs="4" :sm="4" :md="4" :lg="0" :xl="0">
             <div @click="menuDrawerStatus = true">
-              <i class="iconfont el-icon-alihamburger-menu xll-icon-size"></i>
+              <i class="iconfont el-icon-alihamburger-menu-gray xll-icon-size"></i>
             </div>
             <el-drawer
                 v-model="menuDrawerStatus"

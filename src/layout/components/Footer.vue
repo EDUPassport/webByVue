@@ -108,7 +108,7 @@
             <router-link to="#">Schedule A Demo</router-link>
           </div>
           <div class="footer-nav-item">
-            <router-link to="#">ESL Passport Academy</router-link>
+            <router-link to="#">EDU Passport Academy</router-link>
           </div>
           <div class="footer-nav-item">
             <router-link to="#">Intro Webinars</router-link>
@@ -159,7 +159,7 @@
         </el-col>
         <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
           <div class="footer-b-tips">
-            We are global education change-markers. <span>©2021 ESL Passport</span>
+            We are global education change-markers. <span>©2022 EDU Passport</span>
           </div>
         </el-col>
       </el-row>

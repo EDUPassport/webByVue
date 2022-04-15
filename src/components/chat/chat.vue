@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div v-show="token">
     <div class="chat-container">
       <div class="chat-icon-container" @click="setShowChatStatus()">
         <div class="xll-chat-icon-container">
           <el-image class="xll-chat-icon" :src="chatIcon"></el-image>
         </div>
-        <div class="xll-im-unread-total"></div>
+        <div class="xll-im-unread-total" v-if="unreadTotal>0"></div>
       </div>
     </div>
     <div class="chat-content-container" v-if="showChatStatus">
@@ -147,12 +147,15 @@ export default {
   setup(){
     const store = useStore()
 
+    let token = localStorage.getItem('token')
+
     const currentUser = computed(()=>store.state.currentUser)
     const nowChatUserInfo = computed(()=>store.state.nowChatUserInfo)
     const showChatStatus = computed(()=>store.state.showChatStatus)
     const setShowChatStatus = () => store.commit('showChatStatus',!store.state.showChatStatus)
 
     return {
+      token,
       currentUser,
       nowChatUserInfo,
       showChatStatus,
