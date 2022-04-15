@@ -6,6 +6,10 @@ node_modules
 /distCN
 /testDev
 /webProd
+/devEduCN
+/distEduCN
+/testEduDev
+/webEduProd
 
 # local env files
 .env.local
