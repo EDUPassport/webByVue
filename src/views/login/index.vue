@@ -302,7 +302,32 @@
                            @click="selectedIdentity(3)">Vendor
                       </div>
                     </div>
+
+                    <div class="business-dialog-container" v-if="businessDialogStatus">
+                      <div class="business-dialog-close" @click="businessDialogStatus=false">
+                        <el-icon :size="30" >
+                          <circle-close />
+                        </el-icon>
+                      </div>
+                      <h3>Welcome Education Business</h3>
+                      <span>Which would you say best describes your business? </span>
+                      <div class="business-identity-container">
+                        <div class="business-identity-item">Recruiter</div>
+                        <div class="business-identity-item">School</div>
+                        <div class="business-identity-item">Other</div>
+                      </div>
+
+                      <div class="business-dialog-btn-container">
+                        <el-button class="business-dialog-submit-btn" type="primary" round >Submit</el-button>
+                      </div>
+
+
+                    </div>
+
                   </div>
+
+
+
                   <el-form-item>
                     <el-button class="submit-btn"
                                type="primary"
@@ -455,7 +480,8 @@ export default {
       },
       identityValue: 0,
       sendCodeLoading: false,
-      showValue: 1
+      showValue: 1,
+      businessDialogStatus:false
 
     }
   },
@@ -633,7 +659,9 @@ export default {
     },
     selectedIdentity(value) {
       console.log(value)
-      this.identityValue = value
+      this.businessDialogStatus = true;
+      // this.identityValue = value
+
     },
     submitLoginForm(formName) {
       let self = this;
@@ -1442,6 +1470,7 @@ export default {
   padding: 20px 20px 40px 20px;
 }
 
+
 .login-tabs-container {
   display: flex;
   flex-direction: row;
@@ -1560,8 +1589,66 @@ export default {
   margin-top: 20px;
 }
 
-.identity-container {
+.business-dialog-container{
+  position: absolute;
+  background-color: #ffffff;
+  bottom: 30px;
+  left:0;
+  right:0;
+  margin:auto;
+  width:100%;
+  //padding: 20px;
+  padding:40px 0 20px 0;
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.4);
+}
 
+.business-dialog-close{
+  position: absolute;
+  right: 10px;
+  top:10px;
+  cursor: pointer;
+
+}
+
+.business-dialog-container h3{
+
+}
+.business-dialog-container span{
+  font-size: 14px;
+  color:#808080;
+  line-height: 30px;
+}
+
+.business-identity-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.business-identity-item{
+  flex:1;
+  margin:10px;
+  background-color: #f5f6f7;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.business-dialog-btn-container{
+  margin-top: 20px;
+}
+
+.business-dialog-submit-btn{
+
+}
+
+.identity-container {
+  position: relative;
 }
 
 .identity-label {

@@ -220,7 +220,7 @@ export default {
 
   },
   mounted() {
-    console.log('I am Lei . I am a developer')
+    console.log('EDU Passport Developer Lei .')
     // this.username = localStorage.getItem('name')
     // this.identity = localStorage.getItem('identity')
     let token = localStorage.getItem('token')
