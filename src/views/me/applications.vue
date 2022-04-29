@@ -51,9 +51,30 @@
                            :current-page="page" :page-size="limit"
                            :total="totalNum"></el-pagination>
           </div>
-          <div class="ads-container">
-            <el-image :src="dashboardAdsImg"></el-image>
+<!--          <div class="ads-container">-->
+<!--            <el-image :src="dashboardAdsImg"></el-image>-->
+<!--          </div>-->
+
+          <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataTop.length>0">
+            <el-carousel height="220px" indicator-position="none" >
+              <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataTop" :key="i">
+                <div class="xll-ads-l">
+                  <el-image class="xll-ads-l-img"
+                            :src="item.user_url !='' ? item.user_url : item.url"></el-image>
+                </div>
+                <div class="xll-ads-r">
+                  <h4>Naked Butter Products</h4>
+                  <h5>Description:</h5>
+                  <div class="xll-ads-r-desc">
+                    Want to learn what Education Hub can do for you? See for
+                    yourself for free we look forward to seeing you succeed!
+                  </div>
+
+                </div>
+              </el-carousel-item>
+            </el-carousel>
           </div>
+
 
         </el-col>
       </el-row>
@@ -62,7 +83,7 @@
 </template>
 
 <script>
-import {MY_APPLY_JOBS} from "@/api/api";
+import {ADS_LIST, MY_APPLY_JOBS} from "@/api/api";
 import dashboardAdsImg from '@/assets/ads/2.png'
 import meSideMenu from "@/components/meSideMenu";
 
@@ -78,12 +99,61 @@ export default {
       page: 1,
       limit: 8,
       totalNum: 0,
+      adsDataTop:[]
     }
   },
   mounted() {
     this.getMyApplyJobsList(this.page, this.limit)
+    this.getAdsList()
   },
   methods: {
+    turnBanner(link){
+      console.log(link)
+      if (link != '') {
+        window.location.href =  link
+      } else {
+        let token = localStorage.getItem('token')
+        if(!token){
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
+    getAdsList(){
+      let ads_data = {
+        page: 1,
+        limit: 10000
+      }
+      ADS_LIST(ads_data).then(res=>{
+        if (res.code == 200) {
+          // console.log(rs.message)
+          let adsDataTop = [];
+          let identity = localStorage.getItem('identity');
+
+          if (!identity) {
+            adsDataTop = res.message.filter(item => item.name == 'guest_h1');
+          }
+          if (identity == 1) {
+
+            adsDataTop = res.message.filter(item => item.name == 'educator_h1');
+          }
+          if (identity == 2) {
+            adsDataTop = res.message.filter(item => item.name == 'business_h1');
+          }
+          if (identity == 3) {
+            adsDataTop = res.message.filter(item => item.name == 'vendor_h1');
+          }
+
+          if(adsDataTop.length>0){
+            this.adsDataTop = adsDataTop[0].data;
+          }
+
+        }
+
+      }).catch(err=>{
+        this.$message.error(err.msg)
+      })
+    },
     getMyApplyJobsList(page, limit) {
       let params = {
         token: localStorage.getItem('token'),
@@ -234,5 +304,62 @@ export default {
   color: #808080;
   font-size: 14px;
   text-align: center;
+}
+
+
+.xll-ads-container{
+  padding: 20px 20px 0 20px;
+}
+
+.xll-ads-container-margin{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.xll-ads-swiper-item{
+  cursor:pointer;
+  border-radius: 10px;
+  height: 100%;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xll-ads-l{
+  width:60%;
+  height: 100%;
+}
+.xll-ads-l-img{
+//width: 100%;
+  height: 100%;
+  border-radius:10px;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+}
+
+.xll-ads-r{
+  width:36%;
+}
+
+.xll-ads-r{
+  padding-right: 4%;
+}
+.xll-ads-r h4{
+  color:#004956;
+}
+
+.xll-ads-r h5{
+  margin-top:20px;
+}
+
+.xll-ads-r-desc{
+  font-size: 14px;
+  margin-top: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 </style>

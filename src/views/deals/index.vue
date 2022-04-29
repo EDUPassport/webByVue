@@ -5,7 +5,7 @@
         <el-col class="sub-cate-container" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
           <div class="sub-cate-item" v-for="(item,i) in subCateData" :key="i"
                :class="sCateId == item.id ? 'sub-cate-item-active' : ''"
-          @click="selectSubCate(item.id)">
+               @click="selectSubCate(item.id)">
             <el-image class="sub-cate-icon" :src="item.icon_url"></el-image>
             <span>{{item.identity_name}}</span>
           </div>
@@ -56,6 +56,32 @@
           <latestIndustryNews></latestIndustryNews>
         </el-col>
         <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+
+          <div class="xll-ads-container" v-if="adsDataMid.length>0">
+            <el-carousel height="180px" indicator-position="none" >
+              <el-carousel-item class="xll-ads-swiper-item"
+                                v-for="(item,i) in adsDataMid" :key="i"
+                                @click="turnBanner(item.link)"
+              >
+                <div class="xll-ads-l">
+                  <el-image class="xll-ads-l-img"
+                            :src="item.user_url !='' ? item.user_url : item.url"></el-image>
+                </div>
+                <div class="xll-ads-r">
+                  <h4>Naked Butter Products</h4>
+                  <h5>Description:</h5>
+                  <div class="xll-ads-r-desc">
+                    Want to learn what Education Hub can do for you? See for
+                    yourself for free we look forward to seeing you succeed!
+                  </div>
+
+                </div>
+              </el-carousel-item>
+            </el-carousel>
+
+          </div>
+
+
           <div class="deals-container">
             <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index">
               <div class="deals-item-bg"
@@ -74,9 +100,9 @@
                     <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
                   </div>
                 </div>
-<!--                <div class="deals-item-tag-container">-->
-<!--                  <div class="deals-item-tag">Deal</div>-->
-<!--                </div>-->
+                <!--                <div class="deals-item-tag-container">-->
+                <!--                  <div class="deals-item-tag">Deal</div>-->
+                <!--                </div>-->
 
                 <div class="deals-item-name-container">
                   <div class="deals-item-title" @click="turnDealDetail(item.id)">
@@ -112,6 +138,29 @@
                            :current-page="dealPage" :page-size="dealLimit"
                            :total="dealTotalNum"></el-pagination>
           </div>
+
+          <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataBottom.length>0">
+            <el-carousel height="180px" indicator-position="none" >
+              <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataBottom" :key="i">
+                <div class="xll-ads-l">
+                  <el-image class="xll-ads-l-img"
+                            :src="item.user_url !='' ? item.user_url : item.url"></el-image>
+                </div>
+                <div class="xll-ads-r">
+                  <h4>Naked Butter Products</h4>
+                  <h5>Description:</h5>
+                  <div class="xll-ads-r-desc">
+                    Want to learn what Education Hub can do for you? See for
+                    yourself for free we look forward to seeing you succeed!
+                  </div>
+
+                </div>
+              </el-carousel-item>
+            </el-carousel>
+
+          </div>
+
+
         </el-col>
       </el-row>
 
@@ -131,7 +180,7 @@ import {
   DEALS_AREA_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  GET_BASIC_INFO, CHANGE_IDENTITY_LANGUAGE
+  GET_BASIC_INFO, CHANGE_IDENTITY_LANGUAGE, ADS_LIST
 } from "@/api/api";
 import {encode} from "js-base64";
 
@@ -154,16 +203,74 @@ export default {
       dealLimit:10,
       dealTotalNum:0,
       sCateId:0,
-      showLoadingStatus:true
+      showLoadingStatus:true,
+      adsDataMid:[],
+      adsDataBottom:[],
+
     }
   },
   mounted() {
     this.getSubCateList(3)
     this.getTagsList()
     this.getDealsAreaList()
+    this.getAdsList()
     this.getDealsList(this.dealPage,this.dealLimit,this.sCateId)
   },
   methods: {
+    turnBanner(link){
+      console.log(link)
+      if (link != '') {
+        window.location.href =  link
+      } else {
+        let token = localStorage.getItem('token')
+        if(!token){
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
+    getAdsList(){
+      let ads_data = {
+        page: 1,
+        limit: 10000
+      }
+      ADS_LIST(ads_data).then(res=>{
+        if (res.code == 200) {
+          // console.log(rs.message)
+          let adsDataMid = [];
+          let adsDataBottom = [];
+          let identity = localStorage.getItem('identity');
+
+          if (!identity) {
+            adsDataMid = res.message.filter(item => item.name == 'guest_d2');
+            adsDataBottom = res.message.filter(item => item.name == 'guest_d3');
+          }
+          if (identity == 1) {
+            adsDataMid = res.message.filter(item => item.name == 'educator_d2');
+            adsDataBottom = res.message.filter(item => item.name == 'educator_d3');
+          }
+          if (identity == 2) {
+            adsDataMid = res.message.filter(item => item.name == 'business_d2');
+            adsDataBottom = res.message.filter(item => item.name == 'business_d3');
+          }
+          if (identity == 3) {
+            adsDataMid = res.message.filter(item => item.name == 'vendor_d2');
+            adsDataBottom = res.message.filter(item => item.name == 'vendor_d3');
+          }
+
+          if(adsDataMid.length>0){
+            this.adsDataMid = adsDataMid[0].data;
+          }
+          if(adsDataBottom.length>0){
+            this.adsDataBottom = adsDataBottom[0].data;
+          }
+
+        }
+
+      }).catch(err=>{
+        this.$message.error(err.msg)
+      })
+    },
     turnDealDetail(id){
       this.$router.push({path:'/deals/detail',query:{
           id:id
@@ -673,10 +780,69 @@ export default {
   text-align: center;
 }
 
+.xll-ads-container{
+  padding: 20px 0 0 20px;
+}
+
+.xll-ads-container-margin{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.xll-ads-swiper-item{
+  cursor:pointer;
+  border-radius: 10px;
+  height: 100%;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xll-ads-l{
+  width:60%;
+  height: 100%;
+}
+.xll-ads-l-img{
+//width: 100%;
+  height: 100%;
+  border-radius:10px;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+}
+
+.xll-ads-r{
+  width:36%;
+}
+
+.xll-ads-r{
+  padding-right: 4%;
+}
+.xll-ads-r h4{
+  color:#004956;
+}
+
+.xll-ads-r h5{
+  margin-top:20px;
+}
+
+.xll-ads-r-desc{
+  font-size: 14px;
+  margin-top: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+
 @media screen and (min-width: 1200px){
   .xll-container{
     width: 1100px;
   }
 }
+
+
 
 </style>

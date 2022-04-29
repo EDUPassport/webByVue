@@ -96,6 +96,31 @@
 
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+
+        <div class="xll-ads-container" v-if="jobsAdsListTop.length>0">
+          <el-carousel height="180px" indicator-position="none" >
+            <el-carousel-item class="xll-ads-swiper-item"
+                              v-for="(item,i) in jobsAdsListTop" :key="i"
+                              @click="turnBanner(item.link)"
+            >
+              <div class="xll-ads-l">
+                <el-image class="xll-ads-l-img"
+                          :src="item.user_url !='' ? item.user_url : item.url"></el-image>
+              </div>
+              <div class="xll-ads-r">
+                <h4>Naked Butter Products</h4>
+                <h5>Description:</h5>
+                <div class="xll-ads-r-desc">
+                  Want to learn what Education Hub can do for you? See for
+                  yourself for free we look forward to seeing you succeed!
+                </div>
+
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+
+        </div>
+
         <div class="jobs-list-container" >
           <div class="jobs-list-label-container">
             <div class="jobs-list-label">We've found you {{ jobTotalNum }} open jobs</div>
@@ -178,6 +203,28 @@
 
         </div>
 
+        <div class="xll-ads-container xll-ads-container-margin" v-if="jobsAdsListMid.length>0">
+          <el-carousel height="180px" indicator-position="none" >
+            <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in jobsAdsListMid" :key="i">
+              <div class="xll-ads-l">
+                <el-image class="xll-ads-l-img"
+                          :src="item.user_url !='' ? item.user_url : item.url"></el-image>
+              </div>
+              <div class="xll-ads-r">
+                <h4>Naked Butter Products</h4>
+                <h5>Description:</h5>
+                <div class="xll-ads-r-desc">
+                  Want to learn what Education Hub can do for you? See for
+                  yourself for free we look forward to seeing you succeed!
+                </div>
+
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+
+        </div>
+
+
 
       </el-col>
     </el-row>
@@ -188,6 +235,7 @@
 
 import {useRouter,useRoute} from "vue-router";
 import {
+  ADS_LIST,
   JOB_LIST,
   USER_OBJECT_LIST,
   JOBS_AREA_LIST,
@@ -265,6 +313,8 @@ export default {
       jobTotalNum: 0,
       showLoadingStatus:true,
       versionTime:randomString(),
+      jobsAdsListTop:[],
+      jobsAdsListMid:[],
 
     }
   },
@@ -311,11 +361,12 @@ export default {
     //
     // this.getJobList(this.jobPage, this.jobLimit)
     console.log(this.$route.query)
+
   },
   mounted() {
     this.getJobsAreaList()
     this.getUserObjectList()
-
+    this.getAdsList()
     let cityValue= this.$route.query.city;
     if(cityValue && cityValue !=''){
       this.locationValue = Number(cityValue)
@@ -324,6 +375,67 @@ export default {
     this.getJobList(this.jobPage, this.jobLimit)
   },
   methods: {
+    turnBanner(link){
+      console.log(link)
+      if (link != '') {
+        window.location.href =  link
+      } else {
+        let token = localStorage.getItem('token')
+        if(!token){
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
+    getAdsList(){
+      let ads_data = {
+        page: 1,
+        limit: 10000
+      }
+      ADS_LIST(ads_data).then(res=>{
+            if (res.code == 200) {
+              // console.log(rs.message)
+              let jobsAdsListTop = [];
+              let jobsAdsListMid = [];
+              let identity = localStorage.getItem('identity');
+
+              if (!identity) {
+                jobsAdsListTop = res.message.filter(item => item.name == 'guest_j2');
+                jobsAdsListMid = res.message.filter(item => item.name == 'guest_j3');
+              }
+              if (identity == 1) {
+                jobsAdsListTop = res.message.filter(item => item.name == 'educator_j2');
+                jobsAdsListMid = res.message.filter(item => item.name == 'educator_j3');
+              }
+              if (identity == 2) {
+                jobsAdsListTop = res.message.filter(item => item.name == 'business_j2');
+                jobsAdsListMid = res.message.filter(item => item.name == 'business_j3');
+              }
+              if (identity == 3) {
+                jobsAdsListTop = res.message.filter(item => item.name == 'vendor_j2');
+                jobsAdsListMid = res.message.filter(item => item.name == 'vendor_j3');
+              }
+
+              if(jobsAdsListTop.length>0){
+                this.jobsAdsListTop = jobsAdsListTop[0].data;
+              }
+              if(jobsAdsListMid.length>0){
+                this.jobsAdsListMid = jobsAdsListMid[0].data;
+              }
+
+              // if (jobData.length > 3 && jobsAdsListTop.length > 0) {
+              //   jobData[2]['ads'] = jobsAdsListTop[0].data;
+              // }
+              // if (jobData.length > 7 && jobsAdsListMid.length > 0) {
+              //   jobData[5]['ads'] = jobsAdsListMid[0].data;
+              // }
+              // this.jobsList = jobData;
+            }
+
+      }).catch(err=>{
+          this.$message.error(err.msg)
+      })
+    },
     addFavorite(id, type, title, url,index) {
       let params = {
         token: localStorage.getItem('token'),
@@ -693,6 +805,58 @@ export default {
 .jobs-filter-work-exp {
   margin-top: 10px;
 }
+.xll-ads-container{
+  padding: 0 20px;
+}
+.xll-ads-container-margin{
+  margin-bottom: 20px;
+}
+.xll-ads-swiper-item{
+  cursor:pointer;
+  border-radius: 10px;
+  height: 100%;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xll-ads-l{
+  width:60%;
+  height: 100%;
+}
+.xll-ads-l-img{
+  //width: 100%;
+  height: 100%;
+  border-radius:10px;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+}
+
+.xll-ads-r{
+  width:36%;
+}
+
+.xll-ads-r{
+  padding-right: 4%;
+}
+.xll-ads-r h4{
+  color:#004956;
+}
+
+.xll-ads-r h5{
+  margin-top:20px;
+}
+
+.xll-ads-r-desc{
+  font-size: 14px;
+  margin-top: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
 
 .jobs-list-container {
   padding: 20px;
@@ -848,7 +1012,7 @@ export default {
 }
 
 .jobs-list-pagination {
-  margin-top: 20px;
+  margin: 20px;
   text-align: center;
 }
 

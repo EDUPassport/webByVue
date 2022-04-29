@@ -201,3 +201,11 @@ export const EVENTS_CATEGORY = (params) => get('home/eventCategory', params)
 export const EVENTS_TAGS = (params) => get('home/tagList', params)
 
 export const GET_COUNTRY_LIST = (params) => get('getCountry', params)
+
+export const GET_ADS_CATEGORY_LIST = (params) => get('home/adCategoryList', params)
+
+export const GET_ADS_CATEGORY_INFO = (params) => get('ad/categoryInfo', params)
+
+export const GET_MY_ADS = (params) => get('ad/myAds', params)
+
+export const SET_USER_ADS = (params) => post('ad/setUserAds', params)
