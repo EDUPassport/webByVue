@@ -35,6 +35,7 @@
     "date-format": "^3.0.0",
     "element-plus": "^1.1.0-beta.15",
     "element-theme": "^2.0.1",
+    "express": "^4.17.3",
     "fancy-log": "^1.3.3",
     "goeasy": "^2.2.5",
     "graceful-fs": "^4.2.8",

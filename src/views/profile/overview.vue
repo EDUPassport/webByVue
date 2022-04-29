@@ -90,9 +90,33 @@
 
           <accountInfo :info="userInfo" :phone="basicUserInfo.phone" ></accountInfo>
 
-          <div class="ads-container">
-            <el-image class="ads-img" :src="dashboardAdsImg"></el-image>
+<!--          <div class="ads-container">-->
+<!--            <el-image class="ads-img" :src="dashboardAdsImg"></el-image>-->
+<!--          </div>-->
+
+
+          <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataBottom.length>0">
+            <el-carousel height="220px" indicator-position="none" >
+              <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataBottom" :key="i">
+                <div class="xll-ads-l">
+                  <el-image class="xll-ads-l-img"
+                            :src="item.user_url !='' ? item.user_url : item.url"></el-image>
+                </div>
+                <div class="xll-ads-r">
+                  <h4>Naked Butter Products</h4>
+                  <h5>Description:</h5>
+                  <div class="xll-ads-r-desc">
+                    Want to learn what Education Hub can do for you? See for
+                    yourself for free we look forward to seeing you succeed!
+                  </div>
+
+                </div>
+              </el-carousel-item>
+            </el-carousel>
+
           </div>
+
+
         </el-col>
       </el-row>
     </div>
@@ -103,7 +127,7 @@
 import defaultAvatar from '@/assets/default/avatar.png'
 import accountInfo from "../../components/accountInfo";
 import meSideMenu from "@/components/meSideMenu";
-import {VISITOR_USER_INFO} from '@/api/api';
+import {ADS_LIST, VISITOR_USER_INFO} from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
 import { onBeforeRouteUpdate } from "vue-router";
@@ -136,7 +160,9 @@ export default {
       defaultAvatar,
       userInfo: {},
       basicUserInfo: {},
-      identity:this.$route.query.identity
+      identity:this.$route.query.identity,
+      adsDataBottom:[]
+      
     }
   },
   mounted() {
@@ -147,8 +173,56 @@ export default {
       // console.log(to.params, to.query)
     })
     this.getVisitorBasicInfo()
+    this.getAdsList()
   },
   methods: {
+    turnBanner(link){
+      console.log(link)
+      if (link != '') {
+        window.location.href =  link
+      } else {
+        let token = localStorage.getItem('token')
+        if(!token){
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
+    getAdsList(){
+      let ads_data = {
+        page: 1,
+        limit: 10000
+      }
+      ADS_LIST(ads_data).then(res=>{
+        if (res.code == 200) {
+          // console.log(rs.message)
+          let adsDataBottom = [];
+          let identity = localStorage.getItem('identity');
+
+          if (!identity) {
+            adsDataBottom = res.message.filter(item => item.name == 'guest_m1');
+          }
+          if (identity == 1) {
+
+            adsDataBottom = res.message.filter(item => item.name == 'educator_m1');
+          }
+          if (identity == 2) {
+            adsDataBottom = res.message.filter(item => item.name == 'business_m1');
+          }
+          if (identity == 3) {
+            adsDataBottom = res.message.filter(item => item.name == 'vendor_m1');
+          }
+
+          if(adsDataBottom.length>0){
+            this.adsDataBottom = adsDataBottom[0].data;
+          }
+
+        }
+
+      }).catch(err=>{
+        this.$message.error(err.msg)
+      })
+    },
     applicationsHref(){
       this.$router.push({path:'/me/applications'})
     },
@@ -294,4 +368,62 @@ export default {
 .msg-bg {
   background-color: #00525F;
 }
+
+
+.xll-ads-container{
+  padding: 20px 20px 0 20px;
+}
+
+.xll-ads-container-margin{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.xll-ads-swiper-item{
+  cursor:pointer;
+  border-radius: 10px;
+  height: 100%;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xll-ads-l{
+  width:60%;
+  height: 100%;
+}
+.xll-ads-l-img{
+//width: 100%;
+  height: 100%;
+  border-radius:10px;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+}
+
+.xll-ads-r{
+  width:36%;
+}
+
+.xll-ads-r{
+  padding-right: 4%;
+}
+.xll-ads-r h4{
+  color:#004956;
+}
+
+.xll-ads-r h5{
+  margin-top:20px;
+}
+
+.xll-ads-r-desc{
+  font-size: 14px;
+  margin-top: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
 </style>

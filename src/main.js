@@ -19,6 +19,7 @@ import VTypical from 'vue-typical'
 import './assets/font/font.css'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu,ChatLineSquare,
+    ArrowDownBold,ArrowUpBold,
     MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose,SuccessFilled,Failed,UploadFilled,Back}
     from '@element-plus/icons'
 
@@ -90,6 +91,8 @@ app.component('SuccessFilled',SuccessFilled)
 app.component('Failed',Failed)
 app.component('UploadFilled',UploadFilled)
 app.component('Back',Back)
+app.component('ArrowDownBold',ArrowDownBold)
+app.component('ArrowUpBold',ArrowUpBold)
 
 app.component(Vue3CountryIntl.name, Vue3CountryIntl)
 

@@ -23,9 +23,9 @@
         <router-link v-if="identity == 2" to="/business/profile" exact>My Account & Profile</router-link>
         <router-link v-if="identity == 3" to="/vendor/profile" exact>My Account & Profile</router-link>
       </div>
-<!--      <div class="l-item">-->
-<!--        <router-link to="/" exact>My Ads</router-link>-->
-<!--      </div>-->
+      <div class="l-item">
+        <router-link to="/me/ads" exact>My Ads</router-link>
+      </div>
       <div class="l-item" v-if="identity == 2">
         <router-link to="/jobs/myJobs" exact>My Jobs</router-link>
       </div>

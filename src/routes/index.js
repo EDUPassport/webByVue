@@ -408,6 +408,60 @@ const routes = [
                     titleC: 'China FAQ',
                     titleG: 'Global FAQ',
                 }
+            },
+            {
+                path:'/me/ads',
+                name:'myAds',
+                component:()=>import('@/views/me/ads/ads'),
+                meta:{
+                    titleC: 'China My Ads',
+                    titleG: 'Global My Ads',
+                }
+            },
+            {
+                path:'/me/ads/platform',
+                name:'myAdsPlatform',
+                component:()=>import('@/views/me/ads/platform'),
+                meta:{
+                    titleC: 'China Platform',
+                    titleG: 'Global Platform',
+                }
+            },
+            {
+                path:'/me/ads/identity',
+                name:'myAdsIdentity',
+                component:()=>import('@/views/me/ads/identity'),
+                meta:{
+                    titleC: 'China Target Audience',
+                    titleG: 'Global Target Audience',
+                }
+            },
+            {
+                path:'/me/ads/list',
+                name:'myAdsList',
+                component:()=>import('@/views/me/ads/list'),
+                meta:{
+                    titleC: 'China Ads List',
+                    titleG: 'Global Ads List',
+                }
+            },
+            {
+                path:'/me/ads/detail',
+                name:'myAdsDetail',
+                component:()=>import('@/views/me/ads/detail'),
+                meta:{
+                    titleC: 'China Ads Detail',
+                    titleG: 'Global Ads Detail',
+                }
+            },
+            {
+                path:'/me/ads/redeem',
+                name:'myAdsRedeem',
+                component:()=>import('@/views/me/ads/redeem'),
+                meta:{
+                    titleC: 'China Ads Redeem',
+                    titleG: 'Global Ads Redeem',
+                }
             }
 
         ],
