@@ -209,3 +209,25 @@ export const GET_ADS_CATEGORY_INFO = (params) => get('ad/categoryInfo', params)
 export const GET_MY_ADS = (params) => get('ad/myAds', params)
 
 export const SET_USER_ADS = (params) => post('ad/setUserAds', params)
+
+// version 2
+//邮箱 + 验证码  + 密码 注册
+export const EMAIL_REGISTER_V2 = (params) => post('home/email/register',params)
+//手机号 + 验证码 + 密码 注册
+export const PHONE_REGISTER_V2 = (params) => post('home/phone/register',params)
+// 手机号 + 验证码 登录
+export const LOGIN_PHONE_SMS_V2 = (params) => post('home/login/phone/sms',params)
+// 邮箱 —— 密码 登录
+export const LOGIN_EMAIL_PWD_V2 = (params) => post('home/login/email/pwd',params)
+// 手机号 + 密码登录
+export const LOGIN_PHONE_PWD_V2 = (params)=>post('home/login/phone/pwd',params)
+
+// 更新 user contact 信息
+export const USER_CONTACT_EDIT_V2 = (params) => post('home/user/contact/edit',params)
+// 更新 educator contact 信息
+export const EDUCATOR_PROFILE_EDIT_V2 = (params) => post('home/educator/profile/edit',params)
+// 新增 编辑 certification
+export const USER_CERTIFICATION_EDIT_V2 = (params) => post('home/user/certification/edit',params)
+
+// 通过登录token获取用户信息
+export const USER_INFO_BY_TOKEN_V2 = (params) => get('home/user/info',params)

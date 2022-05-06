@@ -53,8 +53,8 @@ axios.interceptors.response.use(response => {
     if(errResponse){
         let status = errResponse.status
         if (status === 401) {
-            localStorage.clear()
-            return window.location.href = '/login'
+            // localStorage.clear()
+            // return window.location.href = '/login'
         } else {
             return Promise.reject(error.response.data);
         }

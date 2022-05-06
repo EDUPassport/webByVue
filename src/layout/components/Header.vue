@@ -180,7 +180,7 @@
 </template>
 
 <script>
-import {CHANGE_IDENTITY_LANGUAGE, GET_BASIC_INFO} from '@/api/api'
+import {CHANGE_IDENTITY_LANGUAGE, GET_BASIC_INFO, USER_INFO_BY_TOKEN_V2} from '@/api/api'
 import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
 import discountCardImg from '@/assets/discountcard/discountCard.png'
@@ -268,55 +268,31 @@ export default {
 
     },
     getBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let params = {
-        id: uid,
-        token: localStorage.getItem('token')
-      }
-      GET_BASIC_INFO(params).then(res => {
+
+      let params = {}
+
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
 
-          localStorage.setItem('uid', res.message.id)
-          localStorage.setItem('identity', res.message.identity)
-          localStorage.setItem('language', res.message.language)
-          localStorage.setItem('email', res.message.email)
-
-          let identity = res.message.identity
-          let firstName;
-          let lastName;
-          let avatar;
-
-          if (identity == 0) {
-            localStorage.setItem('name', 'Guest')
-            firstName = 'Guest'
-            lastName = ''
-            avatar = ''
-          }
-          if (identity == 1) {
-            firstName = res.message.educator_info.first_name;
-            lastName = res.message.educator_info.last_name;
-            avatar = res.message.educator_info.profile_photo;
-          }
-          if (identity == 2) {
-            firstName = res.message.business_info.first_name;
-            lastName = res.message.business_info.last_name;
-            avatar = res.message.business_info.profile_photo;
-          }
-          if (identity == 3) {
-            firstName = res.message.vendor_info.first_name;
-            lastName = res.message.vendor_info.last_name;
-            avatar = res.message.vendor_info.profile_photo;
-          }
-
-          localStorage.setItem('name', firstName + ' ' + lastName)
-          localStorage.setItem('avatar', avatar)
-          localStorage.setItem('first_name', firstName)
-          localStorage.setItem('last_name', lastName)
-
-          this.$store.commit('username', firstName + ' ' + lastName)
-          this.$store.commit('userAvatar', avatar)
-          this.$store.commit('identity', identity)
+          // localStorage.setItem('uid', res.message.id)
+          // localStorage.setItem('identity', res.message.identity)
+          // localStorage.setItem('language', res.message.language)
+          // localStorage.setItem('email', res.message.email)
+          //
+          // let identity = res.message.identity
+          // let firstName = res.message.first_name;
+          // let lastName = res.message.last_name;
+          // let avatar = 'https://oss.esl-passport.cn/educator.png';
+          //
+          // localStorage.setItem('name', firstName + ' ' + lastName)
+          // localStorage.setItem('avatar', avatar)
+          // localStorage.setItem('first_name', firstName)
+          // localStorage.setItem('last_name', lastName)
+          //
+          // this.$store.commit('username', firstName + ' ' + lastName)
+          // this.$store.commit('userAvatar', avatar)
+          // this.$store.commit('identity', identity)
 
         }
       }).catch(err => {
