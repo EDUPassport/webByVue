@@ -8,18 +8,25 @@
     <el-row class="content-row" :gutter="0" align="middle" justify="center">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 
-        <div class="events-filter-container">
-          <el-select v-model="categoryId"
-                     clearable
-                     @change="getEventsList(eventPage,eventLimit)"
-                     placeholder="Category" size="large">
-            <el-option
-                v-for="item in categoryOptions"
-                :key="item.id"
-                :label="item.name_en"
-                :value="item.id"
-            />
-          </el-select>
+        <div class="events-top-container">
+          <div class="events-filter-container">
+            <el-select v-model="categoryId"
+                       clearable
+                       @change="getEventsList(eventPage,eventLimit)"
+                       placeholder="Category" size="large">
+              <el-option
+                  v-for="item in categoryOptions"
+                  :key="item.id"
+                  :label="item.name_en"
+                  :value="item.id"
+              />
+            </el-select>
+          </div>
+
+          <div class="post-event-btn-container">
+            <el-button type="primary" round @click="postEvent()">Post an Event</el-button>
+          </div>
+
         </div>
 
         <div class="events-list-container">
@@ -208,7 +215,19 @@ export default {
     this.getEventsList(this.eventPage,this.eventLimit)
   },
   methods:{
-
+    postEvent(){
+      let token = localStorage.getItem('token')
+      let identity = localStorage.getItem('identity')
+      if(token){
+        if(identity != 1){
+          this.$router.push('/events/post')
+        }else{
+          window.open('https://zfrmz.com/5A8Bl4Gg8unV4HVE0lX4','_blank')
+        }
+      }else{
+        window.open('https://zfrmz.com/5A8Bl4Gg8unV4HVE0lX4','_blank')
+      }
+    },
     getEventCategories(){
       let params = {
         page: 1,
@@ -289,8 +308,18 @@ export default {
 
 
 }
-.events-filter-container{
+
+.events-top-container{
   margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.events-filter-container{
+
 
 }
 
