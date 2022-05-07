@@ -19,7 +19,7 @@ import VTypical from 'vue-typical'
 import './assets/font/font.css'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu,ChatLineSquare,
-    ArrowDownBold,ArrowUpBold,
+    ArrowDownBold,ArrowUpBold,ArrowLeft,
     MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose,SuccessFilled,Failed,UploadFilled,Back}
     from '@element-plus/icons'
 
@@ -79,6 +79,7 @@ app.component('ArrowRightBold',ArrowRightBold )
 app.component('Share',Share)
 app.component('edit',Edit)
 app.component('ArrowDown',ArrowDown)
+app.component('ArrowLeft',ArrowLeft)
 app.component('Menu',Menu)
 app.component('ChatLineSquare',ChatLineSquare)
 app.component('MoreFilled',MoreFilled)

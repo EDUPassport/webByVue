@@ -13,7 +13,7 @@
               <router-link to="/jobs" exact>Jobs</router-link>
               <router-link to="/deals" exact> Edu Deals</router-link>
               <router-link to="/events/list" exact> Events</router-link>
-<!--              <router-link to="/industry/news" exact>News</router-link>-->
+              <!--              <router-link to="/industry/news" exact>News</router-link>-->
               <router-link to="/blog/list" exact>Blog</router-link>
               <router-link to="/contact/us" exact> Contact</router-link>
               <router-link to="/about/us" exact> About</router-link>
@@ -34,6 +34,7 @@
               <template v-if="token && token !='' ">
                 <div class="user-container-1">
                   <div class="user-avatar">
+
                     <el-dropdown>
                       <el-avatar :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
 
@@ -52,22 +53,49 @@
                   <div class="user-1-r">
                     <div class="user-name"> Hi, {{ username }}</div>
                     <div class="user-dropdown">
-                      <el-dropdown>
-                    <span class="el-dropdown-link">
-                        <template v-if="identity == 0">Guest</template>
-                        <template v-if="identity == 1">Educator</template>
-                        <template v-if="identity == 2">Edu-Business</template>
-                        <template v-if="identity == 3">Vendor</template>
-                       <i class="el-icon-arrow-down el-icon--right"></i>
-                     </span>
+
+                      <el-dropdown trigger="click" :hide-on-click="false"
+                                   popper-class="xll-dropdown" >
+                          <span class="el-dropdown-link">
+                            <template v-if="identity == 0">Guest</template>
+                            <template v-if="identity == 1">Educator</template>
+                            <template v-if="identity == 2">Recruiter</template>
+                            <template v-if="identity == 3">School</template>
+                            <template v-if="identity == 4">Other</template>
+                            <template v-if="identity == 5">Vendor</template>
+                            <i class="el-icon-arrow-down el-icon--right"></i>
+                          </span>
 
                         <template #dropdown>
-                          <el-dropdown-menu>
+                          <el-dropdown-menu >
+
                             <el-dropdown-item @click="selectRole(1)">Educator</el-dropdown-item>
-                            <el-dropdown-item @click="selectRole(2)">Edu-Business</el-dropdown-item>
-                            <el-dropdown-item @click="selectRole(3)">Vendor</el-dropdown-item>
+                            <el-dropdown-item>
+                              <el-dropdown   placement="left-start" >
+                                  <span class="el-dropdown-link-business">
+                                     <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
+                                    Edu-Business
+                                  </span>
+                                  <template #dropdown>
+                                    <el-dropdown-menu >
+                                      <el-dropdown-item @click="selectRole(2)">
+                                        Recruiter
+                                      </el-dropdown-item>
+                                      <el-dropdown-item @click="selectRole(3)">
+                                        School
+                                      </el-dropdown-item>
+                                      <el-dropdown-item @click="selectRole(4)">
+                                        Other
+                                      </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                  </template>
+                              </el-dropdown>
+
+                            </el-dropdown-item>
+                            <el-dropdown-item @click="selectRole(5)">Vendor</el-dropdown-item>
                           </el-dropdown-menu>
                         </template>
+
                       </el-dropdown>
 
                     </div>
@@ -103,9 +131,9 @@
               <div class="nav-link-item">
                 <router-link to="/events/list" exact> Events</router-link>
               </div>
-<!--              <div class="nav-link-item">-->
-<!--                <router-link to="/industry/news" exact>News</router-link>-->
-<!--              </div>-->
+              <!--              <div class="nav-link-item">-->
+              <!--                <router-link to="/industry/news" exact>News</router-link>-->
+              <!--              </div>-->
               <div class="nav-link-item">
                 <router-link to="/blog/list" exact>Blog</router-link>
               </div>
@@ -130,10 +158,10 @@
                 </template>
               </div>
               <div class="nav-link-item">
-                <router-link  :to="{path:'/login',query:{type:1}}">Login</router-link>
+                <router-link :to="{path:'/login',query:{type:1}}">Login</router-link>
               </div>
               <div class="nav-link-item">
-                <router-link  :to="{path: '/login', query: {type: 2}}">Sign Up</router-link>
+                <router-link :to="{path: '/login', query: {type: 2}}">Sign Up</router-link>
               </div>
 
             </el-drawer>
@@ -184,7 +212,7 @@ import {CHANGE_IDENTITY_LANGUAGE, GET_BASIC_INFO, USER_INFO_BY_TOKEN_V2} from '@
 import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
 import discountCardImg from '@/assets/discountcard/discountCard.png'
-import {encode,decode} from 'js-base64'
+import {encode, decode} from 'js-base64'
 
 export default {
   name: "Header",
@@ -193,7 +221,7 @@ export default {
       logoImg,
       discountCardImg,
       defaultAvatar,
-      menuDrawerStatus:false,
+      menuDrawerStatus: false,
       dialogSwitchAccountVisible: false,
       token: '',
       dialogDiscountCardVisible: false,
@@ -246,10 +274,10 @@ export default {
         let uid = localStorage.getItem('uid')
 
         let navObj = {
-          uid:uid,
-          email:email,
-          first_name:firstName,
-          last_name:lastName
+          uid: uid,
+          email: email,
+          first_name: firstName,
+          last_name: lastName
         }
 
         let navObjStr = JSON.stringify(navObj)
@@ -258,9 +286,9 @@ export default {
         let b = decode(a)
         console.log(JSON.parse(b))
 
-        let navUrl = domain + '/jobs?exchange_job='+a
+        let navUrl = domain + '/jobs?exchange_job=' + a
         // console.log(navUrl)
-        window.open(navUrl,'_self')
+        window.open(navUrl, '_self')
       } else {
         let adomain = domain + '/jobs'
         window.open(adomain, '_self')
@@ -275,24 +303,21 @@ export default {
         console.log(res)
         if (res.code == 200) {
 
-          // localStorage.setItem('uid', res.message.id)
-          // localStorage.setItem('identity', res.message.identity)
-          // localStorage.setItem('language', res.message.language)
-          // localStorage.setItem('email', res.message.email)
-          //
-          // let identity = res.message.identity
-          // let firstName = res.message.first_name;
-          // let lastName = res.message.last_name;
-          // let avatar = 'https://oss.esl-passport.cn/educator.png';
-          //
-          // localStorage.setItem('name', firstName + ' ' + lastName)
-          // localStorage.setItem('avatar', avatar)
-          // localStorage.setItem('first_name', firstName)
-          // localStorage.setItem('last_name', lastName)
-          //
-          // this.$store.commit('username', firstName + ' ' + lastName)
-          // this.$store.commit('userAvatar', avatar)
-          // this.$store.commit('identity', identity)
+          let userContact = res.message.user_contact;
+
+          let identity = userContact.identity
+          let firstName = userContact.first_name;
+          let lastName = userContact.last_name;
+          let avatar = 'https://oss.esl-passport.cn/educator.png';
+
+          localStorage.setItem('name', firstName + ' ' + lastName)
+          localStorage.setItem('avatar', avatar)
+          localStorage.setItem('first_name', firstName)
+          localStorage.setItem('last_name', lastName)
+
+          this.$store.commit('username', firstName + ' ' + lastName)
+          this.$store.commit('userAvatar', avatar)
+          this.$store.commit('identity', identity)
 
         }
       }).catch(err => {
@@ -305,7 +330,7 @@ export default {
     },
     loginOut() {
       this.$loading({
-        text:'Loading...'
+        text: 'Loading...'
       })
       localStorage.clear()
       this.$router.push('/')
@@ -319,7 +344,7 @@ export default {
     turnEditProfile() {
 
       this.$loading({
-        text:'Loading...'
+        text: 'Loading...'
       })
       let identity = this.identity
       let uid = localStorage.getItem('uid')
@@ -381,7 +406,7 @@ export default {
     },
     selectRole(e) {
       this.$loading({
-        text:'Loading...'
+        text: 'Loading...'
       })
       let uid = localStorage.getItem('uid')
       let params = {
@@ -474,9 +499,8 @@ export default {
   max-width: 1920px;
   margin: 0 auto;
   padding: 10px 40px;
-  //border-bottom: 1px solid #eeeeee;
-  background-color:#1D2634;
-  color:#ffffff;
+//border-bottom: 1px solid #eeeeee; background-color: #1D2634;
+  color: #ffffff;
 }
 
 .header-row-container {
@@ -583,6 +607,14 @@ export default {
   font-size: 12px;
 }
 
+.xll-icon-arrow-left{
+  position: absolute;
+  left:-14px;
+  top:0;
+  bottom:0;
+  margin:auto;
+}
+
 .switch-account-tips {
   font-size: 12px;
 }
@@ -625,7 +657,7 @@ export default {
   font-weight: bold;
   font-size: 14px;
   display: none;
-  border:1px solid #B1C452;
+  border: 1px solid #B1C452;
 }
 
 .nav-link-item {
@@ -647,7 +679,7 @@ export default {
   line-height: 20px;
 }
 
-@media screen and  (min-width: 1200px){
+@media screen and  (min-width: 1200px) {
   .login-btn {
     display: inline;
   }
@@ -657,9 +689,14 @@ export default {
   }
 }
 
-.xll-icon-size{
+.xll-icon-size {
   font-size: 40px;
   cursor: pointer;
-  color:#ffffff;
+  color: #ffffff;
 }
+
+.xll-dropdown{
+
+}
+
 </style>

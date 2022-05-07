@@ -980,7 +980,7 @@ export default {
                 localStorage.setItem('uid', resMessage.id)
                 localStorage.setItem('identity', resMessage.identity)
                 localStorage.setItem('language', resMessage.language)
-                localStorage.setItem('email', resMessage.email)
+                localStorage.setItem('phone', resMessage.phone)
 
                 let identity = resMessage.identity
 
@@ -1004,11 +1004,7 @@ export default {
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
 
                 setTimeout(function () {
-                  // self.skipHomePage()
-                  // USER_INFO_BY_TOKEN_V2({}).then(res=>{
-                  //   console.log(res)
-                  // })
-
+                  self.skipHomePage()
                   self.submitLoginLoadingStatus = false
                 }, 1500)
               }
@@ -1068,7 +1064,7 @@ export default {
                 localStorage.setItem('uid', resMessage.id)
                 localStorage.setItem('identity', resMessage.identity)
                 localStorage.setItem('language', resMessage.language)
-                localStorage.setItem('email', resMessage.email)
+                localStorage.setItem('phone', resMessage.phone)
 
                 let identity = resMessage.identity
                 let firstName = resMessage.first_name
