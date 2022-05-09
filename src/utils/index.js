@@ -65,7 +65,12 @@ export const howLong = (createtime, languageValue) => {
 
     } else if (limit >= 2592000 && limit < 31104000) {
         if (isEnglish) {
-            content = Math.floor(limit / 2592000) + " months ago";
+            if(Math.floor(limit / 2592000) == 1){
+                content = Math.floor(limit / 2592000) + " month ago";
+            }else{
+                content = Math.floor(limit / 2592000) + " months ago";
+            }
+
         } else {
             content = Math.floor(limit / 2592000) + " 个月前";
         }

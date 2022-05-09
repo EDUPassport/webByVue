@@ -103,11 +103,11 @@
                             :src="item.user_url !='' ? item.user_url : item.url"></el-image>
                 </div>
                 <div class="xll-ads-r">
-                  <h4>Naked Butter Products</h4>
+                  <h4>Advertise with Us</h4>
                   <h5>Description:</h5>
                   <div class="xll-ads-r-desc">
-                    Want to learn what Education Hub can do for you? See for
-                    yourself for free we look forward to seeing you succeed!
+                    Your Adverts and their description will be displayed here.
+                    Just click on the banner
                   </div>
 
                 </div>
@@ -183,6 +183,8 @@ export default {
       } else {
         let token = localStorage.getItem('token')
         if(!token){
+          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4','_blank')
+
           return;
         }
         this.$router.push('/me/ads/platform')
