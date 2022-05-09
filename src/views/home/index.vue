@@ -505,7 +505,7 @@
     <div class="get-started-container">
       <h3>Get started with Education Hub</h3>
       <div class="get-started-tips">
-        Want to learn what Education Hub can do for you? See for yourself for free
+        Your Adverts and their description will be displayed here. yourself for free
         we look forward to seeing you succeed!
       </div>
       <div class="get-started-btn-container">

@@ -105,13 +105,7 @@
             >
               <div class="xll-ads-l" >
                 <el-image class="xll-ads-l-img"
-                          :src="item.user_url !='' ? item.user_url : item.url">
-                  <template #error>
-                    <div class="image-ads-slot">
-                      <el-icon :size="80" color="#808080"><Picture /></el-icon>
-                    </div>
-                  </template>
-                </el-image>
+                          :src="item.user_url !='' ? item.user_url : item.url"></el-image>
               </div>
               <div class="xll-ads-r">
                 <h4>Advertise with Us</h4>
@@ -135,8 +129,11 @@
               <el-button class="post-a-job-btn" type="primary" round @click="postJob()">Post a Job</el-button>
             </div>
           </div>
-          <div class="jobs-list-content">
-            <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
+
+          <ul v-infinite-scroll="loadMoreJobList"
+              :infinite-scroll-immediate="false"
+              :infinite-scroll-distance="40" class="jobs-list-content"  >
+            <li class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
 
               <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
                    @click="cancelFavorite(1,item.id,index)">
@@ -146,13 +143,7 @@
                 <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
               </div>
               <div class="jobs-list-item-l">
-                <el-image class="jobs-item-logo" :src="item.logo" fit="cover">
-                  <template #error>
-                    <div class="image-slot">
-                      <el-icon :size="60" color="#808080"><Picture /></el-icon>
-                    </div>
-                  </template>
-                </el-image>
+                <el-image class="jobs-item-logo" :src="item.logo" fit="cover"></el-image>
               </div>
               <div class="jobs-list-item-r">
                 <div class="jobs-list-item-title">
@@ -204,15 +195,21 @@
                 </div>
               </div>
 
-            </div>
+            </li>
+          </ul>
+
+          <div class="job-load-container">
+            <div class="job-load-loading" v-if="jobLoadingStatus" v-loading="jobLoadingStatus"></div>
+            <div class="job-load-nomore" v-if="jobNoMoreStatus">No More</div>
           </div>
-          <div class="jobs-list-pagination">
-            <el-pagination layout="prev, pager, next" :default-current-page="1"
-                           @size-change="jobPageSizeChange"
-                           @current-change="jobPageChange"
-                           :current-page="jobPage" :page-size="jobLimit"
-                           :total="jobTotalNum"></el-pagination>
-          </div>
+
+<!--          <div class="jobs-list-pagination">-->
+<!--            <el-pagination layout="prev, pager, next" :default-current-page="1"-->
+<!--                           @size-change="jobPageSizeChange"-->
+<!--                           @current-change="jobPageChange"-->
+<!--                           :current-page="jobPage" :page-size="jobLimit"-->
+<!--                           :total="jobTotalNum"></el-pagination>-->
+<!--          </div>-->
 
         </div>
 
@@ -221,13 +218,7 @@
             <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in jobsAdsListMid" :key="i">
               <div class="xll-ads-l">
                 <el-image class="xll-ads-l-img"
-                          :src="item.user_url !='' ? item.user_url : item.url">
-                  <template #error>
-                    <div class="image-ads-slot">
-                      <el-icon :size="80" color="#808080"><Picture /></el-icon>
-                    </div>
-                  </template>
-                </el-image>
+                          :src="item.user_url !='' ? item.user_url : item.url"></el-image>
               </div>
               <div class="xll-ads-r">
                 <h4>Advertise with Us</h4>
@@ -243,13 +234,15 @@
 
         </div>
 
+
+
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import ads22Img from '@/assets/ads/22.png'
+
 import {useRouter,useRoute} from "vue-router";
 import {
   ADS_LIST,
@@ -272,7 +265,6 @@ export default {
   name: "list",
   data() {
     return {
-      ads22Img,
       locationValue: '',
       locationOptions: [],
       salaryValue: '',
@@ -329,6 +321,9 @@ export default {
       jobPage: 1,
       jobLimit: 10,
       jobTotalNum: 0,
+      jobLastPage:0,
+      jobLoadingStatus:false,
+      jobNoMoreStatus:false,
       showLoadingStatus:true,
       versionTime:randomString(),
       jobsAdsListTop:[],
@@ -494,8 +489,25 @@ export default {
       this.showLoadingStatus = true;
       this.jobPage = e
       this.getJobList(e, this.jobLimit)
-      // console.log(e)
-      document.documentElement.scrollTop = 120
+      console.log(e)
+    },
+    loadMoreJobList(){
+      // console.log('load more')
+      let lastPage = this.jobLastPage
+
+      this.jobPage ++
+
+      console.log(lastPage)
+      console.log(this.jobPage)
+
+      if(this.jobPage>lastPage){
+        this.jobNoMoreStatus = true
+      }else{
+        this.jobLoadingStatus = true
+        this.getJobList(this.jobPage,this.jobLimit)
+      }
+
+
     },
     getJobList(page, limit) {
       let params = {
@@ -539,8 +551,10 @@ export default {
       JOB_LIST(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
-          this.jobListData = res.message.data
+          this.jobLoadingStatus = false
+          this.jobListData = this.jobListData.concat(res.message.data)
           // console.log(res.message.data)
+          this.jobLastPage = res.message.last_page
           this.jobTotalNum = res.message.total
           this.showLoadingStatus= false
         } else {
@@ -847,14 +861,10 @@ export default {
   height: 100%;
 }
 .xll-ads-l-img{
+  //width: 100%;
   height: 100%;
   border-radius:10px;
   box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
-}
-
-.image-ads-slot{
-  text-align: center;
-  padding:50px 150px;
 }
 
 .xll-ads-r{
@@ -900,6 +910,10 @@ export default {
 
 .jobs-list-content {
   margin-top: 10px;
+  height: 1200px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+  overflow: auto;
 }
 
 .jobs-list-item {
@@ -938,11 +952,6 @@ export default {
   height: 80%;
   border-radius: 10px;
   border: 1px solid #EEEEEE;
-}
-
-.image-slot{
-  padding:40px;
-  text-align: center;
 }
 
 .jobs-list-item-r {
@@ -1050,4 +1059,19 @@ export default {
     width:1100px;
   }
 }
+
+.job-load-container{
+  padding: 10px;
+}
+
+.job-load-loading{
+  text-align: center;
+  padding: 20px;
+}
+
+.job-load-nomore{
+  text-align: center;
+  color:#808080;
+}
+
 </style>
