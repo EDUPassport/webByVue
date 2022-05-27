@@ -6,7 +6,13 @@
           <meSideMenu></meSideMenu>
         </el-col>
         <el-col :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
-          <accountInfo :info="educatorInfo" :phone="basicUserInfo.phone"></accountInfo>
+
+          <accountInfo :info="userContact" :phone="userContact.phone" :email="userContact.email"
+                       :level="educatorContact.vip_level" :vip-due-time="educatorContact.vip_due_time"
+                       :category-str="educatorContact.sub_identity_name_en"
+                       :percentage-status="true" :profile-percentage="userContact.is_educator"
+          ></accountInfo>
+
           <div class="educator-r-container">
             <div class="basic-info-container">
               <div class="basic-info-t">
@@ -15,44 +21,102 @@
               </div>
 
               <div class="basic-info-content">
-                <div class="basic-info-item">
-                  First & Last Name: <span>{{ educatorInfo.first_name }} {{ educatorInfo.last_name }}</span>
-                </div>
-                <div class="basic-info-item" v-if="educatorInfo.email">
-                  Email: <span>{{ educatorInfo.email }}</span>
-                </div>
-                <div class="basic-info-item" v-if="educatorInfo.wx_id">
-                  Wechat ID: <span>{{ educatorInfo.wx_id }}</span>
-                </div>
-                <div class="basic-info-item" v-if="basicUserInfo.sex">
-                  Gender:
-                  <span v-if="basicUserInfo.sex == 1">Male</span>
-                  <span v-if="basicUserInfo.sex == 2">Female</span>
-                  <span v-if="basicUserInfo.sex == 3">Undisclosed</span>
 
+                <div class="basic-info-item">
+                  <div class="basic-info-item-l">First & Last Name:</div>
+                  <div class="basic-info-item-r">{{ userContact.first_name }} {{ userContact.last_name }}</div>
                 </div>
-                <div class="basic-info-item" v-if="educatorInfo.nationality">
-                  Nationality: <span>{{ educatorInfo.nationality }}</span>
+
+                <div class="basic-info-item" v-if="userContact.sex">
+                  <div class="basic-info-item-l">Gender:</div>
+                  <div class="basic-info-item-r">
+                    <template v-if="userContact.sex == 1">Male</template>
+                    <template v-if="userContact.sex == 2">Female</template>
+                    <template v-if="userContact.sex == 3">Undisclosed</template>
+                  </div>
                 </div>
-                <div class="basic-info-item" v-if="basicUserInfo.birthday">
-                  Birthdate: <span>{{ basicUserInfo.birthday }}</span>
+                <div class="basic-info-item" v-if="userContact.phone">
+                  <div class="basic-info-item-l">Phone #:</div>
+                  <div class="basic-info-item-r">{{ userContact.phone }}</div>
                 </div>
-                <!--                <div class="basic-info-item">-->
-                <!--                  Location: <span>shangqiu, shangqiu , henan</span>-->
-                <!--                </div>-->
-                <div class="basic-info-item" v-if="educatorInfo.sub_identity_name">
-                  Educator Category: <span>{{ educatorInfo.sub_identity_name }}</span>
+
+                <div class="basic-info-item" v-if="userContact.email">
+                  <div class="basic-info-item-l">Email: </div>
+                  <div class="basic-info-item-r">{{ userContact.email }}</div>
+                </div>
+
+                <div class="basic-info-item" v-if="userContact.birthday">
+                  <div class="basic-info-item-l">Birthdate:</div>
+                  <div class="basic-info-item-r">{{ userContact.birthday }}</div>
+                </div>
+
+                <div class="basic-info-item" v-if="userContact.country_info">
+                  <div class="basic-info-item-l">Location:</div>
+                  <div class="basic-info-item-r">{{ $filters.countryInfoFormat(userContact.country_info) }}</div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="basic-info-container basic-info-margin">
+              <div class="basic-info-t">
+                <div class="basic-info-label">Educator Contact Info</div>
+                <div class="basic-info-edit" @click="editEducatorContactInfo()">Edit</div>
+              </div>
+
+              <div class="basic-info-content">
+
+                <div class="basic-info-item" v-if="educatorContact.name">
+                  <div class="basic-info-item-l">Name: </div>
+                  <div class="basic-info-item-r">{{ educatorContact.name }}</div>
+                </div>
+
+                <div class="basic-info-item" v-if="educatorContact.phone">
+                  <div class="basic-info-item-l">Phone #:</div>
+                  <div class="basic-info-item-r">{{ educatorContact.phone }}</div>
+                </div>
+                <div class="basic-info-item" v-if="educatorContact.email">
+                  <div class="basic-info-item-l"> Email:</div>
+                  <div class="basic-info-item-r">{{ educatorContact.email }}</div>
+                </div>
+                <div class="basic-info-item" v-if="educatorContact.job_title">
+                  <div class="basic-info-item-l">Job Title:</div>
+                  <div class="basic-info-item-r">{{ educatorContact.job_title }}</div>
                 </div>
                 <div class="basic-info-item">
-                  Job Seeking :
-                  <el-switch v-model="basicUserInfo.is_seeking" :active-value="1" disabled></el-switch>
+                  <div class="basic-info-item-l">Job Seeking :</div>
+                  <div class="basic-info-item-r">
+                    <el-switch v-model="educatorContact.is_seeking" :active-value="1" disabled></el-switch>
+                  </div>
                 </div>
                 <div class="basic-info-item">
-                  Public Profile:
-                  <el-switch v-model="basicUserInfo.is_public" :active-value="1" disabled></el-switch>
+                  <div class="basic-info-item-l">Public Profile:</div>
+                  <div class="basic-info-item-r">
+                    <el-switch v-model="educatorContact.is_public" :active-value="1" disabled></el-switch>
+                  </div>
                 </div>
+
+                <div class="basic-info-item" v-if="educatorContact.nationality">
+                  <div class="basic-info-item-l">Nationality:</div>
+                  <div class="basic-info-item-r">{{ educatorContact.nationality }}</div>
+                </div>
+                <div class="basic-info-item" v-if="educatorContact.address">
+                  <div class="basic-info-item-l">Address: </div>
+                  <div class="basic-info-item-r">{{ educatorContact.address }}</div>
+                </div>
+                <div class="basic-info-item" v-if="educatorContact.sub_identity_name_en">
+                  <div class="basic-info-item-l">Educator Category:</div>
+                  <div class="basic-info-item-r">{{ educatorContact.sub_identity_name_en }}</div>
+                </div>
+                <div class="basic-info-item" v-if="educatorContact.bio">
+                  <div class="basic-info-item-l">Introduction: </div>
+                  <div class="basic-info-item-r">{{ educatorContact.bio }}</div>
+                </div>
+
               </div>
             </div>
+
 
             <div class="credentials-container">
               <div class="credentials-label">Credentials</div>
@@ -62,8 +126,8 @@
                     <div class="languages-label">Languages</div>
                     <div class="languages-edit" @click="editLanguages()">Edit</div>
                   </div>
-                  <div class="languages-content" v-if="educatorInfo.languages">
-                    <div class="languages-item" v-for="(item,i) in educatorInfo.languages" :key="i">
+                  <div class="languages-content" v-if="educatorContact.languages">
+                    <div class="languages-item" v-for="(item,i) in educatorContact.languages" :key="i">
                       <div class="languages-item-l">{{ item.object_en }}</div>
                       <div class="languages-item-r">
                         <el-rate
@@ -436,26 +500,26 @@
             </div>
 
             <div class="media-container">
-              <div class="profile-photo-container">
-                <div class="profile-photo-t">
-                  <div class="profile-photo-t-label">Profile Photo</div>
-                </div>
-                <div class="profile-photo-content">
-                  <el-upload
-                      class="profile-uploader"
-                      :action="uploadActionUrl"
-                      :headers="uploadHeaders"
-                      :data="uploadData"
-                      :show-file-list="false"
-                      name="file[]"
-                      :on-success="handleProfilePhotoSuccess"
-                      :before-upload="beforeProfilePhotoUpload"
-                  >
-                    <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
-                </div>
-              </div>
+<!--              <div class="profile-photo-container">-->
+<!--                <div class="profile-photo-t">-->
+<!--                  <div class="profile-photo-t-label">Profile Photo</div>-->
+<!--                </div>-->
+<!--                <div class="profile-photo-content">-->
+<!--                  <el-upload-->
+<!--                      class="profile-uploader"-->
+<!--                      :action="uploadActionUrl"-->
+<!--                      :headers="uploadHeaders"-->
+<!--                      :data="uploadData"-->
+<!--                      :show-file-list="false"-->
+<!--                      name="file[]"-->
+<!--                      :on-success="handleProfilePhotoSuccess"-->
+<!--                      :before-upload="beforeProfilePhotoUpload"-->
+<!--                  >-->
+<!--                    <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>-->
+<!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                  </el-upload>-->
+<!--                </div>-->
+<!--              </div>-->
               <div class="background-banner-container">
                 <div class="background-banner-t">
                   <div class="background-banner-t-label">Background Banner</div>
@@ -480,23 +544,47 @@
               <div class="account-images-container">
                 <div class="account-images-t">
                   <div class="account-images-t-label">Account Images(6 max)</div>
+                  <div class="account-images-t-edit"
+                       v-if="!editAccountImageStatus"
+                       @click="editAccountImageStatus=true">
+                    Edit
+                  </div>
+                  <div class="account-images-t-edit"
+                       v-if="editAccountImageStatus"
+                       @click="uploadAccountImages()">
+                    Upload
+                  </div>
                 </div>
                 <div class="account-images-content">
-                  <el-upload
-                      :action="uploadActionUrl"
-                      :headers="uploadHeaders"
-                      :data="uploadData"
-                      name="file[]"
-                      list-type="picture-card"
-                      :limit="6"
-                      multiple
-                      :file-list="accountImageFileList"
-                      :on-preview="handleAccountImagePreview"
-                      :on-remove="handleAccountImageRemove"
-                      :on-success="handleAccountImageSuccess"
-                  >
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
+                  <div class="account-images-item-container" v-if="!editAccountImageStatus">
+                    <div class="account-images-item" v-for="(item,i) in accountImageFileList" :key="i" >
+                      <el-image class="account-images-img" :src="item.url" fit="contain"
+                      @click="accountImagePreview(item.url)"
+                      ></el-image>
+                    </div>
+                  </div>
+                  <template v-if="editAccountImageStatus">
+                    <el-upload
+                        ref="accountImagesUpload"
+                        action="#"
+                        :headers="uploadHeaders"
+                        :data="uploadData"
+                        :auto-upload="false"
+                        name="file[]"
+                        list-type="picture-card"
+                        :limit="6"
+                        :multiple="true"
+                        :before-upload="beforeAccountImageUpload"
+                        :file-list="accountImageFileList"
+                        :on-change="handleAccountImageChange"
+                        :on-preview="handleAccountImagePreview"
+                        :on-remove="handleAccountImageRemove"
+
+                    >
+                      <i class="el-icon-plus"></i>
+                    </el-upload>
+
+                  </template>
                   <el-dialog width="50%" v-model="dialogAccountImageVisible" center>
                     <el-image :src="dialogAccountImageUrl"></el-image>
                   </el-dialog>
@@ -505,9 +593,20 @@
               <div class="intro-video-container">
                 <div class="intro-video-t">
                   <div class="intro-video-t-label">Intro Video</div>
+                  <template v-if="introVideoUrl">
+                    <div class="intro-video-t-edit"
+                         v-if="editVideoStatus"
+                         @click="editVideoStatus=false">Edit</div>
+                    <div class="intro-video-t-edit"
+                         v-else
+                         @click="editVideoStatus=true">Cancel</div>
+                  </template>
+
                 </div>
                 <div class="intro-video-content">
+
                   <el-upload
+                      v-if="!editVideoStatus || !introVideoUrl"
                       class="intro-video-uploader"
                       :action="uploadActionUrl"
                       :headers="uploadHeaders"
@@ -517,21 +616,27 @@
                       :on-success="handleIntroVideoSuccess"
                       :before-upload="beforeIntroVideoUpload"
                   >
-                    <video v-if="introVideoUrl" :src="introVideoUrl" controls class="intro-video-avatar"/>
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <i class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
+                  <video v-else :src="introVideoUrl" controls class="intro-video-avatar"/>
                 </div>
               </div>
               <div class="my-resume-container">
                 <div class="my-resume-t">
                   <div class="my-resume-t-label">Your Resume</div>
+                  <template v-if="resumeUrl">
+                    <div class="my-resume-t-edit"
+                         v-if="editResumeStatus"
+                         @click="editResumeStatus=false">Edit</div>
+                    <div class="my-resume-t-edit"
+                         v-else
+                         @click="editResumeStatus=true">Cancel</div>
+                  </template>
                 </div>
                 <div class="my-resume-content">
-                  <a v-if="resumeUrl" :href="resumeUrl" target="_blank" class="resume-avatar">
-                    [PDF] Click to Preview
-                  </a>
+
                   <el-upload
-                       v-else
+                      v-if="!editResumeStatus || !resumeUrl"
                       drag
                       class="resume-uploader"
                       :action="uploadActionUrl"
@@ -543,7 +648,7 @@
                       :before-upload="beforeResumeUpload"
                   >
                     <el-icon class="el-icon--upload" :size="80">
-                      <upload-filled  />
+                      <upload-filled/>
                     </el-icon>
                     <div class="el-upload__text">
                       Drop file here or <em>click to upload</em>
@@ -553,8 +658,11 @@
 
                       </div>
                     </template>
-<!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+                    <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
                   </el-upload>
+                  <a v-else :href="resumeUrl" target="_blank" class="resume-avatar">
+                    [PDF] Click to Preview
+                  </a>
                 </div>
               </div>
             </div>
@@ -931,11 +1039,16 @@
 import meSideMenu from "@/components/meSideMenu";
 import accountInfo from "../../../components/accountInfo";
 import {
-  VISITOR_USER_INFO, GET_BASIC_INFO, USER_OBJECT_LIST,
-  ADD_LANGUAGE_SCORE, ADD_PROFILE, ADD_EDU_BASIC, ADD_USER_INFO, ADD_USER_IMG,
-  UPDATE_EDUCATOR_PROFILE, ZOHO_SYNC
+  USER_OBJECT_LIST,
+  ADD_PROFILE_V2,
+  EDUCATOR_CONTACT_EDIT_V2,
+  ZOHO_SYNC,
+  USER_INFO_BY_TOKEN_V2,
+  ADD_USER_IMG_V2,
+  ADD_LANGUAGE_SCORE_V2,
+  EDUCATOR_PERCENTAGE_V2, UPLOAD_IMG
 } from '@/api/api'
-
+import {encode} from 'js-base64'
 
 export default {
   name: "profile",
@@ -945,6 +1058,7 @@ export default {
   },
   data() {
     return {
+      editAccountImageStatus:false,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
       uploadHeaders: {
         platform: 4
@@ -952,8 +1066,9 @@ export default {
       uploadData: {
         token: localStorage.getItem('token')
       },
-      educatorInfo: {},
-      basicUserInfo: {},
+      educatorContact: {},
+      userContact: {},
+
       languagesDrawer: false,
       languagesData: [],
       languagesCustomData: [],
@@ -1092,11 +1207,14 @@ export default {
       ownBenefitsList: [],
       selectBenefitsList: [],
       selectBenefitsArr: [],
+
+      editVideoStatus:false,
+      editResumeStatus:false
+
     }
   },
   mounted() {
-    this.getVisitorBasicInfo()
-    // this.getBasicInfo()
+    this.getUserInfo()
     this.updateEducatorProfile()
   },
   methods: {
@@ -1104,7 +1222,7 @@ export default {
       let params = {
         token: localStorage.getItem('token')
       }
-      UPDATE_EDUCATOR_PROFILE(params).then(res => {
+      EDUCATOR_PERCENTAGE_V2(params).then(res => {
         console.log(res)
       }).catch(err => {
         console.log(err)
@@ -1112,123 +1230,142 @@ export default {
       })
     },
     editBasicInfo() {
-      this.$router.push('/educator/edit/basic')
+      let strObj = {
+        i:1,
+        action:'edit'
+      }
+      let str = encode(JSON.stringify(strObj))
+
+      this.$router.push({path:'/profile/contact/user',query:{s:str}})
+    },
+    editEducatorContactInfo(){
+      let strObj = {
+        i:1,
+        action:'edit'
+      }
+      let str = encode(JSON.stringify(strObj))
+      this.$router.push({path:'/educator/edit/basic',query:{s:str}})
     },
     editLanguages() {
       this.getUserObjectList()
       this.languagesDrawer = true
     },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
+    getUserInfo() {
       let params = {
-        id: uid,
-        identity: identity
+        identity:1
       }
-      VISITOR_USER_INFO(params).then(res => {
+
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.educatorInfo = res.message.educator_info
-            if (res.message.educator_info.Teaching_certificate) {
-              this.certificationsList = res.message.educator_info.Teaching_certificate;
-            }
 
-            if (res.message.educator_info.education_info) {
-              this.educationInfo = res.message.educator_info.education_info;
-            }
+          let userContact = res.message.user_contact;
+          let educatorContact = res.message.user_contact.educator_contact;
 
-            if (res.message.educator_info.places_lived) {
-              this.countriesLivedList = res.message.educator_info.places_lived;
-            }
-            if (res.message.educator_info.places_traveled) {
-              this.countriesTraveledList = res.message.educator_info.places_traveled;
-            }
+          if (userContact) {
+            this.userContact = userContact
+          }
 
-            if (res.message.educator_info.languages) {
-              this.languagesList = res.message.educator_info.languages;
-            }
-            if (res.message.educator_info.Location) {
-              this.locationList = res.message.educator_info.Location;
-            }
-            if (res.message.educator_info.job_type) {
-              this.jobTypeList = res.message.educator_info.job_type;
-            }
-            if (res.message.educator_info.age_to_teach) {
-              this.ageToTeachList = res.message.educator_info.age_to_teach;
-            }
-            if (res.message.educator_info.region) {
-              this.regionList = res.message.educator_info.region;
-            }
-            if (res.message.educator_info.benefits) {
-              this.benefitsList = res.message.educator_info.benefits;
-            }
-            if (res.message.educator_info.subject) {
-              this.subjectList = res.message.educator_info.subject;
-            }
-            if (res.message.educator_info.user_images) {
-              this.userImagesList = res.message.educator_info.user_images;
-            }
-            if (res.message.educator_info.work_info) {
-              this.workInfo = res.message.educator_info.work_info;
-            }
+          if (educatorContact) {
+            this.educatorContact = educatorContact;
+          }
 
-            if (res.message.educator_info.Teaching_experience) {
-              this.teachExpList = res.message.educator_info.Teaching_experience;
-            }
+          if (educatorContact.Teaching_certificate) {
+            this.certificationsList = educatorContact.Teaching_certificate;
+          }
 
-            let hobbies = res.message.educator_info.hobbies;
-            if (hobbies) {
-              this.hobbiesList = hobbies.split(',');
-            }
+          if (educatorContact.education_info) {
+            this.educationInfo = educatorContact.education_info;
+          }
 
-            if (res.message.educator_info.profile_photo) {
-              this.profilePhotoUrl = res.message.educator_info.profile_photo
-            }
-            if (res.message.educator_info.header_photo) {
-              this.backgroundUrl = res.message.educator_info.header_photo
-            }
-            let userImages = res.message.educator_info.user_images
-            if (userImages) {
+          if (educatorContact.places_lived) {
+            this.countriesLivedList = educatorContact.places_lived;
+          }
+          if (educatorContact.places_traveled) {
+            this.countriesTraveledList = educatorContact.places_traveled;
+          }
+
+          if (educatorContact.languages) {
+            this.languagesList = educatorContact.languages;
+          }
+          if (educatorContact.Location) {
+            this.locationList = educatorContact.Location;
+          }
+          if (educatorContact.job_type) {
+            this.jobTypeList = educatorContact.job_type;
+          }
+          if (educatorContact.age_to_teach) {
+            this.ageToTeachList = educatorContact.age_to_teach;
+          }
+          if (educatorContact.region) {
+            this.regionList = educatorContact.region;
+          }
+          if (educatorContact.benefits) {
+            this.benefitsList = educatorContact.benefits;
+          }
+          if (educatorContact.subject) {
+            this.subjectList = educatorContact.subject;
+          }
+          if (educatorContact.images) {
+            console.log(educatorContact.images)
+            this.userImagesList = educatorContact.images;
+            let userImages = educatorContact.images
+            if (userImages.length>0) {
+              let userImagesArr = []
               userImages.forEach(item => {
                 let userImageObj = {
                   name: '',
                   url: item.url
                 }
-                this.accountImageFileList.push(userImageObj)
+               userImagesArr.push(userImageObj)
               })
-            }
+              this.accountImageFileList = userImagesArr
+              console.log(this.accountImageFileList)
 
-            let videoUrl = res.message.educator_info.video_url
-            let resumePdf = res.message.educator_info.resume_pdf
-            if (videoUrl) {
-              this.introVideoUrl = videoUrl
-            }
-            if (resumePdf) {
-              this.resumeUrl = resumePdf
             }
 
           }
+
+          if (educatorContact.work_info) {
+            this.workInfo = educatorContact.work_info;
+          }
+
+          if (educatorContact.Teaching_experience) {
+            this.teachExpList = educatorContact.Teaching_experience;
+          }
+
+          let hobbies = educatorContact.hobbies;
+          if (hobbies) {
+            this.hobbiesList = hobbies.split(',');
+          }
+
+          if (educatorContact.profile_photo) {
+            this.profilePhotoUrl = educatorContact.profile_photo
+          }
+          if (educatorContact.background_image) {
+            this.backgroundUrl = educatorContact.background_image
+          }
+
+
+          let videoUrl = educatorContact.video_url
+          let resumePdf = educatorContact.resume_pdf
+          if (videoUrl) {
+            this.editVideoStatus = true;
+            this.introVideoUrl = videoUrl
+          }
+          if (resumePdf) {
+            this.editResumeStatus = true;
+            this.resumeUrl = resumePdf
+          }
+
+
         }
       }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
     },
-    getBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let params = {
-        id: uid,
-        token: localStorage.getItem('token')
-      }
-      GET_BASIC_INFO(params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
+
     handleLanguagesClose(e) {
       console.log(e)
       this.languagesDrawer = false
@@ -1275,6 +1412,7 @@ export default {
       // console.log(e)
       // console.log(value)
       let obj = {
+
         object_id: value.id,
         score: e,
         object_name: value.object_en,
@@ -1340,14 +1478,15 @@ export default {
     },
     updateLanguagesScore() {
       let params = {
+        company_id:this.educatorContact.id,
         object_arr: this.languagesObjArr,
         token: localStorage.getItem('token')
       }
-      ADD_LANGUAGE_SCORE(params).then(res => {
+      ADD_LANGUAGE_SCORE_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.languagesDrawer = false
-          this.getVisitorBasicInfo()
+          this.getUserInfo()
         }
       }).catch(err => {
         console.log(err)
@@ -1728,14 +1867,15 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 7,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('certifications--submit--' + res.data);
           this.canEditCertifications = false;
-          this.getVisitorBasicInfo()
+          this.getUserInfo()
         }
 
       }).catch(err => {
@@ -1811,13 +1951,14 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 120,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           this.canEditTeachExp = false;
-          this.getVisitorBasicInfo();
+          this.getUserInfo();
         }
 
       }).catch(err => {
@@ -1884,14 +2025,15 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 8,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('travel--submit--' + res.data);
           this.canEditCountriesTraveled = false;
-          this.getVisitorBasicInfo();
+          this.getUserInfo();
         }
 
       }).catch(err => {
@@ -1958,14 +2100,15 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 9,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('lived--submit--' + res.data);
           this.canEditCountriesLived = false;
-          this.getVisitorBasicInfo();
+          this.getUserInfo();
         }
 
       }).catch(err => {
@@ -2011,10 +2154,9 @@ export default {
 
       let hobbiesStr = this.selectHobbyInfoList.join(',');
       let data = {
-        hobbies: hobbiesStr,
-        token: localStorage.getItem('token')
+        hobbies: hobbiesStr
       }
-      ADD_EDU_BASIC(data).then(res => {
+      EDUCATOR_CONTACT_EDIT_V2(data).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.canEditHobby = false;
@@ -2027,21 +2169,21 @@ export default {
 
     },
     handleProfilePhotoSuccess(res, file) {
+      this.$loading().close()
+
       // console.log(res.data[0]['file_url'])
       this.profilePhotoUrl = URL.createObjectURL(file.raw)
       let profileLink = res.data[0]['file_url']
       let params = {
-        profile_photo: res.data[0]['file_url'],
-        identity: 1,
-        token: localStorage.getItem('token')
+        profile_photo: res.data[0]['file_url']
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res => {
+      EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.submitEducatorContactForm(profileLink, '')
           this.$message.success('Success')
-          this.getVisitorBasicInfo()
+          this.getUserInfo()
         }
       }).catch(err => {
         console.log(err)
@@ -2050,7 +2192,9 @@ export default {
 
     },
     beforeProfilePhotoUpload(file) {
-
+      this.$loading({
+        text:'Uploading...'
+      })
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -2059,18 +2203,18 @@ export default {
       return isLt2M
     },
     handleBackgroundSuccess(res, file) {
+      this.$loading().close()
+
       this.backgroundUrl = URL.createObjectURL(file.raw)
       let params = {
-        header_photo: res.data[0]['file_url'],
-        identity: 1,
-        token: localStorage.getItem('token')
+        background_image: res.data[0]['file_url']
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res => {
+      EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.$message.success('Success')
-          this.getVisitorBasicInfo()
+          this.getUserInfo()
         }
       }).catch(err => {
         console.log(err)
@@ -2079,83 +2223,136 @@ export default {
     },
     beforeBackgroundUpload(file) {
       console.log(file)
+      this.$loading({
+        text:'Uploading...'
+      })
     },
     handleAccountImageRemove(file, fileList) {
       console.log(file, fileList)
-      let accountImagesArr = []
-      fileList.forEach(item => {
-        accountImagesArr.push(item.url)
-      })
-      let params = {
-        token: localStorage.getItem('token'),
-        identity: 1,
-        img: accountImagesArr
-      }
-      ADD_USER_IMG(params).then(res => {
-        if (res.code == 200) {
-          this.getVisitorBasicInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
+      this.accountImageFileList = fileList
     },
     handleAccountImagePreview(file) {
       // console.log(file)
       this.dialogAccountImageUrl = file.url
       this.dialogAccountImageVisible = true
     },
-    handleAccountImageSuccess(res, file) {
-      let accountImages = this.accountImageFileList
-      let name = res.data[0]['file_name']
-      let url = res.data[0]['file_url']
-      let obj = {
-        name: name,
-        url: url
+    beforeAccountImageUpload(file){
+      const isJpeg = file.type === 'image/png' || file.type === 'image/jpg'
+      if(!isJpeg){
+        return this.$message.error('Please select the correct file format to upload')
       }
-      this.accountImageFileList.push(obj)
-
-      let accountImagesArr = []
-      accountImages.forEach(item => {
-        accountImagesArr.push(item.url)
+      return isJpeg
+    },
+    handleAccountImageChange(fileList){
+      this.accountImageFileList.push(fileList)
+    },
+    uploadAccountImages(){
+      this.$loading({
+        text:'Uploading'
       })
-      // console.log(accountImages)
-      //
-      // console.log(res)
-      // console.log(file)
-      this.accoutImageUrl = URL.createObjectURL(file.raw)
-      let params = {
-        token: localStorage.getItem('token'),
-        identity: 1,
-        img: accountImagesArr
+      console.log(this.accountImageFileList)
+
+      if(this.accountImageFileList.length === 0){
+        this.$loading().close()
+        return this.$message.warning('Select File')
       }
-      ADD_USER_IMG(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.getVisitorBasicInfo()
+
+      let imgParams = new FormData();
+      let oldData = []
+
+      let token = localStorage.getItem('token')
+      imgParams.append('token' , token)
+      imgParams.append('platform',4)
+
+      this.accountImageFileList.forEach(file=>{
+        if(file.name == ''){
+          oldData.push(file.url)
+        }else{
+          imgParams.append('file[]',file.raw)
         }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
+
       })
 
+      if(imgParams.get('file[]')){
+
+        UPLOAD_IMG(imgParams).then(res=>{
+          console.log(res)
+          if(res.code == 200){
+            let imgData = res.data;
+            // let imgArr = [];
+            imgData.forEach(item=>{
+              oldData.push(item.file_url)
+            })
+            let params = {
+              token: localStorage.getItem('token'),
+              identity: 1,
+              company_id:this.educatorContact.id,
+              img: oldData
+            }
+            ADD_USER_IMG_V2(params).then(res => {
+              console.log(res)
+              if (res.code == 200) {
+                this.getUserInfo()
+                this.editAccountImageStatus = false;
+                this.$loading().close()
+              }
+            }).catch(err => {
+              console.log(err)
+              this.$loading().close()
+              this.$message.error(err.msg)
+            })
+          }
+
+        }).catch(err=>{
+          this.$loading().close()
+          console.log(err.code)
+        })
+
+      }else{
+
+        let params = {
+          token: localStorage.getItem('token'),
+          identity: 1,
+          company_id:this.educatorContact.id,
+          img: oldData
+        }
+
+        ADD_USER_IMG_V2(params).then(res => {
+          console.log(res)
+          if (res.code == 200) {
+            this.getUserInfo()
+            this.editAccountImageStatus = false;
+            this.$loading().close()
+          }
+        }).catch(err => {
+          console.log(err)
+          this.$loading().close()
+          this.$message.error(err.msg)
+        })
+      }
+    },
+
+    accountImagePreview(url){
+      this.dialogAccountImageVisible = true;
+      this.dialogAccountImageUrl = url;
     },
     handleIntroVideoSuccess(res, file) {
       // console.log(res)
+      this.$loading().close()
+
       this.introVideoUrl = URL.createObjectURL(file.raw)
       let introLink = res.data[0]['file_url']
       let params = {
-        video_url: res.data[0]['file_url'],
-        identity: 1,
-        token: localStorage.getItem('token')
+        video_url: res.data[0]['file_url']
       }
       // console.log(params)
-      ADD_USER_INFO(params).then(res => {
+      EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
+          this.editVideoStatus = true;
           this.submitEducatorContactForm('', introLink)
           this.$message.success('Success')
-          this.getVisitorBasicInfo()
+          this.getUserInfo()
         }
       }).catch(err => {
         console.log(err)
@@ -2164,19 +2361,24 @@ export default {
     },
     beforeIntroVideoUpload(file) {
       console.log(file)
+      this.$loading({
+        text:'Uploading...'
+      })
     },
     handleResumeSuccess(res, file) {
+      this.$loading().close()
+
       this.resumeUrl = URL.createObjectURL(file.raw)
       let params = {
-        resume_pdf: res.data[0]['file_url'],
-        token: localStorage.getItem('token')
+        resume_pdf: res.data[0]['file_url']
       }
       // console.log(params)
-      ADD_EDU_BASIC(params).then(res => {
+      EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.$message.success('Success')
-          this.getVisitorBasicInfo()
+          this.editResumeStatus = true;
+          this.getUserInfo()
         }
       }).catch(err => {
         console.log(err)
@@ -2185,6 +2387,9 @@ export default {
     },
     beforeResumeUpload(file) {
       console.log(file)
+      this.$loading({
+        text:'Uploading...'
+      })
     },
     addOwnSubject() {
       this.addSubjectStatus = false;
@@ -2237,14 +2442,15 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 1,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('subject--submit--' + res.data);
           this.canEditSubject = false;
-          this.getVisitorBasicInfo();
+          this.getUserInfo();
         }
 
       }).catch(err => {
@@ -2305,14 +2511,15 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 71,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('location--submit--' + res.data);
           this.canEditLocation = false;
-          this.getVisitorBasicInfo();
+          this.getUserInfo();
         }
 
       }).catch(err => {
@@ -2371,14 +2578,15 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 3,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('jobtype--submit--' + res.data);
           this.canEditJobType = false;
-          this.getVisitorBasicInfo();
+          this.getUserInfo();
         }
 
       }).catch(err => {
@@ -2437,14 +2645,15 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 4,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('agetoteach--submit--' + res.data);
           this.canEditAgeToTeach = false;
-          this.getVisitorBasicInfo();
+          this.getUserInfo();
         }
 
       }).catch(err => {
@@ -2503,14 +2712,15 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 5,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('region--submit--' + res.data);
           this.canEditRegion = false;
-          this.getVisitorBasicInfo();
+          this.getUserInfo();
         }
 
       }).catch(err => {
@@ -2569,14 +2779,15 @@ export default {
         token: localStorage.getItem('token'),
         object_pid: 6,
         object_id: objectArr,
-        expand: expand
+        expand: expand,
+        company_id:this.educatorContact.id
       }
 
-      ADD_PROFILE(data).then(res => {
+      ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('benefits--submit--' + res.data);
           this.canEditBenefits = false;
-          this.getVisitorBasicInfo();
+          this.getUserInfo();
         }
 
       }).catch(err => {
@@ -2592,51 +2803,74 @@ export default {
         {'zf_referrer_name': ''},
         {'zf_redirect_url': ''},
         {'zc_gad': ''},
-        {'SingleLine': userId //UserID
+        {
+          'SingleLine': userId //UserID
         },
-        {'SingleLine1': this.educatorInfo.first_name // First Name
+        {
+          'SingleLine1': this.userContact.first_name // First Name
         },
-        {'SingleLine2': this.educatorInfo.last_name //  Last Name
+        {
+          'SingleLine2': this.userContact.last_name //  Last Name
         },
-        {'Dropdown': '' //  Gender
+        {
+          'Dropdown': '' //  Gender
         },
-        {'Date': '' //   Date of Birth dd-MMM-yyyy
+        {
+          'Date': '' //   Date of Birth dd-MMM-yyyy
         },
-        {'SingleLine3': '' //   Title
+        {
+          'SingleLine3': '' //   Title
         },
-        {'Email': '' //   Email
+        {
+          'Email': '' //   Email
         },
-        {'PhoneNumber_countrycode': '' //   Phone
+        {
+          'PhoneNumber_countrycode': '' //   Phone
         },
-        {'SingleLine4': '' //   Nationality
+        {
+          'SingleLine4': '' //   Nationality
         },
-        {'Dropdown1': '' //   Membership Type
+        {
+          'Dropdown1': '' //   Membership Type
         },
-        {'MultiLine': '' //   Languages Spoken
+        {
+          'MultiLine': '' //   Languages Spoken
         },
-        {'Number': '' //   Membership Duration
+        {
+          'Number': '' //   Membership Duration
         },
-        {'SingleLine5': '' //   City
+        {
+          'SingleLine5': '' //   City
         },
-        {'SingleLine6': '' //   Province
+        {
+          'SingleLine6': '' //   Province
         },
-        {'SingleLine7': '' //   Country
+        {
+          'SingleLine7': '' //   Country
         },
-        {'Dropdown2': '' //   Educator Type
+        {
+          'Dropdown2': '' //   Educator Type
         },
-        {'MultiLine1': '' //   Education
+        {
+          'MultiLine1': '' //   Education
         },
-        {'MultiLine2': '' //    Work History
+        {
+          'MultiLine2': '' //    Work History
         },
-        {'Dropdown3': '' //    Teaching Experience
+        {
+          'Dropdown3': '' //    Teaching Experience
         },
-        {'MultiLine3': '' //   Certifications
+        {
+          'MultiLine3': '' //   Certifications
         },
-        {'MultiLine4': '' //   Educator Intro
+        {
+          'MultiLine4': '' //   Educator Intro
         },
-        {'Website': contactImageLink //   Contact image Link
+        {
+          'Website': contactImageLink //   Contact image Link
         },
-        {'Website1': introLink //   Intro Video Link
+        {
+          'Website1': introLink //   Intro Video Link
         }
       ]
 
@@ -2672,7 +2906,11 @@ export default {
   padding: 10px 20px;
 }
 
+.basic-info-margin{
+  margin-top: 20px;
+}
 .basic-info-container {
+
   padding: 20px;
   text-align: left;
   background-color: #ffffff;
@@ -2703,22 +2941,45 @@ export default {
 }
 
 .basic-info-content {
-  padding: 10px 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  margin-top: 10px;
+  border-radius:10px;
 }
 
 .basic-info-item {
-  margin: 10px;
-  color: #808080;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  border-bottom:1px solid #FFFFFF;
 }
 
-.basic-info-item span {
-  color: #000000;
+.basic-info-item-l{
+
+  width:20%;
+  text-align: left;
+  background-color: #f4f5f6;
+  padding:10px 0 10px 20px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  line-height: 24px;
+  min-height:24px;
+  font-size: 14px;
+  color:#333333;
 }
+
+.basic-info-item-r{
+  font-size:14px;
+  width:80%;
+  text-align: left;
+  background-color: #eeeeee;
+  padding:10px;
+
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  line-height: 24px;
+  min-height:24px;
+}
+
 
 .credentials-container {
   margin-top: 20px;
@@ -2846,13 +3107,17 @@ export default {
 
 .education-item {
   padding: 10px;
-  border-bottom: 1px solid #EEEEEE;
+  //border-bottom: 1px solid #EEEEEE;
+  background-color:#f4f5f6;
+  margin-top:10px;
+  border-radius:10px;
 }
 
 .education-school-name {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+  line-height: 30px;
 }
 
 .education-school-name:hover {
@@ -2871,6 +3136,7 @@ export default {
   font-size: 14px;
   color: #808080;
   width: 80%;
+  line-height: 28px;
   /* 这两个在技术上是一样的, 为了兼容了浏览器两个都加上 */
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -3051,7 +3317,10 @@ export default {
 
 .work-exp-b-item {
   padding: 10px;
-  border-bottom: 1px solid #EEEEEE;
+  background-color:#f4f5f6;
+  margin-top:10px;
+  border-radius:10px;
+  //border-bottom: 1px solid #EEEEEE;
 }
 
 .work-exp-item-1 {
@@ -3178,33 +3447,6 @@ export default {
   padding: 10px;
 }
 
-/deep/ .profile-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-/deep/ .profile-uploader .el-upload:hover {
-  border-color: #0AA0A8;
-}
-
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-
-.profile-avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
 .background-banner-container {
   margin-top: 10px;
   padding: 10px;
@@ -3229,31 +3471,15 @@ export default {
   padding: 10px;
 }
 
-/deep/ .background-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-/deep/ .background-uploader .el-upload:hover {
-  border-color: #0AA0A8;
-}
-
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
+.background-uploader{
   text-align: center;
+  padding:10px;
+  border:1px dashed #eeeeee;
+  border-radius:10px;
 }
 
 .background-avatar {
-  width: 378px;
-  height: 178px;
-  display: block;
+
 }
 
 .account-images-container {
@@ -3279,6 +3505,37 @@ export default {
 .account-images-content {
   padding: 10px;
 }
+.account-images-item-container{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content: space-between;
+  flex-wrap:wrap;
+
+}
+
+.account-images-item{
+  width:45%;
+  //flex:1;
+  height: 140px;
+  padding:1%;
+  margin:1%;
+  border:1px solid #EEEEEE;
+  border-radius:10px;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+}
+
+.account-images-img{
+  height: 100%;
+}
+
+.account-images-t-edit{
+  font-size: 14px;
+  font-weight: bold;
+  cursor:pointer;
+}
 
 .intro-video-container {
   margin-top: 10px;
@@ -3299,34 +3556,22 @@ export default {
   font-weight: bold;
 
 }
-
+.intro-video-t-edit{
+  font-size: 14px;
+  font-weight: bold;
+  cursor:pointer;
+}
 .intro-video-content {
   padding: 10px;
 }
-
-/deep/ .intro-video-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-/deep/ .intro-video-uploader .el-upload:hover {
-  border-color: #0AA0A8;
-}
-
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
+.intro-video-uploader{
+  border:1px dashed #eeeeee;
+  border-radius:10px;
   text-align: center;
 }
 
 .intro-video-avatar {
-  width: 378px;
+  width: 100%;
   height: 178px;
   display: block;
 }
@@ -3336,6 +3581,7 @@ export default {
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
+
 }
 
 .my-resume-t {
@@ -3350,11 +3596,18 @@ export default {
   font-weight: bold;
 
 }
+.my-resume-t-edit{
+  font-size:14px;
+  font-weight: bold;
+  cursor:pointer;
+}
 
 .my-resume-content {
   padding: 10px;
+  text-align: center;
 }
-/deep/ .resume-uploader .el-upload-dragger{
+
+/deep/ .resume-uploader .el-upload-dragger {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3373,11 +3626,13 @@ export default {
 }
 
 .resume-avatar {
-  width: 378px;
-  /*height: 178px;*/
+
+  padding:20px;
   display: block;
   text-decoration: none;
   color: #00b3d2;
+  background-color:#f4f5f6;
+  border-radius:10px;
 }
 
 .preferences-container {

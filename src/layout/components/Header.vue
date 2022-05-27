@@ -54,14 +54,14 @@
                     <div class="user-name"> Hi, {{ username }}</div>
                     <div class="user-dropdown">
 
-                      <el-dropdown trigger="click" :hide-on-click="false"
-                                   popper-class="xll-dropdown" >
+                      <el-dropdown size="large" trigger="click" :hide-on-click="false"
+                                   popper-class="xll-dropdown">
                           <span class="el-dropdown-link">
                             <template v-if="identity == 0">Guest</template>
                             <template v-if="identity == 1">Educator</template>
-                            <template v-if="identity == 2">Recruiter</template>
-                            <template v-if="identity == 3">School</template>
-                            <template v-if="identity == 4">Other</template>
+                            <template v-if="identity == 2">Edu-Business</template>
+                            <template v-if="identity == 3">Edu-Business</template>
+                            <template v-if="identity == 4">Edu-Business</template>
                             <template v-if="identity == 5">Vendor</template>
                             <i class="el-icon-arrow-down el-icon--right"></i>
                           </span>
@@ -69,30 +69,206 @@
                         <template #dropdown>
                           <el-dropdown-menu >
 
-                            <el-dropdown-item @click="selectRole(1)">Educator</el-dropdown-item>
-                            <el-dropdown-item>
-                              <el-dropdown   placement="left-start" >
+                            <div class="xll-more-company-dropdown" >
+                              <div class="xll-more-company-dropdown-l">
+                                <el-dropdown-item class="xll-dropdown-item">
+                                  <el-dropdown size="large" placement="left-start" :max-height="400">
+                                  <span class="el-dropdown-link-business">
+                                     <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
+                                     Educator
+                                  </span>
+                                    <template #dropdown>
+                                      <el-dropdown-menu v-if="educatorContactStatus ">
+
+                                        <template v-if="educatorContactData.name">
+                                          <el-dropdown-item
+                                              class="xll-dropdown-item"
+                                              @click="changeIdentity(educatorContactData.id,educatorContactData.company_contact_id,1,2)">
+                                              {{educatorContactData.name}}
+                                          </el-dropdown-item>
+                                        </template>
+
+                                        <template v-else>
+                                          <el-dropdown-item
+                                              class="xll-dropdown-item"
+                                              @click="changeIdentity(educatorContactData.id,educatorContactData.company_contact_id,1,2)"
+                                          >
+                                            <div class="xll-add-icon-container" >
+                                              <span>Add</span>
+                                              <el-icon class="xll-icon-circle-plus-1" :size="14">
+                                                <CirclePlus/>
+                                              </el-icon>
+                                            </div>
+                                          </el-dropdown-item>
+                                        </template>
+
+                                      </el-dropdown-menu>
+
+                                      <el-dropdown-menu v-else>
+
+                                        <el-dropdown-item class="xll-dropdown-item" @click="createRole(1)">
+                                          <div class="xll-add-icon-container" >
+                                            <span>Add</span>
+                                            <el-icon class="xll-icon-circle-plus-1" :size="14">
+                                              <CirclePlus/>
+                                            </el-icon>
+                                          </div>
+                                        </el-dropdown-item>
+
+                                      </el-dropdown-menu>
+
+                                    </template>
+                                  </el-dropdown>
+
+                                </el-dropdown-item>
+
+                              </div>
+                              <div class="xll-more-company-dropdown-r">
+<!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
+<!--                                         @click="createRole(1)"-->
+<!--                                >-->
+<!--                                  <CirclePlus/>-->
+<!--                                </el-icon>-->
+                              </div>
+
+                            </div>
+
+                            <div class="xll-more-company-dropdown">
+                              <div class="xll-more-company-dropdown-l">
+
+                                <el-dropdown-item class="xll-dropdown-item">
+                                  <el-dropdown size="large" placement="left-start" :max-height="400">
                                   <span class="el-dropdown-link-business">
                                      <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
                                     Edu-Business
                                   </span>
-                                  <template #dropdown>
-                                    <el-dropdown-menu >
-                                      <el-dropdown-item @click="selectRole(2)">
-                                        Recruiter
-                                      </el-dropdown-item>
-                                      <el-dropdown-item @click="selectRole(3)">
-                                        School
-                                      </el-dropdown-item>
-                                      <el-dropdown-item @click="selectRole(4)">
-                                        Other
-                                      </el-dropdown-item>
-                                    </el-dropdown-menu>
-                                  </template>
-                              </el-dropdown>
+                                    <template #dropdown>
+                                      <el-dropdown-menu>
+                                        <div class="xll-sub-dropdown"  v-if="recruiterCompanyData.length>0">
+                                          <el-dropdown-item
+                                              class="xll-dropdown-item"
+                                              v-for="(item,i) in recruiterCompanyData"
+                                              :key="i"
+                                              @click="changeIdentity(item.id,item.company_contact_id,2,2)">
 
-                            </el-dropdown-item>
-                            <el-dropdown-item @click="selectRole(5)">Vendor</el-dropdown-item>
+                                            <template v-if="item.company_name">
+                                              {{item.company_name}}
+                                            </template>
+                                            <template v-else>
+                                              Company ID: {{item.id}}
+                                            </template>
+                                          </el-dropdown-item>
+                                        </div>
+
+                                        <div class="xll-sub-dropdown" v-if="schoolCompanyData.length>0">
+                                          <el-dropdown-item
+                                              class="xll-dropdown-item"
+                                              v-for="(item,i) in schoolCompanyData"
+                                              :key="i"
+                                              @click="changeIdentity(item.id,item.company_contact_id,3,2)">
+                                            <template v-if="item.company_name">
+                                              {{item.company_name}}
+                                            </template>
+                                            <template v-else>
+                                              Company ID: {{item.id}}
+                                            </template>
+                                          </el-dropdown-item>
+                                        </div>
+                                        <div class="xll-sub-dropdown" v-if="otherCompanyData.length>0">
+                                          <el-dropdown-item
+                                              v-for="(item,i) in otherCompanyData"
+                                              :key="i"
+                                              class="xll-dropdown-item"
+                                              @click="changeIdentity(item.id,item.company_contact_id,4,2)">
+                                            <template v-if="item.company_name">
+                                              {{item.company_name}}
+                                            </template>
+                                            <template v-else>
+                                              Company ID: {{item.id}}
+                                            </template>
+                                          </el-dropdown-item>
+                                        </div>
+
+                                        <div class="xll-sub-dropdown">
+                                          <el-dropdown-item class="xll-dropdown-item" @click="selectBusinessRole()">
+                                            <div class="xll-add-icon-container" >
+                                              <span>Add</span>
+                                              <el-icon class="xll-icon-circle-plus-1" :size="14">
+                                                <CirclePlus/>
+                                              </el-icon>
+                                            </div>
+                                          </el-dropdown-item>
+                                        </div>
+
+                                      </el-dropdown-menu>
+                                    </template>
+                                  </el-dropdown>
+
+                                </el-dropdown-item>
+
+                              </div>
+                              <div class="xll-more-company-dropdown-r">
+<!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
+<!--                                         @click="selectBusinessRole()"-->
+<!--                                >-->
+<!--                                  <CirclePlus/>-->
+<!--                                </el-icon>-->
+                              </div>
+
+                            </div>
+
+                            <div class="xll-more-company-dropdown" >
+                              <div class="xll-more-company-dropdown-l">
+                                <el-dropdown-item class="xll-dropdown-item">
+                                  <el-dropdown size="large" placement="left-start" :max-height="400">
+                                  <span class="el-dropdown-link-business">
+                                     <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
+                                     Vendor
+                                  </span>
+                                    <template #dropdown>
+                                      <el-dropdown-menu >
+                                        <template v-if="vendorCompanyData.length>0">
+
+                                          <el-dropdown-item
+                                              class="xll-dropdown-item"
+                                              v-for="(item,i) in vendorCompanyData"
+                                              :key="i"
+                                              @click="changeIdentity(item.id,item.company_contact_id,5,2)">
+                                            <template v-if="item.company_name">
+                                              {{item.company_name}}
+                                            </template>
+                                            <template v-else>
+                                              Company ID: {{item.id}}
+                                            </template>
+                                          </el-dropdown-item>
+                                        </template>
+
+                                        <el-dropdown-item class="xll-dropdown-item" @click="createRole(5)">
+                                          <div class="xll-add-icon-container" >
+                                            <span>Add</span>
+                                            <el-icon class="xll-icon-circle-plus-1" :size="14">
+                                              <CirclePlus/>
+                                            </el-icon>
+                                          </div>
+                                        </el-dropdown-item>
+
+                                      </el-dropdown-menu>
+
+                                    </template>
+                                  </el-dropdown>
+
+                                </el-dropdown-item>
+
+                              </div>
+                              <div class="xll-more-company-dropdown-r">
+<!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
+<!--                                         @click="createRole(5)"-->
+<!--                                >-->
+<!--                                  <CirclePlus/>-->
+<!--                                </el-icon>-->
+                              </div>
+
+                            </div>
                           </el-dropdown-menu>
                         </template>
 
@@ -173,27 +349,6 @@
     </el-affix>
 
     <el-dialog
-        v-model="dialogSwitchAccountVisible"
-        title="Switch Account"
-        width="30%"
-    >
-      <div class="switch-account-tips">
-        Hello! Which one are you?
-      </div>
-      <div class="switch-account-container">
-        <div class="switch-account-item" @click="selectRole(1)">
-          Educator
-        </div>
-        <div class="switch-account-item" @click="selectRole(2)">
-          Education Business
-        </div>
-        <div class="switch-account-item" @click="selectRole(3)">
-          Vendor (Deal Program)
-        </div>
-      </div>
-    </el-dialog>
-
-    <el-dialog
         v-model="dialogDiscountCardVisible"
         title="Discount Card"
         width="30%"
@@ -203,12 +358,40 @@
       </div>
     </el-dialog>
 
+    <el-dialog
+        v-model="dialogBusinessAccountVisible"
+        title="Create Account"
+        width="30%"
+        center
+    >
+      <div class="switch-account-tips">
+        Hello! Which one are you?
+      </div>
+      <div class="switch-account-container">
+        <div class="switch-account-item" @click="createRole(2)">
+          Recruiter
+        </div>
+        <div class="switch-account-item" @click="createRole(3)">
+          School
+        </div>
+        <div class="switch-account-item" @click="createRole(4)">
+          Other
+        </div>
+      </div>
+    </el-dialog>
+
   </div>
 
 </template>
 
 <script>
-import {CHANGE_IDENTITY_LANGUAGE, GET_BASIC_INFO, USER_INFO_BY_TOKEN_V2} from '@/api/api'
+import {
+  USER_INFO_BY_TOKEN_V2,
+  SWITCH_IDENTITY_V2,
+  USER_INFO_VISITOR_V2,
+  USER_ALL_IDENTITY_V2,
+  LOGOUT_V2
+} from '@/api/api'
 import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
 import discountCardImg from '@/assets/discountcard/discountCard.png'
@@ -222,13 +405,34 @@ export default {
       discountCardImg,
       defaultAvatar,
       menuDrawerStatus: false,
-      dialogSwitchAccountVisible: false,
+      dialogBusinessAccountVisible: false,
       token: '',
       dialogDiscountCardVisible: false,
-      envName: process.env.VUE_APP_ENV_NAME
+      envName: process.env.VUE_APP_ENV_NAME,
+      recruiterCompanyData:[],
+      schoolCompanyData:[],
+      otherCompanyData:[],
+      vendorCompanyData:[],
+      educatorContactData:{},
+      educatorContactStatus:false
+
+    }
+  },
+  watch:{
+    allIdentityChanged(newValue){
+      console.log(newValue)
+      if(newValue){
+        this.getAllIdentity()
+        this.getBasicInfo(this.identity)
+      }
     }
   },
   computed: {
+    allIdentityChanged:{
+      get(){
+        return this.$store.state.allIdentityChanged
+      }
+    },
     username: {
       get() {
         return this.$store.state.username
@@ -248,17 +452,70 @@ export default {
 
   },
   mounted() {
-    console.log('EDU Passport Developer Lei .')
-    // this.username = localStorage.getItem('name')
-    // this.identity = localStorage.getItem('identity')
+    // console.log(this.allIdentityChanged)
+    let identity = localStorage.getItem('identity')
     let token = localStorage.getItem('token')
     this.token = token;
     if (token) {
-      this.getBasicInfo()
+      this.getBasicInfo(identity)
+      this.getAllIdentity()
     }
 
   },
   methods: {
+    getAllIdentity(){
+      this.$store.commit('allIdentityChanged',false)
+
+      let params = {
+
+      }
+      USER_ALL_IDENTITY_V2(params).then(res=>{
+        // console.log(res)
+        if(res.code == 200){
+
+          let vendorCompany = []
+          let recruitingCompany = []
+          let schoolCompany = []
+          let otherCompany = []
+          let companyContact = res.message.user_contact.company_contact
+          let educatorContact = res.message.user_contact.educarot_contact
+
+          if(educatorContact){
+            this.educatorContactStatus = true;
+            this.educatorContactData = educatorContact
+          }else{
+            this.educatorContactStatus = false;
+          }
+          console.log(this.educatorContactStatus)
+          if(companyContact){
+            vendorCompany = companyContact.vendor_company
+            recruitingCompany = companyContact.recruiting_company
+            schoolCompany = companyContact.school_company
+            otherCompany = companyContact.other_company
+          }
+
+          if(vendorCompany){
+            this.vendorCompanyData = vendorCompany
+          }
+
+          if(recruitingCompany){
+            this.recruiterCompanyData = recruitingCompany
+          }
+
+          if(schoolCompany){
+            this.schoolCompanyData = schoolCompany
+          }
+
+          if(otherCompany){
+            this.otherCompanyData = otherCompany
+          }
+
+        }
+
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     signUp() {
       this.$router.push({path: '/login', query: {type: 2}})
     },
@@ -295,29 +552,48 @@ export default {
       }
 
     },
-    getBasicInfo() {
+    getBasicInfo(identity) {
 
-      let params = {}
+      let params = {
+        identity: identity
+      }
 
       USER_INFO_BY_TOKEN_V2(params).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code == 200) {
 
           let userContact = res.message.user_contact;
+          let companyContact = res.message.user_contact.company_contact;
 
-          let identity = userContact.identity
-          let firstName = userContact.first_name;
-          let lastName = userContact.last_name;
+          let companyInfo = {};
+          let defaultName = userContact.first_name + ' ' + userContact.last_name
+          let name = '';
           let avatar = 'https://oss.esl-passport.cn/educator.png';
 
-          localStorage.setItem('name', firstName + ' ' + lastName)
-          localStorage.setItem('avatar', avatar)
-          localStorage.setItem('first_name', firstName)
-          localStorage.setItem('last_name', lastName)
+          if(identity == 1){
+            let educatorContact = res.message.user_contact.educator_contact;
+            name = educatorContact.name ? educatorContact.name : defaultName;
+            avatar = userContact.headimgurl;
+          }
 
-          this.$store.commit('username', firstName + ' ' + lastName)
+          if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
+
+            if(companyContact){
+              companyInfo = companyContact.company;
+              name = companyInfo.company_name ? companyInfo.company_name : defaultName;
+              avatar = companyInfo.logo;
+            }else{
+              name = defaultName;
+              avatar = 'https://oss.esl-passport.cn/educator.png';
+            }
+
+          }
+
+          localStorage.setItem('name', name)
+          localStorage.setItem('avatar', avatar)
+
+          this.$store.commit('username', name)
           this.$store.commit('userAvatar', avatar)
-          this.$store.commit('identity', identity)
 
         }
       }).catch(err => {
@@ -332,66 +608,137 @@ export default {
       this.$loading({
         text: 'Loading...'
       })
-      localStorage.clear()
-      this.$router.push('/')
-      setTimeout(function () {
-        location.reload()
-      }, 1500)
+
+      let params = {
+        token:localStorage.getItem('token'),
+        platform:4
+      }
+
+      LOGOUT_V2(params).then(res=>{
+        if(res.code == 200){
+          localStorage.clear()
+          this.token = '';
+          this.$store.commit('username', '')
+          this.$store.commit('userAvatar', '')
+          this.$router.push('/')
+          this.$loading().close()
+        }
+
+        // console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
     },
     turnProfilePage() {
-      this.$router.push({path: '/overview', query: {identity: this.identity}})
+      let identity = localStorage.getItem('identity')
+      this.$router.push({path: '/overview', query: {identity: identity}})
     },
-    turnEditProfile() {
+    turnEditProfile(){
+      this.$loading({
+        text: 'Loading...'
+      })
+      let identity = localStorage.getItem('identity')
+      this.$router.push({path: '/overview', query: {identity: identity}})
+      this.$loading().close()
+
+    },
+    turnEditProfile1() {
 
       this.$loading({
         text: 'Loading...'
       })
-      let identity = this.identity
-      let uid = localStorage.getItem('uid')
+      let identity = localStorage.getItem('identity')
+
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
+        identity: identity
       }
-      GET_BASIC_INFO(params).then(res => {
-        let isEducator = res.message.is_educator;
-        let isBusiness = res.message.is_business;
-        let isVendor = res.message.is_vendor;
-        // let isOther = res.message.is_other;
-        // let identity = res.message.identity;
+
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
+        let userContact = res.message.user_contact;
+        let educatorContact = {};
+        let companyContact = {};
+        let companyInfo ={};
+
+        let isEducator = userContact.is_educator;
+        let isRecruiting = userContact.is_recruiting;
+        let isSchool = userContact.is_school;
+        let isOther = userContact.is_other;
+        let isVendor = userContact.is_vendor;
 
         if (identity == 1) {
           if (isEducator > 10) {
-            this.$router.push({path: '/overview', query: {identity: this.identity}})
+            educatorContact = res.message.user_contact.educator_contact;
+            this.changeIdentity(educatorContact.id,'',1,2)
+            this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
             this.$loading().close()
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/educator')
-            this.dialogSwitchAccountVisible = false
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 1}})
+
           }
 
         }
         if (identity == 2) {
-          if (isBusiness > 10) {
-            this.$router.push({path: '/overview', query: {identity: this.identity}})
+          if (isRecruiting > 10) {
+            companyContact = res.message.user_contact.company_contact;
+            companyInfo = res.message.user_contact.company_contact.company;
+            this.changeIdentity(companyInfo.id,companyContact.id,2,2)
+            this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
             this.$loading().close()
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/business')
-            this.dialogSwitchAccountVisible = false
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
+
+          }
+        }
+
+        if (identity == 3) {
+          if (isSchool > 10) {
+            companyContact = res.message.user_contact.company_contact;
+            companyInfo = res.message.user_contact.company_contact.company;
+            this.changeIdentity(companyInfo.id,companyContact.id,3,2)
+            this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
+
           }
 
         }
-        if (identity == 3) {
-          if (isVendor > 10) {
-            this.$router.push({path: '/overview', query: {identity: this.identity}})
+
+        if (identity == 4) {
+          if (isOther > 10) {
+            companyContact = res.message.user_contact.company_contact;
+            companyInfo = res.message.user_contact.company_contact.company;
+            this.changeIdentity(companyInfo.id,companyContact.id,4,2)
+            this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
             this.$loading().close()
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/vendor')
-            this.dialogSwitchAccountVisible = false
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 4}})
+
+          }
+
+        }
+
+        if (identity == 5) {
+          if (isVendor > 10) {
+            companyContact = res.message.user_contact.company_contact;
+            companyInfo = res.message.user_contact.company_contact.company;
+            this.changeIdentity(companyInfo.id,companyContact.id,5,2)
+            this.$router.push({path: '/overview', query: {identity: 5}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 5}})
+
           }
 
         }
@@ -402,54 +749,197 @@ export default {
         this.$loading().close()
         this.$message.error(err.msg)
       })
+
+    },
+    selectBusinessRole() {
+      console.log('select business role')
+      this.dialogBusinessAccountVisible = true;
+    },
+    createRole(identity){
+      this.$loading({
+        text: 'Loading...'
+      })
+      if (identity == 1) {
+        this.$loading().close()
+        let strObj={
+          i:1,
+          action:'add'
+        }
+        let str = encode(JSON.stringify(strObj))
+        // this.$message.warning('Oops!.. Your profile is incomplete. ')
+        this.$router.push({path: '/profile/contact/user', query: {s:str}})
+
+      }
+
+      if (identity == 2) {
+
+        this.$loading().close()
+        let strObj={
+          i:2,
+          action:'add'
+        }
+        let str = encode(JSON.stringify(strObj))
+        // this.$message.warning('Oops!.. Your profile is incomplete. ')
+        this.$router.push({path: '/profile/contact/user', query: {s:str}})
+
+        this.dialogBusinessAccountVisible = false
+      }
+
+      if (identity == 3) {
+
+        this.$loading().close()
+        let strObj={
+          i:3,
+          action:'add'
+        }
+        let str = encode(JSON.stringify(strObj))
+        // this.$message.warning('Oops!.. Your profile is incomplete. ')
+        this.$router.push({path: '/profile/contact/user', query: {s: str}})
+
+        this.dialogBusinessAccountVisible = false
+
+        }
+
+        if (identity == 4) {
+
+          this.$loading().close()
+
+          let strObj={
+            i:4,
+            action:'add'
+          }
+          let str = encode(JSON.stringify(strObj))
+
+          // this.$message.warning('Oops!.. Your profile is incomplete. ')
+          this.$router.push({path: '/profile/contact/user', query: {s: str}})
+
+          this.dialogBusinessAccountVisible = false
+
+        }
+
+        if (identity == 5) {
+
+          this.$loading().close()
+
+          let strObj={
+            i:5,
+            action:'add'
+          }
+
+          let str = encode(JSON.stringify(strObj))
+
+          // this.$message.warning('Oops!.. Your profile is incomplete. ')
+          this.$router.push({path: '/profile/contact/user', query: {s: str}})
+        }
+
 
     },
     selectRole(e) {
       this.$loading({
         text: 'Loading...'
       })
-      let uid = localStorage.getItem('uid')
+
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
+        user_id: localStorage.getItem('uid'),
+        identity: e
       }
-      GET_BASIC_INFO(params).then(res => {
-        let isEducator = res.message.is_educator;
-        let isBusiness = res.message.is_business;
-        let isVendor = res.message.is_vendor;
-        // let isOther = res.message.is_other;
-        // let identity = res.message.identity;
 
-        if (e == 1) {
+      USER_INFO_VISITOR_V2(params).then(res => {
+        let userContact = res.message.user_contact;
+        let educatorContact = {};
+        let companyContact = {};
+        let companyInfo = {};
+
+        let isEducator = userContact.is_educator;
+        let isRecruiting = userContact.is_recruiting;
+        let isSchool = userContact.is_school;
+        let isOther = userContact.is_other;
+        let isVendor = userContact.is_vendor;
+        let identity = e;
+
+        if (identity == 1) {
           if (isEducator > 10) {
-            this.changeIdentity(1)
+            educatorContact =  res.message.user_contact.educator_contact;
+            this.changeIdentity(educatorContact.id,'',1,2)
+            this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$loading().close()
           } else {
             this.$loading().close()
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/educator')
-            this.dialogSwitchAccountVisible = false
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 1}})
+
           }
 
         }
-        if (e == 2) {
-          if (isBusiness > 10) {
-            this.changeIdentity(2)
+
+        if (identity == 2) {
+
+          if (isRecruiting > 10) {
+            companyContact = res.message.user_contact.company_contact;
+            companyInfo = res.message.user_contact.company_contact.company;
+            this.changeIdentity(companyInfo.id,companyContact.id,2,2)
+            // this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
+            this.$loading().close()
           } else {
             this.$loading().close()
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/business')
-            this.dialogSwitchAccountVisible = false
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
+
+            this.dialogBusinessAccountVisible = false
+          }
+        }
+
+        if (identity == 3) {
+
+          if (isSchool > 10) {
+            companyContact = res.message.user_contact.company_contact;
+            companyInfo = res.message.user_contact.company_contact.company;
+            this.changeIdentity(companyInfo.id,companyContact.id,3,2)
+            // this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
+
+            this.dialogBusinessAccountVisible = false
           }
 
         }
-        if (e == 3) {
+
+        if (identity == 4) {
+
+          if (isOther > 10) {
+            companyContact = res.message.user_contact.company_contact;
+            companyInfo = res.message.user_contact.company_contact.company;
+            this.changeIdentity(companyInfo.id,companyContact.id,4,2)
+            this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 4}})
+
+            this.dialogBusinessAccountVisible = false
+          }
+
+        }
+
+        if (identity == 5) {
+
           if (isVendor > 10) {
-            this.changeIdentity(3)
+            companyContact = res.message.user_contact.company_contact;
+            companyInfo = res.message.user_contact.company_contact.company;
+            this.changeIdentity(companyInfo.id,companyContact.id,5,2)
+            this.$router.push({path: '/overview', query: {identity: 5}})
+            this.$loading().close()
           } else {
             this.$loading().close()
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/vendor')
-            this.dialogSwitchAccountVisible = false
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 5}})
+
           }
 
         }
@@ -461,23 +951,26 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    changeIdentity(identity) {
+    changeIdentity(companyId, companyContactId, identity, language) {
       let params = {
-        token: localStorage.getItem('token'),
+        company_id: companyId,
+        company_contact_id: companyContactId,
+        language: language,
         identity: identity
       }
 
-      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
-        console.log(res)
+      SWITCH_IDENTITY_V2(params).then(res => {
+        // console.log(res)
         if (res.code == 200) {
           localStorage.setItem('identity', identity)
-          this.dialogSwitchAccountVisible = false
-          this.$loading().close()
+          this.$store.commit('identity', identity)
 
-          this.getBasicInfo()
+          this.getBasicInfo(identity)
           this.$router.push({
             path: '/overview', query: {identity: identity}
           })
+
+          this.$loading().close()
         }
       }).catch(err => {
         console.log(err)
@@ -499,7 +992,7 @@ export default {
   max-width: 1920px;
   margin: 0 auto;
   padding: 10px 40px;
-//border-bottom: 1px solid #eeeeee; background-color: #1D2634;
+  background-color: #1D2634;
   color: #ffffff;
 }
 
@@ -607,16 +1100,70 @@ export default {
   font-size: 12px;
 }
 
-.xll-icon-arrow-left{
+.el-dropdown-link-business {
+  padding-right: 20px;
+  padding-left:10px;
+}
+
+.xll-more-company-dropdown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.xll-more-company-dropdown-l {
+
+}
+
+.xll-more-company-dropdown-r {
+  //padding-right: 10px;
+}
+
+.xll-dropdown-item {
+  padding: 4px 20px;
+  font-size:14px;
+}
+.xll-dropdown-item:hover{
+  color:#00b3d2;
+}
+
+.xll-icon-circle-plus:hover {
+  color: #00b3d2;
+}
+
+.xll-icon-circle-plus {
+  cursor: pointer;
+  color:#808080;
+}
+
+.xll-add-icon-container{
+  display:flex;flex-direction:row;align-items:center;justify-content: center;
+}
+.xll-icon-circle-plus-1{
+  margin-left:4px;
+}
+
+.xll-icon-arrow-left {
   position: absolute;
-  left:-14px;
-  top:0;
-  bottom:0;
-  margin:auto;
+  left: -12px;
+  top: -1px;
+  bottom: 0;
+  margin: auto;
+}
+.xll-sub-dropdown{
+  padding:10px;
+}
+.xll-sub-dropdown h4{
+  padding:4px 10px;
+  border-bottom:1px solid #eeeeee;
+  color:#808080;
 }
 
 .switch-account-tips {
-  font-size: 12px;
+  font-size: 16px;
+  text-align: center;
 }
 
 .switch-account-container {
@@ -630,6 +1177,7 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   margin-top: 10px;
+  text-align: center;
 }
 
 .switch-account-item:hover {
@@ -695,7 +1243,7 @@ export default {
   color: #ffffff;
 }
 
-.xll-dropdown{
+.xll-dropdown {
 
 }
 

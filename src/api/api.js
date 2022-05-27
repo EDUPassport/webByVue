@@ -225,9 +225,74 @@ export const LOGIN_PHONE_PWD_V2 = (params)=>post('home/login/phone/pwd',params)
 // 更新 user contact 信息
 export const USER_CONTACT_EDIT_V2 = (params) => post('home/user/contact/edit',params)
 // 更新 educator contact 信息
-export const EDUCATOR_PROFILE_EDIT_V2 = (params) => post('home/educator/profile/edit',params)
+export const EDUCATOR_CONTACT_EDIT_V2 = (params) => post('home/educator/profile/edit',params)
+// 用户添加 company contact
+export const COMPANY_CONTACT_EDIT_V2 = (params) => post('home/user/company/contact/edit',params)
 // 新增 编辑 certification
 export const USER_CERTIFICATION_EDIT_V2 = (params) => post('home/user/certification/edit',params)
 
 // 通过登录token获取用户信息
 export const USER_INFO_BY_TOKEN_V2 = (params) => get('home/user/info',params)
+
+//用户上传图片【6张图相册】
+export const ADD_USER_IMG_V2 = (params) => post('home/user/addUserImg',params)
+
+//添加语言技能并打分
+export const ADD_LANGUAGE_SCORE_V2 = (params) => post('home/user/addLanguageScore',params)
+
+//Educator 新增&修改工作经历
+export const ADD_USER_WORK_V2 = (params) => post('home/user/addUserWork',params)
+
+//Educator添加教育经历【新增&编辑】
+export const ADD_USER_EDUCATION_V2 = (params) => post('home/user/addUserEducation',params)
+
+//添加【User】多选项
+export const ADD_PROFILE_V2 = (params) => post('home/user/addObject',params)
+
+//切换身份
+export const SWITCH_IDENTITY_V2 = (params) => post('home/user/switch/identity',params)
+
+//新增/编辑 Recruiting Company
+export const RECRUITER_COMPANY_EDIT_V2 = (params) => post('home/user/recruiting/company/edit',params)
+
+//#4D698E 新增/编辑 School Company
+export const SCHOOL_COMPANY_EDIT_V2 = (params) => post('home/user/school/company/edit',params)
+
+//新增/编辑 Other Company
+export const OTHER_COMPANY_EDIT_V2 = (params) => post('home/user/other/company/edit',params)
+
+//新增/编辑 Vendor Company
+export const VENDOR_COMPANY_EDIT_V2 = (params) => post('home/user/vendor/company/edit',params)
+
+//游客用户获取用户信息
+export const USER_INFO_VISITOR_V2 = (params) => get('home/visitor/info',params)
+
+// 返回用户所有身份
+export const USER_ALL_IDENTITY_V2 = (params) => get('home/user/all/identity',params)
+
+// Educator contact完整度
+export const EDUCATOR_PERCENTAGE_V2 = (params) => get('home/user/educator/calculate',params)
+
+//School Company完整度
+export const SCHOOL_PERCENTAGE_V2 = (params) => get('home/user/school/company/calculate',params)
+
+//Recruiting Company完整度
+export const RECRUITER_PERCENTAGE_V2 = (params) => get('home/user/recruiting/company/calculate',params)
+
+//Other Company完整度
+export const OTHER_PERCENTAGE_V2 = (params) => get('home/user/other/company/calculate',params)
+
+//Vendor Company完整度
+export const VENDOR_PERCENTAGE_V2 = (params) => get('home/user/vendor/company/calculate',params)
+
+// 用户登出
+export const LOGOUT_V2 = (params) =>post('home/user/logout',params)
+
+// 找回密码 【Email code】
+export const FIND_PASSWORD_BY_EMAIL_V2 = (params) =>post('home/email/findPassword',params)
+
+// 找回密码【phone code】
+export const FIND_PASSWORD_BY_PHONE_V2 = (params) =>post('home/user/findPassword',params)
+
+// 上传图片-视频(阿里云OSS)
+export const UPLOAD_IMG = (params) =>post('user/uploadImg',params)

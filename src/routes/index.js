@@ -2,7 +2,7 @@ import layout from '../layout/index'
 
 import {createRouter, createWebHistory} from 'vue-router'
 import {isPhone} from "@/utils";
-
+const identity = localStorage.getItem('identity')
 const routes = [
     {
         path: '/',
@@ -212,6 +212,26 @@ const routes = [
                 }
             },
             {
+                path: '/profile/contact/user',
+                name: 'profileUserContact',
+                component: () => import('@/views/profile/contact/user'),
+                meta: {
+                    activeMenu:identity == 1 ?  "/educator/profile" : identity == 2 ? '/business/profile' : identity ==3 ? '/vendor/profile' : '',
+                    titleC: 'China My User Contact',
+                    titleG: 'Global My User Contact',
+                }
+            },
+            {
+                path: '/profile/contact/company',
+                name: 'profileCompanyContact',
+                component: () => import('@/views/profile/contact/company'),
+                meta: {
+                    activeMenu:identity == 1 ?  "/educator/profile" : identity == 2 ? '/business/profile' : identity ==3 ? '/vendor/profile' : '',
+                    titleC: 'China My Company Contact',
+                    titleG: 'Global My Company Contact',
+                }
+            },
+            {
                 path: '/educator/profile',
                 name: 'educatorProfile',
                 component: () => import('@/views/profile/educator/profile'),
@@ -225,6 +245,7 @@ const routes = [
                 name: 'editEducatorBasic',
                 component: () => import('@/views/profile/educator/edit/basic'),
                 meta: {
+                    activeMenu: "/educator/profile",
                     titleC: 'China Edit Basic Info',
                     titleG: 'Global Edit Basic Info',
                 }
@@ -234,6 +255,7 @@ const routes = [
                 name: 'editEducatorEducation',
                 component: () => import('@/views/profile/educator/edit/education'),
                 meta: {
+                    activeMenu: "/educator/profile",
                     titleC: 'China Education',
                     titleG: 'Global Education',
                 }
@@ -243,6 +265,7 @@ const routes = [
                 name: 'editEducatorWork',
                 component: () => import('@/views/profile/educator/edit/work'),
                 meta: {
+                    activeMenu: "/educator/profile",
                     titleC: 'China Work Experience',
                     titleG: 'Global Work Experience',
                 }
@@ -275,12 +298,33 @@ const routes = [
                 }
             },
             {
+                path: '/business/edit/recruiter',
+                name: 'editRecruiter',
+                component: () => import('@/views/profile/business/edit/recruiter'),
+                meta: {
+                    activeMenu: "/business/profile",
+                    titleC: 'China Edit Recruiter Info',
+                    titleG: 'Global Edit Recruiter Info',
+                }
+            },
+            {
+                path: '/business/edit/other',
+                name: 'editBusinessOther',
+                component: () => import('@/views/profile/business/edit/other'),
+                meta: {
+                    activeMenu: "/business/profile",
+                    titleC: 'China Edit Other Info',
+                    titleG: 'Global Edit Other Info',
+                }
+            },
+            {
                 path: '/business/edit/school',
                 name: 'editSchoolInfo',
                 component: () => import('@/views/profile/business/edit/school'),
                 meta: {
-                    titleC: 'China Edit School Information',
-                    titleG: 'Global Edit School Information',
+                    activeMenu: "/business/profile",
+                    titleC: 'China Edit School Info',
+                    titleG: 'Global Edit School Info',
                 }
             },
             {
@@ -290,6 +334,16 @@ const routes = [
                 meta: {
                     titleC: 'China My Profile',
                     titleG: 'Global My Profile',
+                }
+            },
+            {
+                path: '/vendor/edit/vendor',
+                name: 'editVendor',
+                component: () => import('@/views/profile/vendor/edit/vendor'),
+                meta: {
+                    activeMenu: "/vendor/profile",
+                    titleC: 'China Edit Vendor Info',
+                    titleG: 'Global Edit Vendor Info',
                 }
             },
             {

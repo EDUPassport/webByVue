@@ -856,7 +856,10 @@ export default {
           if (identity == 3) {
             adsDataNews = adsData.filter(item => item.name == 'vendor_industry_news');
           }
-          let articleListData = adsDataNews[0].data;
+          let articleListData = [];
+          if(adsDataNews[0]){
+            articleListData = adsDataNews[0].data
+          }
           if (articleListData.length <= 0) {
             this.industryShowStatus = false;
           }

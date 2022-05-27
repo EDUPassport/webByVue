@@ -137,7 +137,11 @@
 <script>
 import {ref,reactive} from "vue";
 
-import {SEND_EMAIL_CODE, WEIXIN_SEND_SMS, FOND_PASSWORD_BY_PHONE, FOND_PASSWORD_BY_EMAIL} from "@/api/api";
+import {
+  SEND_EMAIL_CODE,
+  WEIXIN_SEND_SMS,
+  FIND_PASSWORD_BY_PHONE_V2, FIND_PASSWORD_BY_EMAIL_V2
+} from "@/api/api";
 
 export default {
   name: "forgotPassword",
@@ -297,7 +301,7 @@ export default {
         if (valid) {
           let params = Object.assign({}, this.forgotForm1)
 
-          FOND_PASSWORD_BY_EMAIL(params).then(res => {
+          FIND_PASSWORD_BY_EMAIL_V2(params).then(res => {
             console.log(res)
             if (res.code == 200) {
               this.$message.success(res.msg)
@@ -326,7 +330,7 @@ export default {
         if (valid) {
           let params = Object.assign({}, this.forgotForm2)
 
-          FOND_PASSWORD_BY_PHONE(params).then(res => {
+          FIND_PASSWORD_BY_PHONE_V2(params).then(res => {
             console.log(res)
             if (res.code == 200) {
               this.$message.success(res.msg)

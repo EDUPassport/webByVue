@@ -50,14 +50,18 @@
                           placeholder="Your responsibilities"></el-input>
               </el-form-item>
 
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('basicForm')">
-                  Submit
-                </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
-              </el-form-item>
             </el-form>
           </div>
+
+          <div class="submit-btn-container">
+            <el-button type="primary"
+                       class="submit-btn"
+                       :loading="submitLoadingValue"
+                       @click="submitForm('basicForm')">
+              Submit
+            </el-button>
+          </div>
+
         </el-col>
       </el-row>
     </div>
@@ -66,7 +70,7 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import { ADD_USER_WORK,GET_BASIC_INFO} from '@/api/api'
+import {ADD_USER_WORK_V2, USER_INFO_BY_TOKEN_V2} from '@/api/api'
 
 export default {
   name: "work",
@@ -75,6 +79,7 @@ export default {
   },
   data() {
     return {
+      submitLoadingValue:false,
       basicForm: {
         company_name: '',
         title: '',
@@ -123,6 +128,7 @@ export default {
   },
   methods: {
     submitForm(formName) {
+      this.submitLoadingValue = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
@@ -131,16 +137,19 @@ export default {
           this.basicForm.work_time_to = Math.floor(dateArr[1] / 1000)
           console.log(this.basicForm)
           let params = Object.assign({},this.basicForm)
-          ADD_USER_WORK(params).then(res=>{
+          ADD_USER_WORK_V2(params).then(res=>{
             console.log(res)
             if(res.code == 200){
+              this.submitLoadingValue = false;
               this.$router.push('/educator/profile')
             }
           }).catch(err=>{
             console.log(err)
+            this.submitLoadingValue = false;
             this.$message.error(err.msg)
           })
         } else {
+          this.submitLoadingValue = false;
           console.log('error submit!!')
           return false
         }
@@ -150,26 +159,27 @@ export default {
       this.$refs[formName].resetFields()
     },
     getBasicInfo() {
-      let uid = localStorage.getItem('uid')
+
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
+        identity:1
       }
-      GET_BASIC_INFO(params).then(res => {
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
         // console.log(res)
         if(res.code == 200){
-          let result = res.message.educator_info.work_info;
-          let workId = this.$route.query.workId
-          let work = result.filter(item => item.id == workId);
-          let workInfo = work[0];
+          let educatorContact = res.message.user_contact.educator_contact;
+          if(educatorContact){
+            let result = educatorContact.work_info;
+            let workId = this.$route.query.workId
+            let work = result.filter(item => item.id == workId);
+            let workInfo = work[0];
 
-          this.basicForm = Object.assign({},workInfo)
-          let workTimeFrom = workInfo.work_time_from
-          let workTimeTo = workInfo.work_time_to
-          this.basicForm.date = [workTimeFrom*1000,workTimeTo*1000]
-          this.basicForm.token = localStorage.getItem('token')
-          this.basicForm.work_id = workId
-          // console.log(this.basicForm)
+            this.basicForm = Object.assign({},workInfo)
+            let workTimeFrom = workInfo.work_time_from
+            let workTimeTo = workInfo.work_time_to
+            this.basicForm.date = [workTimeFrom*1000,workTimeTo*1000]
+            this.basicForm.token = localStorage.getItem('token')
+            this.basicForm.work_id = workId
+          }
 
         }
       }).catch(err=>{
@@ -247,6 +257,13 @@ export default {
 .tag-active {
   background-color: #00b3d2;
   color: #FFFFFF;
+}
+.submit-btn-container{
+  text-align: center;
+  margin-top:40px;
+}
+.submit-btn{
+  width:40%;
 }
 
 </style>

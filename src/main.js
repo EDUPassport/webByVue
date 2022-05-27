@@ -19,7 +19,7 @@ import VTypical from 'vue-typical'
 import './assets/font/font.css'
 
 import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu,ChatLineSquare,
-    ArrowDownBold,ArrowUpBold,ArrowLeft,
+    ArrowDownBold,ArrowUpBold,ArrowLeft,CirclePlus,
     MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose,SuccessFilled,Failed,UploadFilled,Back}
     from '@element-plus/icons'
 
@@ -94,6 +94,7 @@ app.component('UploadFilled',UploadFilled)
 app.component('Back',Back)
 app.component('ArrowDownBold',ArrowDownBold)
 app.component('ArrowUpBold',ArrowUpBold)
+app.component('CirclePlus',CirclePlus)
 
 app.component(Vue3CountryIntl.name, Vue3CountryIntl)
 
@@ -148,6 +149,53 @@ app.config.globalProperties.$filters = {
         let endMin = endTime.getMinutes() < 10 ? "0"+endTime.getMinutes() : endTime.getMinutes();
 
         return  startHour+':'+startMin + '' + startHourTag + ' - '+ endHour+':'+endMin+''+endHourTag;
+    },
+    countryInfoFormat(value){
+        // console.log(value)
+        if(value){
+            let valueParse = JSON.parse(value)
+            let str = ''
+            let countryNameEn = valueParse.country_name_en
+            // let countryNameCn = valueParse.country_name_cn
+            let provinceNameEn = valueParse.province_name_en
+            // let provinceNameCn  = valueParse.province_name_cn
+            let cityNameEn = valueParse.city_name_en
+            // let cityNameCn = valueParse.city_name_cn
+            let districtNameEn = valueParse.district_name_en
+            // let districtNameCn = valueParse.district_name_cn
+
+            if(countryNameEn){
+                str = countryNameEn
+            }
+            if(countryNameEn && provinceNameEn){
+                str = provinceNameEn + ', ' + countryNameEn
+            }
+
+            if(countryNameEn && provinceNameEn && cityNameEn){
+                str =  provinceNameEn + ', ' + cityNameEn + ', ' + countryNameEn
+            }
+            if(countryNameEn && provinceNameEn && cityNameEn && districtNameEn){
+                str =  provinceNameEn + ', ' + cityNameEn + ', '+districtNameEn + ', ' + countryNameEn
+            }
+            return str;
+
+        }
+    },
+    userObjectFormat(value){
+        if(value){
+            let arr = []
+            value.forEach(item=>{
+                arr.push(item.object_en)
+            })
+            if(arr.length>0){
+                return arr.join(', ');
+            }else{
+                return '';
+            }
+
+        }else{
+            return '';
+        }
     }
 
 }

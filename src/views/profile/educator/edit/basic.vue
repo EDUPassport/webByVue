@@ -1,8 +1,10 @@
 <template>
   <div class="bg">
     <div class="basic-container">
+      <profileTitle :i="i" :action="action"></profileTitle>
+
       <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4" v-if="sideMenuStatus">
           <meSideMenu></meSideMenu>
         </el-col>
         <el-col class="basic-r-container" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
@@ -10,7 +12,7 @@
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
               <el-breadcrumb-item :to="{ path: '/educator/profile' }">Profile</el-breadcrumb-item>
-              <el-breadcrumb-item>Basic</el-breadcrumb-item>
+              <el-breadcrumb-item>Educator Contact</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           <div class="basic-form">
@@ -22,24 +24,25 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <el-form-item label="First Name" prop="first_name">
-                <el-input v-model="basicForm.first_name" placeholder="First Name"></el-input>
+              <el-form-item label="Display Name" prop="name">
+                <el-input v-model="basicForm.name" placeholder="Display Name"></el-input>
               </el-form-item>
-              <el-form-item label="Last Name" prop="last_name">
-                <el-input v-model="basicForm.last_name" placeholder="Last Name"></el-input>
+              <el-form-item label="Phone #" prop="phone">
+                <el-input v-model="basicForm.phone" placeholder="Phone #"></el-input>
               </el-form-item>
               <el-form-item label="Email" prop="email">
                 <el-input v-model="basicForm.email" placeholder="Email"></el-input>
               </el-form-item>
-              <el-form-item label="Wechat ID" prop="wx_id">
-                <el-input v-model="basicForm.wx_id" placeholder="Wechat ID"></el-input>
+              <el-form-item label="Address" prop="address">
+                <el-input v-model="basicForm.address" placeholder="Address"></el-input>
               </el-form-item>
-              <el-form-item label="Gender">
-                <el-select v-model="basicForm.sex" placeholder="Select your gender">
-                  <el-option v-for="(item,i) in sexOptions" :key="i" :label="item.object_en"
-                             :value="item.value"></el-option>
-                </el-select>
+              <el-form-item label="Job Title" prop="job_title">
+                <el-input v-model="basicForm.job_title" placeholder="Job Title"></el-input>
               </el-form-item>
+              <el-form-item label="About You" prop="bio">
+                <el-input type="textarea" v-model="basicForm.bio" placeholder="Introduction"></el-input>
+              </el-form-item>
+
               <el-form-item label="Nationality">
                 <el-select v-model="basicForm.nationality"
                            filterable
@@ -48,40 +51,14 @@
                              :value="item.name"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="Birthdate" prop="birthday">
-                <el-date-picker
-                    v-model="basicForm.birthday"
-                    type="date"
-                    placeholder="Pick a date"
-                    style="width: 100%"
-                ></el-date-picker>
-              </el-form-item>
 
-              <el-form-item label="Location">
-                <el-select v-model="basicForm.province"
-                           @change="provinceChange"
-                           placeholder="Select Province">
-                  <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
-                             :value="item.id"></el-option>
-                </el-select>
-                <el-select v-model="basicForm.city"
-                           @change="cityChange"
-                           placeholder="Select City">
-                  <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin" :value="item.id"></el-option>
-                </el-select>
-                <el-select v-model="basicForm.district"
-                           @change="districtChange"
-                           placeholder="Select District">
-                  <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                             :value="item.id"></el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item label="Job Seeking">
                 <el-switch v-model="basicForm.is_seeking"></el-switch>
               </el-form-item>
               <el-form-item label="Public Profile">
                 <el-switch v-model="basicForm.is_public"></el-switch>
               </el-form-item>
+
               <el-form-item label="Education Type(Up to 3)">
                 <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
                   <div v-if="item['children'].length>0" class="category-parent">
@@ -101,13 +78,17 @@
 
             </el-form>
 
-            <div class="submit-xll-container">
-              <el-button type="primary" @click="submitForm('basicForm')">
-                Submit
-              </el-button>
-              <el-button @click="resetForm('basicForm')">Reset</el-button>
-            </div>
           </div>
+
+          <div class="submit-btn-container">
+            <el-button type="primary"
+                       class="submit-btn"
+                       :loading="submitLoadingValue"
+                       @click="submitForm('basicForm')">
+              Submit
+            </el-button>
+          </div>
+
         </el-col>
       </el-row>
     </div>
@@ -116,54 +97,64 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import {ALL_AREAS, SUB_CATE_LIST, ADD_EDU_BASIC, GET_BASIC_INFO, ZOHO_SYNC} from '@/api/api'
+import profileTitle from "@/components/profileTitle";
+import {
+  SUB_CATE_LIST,
+  EDUCATOR_CONTACT_EDIT_V2,
+  ZOHO_SYNC,
+  USER_INFO_BY_TOKEN_V2,
+  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2
+} from '@/api/api'
 import {countriesData} from "@/utils/data";
+import {decode} from "js-base64";
 
 export default {
   name: "basic",
   components: {
-    meSideMenu
+    meSideMenu,
+    profileTitle
   },
   data() {
     return {
+      submitLoadingValue:false,
+      sideMenuStatus:true,
       basicForm: {
-        first_name: '',
-        last_name: '',
+        name: '',
+        resume_pdf: '',
+        video_url:'',
+        phone:'',
         email: '',
-        sex: '',
-        nationality: '',
-        birthday: '',
-        location: '',
-        country: '',
-        province: '',
-        city: '',
-        district: '',
-        address: '',
+        address:'',
+        bio:'',
         is_seeking: 0,
         is_public: 0,
-        wx_id: '',
-        sub_identity: '',
-        token:localStorage.getItem('token')
+        job_title:'',
+        sub_identity_id:'',
+        sub_identity_name_cn:'',
+        sub_identity_name_en:'',
+        hobbies:'',
+        nationality: '',
+        background_image:''
       },
       basicRules: {
-        first_name: [
+        name: [
           {
             required: true,
-            message: 'Please input first name',
+            message: 'Please input your name',
             trigger: 'blur',
           }
         ],
-        last_name: [
+        phone: [
           {
             required: true,
-            message: 'Please input last name',
+            message: 'Please input your phone',
             trigger: 'blur',
           },
         ],
-        wx_id: [
+        address: [
           {
             required: true,
-            message: 'Please input wechat id',
+            message: 'Please input address',
             trigger: 'blur',
           },
         ],
@@ -175,65 +166,79 @@ export default {
             trigger: 'blur',
           },
         ],
-        birthday: [
+        job_title: [
           {
-            type: 'date',
             required: true,
-            message: 'Please pick a date',
-            trigger: 'change',
+            message: 'Please input job title',
+            trigger: 'blur',
           },
-        ]
+        ],
+        bio: [
+          {
+            required: true,
+            message: 'Please input introduction',
+            trigger: 'blur',
+          },
+        ],
 
 
       },
-      sexOptions: [
-        {
-          value: 1,
-          object_en: 'Male',
-          object_cn: '男'
-        },
-        {
-          value: 2,
-          object_en: 'Female',
-          object_cn: "女"
-        },
-        {
-          value: 3,
-          object_en: 'Undisclosed',
-          object_cn: '未公开'
-        }
-      ],
       nationalityOptions: countriesData,
-      provinceOptions: [],
-      cityOptions: [],
-      districtOptions: [],
       subCateOptions: [],
       selectEducatorTypeList: [],
-      educatorInfo:{}
+      educatorContact:{},
+      i:0,
+      action:''
 
     }
   },
   mounted() {
     // console.log(countriesData)
-    this.getAllAreas(0)
     this.getSubCateList()
-    this.getBasicInfo()
+
+
+    let str = this.$route.query.s;
+
+    if(str){
+      let strObj = JSON.parse(decode(str))
+
+      // console.log(str)
+      this.i = strObj.i;
+      this.action = strObj.action;
+
+      if(strObj.action == 'add'){
+        this.sideMenuStatus = false;
+      }
+
+      if(strObj.action == 'edit'){
+        this.getBasicInfo(strObj.i)
+      }
+
+    }
+
   },
   methods: {
     submitForm(formName) {
+      this.submitLoadingValue = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let selectTypeList = this.selectEducatorTypeList;
+          // console.log(selectTypeList)
           let educatorTypeIdArr = [];
+          let educatorTypeNameEnArr = [];
+          let educatorTypeNameCnArr = [];
+          let action = this.action
+
           selectTypeList.forEach(item => {
             educatorTypeIdArr.push(item.id)
+            educatorTypeNameEnArr.push(item.identity_name)
+            educatorTypeNameCnArr.push(item.identity_name_cn)
           })
-          let birthday = this.basicForm.birthday
-          let year = birthday.getFullYear()
-          let month = birthday.getMonth() + 1
-          let day = birthday.getDate()
-          this.basicForm.birthday = [year, month, day].join('-')
-          this.basicForm.sub_identity = educatorTypeIdArr.join(',')
+
+
+          this.basicForm.sub_identity_name_en = educatorTypeNameEnArr.join(',')
+          this.basicForm.sub_identity_id = educatorTypeIdArr.join(',')
+          this.basicForm.sub_identity_name_cn = educatorTypeNameCnArr.join(',')
 
           if (this.basicForm.is_public) {
             this.basicForm.is_public = 1
@@ -245,20 +250,31 @@ export default {
           } else {
             this.basicForm.is_seeking = 0
           }
+
           let params = Object.assign({}, this.basicForm);
-          ADD_EDU_BASIC(params).then(res => {
+          EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
             console.log(res)
             if(res.code == 200){
-              this.submitEducatorContactForm()
-              // this.submitCompanyContactForm()
-              this.$router.push('/educator/profile')
+              this.submitLoadingValue = false;
+              if(action == 'edit'){
+                // this.$router.go(-1)
+                this.$store.commit('username',this.basicForm.name)
+                this.$store.commit('allIdentityChanged',true)
+                this.$router.push('/educator/profile')
+              }else{
+                this.changeIdentity(res.message.educator_id,res.message.user_id)
+
+              }
+
             }
           }).catch(err=>{
             console.log(err)
+            this.submitLoadingValue = false;
             this.$message.error(err.msg)
           })
 
         } else {
+          this.submitLoadingValue = false;
           console.log('error submit!!')
           return false
         }
@@ -268,59 +284,6 @@ export default {
       this.$refs[formName].resetFields()
     },
     handleChange(e) {
-      console.log(e)
-    },
-    getAllAreas(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.provinceOptions = res.message
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getAllCitys(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.cityOptions = res.message
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getAllDistricts(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.districtOptions = res.message
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    provinceChange(e) {
-      console.log(e)
-      this.getAllCitys(e)
-    },
-    cityChange(e) {
-      console.log(e)
-      this.getAllDistricts(e)
-    },
-    districtChange(e) {
       console.log(e)
     },
     getSubCateList() {
@@ -352,49 +315,199 @@ export default {
         this.selectEducatorTypeList.splice(this.selectEducatorTypeList.findIndex(element => element.id === item.id), 1);
       }
     },
-    getBasicInfo() {
-      let uid = localStorage.getItem('uid')
+    changeIdentity(companyId,companyContactId,language){
+      let self = this;
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
+        identity:1,
+        company_id:companyId,
+        company_contact_id:companyContactId,
+        language:language
       }
-      GET_BASIC_INFO(params).then(res => {
+      SWITCH_IDENTITY_V2(params).then(res=>{
         console.log(res)
         if(res.code == 200){
-          let educatorInfo = res.message.educator_info;
-          this.educatorInfo = educatorInfo
+          localStorage.setItem('identity',1)
+          self.$store.commit('identity',1)
+          this.$store.commit('username',this.basicForm.name)
+          this.$store.commit('allIdentityChanged',true)
 
-          this.basicForm.first_name = educatorInfo.first_name;
-          this.basicForm.last_name = educatorInfo.last_name;
-          this.basicForm.email = educatorInfo.email ;
+          this.$router.push({path:'/overview',query:{identity:1}})
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    getVisitorInfo(uid,identity) {
 
-          if(res.message.sex){
-            this.basicForm.sex = res.message.sex;
+      let params = {
+        user_id:uid,
+        identity:identity
+      }
+
+      USER_INFO_VISITOR_V2(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+
+          let educatorContact = res.message.user_contact.educator_contact;
+
+          if(educatorContact.name){
+            this.basicForm.name = educatorContact.name;
           }
 
-          this.basicForm.nationality = educatorInfo.nationality;
+          this.basicForm.name = educatorContact.name;
+          if(educatorContact.resume_pdf){
+            this.basicForm.resume_pdf = educatorContact.resume_pdf
+          }
 
-          // this.basicForm.birthday = educatorInfo.birthday;
-          // this.basicForm.location = educatorInfo.location;
-          // this.basicForm.country = educatorInfo.country;
-          // this.basicForm.province = educatorInfo.province;
-          // this.basicForm.city = educatorInfo.city;
-          // this.basicForm.district = educatorInfo.district;
-          // this.basicForm.address = educatorInfo.address;
+          if(educatorContact.background_image){
+            this.basicForm.background_image = educatorContact.background_image
+          }
 
-          this.basicForm.is_seeking = educatorInfo.is_seeking;
-          this.basicForm.is_public = educatorInfo.is_public;
-          this.basicForm.wx_id = educatorInfo.wx_id;
+          if(educatorContact.video_url){
+            this.basicForm.video_url = educatorContact.video_url
+          }
 
-          let subIdentityStr = educatorInfo.sub_identity_id
+          if(educatorContact.phone){
+            this.basicForm.phone = educatorContact.phone
+          }
 
-          let subIdentityArr = subIdentityStr.split(',')
-          let subData = []
-          subIdentityArr.forEach(item=>{
-            subData.push({id: Number(item) })
-          })
-          this.selectEducatorTypeList = subData
-          // console.log(this.selectEducatorTypeList)
+          if(educatorContact.email){
+            this.basicForm.email = educatorContact.email ;
+          }
+
+          if(educatorContact.address){
+            this.basicForm.address = educatorContact.address
+          }
+
+          if(educatorContact.bio){
+            this.basicForm.bio = educatorContact.bio
+          }
+
+          if(educatorContact.is_seeking){
+            this.basicForm.is_seeking = educatorContact.is_seeking;
+          }
+
+          if(educatorContact.is_public){
+            this.basicForm.is_public = educatorContact.is_public;
+          }
+
+          if(educatorContact.job_title){
+            this.basicForm.job_title = educatorContact.job_title;
+          }
+
+          if(educatorContact.hobbies){
+            this.basicForm.hobbies = educatorContact.hobbies;
+          }
+
+          if(educatorContact.nationality){
+            this.basicForm.nationality = educatorContact.nationality;
+          }
+
+
+          let subIdentityStr = educatorContact.sub_identity_id
+
+          if(subIdentityStr){
+            if(subIdentityStr.length>1){
+              let subIdentityArr = subIdentityStr.split(',')
+              let subData = []
+              subIdentityArr.forEach(item=>{
+                subData.push({id: Number(item) })
+              })
+              this.selectEducatorTypeList = subData
+              this.basicForm.sub_identity_name_en = educatorContact.sub_identity_name_en
+              this.basicForm.sub_identity_name_cn = educatorContact.sub_identity_name_cn
+            }
+
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    getBasicInfo() {
+
+      let params = {
+        identity:1
+      }
+
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+
+          let educatorContact = res.message.user_contact.educator_contact;
+
+          if(educatorContact.name){
+            this.basicForm.name = educatorContact.name;
+          }
+
+          this.basicForm.name = educatorContact.name;
+          if(educatorContact.resume_pdf){
+            this.basicForm.resume_pdf = educatorContact.resume_pdf
+          }
+
+          if(educatorContact.background_image){
+            this.basicForm.background_image = educatorContact.background_image
+          }
+
+          if(educatorContact.video_url){
+            this.basicForm.video_url = educatorContact.video_url
+          }
+
+          if(educatorContact.phone){
+            this.basicForm.phone = educatorContact.phone
+          }
+
+          if(educatorContact.email){
+            this.basicForm.email = educatorContact.email ;
+          }
+
+          if(educatorContact.address){
+            this.basicForm.address = educatorContact.address
+          }
+
+          if(educatorContact.bio){
+            this.basicForm.bio = educatorContact.bio
+          }
+
+          if(educatorContact.is_seeking){
+            this.basicForm.is_seeking = educatorContact.is_seeking;
+          }
+
+          if(educatorContact.is_public){
+            this.basicForm.is_public = educatorContact.is_public;
+          }
+
+          if(educatorContact.job_title){
+            this.basicForm.job_title = educatorContact.job_title;
+          }
+
+          if(educatorContact.hobbies){
+            this.basicForm.hobbies = educatorContact.hobbies;
+          }
+
+          if(educatorContact.nationality){
+            this.basicForm.nationality = educatorContact.nationality;
+          }
+
+
+          let subIdentityStr = educatorContact.sub_identity_id
+
+          if(subIdentityStr){
+            if(subIdentityStr.length>1){
+              let subIdentityArr = subIdentityStr.split(',')
+              let subData = []
+              subIdentityArr.forEach(item=>{
+                subData.push({id: Number(item) })
+              })
+              this.selectEducatorTypeList = subData
+              this.basicForm.sub_identity_name_en = educatorContact.sub_identity_name_en
+              this.basicForm.sub_identity_name_cn = educatorContact.sub_identity_name_cn
+            }
+
+          }
 
         }
       }).catch(err=>{
@@ -617,5 +730,12 @@ export default {
   text-align: center;
 }
 
+.submit-btn-container{
+  text-align: center;
+  margin-top:40px;
+}
+.submit-btn{
+  width:40%;
+}
 
 </style>

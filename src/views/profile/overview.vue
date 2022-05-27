@@ -7,7 +7,31 @@
         </el-col>
         <el-col :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
           <div class="dashboard-container">
-            <div class="dashboard-label">Dashboard</div>
+            <div class="dashboard-top-container">
+              <div class="dashboard-label">Dashboard</div>
+              <div class="dashboard-profile-percentage">
+                <h4>Profile:</h4>
+                <div class="percentage-progress-container-bg">
+                  <div class="percentage-progress-container">
+                    <el-progress class="percentage-progress"
+                                 :text-inside="true"
+                                 :stroke-width="20"
+                                 :percentage="profilePercentage" color="#b1c452" >
+                    </el-progress>
+
+                    <div class="percentage-progress-post-job">
+                      <span v-if="identity == 1">Apply for a job</span>
+                      <span v-if="identity == 2 || identity == 3 || identity ==4">Post a Job</span>
+                      <span v-if="identity == 5">Offer a Deal</span>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
             <div class="dashboard-content">
               <template v-if="identity == 1">
                 <div class="dashboard-item events-bg" @click="applicationsHref()">
@@ -15,12 +39,12 @@
                     <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                   </div>
                   <div class="dashboard-item-r">
-                    <router-link to="/me/applications">My Applications</router-link>
+                    <router-link to="/me/applications">My Job Applications</router-link>
                   </div>
                 </div>
 
               </template>
-              <template v-if="identity == 2">
+              <template v-if="identity == 2 || identity == 3 || identity == 4">
                 <div class="dashboard-item jobs-bg" @click="jobPostsHref()">
                   <div class="dashboard-item-l">
                     <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
@@ -39,7 +63,7 @@
                 </div>
 
               </template>
-              <template v-if="identity == 3">
+              <template v-if="identity == 5">
                 <div class="dashboard-item deals-bg" @click="myDealsHref()">
                   <div class="dashboard-item-l">
                     <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
@@ -76,24 +100,14 @@
                 </div>
               </div>
 
-<!--              <div class="dashboard-item msg-bg">-->
-<!--                <div class="dashboard-item-l">-->
-<!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
-<!--                </div>-->
-<!--                <div class="dashboard-item-r">-->
-<!--                  <router-link to="/">My Messages</router-link>-->
-<!--                </div>-->
-<!--              </div>-->
-
             </div>
           </div>
 
-          <accountInfo :info="userInfo" :phone="basicUserInfo.phone" ></accountInfo>
-
-<!--          <div class="ads-container">-->
-<!--            <el-image class="ads-img" :src="dashboardAdsImg"></el-image>-->
-<!--          </div>-->
-
+          <accountInfo :info="userContact" :phone="userContact.phone" :email="userContact.email"
+                       :level="accountInfoLevel" :vip-due-time="accountInfoVipDueTime"
+                       :category-str="accountInfoCategoryStr"
+                       :identityActionStatus="true"
+          ></accountInfo>
 
           <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataBottom.length>0">
             <el-carousel height="220px" indicator-position="none" >
@@ -127,11 +141,17 @@
 import defaultAvatar from '@/assets/default/avatar.png'
 import accountInfo from "../../components/accountInfo";
 import meSideMenu from "@/components/meSideMenu";
-import {ADS_LIST, VISITOR_USER_INFO} from '@/api/api';
+import {
+  ADS_LIST,
+  EDUCATOR_PERCENTAGE_V2, OTHER_PERCENTAGE_V2,
+  RECRUITER_PERCENTAGE_V2,
+  SCHOOL_PERCENTAGE_V2, USER_INFO_BY_TOKEN_V2,
+  USER_INFO_VISITOR_V2, VENDOR_PERCENTAGE_V2
+} from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
 import { onBeforeRouteUpdate } from "vue-router";
-// import {useStore} from "vuex";
+
 import {computed,ref} from "vue";
 
 export default {
@@ -141,14 +161,13 @@ export default {
     accountInfo
   },
   setup(){
-    // const store = useStore()
+
     const i = ref(localStorage.getItem('identity'))
 
     const identity1 = computed(()=>{
       return i.value
     })
 
-    // console.log(identity1.value)
     return {
       identity1
     }
@@ -160,24 +179,113 @@ export default {
       defaultAvatar,
       userInfo: {},
       basicUserInfo: {},
+
+      userContact:{},
+      companyContact:{},
+      companyInfo:{},
+
       identity:this.$route.query.identity,
-      adsDataBottom:[]
+      adsDataBottom:[],
+      profilePercentage:0,
+      accountInfoLevel:1,
+      accountInfoVipDueTime:'',
+      accountInfoCategoryStr:''
       
     }
   },
   mounted() {
+    // let uid = localStorage.getItem('uid')
+
     onBeforeRouteUpdate( to =>{
-      console.log(to)
+      // console.log(to)
       this.identity = to.query.identity
-      this.getVisitorBasicInfo()
-      // console.log(to.params, to.query)
+      this.getBasicInfo(to.query.identity)
+      this.getPercentage(this.identity)
+
     })
-    this.getVisitorBasicInfo()
+
+    this.getBasicInfo(this.identity)
     this.getAdsList()
+
+    this.getPercentage(this.identity)
+
   },
   methods: {
+
+    getPercentage(identity){
+      if(identity == 1){
+        this.getEducatorPercentage()
+      }
+      if(identity == 2){
+        this.getRecruiterPercentage()
+      }
+      if(identity == 3){
+        this.getSchoolPercentage()
+      }
+      if(identity == 4){
+        this.getOtherPercentage()
+      }
+      if(identity == 5){
+        this.getVendorPercentage()
+      }
+    },
+    getEducatorPercentage(){
+      let params = {}
+      EDUCATOR_PERCENTAGE_V2(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.profilePercentage = res.message.is_educator;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    getRecruiterPercentage(){
+      let params = {}
+      RECRUITER_PERCENTAGE_V2(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.profilePercentage = res.message.is_recruiting;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    getSchoolPercentage(){
+      let params = {}
+      SCHOOL_PERCENTAGE_V2(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.profilePercentage = res.message.is_school;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    getOtherPercentage(){
+      let params = {}
+      OTHER_PERCENTAGE_V2(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.profilePercentage = res.message.is_other;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    getVendorPercentage(){
+      let params = {}
+      VENDOR_PERCENTAGE_V2(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.profilePercentage = res.message.is_vendor;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     turnBanner(link){
-      console.log(link)
+      // console.log(link)
       if (link != '') {
         window.location.href =  link
       } else {
@@ -240,33 +348,109 @@ export default {
     myFavoritesHref(){
       this.$router.push({path:'/favorites'})
     },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
+    getBasicInfo(identity) {
+
       let params = {
-        id: uid,
         identity: identity
       }
-      VISITOR_USER_INFO(params).then(res => {
+
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
         console.log(res)
-        if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
+        if(res.code == 200){
+          let userContact = res.message.user_contact;
+          let companyContact = {};
+          let company = {};
+          let educatorContact = {};
+
+          if(userContact){
+            this.userContact = userContact
           }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
+
+          if(identity == 1){
+
+            educatorContact = res.message.user_contact.educator_contact;
+
+            if(educatorContact){
+              this.educatorContact = educatorContact
+              this.accountInfoLevel = educatorContact.vip_level
+              this.accountInfoVipDueTime = educatorContact.vip_due_time
+              this.accountInfoCategoryStr = educatorContact.sub_identity_name_en
+
+            }
           }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
+
+          if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
+            companyContact = res.message.user_contact.company_contact;
+            company = res.message.user_contact.company_contact.company ;
+            if(companyContact){
+              this.companyContact = companyContact
+            }
+            if(company){
+              this.companyInfo = company
+              this.accountInfoLevel = company.vip_level
+              this.accountInfoVipDueTime = company.vip_due_time
+              this.accountInfoCategoryStr = company.category_id+''
+            }
+
           }
+
 
         }
       }).catch(err=>{
         console.log(err)
         this.$message.error(err.msg)
       })
+
     },
+    getVisitorInfo(uid,identity) {
+
+      let params = {
+        user_id:uid,
+        identity: identity
+      }
+
+      USER_INFO_VISITOR_V2(params).then(res => {
+        console.log(res)
+        if(res.code == 200){
+          let userContact = res.message.user_contact;
+          let companyContact = {};
+          let company = {};
+          let educatorContact = {};
+
+          if(userContact){
+            this.userContact = userContact
+          }
+
+          if(identity == 1){
+
+            educatorContact = res.message.user_contact.educator_contact;
+
+            if(educatorContact){
+              this.educatorContact = educatorContact
+            }
+          }
+
+          if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
+            companyContact = res.message.user_contact.company_contact;
+            company = res.message.user_contact.company_contact.company ;
+            if(companyContact){
+              this.companyContact = companyContact
+            }
+            if(company){
+              this.companyInfo = company
+            }
+
+          }
+
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+
   }
 }
 </script>
@@ -286,6 +470,57 @@ export default {
 .dashboard-container {
   padding: 20px;
   text-align: left;
+}
+.dashboard-top-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+}
+.dashboard-label{
+
+}
+.dashboard-profile-percentage{
+  width:50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+}
+.percentage-progress-container-bg{
+  background-color:#ffffff;
+  padding:10px;
+  width:80%;
+  border-radius:20px;
+}
+
+.percentage-progress-container{
+  width:100%;
+  height: 20px;
+  position: relative;
+}
+
+.percentage-progress{
+  width:100%;
+  position: absolute;
+  bottom:0;
+
+}
+
+.percentage-progress-post-job{
+  width:80%;
+  position: absolute;
+  height: 10px;
+  bottom:20px;
+  border-right: 1px solid #808080;
+}
+.percentage-progress-post-job span{
+  position: absolute;
+  right: -30px;
+  top:-16px;
+  font-size: 12px;
 }
 
 .dashboard-label {

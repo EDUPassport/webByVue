@@ -13,10 +13,9 @@
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
               <el-breadcrumb-item :to="{ path: '/business/profile' }">Profile</el-breadcrumb-item>
-              <el-breadcrumb-item>School</el-breadcrumb-item>
+              <el-breadcrumb-item>Recruiter Information</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-
           <div class="basic-form">
             <el-form
                 ref="basicForm"
@@ -36,9 +35,6 @@
 
               <el-form-item label="Work Email">
                 <el-input v-model="basicForm.work_email" placeholder="Please input"></el-input>
-              </el-form-item>
-              <el-form-item label="Website">
-                <el-input v-model="basicForm.website" placeholder="Please input"></el-input>
               </el-form-item>
 
               <el-form-item label="Work Phone #" prop="phone" >
@@ -65,21 +61,6 @@
                 </div>
               </el-form-item>
 
-              <el-form-item label="Logo Photo" prop="logo">
-                <el-upload
-                    class="profile-uploader"
-                    :action="uploadActionUrl"
-                    :headers="uploadHeaders"
-                    :data="uploadData"
-                    :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleLogoPhotoSuccess"
-                    :before-upload="beforeLogoPhotoUpload"
-                >
-                  <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="profile-avatar"></el-image>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>
 
               <el-form-item label="Year Founded">
                 <el-date-picker
@@ -161,6 +142,8 @@
                   <div id="mapContainer" class="basemap"></div>
                 </div>
               </el-form-item>
+
+
               <el-form-item label="Edu-Business Categories (Choose 1)" prop="category_id" required>
                 <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
                   <div v-if="item['children'].length>0" class="category-parent">
@@ -177,26 +160,9 @@
                   </div>
                 </div>
               </el-form-item>
-
-              <el-form-item label="Business registration certificate" prop="business_reg_img">
-                <el-upload
-                    class="business-reg-uploader"
-                    :action="uploadActionUrl"
-                    :headers="uploadHeaders"
-                    :data="uploadData"
-                    :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleBusinessRegPhotoSuccess"
-                    :before-upload="beforeBusinessRegPhotoUpload"
-                >
-                  <el-image v-if="businessRegPhotoUrl" :src="businessRegPhotoUrl" class="business-reg-avatar"></el-image>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>
-
               <el-form-item label="License" prop="license">
                 <el-upload
-                    class="business-reg-uploader"
+                    class="license-uploader"
                     :action="uploadActionUrl"
                     :headers="uploadHeaders"
                     :data="uploadData"
@@ -205,11 +171,25 @@
                     :on-success="handleLicensePhotoSuccess"
                     :before-upload="beforeLicensePhotoUpload"
                 >
-                  <el-image v-if="licensePhotoUrl" :src="licensePhotoUrl" class="business-reg-avatar"></el-image>
+                  <el-image v-if="licensePhotoUrl" :src="licensePhotoUrl" class="license-avatar"></el-image>
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
-
+              <el-form-item label="Logo Photo" prop="logo">
+                <el-upload
+                    class="profile-uploader"
+                    :action="uploadActionUrl"
+                    :headers="uploadHeaders"
+                    :data="uploadData"
+                    :show-file-list="false"
+                    name="file[]"
+                    :on-success="handleLogoPhotoSuccess"
+                    :before-upload="beforeLogoPhotoUpload"
+                >
+                  <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="profile-avatar"></el-image>
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
 
               <el-form-item label="Intro Video" prop="video_url">
                 <el-upload
@@ -227,110 +207,18 @@
                 </el-upload>
               </el-form-item>
 
-              <el-form-item label="Technology Available" prop="technology_available">
-                <el-input v-model="basicForm.technology_available" type="textarea"
-                          placeholder="Computers, Smart screens, 3D Printing, etc..."></el-input>
-              </el-form-item>
-              <el-form-item label="Field Trips">
-                <el-switch v-model="basicForm.felds_trips"></el-switch>
-              </el-form-item>
-
-              <el-form-item label="Tuition (One Year)">
-                <el-input v-model="basicForm.tuition" type="number" placeholder="Tuition/Year"></el-input>
-              </el-form-item>
-
-
-              <el-form-item label="Curriculum" prop="curriculum">
-                <el-input v-model="basicForm.staff_student_ratio" type="textarea"
-                          placeholder="Oxford Reading Tree, McGraw Hill,etc..."></el-input>
-              </el-form-item>
-
-              <el-form-item label="Average class size">
-                <el-input v-model="basicForm.class_size" type="number" placeholder="25 Students"></el-input>
-              </el-form-item>
-
-              <el-form-item label="Our Students Age">
-                <div class="object-tags-container">
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectStudentAgeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in editStudentAgeList" :key="index"
-                         @click="selectStudentAge(item,1)">
-                      {{ item.object_en }}
-                    </div>
-                  </div>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="Subjects We Teach">
-                <div class="object-tags-container">
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectSubjectList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in editSubjectList" :key="index"
-                         @click="selectSubject(item,1)">
-                      {{ item.object_en }}
-                    </div>
-                  </div>
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectSubjectList.findIndex((element)=>element==item) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in ownSubjectList" :key="index"
-                         @click="selectSubject(item,2)">
-                      {{ item.object_name }}
-                    </div>
-                  </div>
-                  <div class="object-tags">
-                    <div class="object-tags-item" v-if="addSubjectStatus==false"
-                         @click="addSubjectStatus=true">Add+
-                    </div>
-                  </div>
-
-                  <div class="object-tags-add">
-                    <div class="object-tags-item-add" v-if="addSubjectStatus">
-                      <el-input type="text" v-model="ownSubjectValue"
-                                placeholder="Add subject"></el-input>
-                      <div class="object-tags-item-btn-container">
-                        <el-button class="object-tags-item-btn" type="primary"
-                                   v-if="ownSubjectValue.length>0"
-                                   @click="addOwnSubject">Confirm
-                        </el-button>
-                        <el-button class="object-tags-item-btn" type="primary"
-                                   v-if="ownSubjectValue.length==0"
-                                   @click="addSubjectStatus=false">Cancel
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </el-form-item>
-
-              <el-form-item label="School Facilities">
-                <div class="object-tags-container">
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectSchoolFacilitesList.findIndex((element)=>element.id==item.id) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in editSchoolFacilitesList" :key="index"
-                         @click="selectSchoolFacilites(item,1)">
-                      {{ item.object_en }}
-                    </div>
-                  </div>
-                </div>
-              </el-form-item>
-
             </el-form>
-
           </div>
 
           <div class="submit-btn-container">
             <el-button type="primary"
-                       :loading="submitLoadingValue"
                        class="submit-btn"
-                       @click="submitForm('basicForm')">
+                       :loading="submitLoadingValue" @click="submitForm('basicForm')">
               Submit
             </el-button>
           </div>
+
+
         </el-col>
       </el-row>
     </div>
@@ -338,28 +226,25 @@
 </template>
 
 <script>
-import profileTitle from "@/components/profileTitle"
-import meSideMenu from "@/components/meSideMenu";
-import {
-  USER_OBJECT_LIST,
-  ZOHO_SYNC,
-  SWITCH_IDENTITY_V2,
-  GET_COUNTRY_LIST,
-  ALL_AREAS,
-  SUB_CATE_LIST,
-  USER_INFO_BY_TOKEN_V2,
-  SCHOOL_COMPANY_EDIT_V2, ADD_PROFILE_V2
-} from '@/api/api'
+
 import {phoneCodeData} from "@/utils/phoneCode";
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import meSideMenu from "@/components/meSideMenu";
+import profileTitle from "@/components/profileTitle";
+import {
+  ALL_AREAS,
+  ZOHO_SYNC,
+  SUB_CATE_LIST,
+  GET_COUNTRY_LIST, RECRUITER_COMPANY_EDIT_V2, SWITCH_IDENTITY_V2, USER_INFO_BY_TOKEN_V2
+} from '@/api/api'
 import {countriesData} from "@/utils/data";
 import {decode} from "js-base64";
 
 export default {
-  name: "school",
+  name: "recruiter",
   components: {
     meSideMenu,
     profileTitle
@@ -378,11 +263,11 @@ export default {
       },
       logoPhotoUrl:'',
       licensePhotoUrl:'',
-      businessRegPhotoUrl:'',
       introVideoUrl:'',
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       basicForm: {
+        company_contact_id:'',
         company_name:'',
         license:'',
         logo:'',
@@ -390,24 +275,19 @@ export default {
         desc:'',
         pid:'',
         work_phone:'',
-        country:'',
-        province:'',
-        city:'',
-        district:'',
+        country_info:'',
+        country: '',
+        province: '',
+        city: '',
+        district: '',
         address:'',
         lat:'',
         lng:'',
-        felds_trips: 0,
-        work_email:'',
         country_code:'+86',
         video_url:'',
         year_founded:'',
-        tuition: '',
-        business_reg_img:'',
-        technology_available: '',
-        website:'',
-        staff_student_ratio:'',
-        class_size:''
+        work_email:'',
+
       },
       basicRules: {
         company_name: [
@@ -423,7 +303,14 @@ export default {
             message: 'Please input ',
             trigger: 'blur',
           },
-        ]
+        ],
+        category_id: [
+          {
+            required: true,
+            message: "Edu-Business Categories (Choose 1) ",
+            trigger: 'change',
+          },
+        ],
 
 
       },
@@ -448,50 +335,21 @@ export default {
       subCateOptions: [],
       selectBusinessTypeList: [],
       selectEducatorTypeList: [],
-      sLocationType:1,//1 国外 2国内
-
-      subjectList: [],
-      studentAgeList: [],
-
-      editStudentAgeList: [],
-      addStudentAgeStatus: false,
-      ownStudentAgeValue: '',
-      ownStudentAgeList: [],
-      selectStudentAgeList: [],
-      selectStudentAgeArr: [],
-
-      editSubjectList: [],
-      addSubjectStatus: false,
-      ownSubjectValue: '',
-      ownSubjectList: [],
-      selectSubjectList: [],
-      selectSubjectArr: [],
-
-      editSchoolFacilitesList: [],
-      addSchoolFacilitesStatus: false,
-      ownSchoolFacilitesValue: '',
-      ownSchoolFacilitesList: [],
-      selectSchoolFacilitesList: [],
-      selectSchoolFacilitesArr: [],
       businessInfo: {},
+      sLocationType:1, //1 国外 2国内
 
       i:0,
       id:0,
       cid:0,
       action:''
-
     }
   },
   mounted() {
+    // console.log(countriesData)
     this.getAllCountry(0)
     this.getAllAreas(0)
     this.getSubCateList()
     this.initMap()
-
-    this.turnSearchTags(73);
-    this.turnSearchTags(1);
-    this.turnSearchTags(147);
-
     let str = this.$route.query.s;
 
     if(str){
@@ -514,8 +372,6 @@ export default {
 
     }
 
-
-
   },
   methods: {
     handleLicensePhotoSuccess(res, file) {
@@ -525,23 +381,6 @@ export default {
       this.basicForm.license = res.data[0]['file_url']
     },
     beforeLicensePhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
-      const isLt2M = file.size / 1024 / 1024 < 20
-
-      if (!isLt2M) {
-        this.$message.error('Avatar picture size can not exceed 20MB')
-      }
-      return isLt2M
-    },
-    handleBusinessRegPhotoSuccess(res, file) {
-      // console.log(res.data[0]['file_url'])
-      this.$loading().close()
-      this.businessRegPhotoUrl = URL.createObjectURL(file.raw)
-      this.basicForm.business_reg_img = res.data[0]['file_url']
-    },
-    beforeBusinessRegPhotoUpload(file) {
       this.$loading({
         text:'Uploading...'
       })
@@ -642,7 +481,7 @@ export default {
     },
     changeIdentity(companyId,companyContactId,language){
       let params = {
-        identity:3,
+        identity:2,
         company_id:companyId,
         company_contact_id:companyContactId,
         language:language
@@ -650,10 +489,10 @@ export default {
       SWITCH_IDENTITY_V2(params).then(res=>{
         console.log(res)
         if(res.code == 200){
-          localStorage.setItem('identity',3)
+          localStorage.setItem('identity',2)
           localStorage.setItem('companyId',companyId)
-          this.$store.commit('identity',3)
-          this.$store.commit('allIdentityChanged',true )
+          this.$store.commit('identity',2)
+
           this.$router.push('/business/profile')
         }
       }).catch(err=>{
@@ -697,42 +536,31 @@ export default {
             this.basicForm.id = this.cid;
           }
           let params = Object.assign({}, this.basicForm);
-          SCHOOL_COMPANY_EDIT_V2(params).then(res => {
+          RECRUITER_COMPANY_EDIT_V2(params).then(res => {
             console.log(res)
             if (res.code == 200) {
 
-              if(this.selectSchoolFacilitesList.length>0){
-                this.schoolFacilitesConfirm(res.message.school_company_id,companyContactId)
-              }
-
-              if(this.selectStudentAgeList.length>0){
-                this.studentAgeConfirm(res.message.school_company_id,companyContactId)
-              }
-
-              if(this.selectSubjectList.length>0){
-                this.subjectConfirm(res.message.school_company_id,companyContactId)
-              }
-
+              this.submitLoadingValue = false;
               this.$store.commit('username',this.basicForm.company_name)
               this.$store.commit('userAvatar',this.basicForm.logo)
               this.$store.commit('allIdentityChanged',true )
-              this.submitLoadingValue = false;
 
               if(action == 'edit'){
                 this.$router.push('/business/profile')
               }else{
-                this.changeIdentity(res.message.school_company_id,companyContactId,2)
+                this.changeIdentity(res.message.recruiting_company_id,companyContactId,2)
               }
-
               // this.submitEduBusinessCompanyForm()
 
             }
           }).catch(err => {
             console.log(err)
+            this.submitLoadingValue = false;
             this.$message.error(err.msg)
           })
 
         } else {
+          this.submitLoadingValue = false;
           console.log('error submit!!')
           return false
         }
@@ -928,105 +756,78 @@ export default {
       }
 
     },
-    async getBasicInfo() {
+    getBasicInfo() {
 
       let params = {
-        identity:3
+        identity:2
       }
-      await USER_INFO_BY_TOKEN_V2(params).then(res => {
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
           // let userContact = res.message.user_contact;
           // let companyContact = res.message.user_contact.company_contact;
-          let schoolInfo = res.message.user_contact.company_contact.company;
+          let recruiterInfo = res.message.user_contact.company_contact.company;
 
-          if (schoolInfo.company_name) {
-            this.basicForm.company_name = schoolInfo.company_name;
+          if (recruiterInfo.company_name) {
+            this.basicForm.company_name = recruiterInfo.company_name;
           }
-          if (schoolInfo.desc) {
-            this.basicForm.desc = schoolInfo.desc;
+          if (recruiterInfo.desc) {
+            this.basicForm.desc = recruiterInfo.desc;
           }
-          if (schoolInfo.work_phone) {
-            this.basicForm.work_phone = schoolInfo.work_phone;
+          if (recruiterInfo.work_phone) {
+            this.basicForm.work_phone = recruiterInfo.work_phone;
           }
-
-          if (schoolInfo.technology_available) {
-            this.basicForm.technology_available = schoolInfo.technology_available;
+          if (recruiterInfo.work_email) {
+            this.basicForm.work_email = recruiterInfo.work_email;
           }
-          if (schoolInfo.felds_trips) {
-            this.basicForm.felds_trips = schoolInfo.felds_trips;
+          if (recruiterInfo.lat) {
+            this.basicForm.lat = recruiterInfo.lat;
           }
-
-          if (schoolInfo.work_email) {
-            this.basicForm.work_email = schoolInfo.work_email;
+          if (recruiterInfo.lng) {
+            this.basicForm.lng = recruiterInfo.lng;
           }
-          if (schoolInfo.staff_student_ratio) {
-            this.basicForm.staff_student_ratio = schoolInfo.staff_student_ratio;
+          if (recruiterInfo.address) {
+            this.basicForm.address = recruiterInfo.address;
           }
-
-          if (schoolInfo.class_size) {
-            this.basicForm.class_size = schoolInfo.class_size;
+          if (recruiterInfo.country_code) {
+            this.basicForm.country_code = recruiterInfo.country_code;
           }
-
-          if (schoolInfo.lat) {
-            this.basicForm.lat = schoolInfo.lat;
+          if (recruiterInfo.video_url) {
+            this.introVideoUrl = recruiterInfo.video_url;
+            this.basicForm.video_url = recruiterInfo.video_url;
           }
-          if (schoolInfo.lng) {
-            this.basicForm.lng = schoolInfo.lng;
+          if (recruiterInfo.logo) {
+            this.logoPhotoUrl = recruiterInfo.logo;
+            this.basicForm.logo = recruiterInfo.logo;
           }
-          if (schoolInfo.address) {
-            this.basicForm.address = schoolInfo.address;
+          if (recruiterInfo.license) {
+            this.licensePhotoUrl = recruiterInfo.license;
+            this.basicForm.license = recruiterInfo.license;
           }
-          if (schoolInfo.country_code) {
-            this.basicForm.country_code = schoolInfo.country_code;
-          }
-          if (schoolInfo.video_url) {
-            this.introVideoUrl = schoolInfo.video_url;
-            this.basicForm.video_url = schoolInfo.video_url;
-          }
-          if (schoolInfo.logo) {
-            this.logoPhotoUrl = schoolInfo.logo;
-            this.basicForm.logo = schoolInfo.logo;
+          if (recruiterInfo.year_founded) {
+            this.basicForm.year_founded = recruiterInfo.year_founded.toString();
           }
 
-          if (schoolInfo.business_reg_img) {
-            this.businessRegPhotoUrl = schoolInfo.business_reg_img;
-            this.basicForm.business_reg_img = schoolInfo.business_reg_img;
+          if(recruiterInfo.country_info){
+            this.basicForm.country_info = recruiterInfo.country_info;
           }
 
-          if (schoolInfo.license) {
-            this.licensePhotoUrl = schoolInfo.license;
-            this.basicForm.license = schoolInfo.license;
+          if(recruiterInfo.country){
+            this.basicForm.country = recruiterInfo.country;
           }
-          if (schoolInfo.year_founded) {
-            this.basicForm.year_founded = schoolInfo.year_founded.toString();
+          if(recruiterInfo.province){
+            this.basicForm.province = recruiterInfo.province;
           }
-          if (schoolInfo.tuition) {
-            this.basicForm.tuition = schoolInfo.tuition;
+          if(recruiterInfo.city){
+            this.basicForm.city = recruiterInfo.city;
           }
-          if(schoolInfo.country_info){
-            this.basicForm.country_info = schoolInfo.country_info;
-          }
-
-          if(schoolInfo.country){
-            this.basicForm.country = schoolInfo.country;
-          }
-          if(schoolInfo.province){
-            this.basicForm.province = schoolInfo.province;
-          }
-          if(schoolInfo.city){
-            this.basicForm.city = schoolInfo.city;
-          }
-          if(schoolInfo.district){
-            this.basicForm.district = schoolInfo.district;
-          }
-          if(schoolInfo.website){
-            this.basicForm.website = schoolInfo.website;
+          if(recruiterInfo.district){
+            this.basicForm.district = recruiterInfo.district;
           }
 
-          let typeId = schoolInfo.category_id;
-          // let typeNameEn = schoolInfo.business_type_name
-          // let typeName = schoolInfo.business_type_name_cn
+          let typeId = recruiterInfo.category_id;
+          // let typeNameEn = recruiterInfo.business_type_name
+          // let typeName = recruiterInfo.business_type_name_cn
 
           let typeObj = {
             id:typeId
@@ -1034,238 +835,12 @@ export default {
 
           this.selectBusinessTypeList.push(typeObj)
 
-          if (schoolInfo.Student_Age) {
-            let studentAgeArr = schoolInfo.Student_Age
-            studentAgeArr.forEach((item,i)=>{
-              studentAgeArr[i].id = item.object_id
-              studentAgeArr[i].pid = item.object_pid
-            })
-            this.selectStudentAgeList = studentAgeArr;
-          }
-
-          if (schoolInfo.subject) {
-            let subjectArr = schoolInfo.subject;
-            subjectArr.forEach((item,i)=>{
-              subjectArr[i].id = item.object_id
-              subjectArr[i].pid = item.object_pid
-            })
-            this.selectSubjectList = subjectArr;
-          }
-
-          if (schoolInfo.facilities) {
-            let facArr = schoolInfo.facilities
-            facArr.forEach((item,i)=>{
-              facArr[i].id = item.object_id
-              facArr[i].pid = item.object_pid
-            })
-            this.selectSchoolFacilitesList = facArr;
-
-          }
-
         }
       }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
-    },
-    async turnSearchTags(type) {
-      // student age
-      let data = {
-        token: localStorage.getItem('token'),
-        pid: type
-      }
-      this.selectStudentAgeList = [];
-      this.ownStudentAgeList = [];
-
-      await USER_OBJECT_LIST(data).then(res => {
-        if (type == 73) {
-          this.editStudentAgeList = res.message;
-        }
-
-        if (type == 1) {
-          this.editSubjectList = res.message;
-        }
-
-        if (type == 147) {
-          this.editSchoolFacilitesList = res.message;
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    selectStudentAge(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectStudentAgeList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectStudentAgeList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        // if (this.selectStudentAgeList.length > 4) {
-        // 	return false;
-        // }
-        this.selectStudentAgeList.push(value);
-
-      } else {
-        this.selectStudentAgeList.splice(index, 1);
-      }
-      // console.log(this.selectStudentAgeList)
-    },
-    studentAgeConfirm(companyId,companyContactId) {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectStudentAgeList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        company_contact_id:companyContactId,
-        company_id:companyId,
-        object_pid: 73,
-        object_id: objectArr,
-        expand: expand
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('StudentAge--submit--' + res.data);
-          this.canEditStudentAge = false;
-          // this.getBasicInfo();
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    addOwnSubject() {
-      this.addSubjectStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownSubjectValue,
-        object_pid: 1
-      }
-      let index = this.selectSubjectList.findIndex((element) => element === obj);
-      if (index == -1) {
-        // if (this.selectSubjectList.length > 4) {
-        // 	return false;
-        // }
-        this.selectSubjectList.push(obj);
-        this.ownSubjectList.push(obj);
-        this.ownSubjectValue = '';
-
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-
-    },
-    selectSubject(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectSubjectList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectSubjectList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        // if (this.selectSubjectList.length > 4) {
-        // 	return false;
-        // }
-        this.selectSubjectList.push(value);
-
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-      console.log(this.selectSubjectList)
-    },
-    subjectConfirm(companyId,companyContactId) {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectSubjectList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        company_contact_id:companyContactId,
-        company_id:companyId,
-        object_pid: 1,
-        object_id: objectArr,
-        expand: expand
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('subject--submit--' + res.data);
-          this.canEditSubject = false;
-          // this.getBasicInfo();
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    selectSchoolFacilites(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectSchoolFacilitesList.findIndex((element) => element.id === value.id);
-      }
-
-      if (index == -1) {
-        this.selectSchoolFacilitesList.push(value);
-      } else {
-        this.selectSchoolFacilitesList.splice(index, 1);
-      }
-
-    },
-    schoolFacilitesConfirm(companyId,companyContactId) {
-      let expand = [];
-      let objectArr = [];
-      this.selectSchoolFacilitesList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        company_contact_id:companyContactId,
-        company_id: companyId,
-        object_pid: 147,
-        object_id: objectArr,
-        expand: expand
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('SchoolFacilites--submit--' + res.data);
-          // this.getBasicInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
     },
     async submitEduBusinessCompanyForm() {
 
@@ -1275,22 +850,22 @@ export default {
       let zohoData = [
         {'zf_referrer_name': ''},
         {'zf_redirect_url': ''},
-        {'z_gad': ''},
-        {'SingleLine': params.company_name  // Education Business Name
+        {'zc_gad': ''},
+        {'SingleLine': params.business_name  // Education Business Name
         },
         {'Dropdown2': params.business_type_name  //Education Business Category
         },
         {'Dropdown': 'Education Business'  //Company Type
         },
-        {'Website': ''  //Education Business Website
+        {'Website': params.website  //Education Business Website
         },
-        {'SingleLine1': ''  // Education Business Contact
+        {'SingleLine1': params.last_name  // Education Business Contact
         },
         {'Number2': ''  //  Company Number
         },
         {'SingleLine5': userId  //UserID
         },
-        {'PhoneNumber_countrycode': ''  //Education Business Phone
+        {'PhoneNumber_countrycode': params.business_phone  //Education Business Phone
         },
         {'Email': ''  // Education Business Email
         },
@@ -1316,7 +891,7 @@ export default {
         },
         {'Number3': ''  //  Number of Branches
         },
-        {'Number4': params.class_size  //    Number of Students
+        {'Number4': ''  //    Number of Students
         },
         {'MultipleChoice': ''  //    Students Ages
         },
@@ -1330,6 +905,7 @@ export default {
         },
         {'Website3': ''   //Header Image Link
         }
+
       ]
 
       let zohoParams = {
@@ -1413,69 +989,6 @@ export default {
   color: #FFFFFF;
 }
 
-.object-show-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.object-show-item {
-  background-color: rgba(0, 179, 210, 0.1);
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin: 10px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.object-tags-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.object-tags {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-
-}
-
-.object-tags-item {
-  background-color: rgba(0, 179, 210, 0.1);
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin: 10px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.object-tags-add {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.object-tags-item-add {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-
-.tags-active {
-  background-color: #00CE47;
-  color: #FFFFFF;
-}
-
-
 .basic-breadcrumb-container {
   padding: 10px;
 }
@@ -1492,15 +1005,11 @@ export default {
   height: 100%;
 
 }
-.business-reg-uploader{
-  border: 1px dashed #EEEEEE;
-  text-align: center;
-  padding:8px;
+.license-uploader{
+  padding:10px;
+  border: 1px dashed #d9d9d9;
   border-radius:10px;
-}
-
-.business-reg-uploader:hover {
-  border-color: #0AA0A8;
+  text-align:center;
 }
 
 /deep/ .profile-uploader .el-upload {
@@ -1530,11 +1039,11 @@ export default {
   display: block;
 }
 
-.intro-video-uploader {
-  border: 1px dashed #d9d9d9;
-  padding:8px;
+.intro-video-uploader{
   text-align: center;
-  border-radius:10px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 10px;
+  padding:10px;
 }
 
 .intro-video-uploader:hover {
@@ -1551,10 +1060,11 @@ export default {
 }
 
 .intro-video-avatar {
-  width: 378px;
+  width: 100%;
   height: 178px;
   display: block;
 }
+
 
 .contact-phone-container{
   display: flex;
@@ -1579,6 +1089,5 @@ export default {
 .submit-btn{
   width:40%;
 }
-
 
 </style>

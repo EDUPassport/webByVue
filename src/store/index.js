@@ -10,7 +10,8 @@ const store = createStore({
             identity: localStorage.getItem('identity'),
             currentUser:currentUserStr ?  JSON.parse(currentUserStr) : '',
             nowChatUserInfo:{},
-            showChatStatus:false
+            showChatStatus:false,
+            allIdentityChanged:false
         }
     },
     mutations: {
@@ -32,6 +33,9 @@ const store = createStore({
         },
         showChatStatus(state,data){
             state.showChatStatus = data
+        },
+        allIdentityChanged(state,data){
+            state.allIdentityChanged = data
         }
     },
     actions:{

@@ -45,13 +45,17 @@
                 </el-date-picker>
               </el-form-item>
 
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('basicForm')">
-                  Submit
-                </el-button>
-                <el-button @click="resetForm('basicForm')">Reset</el-button>
-              </el-form-item>
             </el-form>
+
+          </div>
+
+          <div class="submit-btn-container">
+            <el-button type="primary"
+                       class="submit-btn"
+                       :loading="submitLoadingValue"
+                       @click="submitForm('basicForm')">
+              Submit
+            </el-button>
           </div>
         </el-col>
       </el-row>
@@ -61,7 +65,7 @@
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
-import { ADD_USER_EDUCATION,GET_BASIC_INFO} from '@/api/api'
+import {ADD_USER_EDUCATION_V2, USER_INFO_BY_TOKEN_V2} from '@/api/api'
 
 export default {
   name: "education",
@@ -70,6 +74,7 @@ export default {
   },
   data() {
     return {
+      submitLoadingValue:false,
       basicForm: {
         school_name: '',
         degree: '',
@@ -116,6 +121,7 @@ export default {
   },
   methods: {
     submitForm(formName) {
+      this.submitLoadingValue = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
@@ -124,16 +130,19 @@ export default {
           this.basicForm.end_time = Math.floor(dateArr[1] / 1000)
           console.log(this.basicForm)
           let params = Object.assign({},this.basicForm)
-          ADD_USER_EDUCATION(params).then(res=>{
+          ADD_USER_EDUCATION_V2(params).then(res=>{
             console.log(res)
             if(res.code == 200){
               this.$router.push('/educator/profile')
+              this.submitLoadingValue = false;
             }
           }).catch(err=>{
             console.log(err)
+            this.submitLoadingValue = false;
             this.$message.error(err.msg)
           })
         } else {
+          this.submitLoadingValue = false;
           console.log('error submit!!')
           return false
         }
@@ -143,26 +152,28 @@ export default {
       this.$refs[formName].resetFields()
     },
     getBasicInfo() {
-      let uid = localStorage.getItem('uid')
+
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
+        identity:1
       }
-      GET_BASIC_INFO(params).then(res => {
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
         // console.log(res)
         if(res.code == 200){
-          let result = res.message.educator_info.education_info;
-          let educationId = this.$route.query.educationId
-          let education = result.filter(item => item.id == educationId);
-          let educationInfo = education[0];
+          let educatorContact = res.message.user_contact.educator_contact
 
-          this.basicForm = Object.assign({},educationInfo)
-          let startTime = educationInfo.start_time
-          let endTime = educationInfo.end_time
-          this.basicForm.date = [startTime*1000,endTime*1000]
-          this.basicForm.token = localStorage.getItem('token')
-          this.basicForm.education_id = educationId
-          // console.log(this.basicForm)
+
+          if(educatorContact){
+            let result = educatorContact.education_info  ;
+            let educationId = this.$route.query.educationId
+            let education = result.filter(item => item.id == educationId);
+            let educationInfo = education[0];
+            this.basicForm = Object.assign({},educationInfo)
+            let startTime = educationInfo.start_time
+            let endTime = educationInfo.end_time
+            this.basicForm.date = [startTime*1000,endTime*1000]
+            this.basicForm.token = localStorage.getItem('token')
+            this.basicForm.education_id = educationId
+          }
 
         }
       }).catch(err=>{
@@ -239,6 +250,14 @@ export default {
 .tag-active {
   background-color: #00b3d2;
   color: #FFFFFF;
+}
+
+.submit-btn-container{
+  text-align: center;
+  margin-top:40px;
+}
+.submit-btn{
+  width:40%;
 }
 
 </style>

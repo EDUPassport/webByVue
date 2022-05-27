@@ -734,6 +734,13 @@ export default {
       forgotDialogVisible
     }
   },
+  beforeRouteUpdate(to){
+    // console.log(to)
+    if(to.query.email){
+      this.loginForm.email = to.query.email
+    }
+
+  },
   mounted() {
 
     let email = this.$route.query.email
@@ -743,8 +750,6 @@ export default {
   },
   created() {
     this.showValue = this.showType
-    // let linkedinCode = this.$route.query.code;
-    // console.log(linkedinCode)
   },
   methods: {
     changeType(e){
@@ -905,6 +910,8 @@ export default {
                 localStorage.setItem('name', firstName + ' ' + lastName)
                 localStorage.setItem('first_name', firstName)
                 localStorage.setItem('last_name', lastName)
+
+                this.$store.commit('identity',resMessage.identity)
 
                 let currentUser = {
                   uuid: resMessage.id,
@@ -1290,7 +1297,7 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action==='confirm'){
-                    self.$router.push({path: '/login', query: {type: 1}})
+                    self.$router.push({path: '/login', query: {type: 1,email:self.registerForm.email}})
                     self.showValue = 1
                   }
                 }
@@ -1352,7 +1359,7 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action==='confirm'){
-                    self.$router.push({path: '/login', query: {type: 1}})
+                    self.$router.push({path: '/login', query: {type: 1,phone:self.registerPhoneForm.phone}})
                     self.showValue = 1
                   }
                 }

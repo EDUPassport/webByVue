@@ -18,10 +18,22 @@
       <div class="l-item">
         <router-link to="/favorites" exact>My Favorites</router-link>
       </div>
-      <div class="l-item">
-        <router-link v-if="identity == 1" to="/educator/profile" exact>My Account & Profile</router-link>
-        <router-link v-if="identity == 2" to="/business/profile" exact>My Account & Profile</router-link>
-        <router-link v-if="identity == 3" to="/vendor/profile" exact>My Account & Profile</router-link>
+      <div class="l-item" >
+        <router-link
+            :class="selectedKeys === '/educator/profile' ? 'router-link-exact-active' : '' "
+            v-if="identity == 1" to="/educator/profile" exact>
+          My Account & Profile
+        </router-link>
+        <router-link
+            :class="selectedKeys === '/business/profile' ? 'router-link-exact-active' : '' "
+            v-if="identity == 2 || identity == 3 || identity == 4" to="/business/profile" exact>
+          My Account & Profile
+        </router-link>
+        <router-link
+            :class="selectedKeys === '/vendor/profile' ? 'router-link-exact-active' : '' "
+            v-if="identity == 5" to="/vendor/profile" exact>
+          My Account & Profile
+        </router-link>
       </div>
       <div class="l-item">
         <router-link to="/me/ads" exact>My Ads</router-link>
@@ -64,6 +76,9 @@ import {randomString} from "@/utils";
 import {GET_BASIC_INFO} from  '@/api/api'
 import defaultAvatar from '@/assets/default/avatar.png'
 import {useStore} from "vuex";
+import {useRoute} from "vue-router";
+import {ref} from 'vue'
+
 export default {
   name: "meSideMenu",
   setup(){
@@ -71,9 +86,20 @@ export default {
 
     const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
     const setShowChatStatus = () => store.commit('showChatStatus', true)
+
+    const currentRoute = useRoute()
+
+
+    const activeMenuStr = currentRoute.meta.activeMenu;
+
+    const selectedKeys = ref(activeMenuStr ? activeMenuStr : currentRoute.path)
+
+
+
     return {
       setNowChatUserInfo,
-      setShowChatStatus
+      setShowChatStatus,
+      selectedKeys
     }
   },
   data(){
@@ -105,7 +131,8 @@ export default {
 
   },
   mounted() {
-    // console.log(this.identity)
+    console.log(this.selectedKeys)
+    console.log(this.identity)
     // this.getBasicInfo()
   },
   methods:{
@@ -151,7 +178,8 @@ export default {
 
 <style scoped>
 .profile-l-container{
-  min-height: 800px;
+  //min-height: 800px;
+  min-height: 100vh;
   background-color: #0A1E76;
   border-radius: 10px;
   padding-bottom: 20px;
@@ -189,6 +217,7 @@ export default {
   padding-left: 20px;
   color:#FFFFFF;
   cursor:pointer;
+  font-weight: bold;
 }
 .l-item-msg-active{
   background-color: #0C1954;
@@ -203,6 +232,7 @@ export default {
 .l-item a{
   /*width: 100%;*/
   font-size: 14px;
+  font-weight: bold;
   line-height: 40px;
   text-decoration: none;
   color: #ffffff;
