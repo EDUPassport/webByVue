@@ -32,7 +32,7 @@ const routes = [
                 },
             },
             {
-                path: '/consulting/foodEducation',
+                path: '/food4edu',
                 name: 'consultingFoodEducation',
                 component: () => import('@/views/consulting/foodEducation'),
                 meta: {
