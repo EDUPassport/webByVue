@@ -1308,7 +1308,7 @@ export default {
           }
           if (educatorContact.images) {
             console.log(educatorContact.images)
-            this.userImagesList = educatorContact.images;
+
             let userImages = educatorContact.images
             if (userImages.length>0) {
               let userImagesArr = []

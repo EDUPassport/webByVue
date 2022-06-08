@@ -60,8 +60,8 @@
              <span v-if="identity == 4">Other</span>
              <span v-if="identity == 5">Vendor</span>
 
-             <el-button type="primary"  class="switch-profile-btn" @click="changeSwitchProfile" round>
-               Switch Profile</el-button>
+<!--             <el-button type="primary"  class="switch-profile-btn" @click="changeSwitchProfile" round>-->
+<!--               Switch Profile</el-button>-->
            </div>
 
           </div>

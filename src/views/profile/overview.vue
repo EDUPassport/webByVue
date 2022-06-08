@@ -181,7 +181,7 @@ export default {
       basicUserInfo: {},
 
       userContact:{},
-      companyContact:{},
+
       companyInfo:{},
 
       identity:this.$route.query.identity,
@@ -358,7 +358,7 @@ export default {
         console.log(res)
         if(res.code == 200){
           let userContact = res.message.user_contact;
-          let companyContact = {};
+
           let company = {};
           let educatorContact = {};
 
@@ -380,16 +380,14 @@ export default {
           }
 
           if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
-            companyContact = res.message.user_contact.company_contact;
-            company = res.message.user_contact.company_contact.company ;
-            if(companyContact){
-              this.companyContact = companyContact
-            }
+
+            company = res.message.user_contact.company ;
+
             if(company){
               this.companyInfo = company
               this.accountInfoLevel = company.vip_level
               this.accountInfoVipDueTime = company.vip_due_time
-              this.accountInfoCategoryStr = company.category_id+''
+              this.accountInfoCategoryStr = company.category_name_en
             }
 
           }
@@ -413,7 +411,6 @@ export default {
         console.log(res)
         if(res.code == 200){
           let userContact = res.message.user_contact;
-          let companyContact = {};
           let company = {};
           let educatorContact = {};
 
@@ -431,11 +428,9 @@ export default {
           }
 
           if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
-            companyContact = res.message.user_contact.company_contact;
-            company = res.message.user_contact.company_contact.company ;
-            if(companyContact){
-              this.companyContact = companyContact
-            }
+
+            company = res.message.user_contact.company ;
+
             if(company){
               this.companyInfo = company
             }

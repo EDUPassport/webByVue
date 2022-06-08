@@ -194,8 +194,6 @@ import meSideMenu from "@/components/meSideMenu";
 import profileTitle from "@/components/profileTitle"
 
 import {
-  CHANGE_IDENTITY_LANGUAGE,
-  UPDATE_EDUCATOR_PROFILE,
   ZOHO_SYNC,
   GET_COUNTRY_LIST, ALL_AREAS, USER_CONTACT_EDIT_V2, USER_INFO_BY_TOKEN_V2, USER_INFO_VISITOR_V2
 } from '@/api/api';
@@ -289,15 +287,8 @@ export default {
           message: "Choose your avatar",
           trigger: 'change',
         },
-      ],
-      birthday: [
-        {
-          type: 'date',
-          required: true,
-          message: 'Please pick a date',
-          trigger: 'change',
-        },
       ]
+
     })
 
     const birthdayDisabledDate = (date)=>{
@@ -405,7 +396,7 @@ export default {
     if(str){
       let strObj = JSON.parse(decode(str))
 
-      console.log(strObj)
+      // console.log(strObj)
       this.i = strObj.i;
       this.action = strObj.action;
 
@@ -500,7 +491,7 @@ export default {
       }
 
       USER_INFO_BY_TOKEN_V2(params).then(res => {
-        console.log(res)
+        // console.log(res)
         if(res.code == 200){
           let userContact = res.message.user_contact;
 
@@ -570,15 +561,7 @@ export default {
       })
 
     },
-    updateEduProfile(){
-      let params = {
-        token:localStorage.getItem('token')
-      }
-      UPDATE_EDUCATOR_PROFILE(params).then(res=>{
-        console.log(res)
-      })
 
-    },
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
       this.$loading().close()
@@ -681,29 +664,6 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
-    },
-    changeIdentity(identity) {
-      let params = {
-        token: localStorage.getItem('token'),
-        identity: identity
-      }
-
-      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          console.log('success')
-          localStorage.setItem('identity',identity)
-          this.setIdentity(identity)
-          // this.updateEduProfile()
-          this.submitLoadingValue=false
-          this.$router.push('/home')
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.submitLoadingValue=false
-        this.$message.error(err.msg)
-      })
-
     },
     getAllCountry(pid){
       let params = {

@@ -47,6 +47,7 @@
                     </el-form-item>
                     <el-form-item label="Password" prop="password">
                       <el-input size="medium" placeholder="Password" type="password"
+                                show-password
                                 v-model="loginForm.password"></el-input>
                     </el-form-item>
                     <div class="remeber-container">
@@ -167,6 +168,7 @@
                           </div>
                         </template>
                         <el-input size="medium" placeholder="Password" type="password"
+                                  show-password
                                   v-model="loginPhonePassForm.password"></el-input>
                       </el-form-item>
 
@@ -278,15 +280,16 @@
                     </el-form-item>
 
                     <el-form-item label="Password" prop="password" required>
-                      <el-input size="medium" type="text" placeholder="Password"
+                      <el-input size="medium" placeholder="Password"
+                                show-password
+                                type="password"
                                 v-model="registerForm.password"
-                                @focus="changeType"
                       ></el-input>
                     </el-form-item>
                     <el-form-item label="Confirm Password" prop="c_password" required>
-                      <el-input size="medium" type="text" placeholder="Confirm"
+                      <el-input size="medium" type="password" placeholder="Confirm"
+                                show-password
                                 v-model="registerForm.c_password"
-                                @focus="changeType"
                       ></el-input>
                     </el-form-item>
                     <div class="identity-container">
@@ -408,15 +411,16 @@
                     </el-form-item>
 
                     <el-form-item label="Password" prop="password" required>
-                      <el-input size="medium" type="text" placeholder="Password"
+                      <el-input size="medium" placeholder="Password"
+                                show-password
+                                type="password"
                                 v-model="registerPhoneForm.password"
-                                @focus="changeType"
                       ></el-input>
                     </el-form-item>
                     <el-form-item label="Confirm Password" prop="c_password" required>
-                      <el-input size="medium" type="text" placeholder="Confirm"
+                      <el-input size="medium" type="password" placeholder="Confirm"
+                                show-password
                                 v-model="registerPhoneForm.c_password"
-                                @focus="changeType"
                       ></el-input>
                     </el-form-item>
                     <div class="identity-container">

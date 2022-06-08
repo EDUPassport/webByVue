@@ -83,7 +83,7 @@
                                         <template v-if="educatorContactData.name">
                                           <el-dropdown-item
                                               class="xll-dropdown-item"
-                                              @click="changeIdentity(educatorContactData.id,educatorContactData.company_contact_id,1,2)">
+                                              @click="changeIdentity(educatorContactData.id,1,2)">
                                               {{educatorContactData.name}}
                                           </el-dropdown-item>
                                         </template>
@@ -91,7 +91,7 @@
                                         <template v-else>
                                           <el-dropdown-item
                                               class="xll-dropdown-item"
-                                              @click="changeIdentity(educatorContactData.id,educatorContactData.company_contact_id,1,2)"
+                                              @click="changeIdentity(educatorContactData.id,1,2)"
                                           >
                                             <div class="xll-add-icon-container" >
                                               <span>Add</span>
@@ -149,7 +149,7 @@
                                               class="xll-dropdown-item"
                                               v-for="(item,i) in recruiterCompanyData"
                                               :key="i"
-                                              @click="changeIdentity(item.id,item.company_contact_id,2,2)">
+                                              @click="changeIdentity(item.id,2,2)">
 
                                             <template v-if="item.company_name">
                                               {{item.company_name}}
@@ -165,7 +165,7 @@
                                               class="xll-dropdown-item"
                                               v-for="(item,i) in schoolCompanyData"
                                               :key="i"
-                                              @click="changeIdentity(item.id,item.company_contact_id,3,2)">
+                                              @click="changeIdentity(item.id,3,2)">
                                             <template v-if="item.company_name">
                                               {{item.company_name}}
                                             </template>
@@ -179,7 +179,7 @@
                                               v-for="(item,i) in otherCompanyData"
                                               :key="i"
                                               class="xll-dropdown-item"
-                                              @click="changeIdentity(item.id,item.company_contact_id,4,2)">
+                                              @click="changeIdentity(item.id,4,2)">
                                             <template v-if="item.company_name">
                                               {{item.company_name}}
                                             </template>
@@ -233,7 +233,7 @@
                                               class="xll-dropdown-item"
                                               v-for="(item,i) in vendorCompanyData"
                                               :key="i"
-                                              @click="changeIdentity(item.id,item.company_contact_id,5,2)">
+                                              @click="changeIdentity(item.id,5,2)">
                                             <template v-if="item.company_name">
                                               {{item.company_name}}
                                             </template>
@@ -477,7 +477,7 @@ export default {
           let recruitingCompany = []
           let schoolCompany = []
           let otherCompany = []
-          let companyContact = res.message.user_contact.company_contact
+
           let educatorContact = res.message.user_contact.educarot_contact
 
           if(educatorContact){
@@ -486,12 +486,12 @@ export default {
           }else{
             this.educatorContactStatus = false;
           }
-          console.log(this.educatorContactStatus)
-          if(companyContact){
-            vendorCompany = companyContact.vendor_company
-            recruitingCompany = companyContact.recruiting_company
-            schoolCompany = companyContact.school_company
-            otherCompany = companyContact.other_company
+
+          if(res.message.user_contact){
+            vendorCompany = res.message.user_contact.vendor_company
+            recruitingCompany = res.message.user_contact.recruiting_company
+            schoolCompany = res.message.user_contact.school_company
+            otherCompany = res.message.user_contact.other_company
           }
 
           if(vendorCompany){
@@ -563,7 +563,6 @@ export default {
         if (res.code == 200) {
 
           let userContact = res.message.user_contact;
-          let companyContact = res.message.user_contact.company_contact;
 
           let companyInfo = {};
           let defaultName = userContact.first_name + ' ' + userContact.last_name
@@ -578,8 +577,8 @@ export default {
 
           if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
 
-            if(companyContact){
-              companyInfo = companyContact.company;
+            if(userContact.company){
+              companyInfo = userContact.company;
               name = companyInfo.company_name ? companyInfo.company_name : defaultName;
               avatar = companyInfo.logo;
             }else{
@@ -657,7 +656,7 @@ export default {
       USER_INFO_BY_TOKEN_V2(params).then(res => {
         let userContact = res.message.user_contact;
         let educatorContact = {};
-        let companyContact = {};
+
         let companyInfo ={};
 
         let isEducator = userContact.is_educator;
@@ -669,7 +668,7 @@ export default {
         if (identity == 1) {
           if (isEducator > 10) {
             educatorContact = res.message.user_contact.educator_contact;
-            this.changeIdentity(educatorContact.id,'',1,2)
+            this.changeIdentity(educatorContact.id,1,2)
             this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
@@ -682,9 +681,10 @@ export default {
         }
         if (identity == 2) {
           if (isRecruiting > 10) {
-            companyContact = res.message.user_contact.company_contact;
-            companyInfo = res.message.user_contact.company_contact.company;
-            this.changeIdentity(companyInfo.id,companyContact.id,2,2)
+
+            companyInfo = res.message.user_contact.company;
+
+            this.changeIdentity(companyInfo.id,2,2)
             this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
@@ -697,9 +697,9 @@ export default {
 
         if (identity == 3) {
           if (isSchool > 10) {
-            companyContact = res.message.user_contact.company_contact;
-            companyInfo = res.message.user_contact.company_contact.company;
-            this.changeIdentity(companyInfo.id,companyContact.id,3,2)
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,3,2)
             this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
@@ -713,9 +713,9 @@ export default {
 
         if (identity == 4) {
           if (isOther > 10) {
-            companyContact = res.message.user_contact.company_contact;
-            companyInfo = res.message.user_contact.company_contact.company;
-            this.changeIdentity(companyInfo.id,companyContact.id,4,2)
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,4,2)
             this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
@@ -729,9 +729,10 @@ export default {
 
         if (identity == 5) {
           if (isVendor > 10) {
-            companyContact = res.message.user_contact.company_contact;
-            companyInfo = res.message.user_contact.company_contact.company;
-            this.changeIdentity(companyInfo.id,companyContact.id,5,2)
+
+            companyInfo = res.message.user_contact.company;
+
+            this.changeIdentity(companyInfo.id,5,2)
             this.$router.push({path: '/overview', query: {identity: 5}})
             this.$loading().close()
           } else {
@@ -847,7 +848,7 @@ export default {
       USER_INFO_VISITOR_V2(params).then(res => {
         let userContact = res.message.user_contact;
         let educatorContact = {};
-        let companyContact = {};
+
         let companyInfo = {};
 
         let isEducator = userContact.is_educator;
@@ -860,7 +861,7 @@ export default {
         if (identity == 1) {
           if (isEducator > 10) {
             educatorContact =  res.message.user_contact.educator_contact;
-            this.changeIdentity(educatorContact.id,'',1,2)
+            this.changeIdentity(educatorContact.id,1,2)
             this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
@@ -875,9 +876,9 @@ export default {
         if (identity == 2) {
 
           if (isRecruiting > 10) {
-            companyContact = res.message.user_contact.company_contact;
-            companyInfo = res.message.user_contact.company_contact.company;
-            this.changeIdentity(companyInfo.id,companyContact.id,2,2)
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,2,2)
             // this.$router.push({path: '/overview', query: {identity: identity}})
             this.$router.push({path: '/profile/contact/user', query: {i: 2}})
             this.$loading().close()
@@ -893,9 +894,9 @@ export default {
         if (identity == 3) {
 
           if (isSchool > 10) {
-            companyContact = res.message.user_contact.company_contact;
-            companyInfo = res.message.user_contact.company_contact.company;
-            this.changeIdentity(companyInfo.id,companyContact.id,3,2)
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,3,2)
             // this.$router.push({path: '/overview', query: {identity: identity}})
             this.$router.push({path: '/profile/contact/user', query: {i: 3}})
             this.$loading().close()
@@ -912,9 +913,9 @@ export default {
         if (identity == 4) {
 
           if (isOther > 10) {
-            companyContact = res.message.user_contact.company_contact;
-            companyInfo = res.message.user_contact.company_contact.company;
-            this.changeIdentity(companyInfo.id,companyContact.id,4,2)
+            companyInfo = res.message.user_contact.company;
+
+            this.changeIdentity(companyInfo.id,4,2)
             this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
@@ -930,9 +931,9 @@ export default {
         if (identity == 5) {
 
           if (isVendor > 10) {
-            companyContact = res.message.user_contact.company_contact;
-            companyInfo = res.message.user_contact.company_contact.company;
-            this.changeIdentity(companyInfo.id,companyContact.id,5,2)
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,5,2)
             this.$router.push({path: '/overview', query: {identity: 5}})
             this.$loading().close()
           } else {
@@ -951,10 +952,9 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    changeIdentity(companyId, companyContactId, identity, language) {
+    changeIdentity(companyId, identity, language) {
       let params = {
         company_id: companyId,
-        company_contact_id: companyContactId,
         language: language,
         identity: identity
       }

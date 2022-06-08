@@ -70,10 +70,17 @@
 import profileTitle from "@/components/profileTitle"
 import meSideMenu from "@/components/meSideMenu";
 import {
-  CHANGE_IDENTITY_LANGUAGE,
-  UPDATE_EDUCATOR_PROFILE,
-  ZOHO_SYNC,USER_INFO_VISITOR_V2,
-  COMPANY_CONTACT_EDIT_V2, USER_INFO_BY_TOKEN_V2
+  ZOHO_SYNC,
+  USER_INFO_VISITOR_V2,
+  USER_INFO_BY_TOKEN_V2,
+  RECRUITER_COMPANY_EDIT_V2,
+  SCHOOL_COMPANY_EDIT_V2,
+  OTHER_COMPANY_EDIT_V2,
+  VENDOR_COMPANY_EDIT_V2,
+  RECRUITER_PERCENTAGE_V2,
+  SCHOOL_PERCENTAGE_V2,
+  OTHER_PERCENTAGE_V2,
+  VENDOR_PERCENTAGE_V2, SWITCH_IDENTITY_V2
 } from '@/api/api';
 import {useStore} from "vuex";
 import {ref,reactive} from "vue";
@@ -138,7 +145,7 @@ export default {
   data() {
     return {
       sideMenuStatus:true,
-      companyContactId:undefined,
+      companyId:undefined,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
       uploadHeaders: {
         platform: 4
@@ -165,7 +172,6 @@ export default {
 
       if(strObj.action == 'add'){
         this.sideMenuStatus = false;
-        this.getBasicInfo(strObj.i)
       }
 
       if(strObj.action == 'edit'){
@@ -186,28 +192,28 @@ export default {
       USER_INFO_VISITOR_V2(params).then(res => {
         console.log(res)
         if(res.code == 200){
-          let companyContact = res.message.user_contact.company_contact;
+          let companyInfo = res.message.user_contact.company;
 
-          if(companyContact){
+          if(companyInfo){
 
-            if(companyContact.display_name){
-              this.basicForm.display_name = companyContact.display_name;
+            if(companyInfo.display_name){
+              this.basicForm.display_name = companyInfo.display_name;
             }
 
-            if(companyContact.job_title){
-              this.basicForm.job_title = companyContact.job_title ;
+            if(companyInfo.job_title){
+              this.basicForm.job_title = companyInfo.job_title ;
             }
-            if(companyContact.website){
-              this.basicForm.website = companyContact.website;
-            }
-
-            if(companyContact.profile_photo){
-              this.basicForm.profile_photo = companyContact.profile_photo;
-              this.profilePhotoUrl = companyContact.profile_photo
+            if(companyInfo.website){
+              this.basicForm.website = companyInfo.website;
             }
 
-            if(companyContact.id){
-              this.companyContactId = companyContact.id;
+            if(companyInfo.profile_photo){
+              this.basicForm.profile_photo = companyInfo.profile_photo;
+              this.profilePhotoUrl = companyInfo.profile_photo
+            }
+
+            if(companyInfo.id){
+              this.companyId = companyInfo.id;
             }
 
 
@@ -229,30 +235,29 @@ export default {
       USER_INFO_BY_TOKEN_V2(params).then(res => {
         console.log(res)
         if(res.code == 200){
-          let companyContact = res.message.user_contact.company_contact;
+          let companyInfo = res.message.user_contact.company;
 
-          if(companyContact){
+          if(companyInfo){
 
-            if(companyContact.display_name){
-              this.basicForm.display_name = companyContact.display_name;
+            if(companyInfo.display_name){
+              this.basicForm.display_name = companyInfo.display_name;
             }
 
-            if(companyContact.job_title){
-              this.basicForm.job_title = companyContact.job_title ;
+            if(companyInfo.job_title){
+              this.basicForm.job_title = companyInfo.job_title ;
             }
-            if(companyContact.website){
-              this.basicForm.website = companyContact.website;
-            }
-
-            if(companyContact.profile_photo){
-              this.basicForm.profile_photo = companyContact.profile_photo;
-              this.profilePhotoUrl = companyContact.profile_photo
+            if(companyInfo.website){
+              this.basicForm.website = companyInfo.website;
             }
 
-            if(companyContact.id){
-              this.companyContactId = companyContact.id;
+            if(companyInfo.profile_photo){
+              this.basicForm.profile_photo = companyInfo.profile_photo;
+              this.profilePhotoUrl = companyInfo.profile_photo
             }
 
+            if(companyInfo.id){
+              this.companyId = companyInfo.id;
+            }
 
           }
 
@@ -260,15 +265,6 @@ export default {
       }).catch(err=>{
         console.log(err)
         this.$message.error(err.msg)
-      })
-
-    },
-    updateEduProfile(){
-      let params = {
-        token:localStorage.getItem('token')
-      }
-      UPDATE_EDUCATOR_PROFILE(params).then(res=>{
-        console.log(res)
       })
 
     },
@@ -298,82 +294,28 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // console.log(this.basicForm)
-          if(this.companyContactId){
-            this.basicForm.id = this.companyContactId
+          if(this.companyId){
+            this.basicForm.id = this.companyId
           }
 
           let params = Object.assign({}, this.basicForm)
-          COMPANY_CONTACT_EDIT_V2(params).then(res => {
-            console.log(res)
-            if (res.code == 200) {
 
-              if(i == 2){
-                if(action == 'edit'){
-                  this.$router.push('/business/profile')
-                }else{
-                  let strObj = {
-                    i:i,
-                    id:res.message.company_contact_id,
-                    action:'add'
-                  }
-                  let str = encode(JSON.stringify(strObj))
+          if(i == 2){
+            this.updateRecruiterCompany(params,i,action)
+          }
 
-                  this.$router.push({path:'/business/edit/recruiter',query:{s:str}})
-                }
+          if(i == 3){
+           this.updateSchoolCompany(params,i,action)
+          }
 
-              }
-              if(i == 3){
-                if(action == 'edit'){
-                  this.$router.push('/business/profile')
-                }else{
-                  let strObj = {
-                    i:i,
-                    id:res.message.company_contact_id,
-                    action:'add'
-                  }
-                  let str = encode(JSON.stringify(strObj))
+          if(i == 4){
+           this.updateOtherCompany(params,i,action)
+          }
 
-                  this.$router.push({path:'/business/edit/school',query:{s:str}})
-                }
-              }
-              if(i == 4){
-                if(action == 'edit'){
-                  this.$router.push('/business/profile')
-                }else{
-                  let strObj = {
-                    i:i,
-                    id:res.message.company_contact_id,
-                    action:'add'
-                  }
-                  let str = encode(JSON.stringify(strObj))
+          if(i == 5){
+            this.updateVendorCompany(params,i,action)
+          }
 
-                  this.$router.push({path:'/business/edit/other',query:{s:str}})
-                }
-              }
-              if(i == 5){
-                if(action == 'edit'){
-                  this.$router.push('/vendor/profile')
-                }else{
-                  let strObj = {
-                    i:i,
-                    id:res.message.company_contact_id,
-                    action:'add'
-                  }
-                  let str = encode(JSON.stringify(strObj))
-
-                  this.$router.push({path:'/vendor/edit/vendor',query:{s:str}})
-                }
-
-              }
-
-              // this.submitEducatorContactForm()
-
-            }
-          }).catch(err=>{
-            console.log(err)
-            this.$message.error(err.msg)
-            this.submitLoadingValue=false
-          })
         } else {
           console.log('error submit!!')
           this.submitLoadingValue=false
@@ -382,24 +324,158 @@ export default {
         }
       })
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
+    updateRecruiterCompany(params,i,action){
+
+      RECRUITER_COMPANY_EDIT_V2(params).then(res=>{
+        // console.log(res)
+        if(res.code == 200){
+          if(action == 'edit'){
+            this.$router.push('/business/profile')
+          }else{
+            let strObj = {
+              i:i,
+              cid:res.message.recruiting_company_id,
+              action:'add'
+            }
+            let str = encode(JSON.stringify(strObj))
+            this.changeIdentity(i,res.message.recruiting_company_id,2)
+            this.$router.push({path:'/business/edit/recruiter',query:{s:str}})
+          }
+        }
+
+      }).catch(err=>{
+        this.$message.error(err.msg)
+        this.submitLoadingValue=false
+      })
     },
-    changeIdentity(identity) {
+    updateSchoolCompany(params,i,action){
+      SCHOOL_COMPANY_EDIT_V2(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          if(action == 'edit'){
+            this.$router.push('/business/profile')
+          }else{
+            let strObj = {
+              i:i,
+              cid:res.message.school_company_id,
+              action:'add'
+            }
+            let str = encode(JSON.stringify(strObj))
+            this.changeIdentity(i,res.message.school_company_id,2)
+            this.$router.push({path:'/business/edit/school',query:{s:str}})
+          }
+        }
+      }).catch(err=>{
+        this.$message.error(err.msg)
+        this.submitLoadingValue=false
+      })
+    },
+    updateOtherCompany(params,i,action){
+      OTHER_COMPANY_EDIT_V2(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+
+          if(action == 'edit'){
+            this.$router.push('/business/profile')
+          }else{
+            let strObj = {
+              i:i,
+              cid:res.message.other_company_id,
+              action:'add'
+            }
+            let str = encode(JSON.stringify(strObj))
+            this.changeIdentity(i,res.message.other_company_id,2)
+            this.$router.push({path:'/business/edit/other',query:{s:str}})
+          }
+        }
+
+      }).catch(err=>{
+        this.$message.error(err.msg)
+        this.submitLoadingValue=false
+      })
+    },
+    updateVendorCompany(params,i,action){
+      VENDOR_COMPANY_EDIT_V2(params).then(res=>{
+        console.log(res)
+
+        if(res.code == 200){
+          if(action == 'edit'){
+            this.$router.push('/vendor/profile')
+          }else{
+            let strObj = {
+              i:i,
+              cid:res.message.vendor_company_id,
+              action:'add'
+            }
+            let str = encode(JSON.stringify(strObj))
+            this.changeIdentity(i,res.message.vendor_company_id,2)
+            this.$router.push({path:'/vendor/edit/vendor',query:{s:str}})
+          }
+        }
+
+      }).catch(err=>{
+        this.$message.error(err.msg)
+        this.submitLoadingValue=false
+      })
+    },
+    recruiterCalculate(){
+      RECRUITER_PERCENTAGE_V2().then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    schoolCalculate(){
+      SCHOOL_PERCENTAGE_V2().then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    otherCalculate(){
+      OTHER_PERCENTAGE_V2().then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    vendorCalculate(){
+      VENDOR_PERCENTAGE_V2().then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    changeIdentity(identity,companyId,language) {
       let params = {
-        token: localStorage.getItem('token'),
-        identity: identity
+        identity:identity,
+        company_id: companyId,
+        language:language
       }
 
-      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
-        console.log(res)
+      SWITCH_IDENTITY_V2(params).then(res => {
+        // console.log(res)
         if (res.code == 200) {
-          console.log('success')
+
           localStorage.setItem('identity',identity)
+          localStorage.setItem('companyId',companyId)
           this.setIdentity(identity)
-          this.updateEduProfile()
+
+          if(identity == 2){
+            this.recruiterCalculate()
+          }
+          if(identity == 3){
+            this.schoolCalculate()
+          }
+          if(identity == 4){
+            this.otherCalculate()
+          }
+          if(identity == 5){
+            this.vendorCalculate()
+          }
+
           this.submitLoadingValue=false
-          this.$router.push('/home')
+
         }
       }).catch(err=>{
         console.log(err)

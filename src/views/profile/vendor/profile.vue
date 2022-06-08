@@ -7,7 +7,11 @@
         </el-col>
         <el-col :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
 
-          <accountInfo :info="userContact" :phone="userContact.phone"></accountInfo>
+          <accountInfo :info="userContact" :phone="userContact.phone" :email="userContact.email"
+                       :level="companyInfo.vip_level" :vip-due-time="companyInfo.vip_due_time"
+                       :category-str="companyInfo.category_name_en  "
+                       :percentage-status="true" :profile-percentage="userContact.is_vendor"
+          ></accountInfo>
 
           <div class="educator-r-container">
             <div class="basic-info-container">
@@ -70,22 +74,22 @@
               </div>
 
               <div class="basic-info-content">
-                <div class="company-contact-profile-photo-container" v-if="companyContact.profile_photo">
+                <div class="company-contact-profile-photo-container" v-if="companyInfo.profile_photo">
                   <el-image class="company-contact-profile-photo"
-                            :src="companyContact.profile_photo" ></el-image>
+                            :src="companyInfo.profile_photo" ></el-image>
                 </div>
-                <div class="basic-info-item" v-if="companyContact.display_name">
+                <div class="basic-info-item" v-if="companyInfo.display_name">
                   <div class="basic-info-item-l">Display Name:</div>
-                  <div class="basic-info-item-r">{{ companyContact.display_name }}</div>
+                  <div class="basic-info-item-r">{{ companyInfo.display_name }}</div>
                 </div>
-                <div class="basic-info-item" v-if="companyContact.job_title">
+                <div class="basic-info-item" v-if="companyInfo.job_title">
                   <div class="basic-info-item-l">Job Title:</div>
-                  <div class="basic-info-item-r">{{ companyContact.job_title }}</div>
+                  <div class="basic-info-item-r">{{ companyInfo.job_title }}</div>
                 </div>
 
-                <div class="basic-info-item" v-if="companyContact.website">
+                <div class="basic-info-item" v-if="companyInfo.website">
                   <div class="basic-info-item-l">Website:</div>
-                  <div class="basic-info-item-r">{{ companyContact.website }}</div>
+                  <div class="basic-info-item-r">{{ companyInfo.website }}</div>
                 </div>
 
               </div>
@@ -138,10 +142,7 @@
                   <div class="basic-info-item-l">Address: </div>
                   <div class="basic-info-item-r">{{ companyInfo.address }}</div>
                 </div>
-                <div class="basic-info-item" v-if="companyInfo.technology_available">
-                  <div class="basic-info-item-l">Technology Available: </div>
-                  <div class="basic-info-item-r">{{ companyInfo.technology_available }}</div>
-                </div>
+
                 <div class="basic-info-item" v-if="companyInfo.desc">
                   <div class="basic-info-item-l">Introduction: </div>
                   <div class="basic-info-item-r">{{ companyInfo.desc }}</div>
@@ -150,90 +151,14 @@
                 <div class="recruiter-license-container" v-if="companyInfo.license">
                   <el-image class="recruiter-license" :src="companyInfo.license"></el-image>
                 </div>
-                <div class="recruiter-license-container" v-if="companyInfo.business_reg_img">
-                  <el-image class="recruiter-license" :src="companyInfo.business_reg_img"></el-image>
-                </div>
-                <div class="recruiter-video-container" v-if="companyInfo.video_url">
-                  <video class="recruiter-video" :src="companyInfo.video_url" controls></video>
-                </div>
+<!--                <div class="recruiter-license-container" v-if="companyInfo.business_reg_img">-->
+<!--                  <el-image class="recruiter-license" :src="companyInfo.business_reg_img"></el-image>-->
+<!--                </div>-->
+
 
               </div>
             </div>
 
-            <div class="preferences-container">
-              <div class="preferences-label">
-                <div class="preferences-label-text">Company Policies</div>
-                <div class="profile-underline-1"></div>
-              </div>
-              <div class="preferences-content">
-                <div class="p-benefits-container">
-                  <div class="p-benefits-t">
-                    <div class="p-benefits-t-label">Employment Benefits</div>
-                    <div class="p-benefits-t-edit"
-                         @click="turnIndexList(6)"
-                         v-if="canEditBenefits===false">
-                      <el-icon :size="18">
-                        <edit/>
-                      </el-icon>
-                    </div>
-                    <div class="p-benefits-t-edit"
-                         @click="benefitsConfirm(companyContact.id,companyInfo.id)"
-                         v-if="canEditBenefits">Confirm
-                    </div>
-                  </div>
-                  <div class="p-benefits-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditBenefits === false">
-                      <div class="object-show-item" v-for="(cer,i) in benefitsList" :key="i">
-                        {{ cer.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditBenefits">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectBenefitsList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editBenefitsList" :key="index"
-                             @click="selectBenefits(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownBenefitsList" :key="index"
-                             @click="selectBenefits(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addBenefitsStatus==false"
-                             @click="addBenefitsStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addBenefitsStatus">
-                          <el-input type="text" v-model="ownBenefitsValue"
-                                    placeholder="Add benefits"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownBenefitsValue.length>0"
-                                       @click="addOwnBenefits">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownBenefitsValue.length==0"
-                                       @click="addBenefitsStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <div class="media-container">
               <div class="media-label">
@@ -243,29 +168,59 @@
 
               <div class="account-images-container">
                 <div class="account-images-t">
-                  <div class="account-images-t-tips">Add more pictures to attract better talent</div>
+                  <div class="account-images-t-tips">Add more pictures to attract clients</div>
+                  <div class="account-images-t-edit"
+                       v-if="!editAccountImageStatus"
+                       @click="editAccountImageStatus=true">
+                    <el-icon :size="18">
+                      <edit/>
+                    </el-icon>
+                  </div>
+                  <div class="account-images-t-edit"
+                       v-if="editAccountImageStatus"
+                       @click="uploadAccountImages()">
+                    Upload
+                  </div>
+
                 </div>
                 <div class="account-images-content">
-                  <el-upload
-                      :action="uploadActionUrl"
-                      :headers="uploadHeaders"
-                      :data="uploadData"
-                      name="file[]"
-                      list-type="picture-card"
-                      :limit="6"
-                      multiple
-                      :file-list="accountImageFileList"
-                      :on-preview="handleAccountImagePreview"
-                      :on-remove="handleAccountImageRemove"
-                      :on-success="handleAccountImageSuccess"
-                  >
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
+                  <div class="account-images-item-container" v-if="!editAccountImageStatus">
+                    <div class="account-images-item" v-for="(item,i) in accountImageFileList" :key="i" >
+                      <el-image class="account-images-img" :src="item.url" fit="contain"
+                                @click="accountImagePreview(item.url)"
+                      ></el-image>
+                    </div>
+                  </div>
+
+                  <template v-if="editAccountImageStatus">
+                    <el-upload
+                        ref="accountImagesUpload"
+                        action="#"
+                        :headers="uploadHeaders"
+                        :data="uploadData"
+                        :auto-upload="false"
+                        name="file[]"
+                        list-type="picture-card"
+                        :limit="6"
+                        :multiple="true"
+                        :before-upload="beforeAccountImageUpload"
+                        :file-list="accountImageFileList"
+                        :on-change="handleAccountImageChange"
+                        :on-preview="handleAccountImagePreview"
+                        :on-remove="handleAccountImageRemove"
+
+                    >
+                      <i class="el-icon-plus"></i>
+                    </el-upload>
+
+                  </template>
                   <el-dialog width="50%" v-model="dialogAccountImageVisible" center>
                     <el-image :src="dialogAccountImageUrl"></el-image>
                   </el-dialog>
                 </div>
+
               </div>
+
             </div>
 
           </div>
@@ -282,8 +237,8 @@ import meSideMenu from "@/components/meSideMenu";
 import accountInfo from "../../../components/accountInfo";
 import {
   USER_OBJECT_LIST,
-  ADD_LANGUAGE_SCORE, ADD_PROFILE_V2, ADD_USER_INFO, ADD_USER_IMG,
-  ZOHO_SYNC, USER_INFO_BY_TOKEN_V2, ADD_USER_IMG_V2, VENDOR_PERCENTAGE_V2
+  ADD_LANGUAGE_SCORE, ADD_PROFILE_V2,
+  ZOHO_SYNC, USER_INFO_BY_TOKEN_V2, ADD_USER_IMG_V2, VENDOR_PERCENTAGE_V2, UPLOAD_IMG
 } from '@/api/api'
 import {encode} from 'js-base64'
 
@@ -303,6 +258,8 @@ export default {
   },
   data() {
     return {
+      profilePercentage:0,
+      editAccountImageStatus:false,
       activeName: 'first',
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
       uploadHeaders: {
@@ -312,7 +269,7 @@ export default {
         token: localStorage.getItem('token')
       },
       userContact:{},
-      companyContact:{},
+
       companyInfo:{},
 
       businessInfo: {},
@@ -428,7 +385,6 @@ export default {
     editCompanyInfo(){
       if(this.companyInfo.id){
         let strObj = {
-          id:this.companyContact.id,
           cid:this.companyInfo.id,
           action:'edit'
         }
@@ -437,7 +393,6 @@ export default {
         this.$router.push({path:'/vendor/edit/vendor',query:{s:str}})
       }else{
         let strObj = {
-          id:this.companyContact.id,
           i:5,
           action:'add'
         }
@@ -464,8 +419,8 @@ export default {
         if (res.code == 200) {
 
           let userContact = res.message.user_contact;
-          let companyContact =res.message.user_contact.company_contact;
-          let companyInfo = res.message.user_contact.company_contact.company;
+
+          let companyInfo = res.message.user_contact.company;
 
           if(companyInfo){
             this.companyInfo = companyInfo;
@@ -485,11 +440,7 @@ export default {
             this.userContact = userContact;
           }
 
-          if(companyContact){
-            this.companyContact = companyContact;
-          }
-
-            let userImages = companyInfo.user_images
+            let userImages = companyInfo.images
             this.accountImageFileList = []
             if (userImages) {
               userImages.forEach(item => {
@@ -739,192 +690,6 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    handleProfilePhotoSuccess(res, file) {
-      this.$loading().close()
-      // console.log(res.data[0]['file_url'])
-      this.profilePhotoUrl = URL.createObjectURL(file.raw)
-      let params = {
-        profile_photo: res.data[0]['file_url'],
-        identity: 2,
-        token: localStorage.getItem('token')
-      }
-      // console.log(params)
-      ADD_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    beforeProfilePhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
-      const isLt2M = file.size / 1024 / 1024 < 20
-
-      if (!isLt2M) {
-        this.$message.error('Avatar picture size can not exceed 20MB')
-      }
-      return isLt2M
-    },
-    handleLogoPhotoSuccess(res, file) {
-      this.$loading().close()
-      // console.log(res.data[0]['file_url'])
-      this.logoPhotoUrl = URL.createObjectURL(file.raw)
-      // let logoLink = res.data[0]['file_url']
-      let params = {
-        logo: res.data[0]['file_url'],
-        identity: 2,
-        token: localStorage.getItem('token')
-      }
-      // console.log(params)
-      ADD_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          // this.submitEduBusinessCompanyForm(logoLink, '')
-          this.$message.success('Success')
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    beforeLogoPhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
-      const isLt2M = file.size / 1024 / 1024 < 20
-
-      if (!isLt2M) {
-        this.$message.error('Avatar picture size can not exceed 20MB')
-      }
-      return isLt2M
-    },
-    handleBackgroundSuccess(res, file) {
-      this.$loading().close()
-      this.backgroundUrl = URL.createObjectURL(file.raw)
-      // let headerLink = res.data[0]['file_url']
-      let params = {
-        header_photo: res.data[0]['file_url'],
-        identity: 2,
-        token: localStorage.getItem('token')
-      }
-      // console.log(params)
-      ADD_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          // this.submitEduBusinessCompanyForm('', headerLink)
-          this.$message.success('Success')
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    beforeBackgroundUpload(file) {
-      console.log(file)
-      this.$loading({
-        text:'Uploading...'
-      })
-    },
-    handleAccountImageRemove(file, fileList) {
-      console.log(file, fileList)
-      let accountImagesArr = []
-      fileList.forEach(item => {
-        accountImagesArr.push(item.url)
-      })
-      let params = {
-        token: localStorage.getItem('token'),
-        identity: 2,
-        img: accountImagesArr
-      }
-      ADD_USER_IMG(params).then(res => {
-        if (res.code == 200) {
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    handleAccountImagePreview(file) {
-      // console.log(file)
-      this.dialogAccountImageUrl = file.url
-      this.dialogAccountImageVisible = true
-    },
-    handleAccountImageSuccess(res, file) {
-      let accountImages = this.accountImageFileList
-      let name = res.data[0]['file_name']
-      let url = res.data[0]['file_url']
-      let obj = {
-        name: name,
-        url: url
-      }
-      this.accountImageFileList.push(obj)
-
-      let accountImagesArr = []
-      accountImages.forEach(item => {
-        accountImagesArr.push(item.url)
-      })
-      // console.log(accountImages)
-
-      this.accoutImageUrl = URL.createObjectURL(file.raw)
-      let params = {
-        token: localStorage.getItem('token'),
-        identity: 2,
-        company_id:this.companyInfo.id,
-        company_contact_id:this.companyContact.id,
-        img: accountImagesArr
-      }
-      ADD_USER_IMG_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    handleIntroVideoSuccess(res, file) {
-      // console.log(res)
-      this.$loading().close()
-      this.introVideoUrl = URL.createObjectURL(file.raw)
-      let params = {
-        video_url: res.data[0]['file_url'],
-        identity: 2,
-        token: localStorage.getItem('token')
-      }
-      // console.log(params)
-      ADD_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    beforeIntroVideoUpload(file) {
-      console.log(file)
-      this.$loading({
-        text:'Uploading...'
-      })
-    },
     addOwnSubject() {
       this.addSubjectStatus = false;
       let obj = {
@@ -959,7 +724,7 @@ export default {
       }
       // console.log(this.selectSubjectList)
     },
-    subjectConfirm(companyContactId,companyId) {
+    subjectConfirm(companyId) {
 
       let expand = [];
       let objectArr = [];
@@ -973,7 +738,6 @@ export default {
       })
 
       let data = {
-        company_contact_id:companyContactId,
         company_id:companyId,
         token: localStorage.getItem('token'),
         object_pid: 1,
@@ -1028,7 +792,7 @@ export default {
       }
       // console.log(this.selectJobTypeList)
     },
-    jobTypeConfirm(companyContactId,companyId) {
+    jobTypeConfirm(companyId) {
 
       let expand = [];
       let objectArr = [];
@@ -1042,7 +806,6 @@ export default {
       })
 
       let data = {
-        company_contact_id:companyContactId,
         company_id:companyId,
         object_pid: 3,
         object_id: objectArr,
@@ -1095,7 +858,7 @@ export default {
       }
       // console.log(this.selectBenefitsList)
     },
-    benefitsConfirm(companyContactId,companyId) {
+    benefitsConfirm(companyId) {
 
       let expand = [];
       let objectArr = [];
@@ -1109,7 +872,6 @@ export default {
       })
 
       let data = {
-        company_contact_id:companyContactId,
         company_id:companyId,
         object_pid: 6,
         object_id: objectArr,
@@ -1132,6 +894,115 @@ export default {
     handleTabsClick(tab, event) {
       console.log(tab, event)
     },
+    handleAccountImageRemove(file, fileList) {
+      console.log(file, fileList)
+      this.accountImageFileList = fileList
+    },
+    handleAccountImagePreview(file) {
+      // console.log(file)
+      this.dialogAccountImageUrl = file.url
+      this.dialogAccountImageVisible = true
+    },
+    beforeAccountImageUpload(file){
+      const isJpeg = file.type === 'image/png' || file.type === 'image/jpg'
+      if(!isJpeg){
+        return this.$message.error('Please select the correct file format to upload')
+      }
+      return isJpeg
+    },
+    handleAccountImageChange(fileList){
+      this.accountImageFileList.push(fileList)
+    },
+    uploadAccountImages(){
+      this.$loading({
+        text:'Uploading'
+      })
+      console.log(this.accountImageFileList)
+
+      if(this.accountImageFileList.length === 0){
+        this.$loading().close()
+        return this.$message.warning('Select File')
+      }
+
+      let imgParams = new FormData();
+      let oldData = []
+
+      let token = localStorage.getItem('token')
+      imgParams.append('token' , token)
+      imgParams.append('platform',4)
+
+      this.accountImageFileList.forEach(file=>{
+        if(file.name == ''){
+          oldData.push(file.url)
+        }else{
+          imgParams.append('file[]',file.raw)
+        }
+
+      })
+
+      if(imgParams.get('file[]')){
+
+        UPLOAD_IMG(imgParams).then(res=>{
+          console.log(res)
+          if(res.code == 200){
+            let imgData = res.data;
+            // let imgArr = [];
+            imgData.forEach(item=>{
+              oldData.push(item.file_url)
+            })
+            let params = {
+              token: localStorage.getItem('token'),
+              identity: localStorage.getItem('identity'),
+              company_id:this.companyInfo.id,
+              img: oldData
+            }
+            ADD_USER_IMG_V2(params).then(res => {
+              console.log(res)
+              if (res.code == 200) {
+                this.getUserInfo()
+                this.editAccountImageStatus = false;
+                this.$loading().close()
+              }
+            }).catch(err => {
+              console.log(err)
+              this.$loading().close()
+              this.$message.error(err.msg)
+            })
+          }
+
+        }).catch(err=>{
+          this.$loading().close()
+          console.log(err.code)
+        })
+
+      }else{
+
+        let params = {
+          token: localStorage.getItem('token'),
+          identity: localStorage.getItem('identity'),
+          company_id:this.companyInfo.id,
+          img: oldData
+        }
+
+        ADD_USER_IMG_V2(params).then(res => {
+          console.log(res)
+          if (res.code == 200) {
+            this.getUserInfo()
+            this.editAccountImageStatus = false;
+            this.$loading().close()
+          }
+        }).catch(err => {
+          console.log(err)
+          this.$loading().close()
+          this.$message.error(err.msg)
+        })
+      }
+    },
+
+    accountImagePreview(url){
+      this.dialogAccountImageVisible = true;
+      this.dialogAccountImageUrl = url;
+    },
     async submitEduBusinessCompanyForm(logoLink, headerLink) {
 
       let userId = localStorage.getItem('uid')
@@ -1140,9 +1011,9 @@ export default {
         {'zf_referrer_name': ''},
         {'zf_redirect_url': ''},
         {'zc_gad': ''},
-        {'SingleLine': this.businessInfo.business_name  // Education Business Name
+        {'SingleLine': this.companyInfo.company_name  // Education Business Name
         },
-        {'Dropdown2': this.businessInfo.business_type_name  //Education Business Category
+        {'Dropdown2': this.companyInfo.business_type_name  //Education Business Category
         },
         {'Dropdown': 'Education Business'  //Company Type
         },
@@ -1381,7 +1252,10 @@ export default {
 }
 
 .account-images-t {
-
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .account-images-t-label {
@@ -1399,6 +1273,37 @@ export default {
   padding: 10px;
 //text-align: center;
 
+}
+.account-images-item-container{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content: space-between;
+  flex-wrap:wrap;
+
+}
+
+.account-images-item{
+  width:45%;
+//flex:1;
+  height: 140px;
+  padding:1%;
+  margin:1%;
+  border:1px solid #EEEEEE;
+  border-radius:10px;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+}
+
+.account-images-img{
+  height: 100%;
+}
+
+.account-images-t-edit{
+  font-size: 14px;
+  font-weight: bold;
+  cursor:pointer;
 }
 
 .preferences-container {

@@ -41,6 +41,7 @@
                     range-separator="To"
                     start-placeholder="Start Date"
                     end-placeholder="End Date"
+                    :disabledDate="birthdayDisabledDate"
                 >
                 </el-date-picker>
               </el-form-item>
@@ -76,6 +77,15 @@ export default {
   name: "work",
   components: {
     meSideMenu
+  },
+  setup(){
+    const birthdayDisabledDate = (date)=>{
+      let myDate = new Date();
+      return date.getTime() >= myDate.getTime();
+    }
+    return {
+      birthdayDisabledDate
+    }
   },
   data() {
     return {

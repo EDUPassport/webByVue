@@ -1,14 +1,14 @@
 <template>
   <div class="title-container" v-if="action=='add' ">
-    <h3>You are adding a
+    <h3>
       <span v-if="i==1">Educator</span>
       <span v-if="i==2">Recruiter</span>
       <span v-if="i==3">School</span>
       <span v-if="i==4">Other</span>
       <span v-if="i==5">Vendor</span>
-      !
+      Profile
     </h3>
-    <h4>Confirm and complete your information. </h4>
+    <h4>Please confirm and complete the fields </h4>
   </div>
 </template>
 

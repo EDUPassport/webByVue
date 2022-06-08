@@ -287,6 +287,8 @@ export default {
         video_url:'',
         year_founded:'',
         work_email:'',
+        category_name_en:'',
+        category_name_cn:''
 
       },
       basicRules: {
@@ -355,7 +357,8 @@ export default {
     if(str){
       let strObj = JSON.parse(decode(str))
 
-      // console.log(str)
+      // console.log(strObj)
+
       this.i = strObj.i;
       this.id = strObj.id;
       this.cid = strObj.cid;
@@ -479,11 +482,10 @@ export default {
     setPlace(e) {
       console.log(e)
     },
-    changeIdentity(companyId,companyContactId,language){
+    changeIdentity(companyId,language){
       let params = {
         identity:2,
         company_id:companyId,
-        company_contact_id:companyContactId,
         language:language
       }
       SWITCH_IDENTITY_V2(params).then(res=>{
@@ -502,17 +504,19 @@ export default {
     submitForm(formName) {
       this.submitLoadingValue = true;
       let businessTypeId;
-      // let businessTypeName;
-      // let businessTypeNameCn;
+      let businessTypeName;
+      let businessTypeNameCn;
+
       this.selectBusinessTypeList.forEach(item => {
         businessTypeId = item.id;
-        // businessTypeName = item.identity_name;
-        // businessTypeNameCn = item.identity_name_cn;
+        businessTypeName = item.identity_name;
+        businessTypeNameCn = item.identity_name_cn;
       })
-      this.basicForm.company_contact_id = this.id;
+      console.log(businessTypeName)
+
       this.basicForm.category_id = businessTypeId;
-      // this.basicForm.business_type_name = businessTypeName;
-      // this.basicForm.business_type_name_cn = businessTypeNameCn;
+      this.basicForm.category_name_en = businessTypeName;
+      this.basicForm.category_name_cn = businessTypeNameCn;
 
       let countryObj = {
         country_name_en:this.countryName,
@@ -527,12 +531,14 @@ export default {
 
       this.basicForm.country_info = JSON.stringify(countryObj)
 
-      let companyContactId = this.id;
       let action = this.action;
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if(action == 'edit'){
+            this.basicForm.id = this.cid;
+          }
+          if(action == 'add'){
             this.basicForm.id = this.cid;
           }
           let params = Object.assign({}, this.basicForm);
@@ -548,7 +554,7 @@ export default {
               if(action == 'edit'){
                 this.$router.push('/business/profile')
               }else{
-                this.changeIdentity(res.message.recruiting_company_id,companyContactId,2)
+                this.changeIdentity(res.message.recruiting_company_id,2)
               }
               // this.submitEduBusinessCompanyForm()
 
@@ -766,7 +772,7 @@ export default {
         if (res.code == 200) {
           // let userContact = res.message.user_contact;
           // let companyContact = res.message.user_contact.company_contact;
-          let recruiterInfo = res.message.user_contact.company_contact.company;
+          let recruiterInfo = res.message.user_contact.company;
 
           if (recruiterInfo.company_name) {
             this.basicForm.company_name = recruiterInfo.company_name;
@@ -826,11 +832,13 @@ export default {
           }
 
           let typeId = recruiterInfo.category_id;
-          // let typeNameEn = recruiterInfo.business_type_name
-          // let typeName = recruiterInfo.business_type_name_cn
+          let typeNameEn = recruiterInfo.category_name_en;
+          let typeName = recruiterInfo.category_name_cn
 
           let typeObj = {
-            id:typeId
+            id:typeId,
+            identity_name:typeNameEn,
+            identity_name_cn:typeName
           }
 
           this.selectBusinessTypeList.push(typeObj)

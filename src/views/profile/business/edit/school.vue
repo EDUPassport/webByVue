@@ -236,7 +236,14 @@
               </el-form-item>
 
               <el-form-item label="Tuition (One Year)">
-                <el-input v-model="basicForm.tuition" type="number" placeholder="Tuition/Year"></el-input>
+                <el-input v-model="tuitionValue" type="number" placeholder="Tuition/Year">
+                  <template #prepend>
+                    <el-select v-model="currencyValue" placeholder="Currency" style="width: 115px">
+                      <el-option label="CNY" :value="1" />
+                      <el-option label="USD" :value="2" />
+                    </el-select>
+                  </template>
+                </el-input>
               </el-form-item>
 
 
@@ -366,6 +373,8 @@ export default {
   },
   data() {
     return {
+      tuitionValue:0,
+      currencyValue:2,
       sideMenuStatus:true,
       submitLoadingValue:false,
       phoneCodeData:phoneCodeData,
@@ -387,6 +396,8 @@ export default {
         license:'',
         logo:'',
         category_id:'',
+        category_name_en:'',
+        category_name_cn:'',
         desc:'',
         pid:'',
         work_phone:'',
@@ -402,7 +413,9 @@ export default {
         country_code:'+86',
         video_url:'',
         year_founded:'',
-        tuition: '',
+        tuition_type: '',
+        tuition_dollar:'',
+        tuition_rmb:'',
         business_reg_img:'',
         technology_available: '',
         website:'',
@@ -640,11 +653,10 @@ export default {
     setPlace(e) {
       console.log(e)
     },
-    changeIdentity(companyId,companyContactId,language){
+    changeIdentity(companyId,language){
       let params = {
         identity:3,
         company_id:companyId,
-        company_contact_id:companyContactId,
         language:language
       }
       SWITCH_IDENTITY_V2(params).then(res=>{
@@ -663,17 +675,17 @@ export default {
     submitForm(formName) {
       this.submitLoadingValue = true;
       let businessTypeId;
-      // let businessTypeName;
-      // let businessTypeNameCn;
+      let businessTypeName;
+      let businessTypeNameCn;
       this.selectBusinessTypeList.forEach(item => {
         businessTypeId = item.id;
-        // businessTypeName = item.identity_name;
-        // businessTypeNameCn = item.identity_name_cn;
+        businessTypeName = item.identity_name;
+        businessTypeNameCn = item.identity_name_cn;
       })
       this.basicForm.company_contact_id = this.id;
       this.basicForm.category_id = businessTypeId;
-      // this.basicForm.business_type_name = businessTypeName;
-      // this.basicForm.business_type_name_cn = businessTypeNameCn;
+      this.basicForm.category_name_en = businessTypeName;
+      this.basicForm.category_name_cn = businessTypeNameCn;
 
       let countryObj = {
         country_name_en:this.countryName,
@@ -688,12 +700,24 @@ export default {
 
       this.basicForm.country_info = JSON.stringify(countryObj)
 
-      let companyContactId = this.id;
+      if(this.currencyValue == 1){
+        this.basicForm. tuition_rmb = this.tuitionValue
+        this.basicForm.tuition_type = 1
+      }
+
+      if(this.currencyValue == 2){
+        this.basicForm.tuition_dollar = this.tuitionValue
+        this.basicForm.tuition_type = 2
+      }
+
       let action = this.action;
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if(action == 'edit'){
+            this.basicForm.id = this.cid;
+          }
+          if(action == 'add'){
             this.basicForm.id = this.cid;
           }
           let params = Object.assign({}, this.basicForm);
@@ -702,15 +726,15 @@ export default {
             if (res.code == 200) {
 
               if(this.selectSchoolFacilitesList.length>0){
-                this.schoolFacilitesConfirm(res.message.school_company_id,companyContactId)
+                this.schoolFacilitesConfirm(res.message.school_company_id)
               }
 
               if(this.selectStudentAgeList.length>0){
-                this.studentAgeConfirm(res.message.school_company_id,companyContactId)
+                this.studentAgeConfirm(res.message.school_company_id)
               }
 
               if(this.selectSubjectList.length>0){
-                this.subjectConfirm(res.message.school_company_id,companyContactId)
+                this.subjectConfirm(res.message.school_company_id)
               }
 
               this.$store.commit('username',this.basicForm.company_name)
@@ -721,7 +745,7 @@ export default {
               if(action == 'edit'){
                 this.$router.push('/business/profile')
               }else{
-                this.changeIdentity(res.message.school_company_id,companyContactId,2)
+                this.changeIdentity(res.message.school_company_id,2)
               }
 
               // this.submitEduBusinessCompanyForm()
@@ -937,8 +961,8 @@ export default {
         // console.log(res)
         if (res.code == 200) {
           // let userContact = res.message.user_contact;
-          // let companyContact = res.message.user_contact.company_contact;
-          let schoolInfo = res.message.user_contact.company_contact.company;
+
+          let schoolInfo = res.message.user_contact.company;
 
           if (schoolInfo.company_name) {
             this.basicForm.company_name = schoolInfo.company_name;
@@ -1001,8 +1025,19 @@ export default {
           if (schoolInfo.year_founded) {
             this.basicForm.year_founded = schoolInfo.year_founded.toString();
           }
-          if (schoolInfo.tuition) {
-            this.basicForm.tuition = schoolInfo.tuition;
+          if (schoolInfo.tuition_type) {
+            this.basicForm.tuition_type = schoolInfo.tuition_type;
+            this.currencyValue = schoolInfo.tuition_type;
+
+            if(schoolInfo.tuition_type == 1){
+              this.basicForm.tuition_rmb = schoolInfo.tuition_rmb;
+              this.tuitionValue = schoolInfo.tuition_rmb;
+            }
+            if(schoolInfo.tuition_type == 2){
+              this.basicForm.tuition_dollar = schoolInfo.tuition_dollar;
+              this.tuitionValue =  schoolInfo.tuition_dollar;
+            }
+
           }
           if(schoolInfo.country_info){
             this.basicForm.country_info = schoolInfo.country_info;
@@ -1025,11 +1060,13 @@ export default {
           }
 
           let typeId = schoolInfo.category_id;
-          // let typeNameEn = schoolInfo.business_type_name
-          // let typeName = schoolInfo.business_type_name_cn
+          let typeNameEn = schoolInfo.category_name_en
+          let typeName = schoolInfo.category_name_cn
 
           let typeObj = {
-            id:typeId
+            id:typeId,
+            identity_name:typeNameEn,
+            identity_name_cn:typeName
           }
 
           this.selectBusinessTypeList.push(typeObj)
@@ -1117,7 +1154,7 @@ export default {
       }
       // console.log(this.selectStudentAgeList)
     },
-    studentAgeConfirm(companyId,companyContactId) {
+    studentAgeConfirm(companyId) {
 
       let expand = [];
       let objectArr = [];
@@ -1131,7 +1168,6 @@ export default {
       })
 
       let data = {
-        company_contact_id:companyContactId,
         company_id:companyId,
         object_pid: 73,
         object_id: objectArr,
@@ -1191,7 +1227,7 @@ export default {
       }
       console.log(this.selectSubjectList)
     },
-    subjectConfirm(companyId,companyContactId) {
+    subjectConfirm(companyId) {
 
       let expand = [];
       let objectArr = [];
@@ -1205,7 +1241,6 @@ export default {
       })
 
       let data = {
-        company_contact_id:companyContactId,
         company_id:companyId,
         object_pid: 1,
         object_id: objectArr,
@@ -1236,7 +1271,7 @@ export default {
       }
 
     },
-    schoolFacilitesConfirm(companyId,companyContactId) {
+    schoolFacilitesConfirm(companyId) {
       let expand = [];
       let objectArr = [];
       this.selectSchoolFacilitesList.forEach(item => {
@@ -1249,7 +1284,6 @@ export default {
       })
 
       let data = {
-        company_contact_id:companyContactId,
         company_id: companyId,
         object_pid: 147,
         object_id: objectArr,

@@ -161,7 +161,7 @@
                   <div id="mapContainer" class="basemap"></div>
                 </div>
               </el-form-item>
-              <el-form-item label="Edu-Business Categories (Choose 1)" prop="category_id" required>
+              <el-form-item label="Vendor Categories (Choose 1)" prop="category_id" required>
                 <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
                   <div v-if="item['children'].length>0" class="category-parent">
                   </div>
@@ -176,22 +176,6 @@
                     {{ child.identity_name }}
                   </div>
                 </div>
-              </el-form-item>
-
-              <el-form-item label="Business registration certificate" prop="business_reg_img">
-                <el-upload
-                    class="business-reg-uploader"
-                    :action="uploadActionUrl"
-                    :headers="uploadHeaders"
-                    :data="uploadData"
-                    :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleBusinessRegPhotoSuccess"
-                    :before-upload="beforeBusinessRegPhotoUpload"
-                >
-                  <el-image v-if="businessRegPhotoUrl" :src="businessRegPhotoUrl" class="business-reg-avatar"></el-image>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
               </el-form-item>
 
               <el-form-item label="License" prop="license">
@@ -209,36 +193,6 @@
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
-
-
-              <el-form-item label="Intro Video" prop="video_url">
-                <el-upload
-                    class="intro-video-uploader"
-                    :action="uploadActionUrl"
-                    :headers="uploadHeaders"
-                    :data="uploadData"
-                    :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleIntroVideoSuccess"
-                    :before-upload="beforeIntroVideoUpload"
-                >
-                  <video v-if="introVideoUrl" :src="introVideoUrl" controls class="intro-video-avatar"/>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>
-
-              <el-form-item label="Technology Available" prop="technology_available">
-                <el-input v-model="basicForm.technology_available" type="textarea"
-                          placeholder="Computers, Smart screens, 3D Printing, etc..."></el-input>
-              </el-form-item>
-
-              <div class="xll-form-switch">
-                <div class="xll-form-switch-label">Field Trips</div>
-                <div class="xll-form-switch-c">
-                  <el-switch inactive-value="0" active-value="1"  v-model="basicForm.felds_trips"></el-switch>
-                </div>
-              </div>
-
 
             </el-form>
 
@@ -305,6 +259,8 @@ export default {
         license:'',
         logo:'',
         category_id:'',
+        category_name_en:'',
+        category_name_cn:'',
         desc:'',
         pid:'',
         work_phone:'',
@@ -526,12 +482,11 @@ export default {
     setPlace(e) {
       console.log(e)
     },
-    changeIdentity(companyId,companyContactId,language){
+    changeIdentity(companyId,language){
       let self = this;
       let params = {
         identity:5,
         company_id:companyId,
-        company_contact_id:companyContactId,
         language:language
       }
       SWITCH_IDENTITY_V2(params).then(res=>{
@@ -551,17 +506,17 @@ export default {
     submitForm(formName) {
       this.submitLoadingValue = true;
       let businessTypeId;
-      // let businessTypeName;
-      // let businessTypeNameCn;
+      let businessTypeName;
+      let businessTypeNameCn;
       this.selectBusinessTypeList.forEach(item => {
         businessTypeId = item.id;
-        // businessTypeName = item.identity_name;
-        // businessTypeNameCn = item.identity_name_cn;
+        businessTypeName = item.identity_name;
+        businessTypeNameCn = item.identity_name_cn;
       })
-      this.basicForm.company_contact_id = this.id;
+
       this.basicForm.category_id = businessTypeId;
-      // this.basicForm.business_type_name = businessTypeName;
-      // this.basicForm.business_type_name_cn = businessTypeNameCn;
+      this.basicForm.category_name_en = businessTypeName;
+      this.basicForm.category_name_cn = businessTypeNameCn;
 
       let countryObj = {
         country_name_en:this.countryName,
@@ -576,7 +531,7 @@ export default {
 
       this.basicForm.country_info = JSON.stringify(countryObj)
 
-      let companyContactId = this.id;
+
       let action = this.action;
 
       this.$refs[formName].validate((valid) => {
@@ -584,6 +539,10 @@ export default {
           if(action == 'edit'){
             this.basicForm.id = this.cid;
           }
+          if(action == 'add'){
+            this.basicForm.id = this.cid;
+          }
+
           let params = Object.assign({}, this.basicForm);
           VENDOR_COMPANY_EDIT_V2(params).then(res => {
             console.log(res)
@@ -598,7 +557,7 @@ export default {
               if(action == 'edit'){
                 this.$router.push('/vendor/profile')
               }else{
-                this.changeIdentity(res.message.vendor_company_id,companyContactId,2)
+                this.changeIdentity(res.message.vendor_company_id,2)
               }
               // this.submitEduBusinessCompanyForm()
 
@@ -781,7 +740,7 @@ export default {
     },
     getSubCateList() {
       let params = {
-        pid: 2,
+        pid: 3,
         tree: 1
       }
       SUB_CATE_LIST(params).then(res => {
@@ -817,8 +776,8 @@ export default {
         // console.log(res)
         if (res.code == 200) {
           // let userContact = res.message.user_contact;
-          // let companyContact = res.message.user_contact.company_contact;
-          let companyInfo = res.message.user_contact.company_contact.company;
+
+          let companyInfo = res.message.user_contact.company;
 
           if (companyInfo.company_name) {
             this.basicForm.company_name = companyInfo.company_name;
@@ -898,11 +857,13 @@ export default {
           }
 
           let typeId = companyInfo.category_id;
-          // let typeNameEn = schoolInfo.business_type_name
-          // let typeName = schoolInfo.business_type_name_cn
+          let typeNameEn = companyInfo.category_name_en;
+          let typeName = companyInfo.category_name_cn;
 
           let typeObj = {
-            id:typeId
+            id:typeId,
+            identity_name:typeNameEn,
+            identity_name_cn:typeName
           }
 
           this.selectBusinessTypeList.push(typeObj)
@@ -924,8 +885,8 @@ export default {
         // console.log(res)
         if (res.code == 200) {
           // let userContact = res.message.user_contact;
-          // let companyContact = res.message.user_contact.company_contact;
-          let companyInfo = res.message.user_contact.company_contact.company;
+
+          let companyInfo = res.message.user_contact.company;
 
           if (companyInfo.company_name) {
             this.basicForm.company_name = companyInfo.company_name;
@@ -1005,15 +966,16 @@ export default {
           }
 
           let typeId = companyInfo.category_id;
-          // let typeNameEn = schoolInfo.business_type_name
-          // let typeName = schoolInfo.business_type_name_cn
+          let typeNameEn = companyInfo.category_name_en;
+          let typeName = companyInfo.category_name_cn;
 
           let typeObj = {
-            id:typeId
+            id:typeId,
+            identity_name:typeNameEn,
+            identity_name_cn:typeName
           }
 
           this.selectBusinessTypeList.push(typeObj)
-
 
         }
       }).catch(err => {
