@@ -16,7 +16,7 @@
                     <el-progress class="percentage-progress"
                                  :text-inside="true"
                                  :stroke-width="20"
-                                 :percentage="profilePercentage" color="#b1c452" >
+                                 :percentage="profilePercentage" color="#b1c452">
                     </el-progress>
 
                     <div class="percentage-progress-post-job">
@@ -50,7 +50,7 @@
                     <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                   </div>
                   <div class="dashboard-item-r">
-                    <router-link to="/jobs">Job Posts </router-link>
+                    <router-link to="/jobs">Job Posts</router-link>
                   </div>
                 </div>
                 <div class="dashboard-item events-bg" @click="myEventsHref()">
@@ -82,14 +82,14 @@
                 </div>
               </template>
 
-<!--              <div class="dashboard-item ads-bg">-->
-<!--                <div class="dashboard-item-l">-->
-<!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
-<!--                </div>-->
-<!--                <div class="dashboard-item-r">-->
-<!--                  <router-link to="/">My Ads</router-link>-->
-<!--                </div>-->
-<!--              </div>-->
+              <!--              <div class="dashboard-item ads-bg">-->
+              <!--                <div class="dashboard-item-l">-->
+              <!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
+              <!--                </div>-->
+              <!--                <div class="dashboard-item-r">-->
+              <!--                  <router-link to="/">My Ads</router-link>-->
+              <!--                </div>-->
+              <!--              </div>-->
 
               <div class="dashboard-item favorites-bg" @click="myFavoritesHref()">
                 <div class="dashboard-item-l">
@@ -109,8 +109,42 @@
                        :identityActionStatus="true"
           ></accountInfo>
 
+
+          <div class="admin-container">
+            <h3>Account Administrators</h3>
+            <div class="admin-content-container">
+              <h4>Contributors</h4>
+              <div class="admin-content-underline"></div>
+              <div class="admin-list-container">
+                <div class="admin-item-container">
+                  <div class="admin-item-img-container">
+                    <el-image class="admin-item-img"
+                              src="https://osstest.esl-passport.cn/81a2ec26967d029054113335b961ac98.jpeg"></el-image>
+                  </div>
+                  <div class="admin-item-name">Lloyd</div>
+                  <div class="admin-item-role">Super Admin</div>
+                </div>
+                <div class="admin-item-container">
+                  <div class="admin-item-img-container">
+                    <el-image class="admin-item-img"
+                              src="https://osstest.esl-passport.cn/81a2ec26967d029054113335b961ac98.jpeg"></el-image>
+                  </div>
+                  <div class="admin-item-name">Lloyd</div>
+                  <div class="admin-item-role">Super Admin</div>
+                </div>
+
+              </div>
+
+              <div class="add-admin">
+                <el-button type="primary" @click="addAdmin()">Add an Admin</el-button>
+              </div>
+
+            </div>
+          </div>
+
+
           <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataBottom.length>0">
-            <el-carousel height="220px" indicator-position="none" >
+            <el-carousel height="220px" indicator-position="none">
               <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataBottom" :key="i">
                 <div class="xll-ads-l">
                   <el-image class="xll-ads-l-img"
@@ -150,9 +184,9 @@ import {
 } from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
-import { onBeforeRouteUpdate } from "vue-router";
+import {onBeforeRouteUpdate} from "vue-router";
 
-import {computed,ref} from "vue";
+import {computed, ref} from "vue";
 
 export default {
   name: "index",
@@ -160,11 +194,11 @@ export default {
     meSideMenu,
     accountInfo
   },
-  setup(){
+  setup() {
 
     const i = ref(localStorage.getItem('identity'))
 
-    const identity1 = computed(()=>{
+    const identity1 = computed(() => {
       return i.value
     })
 
@@ -180,23 +214,23 @@ export default {
       userInfo: {},
       basicUserInfo: {},
 
-      userContact:{},
+      userContact: {},
 
-      companyInfo:{},
+      companyInfo: {},
 
-      identity:this.$route.query.identity,
-      adsDataBottom:[],
-      profilePercentage:0,
-      accountInfoLevel:1,
-      accountInfoVipDueTime:'',
-      accountInfoCategoryStr:''
-      
+      identity: this.$route.query.identity,
+      adsDataBottom: [],
+      profilePercentage: 0,
+      accountInfoLevel: 1,
+      accountInfoVipDueTime: '',
+      accountInfoCategoryStr: ''
+
     }
   },
   mounted() {
     // let uid = localStorage.getItem('uid')
 
-    onBeforeRouteUpdate( to =>{
+    onBeforeRouteUpdate(to => {
       // console.log(to)
       this.identity = to.query.identity
       this.getBasicInfo(to.query.identity)
@@ -211,99 +245,101 @@ export default {
 
   },
   methods: {
-
-    getPercentage(identity){
-      if(identity == 1){
+    addAdmin(){
+      this.$router.push({path:'/profile/admin/add',query:{}})
+    },
+    getPercentage(identity) {
+      if (identity == 1) {
         this.getEducatorPercentage()
       }
-      if(identity == 2){
+      if (identity == 2) {
         this.getRecruiterPercentage()
       }
-      if(identity == 3){
+      if (identity == 3) {
         this.getSchoolPercentage()
       }
-      if(identity == 4){
+      if (identity == 4) {
         this.getOtherPercentage()
       }
-      if(identity == 5){
+      if (identity == 5) {
         this.getVendorPercentage()
       }
     },
-    getEducatorPercentage(){
+    getEducatorPercentage() {
       let params = {}
-      EDUCATOR_PERCENTAGE_V2(params).then(res=>{
+      EDUCATOR_PERCENTAGE_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.profilePercentage = res.message.is_educator;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    getRecruiterPercentage(){
+    getRecruiterPercentage() {
       let params = {}
-      RECRUITER_PERCENTAGE_V2(params).then(res=>{
+      RECRUITER_PERCENTAGE_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.profilePercentage = res.message.is_recruiting;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    getSchoolPercentage(){
+    getSchoolPercentage() {
       let params = {}
-      SCHOOL_PERCENTAGE_V2(params).then(res=>{
+      SCHOOL_PERCENTAGE_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.profilePercentage = res.message.is_school;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    getOtherPercentage(){
+    getOtherPercentage() {
       let params = {}
-      OTHER_PERCENTAGE_V2(params).then(res=>{
+      OTHER_PERCENTAGE_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.profilePercentage = res.message.is_other;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    getVendorPercentage(){
+    getVendorPercentage() {
       let params = {}
-      VENDOR_PERCENTAGE_V2(params).then(res=>{
+      VENDOR_PERCENTAGE_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.profilePercentage = res.message.is_vendor;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    turnBanner(link){
+    turnBanner(link) {
       // console.log(link)
       if (link != '') {
-        window.location.href =  link
+        window.location.href = link
       } else {
         let token = localStorage.getItem('token')
-        if(!token){
-          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4','_blank')
+        if (!token) {
+          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
 
           return;
         }
         this.$router.push('/me/ads/platform')
       }
     },
-    getAdsList(){
+    getAdsList() {
       let ads_data = {
         page: 1,
         limit: 10000
       }
-      ADS_LIST(ads_data).then(res=>{
+      ADS_LIST(ads_data).then(res => {
         if (res.code == 200) {
           // console.log(rs.message)
           let adsDataBottom = [];
@@ -323,30 +359,30 @@ export default {
             adsDataBottom = res.message.filter(item => item.name == 'vendor_m1');
           }
 
-          if(adsDataBottom.length>0){
+          if (adsDataBottom.length > 0) {
             this.adsDataBottom = adsDataBottom[0].data;
           }
 
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    applicationsHref(){
-      this.$router.push({path:'/me/applications'})
+    applicationsHref() {
+      this.$router.push({path: '/me/applications'})
     },
-    jobPostsHref(){
-      this.$router.push({path:'/jobs'})
+    jobPostsHref() {
+      this.$router.push({path: '/jobs'})
     },
-    myEventsHref(){
-      this.$router.push({path:'/events/myEvents'})
+    myEventsHref() {
+      this.$router.push({path: '/events/myEvents'})
     },
-    myDealsHref(){
-      this.$router.push({path:'/deals/myDeals'})
+    myDealsHref() {
+      this.$router.push({path: '/deals/myDeals'})
     },
-    myFavoritesHref(){
-      this.$router.push({path:'/favorites'})
+    myFavoritesHref() {
+      this.$router.push({path: '/favorites'})
     },
     getBasicInfo(identity) {
 
@@ -356,21 +392,21 @@ export default {
 
       USER_INFO_BY_TOKEN_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let userContact = res.message.user_contact;
 
           let company = {};
           let educatorContact = {};
 
-          if(userContact){
+          if (userContact) {
             this.userContact = userContact
           }
 
-          if(identity == 1){
+          if (identity == 1) {
 
             educatorContact = res.message.user_contact.educator_contact;
 
-            if(educatorContact){
+            if (educatorContact) {
               this.educatorContact = educatorContact
               this.accountInfoLevel = educatorContact.vip_level
               this.accountInfoVipDueTime = educatorContact.vip_due_time
@@ -379,11 +415,11 @@ export default {
             }
           }
 
-          if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
+          if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
 
-            company = res.message.user_contact.company ;
+            company = res.message.user_contact.company;
 
-            if(company){
+            if (company) {
               this.companyInfo = company
               this.accountInfoLevel = company.vip_level
               this.accountInfoVipDueTime = company.vip_due_time
@@ -394,44 +430,44 @@ export default {
 
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    getVisitorInfo(uid,identity) {
+    getVisitorInfo(uid, identity) {
 
       let params = {
-        user_id:uid,
+        user_id: uid,
         identity: identity
       }
 
       USER_INFO_VISITOR_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let userContact = res.message.user_contact;
           let company = {};
           let educatorContact = {};
 
-          if(userContact){
+          if (userContact) {
             this.userContact = userContact
           }
 
-          if(identity == 1){
+          if (identity == 1) {
 
             educatorContact = res.message.user_contact.educator_contact;
 
-            if(educatorContact){
+            if (educatorContact) {
               this.educatorContact = educatorContact
             }
           }
 
-          if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
+          if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
 
-            company = res.message.user_contact.company ;
+            company = res.message.user_contact.company;
 
-            if(company){
+            if (company) {
               this.companyInfo = company
             }
 
@@ -439,7 +475,7 @@ export default {
 
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -466,55 +502,60 @@ export default {
   padding: 20px;
   text-align: left;
 }
-.dashboard-top-container{
+
+.dashboard-top-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 
 }
-.dashboard-label{
+
+.dashboard-label {
 
 }
-.dashboard-profile-percentage{
-  width:50%;
+
+.dashboard-profile-percentage {
+  width: 50%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 
 }
-.percentage-progress-container-bg{
-  background-color:#ffffff;
-  padding:10px;
-  width:80%;
-  border-radius:20px;
+
+.percentage-progress-container-bg {
+  background-color: #ffffff;
+  padding: 10px;
+  width: 80%;
+  border-radius: 20px;
 }
 
-.percentage-progress-container{
-  width:100%;
+.percentage-progress-container {
+  width: 100%;
   height: 20px;
   position: relative;
 }
 
-.percentage-progress{
-  width:100%;
+.percentage-progress {
+  width: 100%;
   position: absolute;
-  bottom:0;
+  bottom: 0;
 
 }
 
-.percentage-progress-post-job{
-  width:80%;
+.percentage-progress-post-job {
+  width: 80%;
   position: absolute;
   height: 10px;
-  bottom:20px;
+  bottom: 20px;
   border-right: 1px solid #808080;
 }
-.percentage-progress-post-job span{
+
+.percentage-progress-post-job span {
   position: absolute;
   right: -30px;
-  top:-16px;
+  top: -16px;
   font-size: 12px;
 }
 
@@ -528,8 +569,8 @@ export default {
   margin-top: 20px;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
-  
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -540,7 +581,7 @@ export default {
 
 .dashboard-item {
   width: 45%;
-  cursor:pointer;
+  cursor: pointer;
   background-color: #EEEEEE;
   color: #ffffff;
   margin-top: 20px;
@@ -564,19 +605,23 @@ export default {
 .dashboard-item-r {
   padding-left: 20px;
 }
-.dashboard-item-r a{
+
+.dashboard-item-r a {
   text-decoration: none;
   color: #FFFFFF;
 }
+
 .ads-container {
   margin-top: 20px;
-  padding:0 20px;
+  padding: 0 20px;
   text-align: center;
 }
-.ads-img{
+
+.ads-img {
   width: 100%;
   border-radius: 10px;
 }
+
 .jobs-bg {
   background-color: #870043;
 }
@@ -602,17 +647,17 @@ export default {
 }
 
 
-.xll-ads-container{
+.xll-ads-container {
   padding: 20px 20px 0 20px;
 }
 
-.xll-ads-container-margin{
+.xll-ads-container-margin {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.xll-ads-swiper-item{
-  cursor:pointer;
+.xll-ads-swiper-item {
+  cursor: pointer;
   border-radius: 10px;
   height: 100%;
   background-color: #FFFFFF;
@@ -622,33 +667,34 @@ export default {
   justify-content: space-between;
 }
 
-.xll-ads-l{
-  width:60%;
+.xll-ads-l {
+  width: 60%;
   height: 100%;
 }
-.xll-ads-l-img{
-//width: 100%;
-  height: 100%;
-  border-radius:10px;
-  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+
+.xll-ads-l-img {
+//width: 100%; height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
-.xll-ads-r{
-  width:36%;
+.xll-ads-r {
+  width: 36%;
 }
 
-.xll-ads-r{
+.xll-ads-r {
   padding-right: 4%;
 }
-.xll-ads-r h4{
-  color:#004956;
+
+.xll-ads-r h4 {
+  color: #004956;
 }
 
-.xll-ads-r h5{
-  margin-top:20px;
+.xll-ads-r h5 {
+  margin-top: 20px;
 }
 
-.xll-ads-r-desc{
+.xll-ads-r-desc {
   font-size: 14px;
   margin-top: 10px;
   overflow: hidden;
@@ -656,6 +702,80 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+}
+
+
+.admin-container {
+  padding: 20px;
+
+}
+
+.admin-container h3 {
+
+}
+
+.admin-content-container {
+  background-color: #ffffff;
+  padding: 20px 0;
+  margin-top: 20px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.admin-content-container h4 {
+  margin-left: 20px;
+}
+
+.admin-content-underline {
+  width: 60px;
+  height: 4px;
+  background-color: #DD4A68;
+  margin-left: 20px;
+}
+
+.admin-list-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+
+.admin-item-container {
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.admin-item-img-container {
+  width: 80px;
+  height: 80px;
+  border: 4px solid #004956;
+  border-radius: 80px;
+  overflow: hidden;
+}
+
+.admin-item-img {
+  width: 100%;
+}
+
+.admin-item-name {
+  text-align: center;
+  font-weight: bold;
+  line-height: 24px;
+}
+
+.admin-item-role {
+  color: #00b3d2;
+  line-height: 24px;
+  text-align: center;
+}
+
+.add-admin {
+  position: absolute;
+  right: 40px;
+  top: 20px;
+
 }
 
 </style>

@@ -1032,6 +1032,8 @@
 
 
     </el-drawer>
+
+    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
   </div>
 </template>
 
@@ -1049,15 +1051,18 @@ import {
   EDUCATOR_PERCENTAGE_V2, UPLOAD_IMG
 } from '@/api/api'
 import {encode} from 'js-base64'
+import xllLoading from '@/components/xllLoading'
 
 export default {
   name: "profile",
   components: {
     meSideMenu,
-    accountInfo
+    accountInfo,
+    xllLoading
   },
   data() {
     return {
+      uploadLoadingStatus:false,
       editAccountImageStatus:false,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
       uploadHeaders: {
@@ -2202,8 +2207,11 @@ export default {
       }
       return isLt2M
     },
+    cancelUpload(){
+      this.uploadLoadingStatus = false;
+    },
     handleBackgroundSuccess(res, file) {
-      this.$loading().close()
+      this.uploadLoadingStatus = false;
 
       this.backgroundUrl = URL.createObjectURL(file.raw)
       let params = {
@@ -2223,9 +2231,7 @@ export default {
     },
     beforeBackgroundUpload(file) {
       console.log(file)
-      this.$loading({
-        text:'Uploading...'
-      })
+      this.uploadLoadingStatus = true;
     },
     handleAccountImageRemove(file, fileList) {
       console.log(file, fileList)

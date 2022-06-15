@@ -12,7 +12,7 @@
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
               <el-breadcrumb-item :to="{ path: '/educator/profile' }">Profile</el-breadcrumb-item>
-              <el-breadcrumb-item>Educator Contact</el-breadcrumb-item>
+              <el-breadcrumb-item>Educator Contact Information</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           <div class="basic-form">
@@ -25,6 +25,9 @@
                 class="demo-ruleForm"
             >
               <el-form-item label="Display Name" prop="name">
+                <template #label>
+                  Display Name (This is what platform users will actually see)
+                </template>
                 <el-input v-model="basicForm.name" placeholder="Display Name"></el-input>
               </el-form-item>
               <el-form-item label="Phone #" prop="phone">
@@ -208,6 +211,7 @@ export default {
 
       if(strObj.action == 'add'){
         this.sideMenuStatus = false;
+        this.getBasicInfo(strObj.i)
       }
 
       if(strObj.action == 'edit'){
@@ -438,12 +442,14 @@ export default {
         if(res.code == 200){
 
           let educatorContact = res.message.user_contact.educator_contact;
+          let userContact = res.message.user_contact;
 
           if(educatorContact.name){
             this.basicForm.name = educatorContact.name;
+          }else{
+            this.basicForm.name = userContact.first_name + ' ' + userContact.last_name;
           }
 
-          this.basicForm.name = educatorContact.name;
           if(educatorContact.resume_pdf){
             this.basicForm.resume_pdf = educatorContact.resume_pdf
           }
@@ -462,6 +468,8 @@ export default {
 
           if(educatorContact.email){
             this.basicForm.email = educatorContact.email ;
+          }else{
+            this.basicForm.email = userContact.email;
           }
 
           if(educatorContact.address){

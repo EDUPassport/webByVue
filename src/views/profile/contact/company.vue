@@ -12,7 +12,7 @@
           <div class="basic-breadcrumb-container">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-              <el-breadcrumb-item>Company Contact</el-breadcrumb-item>
+              <el-breadcrumb-item>Company Contact Person</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
 

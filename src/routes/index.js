@@ -212,6 +212,16 @@ const routes = [
                 }
             },
             {
+                path: '/profile/admin/add',
+                name: 'profileAdminAdd',
+                component: () => import('@/views/profile/admin/add'),
+                meta: {
+                    activeMenu:identity == 1 ?  "/educator/profile" : identity == 2 ? '/business/profile' : identity ==3 ? '/vendor/profile' : '',
+                    titleC: 'China Add an Agent',
+                    titleG: 'Global Add an Agent',
+                }
+            },
+            {
                 path: '/profile/contact/user',
                 name: 'profileUserContact',
                 component: () => import('@/views/profile/contact/user'),

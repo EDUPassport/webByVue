@@ -13,7 +13,7 @@
           <div class="basic-breadcrumb-container">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-              <el-breadcrumb-item>Personal Info</el-breadcrumb-item>
+              <el-breadcrumb-item>Your Personal Information</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
 
@@ -68,6 +68,9 @@
               </el-form-item>
 
               <el-form-item label="Email" prop="email">
+                <template #label>
+                  Email (Caution: Changing this will affect your login details)
+                </template>
                 <el-input v-model="basicForm.email" placeholder="Email"></el-input>
               </el-form-item>
 
@@ -181,6 +184,8 @@
             </el-button>
           </div>
 
+          <xllLoading :show="loadingProfilePhotoShow" @onCancel="cancelUploadProfile()" ></xllLoading>
+
         </el-col>
       </el-row>
     </div>
@@ -192,6 +197,7 @@ import {phoneCodeData} from "@/utils/phoneCode";
 import {countriesData} from "@/utils/data";
 import meSideMenu from "@/components/meSideMenu";
 import profileTitle from "@/components/profileTitle"
+import xllLoading from "@/components/xllLoading"
 
 import {
   ZOHO_SYNC,
@@ -201,11 +207,13 @@ import {useStore} from "vuex";
 import {ref,reactive} from "vue";
 import {encode,decode} from 'js-base64'
 
+
 export default {
   name: "userContact",
   components: {
     meSideMenu,
-    profileTitle
+    profileTitle,
+    xllLoading
   },
   setup(){
     const store = useStore()
@@ -314,6 +322,8 @@ export default {
   },
   data() {
     return {
+      loadingProfilePhotoShow:false,
+
       sideMenuStatus:true,
       sexOptions: [
         {
@@ -415,6 +425,11 @@ export default {
     this.getAllAreas(0)
   },
   methods: {
+    cancelUploadProfile(){
+      console.log('cancel upload')
+
+      this.loadingProfilePhotoShow = false;
+    },
     getVisitorInfo(uid,identity) {
 
       let params = {
@@ -564,20 +579,19 @@ export default {
 
     handleProfilePhotoSuccess(res, file) {
       // console.log(res.data[0]['file_url'])
-      this.$loading().close()
+      this.loadingProfilePhotoShow = false;
       this.profilePhotoUrl = URL.createObjectURL(file.raw)
       this.basicForm.headimgurl = res.data[0]['file_url']
     },
     beforeProfilePhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
+      this.loadingProfilePhotoShow = true;
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
         this.$message.error('Avatar picture size can not exceed 20MB')
       }
       return isLt2M
+
     },
     submitForm(formName) {
       // console.log(formName)

@@ -118,7 +118,7 @@ export default {
         ],
         wx_id: [
           {
-            required: true,
+            required: false,
             message: "Wechat ID",
             trigger: 'blur',
           },

@@ -1715,10 +1715,10 @@ export default {
       let cityName = this.cityName
       let districtName = this.districtName
 
-      console.log(countryName)
-      console.log(provinceName)
-      console.log(cityName)
-      console.log(districtName)
+      // console.log(countryName)
+      // console.log(provinceName)
+      // console.log(cityName)
+      // console.log(districtName)
 
       if(countryName ){
         jobLocationValue = countryName
@@ -1769,7 +1769,7 @@ export default {
       // if (that.isEdit) {
       //   that.form.job_id = this.jobId;
       // }
-      console.log(that.jobForm);
+      // console.log(that.jobForm);
       this.$loading({
         text: 'Loading...'
       })
