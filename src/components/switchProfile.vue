@@ -68,7 +68,7 @@ export default {
           } else {
             this.$loading().close()
             this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/educator')
+            // this.$router.push('/role/educator')
 
           }
 
@@ -79,7 +79,7 @@ export default {
           } else {
             this.$loading().close()
             this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/business')
+            // this.$router.push('/role/business')
 
           }
 
@@ -90,7 +90,7 @@ export default {
           } else {
             this.$loading().close()
             this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/vendor')
+            // this.$router.push('/role/vendor')
 
           }
 

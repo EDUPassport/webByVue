@@ -296,3 +296,31 @@ export const FIND_PASSWORD_BY_PHONE_V2 = (params) =>post('home/user/findPassword
 
 // 上传图片-视频(阿里云OSS)
 export const UPLOAD_IMG = (params) =>post('user/uploadImg',params)
+
+// 前台用户分配菜单权限
+export const USER_ADD_MENU = (params) =>post('home/user/menu/add',params)
+
+// 前台用户分配菜单权限列表
+export const USER_MENU_LIST = (params) => get('home/user/menu/list',params)
+
+// 所有菜单的权限列表
+export const ALL_MENU_LIST = (params) => get('home/all/function/menu/list',params)
+
+// 获取用户所有分配出去的权限 去重后的角色
+export const ALL_ASSIGN_USERS = (params) => get('home/all/assign/users',params)
+
+// 通过阿里云oss存储
+export const UPLOAD_BY_ALI_OSS = (params) => post('user/uploadImg', params)
+
+// 直接存储到服务器上
+export const UPLOAD_BY_SERVICE = (params) => post('home/upload/storage', params)
+
+// 管理第三方公司状态下【返回自己公司】
+export const COMEBACK_MYSELF = (params) => post('home/user/comeback/myself', params)
+
+// 返回当前用户【分配给】【管理员下的所有company】
+export const USER_MENU_COMPANY = (params) => get('home/user/menu/company',params)
+
+// 删除当前用户【分配给】【管理员下的所有company】权限
+export const USER_MENU_DELETE = (params) => post('home/user/menu/delete', params)
+

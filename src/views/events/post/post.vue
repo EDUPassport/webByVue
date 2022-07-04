@@ -224,12 +224,10 @@
                 <el-form-item label="Event Flyer(jpg,png)" prop="file">
                   <el-upload
                       class="profile-uploader"
-                      :action="uploadActionUrl"
+                      action=""
                       :headers="uploadHeaders"
-                      :data="uploadData"
                       :show-file-list="false"
-                      name="file[]"
-                      :on-success="handleFlyerPhotoSuccess"
+                      :http-request="flyerHttpRequest"
                       :before-upload="beforeFlyerPhotoUpload"
                   >
                     <el-image v-if="flyerPhotoUrl" :src="flyerPhotoUrl" class="profile-avatar"></el-image>
@@ -254,11 +252,14 @@
         </el-col>
       </el-row>
     </div>
+
+    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
+
   </div>
 </template>
 
 <script>
-
+import xllLoading from '@/components/xllLoading'
 import meSideMenu from "@/components/meSideMenu";
 import {
   VISITOR_USER_INFO,
@@ -267,20 +268,24 @@ import {
   EVENTS_CATEGORY,
   EVENTS_TAGS,
   TAG_IS_EXISTS,
-  ZOHO_SYNC
+  ZOHO_SYNC, UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE
 } from '@/api/api';
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import ImageCompressor from 'compressorjs'
+
 
 export default {
   name: "post",
   components: {
-    meSideMenu
+    meSideMenu,
+    xllLoading
   },
   data() {
     return {
+      uploadLoadingStatus:false,
       mapLoading:false,
       map1Loading:false,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
@@ -369,6 +374,59 @@ export default {
     this.getEventsTags()
   },
   methods: {
+    flyerHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      new ImageCompressor(options.file,{
+        quality:0.6,
+        success(file) {
+          // console.log(file)
+          const formData = new FormData();
+
+          formData.append('token',localStorage.getItem('token'))
+          // console.log(file)
+          let isInChina = process.env.VUE_APP_CHINA
+          if(isInChina === 'yes'){
+            formData.append('file[]',file,file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.data[0]['file_url'];
+                self.uploadLoadingStatus = false;
+                self.flyerPhotoUrl = myFileUrl
+                self.basicForm.file = myFileUrl
+
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+          if(isInChina === 'no'){
+            formData.append('file',file,file.name)
+            UPLOAD_BY_SERVICE(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.message.file_path;
+                self.uploadLoadingStatus = false;
+                self.flyerPhotoUrl = myFileUrl
+                self.basicForm.file = myFileUrl
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
+
+    },
     addOwnTag() {
       this.addTagsStatus = false;
       let token = localStorage.getItem('token');
@@ -469,22 +527,20 @@ export default {
 
       }
     },
-    handleFlyerPhotoSuccess(res, file) {
-      // console.log(res.data[0]['file_url'])
-      this.$loading().close()
-      this.flyerPhotoUrl = URL.createObjectURL(file.raw)
-      this.basicForm.file = res.data[0]['file_url']
-    },
     beforeFlyerPhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
+      // this.$loading({
+      //   text:'Uploading...'
+      // })
+      this.uploadLoadingStatus = true;
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
         this.$message.error('Avatar picture size can not exceed 20MB')
       }
       return isLt2M
+    },
+    cancelUpload(){
+      this.uploadLoadingStatus = false;
     },
     eventDateChange(e){
       // console.log(e)

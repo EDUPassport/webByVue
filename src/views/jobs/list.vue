@@ -696,7 +696,7 @@ export default {
             this.changeIdentity(1)
           } else {
             this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/educator')
+            // this.$router.push('/role/educator')
           }
 
         }
@@ -704,7 +704,7 @@ export default {
           if (isBusiness >= 10) {
             let firstName = res.message.business_info.first_name;
             let lastName = res.message.business_info.last_name;
-            let avatar = res.message.business_info.profile_photo;
+            let avatar = res.message.business_info.logo;
             localStorage.setItem('name', firstName + ' ' + lastName)
             localStorage.setItem('avatar', avatar)
             localStorage.setItem('first_name', firstName)
@@ -716,7 +716,7 @@ export default {
             this.changeIdentity(2)
           } else {
             this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/business')
+            // this.$router.push('/role/business')
           }
 
         }
@@ -724,7 +724,7 @@ export default {
           if (isVendor >= 10) {
             let firstName = res.message.vendor_info.first_name;
             let lastName = res.message.vendor_info.last_name;
-            let avatar = res.message.vendor_info.profile_photo;
+            let avatar = res.message.vendor_info.logo;
 
             localStorage.setItem('name', firstName + ' ' + lastName)
             localStorage.setItem('avatar', avatar)
@@ -737,7 +737,7 @@ export default {
             this.changeIdentity(3)
           } else {
             this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/vendor')
+            // this.$router.push('/role/vendor')
           }
 
         }

@@ -195,7 +195,7 @@
                   <template v-if="editAccountImageStatus">
                     <el-upload
                         ref="accountImagesUpload"
-                        action="#"
+                        action=""
                         :headers="uploadHeaders"
                         :data="uploadData"
                         :auto-upload="false"
@@ -229,6 +229,8 @@
       </el-row>
 
     </div>
+
+    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()" ></xllLoading>
   </div>
 </template>
 
@@ -241,12 +243,17 @@ import {
   ZOHO_SYNC, USER_INFO_BY_TOKEN_V2, ADD_USER_IMG_V2, VENDOR_PERCENTAGE_V2, UPLOAD_IMG
 } from '@/api/api'
 import {encode} from 'js-base64'
+import xllLoading from "@/components/xllLoading"
+
+import ImageCompressor from 'compressorjs'
+
 
 export default {
   name: "profile",
   components: {
     meSideMenu,
-    accountInfo
+    accountInfo,
+    xllLoading
   },
   computed:{
     identity:{
@@ -258,6 +265,7 @@ export default {
   },
   data() {
     return {
+      uploadLoadingStatus:false,
       profilePercentage:0,
       editAccountImageStatus:false,
       activeName: 'first',
@@ -351,6 +359,9 @@ export default {
     this.updateBusinessProfile()
   },
   methods: {
+    cancelUploadProfile(){
+      this.uploadLoadingStatus = false;
+    },
     updateBusinessProfile() {
       let params = {
         token: localStorage.getItem('token')
@@ -904,6 +915,17 @@ export default {
       this.dialogAccountImageVisible = true
     },
     beforeAccountImageUpload(file){
+      console.log(file)
+      new ImageCompressor(file,{
+        quality:0.6,
+        success(file) {
+          console.log(file)
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
       const isJpeg = file.type === 'image/png' || file.type === 'image/jpg'
       if(!isJpeg){
         return this.$message.error('Please select the correct file format to upload')
@@ -911,6 +933,7 @@ export default {
       return isJpeg
     },
     handleAccountImageChange(fileList){
+      console.log(fileList)
       this.accountImageFileList.push(fileList)
     },
     uploadAccountImages(){

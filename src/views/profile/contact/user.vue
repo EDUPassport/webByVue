@@ -74,17 +74,13 @@
                 <el-input v-model="basicForm.email" placeholder="Email"></el-input>
               </el-form-item>
 
-
-
               <el-form-item label="Avatar" prop="headimgurl">
                 <el-upload
                     class="profile-uploader"
-                    :action="uploadActionUrl"
+                    action=""
                     :headers="uploadHeaders"
-                    :data="uploadData"
                     :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleProfilePhotoSuccess"
+                    :http-request="profilePhotoHttpRequest"
                     :before-upload="beforeProfilePhotoUpload"
                 >
                   <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>
@@ -184,7 +180,7 @@
             </el-button>
           </div>
 
-          <xllLoading :show="loadingProfilePhotoShow" @onCancel="cancelUploadProfile()" ></xllLoading>
+          <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()" ></xllLoading>
 
         </el-col>
       </el-row>
@@ -201,11 +197,14 @@ import xllLoading from "@/components/xllLoading"
 
 import {
   ZOHO_SYNC,
-  GET_COUNTRY_LIST, ALL_AREAS, USER_CONTACT_EDIT_V2, USER_INFO_BY_TOKEN_V2, USER_INFO_VISITOR_V2
+  GET_COUNTRY_LIST, ALL_AREAS, USER_CONTACT_EDIT_V2, USER_INFO_BY_TOKEN_V2, USER_INFO_VISITOR_V2,
+  UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE
 } from '@/api/api';
 import {useStore} from "vuex";
 import {ref,reactive} from "vue";
 import {encode,decode} from 'js-base64'
+
+import ImageCompressor from 'compressorjs'
 
 
 export default {
@@ -322,7 +321,7 @@ export default {
   },
   data() {
     return {
-      loadingProfilePhotoShow:false,
+      uploadLoadingStatus:false,
 
       sideMenuStatus:true,
       sexOptions: [
@@ -426,9 +425,7 @@ export default {
   },
   methods: {
     cancelUploadProfile(){
-      console.log('cancel upload')
-
-      this.loadingProfilePhotoShow = false;
+      this.uploadLoadingStatus = false;
     },
     getVisitorInfo(uid,identity) {
 
@@ -576,15 +573,61 @@ export default {
       })
 
     },
+    profilePhotoHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      new ImageCompressor(options.file,{
+        quality:0.6,
+        success(file) {
+          // console.log(file)
+          const formData = new FormData();
 
-    handleProfilePhotoSuccess(res, file) {
-      // console.log(res.data[0]['file_url'])
-      this.loadingProfilePhotoShow = false;
-      this.profilePhotoUrl = URL.createObjectURL(file.raw)
-      this.basicForm.headimgurl = res.data[0]['file_url']
+          formData.append('token',localStorage.getItem('token'))
+          // console.log(file)
+          let isInChina = process.env.VUE_APP_CHINA
+          if(isInChina === 'yes'){
+            formData.append('file[]',file,file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.data[0]['file_url'];
+                self.uploadLoadingStatus = false;
+                self.profilePhotoUrl = myFileUrl
+                self.basicForm.headimgurl = myFileUrl
+
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+          if(isInChina === 'no'){
+            formData.append('file',file,file.name)
+            UPLOAD_BY_SERVICE(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.message.file_path;
+                self.uploadLoadingStatus = false;
+                self.profilePhotoUrl = myFileUrl
+                self.basicForm.headimgurl = myFileUrl
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
+
     },
     beforeProfilePhotoUpload(file) {
-      this.loadingProfilePhotoShow = true;
+      this.uploadLoadingStatus = true;
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {

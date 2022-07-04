@@ -28,12 +28,10 @@
                   <el-upload
                       drag
                       class="resume-uploader"
-                      :action="uploadActionUrl"
+                      action=""
                       :headers="uploadHeaders"
-                      :data="uploadData"
                       :show-file-list="true"
-                      name="file[]"
-                      :on-success="handleSuccess"
+                      :http-request="bannerHttpRequest"
                       :before-upload="beforeUpload"
                   >
                     <el-icon class="el-icon--upload" :size="80">
@@ -44,12 +42,15 @@
                     </div>
                     <template #tip>
                       <div class="el-upload__tip">
-                          Upload your banner
+                        Upload your banner
                       </div>
                     </template>
-                    <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+                    <!--    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
                   </el-upload>
 
+                </div>
+                <div v-if="bannerImageUrl">
+                  <el-image :src="bannerImageUrl"></el-image>
                 </div>
 
               </div>
@@ -190,22 +191,30 @@
         </el-col>
       </el-row>
     </div>
+
+    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
   </div>
 </template>
 
 <script>
-import { EVENTS_MY_EVENT, MY_DEALS, MY_JOBS, SET_USER_ADS} from "@/api/api";
+import xllLoading from '@/components/xllLoading';
+import {EVENTS_MY_EVENT, MY_DEALS, MY_JOBS, SET_USER_ADS, UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE} from "@/api/api";
 import dashboardAdsImg from '@/assets/ads/2.png'
 import meSideMenu from "@/components/meSideMenu"
 import {decode} from 'js-base64'
+import ImageCompressor from 'compressorjs'
+
+
 
 export default {
   name: "redeem",
   components: {
-    meSideMenu
+    meSideMenu,
+    xllLoading
   },
   data() {
     return {
+      uploadLoadingStatus:false,
       dashboardAdsImg,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
       uploadHeaders: {
@@ -244,7 +253,7 @@ export default {
           {required: true, message: 'Please enter your contact', trigger: 'blur'}
         ],
         wx_id: [
-          {required: true, message: 'Please enter your wechat id', trigger: 'blur'}
+          {required: false, message: 'Please enter your wechat id', trigger: 'blur'}
         ]
       },
 
@@ -260,7 +269,7 @@ export default {
     let info = this.$route.query.info
     let infoDecode = decode(info)
     this.adCategoryDetail = JSON.parse(infoDecode)
-    console.log(this.adCategoryDetail)
+    // console.log(this.adCategoryDetail)
     let identity = localStorage.getItem('identity');
     this.identity = identity;
     if (identity == 2) {
@@ -275,20 +284,69 @@ export default {
     turnBack(){
       this.$router.push('/me/ads')
     },
-    handleSuccess(res, file) {
-      console.log(file)
-      // console.log(res.data[0]['file_url'])
-      this.bannerImageUrl = res.data[0]['file_url']
+    bannerHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      new ImageCompressor(options.file,{
+        quality:0.6,
+        success(file) {
+          // console.log(file)
+          const formData = new FormData();
+
+          formData.append('token',localStorage.getItem('token'))
+          // console.log(file)
+          let isInChina = process.env.VUE_APP_CHINA
+          if(isInChina === 'yes'){
+            formData.append('file[]',file,file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.data[0]['file_url'];
+                self.uploadLoadingStatus = false;
+                self.bannerImageUrl = myFileUrl
+
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+          if(isInChina === 'no'){
+            formData.append('file',file,file.name)
+            UPLOAD_BY_SERVICE(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.message.file_path;
+                self.uploadLoadingStatus = false;
+                self.bannerImageUrl = myFileUrl
+
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
 
     },
     beforeUpload(file) {
-
+      this.uploadLoadingStatus = true;
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
         this.$message.error('Avatar picture size can not exceed 20MB')
       }
       return isLt2M
+    },
+    cancelUpload(){
+      this.uploadLoadingStatus = false;
     },
     // 获取我发布的已审核通过的职位列表
     getJobListApproved(page, limit) {
@@ -363,7 +421,7 @@ export default {
       let myAdsId = adCategoryDetail.id;
 
       if (imageUrl == '') {
-       return this.$message.error(
+        return this.$message.error(
             'Please upload your banner'
         )
       }
@@ -396,9 +454,9 @@ export default {
       SET_USER_ADS(data).then(res => {
         console.log(res)
         if (res.code == 200) {
-            this.$message.success(res.msg)
+          this.$message.success(res.msg)
         } else {
-            this.$message.error(res.msg)
+          this.$message.error(res.msg)
         }
       }).catch(err => {
         console.log(err)

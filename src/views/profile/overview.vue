@@ -110,28 +110,34 @@
           ></accountInfo>
 
 
-          <div class="admin-container">
+          <div class="admin-container" v-if="isThirdCompanyStatus != 1">
             <h3>Account Administrators</h3>
             <div class="admin-content-container">
               <h4>Contributors</h4>
               <div class="admin-content-underline"></div>
               <div class="admin-list-container">
-                <div class="admin-item-container">
-                  <div class="admin-item-img-container">
-                    <el-image class="admin-item-img"
-                              src="https://osstest.esl-passport.cn/81a2ec26967d029054113335b961ac98.jpeg"></el-image>
+                <template v-if="assignUserData.length>0">
+                  <div class="admin-item-container"
+                       v-for="(item,i) in assignUserData" :key="i"
+                       @click="showMyCompany(item.id)"
+                  >
+                    <div class="admin-item-img-container">
+                      <el-image class="admin-item-img"
+                                :src="item.headimgurl ? item.headimgurl : defaultAvatar ">
+
+                      </el-image>
+                    </div>
+                    <div class="admin-item-name">{{ item.first_name }} {{item.last_name}}</div>
+                    <div class="admin-item-role">
+                      <template v-if="item.identity === 1">Educator</template>
+                      <template v-if="item.identity === 2">Recruiter</template>
+                      <template v-if="item.identity === 3">School</template>
+                      <template v-if="item.identity === 4">Other</template>
+                      <template v-if="item.identity === 5">Vendor</template>
+                    </div>
                   </div>
-                  <div class="admin-item-name">Lloyd</div>
-                  <div class="admin-item-role">Super Admin</div>
-                </div>
-                <div class="admin-item-container">
-                  <div class="admin-item-img-container">
-                    <el-image class="admin-item-img"
-                              src="https://osstest.esl-passport.cn/81a2ec26967d029054113335b961ac98.jpeg"></el-image>
-                  </div>
-                  <div class="admin-item-name">Lloyd</div>
-                  <div class="admin-item-role">Super Admin</div>
-                </div>
+
+                </template>
 
               </div>
 
@@ -164,6 +170,33 @@
 
           </div>
 
+          <el-dialog
+              v-model="dialogUserMenuCompanyVisible"
+              title="Choose a Company"
+              width="30%"
+              center
+          >
+            <div class="switch-account-tips">
+              Hello! Select a company to update！
+            </div>
+            <div class="switch-account-container">
+              <div class="switch-account-item"
+                   v-for="(item,i) in userMenuCompanyData"
+                   :key="i"
+                   @click="selectCompanyToUpdate(item.user_id,item.id)">
+                <template v-if="identity == 1">
+                  {{item.name}}
+                </template>
+                <template v-else>
+                  {{item.company_name}}
+                </template>
+
+              </div>
+
+            </div>
+          </el-dialog>
+
+
 
         </el-col>
       </el-row>
@@ -176,16 +209,15 @@ import defaultAvatar from '@/assets/default/avatar.png'
 import accountInfo from "../../components/accountInfo";
 import meSideMenu from "@/components/meSideMenu";
 import {
-  ADS_LIST,
+  ADS_LIST, ALL_ASSIGN_USERS,
   EDUCATOR_PERCENTAGE_V2, OTHER_PERCENTAGE_V2,
   RECRUITER_PERCENTAGE_V2,
   SCHOOL_PERCENTAGE_V2, USER_INFO_BY_TOKEN_V2,
-  USER_INFO_VISITOR_V2, VENDOR_PERCENTAGE_V2
+  USER_INFO_VISITOR_V2, USER_MENU_COMPANY, VENDOR_PERCENTAGE_V2
 } from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
 import {onBeforeRouteUpdate} from "vue-router";
-
 import {computed, ref} from "vue";
 
 export default {
@@ -205,6 +237,28 @@ export default {
     return {
       identity1
     }
+
+  },
+  watch:{
+    allIdentityChanged(newValue){
+      // console.log(newValue)
+      if(newValue){
+        this.getAllAssignUsers()
+      }
+    }
+  },
+  computed: {
+    isThirdCompanyStatus: {
+      get() {
+        return this.$store.state.isThirdCompanyStatus
+      }
+    },
+    allIdentityChanged:{
+      get(){
+        return this.$store.state.allIdentityChanged
+      }
+    }
+
   },
   data() {
     return {
@@ -223,7 +277,13 @@ export default {
       profilePercentage: 0,
       accountInfoLevel: 1,
       accountInfoVipDueTime: '',
-      accountInfoCategoryStr: ''
+      accountInfoCategoryStr: '',
+
+      assignUserData:[],
+      dialogUserMenuCompanyVisible:false,
+      userMenuCompanyData:[],
+
+      anotherUserId:0
 
     }
   },
@@ -242,9 +302,38 @@ export default {
     this.getAdsList()
 
     this.getPercentage(this.identity)
-
+    this.getAllAssignUsers()
   },
   methods: {
+    selectCompanyToUpdate(userId,companyId){
+      this.$router.push({path:'/profile/admin/add',query:{action:'edit',uid:this.anotherUserId,cuid:userId,cId:companyId}})
+    },
+    showMyCompany(userId){
+      this.anotherUserId = userId
+      let params = {
+        user_id:userId
+      }
+      USER_MENU_COMPANY(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.dialogUserMenuCompanyVisible = true;
+          this.userMenuCompanyData = res.message;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    getAllAssignUsers(){
+      let params = {}
+      ALL_ASSIGN_USERS(params).then(res=>{
+        console.log(res)
+        if(res.code === 200){
+          this.assignUserData = res.message
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     addAdmin(){
       this.$router.push({path:'/profile/admin/add',query:{}})
     },
@@ -745,6 +834,7 @@ export default {
 .admin-item-container {
   margin-left: 20px;
   margin-top: 20px;
+  cursor:pointer;
 }
 
 .admin-item-img-container {
@@ -777,5 +867,27 @@ export default {
   top: 20px;
 
 }
+.switch-account-tips {
+  font-size: 16px;
+  text-align: center;
+}
 
+.switch-account-container {
+  padding: 10px;
+}
+
+.switch-account-item {
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid #EEEEEE;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.switch-account-item:hover {
+  background-color: #0AA0A8;
+  color: #FFFFFF;
+}
 </style>

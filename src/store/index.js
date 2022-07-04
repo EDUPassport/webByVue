@@ -3,15 +3,20 @@ import {createStore} from "vuex";
 const store = createStore({
     state() {
         let currentUserStr = localStorage.getItem('currentUser')
-
+        let menuDataStr = localStorage.getItem('menuData')
+        let isThirdCompanyValue = localStorage.getItem('is_third_company')
         return {
             username: localStorage.getItem('name'),
             userAvatar: localStorage.getItem('avatar'),
             identity: localStorage.getItem('identity'),
+            thirdCompanyId:localStorage.getItem('third_company_id'),
             currentUser:currentUserStr ?  JSON.parse(currentUserStr) : '',
             nowChatUserInfo:{},
             showChatStatus:false,
-            allIdentityChanged:false
+            allIdentityChanged:false,
+            menuData:menuDataStr ? JSON.parse(menuDataStr) : [],
+            menuDataStatus:false,
+            isThirdCompanyStatus: isThirdCompanyValue ? isThirdCompanyValue : 0
         }
     },
     mutations: {
@@ -23,6 +28,9 @@ const store = createStore({
         },
         identity(state, data) {
             state.identity = data
+        },
+        thirdCompanyId(state, data) {
+            state.thirdCompanyId = data
         },
         currentUser(state, data){
             localStorage.setItem('currentUser',JSON.stringify(data))
@@ -36,6 +44,15 @@ const store = createStore({
         },
         allIdentityChanged(state,data){
             state.allIdentityChanged = data
+        },
+        menuData(state,data){
+            state.menuData = data
+        },
+        changeMenuDataStatus(state, data){
+            state.menuDataStatus = data
+        },
+        changeThirdCompanyStatus(state, data){
+            state.isThirdCompanyStatus = data
         }
     },
     actions:{

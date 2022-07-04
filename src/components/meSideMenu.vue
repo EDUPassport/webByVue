@@ -15,56 +15,21 @@
               :class="activeMsg ? 'l-item-msg-active' : ''"
               @click="turnMyMessages()">My Messages</div>
       </div>
-      <div class="l-item">
-        <router-link to="/favorites" exact>My Favorites</router-link>
+
+      <div class="l-item"
+           v-for="(item,i) in menuData" :Key="i"
+           :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' ">
+        <template v-if="item.link === '/jobs/post' ">
+          <router-link :to="{path:item.link,query:{version_time:versionTime}}" exact>
+            {{item.menu_name_en}}
+          </router-link>
+        </template>
+        <template v-else>
+          <router-link :to="{path:item.link}" exact>{{item.menu_name_en}}</router-link>
+        </template>
+
       </div>
-      <div class="l-item" >
-        <router-link
-            :class="selectedKeys === '/educator/profile' ? 'router-link-exact-active' : '' "
-            v-if="identity == 1" to="/educator/profile" exact>
-          My Account & Profile
-        </router-link>
-        <router-link
-            :class="selectedKeys === '/business/profile' ? 'router-link-exact-active' : '' "
-            v-if="identity == 2 || identity == 3 || identity == 4" to="/business/profile" exact>
-          My Account & Profile
-        </router-link>
-        <router-link
-            :class="selectedKeys === '/vendor/profile' ? 'router-link-exact-active' : '' "
-            v-if="identity == 5" to="/vendor/profile" exact>
-          My Account & Profile
-        </router-link>
-      </div>
-      <div class="l-item">
-        <router-link to="/me/ads" exact>My Ads</router-link>
-      </div>
-      <div class="l-item" v-if="identity == 2">
-        <router-link to="/jobs/myJobs" exact>My Jobs</router-link>
-      </div>
-      <div class="l-item" v-if="identity == 3">
-        <router-link to="/deals/myDeals" exact>My Deals</router-link>
-      </div>
-      <div class="l-item" v-if="identity == 2">
-        <router-link :to="{path:'/jobs/post',query:{version_time:versionTime}}" exact>Post a Job</router-link>
-      </div>
-      <div class="l-item" v-if="identity == 3">
-        <router-link to="/deals/offer" exact>Offer a Deal</router-link>
-      </div>
-      <div class="l-item" v-if="identity == 3 || identity == 2">
-        <router-link to="/events/myEvents" exact>My Events</router-link>
-      </div>
-      <div class="l-item" v-if="identity == 3 || identity == 2">
-        <router-link to="/events/post" exact>Post Event</router-link>
-      </div>
-      <div class="l-item">
-        <router-link to="/privacy/policy" exact>Privacy Policy</router-link>
-      </div>
-      <div class="l-item" v-if="identity == 1">
-        <router-link to="/me/applications" exact>My Applications</router-link>
-      </div>
-      <div class="l-item">
-        <router-link to="/faq/list" exact>FAQ</router-link>
-      </div>
+
     </div>
 
   </div>
@@ -73,7 +38,7 @@
 
 <script>
 import {randomString} from "@/utils";
-import {GET_BASIC_INFO} from  '@/api/api'
+import {USER_MENU_LIST} from '@/api/api'
 import defaultAvatar from '@/assets/default/avatar.png'
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
@@ -86,21 +51,16 @@ export default {
 
     const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
     const setShowChatStatus = () => store.commit('showChatStatus', true)
-
     const currentRoute = useRoute()
-
-
     const activeMenuStr = currentRoute.meta.activeMenu;
-
     const selectedKeys = ref(activeMenuStr ? activeMenuStr : currentRoute.path)
-
-
 
     return {
       setNowChatUserInfo,
       setShowChatStatus,
       selectedKeys
     }
+
   },
   data(){
     return {
@@ -109,6 +69,7 @@ export default {
       accountPhotoValue:'',
       versionTime:randomString(),
       activeMsg:false
+
     }
   },
   computed:{
@@ -127,51 +88,46 @@ export default {
       get(){
         return this.$store.state.identity
       }
+    },
+    menuData:{
+      get(){
+        return this.$store.state.menuData
+      }
     }
+
 
   },
   mounted() {
-    console.log(this.selectedKeys)
-    console.log(this.identity)
-    // this.getBasicInfo()
+    // this.getUserMenuList()
   },
   methods:{
-    turnMyMessages(){
-      // this.activeMsg = true
-      this.setShowChatStatus()
-    },
-    getBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
+    getUserMenuList(){
+      let self = this;
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
+        user_id:localStorage.getItem('uid'),
+        identity:self.identity,
+        company_id:localStorage.getItem('company_id'),
+        create_user_id:localStorage.getItem('c_uid'),
+        page:1,
+        limit:1000
       }
-      GET_BASIC_INFO(params).then(res => {
-        console.log(res)
-        if(res.code == 200){
-
-          this.phone = res.message.phone;
-          if (identity == 1 && res.message.educator_info) {
-            this.accountInfo = res.message.educator_info;
-            this.accountPhotoValue = res.message.educator_info.profile_photo
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.accountInfo = res.message.business_info;
-            this.accountPhotoValue = res.message.business_info.logo
-
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.accountInfo = res.message.vendor_info;
-            this.accountPhotoValue = res.message.vendor_info.logo
-          }
-
+      USER_MENU_LIST(params).then(res=>{
+        // console.log(res)
+        if(res.code === 200){
+          let pcAllData = res.message.pc;
+          let sData = pcAllData.filter(item=>item.identity == self.identity)
+          this.$store.commit('menuData', sData)
+          // localStorage.setItem('menuData',res.message.pc)
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
       })
+    },
+    turnMyMessages(){
+      // this.activeMsg = true
+      this.setShowChatStatus()
     }
+
   }
 }
 </script>

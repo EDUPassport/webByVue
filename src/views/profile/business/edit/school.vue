@@ -68,12 +68,10 @@
               <el-form-item label="Logo Photo" prop="logo">
                 <el-upload
                     class="profile-uploader"
-                    :action="uploadActionUrl"
+                    action=""
                     :headers="uploadHeaders"
-                    :data="uploadData"
                     :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleLogoPhotoSuccess"
+                    :http-request="logoPhotoHttpRequest"
                     :before-upload="beforeLogoPhotoUpload"
                 >
                   <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="profile-avatar"></el-image>
@@ -181,12 +179,10 @@
               <el-form-item label="Business registration certificate" prop="business_reg_img">
                 <el-upload
                     class="business-reg-uploader"
-                    :action="uploadActionUrl"
+                    action=""
                     :headers="uploadHeaders"
-                    :data="uploadData"
                     :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleBusinessRegPhotoSuccess"
+                    :http-request="businessRegPhotoHttpRequest"
                     :before-upload="beforeBusinessRegPhotoUpload"
                 >
                   <el-image v-if="businessRegPhotoUrl" :src="businessRegPhotoUrl" class="business-reg-avatar"></el-image>
@@ -197,12 +193,10 @@
               <el-form-item label="License" prop="license">
                 <el-upload
                     class="business-reg-uploader"
-                    :action="uploadActionUrl"
+                    action=""
                     :headers="uploadHeaders"
-                    :data="uploadData"
                     :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleLicensePhotoSuccess"
+                    :http-request="licenseHttpRequest"
                     :before-upload="beforeLicensePhotoUpload"
                 >
                   <el-image v-if="licensePhotoUrl" :src="licensePhotoUrl" class="business-reg-avatar"></el-image>
@@ -214,12 +208,10 @@
               <el-form-item label="Intro Video" prop="video_url">
                 <el-upload
                     class="intro-video-uploader"
-                    :action="uploadActionUrl"
+                    action=""
                     :headers="uploadHeaders"
-                    :data="uploadData"
                     :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleIntroVideoSuccess"
+                    :http-request="videoHttpRequest"
                     :before-upload="beforeIntroVideoUpload"
                 >
                   <video v-if="introVideoUrl" :src="introVideoUrl" controls class="intro-video-avatar"/>
@@ -245,7 +237,6 @@
                   </template>
                 </el-input>
               </el-form-item>
-
 
               <el-form-item label="Curriculum" prop="curriculum">
                 <el-input v-model="basicForm.staff_student_ratio" type="textarea"
@@ -341,10 +332,15 @@
         </el-col>
       </el-row>
     </div>
+
+    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()" ></xllLoading>
+
   </div>
 </template>
 
 <script>
+import xllLoading from "@/components/xllLoading"
+
 import profileTitle from "@/components/profileTitle"
 import meSideMenu from "@/components/meSideMenu";
 import {
@@ -355,7 +351,8 @@ import {
   ALL_AREAS,
   SUB_CATE_LIST,
   USER_INFO_BY_TOKEN_V2,
-  SCHOOL_COMPANY_EDIT_V2, ADD_PROFILE_V2
+  SCHOOL_COMPANY_EDIT_V2, ADD_PROFILE_V2,
+  UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, USER_MENU_LIST
 } from '@/api/api'
 import {phoneCodeData} from "@/utils/phoneCode";
 import mapboxgl from "mapbox-gl";
@@ -364,15 +361,19 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import {countriesData} from "@/utils/data";
 import {decode} from "js-base64";
+import ImageCompressor from 'compressorjs'
+
 
 export default {
   name: "school",
   components: {
     meSideMenu,
-    profileTitle
+    profileTitle,
+    xllLoading
   },
   data() {
     return {
+      uploadLoadingStatus:false,
       tuitionValue:0,
       currencyValue:2,
       sideMenuStatus:true,
@@ -531,16 +532,64 @@ export default {
 
   },
   methods: {
-    handleLicensePhotoSuccess(res, file) {
-      // console.log(res.data[0]['file_url'])
-      this.$loading().close()
-      this.licensePhotoUrl = URL.createObjectURL(file.raw)
-      this.basicForm.license = res.data[0]['file_url']
+    cancelUploadProfile(){
+      this.uploadLoadingStatus = false;
+    },
+    licenseHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      new ImageCompressor(options.file,{
+        quality:0.6,
+        success(file) {
+          // console.log(file)
+          const formData = new FormData();
+
+          formData.append('token',localStorage.getItem('token'))
+          // console.log(file)
+          let isInChina = process.env.VUE_APP_CHINA
+          if(isInChina === 'yes'){
+            formData.append('file[]',file,file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.data[0]['file_url'];
+                self.uploadLoadingStatus = false;
+                self.licensePhotoUrl = myFileUrl
+                self.basicForm.license = myFileUrl
+
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+          if(isInChina === 'no'){
+            formData.append('file',file,file.name)
+            UPLOAD_BY_SERVICE(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.message.file_path;
+                self.uploadLoadingStatus = false;
+                self.licensePhotoUrl = myFileUrl
+                self.basicForm.license = myFileUrl
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
+
     },
     beforeLicensePhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
+      this.uploadLoadingStatus = true;
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -548,16 +597,62 @@ export default {
       }
       return isLt2M
     },
-    handleBusinessRegPhotoSuccess(res, file) {
-      // console.log(res.data[0]['file_url'])
-      this.$loading().close()
-      this.businessRegPhotoUrl = URL.createObjectURL(file.raw)
-      this.basicForm.business_reg_img = res.data[0]['file_url']
+    businessRegPhotoHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      new ImageCompressor(options.file,{
+        quality:0.6,
+        success(file) {
+          // console.log(file)
+          const formData = new FormData();
+
+          formData.append('token',localStorage.getItem('token'))
+          // console.log(file)
+          let isInChina = process.env.VUE_APP_CHINA
+          if(isInChina === 'yes'){
+            formData.append('file[]',file,file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.data[0]['file_url'];
+                self.uploadLoadingStatus = false;
+                self.businessRegPhotoUrl = myFileUrl
+                self.basicForm.business_reg_img = myFileUrl
+
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+          if(isInChina === 'no'){
+            formData.append('file',file,file.name)
+            UPLOAD_BY_SERVICE(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.message.file_path;
+                self.uploadLoadingStatus = false;
+                self.businessRegPhotoUrl = myFileUrl
+                self.basicForm.business_reg_img = myFileUrl
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
+
     },
     beforeBusinessRegPhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
+      this.uploadLoadingStatus = true;
+
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -565,16 +660,62 @@ export default {
       }
       return isLt2M
     },
-    handleLogoPhotoSuccess(res, file) {
-      // console.log(res.data[0]['file_url'])
-      this.$loading().close()
-      this.logoPhotoUrl = URL.createObjectURL(file.raw)
-      this.basicForm.logo = res.data[0]['file_url']
+    logoPhotoHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      new ImageCompressor(options.file,{
+        quality:0.6,
+        success(file) {
+          // console.log(file)
+          const formData = new FormData();
+
+          formData.append('token',localStorage.getItem('token'))
+          // console.log(file)
+          let isInChina = process.env.VUE_APP_CHINA
+          if(isInChina === 'yes'){
+            formData.append('file[]',file,file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.data[0]['file_url'];
+                self.uploadLoadingStatus = false;
+                self.logoPhotoUrl = myFileUrl
+                self.basicForm.logo = myFileUrl
+
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+          if(isInChina === 'no'){
+            formData.append('file',file,file.name)
+            UPLOAD_BY_SERVICE(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.message.file_path;
+                self.uploadLoadingStatus = false;
+                self.logoPhotoUrl = myFileUrl
+                self.basicForm.logo = myFileUrl
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
+
     },
     beforeLogoPhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
+      this.uploadLoadingStatus = true;
+
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -582,18 +723,52 @@ export default {
       }
       return isLt2M
     },
-    handleIntroVideoSuccess(res, file) {
-      // console.log(res)
-      this.$loading().close()
-      this.introVideoUrl = URL.createObjectURL(file.raw)
-      this.basicForm.video_url = res.data[0]['file_url']
+    videoHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      const formData = new FormData();
+      let file = options.file;
+
+      formData.append('token',localStorage.getItem('token'))
+      // console.log(file)
+      let isInChina = process.env.VUE_APP_CHINA
+      if(isInChina === 'yes'){
+        formData.append('file[]',file,file.name)
+        UPLOAD_BY_ALI_OSS(formData).then(res=>{
+          // console.log(res)
+          if(res.code == 200){
+            let myFileUrl = res.data[0]['file_url'];
+            self.uploadLoadingStatus = false;
+            self.introVideoUrl = myFileUrl
+            self.basicForm.video_url = myFileUrl
+
+          }
+        }).catch(err=>{
+          console.log(err)
+        })
+
+      }
+
+      if(isInChina === 'no'){
+        formData.append('file',file,file.name)
+        UPLOAD_BY_SERVICE(formData).then(res=>{
+          // console.log(res)
+          if(res.code == 200){
+            let myFileUrl = res.message.file_path;
+            self.uploadLoadingStatus = false;
+            self.introVideoUrl = myFileUrl
+            self.basicForm.video_url = myFileUrl
+          }
+        }).catch(err=>{
+          console.log(err)
+        })
+
+      }
 
     },
     beforeIntroVideoUpload(file) {
       console.log(file)
-      this.$loading({
-        text:'Uploading...'
-      })
+      this.uploadLoadingStatus = true;
     },
     initMap() {
       mapboxgl.accessToken = this.accessToken;
@@ -663,7 +838,7 @@ export default {
         console.log(res)
         if(res.code == 200){
           localStorage.setItem('identity',3)
-          localStorage.setItem('companyId',companyId)
+          localStorage.setItem('company_id',companyId)
           this.$store.commit('identity',3)
           this.$store.commit('allIdentityChanged',true )
           this.$router.push('/business/profile')
@@ -739,16 +914,22 @@ export default {
 
               this.$store.commit('username',this.basicForm.company_name)
               this.$store.commit('userAvatar',this.basicForm.logo)
-              this.$store.commit('allIdentityChanged',true )
+
               this.submitLoadingValue = false;
 
               if(action == 'edit'){
                 this.$router.push('/business/profile')
               }else{
+
+                localStorage.setItem('company_id', res.message.school_company_id)
+
+                this.$store.commit('allIdentityChanged',true )
+                let uid = localStorage.getItem('uid')
+
+                this.getUserMenuList(uid,3, res.message.school_company_id, uid)
+
                 this.changeIdentity(res.message.school_company_id,2)
               }
-
-              // this.submitEduBusinessCompanyForm()
 
             }
           }).catch(err => {
@@ -760,6 +941,30 @@ export default {
           console.log('error submit!!')
           return false
         }
+      })
+    },
+    getUserMenuList(uid,identity,companyId,createUid){
+
+      let params = {
+        user_id: uid,
+        identity: identity,
+        company_id: companyId,
+        create_user_id: createUid,
+        page:1,
+        limit:1000
+      }
+
+      USER_MENU_LIST(params).then(res=>{
+        // console.log(res)
+        if(res.code === 200){
+          let pcAllData = res.message.pc;
+          let sData = pcAllData.filter(item=>item.identity == identity)
+          this.$store.commit('menuData', sData)
+          localStorage.setItem('menuData',JSON.stringify(sData))
+        }
+
+      }).catch(err=>{
+        console.log(err)
       })
     },
     resetForm(formName) {

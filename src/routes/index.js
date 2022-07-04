@@ -185,33 +185,6 @@ const routes = [
                 }
             },
             {
-                path: '/role/educator',
-                name: 'roleEducator',
-                component: () => import('@/views/role/educator'),
-                meta: {
-                    titleC: 'China Educator',
-                    titleG: 'Global Educator',
-                }
-            },
-            {
-                path: '/role/business',
-                name: 'roleBusiness',
-                component: () => import('@/views/role/business'),
-                meta: {
-                    titleC: 'China Business',
-                    titleG: 'Global Business',
-                }
-            },
-            {
-                path: '/role/vendor',
-                name: 'roleVendor',
-                component: () => import('@/views/role/vendor'),
-                meta: {
-                    titleC: 'China Vendor',
-                    titleG: 'Global Vendor',
-                }
-            },
-            {
                 path: '/profile/admin/add',
                 name: 'profileAdminAdd',
                 component: () => import('@/views/profile/admin/add'),
@@ -290,24 +263,6 @@ const routes = [
                 }
             },
             {
-                path: '/business/edit/basic',
-                name: 'editBusinessBasic',
-                component: () => import('@/views/profile/business/edit/basic'),
-                meta: {
-                    titleC: 'China Edit Basic Info',
-                    titleG: 'Global Edit Basic Info',
-                }
-            },
-            {
-                path: '/business/edit/businessInfo',
-                name: 'editBusinessInfo',
-                component: () => import('@/views/profile/business/edit/businessInfo'),
-                meta: {
-                    titleC: 'China Edit Business Information',
-                    titleG: 'Global Edit Business Information',
-                }
-            },
-            {
                 path: '/business/edit/recruiter',
                 name: 'editRecruiter',
                 component: () => import('@/views/profile/business/edit/recruiter'),
@@ -354,33 +309,6 @@ const routes = [
                     activeMenu: "/vendor/profile",
                     titleC: 'China Edit Vendor Info',
                     titleG: 'Global Edit Vendor Info',
-                }
-            },
-            {
-                path: '/vendor/edit/basic',
-                name: 'editVendorBasic',
-                component: () => import('@/views/profile/vendor/edit/basic'),
-                meta: {
-                    titleC: 'China Edit Basic Info',
-                    titleG: 'Global Edit Basic Info',
-                }
-            },
-            {
-                path: '/vendor/edit/vendorInfo',
-                name: 'editVendorInfo',
-                component: () => import('@/views/profile/vendor/edit/vendorInfo'),
-                meta: {
-                    titleC: 'China Edit Company General Info',
-                    titleG: 'Global Edit Company General Info',
-                }
-            },
-            {
-                path: '/vendor/edit/legalInfo',
-                name: 'editLegalInfo',
-                component: () => import('@/views/profile/vendor/edit/legalInfo'),
-                meta: {
-                    titleC: 'China Edit Company Legal Info',
-                    titleG: 'Global Edit Company Legal Info',
                 }
             },
             {

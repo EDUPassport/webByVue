@@ -44,6 +44,9 @@
                           <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>
                           <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
                           <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
+                          <el-dropdown-item divided @click="returnMySelf()" v-if="isThirdCompanyStatus == 1">
+                            Return to Previous Account
+                          </el-dropdown-item>
                           <el-dropdown-item divided @click="loginOut()">Log Out</el-dropdown-item>
                         </el-dropdown-menu>
                       </template>
@@ -53,9 +56,19 @@
                   <div class="user-1-r">
                     <div class="user-name"> Hi, {{ username }}</div>
                     <div class="user-dropdown">
-
-                      <el-dropdown size="large" trigger="click" :hide-on-click="false"
-                                   popper-class="xll-dropdown">
+                      <template v-if="isThirdCompanyStatus == 1">
+                         <span class="el-dropdown-link">
+                            <template v-if="identity == 0">Guest</template>
+                            <template v-if="identity == 1">Educator</template>
+                            <template v-if="identity == 2">Edu-Business</template>
+                            <template v-if="identity == 3">Edu-Business</template>
+                            <template v-if="identity == 4">Edu-Business</template>
+                            <template v-if="identity == 5">Vendor</template>
+                          </span>
+                      </template>
+                      <template v-else>
+                        <el-dropdown size="large" trigger="click" :hide-on-click="false"
+                                     popper-class="xll-dropdown">
                           <span class="el-dropdown-link">
                             <template v-if="identity == 0">Guest</template>
                             <template v-if="identity == 1">Educator</template>
@@ -63,134 +76,213 @@
                             <template v-if="identity == 3">Edu-Business</template>
                             <template v-if="identity == 4">Edu-Business</template>
                             <template v-if="identity == 5">Vendor</template>
-                            <i class="el-icon-arrow-down el-icon--right"></i>
+                            <i  class="el-icon-arrow-down el-icon--right"></i>
                           </span>
 
-                        <template #dropdown>
-                          <el-dropdown-menu >
-
-                            <div class="xll-more-company-dropdown" >
-                              <div class="xll-more-company-dropdown-l">
-                                <el-dropdown-item class="xll-dropdown-item">
-                                  <el-dropdown size="large" placement="left-start" :max-height="400">
+                          <template #dropdown >
+                            <el-dropdown-menu >
+                              <div class="xll-more-company-dropdown" >
+                                <div class="xll-more-company-dropdown-l">
+                                  <el-dropdown-item class="xll-dropdown-item">
+                                    <el-dropdown size="large" placement="left-start" :max-height="400">
                                   <span class="el-dropdown-link-business">
                                      <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
                                      Educator
                                   </span>
-                                    <template #dropdown>
-                                      <el-dropdown-menu v-if="educatorContactStatus ">
+                                      <template #dropdown>
+                                        <el-dropdown-menu >
+                                          <div class="xll-sub-dropdown"  v-if="educatorContactData.length>0">
+                                            <el-dropdown-item
+                                                class="xll-dropdown-item"
+                                                v-for="(item,i) in educatorContactData"
+                                                :key="i"
+                                                @click="changeIdentity(item.id,1,2)">
 
-                                        <template v-if="educatorContactData.name">
-                                          <el-dropdown-item
-                                              class="xll-dropdown-item"
-                                              @click="changeIdentity(educatorContactData.id,1,2)">
-                                              {{educatorContactData.name}}
-                                          </el-dropdown-item>
-                                        </template>
-
-                                        <template v-else>
-                                          <el-dropdown-item
-                                              class="xll-dropdown-item"
-                                              @click="changeIdentity(educatorContactData.id,1,2)"
-                                          >
-                                            <div class="xll-add-icon-container" >
-                                              <span>Add</span>
-                                              <el-icon class="xll-icon-circle-plus-1" :size="14">
-                                                <CirclePlus/>
-                                              </el-icon>
-                                            </div>
-                                          </el-dropdown-item>
-                                        </template>
-
-                                      </el-dropdown-menu>
-
-                                      <el-dropdown-menu v-else>
-
-                                        <el-dropdown-item class="xll-dropdown-item" @click="createRole(1)">
-                                          <div class="xll-add-icon-container" >
-                                            <span>Add</span>
-                                            <el-icon class="xll-icon-circle-plus-1" :size="14">
-                                              <CirclePlus/>
-                                            </el-icon>
+                                              <template v-if="item.name">
+                                                {{item.name}}
+                                              </template>
+                                              <template v-else>
+                                                Default ID : {{item.id}}
+                                              </template>
+                                            </el-dropdown-item>
                                           </div>
-                                        </el-dropdown-item>
 
-                                      </el-dropdown-menu>
+                                          <div class="xll-sub-dropdown">
+                                            <el-dropdown-item class="xll-dropdown-item" @click="createRole(1)">
+                                              <div class="xll-add-icon-container" >
+                                                <span>Add</span>
+                                                <el-icon class="xll-icon-circle-plus-1" :size="14">
+                                                  <CirclePlus/>
+                                                </el-icon>
+                                              </div>
+                                            </el-dropdown-item>
+                                          </div>
 
-                                    </template>
-                                  </el-dropdown>
 
-                                </el-dropdown-item>
+                                          <!--                                        <template v-if="educatorContactData.name">-->
+                                          <!--                                          <el-dropdown-item-->
+                                          <!--                                              class="xll-dropdown-item"-->
+                                          <!--                                              @click="changeIdentity(educatorContactData.id,1,2)">-->
+                                          <!--                                              {{educatorContactData.name}}-->
+                                          <!--                                          </el-dropdown-item>-->
+                                          <!--                                        </template>-->
+
+                                          <!--                                        <template v-else>-->
+                                          <!--                                          <el-dropdown-item-->
+                                          <!--                                              class="xll-dropdown-item"-->
+                                          <!--                                              @click="changeIdentity(educatorContactData.id,1,2)"-->
+                                          <!--                                          >-->
+                                          <!--                                            <div class="xll-add-icon-container" >-->
+                                          <!--                                              <span>Add</span>-->
+                                          <!--                                              <el-icon class="xll-icon-circle-plus-1" :size="14">-->
+                                          <!--                                                <CirclePlus/>-->
+                                          <!--                                              </el-icon>-->
+                                          <!--                                            </div>-->
+                                          <!--                                          </el-dropdown-item>-->
+                                          <!--                                        </template>-->
+
+                                        </el-dropdown-menu>
+
+                                        <!--                                      <el-dropdown-menu v-else>-->
+
+                                        <!--                                        <el-dropdown-item class="xll-dropdown-item" @click="createRole(1)">-->
+                                        <!--                                          <div class="xll-add-icon-container" >-->
+                                        <!--                                            <span>Add</span>-->
+                                        <!--                                            <el-icon class="xll-icon-circle-plus-1" :size="14">-->
+                                        <!--                                              <CirclePlus/>-->
+                                        <!--                                            </el-icon>-->
+                                        <!--                                          </div>-->
+                                        <!--                                        </el-dropdown-item>-->
+
+                                        <!--                                      </el-dropdown-menu>-->
+
+                                      </template>
+                                    </el-dropdown>
+
+                                  </el-dropdown-item>
+
+                                </div>
+                                <div class="xll-more-company-dropdown-r">
+                                  <!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
+                                  <!--                                         @click="createRole(1)"-->
+                                  <!--                                >-->
+                                  <!--                                  <CirclePlus/>-->
+                                  <!--                                </el-icon>-->
+                                </div>
 
                               </div>
-                              <div class="xll-more-company-dropdown-r">
-<!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
-<!--                                         @click="createRole(1)"-->
-<!--                                >-->
-<!--                                  <CirclePlus/>-->
-<!--                                </el-icon>-->
-                              </div>
 
-                            </div>
+                              <div class="xll-more-company-dropdown">
+                                <div class="xll-more-company-dropdown-l">
 
-                            <div class="xll-more-company-dropdown">
-                              <div class="xll-more-company-dropdown-l">
-
-                                <el-dropdown-item class="xll-dropdown-item">
-                                  <el-dropdown size="large" placement="left-start" :max-height="400">
+                                  <el-dropdown-item class="xll-dropdown-item">
+                                    <el-dropdown size="large" placement="left-start" :max-height="400">
                                   <span class="el-dropdown-link-business">
                                      <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
                                     Edu-Business
                                   </span>
-                                    <template #dropdown>
-                                      <el-dropdown-menu>
-                                        <div class="xll-sub-dropdown"  v-if="recruiterCompanyData.length>0">
-                                          <el-dropdown-item
-                                              class="xll-dropdown-item"
-                                              v-for="(item,i) in recruiterCompanyData"
-                                              :key="i"
-                                              @click="changeIdentity(item.id,2,2)">
+                                      <template #dropdown>
+                                        <el-dropdown-menu>
+                                          <div class="xll-sub-dropdown"  v-if="recruiterCompanyData.length>0">
+                                            <el-dropdown-item
+                                                class="xll-dropdown-item"
+                                                v-for="(item,i) in recruiterCompanyData"
+                                                :key="i"
+                                                @click="changeIdentity(item.id,2,2)">
 
-                                            <template v-if="item.company_name">
-                                              {{item.company_name}}
-                                            </template>
-                                            <template v-else>
-                                              Company ID: {{item.id}}
-                                            </template>
-                                          </el-dropdown-item>
-                                        </div>
+                                              <template v-if="item.company_name">
+                                                {{item.company_name}}
+                                              </template>
+                                              <template v-else>
+                                                Default ID: {{item.id}}
+                                              </template>
+                                            </el-dropdown-item>
+                                          </div>
 
-                                        <div class="xll-sub-dropdown" v-if="schoolCompanyData.length>0">
-                                          <el-dropdown-item
-                                              class="xll-dropdown-item"
-                                              v-for="(item,i) in schoolCompanyData"
-                                              :key="i"
-                                              @click="changeIdentity(item.id,3,2)">
-                                            <template v-if="item.company_name">
-                                              {{item.company_name}}
-                                            </template>
-                                            <template v-else>
-                                              Company ID: {{item.id}}
-                                            </template>
-                                          </el-dropdown-item>
-                                        </div>
-                                        <div class="xll-sub-dropdown" v-if="otherCompanyData.length>0">
-                                          <el-dropdown-item
-                                              v-for="(item,i) in otherCompanyData"
-                                              :key="i"
-                                              class="xll-dropdown-item"
-                                              @click="changeIdentity(item.id,4,2)">
-                                            <template v-if="item.company_name">
-                                              {{item.company_name}}
-                                            </template>
-                                            <template v-else>
-                                              Company ID: {{item.id}}
-                                            </template>
-                                          </el-dropdown-item>
-                                        </div>
+                                          <div class="xll-sub-dropdown" v-if="schoolCompanyData.length>0">
+                                            <el-dropdown-item
+                                                class="xll-dropdown-item"
+                                                v-for="(item,i) in schoolCompanyData"
+                                                :key="i"
+                                                @click="changeIdentity(item.id,3,2)">
+                                              <template v-if="item.company_name">
+                                                {{item.company_name}}
+                                              </template>
+                                              <template v-else>
+                                                Company ID: {{item.id}}
+                                              </template>
+                                            </el-dropdown-item>
+                                          </div>
+                                          <div class="xll-sub-dropdown" v-if="otherCompanyData.length>0">
+                                            <el-dropdown-item
+                                                v-for="(item,i) in otherCompanyData"
+                                                :key="i"
+                                                class="xll-dropdown-item"
+                                                @click="changeIdentity(item.id,4,2)">
+                                              <template v-if="item.company_name">
+                                                {{item.company_name}}
+                                              </template>
+                                              <template v-else>
+                                                Default ID: {{item.id}}
+                                              </template>
+                                            </el-dropdown-item>
+                                          </div>
 
-                                        <div class="xll-sub-dropdown">
-                                          <el-dropdown-item class="xll-dropdown-item" @click="selectBusinessRole()">
+                                          <div class="xll-sub-dropdown">
+                                            <el-dropdown-item class="xll-dropdown-item" @click="selectBusinessRole()">
+                                              <div class="xll-add-icon-container" >
+                                                <span>Add</span>
+                                                <el-icon class="xll-icon-circle-plus-1" :size="14">
+                                                  <CirclePlus/>
+                                                </el-icon>
+                                              </div>
+                                            </el-dropdown-item>
+                                          </div>
+
+                                        </el-dropdown-menu>
+                                      </template>
+                                    </el-dropdown>
+
+                                  </el-dropdown-item>
+
+                                </div>
+                                <div class="xll-more-company-dropdown-r">
+                                  <!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
+                                  <!--                                         @click="selectBusinessRole()"-->
+                                  <!--                                >-->
+                                  <!--                                  <CirclePlus/>-->
+                                  <!--                                </el-icon>-->
+                                </div>
+
+                              </div>
+
+                              <div class="xll-more-company-dropdown" >
+                                <div class="xll-more-company-dropdown-l">
+                                  <el-dropdown-item class="xll-dropdown-item">
+                                    <el-dropdown size="large" placement="left-start" :max-height="400">
+                                  <span class="el-dropdown-link-business">
+                                     <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
+                                     Vendor
+                                  </span>
+                                      <template #dropdown>
+                                        <el-dropdown-menu >
+                                          <template v-if="vendorCompanyData.length>0">
+
+                                            <el-dropdown-item
+                                                class="xll-dropdown-item"
+                                                v-for="(item,i) in vendorCompanyData"
+                                                :key="i"
+                                                @click="changeIdentity(item.id,5,2)">
+                                              <template v-if="item.company_name">
+                                                {{item.company_name}}
+                                              </template>
+                                              <template v-else>
+                                                Default ID: {{item.id}}
+                                              </template>
+                                            </el-dropdown-item>
+                                          </template>
+
+                                          <el-dropdown-item class="xll-dropdown-item" @click="createRole(5)">
                                             <div class="xll-add-icon-container" >
                                               <span>Add</span>
                                               <el-icon class="xll-icon-circle-plus-1" :size="14">
@@ -198,81 +290,30 @@
                                               </el-icon>
                                             </div>
                                           </el-dropdown-item>
-                                        </div>
 
-                                      </el-dropdown-menu>
-                                    </template>
-                                  </el-dropdown>
+                                        </el-dropdown-menu>
 
-                                </el-dropdown-item>
+                                      </template>
+                                    </el-dropdown>
 
-                              </div>
-                              <div class="xll-more-company-dropdown-r">
-<!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
-<!--                                         @click="selectBusinessRole()"-->
-<!--                                >-->
-<!--                                  <CirclePlus/>-->
-<!--                                </el-icon>-->
-                              </div>
+                                  </el-dropdown-item>
 
-                            </div>
-
-                            <div class="xll-more-company-dropdown" >
-                              <div class="xll-more-company-dropdown-l">
-                                <el-dropdown-item class="xll-dropdown-item">
-                                  <el-dropdown size="large" placement="left-start" :max-height="400">
-                                  <span class="el-dropdown-link-business">
-                                     <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
-                                     Vendor
-                                  </span>
-                                    <template #dropdown>
-                                      <el-dropdown-menu >
-                                        <template v-if="vendorCompanyData.length>0">
-
-                                          <el-dropdown-item
-                                              class="xll-dropdown-item"
-                                              v-for="(item,i) in vendorCompanyData"
-                                              :key="i"
-                                              @click="changeIdentity(item.id,5,2)">
-                                            <template v-if="item.company_name">
-                                              {{item.company_name}}
-                                            </template>
-                                            <template v-else>
-                                              Company ID: {{item.id}}
-                                            </template>
-                                          </el-dropdown-item>
-                                        </template>
-
-                                        <el-dropdown-item class="xll-dropdown-item" @click="createRole(5)">
-                                          <div class="xll-add-icon-container" >
-                                            <span>Add</span>
-                                            <el-icon class="xll-icon-circle-plus-1" :size="14">
-                                              <CirclePlus/>
-                                            </el-icon>
-                                          </div>
-                                        </el-dropdown-item>
-
-                                      </el-dropdown-menu>
-
-                                    </template>
-                                  </el-dropdown>
-
-                                </el-dropdown-item>
+                                </div>
+                                <div class="xll-more-company-dropdown-r">
+                                  <!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
+                                  <!--                                         @click="createRole(5)"-->
+                                  <!--                                >-->
+                                  <!--                                  <CirclePlus/>-->
+                                  <!--                                </el-icon>-->
+                                </div>
 
                               </div>
-                              <div class="xll-more-company-dropdown-r">
-<!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
-<!--                                         @click="createRole(5)"-->
-<!--                                >-->
-<!--                                  <CirclePlus/>-->
-<!--                                </el-icon>-->
-                              </div>
+                            </el-dropdown-menu>
+                          </template>
 
-                            </div>
-                          </el-dropdown-menu>
-                        </template>
+                        </el-dropdown>
 
-                      </el-dropdown>
+                      </template>
 
                     </div>
                   </div>
@@ -390,7 +431,7 @@ import {
   SWITCH_IDENTITY_V2,
   USER_INFO_VISITOR_V2,
   USER_ALL_IDENTITY_V2,
-  LOGOUT_V2
+  LOGOUT_V2, USER_MENU_LIST, COMEBACK_MYSELF
 } from '@/api/api'
 import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
@@ -424,6 +465,7 @@ export default {
       if(newValue){
         this.getAllIdentity()
         this.getBasicInfo(this.identity)
+
       }
     }
   },
@@ -448,6 +490,11 @@ export default {
       get() {
         return this.$store.state.identity
       }
+    },
+    isThirdCompanyStatus: {
+      get() {
+        return this.$store.state.isThirdCompanyStatus
+      }
     }
 
   },
@@ -464,7 +511,6 @@ export default {
   },
   methods: {
     getAllIdentity(){
-      this.$store.commit('allIdentityChanged',false)
 
       let params = {
 
@@ -472,42 +518,54 @@ export default {
       USER_ALL_IDENTITY_V2(params).then(res=>{
         // console.log(res)
         if(res.code == 200){
+          this.$store.commit('allIdentityChanged',false)
 
           let vendorCompany = []
           let recruitingCompany = []
           let schoolCompany = []
           let otherCompany = []
 
-          let educatorContact = res.message.user_contact.educarot_contact
+          let userContact = res.message.user_contact
 
-          if(educatorContact){
-            this.educatorContactStatus = true;
-            this.educatorContactData = educatorContact
+          if(userContact){
+            let educatorContact = userContact.educarot_contact
+
+            if(educatorContact){
+              this.educatorContactStatus = true;
+              this.educatorContactData = educatorContact
+            }else{
+              this.educatorContactStatus = false;
+            }
+
+            if(res.message.user_contact){
+              vendorCompany = res.message.user_contact.vendor_company
+              recruitingCompany = res.message.user_contact.recruiting_company
+              schoolCompany = res.message.user_contact.school_company
+              otherCompany = res.message.user_contact.other_company
+            }
+
+            if(vendorCompany){
+              this.vendorCompanyData = vendorCompany
+            }
+
+            if(recruitingCompany){
+              this.recruiterCompanyData = recruitingCompany
+            }
+
+            if(schoolCompany){
+              this.schoolCompanyData = schoolCompany
+            }
+
+            if(otherCompany){
+              this.otherCompanyData = otherCompany
+            }
+
           }else{
-            this.educatorContactStatus = false;
-          }
-
-          if(res.message.user_contact){
-            vendorCompany = res.message.user_contact.vendor_company
-            recruitingCompany = res.message.user_contact.recruiting_company
-            schoolCompany = res.message.user_contact.school_company
-            otherCompany = res.message.user_contact.other_company
-          }
-
-          if(vendorCompany){
-            this.vendorCompanyData = vendorCompany
-          }
-
-          if(recruitingCompany){
-            this.recruiterCompanyData = recruitingCompany
-          }
-
-          if(schoolCompany){
-            this.schoolCompanyData = schoolCompany
-          }
-
-          if(otherCompany){
-            this.otherCompanyData = otherCompany
+            this.educatorContactData = []
+            this.vendorCompanyData = []
+            this.recruiterCompanyData = []
+            this.schoolCompanyData = []
+            this.otherCompanyData = []
           }
 
         }
@@ -593,6 +651,9 @@ export default {
 
           this.$store.commit('username', name)
           this.$store.commit('userAvatar', avatar)
+          this.$store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
+
+          localStorage.setItem('is_third_company',res.message.user_contact.is_third_company )
 
         }
       }).catch(err => {
@@ -602,6 +663,18 @@ export default {
     },
     login() {
       this.$router.push('/login')
+    },
+    returnMySelf(){
+      COMEBACK_MYSELF().then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.getBasicInfo(this.identity)
+          this.getAllIdentity()
+          // window.location.reload()
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
     },
     loginOut() {
       this.$loading({
@@ -629,127 +702,89 @@ export default {
       })
 
     },
-    turnProfilePage() {
-      let identity = localStorage.getItem('identity')
-      this.$router.push({path: '/overview', query: {identity: identity}})
-    },
     turnEditProfile(){
       this.$loading({
         text: 'Loading...'
       })
+      let companyId = localStorage.getItem('company_id')
       let identity = localStorage.getItem('identity')
-      this.$router.push({path: '/overview', query: {identity: identity}})
-      this.$loading().close()
+      // console.log(companyId)
+      if(companyId && companyId != '0' ){
+        this.changeIdentity(companyId,identity,2)
+        this.$router.push({path: '/overview', query: {identity: identity}})
 
-    },
-    turnEditProfile1() {
+        this.$loading().close()
 
-      this.$loading({
-        text: 'Loading...'
-      })
-      let identity = localStorage.getItem('identity')
-
-      let params = {
-        identity: identity
-      }
-
-      USER_INFO_BY_TOKEN_V2(params).then(res => {
-        let userContact = res.message.user_contact;
-        let educatorContact = {};
-
-        let companyInfo ={};
-
-        let isEducator = userContact.is_educator;
-        let isRecruiting = userContact.is_recruiting;
-        let isSchool = userContact.is_school;
-        let isOther = userContact.is_other;
-        let isVendor = userContact.is_vendor;
-
+      }else{
         if (identity == 1) {
-          if (isEducator > 10) {
-            educatorContact = res.message.user_contact.educator_contact;
-            this.changeIdentity(educatorContact.id,1,2)
-            this.$router.push({path: '/overview', query: {identity: identity}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 1}})
-
+          this.$loading().close()
+          let strObj={
+            i:1,
+            action:'add'
           }
+          let str = encode(JSON.stringify(strObj))
+          // this.$message.warning('Oops!.. Your profile is incomplete. ')
+          this.$router.push({path: '/profile/contact/user', query: {s:str}})
 
         }
+
         if (identity == 2) {
-          if (isRecruiting > 10) {
 
-            companyInfo = res.message.user_contact.company;
-
-            this.changeIdentity(companyInfo.id,2,2)
-            this.$router.push({path: '/overview', query: {identity: identity}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
-
+          this.$loading().close()
+          let strObj={
+            i:2,
+            action:'add'
           }
+          let str = encode(JSON.stringify(strObj))
+          // this.$message.warning('Oops!.. Your profile is incomplete. ')
+          this.$router.push({path: '/profile/contact/user', query: {s:str}})
+
         }
 
         if (identity == 3) {
-          if (isSchool > 10) {
 
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,3,2)
-            this.$router.push({path: '/overview', query: {identity: identity}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
-
+          this.$loading().close()
+          let strObj={
+            i:3,
+            action:'add'
           }
+          let str = encode(JSON.stringify(strObj))
+          // this.$message.warning('Oops!.. Your profile is incomplete. ')
+          this.$router.push({path: '/profile/contact/user', query: {s: str}})
 
         }
 
         if (identity == 4) {
-          if (isOther > 10) {
 
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,4,2)
-            this.$router.push({path: '/overview', query: {identity: identity}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 4}})
+          this.$loading().close()
 
+          let strObj={
+            i:4,
+            action:'add'
           }
+          let str = encode(JSON.stringify(strObj))
+
+          // this.$message.warning('Oops!.. Your profile is incomplete. ')
+          this.$router.push({path: '/profile/contact/user', query: {s: str}})
 
         }
 
         if (identity == 5) {
-          if (isVendor > 10) {
 
-            companyInfo = res.message.user_contact.company;
+          this.$loading().close()
 
-            this.changeIdentity(companyInfo.id,5,2)
-            this.$router.push({path: '/overview', query: {identity: 5}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 5}})
-
+          let strObj={
+            i:5,
+            action:'add'
           }
+
+          let str = encode(JSON.stringify(strObj))
+          // this.$message.warning('Oops!.. Your profile is incomplete. ')
+          this.$router.push({path: '/profile/contact/user', query: {s: str}})
 
         }
 
-
-      }).catch(err => {
-        console.log(err)
-        this.$loading().close()
-        this.$message.error(err.msg)
-      })
+      }
 
     },
     selectBusinessRole() {
@@ -962,8 +997,16 @@ export default {
       SWITCH_IDENTITY_V2(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
+          this.$store.commit('allIdentityChanged',true )
+
+          localStorage.setItem('company_id',companyId)
           localStorage.setItem('identity', identity)
+
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData',str)
+
           this.$store.commit('identity', identity)
+          this.$store.commit('menuData', res.message)
 
           this.getBasicInfo(identity)
           this.$router.push({
@@ -978,6 +1021,27 @@ export default {
         this.$message.error(err.msg)
       })
 
+    },
+    getUserMenuList(userId,identity,companyId,cUid){
+
+      let params = {
+        user_id:userId,
+        identity:identity,
+        company_id: companyId,
+        create_user_id:cUid,
+        page:1,
+        limit:1000
+      }
+      USER_MENU_LIST(params).then(res=>{
+        // console.log(res)
+        if(res.code === 200){
+          // this.menuData = res.message.pc
+          let str = JSON.stringify(res.message.pc)
+          localStorage.setItem('menuData',str)
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
     },
     turnHome() {
       this.$router.push('/')

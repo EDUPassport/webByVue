@@ -899,12 +899,18 @@ export default {
               console.log(res)
               if (res.code == 200) {
                 let resMessage = res.message;
-
+                // console.log(resMessage.company_id)
                 localStorage.setItem('token', resMessage.token)
                 localStorage.setItem('uid', resMessage.id)
                 localStorage.setItem('identity', resMessage.identity)
                 localStorage.setItem('language', resMessage.language)
                 localStorage.setItem('email', resMessage.email)
+                localStorage.setItem('company_id', resMessage.company_id)
+
+                if(resMessage.third_company_id){
+                  localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
+                  this.$store.commit('thirdCompanyId',resMessage.third_company_id)
+                }
 
                 let identity = resMessage.identity;
                 let firstName = resMessage.first_name;
@@ -992,6 +998,11 @@ export default {
                 localStorage.setItem('identity', resMessage.identity)
                 localStorage.setItem('language', resMessage.language)
                 localStorage.setItem('phone', resMessage.phone)
+                localStorage.setItem('company_id', resMessage.company_id)
+                if(resMessage.third_company_id){
+                  localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
+                  this.$store.commit('thirdCompanyId',resMessage.third_company_id)
+                }
 
                 let identity = resMessage.identity
 
@@ -1002,6 +1013,8 @@ export default {
                 localStorage.setItem('name', firstName + ' ' + lastName)
                 localStorage.setItem('first_name', firstName)
                 localStorage.setItem('last_name', lastName)
+
+                this.$store.commit('identity',resMessage.identity)
 
                 let currentUser = {
                   uuid: resMessage.id,
@@ -1076,6 +1089,11 @@ export default {
                 localStorage.setItem('identity', resMessage.identity)
                 localStorage.setItem('language', resMessage.language)
                 localStorage.setItem('phone', resMessage.phone)
+                localStorage.setItem('company_id', resMessage.company_id)
+                if(resMessage.third_company_id){
+                  localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
+                  this.$store.commit('thirdCompanyId',resMessage.third_company_id)
+                }
 
                 let identity = resMessage.identity
                 let firstName = resMessage.first_name
@@ -1085,6 +1103,8 @@ export default {
                 localStorage.setItem('name', firstName + ' ' + lastName)
                 localStorage.setItem('first_name', firstName)
                 localStorage.setItem('last_name', lastName)
+
+                this.$store.commit('identity',resMessage.identity)
 
                 let currentUser = {
                   uuid: resMessage.id,

@@ -35,12 +35,10 @@
               <el-form-item label="Profile Photo" prop="profile_photo">
                 <el-upload
                     class="profile-uploader"
-                    :action="uploadActionUrl"
+                    action=""
                     :headers="uploadHeaders"
-                    :data="uploadData"
                     :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleProfilePhotoSuccess"
+                    :http-request="profilePhotoHttpRequest"
                     :before-upload="beforeProfilePhotoUpload"
                 >
                   <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>
@@ -63,10 +61,17 @@
         </el-col>
       </el-row>
     </div>
+
+    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()" ></xllLoading>
+
   </div>
 </template>
 
 <script>
+import xllLoading from "@/components/xllLoading"
+import ImageCompressor from 'compressorjs'
+
+
 import profileTitle from "@/components/profileTitle"
 import meSideMenu from "@/components/meSideMenu";
 import {
@@ -80,7 +85,8 @@ import {
   RECRUITER_PERCENTAGE_V2,
   SCHOOL_PERCENTAGE_V2,
   OTHER_PERCENTAGE_V2,
-  VENDOR_PERCENTAGE_V2, SWITCH_IDENTITY_V2
+  VENDOR_PERCENTAGE_V2, SWITCH_IDENTITY_V2,
+  UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE
 } from '@/api/api';
 import {useStore} from "vuex";
 import {ref,reactive} from "vue";
@@ -90,7 +96,8 @@ export default {
   name: "companyContact",
   components: {
     meSideMenu,
-    profileTitle
+    profileTitle,
+    xllLoading
   },
   setup(){
     const store = useStore()
@@ -144,6 +151,7 @@ export default {
   },
   data() {
     return {
+      uploadLoadingStatus:false,
       sideMenuStatus:true,
       companyId:undefined,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
@@ -182,6 +190,9 @@ export default {
 
   },
   methods: {
+    cancelUploadProfile(){
+      this.uploadLoadingStatus = false;
+    },
     getVisitorInfo(uid,identity) {
 
       let params = {
@@ -268,16 +279,62 @@ export default {
       })
 
     },
-    handleProfilePhotoSuccess(res, file) {
-      // console.log(res.data[0]['file_url'])
-      this.$loading().close()
-      this.profilePhotoUrl = URL.createObjectURL(file.raw)
-      this.basicForm.profile_photo = res.data[0]['file_url']
+    profilePhotoHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      new ImageCompressor(options.file,{
+        quality:0.6,
+        success(file) {
+          // console.log(file)
+          const formData = new FormData();
+
+          formData.append('token',localStorage.getItem('token'))
+          // console.log(file)
+          let isInChina = process.env.VUE_APP_CHINA
+          if(isInChina === 'yes'){
+            formData.append('file[]',file,file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.data[0]['file_url'];
+                self.uploadLoadingStatus = false;
+                self.profilePhotoUrl = myFileUrl
+                self.basicForm.profile_photo = myFileUrl
+
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+          if(isInChina === 'no'){
+            formData.append('file',file,file.name)
+            UPLOAD_BY_SERVICE(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.message.file_path;
+                self.uploadLoadingStatus = false;
+                self.profilePhotoUrl = myFileUrl
+                self.basicForm.profile_photo = myFileUrl
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
+
     },
     beforeProfilePhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
+      this.uploadLoadingStatus = true;
+
       const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!isLt2M) {
@@ -458,7 +515,7 @@ export default {
         if (res.code == 200) {
 
           localStorage.setItem('identity',identity)
-          localStorage.setItem('companyId',companyId)
+          localStorage.setItem('company_id',companyId)
           this.setIdentity(identity)
 
           if(identity == 2){

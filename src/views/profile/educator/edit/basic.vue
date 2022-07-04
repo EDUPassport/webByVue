@@ -106,7 +106,7 @@ import {
   EDUCATOR_CONTACT_EDIT_V2,
   ZOHO_SYNC,
   USER_INFO_BY_TOKEN_V2,
-  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2
+  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2, USER_MENU_LIST
 } from '@/api/api'
 import {countriesData} from "@/utils/data";
 import {decode} from "js-base64";
@@ -263,9 +263,16 @@ export default {
               if(action == 'edit'){
                 // this.$router.go(-1)
                 this.$store.commit('username',this.basicForm.name)
-                this.$store.commit('allIdentityChanged',true)
                 this.$router.push('/educator/profile')
               }else{
+                localStorage.setItem('company_id', res.message.educator_id)
+
+                this.$store.commit('allIdentityChanged',true )
+
+                let uid = localStorage.getItem('uid')
+
+                this.getUserMenuList(uid,1, res.message.educator_id, uid)
+
                 this.changeIdentity(res.message.educator_id,res.message.user_id)
 
               }
@@ -282,6 +289,30 @@ export default {
           console.log('error submit!!')
           return false
         }
+      })
+    },
+    getUserMenuList(uid,identity,companyId,createUid){
+
+      let params = {
+        user_id: uid,
+        identity: identity,
+        company_id: companyId,
+        create_user_id: createUid,
+        page:1,
+        limit:1000
+      }
+
+      USER_MENU_LIST(params).then(res=>{
+        // console.log(res)
+        if(res.code === 200){
+          let pcAllData = res.message.pc;
+          let sData = pcAllData.filter(item=>item.identity == identity)
+          this.$store.commit('menuData', sData)
+          localStorage.setItem('menuData',JSON.stringify(sData))
+        }
+
+      }).catch(err=>{
+        console.log(err)
       })
     },
     resetForm(formName) {
