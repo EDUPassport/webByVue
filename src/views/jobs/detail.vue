@@ -67,12 +67,10 @@
 <!--              <span v-if="detailData.foreign_provinces">, {{detailData.foreign_provinces.Pinyin}}</span>-->
 <!--              <span v-if="detailData.foreign_citys">, {{detailData.foreign_citys.Pinyin}}</span>-->
 <!--              <span v-if="detailData.foreign_districts">, {{detailData.foreign_districts.Pinyin}}</span>-->
-
 <!--              <span v-if="detailData.provinces">, {{detailData.provinces.Pinyin}}</span>-->
 <!--              <span v-if="detailData.citys">, {{detailData.citys.Pinyin}}</span>-->
 <!--              <span v-if="detailData.districts">, {{detailData.districts.Pinyin}}</span>-->
             </div>
-
           </div>
         </div>
 
@@ -107,6 +105,10 @@
             <div class="qua-teach-exp" v-if="detailData.teaching_times_en">
               <b>Teaching Experience: </b>
               <span>{{detailData.teaching_times_en}}</span>
+            </div>
+            <div class="qua-teach-exp" v-if="detailData.is_native" >
+              <b>Native Speaker Requirement: </b>
+              <span>Required</span>
             </div>
 <!--            <div class="qua-age">-->
 <!--              <b>Age: </b>-->

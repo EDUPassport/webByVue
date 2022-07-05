@@ -668,8 +668,15 @@ export default {
       COMEBACK_MYSELF().then(res=>{
         console.log(res)
         if(res.code == 200){
-          this.getBasicInfo(this.identity)
+          let uid = localStorage.getItem('uid')
+          let identityValue = res.message.return_identity
+          let companyIdValue = res.message.return_company_id
+          this.$store.commit('identity', identityValue)
+          this.$store.commit('allIdentityChanged',true )
+
+          this.getBasicInfo(identityValue)
           this.getAllIdentity()
+          this.getUserMenuList(uid,identityValue,companyIdValue,uid)
           // window.location.reload()
         }
       }).catch(err=>{
@@ -1022,22 +1029,23 @@ export default {
       })
 
     },
-    getUserMenuList(userId,identity,companyId,cUid){
-
+    getUserMenuList(uid,identity,companyId,cId){
+      let self = this;
       let params = {
-        user_id:userId,
+        user_id:uid,
         identity:identity,
-        company_id: companyId,
-        create_user_id:cUid,
+        company_id:companyId,
+        create_user_id:cId,
         page:1,
         limit:1000
       }
       USER_MENU_LIST(params).then(res=>{
         // console.log(res)
         if(res.code === 200){
-          // this.menuData = res.message.pc
-          let str = JSON.stringify(res.message.pc)
-          localStorage.setItem('menuData',str)
+          let pcAllData = res.message.pc;
+          let sData = pcAllData.filter(item=>item.identity == self.identity)
+          this.$store.commit('menuData', sData)
+          // localStorage.setItem('menuData',res.message.pc)
         }
       }).catch(err=>{
         console.log(err)

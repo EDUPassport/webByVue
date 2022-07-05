@@ -244,6 +244,7 @@ export default {
       // console.log(newValue)
       if(newValue){
         this.getAllAssignUsers()
+        this.getBasicInfo(this.identity)
       }
     }
   },
