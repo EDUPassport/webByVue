@@ -1859,7 +1859,7 @@ export default {
                     }
 
                     let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
-                    let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=1&redirect_params='+redirectParamsStr
+                    let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/edupassport?type=login&redirect_params='+redirectParamsStr
                     window.open(exchange_domain,'_blank')
                   }
 
@@ -1887,7 +1887,7 @@ export default {
                   }
 
                   let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
-                  let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=1&redirect_params='+redirectParamsStr
+                  let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/edupassport?type=login&redirect_params='+redirectParamsStr
                   window.open(exchange_domain,'_blank')
                 }
               }

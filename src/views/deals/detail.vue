@@ -323,7 +323,7 @@ export default {
       console.log(userId)
       let token = localStorage.getItem('token')
       if(!token || token === ''){
-        return this.$router.push('/login')
+        return this.$router.push('/edupassport')
       }
 
       let vendorInfo = this.detailData.userInfo;
@@ -412,7 +412,7 @@ export default {
 
               let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
 
-              self.$router.push({path:'/login',query:{redirect_params:redirectParamsStr}})
+              self.$router.push({path:'/edupassport',query:{redirect_params:redirectParamsStr}})
             }
           }
         })

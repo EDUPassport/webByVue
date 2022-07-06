@@ -477,16 +477,16 @@ const routes = [
         }
     },
     {
-        path: '/login',
-        name: 'login',
+        path: '/edupassport',
+        name: 'edupassport',
         component: () => import('@/views/login/index'),
         meta: {
-            titleC: 'China Login',
-            titleG: 'Global Login',
+            titleC: 'China EDU Passport Login and Sign Up',
+            titleG: 'Global Login EDU Passport Login and Sign Up',
         },
     },
     {
-        path: '/login/linkedin',
+        path: '/edupassport/linkedin',
         name: 'linkedinLogin',
         component: () => import('@/views/login/linkedin'),
         meta: {
@@ -495,7 +495,7 @@ const routes = [
         }
     },
     {
-        path: '/login/google',
+        path: '/edupassport/google',
         name: 'googleLogin',
         component: () => import('@/views/login/google'),
         meta: {

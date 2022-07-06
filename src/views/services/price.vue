@@ -503,8 +503,8 @@ export default {
 
       if(!token || token === ''){
         return this.$router.push({
-          path:'/login',
-          query:{type:1}
+          path:'/edupassport',
+          query:{type:'login'}
         })
       }
 

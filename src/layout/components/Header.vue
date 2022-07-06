@@ -320,7 +320,7 @@
                 </div>
               </template>
               <template v-else>
-                <router-link class="login-btn" :to="{path:'/login',query:{type:1}}">Login</router-link>
+                <router-link class="login-btn" :to="{path:'/edupassport',query:{type:'login'}}">Login</router-link>
                 <el-button class="sign-up-btn" type="default" @click="signUp()">Sign Up</el-button>
               </template>
             </div>
@@ -375,10 +375,10 @@
                 </template>
               </div>
               <div class="nav-link-item">
-                <router-link :to="{path:'/login',query:{type:1}}">Login</router-link>
+                <router-link :to="{path:'/edupassport',query:{type:'login'}}">Login</router-link>
               </div>
               <div class="nav-link-item">
-                <router-link :to="{path: '/login', query: {type: 2}}">Sign Up</router-link>
+                <router-link :to="{path: '/edupassport', query: {type: 'sign-up'}}">Sign Up</router-link>
               </div>
 
             </el-drawer>
@@ -575,7 +575,7 @@ export default {
       })
     },
     signUp() {
-      this.$router.push({path: '/login', query: {type: 2}})
+      this.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
     },
     turnEnvJobs() {
 
@@ -662,7 +662,7 @@ export default {
       })
     },
     login() {
-      this.$router.push('/login')
+      this.$router.push('/edupassport')
     },
     returnMySelf(){
       COMEBACK_MYSELF().then(res=>{

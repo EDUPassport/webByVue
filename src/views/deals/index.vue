@@ -457,7 +457,7 @@ export default {
 
               let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
 
-              self.$router.push({path:'/login',query:{redirect_params:redirectParamsStr}})
+              self.$router.push({path:'/edupassport',query:{redirect_params:redirectParamsStr}})
             }
           }
         })

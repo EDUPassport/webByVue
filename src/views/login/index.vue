@@ -16,18 +16,18 @@
         </div>
       </el-header>
       <el-main>
-        <el-row class="xll-login-row-container" justify="center" align="middle" v-if="showValue == 1">
+        <el-row class="xll-login-row-container" justify="center" align="middle" v-if="showValue == 'login' ">
           <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
             <div class="xll-login-container">
               <div class="login-tabs-container">
                 <div class="login-label"
-                     :class="showValue==1 ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister(1)"
+                     :class="showValue=='login' ? 'login-tab-active' : ''"
+                     @click="switchLoginRegister('login')"
                 >Login
                 </div>
                 <div class="register-label"
-                     :class="showValue==2 ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister(2)"
+                     :class="showValue=='sign-up' ? 'login-tab-active' : ''"
+                     @click="switchLoginRegister('sign-up')"
                 >Register
                 </div>
               </div>
@@ -233,18 +233,18 @@
           </el-col>
         </el-row>
 
-        <el-row class="xll-register-row-container" justify="center" align="middle" v-if="showValue == 2">
+        <el-row class="xll-register-row-container" justify="center" align="middle" v-if="showValue == 'sign-up' ">
           <el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">
             <div class="xll-register-container">
               <div class="login-tabs-container">
                 <div class="login-label"
-                     :class="showValue==1 ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister(1)"
+                     :class="showValue=='login' ? 'login-tab-active' : ''"
+                     @click="switchLoginRegister('login')"
                 >Login
                 </div>
                 <div class="register-label"
-                     :class="showValue==2 ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister(2)"
+                     :class="showValue=='sign-up' ? 'login-tab-active' : ''"
+                     @click="switchLoginRegister('sign-up')"
                 >Register
                 </div>
               </div>
@@ -654,7 +654,7 @@ export default {
       },
       identityValue: 0,
       sendCodeLoading: false,
-      showValue: 1,
+      showValue: 'login',
       businessDialogStatus:false
 
     }
@@ -687,7 +687,7 @@ export default {
     }
 
     let value = route.query.type;
-    const showType = value ? value : 1
+    const showType = value ? value : 'login'
 
     const store = useStore()
     const setCurrentUser = (data) => store.commit('currentUser', data)
@@ -957,8 +957,8 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/login', query: {type: 2}})
-                      self.showValue = 2
+                      self.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
+                      self.showValue = 'sign-up'
                     }
                   }
 
@@ -1049,8 +1049,8 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/login', query: {type: 2}})
-                      self.showValue = 2
+                      self.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
+                      self.showValue = 'sign-up'
                     }
                   }
 
@@ -1139,8 +1139,8 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/login', query: {type: 2}})
-                      self.showValue = 2
+                      self.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
+                      self.showValue = 'sign-up'
                     }
                   }
 
@@ -1321,8 +1321,8 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action==='confirm'){
-                    self.$router.push({path: '/login', query: {type: 1,email:self.registerForm.email}})
-                    self.showValue = 1
+                    self.$router.push({path: '/edupassport', query: {type: 'login',email:self.registerForm.email}})
+                    self.showValue = 'login'
                   }
                 }
 
@@ -1383,8 +1383,8 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action==='confirm'){
-                    self.$router.push({path: '/login', query: {type: 1,phone:self.registerPhoneForm.phone}})
-                    self.showValue = 1
+                    self.$router.push({path: '/edupassport', query: {type: 'login',phone:self.registerPhoneForm.phone}})
+                    self.showValue = 'login'
                   }
                 }
 
