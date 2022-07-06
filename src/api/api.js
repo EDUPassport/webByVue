@@ -324,3 +324,12 @@ export const USER_MENU_COMPANY = (params) => get('home/user/menu/company',params
 // 删除当前用户【分配给】【管理员下的所有company】权限
 export const USER_MENU_DELETE = (params) => post('home/user/menu/delete', params)
 
+//获取【创建人】【分配人】【身份】【公司】下的菜单权限
+export const USER_ADMIN_MENU_INFO = (params) => get('home/user/company/menu/list',params)
+
+// 删除【创建人】【分配人】【身份】【公司】下的菜单权限
+export const USER_ADMIN_DELETE = (params) => post('home/user/company/menu/del', params)
+
+
+
+

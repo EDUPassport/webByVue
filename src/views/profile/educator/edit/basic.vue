@@ -149,7 +149,7 @@ export default {
         ],
         phone: [
           {
-            required: true,
+            required: false,
             message: 'Please input your phone',
             trigger: 'blur',
           },

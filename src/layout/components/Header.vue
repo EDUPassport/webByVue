@@ -45,7 +45,7 @@
                           <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
                           <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
                           <el-dropdown-item divided @click="returnMySelf()" v-if="isThirdCompanyStatus == 1">
-                            Return to Previous Account
+                            Return to My Account
                           </el-dropdown-item>
                           <el-dropdown-item divided @click="loginOut()">Log Out</el-dropdown-item>
                         </el-dropdown-menu>
@@ -665,6 +665,10 @@ export default {
       this.$router.push('/edupassport')
     },
     returnMySelf(){
+      this.$loading({
+        text: 'Loading...'
+      })
+      let self = this;
       COMEBACK_MYSELF().then(res=>{
         console.log(res)
         if(res.code == 200){
@@ -677,6 +681,11 @@ export default {
           this.getBasicInfo(identityValue)
           this.getAllIdentity()
           this.getUserMenuList(uid,identityValue,companyIdValue,uid)
+
+          setTimeout(function () {
+            self.$router.push({path:'/overview',query:{identity:identityValue}})
+            self.$loading().close()
+          },1200)
           // window.location.reload()
         }
       }).catch(err=>{

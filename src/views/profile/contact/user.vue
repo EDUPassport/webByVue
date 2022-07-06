@@ -74,7 +74,7 @@
                 <el-input v-model="basicForm.email" placeholder="Email"></el-input>
               </el-form-item>
 
-              <el-form-item label="Avatar" prop="headimgurl">
+              <el-form-item label="Profile Photo" prop="headimgurl">
                 <el-upload
                     class="profile-uploader"
                     action=""
@@ -101,16 +101,17 @@
               </el-form-item>
 
               <el-form-item label="Location">
+                <el-select v-model="countryObj"
+                           @change="countryChange"
+                           value-key="id"
+                           filterable
+                           placeholder="Select Country">
+                  <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.Pinyin"
+                             :value="item"></el-option>
+                </el-select>
 
                 <template v-if="sLocationType==1">
-                  <el-select v-model="countryObj"
-                             @change="countryChange"
-                             value-key="id"
-                             filterable
-                             placeholder="Select Country">
-                    <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.Pinyin"
-                               :value="item"></el-option>
-                  </el-select>
+
                   <template v-if="provinceOptions.length>0">
                     <el-select v-model="provinceObj"
                                value-key="id"
@@ -421,7 +422,7 @@ export default {
     }
 
     this.getAllCountry(0)
-    this.getAllAreas(0)
+    // this.getAllAreas(0)
   },
   methods: {
     cancelUploadProfile(){
@@ -822,6 +823,10 @@ export default {
       this.basicForm.province=undefined
       this.basicForm.city = undefined
       this.basicForm.district = undefined
+      this.provinceOptions = []
+      this.cityOptions = []
+      this.districtOptions = []
+
       this.basicForm.country = e.id
       this.countryName = e.Pinyin
       this.countryNameCn = e.Name

@@ -161,7 +161,7 @@
 <script>
 
 import meSideMenu from "@/components/meSideMenu";
-import {ALL_MENU_LIST, USER_ADD_MENU, USER_MENU_DELETE, USER_MENU_LIST} from "@/api/api";
+import {ALL_MENU_LIST, USER_ADD_MENU, USER_ADMIN_MENU_INFO, USER_MENU_DELETE, USER_MENU_LIST} from "@/api/api";
 
 
 export default {
@@ -195,11 +195,41 @@ export default {
     }
 
   },
-  mounted() {
-    this.getAllMenuList()
+  async mounted() {
+    await this.getAllMenuList()
     this.action = this.$route.query.action
+    let action = this.$route.query.action
+    let uid = this.$route.query.uid
+    let companyId = this.$route.query.cId
+
+    if(action == 'edit'){
+      await this.getUserAdminMenuList(uid,this.identity,companyId)
+    }
+
   },
   methods: {
+    async getUserAdminMenuList(uid,identity,companyId){
+      let params = {
+        user_id:uid,
+        identity:identity,
+        company_id:companyId
+      }
+
+      await USER_ADMIN_MENU_INFO(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          let resData = res.message;
+          resData.forEach(item=>{
+            this.sMenuItemData.push( Number(item.menu_id) )
+          })
+
+          // console.log(this.sMenuItemData)
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
     addMenu() {
       let identity = this.identity;
       let email = this.email;
@@ -334,9 +364,9 @@ export default {
         console.log(err)
       })
     },
-    getAllMenuList() {
+    async getAllMenuList() {
       let params = {}
-      ALL_MENU_LIST(params).then(res => {
+      await ALL_MENU_LIST(params).then(res => {
         console.log(res)
         if (res.code == 200) {
 
