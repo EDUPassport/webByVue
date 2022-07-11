@@ -146,6 +146,20 @@
                     Add
                   </template>
                 </el-button>
+                <template v-if="action == 'edit' ">
+
+                  <el-popconfirm title="Are you sure to delete this?"
+                    @confirm="deleteUserMenu()"
+                  >
+                    <template #reference>
+                      <el-button type="danger" :loading="deleteLoading">
+                        Delete
+                      </el-button>
+                    </template>
+                  </el-popconfirm>
+
+                </template>
+
               </div>
 
             </div>
@@ -161,7 +175,14 @@
 <script>
 
 import meSideMenu from "@/components/meSideMenu";
-import {ALL_MENU_LIST, USER_ADD_MENU, USER_ADMIN_MENU_INFO, USER_MENU_DELETE, USER_MENU_LIST} from "@/api/api";
+import {
+  ALL_MENU_LIST,
+  USER_ADD_MENU,
+  USER_ADMIN_DELETE,
+  USER_ADMIN_MENU_INFO,
+  USER_MENU_DELETE,
+  USER_MENU_LIST
+} from "@/api/api";
 
 
 export default {
@@ -182,7 +203,8 @@ export default {
       sMenuItemData: [],
       email:'',
       addLoading:false,
-      action:''
+      action:'',
+      deleteLoading:false
 
 
     }
@@ -208,6 +230,29 @@ export default {
 
   },
   methods: {
+    deleteUserMenu(){
+      let self = this;
+      this.deleteLoading = true;
+      let uid = this.$route.query.uid
+      let companyId = this.$route.query.cId
+
+      let params = {
+        user_id:uid,
+        identity:self.identity,
+        company_id:companyId
+      }
+
+      USER_ADMIN_DELETE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.deleteLoading = false;
+          this.$router.push({path:'/overview',query:{identity:self.identity}})
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
     async getUserAdminMenuList(uid,identity,companyId){
       let params = {
         user_id:uid,
