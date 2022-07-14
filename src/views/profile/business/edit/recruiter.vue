@@ -238,7 +238,7 @@ import {
   ZOHO_SYNC,
   SUB_CATE_LIST,
   GET_COUNTRY_LIST, RECRUITER_COMPANY_EDIT_V2, SWITCH_IDENTITY_V2, USER_INFO_BY_TOKEN_V2,
-  UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, USER_MENU_LIST
+  UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, USER_MENU_LIST,USER_SUB_IDENTITY_V2
 } from '@/api/api'
 import {countriesData} from "@/utils/data";
 import {decode} from "js-base64";
@@ -348,11 +348,13 @@ export default {
       action:''
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getSubIdentityList()
+
     // console.log(countriesData)
     this.getAllCountry(0)
     this.getAllAreas(0)
-    this.getSubCateList()
+    // this.getSubCateList()
     this.initMap()
     let str = this.$route.query.s;
 
@@ -379,6 +381,28 @@ export default {
 
   },
   methods: {
+    async getSubIdentityList(){
+      let params = {
+        pid: 2,
+        tree: 1
+      }
+
+      await USER_SUB_IDENTITY_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.subCateOptions = res.message
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+
+      })
+    },
     cancelUploadProfile(){
       this.uploadLoadingStatus = false;
     },

@@ -224,6 +224,7 @@ import {
   USER_INFO_VISITOR_V2,
   UPLOAD_BY_ALI_OSS,
   UPLOAD_BY_SERVICE,
+  USER_SUB_IDENTITY_V2,
   USER_MENU_LIST
 } from '@/api/api'
 import {phoneCodeData} from "@/utils/phoneCode";
@@ -337,12 +338,14 @@ export default {
 
     }
   },
-  mounted() {
+  async mounted() {
+
+    await this.getSubIdentityList()
+
     this.getAllCountry(0)
     this.getAllAreas(0)
-    this.getSubCateList()
+    // this.getSubCateList()
     this.initMap()
-
 
     let str = this.$route.query.s;
 
@@ -368,6 +371,29 @@ export default {
 
   },
   methods: {
+
+    async getSubIdentityList(){
+      let params = {
+        pid: 5,
+        tree: 1
+      }
+
+      await USER_SUB_IDENTITY_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.subCateOptions = res.message
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+
+      })
+    },
     cancelUploadProfile(){
       this.uploadLoadingStatus = false;
     },

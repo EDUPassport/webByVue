@@ -351,7 +351,7 @@ import {
   ALL_AREAS,
   SUB_CATE_LIST,
   USER_INFO_BY_TOKEN_V2,
-  SCHOOL_COMPANY_EDIT_V2, ADD_PROFILE_V2,
+  SCHOOL_COMPANY_EDIT_V2, ADD_PROFILE_V2,USER_SUB_IDENTITY_V2,
   UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, USER_MENU_LIST
 } from '@/api/api'
 import {phoneCodeData} from "@/utils/phoneCode";
@@ -496,10 +496,12 @@ export default {
 
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getSubIdentityList()
+
     this.getAllCountry(0)
     this.getAllAreas(0)
-    this.getSubCateList()
+    // this.getSubCateList()
     this.initMap()
 
     this.turnSearchTags(73);
@@ -532,6 +534,29 @@ export default {
 
   },
   methods: {
+
+    async getSubIdentityList(){
+      let params = {
+        pid: 3,
+        tree: 1
+      }
+
+      await USER_SUB_IDENTITY_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.subCateOptions = res.message
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+
+      })
+    },
     cancelUploadProfile(){
       this.uploadLoadingStatus = false;
     },

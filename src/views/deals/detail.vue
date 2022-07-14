@@ -242,7 +242,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -263,7 +268,12 @@ export default {
 
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -283,7 +293,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -300,7 +315,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     isFavorite(type,typeId){
@@ -316,7 +336,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     chat(userId){
@@ -388,6 +413,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -504,7 +535,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     changeIdentity(identity) {
@@ -521,7 +557,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     }

@@ -708,7 +708,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getSixLogos() {
@@ -720,7 +725,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     chooseSearchCategory(value) {
@@ -741,7 +751,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getJobFeaturedList() {
@@ -762,7 +777,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -781,7 +801,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -795,7 +820,12 @@ export default {
         this.businessListData = res.message.data;
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getDealsList() {
@@ -810,7 +840,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getFeaturedDealsList() {
@@ -826,7 +861,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAdsList() {
@@ -870,7 +910,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -899,7 +944,12 @@ export default {
           if(err.code === 400){
             this.$message.error('Please complete your profile in order to apply')
           }else{
-            this.$message.error(err.msg)
+            if(err.msg){
+              this.$message.error(err.msg)
+            }
+            if(err.message){
+              this.$message.error(err.message)
+            }
           }
 
         })
@@ -926,7 +976,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -943,7 +998,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     addDealFavorite(id, type, title, url, index) {
@@ -962,7 +1022,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -979,7 +1044,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
 

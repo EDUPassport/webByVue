@@ -452,7 +452,12 @@ export default {
             }
 
       }).catch(err=>{
+        if(err.msg){
           this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     addFavorite(id, type, title, url,index) {
@@ -471,7 +476,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -484,7 +494,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     jobPageSizeChange(e) {
@@ -548,7 +563,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -574,7 +594,12 @@ export default {
 
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     locationChange(e){
@@ -625,7 +650,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     postJob(){
@@ -744,7 +774,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     changeIdentity(identity) {
@@ -761,7 +796,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     }

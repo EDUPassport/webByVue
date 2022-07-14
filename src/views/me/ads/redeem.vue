@@ -308,6 +308,12 @@ export default {
               }
             }).catch(err=>{
               console.log(err)
+              if(err.msg){
+                this.$message.error(err.msg)
+              }
+              if(err.message){
+                this.$message.error(err.message)
+              }
             })
 
           }
@@ -324,6 +330,12 @@ export default {
               }
             }).catch(err=>{
               console.log(err)
+              if(err.msg){
+                this.$message.error(err.msg)
+              }
+              if(err.message){
+                this.$message.error(err.message)
+              }
             })
 
           }
@@ -369,8 +381,14 @@ export default {
         } else {
           this.$message.error(res.msg)
         }
-      }).catch(error => {
-        console.log(error)
+      }).catch(err => {
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getDealsList(page, limit) {
@@ -388,8 +406,14 @@ export default {
         } else {
           this.$message.error(res.msg)
         }
-      }).catch(error => {
-        console.log(error);
+      }).catch(err => {
+        console.log(err);
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getEventsList(page, limit) {
@@ -406,8 +430,14 @@ export default {
         } else {
           this.$message.error(res.msg)
         }
-      }).catch(error => {
-        console.log(error);
+      }).catch(err => {
+        console.log(err);
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     submit() {
@@ -460,7 +490,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },

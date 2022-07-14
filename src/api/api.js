@@ -330,6 +330,5 @@ export const USER_ADMIN_MENU_INFO = (params) => get('home/user/company/menu/list
 // 删除【创建人】【分配人】【身份】【公司】下的菜单权限
 export const USER_ADMIN_DELETE = (params) => post('home/user/company/menu/del', params)
 
-
-
-
+// 用户子身份接口 【Edu新】
+export const USER_SUB_IDENTITY_V2 = (params) => get('home/user/sub/identity',params)

@@ -106,7 +106,8 @@ import {
   EDUCATOR_CONTACT_EDIT_V2,
   ZOHO_SYNC,
   USER_INFO_BY_TOKEN_V2,
-  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2, USER_MENU_LIST
+  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2, USER_MENU_LIST,
+  USER_SUB_IDENTITY_V2
 } from '@/api/api'
 import {countriesData} from "@/utils/data";
 import {decode} from "js-base64";
@@ -195,10 +196,11 @@ export default {
 
     }
   },
-  mounted() {
+  async mounted() {
     // console.log(countriesData)
-    this.getSubCateList()
+    // this.getSubCateList()
 
+    await this.getSubIdentityList()
 
     let str = this.$route.query.s;
 
@@ -211,11 +213,11 @@ export default {
 
       if(strObj.action == 'add'){
         this.sideMenuStatus = false;
-        this.getBasicInfo(strObj.i)
+        await this.getBasicInfo(strObj.i)
       }
 
       if(strObj.action == 'edit'){
-        this.getBasicInfo(strObj.i)
+        await this.getBasicInfo(strObj.i)
       }
 
     }
@@ -321,6 +323,28 @@ export default {
     handleChange(e) {
       console.log(e)
     },
+    async getSubIdentityList(){
+      let params = {
+        pid: 1,
+        tree: 1
+      }
+
+      await USER_SUB_IDENTITY_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.subCateOptions = res.message
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+
+      })
+    },
     getSubCateList() {
       let params = {
         pid: 1,
@@ -337,6 +361,7 @@ export default {
       })
     },
     selectEducatorType(item) {
+      // console.log(this.selectEducatorTypeList)
       // console.log(item);
       if (this.selectEducatorTypeList.findIndex(element => element.id === item.id) == -1) {
         if (this.selectEducatorTypeList.length > 2) {
@@ -345,10 +370,10 @@ export default {
         }
         this.selectEducatorTypeList.push(item);
       } else {
-        // let len = this.selectEducatorTypeList.length - 1;
-
         this.selectEducatorTypeList.splice(this.selectEducatorTypeList.findIndex(element => element.id === item.id), 1);
       }
+
+
     },
     changeIdentity(companyId,companyContactId,language){
       let self = this;
@@ -440,17 +465,19 @@ export default {
 
 
           let subIdentityStr = educatorContact.sub_identity_id
+          let subCateOptions = this.subCateOptions
 
           if(subIdentityStr){
             if(subIdentityStr.length>1){
               let subIdentityArr = subIdentityStr.split(',')
               let subData = []
               subIdentityArr.forEach(item=>{
-                subData.push({id: Number(item) })
+                let cateValue = subCateOptions.filter(value => value.id == item)
+                // console.log(cateValue)
+                subData.push( cateValue[0] )
               })
               this.selectEducatorTypeList = subData
-              this.basicForm.sub_identity_name_en = educatorContact.sub_identity_name_en
-              this.basicForm.sub_identity_name_cn = educatorContact.sub_identity_name_cn
+
             }
 
           }
@@ -462,13 +489,13 @@ export default {
       })
 
     },
-    getBasicInfo() {
+    async getBasicInfo() {
 
       let params = {
         identity:1
       }
 
-      USER_INFO_BY_TOKEN_V2(params).then(res => {
+      await USER_INFO_BY_TOKEN_V2(params).then(res => {
         console.log(res)
         if(res.code == 200){
 
@@ -533,17 +560,21 @@ export default {
 
 
           let subIdentityStr = educatorContact.sub_identity_id
+          let subCateOptions = this.subCateOptions
 
           if(subIdentityStr){
             if(subIdentityStr.length>1){
               let subIdentityArr = subIdentityStr.split(',')
               let subData = []
               subIdentityArr.forEach(item=>{
-                subData.push({id: Number(item) })
+                let cateValue = subCateOptions.filter(value => value.id == item)
+                // console.log(cateValue)
+                subData.push( cateValue[0] )
               })
               this.selectEducatorTypeList = subData
-              this.basicForm.sub_identity_name_en = educatorContact.sub_identity_name_en
-              this.basicForm.sub_identity_name_cn = educatorContact.sub_identity_name_cn
+
+              // this.basicForm.sub_identity_name_en = educatorContact.sub_identity_name_en
+              // this.basicForm.sub_identity_name_cn = educatorContact.sub_identity_name_cn
             }
 
           }

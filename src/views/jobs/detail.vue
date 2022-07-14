@@ -361,7 +361,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -378,7 +383,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getCompanyJobList(userId){
@@ -398,7 +408,12 @@ export default {
 
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -420,7 +435,12 @@ export default {
           if(err.code === 400){
             this.$message.error('Please complete your profile in order to apply')
           }else{
-            this.$message.error(err.msg)
+            if(err.msg){
+              this.$message.error(err.msg)
+            }
+            if(err.message){
+              this.$message.error(err.message)
+            }
           }
 
         })
@@ -447,7 +467,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -464,7 +489,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     chat(userId){
@@ -535,6 +565,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -654,7 +690,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     changeIdentity(identity) {
@@ -671,7 +712,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     }

@@ -893,7 +893,12 @@ export default {
           this.countryOptions = res.message;
         }
       }).catch(err=>{
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAllForProvinces(pid){
@@ -906,7 +911,12 @@ export default {
           this.provinceOptions = res.message;
         }
       }).catch(err=>{
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAllForCitys(pid){
@@ -919,7 +929,12 @@ export default {
           this.cityOptions = res.message;
         }
       }).catch(err=>{
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAllForDistricts(pid){
@@ -933,7 +948,12 @@ export default {
           this.districtOptions = res.message;
         }
       }).catch(err=>{
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     countryChange(e){
@@ -1086,7 +1106,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAllAreas(pid) {
@@ -1100,7 +1125,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAllCitys(pid) {
@@ -1114,7 +1144,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAllDistricts(pid) {
@@ -1128,7 +1163,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     provinceChange(e) {
@@ -1432,7 +1472,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     submitAgeToTeach(jobId) {
@@ -1465,7 +1510,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     submitSubject(jobId) {
@@ -1499,7 +1549,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     submitEmploymentType(jobId) {
@@ -1532,7 +1587,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     submitTeachingCertificate(jobId) {
@@ -1565,7 +1625,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     submitLanguages(jobId) {
@@ -1598,7 +1663,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getUserObjectList() {
@@ -1625,7 +1695,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     addWorkingHours() {
@@ -1807,7 +1882,12 @@ export default {
             }
           }).catch(err => {
             console.log(err)
-            this.$message.error(err.msg)
+            if(err.msg){
+              this.$message.error(err.msg)
+            }
+            if(err.message){
+              this.$message.error(err.message)
+            }
           })
 
         } else {
@@ -1903,6 +1983,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
         this.$loading().close()
       })
 
@@ -1917,6 +2003,12 @@ export default {
         console.log(res)
       }).catch(err => {
         console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
 

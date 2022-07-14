@@ -51,8 +51,11 @@ axios.interceptors.response.use(response => {
 
     let errResponse = error.response
 
+    // console.log(errResponse)
+
     if(errResponse){
         let status = errResponse.status
+
         if (status === 401) {
             localStorage.clear()
             const loadingInstance =  ElLoading.service({
@@ -67,6 +70,7 @@ axios.interceptors.response.use(response => {
         } else {
             return Promise.reject(error.response.data);
         }
+
     }
 
     // 对响应错误做点什么

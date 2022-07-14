@@ -166,6 +166,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -184,6 +190,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAdsCategoryList() {
@@ -201,6 +213,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },

@@ -381,7 +381,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAllCitys(pid) {
@@ -395,7 +400,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getAllDistricts(pid) {
@@ -409,7 +419,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     provinceChange(e) {
@@ -435,7 +450,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     addOwnTag() {
@@ -514,7 +534,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     submitForm(formName) {
@@ -535,7 +560,12 @@ export default {
             }
           }).catch(err=>{
             console.log(err)
-            this.$message.error(err.msg)
+            if(err.msg){
+              this.$message.error(err.msg)
+            }
+            if(err.message){
+              this.$message.error(err.message)
+            }
           })
 
         } else {

@@ -772,7 +772,12 @@ export default {
           this.$message.success('Success')
         }
       }).catch(err => {
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -789,7 +794,12 @@ export default {
           this.$message.success('Success')
         }
       }).catch(err => {
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -848,7 +858,12 @@ export default {
           }
         }).catch(err => {
           console.log(err)
-          this.$message.error(err.msg)
+          if(err.msg){
+            this.$message.error(err.msg)
+          }
+          if(err.message){
+            this.$message.error(err.message)
+          }
         })
       }
 
@@ -1226,6 +1241,12 @@ export default {
         console.log(res)
       }).catch(err => {
         console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
