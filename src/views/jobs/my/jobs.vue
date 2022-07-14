@@ -17,7 +17,7 @@
             <div class="jobs-list-content">
               <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
                 <div class="jobs-list-item-l">
-                  <el-image class="jobs-item-logo" :src="item.logo" fit="cover"></el-image>
+                  <el-image class="jobs-item-logo" :src="item.logo" fit="contain"></el-image>
                 </div>
                 <div class="jobs-list-item-r">
                   <div class="jobs-list-item-title">
@@ -256,6 +256,7 @@ export default {
 
 .jobs-list-item-l {
   width: 30%;
+  height: 180px;
 }
 
 .jobs-item-logo {

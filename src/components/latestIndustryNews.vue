@@ -54,12 +54,13 @@ export default {
           if (identity == 1) {
             adsDataNews = adsData.filter(item => item.name == 'educator_industry_news');
           }
-          if (identity == 2) {
+          if (identity == 2 || identity == 3 || identity == 4) {
             adsDataNews = adsData.filter(item => item.name == 'business_industry_news');
           }
-          if (identity == 3) {
+          if (identity == 5) {
             adsDataNews = adsData.filter(item => item.name == 'vendor_industry_news');
           }
+
           let articleListData = adsDataNews[0].data;
           this.articleListData = articleListData;
           this.articleListLimitData = articleListData.slice(0, 2)

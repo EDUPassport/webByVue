@@ -146,7 +146,7 @@
                 <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
               </div>
               <div class="jobs-list-item-l">
-                <el-image class="jobs-item-logo" :src="item.logo" fit="cover">
+                <el-image class="jobs-item-logo" :src="item.logo" fit="contain">
                   <template #error>
                     <div class="image-slot">
                       <el-icon :size="60" color="#808080"><Picture /></el-icon>
@@ -971,6 +971,7 @@ export default {
 
 .jobs-list-item-l {
   width: 30%;
+  height: 180px;
 }
 
 .jobs-item-logo {
