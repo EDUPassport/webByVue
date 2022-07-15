@@ -14,7 +14,8 @@
               <router-link to="/deals" exact> Edu Deals</router-link>
               <router-link to="/events/list" exact> Events</router-link>
               <!--              <router-link to="/industry/news" exact>News</router-link>-->
-              <router-link to="/blog/list" exact>Blog</router-link>
+<!--              <router-link to="/blog/list" exact>Blog</router-link>-->
+              <span class="zoho-blog-menu" @click="turnZohoBlog()">Blog</span>
               <router-link to="/contact/us" exact> Contact</router-link>
               <router-link to="/about/us" exact> About</router-link>
               <router-link to="/services/price" exact> Pricing</router-link>
@@ -1062,7 +1063,21 @@ export default {
     },
     turnHome() {
       this.$router.push('/')
+    },
+    turnZohoBlog(){
+      let envName = this.envName;
+
+      if(envName === 'development' || envName === 'production'){
+        window.open('https://news.edupassport.io/blogs','_blank')
+      }
+
+      if(envName === 'developmentCN' || envName === 'productionCN' ){
+        window.open('https://news.esl-passport.cn/blogs','_blank')
+      }
+
+
     }
+
   }
 
 }
@@ -1108,6 +1123,22 @@ export default {
 .nav-link-container a:hover {
   color: #00b3d2;
 }
+
+.zoho-blog-menu{
+  cursor: pointer;
+
+  margin-left: 20px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.zoho-blog-menu:hover {
+  color: #00b3d2;
+}
+
 
 .nav-china-jobs {
   margin-left: 20px;

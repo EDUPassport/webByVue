@@ -635,8 +635,8 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 import meSideMenu from "@/components/meSideMenu";
 import {
-  VISITOR_USER_INFO, ALL_AREAS, USER_OBJECT_LIST, ADD_JOB,
-  JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO, GET_COUNTRY_LIST
+  ALL_AREAS, USER_OBJECT_LIST, ADD_JOB,
+  JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO, GET_COUNTRY_LIST, USER_INFO_BY_TOKEN_V2
 } from '@/api/api';
 // import {ref} from "vue";
 import axios from 'axios'
@@ -842,8 +842,9 @@ export default {
         interview_nationlity: '',
         interview_imgurl: '',
         entry_date: '',
-        business_id: '',
-        business_name: '',
+        company_id: '',
+        company_name: '',
+        identity:'',
         currency: '',
         is_mom_language: 0,
         employment_type: '',
@@ -875,14 +876,48 @@ export default {
 
     }
   },
+  computed:{
+    identity:{
+      get(){
+        return this.$store.state.identity
+      }
+    }
+  },
   mounted() {
     this.initMap()
+
+    this.getBasicInfo(this.identity)
+
     this.getAllCountry(0)
-    this.getVisitorBasicInfo()
     this.getAllAreas(0)
     this.getUserObjectList()
+
   },
   methods: {
+    getBasicInfo(identity) {
+
+      let params = {
+        identity:identity
+      }
+
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
+        // console.log(res)
+        if(res.code == 200){
+          let userContact = res.message.user_contact;
+
+          if(userContact){
+            this.jobForm.company_id = userContact.company_id;
+            this.jobForm.company_name = userContact.company.company_name;
+
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
     getAllCountry(pid){
       let params = {
         pid:pid
@@ -1078,41 +1113,6 @@ export default {
         this.districtOptions = []
       }
 
-    },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
-      let params = {
-        id: uid,
-        identity: identity
-      }
-      VISITOR_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
-            this.jobForm.business_id = res.message.business_info.id;
-            this.jobForm.business_name = res.message.business_info.business_name
-
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
-          }
-
-        }
-      }).catch(err => {
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
     },
     getAllAreas(pid) {
       let params = {
@@ -1840,6 +1840,7 @@ export default {
       that.jobForm.age_max = this.ageValue[1];
 
       that.jobForm.version_time = this.$route.query.version_time;
+      that.jobForm.identity = this.identity;
 
       // if (that.isEdit) {
       //   that.form.job_id = this.jobId;

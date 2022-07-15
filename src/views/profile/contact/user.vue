@@ -17,6 +17,7 @@
             </el-breadcrumb>
           </div>
 
+
           <div class="basic-form">
             <el-form
                 ref="basicForms"
@@ -883,75 +884,143 @@ export default {
       this.districtName = e.Pinyin
       this.districtNameCn = e.Name
     },
-    async submitEducatorContactForm(){
+    async submitEducatorContactForm(userId){
 
       let params = Object.assign({}, this.basicForm)
-      let userId = localStorage.getItem('uid')
+      let gender = ''
+      if(params.sex == 1){
+        gender = 'Male'
+      }
+      if(params.sex == 2){
+        gender = 'Female'
+      }
+      if(params.sex == 3){
+        gender = 'Undisclosed'
+      }
 
       let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {'SingleLine': userId  //UserID//
+        {'zf_referrer_name':''},
+        {'zf_redirect_url':''},
+        {'zc_gad':''},
+        {'SingleLine':userId //UserID
         },
-        {'SingleLine1': params.first_name // First Name
+        {'SingleLine1':params.first_name // First Name
         },
-        {'SingleLine2': params.last_name //  Last Name
+        {'SingleLine2':params.last_name //  Last Name
         },
-        {'Dropdown': ''  //  Gender
+        {'Dropdown': gender //  Gender
         },
-        {'Date': ''  //   Date of Birth dd-MMM-yyyy
+        {'Date': params.birthday //   Date of Birth dd-MMM-yyyy
         },
-        {'SingleLine3': ''  //   Title
+        {'SingleLine3':'' //   Title
         },
-        {'Email': ''  //   Email
+        {'Email':params.email //   Email
         },
-        {'PhoneNumber_countrycode': ''  //   Phone
+        {'PhoneNumber_countrycode': params.phone_code + ' ' + params.phone //   Phone
         },
-        {'SingleLine4': ''  //   Nationality
+        {'SingleLine4':'' //   Nationality
         },
-        {'Dropdown1': ''  //  Membership Type
+        {'Dropdown1':'' //   Membership Type
         },
-        {'MultiLine': ''  //  Languages Spoken
+        {'MultiLine':'' //   Languages Spoken
         },
-        {'Number': ''  //  Membership Duration
+        {'Number':'' //   Membership Duration
         },
-        {'SingleLine5': ''  //  City
+        {'SingleLine5':'' //   City
         },
-        {'SingleLine6': ''  //  Province
+        {'SingleLine6':'' //   Province
         },
-        {'SingleLine7': ''  //  Country
+        {'SingleLine7':'' //   Country
         },
-        {'Dropdown2': ''  //  Educator Type
+        {'Dropdown2':'' //   Educator Type
         },
-        {'MultiLine1': ''  //  Education
+        {'MultiLine1':'' //   Education
         },
-        {'MultiLine2': ''  //   Work History
+        {'MultiLine2':'' //    Work History
         },
-        {'Dropdown3': ''  //  Teaching Experience
+        {'Dropdown3':'' //    Teaching Experience
         },
-        {'MultiLine3': ''  //  Certifications
+        {'MultiLine3':'' //   Certifications
         },
-        {'MultiLine4': ''  //  Educator Intro
+        {'MultiLine4':'' //   Educator Intro
         },
-        {'Website': params.profile_photo  //   Contact image Link
+        {'Website':params.headimgurl //   Contact image Link
         },
-        {'Website1': ''  //   Intro Video Link
+        {'Website1':'' //   Intro Video Link
         }
       ]
 
       let zohoParams = {
-        zoho_data:zohoData,
-        zoho_url:'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
       }
 
-      await ZOHO_SYNC(zohoParams).then(res=>{
+      await ZOHO_SYNC(zohoParams).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+      })
+
+    },
+    async submitCompanyContactForm(userId){
+
+      let params = Object.assign({}, this.basicForm)
+
+      let zohoData = [
+        {'zf_referrer_name':''},
+        {'zf_redirect_url':''},
+        {'zc_gad':''},
+        {'SingleLine':userId  //UserID
+        },
+        {'SingleLine1':params.first_name  // First Name
+        },
+        {'SingleLine2':params.last_name  //  Last Name
+        },
+        {'Dropdown':'' //  Gender
+        },
+        {'Date':''  //   Date of Birth dd-MMM-yyyy params.birthday
+        },
+        {'SingleLine3':''  //   Title
+        },
+        {'Email':params.email  //   Email
+        },
+        {'PhoneNumber_countrycode':''  //   Phone
+        },
+        {'SingleLine4':''  //   Nationality
+        },
+        {'Dropdown1':''  //   Membership Type
+        },
+        {'Number':''  //   Membership Duration
+        },
+        {'SingleLine5':''  //   City
+        },
+        {'SingleLine6':''  //   Province
+        },
+        {'SingleLine7':''  //   Country
+        },
+        {'Website':'' //   Contact image Link
+        }
+
+      ]
+
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
+        console.log(res)
+      }).catch(err => {
         console.log(err)
       })
 
-    }
+    },
 
   }
 }
