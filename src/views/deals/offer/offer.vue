@@ -166,7 +166,7 @@
 <script>
 
 import meSideMenu from "@/components/meSideMenu";
-import {VISITOR_USER_INFO,TAG_LIST,TAG_IS_EXISTS,ALL_AREAS,ADD_DEALS} from '@/api/api';
+import {TAG_LIST,TAG_IS_EXISTS,ALL_AREAS,ADD_DEALS} from '@/api/api';
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -238,11 +238,8 @@ export default {
     }
   },
   mounted() {
-    // this.getVisitorBasicInfo()
     this.getTagsList()
     this.getAllAreas(0)
-    // this.initMap()
-    // this.initMap1()
   },
   methods: {
     dealLocationTypeChange(e){
@@ -509,38 +506,6 @@ export default {
         this.tagsEnData.splice(index,1);
       }
 
-    },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
-      let params = {
-        id: uid,
-        identity: identity
-      }
-      VISITOR_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
-          }
-
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

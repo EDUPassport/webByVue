@@ -262,7 +262,6 @@
 import xllLoading from '@/components/xllLoading'
 import meSideMenu from "@/components/meSideMenu";
 import {
-  VISITOR_USER_INFO,
   ALL_AREAS,
   EVENTS_ADD_EVENT,
   EVENTS_CATEGORY,
@@ -275,7 +274,6 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import ImageCompressor from 'compressorjs'
-
 
 export default {
   name: "post",
@@ -710,33 +708,6 @@ export default {
     },
     districtChange(e) {
       console.log(e)
-    },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
-      let params = {
-        id: uid,
-        identity: identity
-      }
-      VISITOR_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
-          }
-
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
-      })
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
