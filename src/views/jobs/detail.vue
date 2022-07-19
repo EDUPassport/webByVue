@@ -245,7 +245,7 @@
               </div>
               <div class="other-jobs-r">
                 <div class="other-jobs-r-t">
-                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">{{ item.job_title }}</router-link>
+                  <router-link :to="{path:'/jobs/detail',query:{id:item.id}}">{{ item.job_title }}</router-link>
                 </div>
                 <div class="other-jobs-r-b">
                   {{item.refresh_time}}
