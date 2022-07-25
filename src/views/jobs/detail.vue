@@ -52,9 +52,24 @@
               <b>Subject(s):</b>
               <span v-for="(item,i) in detailData.subject" :key="i">{{item.object_en}}</span>
             </div>
+
             <div class="working-hours">
+              <b>Working Hours:</b>
+              <div class="working-hours-item" v-for="(item,index) in workingHoursData" :key="index">
+                <el-tag class="working-hours-week" v-for="(week,i) in item.week" :key="i">
+                  <span v-if="week==1">M</span>
+                  <span v-if="week==2">T</span>
+                  <span v-if="week==3">W</span>
+                  <span v-if="week==4">Th</span>
+                  <span v-if="week==5">F</span>
+                  <span v-if="week==6">Sa</span>
+                  <span v-if="week==7">Su</span>
+                </el-tag>
+                <div class="working-hours-hours">{{item.hours}}</div>
+              </div>
 
             </div>
+
             <div class="student-ages" v-if="detailData.age_to_teach">
               <b>Student Ages:</b>
               <span v-for="(item,i) in detailData.age_to_teach" :key="i">{{item.object_en}}</span>
@@ -293,7 +308,8 @@ export default {
       otherJobsData:[],
       isFavoriteValue:0,
       versionTime:randomString(),
-      showSocialShareExpandStatus:false
+      showSocialShareExpandStatus:false,
+      workingHoursData:[]
     }
   },
   components:{
@@ -351,6 +367,13 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.detailData = res.message
+
+          const workHours = res.message.working_hours
+          if (workHours) {
+            // this.jobForm.working_hours = JSON.parse(workHours)
+            this.workingHoursData = JSON.parse(workHours)
+          }
+
           this.initMap(res.message.lng,res.message.lat)
           let userId = res.message.user_id
           this.getCompanyJobList(userId)
@@ -933,6 +956,12 @@ export default {
   color: #ff2870;
   font-size: 14px;
 }
+.working-hours{
+  width:100%;
+}
+.working-hours b{
+  font-size: 14px;
+}
 
 .subjects {
   padding: 10px 0;
@@ -1401,5 +1430,24 @@ export default {
 
 .xll-icon {
   font-size: 24px;
+}
+
+
+.working-hours-item{
+  border: 1px solid #eeeeee;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+.working-hours-week{
+  margin-left: 10px;
+}
+.working-hours-hours{
+  margin-left: 20px;
 }
 </style>

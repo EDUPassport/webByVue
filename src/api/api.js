@@ -332,3 +332,9 @@ export const USER_ADMIN_DELETE = (params) => post('home/user/company/menu/del', 
 
 // 用户子身份接口 【Edu新】
 export const USER_SUB_IDENTITY_V2 = (params) => get('home/user/sub/identity',params)
+
+//返回已发布职位的国家信息
+export const JOBS_COUNTRY_LIST = (params) => get('jobsCountryList', params)
+
+// job applications
+export const JOBS_APPLICATIONS = (params) => get('job/getJobResume',params)

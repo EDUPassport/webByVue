@@ -75,18 +75,22 @@
               </el-option>
             </el-select>
           </div>
-<!--          <div class="jobs-filter-work-exp">-->
-<!--            <el-select class="jobs-filter-select" v-model="workExpValue" clearable placeholder="Work Experience"-->
-<!--                       size="medium">-->
-<!--              <el-option-->
-<!--                  v-for="item in workExpOptions"-->
-<!--                  :key="item.value"-->
-<!--                  :label="item.label"-->
-<!--                  :value="item.value"-->
-<!--              >-->
-<!--              </el-option>-->
-<!--            </el-select>-->
-<!--          </div>-->
+
+          <div class="jobs-filter-online">
+            <el-select class="jobs-filter-select" v-model="onlineValue" clearable
+                       @change="onlineChange"
+                       placeholder="Online/Offline"
+                       size="medium">
+              <el-option
+                  v-for="item in onlineOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+
 
         </div>
         <!--        featuredJobs jobs    -->
@@ -258,7 +262,8 @@ import {
   JOBS_AREA_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2
+  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2,
+  JOBS_COUNTRY_LIST
 } from "@/api/api";
 
 import featuredJobs from "@/components/featuredJobs";
@@ -320,6 +325,18 @@ export default {
       ],
       studentAgeValue: '',
       studentAgeOptions: [],
+      onlineValue:'',
+      onlineOptions:[
+        {
+          label:'Online',
+          value:1
+        },
+        {
+          label:'Offline',
+          value:0
+        }
+
+      ],
       workExpValue: '',
       workExpOptions: [],
       jobFeaturedListData: [],
@@ -374,12 +391,26 @@ export default {
 
   },
   mounted() {
-    this.getJobsAreaList()
+
     this.getUserObjectList()
     this.getAdsList()
-    let cityValue= this.$route.query.city;
-    if(cityValue && cityValue !=''){
-      this.locationValue = Number(cityValue)
+
+
+    let envName = process.env.VUE_APP_ENV_NAME
+    if(envName === 'development' || envName === 'production'){
+      this.getJobCountryList()
+      let countryValue= this.$route.query.country;
+      if(countryValue && countryValue !=''){
+        this.locationValue = Number(countryValue)
+      }
+    }
+
+    if(envName === 'developmentCN' || envName === 'productionCN' ){
+      this.getJobsAreaList()
+      let cityValue= this.$route.query.city;
+      if(cityValue && cityValue !=''){
+        this.locationValue = Number(cityValue)
+      }
     }
 
     this.getJobList(this.jobPage, this.jobLimit)
@@ -434,13 +465,6 @@ export default {
                 this.jobsAdsListMid = jobsAdsListMid[0].data;
               }
 
-              // if (jobData.length > 3 && jobsAdsListTop.length > 0) {
-              //   jobData[2]['ads'] = jobsAdsListTop[0].data;
-              // }
-              // if (jobData.length > 7 && jobsAdsListMid.length > 0) {
-              //   jobData[5]['ads'] = jobsAdsListMid[0].data;
-              // }
-              // this.jobsList = jobData;
             }
 
       }).catch(err=>{
@@ -476,6 +500,16 @@ export default {
         }
       })
 
+    },
+    getJobCountryList(){
+      let params = {}
+      JOBS_COUNTRY_LIST(params).then(res=>{
+        if(res.code == 200){
+          this.locationOptions = res.message;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
     },
     getJobsAreaList(){
       let params = {}
@@ -528,9 +562,18 @@ export default {
         }
 
       }
+
+      let envName = process.env.VUE_APP_ENV_NAME
+
       if(this.locationValue != ''){
-        params.city = this.locationValue
+        if(envName === 'development' || envName === 'production'){
+          params.country = this.locationValue
+        }
+        if(envName === 'developmentCN' || envName === 'productionCN'){
+          params.city = this.locationValue
+        }
       }
+
       if (this.genderValue != '') {
         params.sex = this.genderValue
       }
@@ -542,6 +585,8 @@ export default {
       if (this.studentAgeValue != '') {
         params.age_to_teach = this.studentAgeValue
       }
+
+      params.is_online = this.onlineValue
 
       JOB_LIST(params).then(res => {
         // console.log(res)
@@ -627,6 +672,13 @@ export default {
       this.showLoadingStatus = true
       // console.log(e)
       this.studentAgeValue = e
+      this.getJobList(this.jobPage, this.jobLimit)
+    },
+    onlineChange(e) {
+      this.jobListData = []
+      this.showLoadingStatus = true
+      // console.log(e)
+      this.onlineValue = e
       this.getJobList(this.jobPage, this.jobLimit)
     },
     cancelFavorite(type,typeId,index){
@@ -884,6 +936,9 @@ export default {
 
 .jobs-filter-student-age {
   margin-top: 10px;
+}
+.jobs-filter-online{
+  margin-top:10px;
 }
 
 .jobs-filter-work-exp {
