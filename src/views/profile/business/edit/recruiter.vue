@@ -69,6 +69,7 @@
                     format="YYYY"
                     value-format="YYYY"
                     placeholder="Year Founded"
+                    :disabledDate="birthdayDisabledDate"
                     style="width: 100%"
                 ></el-date-picker>
               </el-form-item>
@@ -249,6 +250,15 @@ export default {
     meSideMenu,
     profileTitle,
     xllLoading
+  },
+  setup(){
+    const birthdayDisabledDate = (date)=>{
+      let myDate = new Date();
+      return date.getTime() >= myDate.getTime();
+    }
+    return {
+      birthdayDisabledDate
+    }
   },
   data() {
     return {

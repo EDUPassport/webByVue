@@ -396,7 +396,6 @@
 import meSideMenu from "@/components/meSideMenu";
 import accountInfo from "../../../components/accountInfo";
 import {
-  GET_BASIC_INFO,
   USER_OBJECT_LIST,
   ADD_LANGUAGE_SCORE,
   ADD_PROFILE_V2,
@@ -708,20 +707,6 @@ export default {
             })
           }
         }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    getBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let params = {
-        id: uid,
-        token: localStorage.getItem('token')
-      }
-      GET_BASIC_INFO(params).then(res => {
-        console.log(res)
       }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)

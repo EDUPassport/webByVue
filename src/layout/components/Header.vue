@@ -678,6 +678,8 @@ export default {
           let companyIdValue = res.message.return_company_id
           this.$store.commit('identity', identityValue)
           this.$store.commit('allIdentityChanged',true )
+          localStorage.setItem('identity',identityValue)
+          localStorage.setItem('company_id',companyIdValue)
 
           this.getBasicInfo(identityValue)
           this.getAllIdentity()

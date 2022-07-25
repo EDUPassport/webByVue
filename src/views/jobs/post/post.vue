@@ -130,7 +130,7 @@
                   <el-form-item label="Number of Vacancies">
                     <el-input v-model="jobForm.numbers" type="number" placeholder="Number of Vacancies"></el-input>
                   </el-form-item>
-                  <el-form-item label="Employment Type">
+                  <el-form-item label="Employment Type" required>
 
                     <div class="object-tags-container">
                       <div class="object-tags">
@@ -152,44 +152,22 @@
               <div class="position-info-container">
                 <div class="position-info-label">General Position Info</div>
                 <div class="position-info-content">
-                  <el-form-item label="Job Title">
+                  <el-form-item label="Job Title" required>
+
+                    <div class="object-tags-add">
+                      <div class="object-tags-item-add">
+                        <el-input type="text" v-model="ownJobTitleValue"
+                                  placeholder="Job Title"></el-input>
+                      </div>
+                    </div>
+
                     <div class="object-tags-container">
                       <div class="object-tags">
                         <div class="object-tags-item"
-                             :class=" selectJobTitleList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                             :class="item.object_en == ownJobTitleValue ? 'tags-active' : '' "
                              v-for="(item,index) in jobTitleList" :key="index"
                              @click="selectJobTitle(item)">
                           {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectJobTitleList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownJobTitleList" :key="index"
-                             @click="selectJobTitle(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addJobTitleStatus==false"
-                             @click="addJobTitleStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addJobTitleStatus">
-                          <el-input type="text" v-model="ownJobTitleValue"
-                                    placeholder="Add job title"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownJobTitleValue.length>0"
-                                       @click="addOwnJobTitle">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownJobTitleValue.length==0"
-                                       @click="addJobTitleStatus=false">Cancel
-                            </el-button>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -311,7 +289,7 @@
 
 
                   </el-form-item>
-                  <el-form-item label="Additional Job information">
+                  <el-form-item label="Additional Job information" required>
                     <el-input v-model="jobForm.desc" type="textarea"
                               placeholder="Please enter additional job information"></el-input>
                   </el-form-item>
@@ -322,13 +300,13 @@
               <div class="compensation-container">
                 <div class="compensation-label">Compensation</div>
                 <div class="compensation-content">
-                  <el-form-item label="Salary (Min)">
+                  <el-form-item label="Salary (Min)" required>
                     <el-input v-model="jobForm.salary_min" placeholder="Enter min salary"></el-input>
                   </el-form-item>
-                  <el-form-item label="Salary (Max)">
+                  <el-form-item label="Salary (Max)" required>
                     <el-input v-model="jobForm.salary_max" placeholder="Enter max salary"></el-input>
                   </el-form-item>
-                  <el-form-item label="Payment Period">
+                  <el-form-item label="Payment Period" required>
                     <el-select v-model="jobForm.payment_period"
                                filterable
                                placeholder="Choose Payment Period">
@@ -336,7 +314,7 @@
                                  :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="Currency">
+                  <el-form-item label="Currency" required>
 
                     <div class="object-tags-container">
                       <div class="object-tags">
@@ -688,7 +666,7 @@ export default {
       selectEmploymentTypeList: [],
 
       jobTitleList: [],
-      addJobTitleStatus: false,
+      addJobTitleStatus: true,
       ownJobTitleValue: '',
       ownJobTitleList: [],
       selectJobTitleList: [],
@@ -1224,14 +1202,9 @@ export default {
       // console.log(this.selectJobTitleList)
     },
     selectJobTitle(value) {
-      let index = this.selectJobTitleList.findIndex((element) => element === value);
+      // console.log(value)
+      this.ownJobTitleValue = value.object_en;
 
-      if (index == -1) {
-        this.selectJobTitleList.splice(index, 1, value);
-      } else {
-        this.selectJobTitleList.splice(index, 1);
-      }
-      // console.log(this.selectJobTitleList)
     },
     addOwnStartDate() {
       this.addStartDateStatus = false;
@@ -1776,7 +1749,7 @@ export default {
         return this.$message.warning('Employment Type')
       }
 
-      if (this.selectJobTitleList.length <= 0) {
+      if (this.ownJobTitleValue.length<=0) {
         return this.$message.warning('Job Title')
       }
 
@@ -1822,11 +1795,9 @@ export default {
       } else {
         that.jobForm.currency = '';
       }
-      if (this.selectJobTitleList.length > 0) {
-        let a = this.selectJobTitleList;
-        that.jobForm.job_title = a[0].object_en;
-      } else {
-        that.jobForm.job_title = '';
+
+      if(this.ownJobTitleValue){
+        that.jobForm.job_title = this.ownJobTitleValue;
       }
 
       if (this.selectStartDateList.length > 0) {

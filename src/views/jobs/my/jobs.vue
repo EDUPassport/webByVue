@@ -17,14 +17,14 @@
             <div class="jobs-list-content">
               <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
                 <div class="jobs-list-item-l">
-                  <el-image class="jobs-item-logo" :src="item.logo" fit="contain"></el-image>
+                  <el-image class="jobs-item-logo" :src="item.third_company_logo ? item.third_company_logo : item.company_logo" fit="contain"></el-image>
                 </div>
                 <div class="jobs-list-item-r">
                   <div class="jobs-list-item-title">
                     <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">{{ item.job_title }}</router-link>
                   </div>
                   <div class="jobs-list-item-name">
-                    {{ item.business_name }}
+                    {{ item.company_name }}
                   </div>
                   <div class="jobs-list-item-address">
                     {{ item.address }}
@@ -76,7 +76,7 @@
                   Active
                 </div>
                 <div class="list-item-tag actived-2" v-if="item.status==2">
-                 Rejected
+                  Rejected
                 </div>
 
               </div>
@@ -97,9 +97,9 @@
 </template>
 
 <script>
-import {randomString} from "../../../utils";
+import {randomString} from "@/utils";
 import meSideMenu from "@/components/meSideMenu";
-import {VISITOR_USER_INFO,MY_JOBS} from '@/api/api';
+import {MY_JOBS} from '@/api/api';
 
 export default {
   name: "jobs",
@@ -118,7 +118,6 @@ export default {
     }
   },
   mounted() {
-    // this.getVisitorBasicInfo()
     this.getMyJobs(this.jobPage,this.jobLimit)
   },
   methods: {
@@ -161,38 +160,7 @@ export default {
       })
 
     },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
-      let params = {
-        id: uid,
-        identity: identity
-      }
-      VISITOR_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
-          }
 
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    },
   }
 }
 </script>

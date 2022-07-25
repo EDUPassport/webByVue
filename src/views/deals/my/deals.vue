@@ -21,8 +21,8 @@
                 <div class="deals-item-bg" :style="'background-image:url('+ item.user_info.profile_photo + ')'">
                   <div class="deals-item-t">
                     <div class="deals-item-t-l">
-                      <template v-if="item.user_info">
-                        <el-image class="deals-logo" :src="item.user_info.logo"></el-image>
+                      <template v-if="item.company_logo">
+                        <el-image class="deals-logo" :src="item.company_logo"></el-image>
                       </template>
                     </div>
                     <div class="deals-item-t-r">
@@ -46,13 +46,13 @@
 
                 <div class="deals-item-b">
                   <div class="deals-item-b-l">
-                    <template v-if="item.vendor_type_icon">
-                      <el-image class="hot-deal-type-icon" :src="item.vendor_type_icon.icon_url"></el-image>
+                    <template v-if="item.company_category_logo">
+                      <el-image class="hot-deal-type-icon" :src="item.company_category_logo"></el-image>
                     </template>
                   </div>
                   <div class="deals-item-b-r">
-                    <template v-if="item.user_info">
-                      {{ item.user_info.vendor_name_en }}
+                    <template v-if="item.company_name">
+                      {{ item.company_name }}
                     </template>
                   </div>
                 </div>
@@ -88,7 +88,7 @@
 <script>
 
 import meSideMenu from "@/components/meSideMenu";
-import {VISITOR_USER_INFO,MY_DEALS} from '@/api/api';
+import {MY_DEALS} from '@/api/api';
 
 export default {
   name: "deals",
@@ -106,7 +106,6 @@ export default {
     }
   },
   mounted() {
-    // this.getVisitorBasicInfo()
     this.getMyDeals(this.dealPage,this.dealLimit)
   },
   methods: {
@@ -154,38 +153,7 @@ export default {
       })
 
     },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
-      let params = {
-        id: uid,
-        identity: identity
-      }
-      VISITOR_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
-          }
 
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    },
   }
 }
 </script>

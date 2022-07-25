@@ -127,7 +127,6 @@
 
         </div>
 
-
         <div class="jobs-list-container" >
           <div class="jobs-list-label-container">
             <div class="jobs-list-label">We've found you {{ jobTotalNum }} open jobs</div>
@@ -146,7 +145,8 @@
                 <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
               </div>
               <div class="jobs-list-item-l">
-                <el-image class="jobs-item-logo" :src="item.logo" fit="contain">
+                <el-image class="jobs-item-logo" :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+                          fit="contain">
                   <template #error>
                     <div class="image-slot">
                       <el-icon :size="60" color="#808080"><Picture /></el-icon>
@@ -159,7 +159,7 @@
                   <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">{{ item.job_title }}</router-link>
                 </div>
                 <div class="jobs-list-item-name">
-                  {{ item.business_name }}
+                  {{ item.company_name }}
                 </div>
                 <div class="jobs-list-item-address">
                   {{ item.address }}
@@ -258,8 +258,7 @@ import {
   JOBS_AREA_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  GET_BASIC_INFO,
-  CHANGE_IDENTITY_LANGUAGE
+  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2
 } from "@/api/api";
 
 import featuredJobs from "@/components/featuredJobs";
@@ -370,14 +369,7 @@ export default {
     };
   },
   created() {
-    // this.getJobsAreaList()
-    // this.getUserObjectList()
-    // let cityValue= this.$route.query.city;
-    // if(cityValue && cityValue !=''){
-    //   this.locationValue = Number(cityValue)
-    // }
-    //
-    // this.getJobList(this.jobPage, this.jobLimit)
+
     console.log(this.$route.query)
 
   },
@@ -697,111 +689,143 @@ export default {
 
     },
     selectRole(e) {
-      let uid = localStorage.getItem('uid')
+      this.$loading({
+        text: 'Loading...'
+      })
+
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
+        user_id: localStorage.getItem('uid'),
+        identity: e
       }
-      GET_BASIC_INFO(params).then(res => {
-        let isEducator = res.message.is_educator;
-        let isBusiness = res.message.is_business;
-        let isVendor = res.message.is_vendor;
-        // let isOther = res.message.is_other;
-        // let identity = res.message.identity;
 
-        if (e == 1) {
-          if (isEducator >= 10) {
-            let firstName = res.message.educator_info.first_name;
-            let lastName = res.message.educator_info.last_name;
-            let avatar = res.message.educator_info.profile_photo;
+      USER_INFO_VISITOR_V2(params).then(res => {
+        let userContact = res.message.user_contact;
+        let educatorContact = {};
 
-            localStorage.setItem('name', firstName + ' ' + lastName)
-            localStorage.setItem('avatar', avatar)
-            localStorage.setItem('first_name', firstName)
-            localStorage.setItem('last_name', lastName)
+        let companyInfo = {};
 
-            this.$store.commit('username', firstName + ' ' + lastName)
-            this.$store.commit('userAvatar', avatar)
+        let isEducator = userContact.is_educator;
+        let isRecruiting = userContact.is_recruiting;
+        let isSchool = userContact.is_school;
+        let isOther = userContact.is_other;
+        let isVendor = userContact.is_vendor;
+        let identity = e;
 
-            this.changeIdentity(1)
+        if (identity == 1) {
+          if (isEducator > 10) {
+            educatorContact =  res.message.user_contact.educator_contact;
+            this.changeIdentity(educatorContact.id,1,2)
+            this.$loading().close()
           } else {
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            // this.$router.push('/role/educator')
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 1}})
+
           }
 
         }
-        if (e == 2) {
-          if (isBusiness >= 10) {
-            let firstName = res.message.business_info.first_name;
-            let lastName = res.message.business_info.last_name;
-            let avatar = res.message.business_info.logo;
-            localStorage.setItem('name', firstName + ' ' + lastName)
-            localStorage.setItem('avatar', avatar)
-            localStorage.setItem('first_name', firstName)
-            localStorage.setItem('last_name', lastName)
 
-            this.$store.commit('username', firstName + ' ' + lastName)
-            this.$store.commit('userAvatar', avatar)
+        if (identity == 2) {
 
-            this.changeIdentity(2)
+          if (isRecruiting > 10) {
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,2,2)
+            // this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$loading().close()
           } else {
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            // this.$router.push('/role/business')
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
+
+            this.dialogBusinessAccountVisible = false
+          }
+        }
+
+        if (identity == 3) {
+
+          if (isSchool > 10) {
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,3,2)
+            // this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
+
+            this.dialogBusinessAccountVisible = false
           }
 
         }
-        if (e == 3) {
-          if (isVendor >= 10) {
-            let firstName = res.message.vendor_info.first_name;
-            let lastName = res.message.vendor_info.last_name;
-            let avatar = res.message.vendor_info.logo;
 
-            localStorage.setItem('name', firstName + ' ' + lastName)
-            localStorage.setItem('avatar', avatar)
-            localStorage.setItem('first_name', firstName)
-            localStorage.setItem('last_name', lastName)
+        if (identity == 4) {
 
-            this.$store.commit('username', firstName + ' ' + lastName)
-            this.$store.commit('userAvatar', avatar)
+          if (isOther > 10) {
+            companyInfo = res.message.user_contact.company;
 
-            this.changeIdentity(3)
+            this.changeIdentity(companyInfo.id,4,2)
+            this.$loading().close()
           } else {
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            // this.$router.push('/role/vendor')
+            this.$loading().close()
+            this.$router.push({path: '/profile/contact/user', query: {i: 4}})
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.dialogBusinessAccountVisible = false
           }
 
         }
+
+        if (identity == 5) {
+
+          if (isVendor > 10) {
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,5,2)
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 5}})
+
+          }
+
+        }
+
 
       }).catch(err => {
         console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        this.$loading().close()
+        this.$message.error(err.msg)
       })
     },
-    changeIdentity(identity) {
+    changeIdentity(companyId, identity, language) {
       let params = {
-        token: localStorage.getItem('token'),
+        company_id: companyId,
+        language: language,
         identity: identity
       }
 
-      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
-        console.log(res)
+      SWITCH_IDENTITY_V2(params).then(res => {
+        // console.log(res)
         if (res.code == 200) {
+          this.$store.commit('allIdentityChanged',true )
+
+          localStorage.setItem('company_id',companyId)
           localStorage.setItem('identity', identity)
-          this.$store.commit('identity',identity)
+
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData',str)
+
+          this.$store.commit('identity', identity)
+          this.$store.commit('menuData', res.message)
+
+          this.$loading().close()
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        this.$loading().close()
+        this.$message.error(err.msg)
       })
 
     }

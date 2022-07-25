@@ -36,7 +36,6 @@
           >
             <div class="events-item-l">
               <el-image class="events-item-banner"
-
                         :src="item.file !='' ? item.file : 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220324/xxx.2ntb45gjv1g0.webp' "
               >
 
@@ -70,11 +69,8 @@
                               effect="dark"
                              color="#b1c452"
                     >
-                      <template v-if="item.identity == 3 && item.user_info">
-                        {{ item.user_info.vendor_type_name }}
-                      </template>
-                      <template v-if="item.identity == 2 && item.business_info">
-                        {{ item.business_info.business_type_name }}
+                      <template v-if="item.company_category_name">
+                        {{ item.company_category_name }}
                       </template>
                     </el-tag>
                   </div>
@@ -83,35 +79,24 @@
                 <div class="vendor-company-2">
 
                   <div class="vendor-company-2-l">
-                    <template v-if="item.identity == 3 ">
-                      <el-image class="vendor-company-logo"
-                                :src="item.user_info ? item.user_info.logo : '' "
-                      ></el-image>
-                    </template>
-                    <template v-if="item.identity == 2">
-                      <el-image class="vendor-company-logo"
-                                :src="item.business_info ? item.business_info.logo : '' "
-                      ></el-image>
-                    </template>
-
+                    <el-avatar class="vendor-company-logo"
+                               :src="item.third_company_logo ? item.third_company_logo : item.company_logo "
+                    ></el-avatar>
                   </div>
                   <div class="vendor-company-2-r">
                     <div class="vendor-company-2-name">
-                      <template v-if="item.identity == 3 && item.user_info">
-                        {{ item.user_info.vendor_name_en }}
-                      </template>
-                      <template v-if="item.identity == 2 && item.business_info">
-                        {{ item.business_info.business_name }}
+                      <template v-if="item.company_category_name">
+                        {{ item.company_category_name }}
                       </template>
                     </div>
-                    <div class="vendor-company-2-title">
-                      <template v-if="item.identity == 3 && item.user_info">
-                        {{ item.user_info.job_title }}
-                      </template>
-                      <template v-if="item.identity == 2 && item.business_info">
-                        {{ item.business_info.job_title }}
-                      </template>
-                    </div>
+<!--                    <div class="vendor-company-2-title">-->
+<!--                      <template v-if="item.identity == 3 && item.user_info">-->
+<!--                        {{ item.user_info.job_title }}-->
+<!--                      </template>-->
+<!--                      <template v-if="item.identity == 2 && item.business_info">-->
+<!--                        {{ item.business_info.job_title }}-->
+<!--                      </template>-->
+<!--                    </div>-->
                     <div class="vendor-company-2-event-name">
                       {{item.name}}
                     </div>
@@ -145,11 +130,8 @@
                     </div>
                   </div>
                   <div class="event-r-category">
-                    <template v-if="item.identity == 3 && item.user_info">
-                      Category: {{ item.user_info.vendor_type_name }}
-                    </template>
-                    <template v-if="item.identity == 2 && item.business_info">
-                      Category: {{ item.business_info.business_type_name }}
+                    <template v-if="item.company_category_name">
+                      Category: {{ item.company_category_name }}
                     </template>
                   </div>
                   <div class="event-r-location">
@@ -456,7 +438,8 @@ export default {
 }
 
 .vendor-company-logo{
-  width:100%;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   border: 1px solid #eaeaea;
 }

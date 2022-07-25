@@ -109,7 +109,7 @@
                   <div class="featured-jobs-title">
                     <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}"> {{ item.job_title }}</router-link>
                   </div>
-                  <div class="featured-business-name">{{ item.business_name }}</div>
+                  <div class="featured-business-name">{{ item.company_name }}</div>
                   <div class="featured-jobs-location">
                     <el-icon>
                       <LocationFilled></LocationFilled>
@@ -150,7 +150,7 @@
                       <el-icon>
                         <Calendar/>
                       </el-icon> &nbsp;
-                      {{ $filters.howLongFormat(item.c_time) }}
+                      {{ $filters.howLongFormat(item.refresh_time) }}
                     </div>
 
                   </div>

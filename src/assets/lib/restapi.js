@@ -1,4 +1,4 @@
-import {VISITOR_USER_INFO} from '@/api/api'
+import {USER_INFO_VISITOR_V2} from '@/api/api'
 
 //用户数据示例
 let users = [
@@ -85,44 +85,46 @@ RestApi.prototype.findUserById =async function (userId,identity) {
     // return user;
 
     let data = {
-        id: userId,
+        user_id: userId,
         identity: identity
     }
     let user = {};
-    let res = await  VISITOR_USER_INFO(data)
+    let res = await  USER_INFO_VISITOR_V2(data)
     // console.log(res)
 
     if (res.code == 200) {
-        let message = res.message;
+
+        let userContact = res.message.user_contact;
+
         let name = '';
         let avatar = 'https://oss.esl-passport.cn/educator.png';
+
+
         if (identity == 1) {
-            let educatorInfo = message.educator_info;
+
+            let educatorInfo = res.message.user_contact;
             if (educatorInfo) {
                 name = educatorInfo.first_name + '' + educatorInfo.last_name;
             }
-            if (educatorInfo && educatorInfo.profile_photo) {
-                avatar = educatorInfo.profile_photo;
+            if (educatorInfo && educatorInfo.headimgurl) {
+                avatar = educatorInfo.headimgurl;
             }
         }
-        if (identity == 2) {
-            let businessInfo = message.business_info;
-            if (businessInfo) {
-                name = businessInfo.first_name + '' + businessInfo.last_name;
+
+        if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
+
+            let businessInfo = res.message.user_contact.company;
+
+            if (userContact) {
+                name = userContact.first_name + '' + userContact.last_name;
             }
-            if (businessInfo && businessInfo.profile_photo) {
-                avatar = businessInfo.profile_photo;
+
+            if (businessInfo && businessInfo.logo) {
+                avatar = businessInfo.logo;
             }
+
         }
-        if (identity == 3) {
-            let vendorInfo = message.vendor_info;
-            if (vendorInfo) {
-                name = vendorInfo.first_name + '' + vendorInfo.last_name;
-            }
-            if (vendorInfo && vendorInfo.profile_photo) {
-                avatar = vendorInfo.profile_photo;
-            }
-        }
+
         user = {
             uuid: userId,
             name: name,

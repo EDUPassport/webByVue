@@ -140,7 +140,6 @@ import {useStore} from 'vuex'
 import {computed} from "vue";
 import SendBox from "./chat-component/SendBox";
 import ChatMessage from "./chat-component/ChatMessage";
-// import {VISITOR_USER_INFO} from '@/api/api'
 
 export default {
   name: "chat",

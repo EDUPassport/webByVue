@@ -96,31 +96,19 @@
           <div class="vendor-label">Vendor Bio</div>
           <div class="vendor-label-underline"></div>
           <div class="vendor-content">
-            <template v-if="eventData.identity == 3 ">
-              <el-image class="vendor-company-logo"
-                        :src="eventData.userInfo ? eventData.userInfo.logo : '' "
-              ></el-image>
-            </template>
-            <template v-if="eventData.identity == 2">
-              <el-image class="vendor-company-logo"
-                        :src="eventData.business_info ? eventData.business_info.logo : '' "
-              ></el-image>
-            </template>
+            <el-avatar class="vendor-company-logo"
+                      :src="eventData.third_company_logo ? eventData.third_company_logo : eventData.company_logo "
+            ></el-avatar>
             <p>
-              <template v-if="eventData.identity == 3 && eventData.userInfo ">
-                {{ eventData.userInfo.vendor_bio }}
-              </template>
-              <template v-if="eventData.identity == 2 && eventData.business_info">
-                {{ eventData.business_info.business_bio }}
+              <template v-if="eventData.company ">
+                {{ eventData.company.desc }}
               </template>
             </p>
-
-            <!--            <el-button class="vendor-profile-btn" type="primary" round>View Profile</el-button>-->
 
           </div>
         </div>
 
-        <div class="event-flyer">
+        <div class="event-flyer" v-if="eventData.file">
           <el-image :src="eventData.file" class="event-flyer-img"></el-image>
         </div>
 
@@ -133,7 +121,6 @@
 <script>
 import detailBannerImg from '../../assets/events/detail-banner.png'
 import {EVENTS_ADD_APPLICANTS, EVENTS_DETAIL} from "@/api/api";
-
 
 export default {
   name: "detail",
