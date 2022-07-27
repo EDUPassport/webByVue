@@ -61,7 +61,7 @@
                       <el-icon>
                         <Calendar/>
                       </el-icon>&nbsp;
-                      {{ $filters.howLongFormat(item.c_time) }}
+                      {{ $filters.howLongFormat(item.refresh_time) }}
                     </view>
                     <view class="jobs-list-item-salary">
                       {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}

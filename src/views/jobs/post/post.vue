@@ -27,30 +27,35 @@
                     <el-tab-pane label="China" name="first">
                       <template v-if="envName==='developmentCN' || envName==='productionCN' ">
                         <el-form-item label="Job Location">
-                          <el-select v-model="provinceObj"
-                                     filterable
+                          <el-select v-model="countryObj"
+                                     @change="countryChange"
                                      value-key="id"
-                                     @change="provinceChange"
-                                     placeholder="Select Province">
-                            <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
+                                     filterable
+                                     placeholder="Select Country">
+                            <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
                                        :value="item"></el-option>
                           </el-select>
-                          <el-select v-model="cityObj"
-                                     filterable
-                                     value-key="id"
-                                     @change="cityChange"
-                                     placeholder="Select City">
-                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
-                          <el-select v-model="districtObj"
-                                     filterable
-                                     value-key="id"
-                                     @change="districtChange"
-                                     placeholder="Select District">
-                            <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
+
+                          <template v-if="provinceOptions.length>0">
+                            <el-select v-model="provinceObj"
+                                       value-key="id"
+                                       filterable
+                                       @change="provinceChange"
+                                       placeholder="Select Province">
+                              <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                         :value="item"></el-option>
+                            </el-select>
+                          </template>
+                          <template v-if="cityOptions.length>0">
+                            <el-select v-model="cityObj"
+                                       value-key="id"
+                                       filterable
+                                       @change="cityChange"
+                                       placeholder="Select City">
+                              <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                         :value="item"></el-option>
+                            </el-select>
+                          </template>
                         </el-form-item>
                       </template>
                       <template v-if="envName==='development' || envName==='production' ">
@@ -75,51 +80,39 @@
                     <el-tab-pane label="International" name="second">
                       <el-form-item label="Job Location">
                         <el-select v-model="countryObj"
-                                   filterable
-                                   value-key="id"
                                    @change="countryChange"
+                                   value-key="id"
+                                   filterable
                                    placeholder="Select Country">
-                          <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.Pinyin"
+                          <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
                                      :value="item"></el-option>
                         </el-select>
+
                         <template v-if="provinceOptions.length>0">
                           <el-select v-model="provinceObj"
-                                     filterable
                                      value-key="id"
-                                     @change="provinceForChange"
+                                     filterable
+                                     @change="provinceChange"
                                      placeholder="Select Province">
-                            <el-option v-for="(item,i) in provinceOptions" :key="i"
-                                       :label="item.Pinyin"
+                            <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
                                        :value="item"></el-option>
                           </el-select>
                         </template>
                         <template v-if="cityOptions.length>0">
                           <el-select v-model="cityObj"
-                                     filterable
                                      value-key="id"
-                                     @change="cityForChange"
+                                     filterable
+                                     @change="cityChange"
                                      placeholder="Select City">
-                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
+                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
                                        :value="item"></el-option>
                           </el-select>
                         </template>
-                        <template v-if="districtOptions.length>0">
-                          <el-select v-model="districtObj"
-                                     filterable
-                                     value-key="id"
-                                     @change="districtForChange"
-                                     placeholder="Select District">
-                            <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
-                        </template>
-<!--                        <el-input v-model="jobForm.nation_address" type="text" placeholder="Country, City"></el-input>-->
+
                       </el-form-item>
                     </el-tab-pane>
 
                   </el-tabs>
-
-<!--                  <el-button @click="testName()">test</el-button>-->
 
                   <el-form-item label="Add Location Pin">
                     <div class="map-container">
@@ -613,7 +606,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 import meSideMenu from "@/components/meSideMenu";
 import {
-  ALL_AREAS, USER_OBJECT_LIST, ADD_JOB,
+  USER_OBJECT_LIST, ADD_JOB,
   JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO, GET_COUNTRY_LIST, USER_INFO_BY_TOKEN_V2
 } from '@/api/api';
 // import {ref} from "vue";
@@ -642,13 +635,7 @@ export default {
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       isInternationalName: 'first',
-      countryName:'',
-      provinceOptions: [],
-      provinceName: '',
-      cityOptions: [],
-      cityName: '',
-      districtOptions: [],
-      districtName: '',
+
       paymentPeriodList: [],
       employmentTypeList: [{
         id: 1,
@@ -788,10 +775,10 @@ export default {
       jobForm: {
         job_title: '',
         job_location: '',
-        country:'',
-        province: '',
-        city: '',
-        district: '',
+        country_id:'',
+        state_id:'',
+        town_id:'',
+
         apply_due_date: '',
         is_online: 0,
         salary_min: '',
@@ -830,6 +817,8 @@ export default {
         working_hours: '',
         version_time: '',
         address: '',
+        state:'',
+        town:'',
         lat: '',
         lng: '',
         international: 0,
@@ -845,12 +834,21 @@ export default {
           },
         ],
       },
-      countryOptions:[],
+
       sLocationType:1,
       countryObj:{},
       provinceObj:{},
       cityObj:{},
-      districtObj:{}
+      countryName:'',
+      countryNameCn:'',
+      provinceName:'',
+      provinceNameCn:'',
+      cityName:'',
+      cityNameCn:'',
+
+      countryOptions:[],
+      provinceOptions: [],
+      cityOptions: [],
 
     }
   },
@@ -866,8 +864,8 @@ export default {
 
     this.getBasicInfo(this.identity)
 
-    this.getAllCountry(0)
-    this.getAllAreas(0)
+    this.getAllCountry()
+
     this.getUserObjectList()
 
   },
@@ -896,9 +894,8 @@ export default {
       })
 
     },
-    getAllCountry(pid){
+    getAllCountry(){
       let params = {
-        pid:pid
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
@@ -906,17 +903,12 @@ export default {
           this.countryOptions = res.message;
         }
       }).catch(err=>{
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        this.$message.error(err.msg)
       })
     },
-    getAllForProvinces(pid){
+    getAllProvinces(countryId){
       let params = {
-        pid:pid
+        country_id:countryId
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
@@ -924,17 +916,13 @@ export default {
           this.provinceOptions = res.message;
         }
       }).catch(err=>{
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        this.$message.error(err.msg)
       })
     },
-    getAllForCitys(pid){
+    getAllCitys(countryId,stateId){
       let params = {
-        pid:pid
+        country_id:countryId,
+        state_id:stateId
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
@@ -942,72 +930,39 @@ export default {
           this.cityOptions = res.message;
         }
       }).catch(err=>{
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    },
-    getAllForDistricts(pid){
-      let params = {
-        pid:pid
-      }
-
-      GET_COUNTRY_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-          this.districtOptions = res.message;
-        }
-      }).catch(err=>{
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        this.$message.error(err.msg)
       })
     },
     countryChange(e){
       console.log(e)
-      this.jobForm.country = e.id
-      this.countryName = e.Pinyin
+      this.jobForm.state_id=undefined
+      this.jobForm.town_id = undefined
 
-      this.jobForm.province=undefined
-      this.jobForm.city = undefined
-      this.jobForm.district = undefined
+      this.provinceOptions = []
+      this.cityOptions = []
 
-      if(e.id == 99999999){
-        this.isInternationalName = 'first'
-        this.getAllAreas(0)
-      }else{
-        this.isInternationalName= 'second'
-        this.getAllForProvinces(e.id)
-      }
+      this.jobForm.country_id = e.id
+      this.countryName = e.name
+      this.countryNameCn = e.name
+      this.getAllProvinces(e.id)
+
     },
-    provinceForChange(e) {
+    provinceChange(e) {
       console.log(e)
-      this.jobForm.province = e.id
-      this.provinceName = e.Pinyin
+      this.jobForm.town_id = undefined
+      this.cityOptions = []
 
-      this.jobForm.city = undefined
-      this.jobForm.district = undefined
-      this.getAllForCitys(e.id)
+      this.jobForm.state_id = e.id
+      this.provinceName = e.name
+      this.provinceNameCn = e.name
+
+      this.getAllCitys(this.jobForm.country_id,e.id)
     },
-    cityForChange(e) {
+    cityChange(e) {
       console.log(e)
-      this.jobForm.city = e.id
-      this.cityName = e.Pinyin
-
-      this.jobForm.district = undefined
-      this.getAllForDistricts(e.id)
-    },
-    districtForChange(e) {
-      this.jobForm.district = e.id
-      this.districtName = e.Pinyin
-
-      console.log(e)
+      this.jobForm.town_id = e.id
+      this.cityName = e.name
+      this.cityNameCn = e.name
     },
     initMap() {
       mapboxgl.accessToken = this.accessToken;
@@ -1071,10 +1026,9 @@ export default {
       this.cityObj = {}
       this.districtObj = {}
 
-      this.jobForm.country = undefined;
-      this.jobForm.province = undefined;
-      this.jobForm.city = undefined;
-      this.jobForm.district = undefined;
+      this.jobForm.country_id = undefined;
+      this.jobForm.state_id = undefined;
+      this.jobForm.town_id = undefined;
 
       if(tab.paneName=='first'){
         this.countryName = 'China'
@@ -1091,81 +1045,6 @@ export default {
         this.districtOptions = []
       }
 
-    },
-    getAllAreas(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.provinceOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    },
-    getAllCitys(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.cityOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    },
-    getAllDistricts(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.districtOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    },
-    provinceChange(e) {
-      console.log(e)
-      this.getAllCitys(e.id)
-      this.provinceName = e.Pinyin
-      this.jobForm.province = e.id
-    },
-    cityChange(e) {
-      console.log(e)
-      this.getAllDistricts(e.id)
-      this.cityName = e.Pinyin
-      this.jobForm.city = e.id
-
-    },
-    districtChange(e) {
-      console.log(e)
-      this.jobForm.district = e.id
-      this.districtName = e.Pinyin
     },
     selectEmploymentType(value) {
 

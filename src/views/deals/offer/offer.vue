@@ -78,24 +78,37 @@
                   </el-tab-pane>
                   <el-tab-pane label="Offline" name="2">
                     <div class="deals-location-select-container">
-                      <el-select v-model="basicForm.province"
-                                 @change="provinceChange"
-                                 placeholder="Select Province">
-                        <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
-                                   :value="item.id"></el-option>
+
+                      <el-select v-model="countryObj"
+                                 @change="countryChange"
+                                 value-key="id"
+                                 filterable
+                                 placeholder="Select Country">
+                        <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                   :value="item"></el-option>
                       </el-select>
-                      <el-select v-model="basicForm.city"
-                                 @change="cityChange"
-                                 placeholder="Select City">
-                        <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                   :value="item.id"></el-option>
-                      </el-select>
-                      <el-select v-model="basicForm.district"
-                                 @change="districtChange"
-                                 placeholder="Select District">
-                        <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                   :value="item.id"></el-option>
-                      </el-select>
+
+                      <template v-if="provinceOptions.length>0">
+                        <el-select v-model="provinceObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="provinceChange"
+                                   placeholder="Select Province">
+                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
+                      <template v-if="cityOptions.length>0">
+                        <el-select v-model="cityObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="cityChange"
+                                   placeholder="Select City">
+                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
+
                     </div>
 
                     <div class="map-container"
@@ -110,24 +123,35 @@
                       This deal is available online and at the location below
                     </div>
                     <div class="deals-location-select-container">
-                      <el-select v-model="basicForm.province"
-                                 @change="provinceChange"
-                                 placeholder="Select Province">
-                        <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
-                                   :value="item.id"></el-option>
+                      <el-select v-model="countryObj"
+                                 @change="countryChange"
+                                 value-key="id"
+                                 filterable
+                                 placeholder="Select Country">
+                        <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                   :value="item"></el-option>
                       </el-select>
-                      <el-select v-model="basicForm.city"
-                                 @change="cityChange"
-                                 placeholder="Select City">
-                        <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                   :value="item.id"></el-option>
-                      </el-select>
-                      <el-select v-model="basicForm.district"
-                                 @change="districtChange"
-                                 placeholder="Select District">
-                        <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                   :value="item.id"></el-option>
-                      </el-select>
+
+                      <template v-if="provinceOptions.length>0">
+                        <el-select v-model="provinceObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="provinceChange"
+                                   placeholder="Select Province">
+                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
+                      <template v-if="cityOptions.length>0">
+                        <el-select v-model="cityObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="cityChange"
+                                   placeholder="Select City">
+                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
                     </div>
                     <div class="map-container"
                          v-loading="map1Loading"
@@ -166,7 +190,7 @@
 <script>
 
 import meSideMenu from "@/components/meSideMenu";
-import {TAG_LIST,TAG_IS_EXISTS,ALL_AREAS,ADD_DEALS} from '@/api/api';
+import {TAG_LIST, TAG_IS_EXISTS, ADD_DEALS, GET_COUNTRY_LIST} from '@/api/api';
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -194,12 +218,20 @@ export default {
       selectTagsArr: [],
       tagsCnData:[],
       tagsEnData:[],
+
+      countryObj:{},
+      provinceObj:{},
+      cityObj:{},
+      countryName:'',
+      countryNameCn:'',
+      provinceName:'',
+      provinceNameCn:'',
+      cityName:'',
+      cityNameCn:'',
+
+      countryOptions:[],
       provinceOptions: [],
-      provinceName: '',
       cityOptions: [],
-      cityName: '',
-      districtOptions: [],
-      districtName: '',
 
       basicForm: {
         token: localStorage.getItem('token'),
@@ -209,9 +241,9 @@ export default {
         tag:'',
         is_online: 0,
         location:'',
-        province:'',
-        city:'',
-        district:'',
+        country_id:'',
+        state_id:'',
+        town_id:'',
         lng:'',
         lat:'',
         tags_cn:'',
@@ -239,7 +271,7 @@ export default {
   },
   mounted() {
     this.getTagsList()
-    this.getAllAreas(0)
+    this.getAllCountry()
   },
   methods: {
     dealLocationTypeChange(e){
@@ -367,73 +399,75 @@ export default {
       })
 
     },
-    getAllAreas(pid) {
+    getAllCountry(){
       let params = {
-        pid: pid
       }
-      ALL_AREAS(params).then(res => {
+      GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
-        if (res.code == 200) {
-          this.provinceOptions = res.message
+        if(res.code == 200){
+          this.countryOptions = res.message;
         }
       }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        this.$message.error(err.msg)
       })
     },
-    getAllCitys(pid) {
+    getAllProvinces(countryId){
       let params = {
-        pid: pid
+        country_id:countryId
       }
-      ALL_AREAS(params).then(res => {
+      GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
-        if (res.code == 200) {
-          this.cityOptions = res.message
+        if(res.code == 200){
+          this.provinceOptions = res.message;
         }
       }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        this.$message.error(err.msg)
       })
     },
-    getAllDistricts(pid) {
+    getAllCitys(countryId,stateId){
       let params = {
-        pid: pid
+        country_id:countryId,
+        state_id:stateId
       }
-      ALL_AREAS(params).then(res => {
+      GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
-        if (res.code == 200) {
-          this.districtOptions = res.message
+        if(res.code == 200){
+          this.cityOptions = res.message;
         }
       }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        this.$message.error(err.msg)
       })
+    },
+    countryChange(e){
+      console.log(e)
+      this.basicForm.state_id=undefined
+      this.basicForm.town_id = undefined
+
+      this.provinceOptions = []
+      this.cityOptions = []
+
+      this.basicForm.country_id = e.id
+      this.countryName = e.name
+      this.countryNameCn = e.name
+      this.getAllProvinces(e.id)
+
     },
     provinceChange(e) {
       console.log(e)
-      this.getAllCitys(e)
+      this.basicForm.town_id = undefined
+      this.cityOptions = []
+
+      this.basicForm.state = e.id
+      this.provinceName = e.name
+      this.provinceNameCn = e.name
+
+      this.getAllCitys(this.basicForm.country_id,e.id)
     },
     cityChange(e) {
       console.log(e)
-      this.getAllDistricts(e)
-    },
-    districtChange(e) {
-      console.log(e)
+      this.basicForm.town_id = e.id
+      this.cityName = e.name
+      this.cityNameCn = e.name
     },
     getTagsList(){
       let data = {

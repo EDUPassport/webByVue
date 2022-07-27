@@ -33,9 +33,6 @@
               <el-form-item label="Last Name" prop="last_name">
                 <el-input v-model="basicForm.last_name" placeholder="Last Name"></el-input>
               </el-form-item>
-<!--              <el-form-item label="User Name" prop="username">-->
-<!--                <el-input v-model="basicForm.username" placeholder="User Name"></el-input>-->
-<!--              </el-form-item>-->
 
               <el-form-item label="Gender" prop="sex">
                 <el-select v-model="basicForm.sex" placeholder="Select your gender">
@@ -107,63 +104,27 @@
                            value-key="id"
                            filterable
                            placeholder="Select Country">
-                  <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.Pinyin"
+                  <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
                              :value="item"></el-option>
                 </el-select>
 
-                <template v-if="sLocationType==1">
-
-                  <template v-if="provinceOptions.length>0">
-                    <el-select v-model="provinceObj"
-                               value-key="id"
-                               filterable
-                               @change="provinceForChange"
-                               placeholder="Select Province">
-                      <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
-                                 :value="item"></el-option>
-                    </el-select>
-                  </template>
-                  <template v-if="cityOptions.length>0">
-                    <el-select v-model="cityObj"
-                               value-key="id"
-                               filterable
-                               @change="cityForChange"
-                               placeholder="Select City">
-                      <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                 :value="item"></el-option>
-                    </el-select>
-                  </template>
-                  <template v-if="districtOptions.length>0">
-                    <el-select v-model="districtObj"
-                               value-key="id"
-                               @change="districtForChange"
-                               placeholder="Select District">
-                      <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                 :value="item"></el-option>
-                    </el-select>
-                  </template>
-
-                </template>
-                <template v-if="sLocationType==2">
+                <template v-if="provinceOptions.length>0">
                   <el-select v-model="provinceObj"
                              value-key="id"
+                             filterable
                              @change="provinceChange"
                              placeholder="Select Province">
-                    <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
+                    <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
                                :value="item"></el-option>
                   </el-select>
+                </template>
+                <template v-if="cityOptions.length>0">
                   <el-select v-model="cityObj"
                              value-key="id"
+                             filterable
                              @change="cityChange"
                              placeholder="Select City">
-                    <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                               :value="item"></el-option>
-                  </el-select>
-                  <el-select v-model="districtObj"
-                             value-key="id"
-                             @change="districtChange"
-                             placeholder="Select District">
-                    <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
+                    <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
                                :value="item"></el-option>
                   </el-select>
                 </template>
@@ -199,7 +160,7 @@ import xllLoading from "@/components/xllLoading"
 
 import {
   ZOHO_SYNC,
-  GET_COUNTRY_LIST, ALL_AREAS, USER_CONTACT_EDIT_V2, USER_INFO_BY_TOKEN_V2, USER_INFO_VISITOR_V2,
+  GET_COUNTRY_LIST, USER_CONTACT_EDIT_V2, USER_INFO_BY_TOKEN_V2, USER_INFO_VISITOR_V2,
   UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE
 } from '@/api/api';
 import {useStore} from "vuex";
@@ -234,10 +195,9 @@ export default {
       sex:'',
       phone:'',
       email:'',
-      district:'',
-      city:'',
-      province:'',
-      country:'',
+      state_id:'',
+      town_id:'',
+      country_id:'',
       country_info:'',
       headimgurl:'',
       language: 2,
@@ -361,6 +321,7 @@ export default {
       provinceOptions: [],
       cityOptions: [],
       districtOptions: [],
+
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
       uploadHeaders: {
         platform: 4
@@ -422,8 +383,8 @@ export default {
 
     }
 
-    this.getAllCountry(0)
-    // this.getAllAreas(0)
+    this.getAllCountry()
+
   },
   methods: {
     cancelUploadProfile(){
@@ -460,19 +421,17 @@ export default {
             if(userContact.phone){
               this.basicForm.phone = userContact.phone;
             }
-            if(userContact.country){
-              this.basicForm.country = userContact.country;
+            if(userContact.country_id){
+              this.basicForm.country_id = userContact.country_id;
             }
 
-            if(userContact.province){
-              this.basicForm.province = userContact.province;
+            if(userContact.state_id){
+              this.basicForm.state_id = userContact.state_id;
             }
-            if(userContact.city){
-              this.basicForm.city = userContact.city;
+            if(userContact.town_id){
+              this.basicForm.town_id = userContact.town_id;
             }
-            if(userContact.district){
-              this.basicForm.district = userContact.district;
-            }
+
             if(userContact.headimgurl){
               this.basicForm.headimgurl = userContact.headimgurl;
               this.profilePhotoUrl = userContact.headimgurl
@@ -528,19 +487,17 @@ export default {
             if(userContact.phone){
               this.basicForm.phone = userContact.phone;
             }
-            if(userContact.country){
-              this.basicForm.country = userContact.country;
+            if(userContact.country_id){
+              this.basicForm.country_id = userContact.country_id;
             }
 
-            if(userContact.province){
-              this.basicForm.province = userContact.province;
+            if(userContact.state_id){
+              this.basicForm.state_id = userContact.state_id;
             }
-            if(userContact.city){
-              this.basicForm.city = userContact.city;
+            if(userContact.town_id){
+              this.basicForm.town_id = userContact.town_id;
             }
-            if(userContact.district){
-              this.basicForm.district = userContact.district;
-            }
+
             if(userContact.headimgurl){
               this.basicForm.headimgurl = userContact.headimgurl;
               this.profilePhotoUrl = userContact.headimgurl
@@ -653,9 +610,7 @@ export default {
             province_name_en:this.provinceName,
             province_name_cn:this.provinceNameCn,
             city_name_en:this.cityName,
-            city_name_cn:this.cityNameCn,
-            district_name_en:this.districtName,
-            district_name_cn:this.districtNameCn
+            city_name_cn:this.cityNameCn
           }
 
           this.basicForm.country_info = JSON.stringify(countryObj)
@@ -724,9 +679,8 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    getAllCountry(pid){
+    getAllCountry(){
       let params = {
-        pid:pid
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
@@ -737,9 +691,9 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    getAllForProvinces(pid){
+    getAllProvinces(countryId){
       let params = {
-        pid:pid
+        country_id:countryId
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
@@ -750,9 +704,10 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    getAllForCitys(pid){
+    getAllCitys(countryId,stateId){
       let params = {
-        pid:pid
+        country_id:countryId,
+        state_id:stateId
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
@@ -763,126 +718,36 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    getAllForDistricts(pid){
-      let params = {
-        pid:pid
-      }
-
-      GET_COUNTRY_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-          this.districtOptions = res.message;
-        }
-      }).catch(err=>{
-        this.$message.error(err.msg)
-      })
-    },
-    getAllAreas(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.provinceOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getAllCitys(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.cityOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getAllDistricts(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.districtOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
     countryChange(e){
       console.log(e)
-      this.basicForm.province=undefined
-      this.basicForm.city = undefined
-      this.basicForm.district = undefined
+      this.basicForm.state_id=undefined
+      this.basicForm.town_id = undefined
+
       this.provinceOptions = []
       this.cityOptions = []
-      this.districtOptions = []
 
-      this.basicForm.country = e.id
-      this.countryName = e.Pinyin
-      this.countryNameCn = e.Name
+      this.basicForm.country_id = e.id
+      this.countryName = e.name
+      this.countryNameCn = e.name
+      this.getAllProvinces(e.id)
 
-      if(e.id == 99999999){
-        this.sLocationType =2
-        this.getAllAreas(0)
-      }else{
-        this.sLocationType=1
-        this.getAllForProvinces(e.id)
-      }
     },
     provinceChange(e) {
       console.log(e)
-      this.getAllCitys(e.id)
-      this.basicForm.province = e.id
-      this.provinceName = e.Pinyin
-      this.provinceNameCn = e.Name
+      this.basicForm.town_id = undefined
+      this.cityOptions = []
+
+      this.basicForm.state_id = e.id
+      this.provinceName = e.name
+      this.provinceNameCn = e.name
+
+      this.getAllCitys(this.basicForm.country_id,e.id)
     },
     cityChange(e) {
       console.log(e)
-      this.getAllDistricts(e.id)
-      this.basicForm.city = e.id
-      this.cityName = e.Pinyin
-      this.cityNameCn = e.Name
-    },
-    districtChange(e) {
-      console.log(e)
-      this.basicForm.district = e.id
-      this.districtName = e.Pinyin
-      this.districtNameCn = e.Name
-
-    },
-    provinceForChange(e) {
-      console.log(e)
-      this.basicForm.city = undefined
-      this.basicForm.district = undefined
-      this.getAllForCitys(e.id)
-      this.basicForm.province = e.id
-      this.provinceName = e.Pinyin
-      this.provinceNameCn = e.Name
-    },
-    cityForChange(e) {
-      console.log(e)
-      this.basicForm.district = undefined
-      this.getAllForDistricts(e.id)
-      this.basicForm.city = e.id
-      this.cityName = e.Pinyin
-      this.cityNameCn = e.Name
-    },
-    districtForChange(e) {
-      console.log(e)
-      this.basicForm.district = e.id
-      this.districtName = e.Pinyin
-      this.districtNameCn = e.Name
+      this.basicForm.town_id = e.id
+      this.cityName = e.name
+      this.cityNameCn = e.name
     },
     async submitEducatorContactForm(userId){
 

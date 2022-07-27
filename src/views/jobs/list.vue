@@ -189,10 +189,6 @@
                     <span v-if="item.sex == 1">Male</span>
                     <span v-if="item.sex == 2">Female</span>
                   </view>
-<!--                  <view class="jobs-list-item-work-exp">-->
-<!--                    <i class="iconfont el-icon-aligongzuojingyan"></i>-->
-<!--                    1-2 yrs-->
-<!--                  </view>-->
                 </div>
 
                 <div class="jobs-list-item-b-r">

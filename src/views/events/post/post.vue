@@ -43,63 +43,27 @@
                                    value-key="id"
                                    filterable
                                    placeholder="Select Country">
-                          <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.Pinyin"
+                          <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
                                      :value="item"></el-option>
                         </el-select>
 
-                        <template v-if="sLocationType==1">
-
-                          <template v-if="provinceOptions.length>0">
-                            <el-select v-model="provinceObj"
-                                       value-key="id"
-                                       filterable
-                                       @change="provinceForChange"
-                                       placeholder="Select Province">
-                              <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
-                                         :value="item"></el-option>
-                            </el-select>
-                          </template>
-                          <template v-if="cityOptions.length>0">
-                            <el-select v-model="cityObj"
-                                       value-key="id"
-                                       filterable
-                                       @change="cityForChange"
-                                       placeholder="Select City">
-                              <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                         :value="item"></el-option>
-                            </el-select>
-                          </template>
-                          <template v-if="districtOptions.length>0">
-                            <el-select v-model="districtObj"
-                                       value-key="id"
-                                       @change="districtForChange"
-                                       placeholder="Select District">
-                              <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                         :value="item"></el-option>
-                            </el-select>
-                          </template>
-
-                        </template>
-                        <template v-if="sLocationType==2">
+                        <template v-if="provinceOptions.length>0">
                           <el-select v-model="provinceObj"
                                      value-key="id"
+                                     filterable
                                      @change="provinceChange"
                                      placeholder="Select Province">
-                            <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
+                            <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
                                        :value="item"></el-option>
                           </el-select>
+                        </template>
+                        <template v-if="cityOptions.length>0">
                           <el-select v-model="cityObj"
                                      value-key="id"
+                                     filterable
                                      @change="cityChange"
                                      placeholder="Select City">
-                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
-                          <el-select v-model="districtObj"
-                                     value-key="id"
-                                     @change="districtChange"
-                                     placeholder="Select District">
-                            <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
+                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
                                        :value="item"></el-option>
                           </el-select>
                         </template>
@@ -123,85 +87,31 @@
                                    value-key="id"
                                    filterable
                                    placeholder="Select Country">
-                          <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.Pinyin"
+                          <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
                                      :value="item"></el-option>
                         </el-select>
 
-                        <template v-if="sLocationType==1">
-
-                          <template v-if="provinceOptions.length>0">
-                            <el-select v-model="provinceObj"
-                                       value-key="id"
-                                       filterable
-                                       @change="provinceForChange"
-                                       placeholder="Select Province">
-                              <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
-                                         :value="item"></el-option>
-                            </el-select>
-                          </template>
-                          <template v-if="cityOptions.length>0">
-                            <el-select v-model="cityObj"
-                                       value-key="id"
-                                       filterable
-                                       @change="cityForChange"
-                                       placeholder="Select City">
-                              <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                         :value="item"></el-option>
-                            </el-select>
-                          </template>
-                          <template v-if="districtOptions.length>0">
-                            <el-select v-model="districtObj"
-                                       value-key="id"
-                                       @change="districtForChange"
-                                       placeholder="Select District">
-                              <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                         :value="item"></el-option>
-                            </el-select>
-                          </template>
-
-                        </template>
-                        <template v-if="sLocationType==2">
+                        <template v-if="provinceOptions.length>0">
                           <el-select v-model="provinceObj"
                                      value-key="id"
+                                     filterable
                                      @change="provinceChange"
                                      placeholder="Select Province">
-                            <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
+                            <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
                                        :value="item"></el-option>
                           </el-select>
+                        </template>
+                        <template v-if="cityOptions.length>0">
                           <el-select v-model="cityObj"
                                      value-key="id"
+                                     filterable
                                      @change="cityChange"
                                      placeholder="Select City">
-                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
-                          <el-select v-model="districtObj"
-                                     value-key="id"
-                                     @change="districtChange"
-                                     placeholder="Select District">
-                            <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
+                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
                                        :value="item"></el-option>
                           </el-select>
                         </template>
 
-<!--                        <el-select v-model="basicForm.province"-->
-<!--                                   @change="provinceChange"-->
-<!--                                   placeholder="Select Province">-->
-<!--                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"-->
-<!--                                     :value="item.id"></el-option>-->
-<!--                        </el-select>-->
-<!--                        <el-select v-model="basicForm.city"-->
-<!--                                   @change="cityChange"-->
-<!--                                   placeholder="Select City">-->
-<!--                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"-->
-<!--                                     :value="item.id"></el-option>-->
-<!--                        </el-select>-->
-<!--                        <el-select v-model="basicForm.district"-->
-<!--                                   @change="districtChange"-->
-<!--                                   placeholder="Select District">-->
-<!--                          <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"-->
-<!--                                     :value="item.id"></el-option>-->
-<!--                        </el-select>-->
                       </div>
 
                       <div class="map-container"
@@ -285,7 +195,6 @@
                   </div>
 
                 </el-form-item>
-
 
               </div>
 
@@ -396,7 +305,6 @@
 
                 </el-form-item>
 
-
                 <el-form-item label="Company Logo(jpg,png)" prop="third_company_logo">
                   <el-upload
                       class="profile-uploader"
@@ -412,13 +320,11 @@
 
                 </el-form-item>
 
-
                 <el-form-item label="Company Name" prop="third_company_name">
                   <el-input v-model="basicForm.third_company_name" type="text"
                             placeholder="Please input company name"
                   ></el-input>
                 </el-form-item>
-
 
               </div>
 
@@ -446,7 +352,6 @@
 import xllLoading from '@/components/xllLoading'
 import meSideMenu from "@/components/meSideMenu";
 import {
-  ALL_AREAS,
   EVENTS_ADD_EVENT,
   EVENTS_CATEGORY,
   EVENTS_TAGS,
@@ -526,20 +431,16 @@ export default {
       countryObj:{},
       provinceObj:{},
       cityObj:{},
-      districtObj:{},
       countryName:'',
       countryNameCn:'',
       provinceName:'',
       provinceNameCn:'',
       cityName:'',
       cityNameCn:'',
-      districtName:'',
-      districtNameCn:'',
 
       countryOptions:[],
       provinceOptions: [],
       cityOptions: [],
-      districtOptions: [],
 
       startTime:'',
       endTime:'',
@@ -560,13 +461,13 @@ export default {
         event_place:undefined,
         start_time: undefined,
         end_time: undefined,
-        is_online:undefined,
+        is_online: 1,
         online_url:undefined,
         location:undefined,
-        country:undefined,
-        province:undefined,
-        city:undefined,
-        district:undefined,
+        country_id:undefined,
+        state_id:undefined,
+        town_id:undefined,
+
         lat:undefined,
         lng:undefined,
         category_id:undefined,
@@ -606,14 +507,14 @@ export default {
         ],
         third_company_logo: [
           {
-            required: true,
+            required: false,
             message: 'Please upload',
             trigger: 'blur',
           },
         ],
         third_company_name: [
           {
-            required: true,
+            required: false,
             message: 'Please input',
             trigger: 'blur',
           },
@@ -633,7 +534,7 @@ export default {
     }
   },
   mounted() {
-    this.getAllCountry(0)
+    this.getAllCountry()
     this.getUserObjectList()
     this.getEventCategories()
     this.getEventsTags()
@@ -828,6 +729,9 @@ export default {
     dealLocationTypeChange(e){
       console.log(e.paneName)
       let self =this
+
+      self.basicForm.is_online = e.paneName
+
       if(e.paneName == 2){
         this.mapLoading=true
         setTimeout(function () {
@@ -849,6 +753,15 @@ export default {
       // this.$loading({
       //   text:'Uploading...'
       // })
+      this.uploadLoadingStatus = true;
+      const isLt2M = file.size / 1024 / 1024 < 20
+
+      if (!isLt2M) {
+        this.$message.error('Avatar picture size can not exceed 20MB')
+      }
+      return isLt2M
+    },
+    beforeCompanyLogoPhotoUpload(file){
       this.uploadLoadingStatus = true;
       const isLt2M = file.size / 1024 / 1024 < 20
 
@@ -976,9 +889,8 @@ export default {
       })
 
     },
-    getAllCountry(pid){
+    getAllCountry(){
       let params = {
-        pid:pid
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
@@ -989,9 +901,9 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    getAllForProvinces(pid){
+    getAllProvinces(countryId){
       let params = {
-        pid:pid
+        country_id:countryId
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
@@ -1002,9 +914,10 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    getAllForCitys(pid){
+    getAllCitys(countryId,stateId){
       let params = {
-        pid:pid
+        country_id:countryId,
+        state_id:stateId
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
@@ -1015,126 +928,36 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    getAllForDistricts(pid){
-      let params = {
-        pid:pid
-      }
-
-      GET_COUNTRY_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-          this.districtOptions = res.message;
-        }
-      }).catch(err=>{
-        this.$message.error(err.msg)
-      })
-    },
-    getAllAreas(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.provinceOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getAllCitys(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.cityOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getAllDistricts(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.districtOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
     countryChange(e){
       console.log(e)
-      this.basicForm.province=undefined
-      this.basicForm.city = undefined
-      this.basicForm.district = undefined
+      this.basicForm.state_id = undefined
+      this.basicForm.town_id = undefined
+
       this.provinceOptions = []
       this.cityOptions = []
-      this.districtOptions = []
 
-      this.basicForm.country = e.id
-      this.countryName = e.Pinyin
-      this.countryNameCn = e.Name
+      this.basicForm.country_id = e.id
+      this.countryName = e.name
+      this.countryNameCn = e.name
+      this.getAllProvinces(e.id)
 
-      if(e.id == 99999999){
-        this.sLocationType =2
-        this.getAllAreas(0)
-      }else{
-        this.sLocationType=1
-        this.getAllForProvinces(e.id)
-      }
     },
     provinceChange(e) {
       console.log(e)
-      this.getAllCitys(e.id)
-      this.basicForm.province = e.id
-      this.provinceName = e.Pinyin
-      this.provinceNameCn = e.Name
+      this.basicForm.town_id = undefined
+      this.cityOptions = []
+
+      this.basicForm.state_id = e.id
+      this.provinceName = e.name
+      this.provinceNameCn = e.name
+
+      this.getAllCitys(this.basicForm.country_id,e.id)
     },
     cityChange(e) {
       console.log(e)
-      this.getAllDistricts(e.id)
-      this.basicForm.city = e.id
-      this.cityName = e.Pinyin
-      this.cityNameCn = e.Name
-    },
-    districtChange(e) {
-      console.log(e)
-      this.basicForm.district = e.id
-      this.districtName = e.Pinyin
-      this.districtNameCn = e.Name
-
-    },
-    provinceForChange(e) {
-      console.log(e)
-      this.basicForm.city = undefined
-      this.basicForm.district = undefined
-      this.getAllForCitys(e.id)
-      this.basicForm.province = e.id
-      this.provinceName = e.Pinyin
-      this.provinceNameCn = e.Name
-    },
-    cityForChange(e) {
-      console.log(e)
-      this.basicForm.district = undefined
-      this.getAllForDistricts(e.id)
-      this.basicForm.city = e.id
-      this.cityName = e.Pinyin
-      this.cityNameCn = e.Name
-    },
-    districtForChange(e) {
-      console.log(e)
-      this.basicForm.district = e.id
-      this.districtName = e.Pinyin
-      this.districtNameCn = e.Name
+      this.basicForm.town_id = e.id
+      this.cityName = e.name
+      this.cityNameCn = e.name
     },
     addOwnCurrency() {
       this.addCurrencyStatus = false;
@@ -1182,14 +1005,11 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(this.basicForm)
           // console.log(this.selectCurrencyList)
           this.basicForm.tag = this.selectTagsList;
           this.basicForm.tags_cn = this.tagsCnData.join(',');
           this.basicForm.tags_en = this.tagsEnData.join(',');
-
-          // if (this.selectCurrencyList.length <= 0) {
-          //   return this.$message.warning('Currency')
-          // }
 
           if(this.eventDate){
             this.basicForm.date = this.eventDate
@@ -1216,9 +1036,7 @@ export default {
             province_name_en:this.provinceName,
             province_name_cn:this.provinceNameCn,
             city_name_en:this.cityName,
-            city_name_cn:this.cityNameCn,
-            district_name_en:this.districtName,
-            district_name_cn:this.districtNameCn
+            city_name_cn:this.cityNameCn
           }
 
           this.basicForm.country_info = JSON.stringify(countryObj)

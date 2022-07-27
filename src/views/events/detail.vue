@@ -25,6 +25,11 @@
 
               <div class="event-tag" v-if="eventData.is_all == 1">Social</div>
               <div class="event-tag" v-if="eventData.is_all == 2">Professional</div>
+              
+              <div class="event-tag" v-if="eventData.countries">{{eventData.countries.name}}</div>
+              <div class="event-tag" v-if="eventData.states">{{eventData.states.name}}</div>
+              <div class="event-tag" v-if="eventData.towns">{{eventData.towns.name}}</div>
+
             </div>
             <div class="event-location">
               <template v-if="eventData.is_online == 2 || eventData.is_online == 3">
