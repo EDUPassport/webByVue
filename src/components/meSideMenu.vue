@@ -1,36 +1,46 @@
 <template>
-  <div class="profile-l-container">
-    <div class="profile-photo-container">
-      <el-avatar :size="120" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
-      <div class="profile-xll-username">
-        <span>{{username}}</span>
-      </div>
+  <div>
+
+    <div class="menu-btn-container">
+      <el-button class="menu-btn" type="primary" @click="showSideMenu()">Menu</el-button>
     </div>
-    <div class="l-container">
-      <div class="l-item">
-        <router-link :to="{path:'/overview',query:{identity:identity}}" exact>Overview</router-link>
-      </div>
-      <div class="l-item">
-        <div  class="l-item-msg"
-              :class="activeMsg ? 'l-item-msg-active' : ''"
-              @click="turnMyMessages()">My Messages</div>
-      </div>
 
-      <div class="l-item"
-           v-for="(item,i) in menuData" :Key="i"
-           :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' ">
-        <template v-if="item.link === '/jobs/post' ">
-          <router-link :to="{path:item.link,query:{version_time:versionTime}}" exact>
-            {{item.menu_name_en}}
-          </router-link>
-        </template>
-        <template v-else>
-          <router-link :to="{path:item.link}" exact>{{item.menu_name_en}}</router-link>
-        </template>
+    <div class="profile-l-container" v-if="showSideMenuStatus">
+
+      <div class="profile-photo-container">
+        <el-avatar :size="120" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
+        <div class="profile-xll-username">
+          <span>{{username}}</span>
+        </div>
+      </div>
+      <div class="l-container">
+        <div class="l-item">
+          <router-link :to="{path:'/overview',query:{identity:identity}}" exact>Overview</router-link>
+        </div>
+        <div class="l-item">
+          <div  class="l-item-msg"
+                :class="activeMsg ? 'l-item-msg-active' : ''"
+                @click="turnMyMessages()">My Messages</div>
+        </div>
+
+        <div class="l-item"
+             v-for="(item,i) in menuData" :Key="i"
+             :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' ">
+          <template v-if="item.link === '/jobs/post' ">
+            <router-link :to="{path:item.link,query:{version_time:versionTime}}" exact>
+              {{item.menu_name_en}}
+            </router-link>
+          </template>
+          <template v-else>
+            <router-link :to="{path:item.link}" exact>{{item.menu_name_en}}</router-link>
+          </template>
+
+        </div>
 
       </div>
 
     </div>
+
 
   </div>
 
@@ -68,7 +78,8 @@ export default {
       accountInfo:{},
       accountPhotoValue:'',
       versionTime:randomString(),
-      activeMsg:false
+      activeMsg:false,
+      showSideMenuStatus:true
 
     }
   },
@@ -99,8 +110,45 @@ export default {
   },
   mounted() {
     // this.getUserMenuList()
+    let screenWidth = document.body.clientWidth
+
+    if (Math.floor(screenWidth) < 768) {
+      this.showSideMenuStatus = false;
+    }
+    if (Math.floor(screenWidth) >= 768 && Math.floor(screenWidth) < 992) {
+      this.showSideMenuStatus = true;
+    }
+    if (Math.floor(screenWidth) >= 992 && Math.floor(screenWidth) < 1200) {
+      this.showSideMenuStatus = true;
+    }
+    if (Math.floor(screenWidth) >= 1200) {
+      this.showSideMenuStatus = true;
+    }
+
+    window.onresize = () => {
+      let screenWidth2 = document.body.clientWidth
+      if (Math.floor(screenWidth2) < 768) {
+        this.showSideMenuStatus = false;
+      }
+      if (Math.floor(screenWidth2) >= 768 && Math.floor(screenWidth2) < 992) {
+        this.showSideMenuStatus = true;
+      }
+      if (Math.floor(screenWidth2) >= 992 && Math.floor(screenWidth2) < 1200) {
+        this.showSideMenuStatus = true;
+      }
+      if (Math.floor(screenWidth2) >= 1200) {
+        this.showSideMenuStatus = true;
+      }
+     }
   },
   methods:{
+    showSideMenu(){
+      this.showSideMenuStatus = !this.showSideMenuStatus;
+      // let obj = document.getElementsByClassName('profile-l-container');
+      // console.log(obj)
+      // obj[0].setAttribute('style','display:block');
+
+    },
     getUserMenuList(){
       let self = this;
       let params = {
@@ -134,7 +182,7 @@ export default {
 
 <style scoped>
 .profile-l-container{
-  //min-height: 800px;
+
   min-height: 100vh;
   background-color: #0A1E76;
   border-radius: 10px;
@@ -186,7 +234,6 @@ export default {
   background-color: #0C1954;
 }
 .l-item a{
-  /*width: 100%;*/
   font-size: 14px;
   font-weight: bold;
   line-height: 40px;
@@ -195,8 +242,35 @@ export default {
   display: block;
   padding-left: 20px;
 }
+
 .router-link-exact-active {
   background-color: #0C1954;
   color: #ffffff !important;
 }
+.menu-btn-container{
+  display: none;
+}
+.menu-btn{
+  margin:10px 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .profile-l-container{
+    width: 200px;
+    position: fixed;
+    z-index:1000;
+    top:0;
+    bottom:0;
+    right:0;
+
+  }
+  .menu-btn-container{
+    display: inline ;
+
+  }
+
+
+
+}
+
 </style>

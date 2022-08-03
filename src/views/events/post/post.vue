@@ -1164,7 +1164,6 @@ export default {
 }
 
 .profile-container {
-  width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -1315,4 +1314,22 @@ export default {
   background-color: #00CE47;
   color: #FFFFFF;
 }
+
+@media screen and (min-width: 1200px){
+  .profile-container{
+    width: 1100px;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+    .event-date-container{
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  .event-time{
+    margin: 10px 0 0 0;
+  }
+}
+
 </style>

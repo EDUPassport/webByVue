@@ -1,7 +1,7 @@
 import layout from '../layout/index'
 
 import {createRouter, createWebHistory} from 'vue-router'
-import {isPhone} from "@/utils";
+// import {isPhone} from "@/utils";
 const identity = localStorage.getItem('identity')
 const routes = [
     {
@@ -550,25 +550,25 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.titleG ? to.meta.titleG : defaultTitle;
     }
 
-    if (isPhone()) {
-        let domain = ''
-        if(envName === 'developmentCN'){
-            domain = 'https://test.esl-passport.cn/'
-        }
-
-        if(envName === 'development'){
-            domain = 'https://test.esl-passport.cn/'
-        }
-        if(envName === 'productionCN'){
-            domain = 'https://esl-passport.cn/'
-        }
-
-        if(envName === 'production'){
-            domain = 'https://esl-passport.cn/'
-        }
-
-        window.location.href = domain
-    }
+    // if (isPhone()) {
+    //     let domain = ''
+    //     if(envName === 'developmentCN'){
+    //         domain = 'https://test.esl-passport.cn/'
+    //     }
+    //
+    //     if(envName === 'development'){
+    //         domain = 'https://test.esl-passport.cn/'
+    //     }
+    //     if(envName === 'productionCN'){
+    //         domain = 'https://esl-passport.cn/'
+    //     }
+    //
+    //     if(envName === 'production'){
+    //         domain = 'https://esl-passport.cn/'
+    //     }
+    //
+    //     window.location.href = domain
+    // }
     next();
 });
 

@@ -1876,7 +1876,6 @@ export default {
 }
 
 .profile-container {
-  width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -2127,5 +2126,17 @@ export default {
   font-weight: bold;
   padding: 0 10px;
 }
+
+@media screen and (min-width: 1200px){
+  .profile-container{
+    width: 1100px;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+
+}
+
 
 </style>

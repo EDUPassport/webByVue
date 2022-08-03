@@ -1160,6 +1160,46 @@ export default {
   margin: 20px;
   text-align: center;
 }
+@media screen and (max-width: 768px ){
+  .jobs-filter-container{
+    display:none;
+  }
+  .featured-jobs-container{
+    display: none;
+  }
+  .articles-container{
+    display:none;
+  }
+
+  .jobs-list-item{
+    /*padding:4px;*/
+  }
+
+  .jobs-list-item-title a{
+    font-size: 14px;
+  }
+  .jobs-list-item-name{
+    margin-top: 4px;
+    font-size:12px;
+  }
+  .jobs-list-item-desc{
+    display:none;
+  }
+  .jobs-list-item-readmore{
+    margin-top:4px;
+    font-size:14px;
+  }
+  .jobs-list-item-address{
+    margin-top:4px;
+    font-size:12px;
+  }
+  .jobs-list-item-l{
+    height: 100px;
+  }
+.image-slot{
+  padding:10px;
+}
+}
 
 @media screen  and (min-width: 1200px){
   .bg-container{

@@ -283,13 +283,6 @@ export default {
   margin: 0 auto;
 }
 
-@media screen and (min-width: 1200px){
-  .content-row{
-    width: 1100px;
-  }
-
-
-}
 
 .events-top-container{
   margin-top: 40px;
@@ -547,6 +540,36 @@ export default {
 .events-pagination{
   text-align: center;
   padding:40px;
+}
+
+
+@media screen and (min-width: 1200px){
+  .content-row{
+    width: 1100px;
+  }
+
+
+}
+
+@media screen and (max-width: 768px){
+  .events-top-container{
+    margin-top:20px;
+    padding: 0 20px;
+  }
+
+  .events-list-container{
+    padding: 0 20px;
+    flex-direction: column;
+
+  }
+
+  .events-item{
+    width:100%;
+  }
+  .events-pagination{
+    padding:20px 8px;
+  }
+
 }
 
 </style>

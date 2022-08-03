@@ -1347,7 +1347,7 @@ export default {
 }
 
 .educator-container {
-  width: 1100px;
+
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -1677,5 +1677,20 @@ export default {
   color: #FFFFFF;
 }
 
+@media screen and (min-width: 1200px){
+  .educator-container{
+    width: 1100px;
+  }
+}
+
+@media screen and (max-width: 768px){
+  .basic-info-item-l{
+    font-size:12px;
+    width:30%;
+  }
+  .basic-info-item-r{
+    font-size: 12px;
+  }
+}
 
 </style>

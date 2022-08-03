@@ -216,4 +216,35 @@ export default {
   }
 
 }
+
+@media screen and (max-width: 768px) {
+  .banner-bg{
+    height: 220px;
+  }
+  .about-content-row{
+    height: auto;
+    border-radius: 0;
+    padding: 20px;
+  }
+
+  .about-content-l{
+    border-radius: 0;
+
+  }
+
+  .we-do-content{
+    flex-direction:column;
+
+  }
+
+  .xll-icon{
+    font-size: 64px;
+  }
+
+
+
+
+}
+
+
 </style>

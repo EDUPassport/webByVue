@@ -348,14 +348,12 @@ export default {
 }
 
 .account-info-tag {
-  //margin: 10px;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   font-size: 14px;
   border-bottom:1px solid #FFFFFF;
-  //color: #808080;
 }
 .account-info-tag-l{
   width: 40%;
@@ -406,4 +404,37 @@ export default {
   margin-left: 10px;
 }
 
+@media screen and (max-width: 768px){
+
+  .account-info-container{
+
+  }
+  .account-info-b{
+    flex-direction: column;
+    padding:10px 0;
+  }
+  .account-info-photo{
+    width: 100%;
+    padding-top: 10px;
+  }
+  .account-info-tags{
+    width:90%;
+    padding:0
+  }
+  .account-info-tag{
+    font-size: 12px;
+  }
+  .account-info-tag-l{
+    width:30%;
+  }
+  .account-info-tag-r{
+    width:70%;
+  }
+  .account-info-tag-r span{
+    font-size: 12px;
+  }
+
+
+
+}
 </style>

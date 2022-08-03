@@ -966,6 +966,7 @@
     </div>
     <!--    languages -->
     <el-drawer
+        :size="languagesDrawerSize"
         v-model="languagesDrawer"
         title="Languages"
         direction="rtl"
@@ -1073,7 +1074,7 @@ export default {
       },
       educatorContact: {},
       userContact: {},
-
+      languagesDrawerSize:"30%",
       languagesDrawer: false,
       languagesData: [],
       languagesCustomData: [],
@@ -1219,6 +1220,37 @@ export default {
     }
   },
   mounted() {
+    let screenWidth = document.body.clientWidth
+
+    if (Math.floor(screenWidth) < 768) {
+      this.languagesDrawerSize = '90%'
+    }
+    if (Math.floor(screenWidth) >= 768 && Math.floor(screenWidth) < 992) {
+      this.languagesDrawerSize = '90%'
+    }
+    if (Math.floor(screenWidth) >= 992 && Math.floor(screenWidth) < 1200) {
+      this.languagesDrawerSize = '30%'
+    }
+    if (Math.floor(screenWidth) >= 1200) {
+      this.languagesDrawerSize = '30%'
+    }
+
+    window.onresize = () => {
+      let screenWidth2 = document.body.clientWidth
+      if (Math.floor(screenWidth2) < 768) {
+        this.languagesDrawerSize = '90%'
+      }
+      if (Math.floor(screenWidth2) >= 768 && Math.floor(screenWidth2) < 992) {
+        this.languagesDrawerSize = '90%'
+      }
+      if (Math.floor(screenWidth2) >= 992 && Math.floor(screenWidth2) < 1200) {
+        this.languagesDrawerSize = '30%'
+      }
+      if (Math.floor(screenWidth2) >= 1200) {
+        this.languagesDrawerSize = '30%'
+      }
+    }
+
     this.getUserInfo()
     this.updateEducatorProfile()
   },
@@ -2903,7 +2935,6 @@ export default {
 }
 
 .educator-container {
-  width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -3113,7 +3144,6 @@ export default {
 
 .education-item {
   padding: 10px;
-  //border-bottom: 1px solid #EEEEEE;
   background-color:#f4f5f6;
   margin-top:10px;
   border-radius:10px;
@@ -3326,7 +3356,6 @@ export default {
   background-color:#f4f5f6;
   margin-top:10px;
   border-radius:10px;
-  //border-bottom: 1px solid #EEEEEE;
 }
 
 .work-exp-item-1 {
@@ -3522,7 +3551,6 @@ export default {
 
 .account-images-item{
   width:45%;
-  //flex:1;
   height: 140px;
   padding:1%;
   margin:1%;
@@ -3918,5 +3946,37 @@ export default {
   color: #FFFFFF;
 }
 
+@media screen and (min-width: 1200px){
+  .educator-container{
+    width: 1100px;
+  }
+}
+
+@media screen and (max-width: 768px){
+    /deep/ .el-upload-dragger{
+      width:260px;
+    }
+
+  .basic-info-item-l{
+    font-size:12px;
+    width:30%;
+  }
+  .basic-info-item-r{
+    font-size: 12px;
+  }
+  .work-exp-content{
+    padding:0;
+  }
+  .work-exp-date{
+    font-size: 12px;
+  }
+  .education-content{
+    padding:0;
+  }
+  .education-date{
+    font-size: 12px;
+  }
+
+}
 
 </style>

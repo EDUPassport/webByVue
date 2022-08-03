@@ -1,144 +1,143 @@
 <template>
   <div class="bg">
-    <div>
-      <el-row class="detail-row" align="top" justify="start">
-        <el-col class="detail-l-col" :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-          <div class="job-title">{{ detailData.title }}</div>
-          <div class="job-address-salary">
-            <div class="job-address">
-              {{ detailData.location }}
+    <el-row class="detail-row" align="top" justify="start">
+      <el-col class="detail-l-col" :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+        <div class="job-title">{{ detailData.title }}</div>
+        <div class="job-address-salary">
+          <div class="job-address">
+            {{ detailData.location }}
+          </div>
+        </div>
+
+        <div class="job-desc-container">
+          <div class="job-desc-label">Deal Description</div>
+          <div class="job-desc-label-underline"></div>
+          <div class="job-desc-content">
+            {{ detailData.desc }}
+          </div>
+          <div class="job-tags" v-if="detailData.tags">
+            <div class="job-tag" v-for="(item,i) in detailData.tags" :key="i">{{item.tag_name_en}}</div>
+          </div>
+
+        </div>
+
+        <div class="address-container">
+          <div class="address-label">Address & Location</div>
+          <div class="address-label-underline"></div>
+          <div class="address-content">
+            <div class="address-address">
+              <b>Address:</b>
+              <span>{{ detailData.location }}</span>
+            </div>
+
+            <div class="address-location">
+              <b>Location: </b>
+              <div class="map-container">
+                <div id="mapContainer" class="basemap"></div>
+              </div>
             </div>
           </div>
 
-          <div class="job-desc-container">
-            <div class="job-desc-label">Deal Description</div>
-            <div class="job-desc-label-underline"></div>
-            <div class="job-desc-content">
-              {{ detailData.desc }}
-            </div>
-            <div class="job-tags" v-if="detailData.tags">
-              <div class="job-tag" v-for="(item,i) in detailData.tags" :key="i">{{item.tag_name_en}}</div>
-            </div>
+        </div>
 
+
+        <!--          <div class="apply-btn-container">-->
+        <!--            <el-button class="apply-btn" type="info">Apply Now!</el-button>-->
+        <!--          </div>-->
+      </el-col>
+      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="xll-deals-r-container">
+
+        <div class="deals-detail-share-container">
+          <div class="deals-favorite" v-if="isFavoriteValue == 1"
+               @click="cancelFavorite(2,detailData.id)">
+            <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
+          </div>
+          <div class="deals-favorite" v-else @click="addFavorite(detailData.id,2,detailData.title,detailData.company_logo)">
+            <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
           </div>
 
-          <div class="address-container">
-            <div class="address-label">Address & Location</div>
-            <div class="address-label-underline"></div>
-            <div class="address-content">
-              <div class="address-address">
-                <b>Address:</b>
-                <span>{{ detailData.location }}</span>
-              </div>
+          <div class="social-share-container">
 
-              <div class="address-location">
-                <b>Location: </b>
-                <div class="map-container">
-                  <div id="mapContainer" class="basemap"></div>
-                </div>
-              </div>
+            <div class="social-share-icon-container"
+                 @click="showSocialShareExpandStatus = !showSocialShareExpandStatus"
+                 @mouseover="showSocialShareExpandStatus=true">
+              <el-icon :size="24">
+                <Share/>
+              </el-icon>
             </div>
 
-          </div>
-
-
-          <!--          <div class="apply-btn-container">-->
-<!--            <el-button class="apply-btn" type="info">Apply Now!</el-button>-->
-<!--          </div>-->
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-
-          <div class="deals-detail-share-container">
-            <div class="deals-favorite" v-if="isFavoriteValue == 1"
-                 @click="cancelFavorite(2,detailData.id)">
-              <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-            </div>
-            <div class="deals-favorite" v-else @click="addFavorite(detailData.id,2,detailData.title,detailData.company_logo)">
-              <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-            </div>
-
-            <div class="social-share-container">
-
-              <div class="social-share-icon-container"
-                   @click="showSocialShareExpandStatus = !showSocialShareExpandStatus"
-                   @mouseover="showSocialShareExpandStatus=true">
-                <el-icon :size="24">
-                  <Share/>
-                </el-icon>
-              </div>
-
-              <div class="social-share-icon-expand" v-if="showSocialShareExpandStatus"
-                   @mouseleave="showSocialShareExpandStatus = false"
+            <div class="social-share-icon-expand" v-if="showSocialShareExpandStatus"
+                 @mouseleave="showSocialShareExpandStatus = false"
+            >
+              <ShareNetwork
+                  network="Twitter"
+                  :url="locationUrl"
+                  :title="detailData.title == undefined ? '' : detailData.title"
               >
-                <ShareNetwork
-                    network="Twitter"
-                    :url="locationUrl"
-                    :title="detailData.title == undefined ? '' : detailData.title"
-                >
-                  <i class="iconfont el-icon-alitwitter xll-icon"></i>
-                </ShareNetwork>
-                <ShareNetwork
-                    network="LinkedIn"
-                    :url="locationUrl"
-                    :title="detailData.title == undefined ? '' : detailData.title"
-                >
-                  <i class="iconfont el-icon-alilinkedin xll-icon"></i>
-                </ShareNetwork>
-                <ShareNetwork
-                    network="Facebook"
-                    :url="locationUrl"
-                    :title="detailData.title == undefined ? '' : detailData.title"
-                    :description="detailData.desc == undefined ? '' : detailData.desc"
-                    :quote="detailData.title == undefined ? '' : detailData.title"
-                >
-                  <i class="iconfont el-icon-alifacebook xll-icon"></i>
-                </ShareNetwork>
-              </div>
-
+                <i class="iconfont el-icon-alitwitter xll-icon"></i>
+              </ShareNetwork>
+              <ShareNetwork
+                  network="LinkedIn"
+                  :url="locationUrl"
+                  :title="detailData.title == undefined ? '' : detailData.title"
+              >
+                <i class="iconfont el-icon-alilinkedin xll-icon"></i>
+              </ShareNetwork>
+              <ShareNetwork
+                  network="Facebook"
+                  :url="locationUrl"
+                  :title="detailData.title == undefined ? '' : detailData.title"
+                  :description="detailData.desc == undefined ? '' : detailData.desc"
+                  :quote="detailData.title == undefined ? '' : detailData.title"
+              >
+                <i class="iconfont el-icon-alifacebook xll-icon"></i>
+              </ShareNetwork>
             </div>
 
           </div>
 
-          <div class="company-bio-container">
-            <div class="company-bio-label">Company Bio</div>
-            <div class="company-bio-label-underline"></div>
-            <div class="company-bio-content">
-              <div class="company-logo-container">
-                <el-image class="company-logo" v-if="detailData.company"
-                          :src="detailData.company.logo"></el-image>
+        </div>
+
+        <div class="company-bio-container">
+          <div class="company-bio-label">Company Bio</div>
+          <div class="company-bio-label-underline"></div>
+          <div class="company-bio-content">
+            <div class="company-logo-container">
+              <el-image class="company-logo" v-if="detailData.company"
+                        :src="detailData.company.logo"></el-image>
+            </div>
+            <div class="company-bio-text" v-if="detailData.company">
+              {{ detailData.company.desc }}
+            </div>
+            <div class="view-profile-btn-container">
+              <el-button class="view-profile-btn" type="primary" round
+                         @click="viewCompanyProfile(detailData.user_id)">
+                View Profile
+              </el-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-container" v-if="detailData.user_contact">
+          <div class="contact-label">Contact Person</div>
+          <div class="contact-content">
+            <div class="contact-l">
+              <el-image class="contact-profile-photo" :src="detailData.user_contact.headimgurl"></el-image>
+            </div>
+            <div class="contact-r">
+              <div class="contact-r-t">
+                Hi I am {{ detailData.user_contact.first_name }} from {{ detailData.company.company_name }}.
               </div>
-              <div class="company-bio-text" v-if="detailData.company">
-                {{ detailData.company.desc }}
-              </div>
-              <div class="view-profile-btn-container">
-                <el-button class="view-profile-btn" type="primary" round
-                           @click="viewCompanyProfile(detailData.user_id)">
-                  View Profile
-                </el-button>
+              <div class="contact-r-b">
+                <el-button type="primary" @click="chat(detailData.user_id)">Let's Chat!</el-button>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="contact-container" v-if="detailData.user_contact">
-            <div class="contact-label">Contact Person</div>
-            <div class="contact-content">
-              <div class="contact-l">
-                <el-image class="contact-profile-photo" :src="detailData.user_contact.headimgurl"></el-image>
-              </div>
-              <div class="contact-r">
-                <div class="contact-r-t">
-                  Hi I am {{ detailData.user_contact.first_name }} from {{ detailData.company.company_name }}.
-                </div>
-                <div class="contact-r-b">
-                  <el-button type="primary" @click="chat(detailData.user_id)">Let's Chat!</el-button>
-                </div>
-              </div>
-            </div>
-          </div>
+      </el-col>
+    </el-row>
 
-        </el-col>
-      </el-row>
-    </div>
 
   </div>
 </template>
@@ -612,7 +611,6 @@ export default {
 }
 
 .detail-row {
-  width: 1100px;
   margin: 0 auto;
   text-align: left;
   padding: 20px 0;
@@ -968,6 +966,24 @@ export default {
 
 .xll-icon {
   font-size: 24px;
+}
+
+@media screen and (min-width: 1200px){
+
+  .detail-row {
+    width: 1100px;
+  }
+
+}
+
+@media screen  and (max-width: 768px ){
+  .xll-deals-r-container{
+    padding:20px;
+  }
+
+
+
+
 }
 
 </style>

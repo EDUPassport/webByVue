@@ -30,7 +30,8 @@
       </el-col>
     </el-row>
 
-    <el-dialog v-model="sdialogVisible" title="" width="60%"
+    <el-dialog v-model="sdialogVisible" title=""
+               :width="sdialogWidth"
                custom-class="dialog-custom"
                center>
       <div class="dialog-container">
@@ -109,11 +110,49 @@ export default {
   },
   data(){
     return {
+      sdialogWidth: '60%',
       subscribeEmail:'',
       subscribeName:'',
       sdialogVisible:false
 
     }
+  },
+  mounted() {
+    let screenWidth = document.body.clientWidth
+
+    if (Math.floor(screenWidth) < 768) {
+       this.sdialogWidth = "90%"
+    }
+    if (Math.floor(screenWidth) >= 768 && Math.floor(screenWidth) < 992) {
+      this.sdialogWidth = "60%"
+    }
+    if (Math.floor(screenWidth) >= 992 && Math.floor(screenWidth) < 1200) {
+      this.sdialogWidth = "60%"
+    }
+    if (Math.floor(screenWidth) >= 1200) {
+      this.sdialogWidth = "60%"
+    }
+
+    window.onresize = () => {
+      let screenWidth2 = document.body.clientWidth
+      if (Math.floor(screenWidth2) < 768) {
+         this.sdialogWidth = "90%"
+      }
+      if (Math.floor(screenWidth2) >= 768 && Math.floor(screenWidth2) < 992) {
+         this.sdialogWidth = "60%"
+      }
+      if (Math.floor(screenWidth2) >= 992 && Math.floor(screenWidth2) < 1200) {
+         this.sdialogWidth = "60%"
+      }
+      if (Math.floor(screenWidth2) >= 1200) {
+         this.sdialogWidth = "60%"
+      }
+
+    }
+
+  },
+  unmounted() {
+    window.onresize = null
   },
   methods:{
 
@@ -342,6 +381,17 @@ export default {
   margin: 0 auto;
   font-size: 18px;
   border-radius: 60px;
+}
+
+@media screen and (max-width: 768px){
+  .dialog-container{
+    width: 100%;
+  }
+  .identity-btn{
+    padding:10px;
+    font-size: 12px;
+  }
+
 }
 
 </style>

@@ -7,7 +7,8 @@
         <div class="price-label-container">
           <h1>Our Pricing & Plans</h1>
           <div class="price-label-tips">
-            We have 3 levels of annual memberships with different perks just for you! Start with basic & upgrade at anytime.
+            We have 3 levels of annual memberships with different perks just for you! Start with basic & upgrade at
+            anytime.
           </div>
         </div>
 
@@ -39,29 +40,29 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{item.money}}/yr
+                    ￥{{ item.money }}/yr
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{item.dollar}}/yr
+                    ${{ item.dollar }}/yr
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
               </div>
               <div class="price-item-actual-money">
                 <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                   Value: ￥{{item.original_money}}
+                  Value: ￥{{ item.original_money }}
                 </template>
                 <template v-if="envName==='development' || envName==='production'">
-                   Value: ${{item.original_dollar}}
+                  Value: ${{ item.original_dollar }}
                 </template>
               </div>
               <div class="price-item-content">
-<!--                <div class="price-item-content-label">Basic Membership Includes:</div>-->
+                <!--                <div class="price-item-content-label">Basic Membership Includes:</div>-->
                 <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
 
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" color="#b1c452" @click="zohoContactUs()"  round>
+                <el-button class="price-purchase-btn" color="#b1c452" @click="zohoContactUs()" round>
                   Get Started
                 </el-button>
               </div>
@@ -71,28 +72,30 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{item.money}}/yr
+                    ￥{{ item.money }}/yr
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{item.dollar}}/yr
+                    ${{ item.dollar }}/yr
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
               </div>
               <div class="price-item-actual-money">
                 <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                   Value: ￥{{item.original_money}}
+                  Value: ￥{{ item.original_money }}
                 </template>
                 <template v-if="envName==='development' || envName==='production'">
-                   Value: ${{item.original_dollar}}
+                  Value: ${{ item.original_dollar }}
                 </template>
               </div>
               <div class="price-item-content">
-<!--                <div class="price-item-content-label">Pro Membership Includes:</div>-->
+                <!--                <div class="price-item-content-label">Pro Membership Includes:</div>-->
                 <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy Now</el-button>
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy
+                  Now
+                </el-button>
               </div>
             </div>
             <div class="price-item-e price-plus" v-if="item.level == 3">
@@ -100,47 +103,49 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{item.money}}/yr
+                    ￥{{ item.money }}/yr
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{item.dollar}}/yr
+                    ${{ item.dollar }}/yr
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
               </div>
               <div class="price-item-actual-money">
                 <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                   Value: ￥{{item.original_money}}
+                  Value: ￥{{ item.original_money }}
                 </template>
                 <template v-if="envName==='development' || envName==='production'">
-                   Value: ${{item.original_dollar}}
+                  Value: ${{ item.original_dollar }}
                 </template>
               </div>
               <div class="price-item-content">
-<!--                <div class="price-item-content-label">Plus Membership Includes:</div>-->
+                <!--                <div class="price-item-content-label">Plus Membership Includes:</div>-->
                 <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy Now</el-button>
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy
+                  Now
+                </el-button>
               </div>
             </div>
-<!--            <div class="price-item-e price-plus" v-if="item.level == 4">-->
-<!--              <div class="price-item-label">LIFETIME</div>-->
-<!--              <div class="price-item-money-mask">-->
-<!--                <div class="price-item-money-mask-money">${{item.dollar}}</div>-->
-<!--                <div class="price-item-money-mask-sjx"></div>-->
-<!--              </div>-->
-<!--              <div class="price-item-actual-money">-->
-<!--                Actual Value: ${{item.dollar*10}}-->
-<!--              </div>-->
-<!--              <div class="price-item-content">-->
-<!--                <div class="price-item-content-label">Lifetime Membership Includes:</div>-->
-<!--                <div class="price-item-content-content" v-html="item.desc"></div>-->
-<!--              </div>-->
-<!--              <div class="price-purchase">-->
-<!--                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--            <div class="price-item-e price-plus" v-if="item.level == 4">-->
+            <!--              <div class="price-item-label">LIFETIME</div>-->
+            <!--              <div class="price-item-money-mask">-->
+            <!--                <div class="price-item-money-mask-money">${{item.dollar}}</div>-->
+            <!--                <div class="price-item-money-mask-sjx"></div>-->
+            <!--              </div>-->
+            <!--              <div class="price-item-actual-money">-->
+            <!--                Actual Value: ${{item.dollar*10}}-->
+            <!--              </div>-->
+            <!--              <div class="price-item-content">-->
+            <!--                <div class="price-item-content-label">Lifetime Membership Includes:</div>-->
+            <!--                <div class="price-item-content-content" v-html="item.desc"></div>-->
+            <!--              </div>-->
+            <!--              <div class="price-purchase">-->
+            <!--                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>-->
+            <!--              </div>-->
+            <!--            </div>-->
 
           </template>
 
@@ -155,29 +160,29 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{item.money}}/yr
+                    ￥{{ item.money }}/yr
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{item.dollar}}/yr
+                    ${{ item.dollar }}/yr
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
               </div>
               <div class="price-item-actual-money">
                 <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                   Value: ￥{{item.original_money}}
+                  Value: ￥{{ item.original_money }}
                 </template>
                 <template v-if="envName==='development' || envName==='production'">
-                   Value: ${{item.original_dollar}}
+                  Value: ${{ item.original_dollar }}
                 </template>
               </div>
               <div class="price-item-content">
-<!--                <div class="price-item-content-label">Basic Membership Includes:</div>-->
+                <!--                <div class="price-item-content-label">Basic Membership Includes:</div>-->
                 <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
 
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>
+                <el-button class="price-purchase-btn" @click="zohoContactUs()" round>Get Started</el-button>
               </div>
             </div>
             <div class="price-item-b price-pro-b" v-if="item.level == 2">
@@ -185,28 +190,30 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{item.money}}/yr
+                    ￥{{ item.money }}/yr
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{item.dollar}}/yr
+                    ${{ item.dollar }}/yr
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
               </div>
               <div class="price-item-actual-money">
                 <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                   Value: ￥{{item.original_money}}
+                  Value: ￥{{ item.original_money }}
                 </template>
                 <template v-if="envName==='development' || envName==='production'">
-                   Value: ${{item.original_dollar}}
+                  Value: ${{ item.original_dollar }}
                 </template>
               </div>
               <div class="price-item-content">
-<!--                <div class="price-item-content-label">Pro Membership Includes:</div>-->
+                <!--                <div class="price-item-content-label">Pro Membership Includes:</div>-->
                 <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy Now</el-button>
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy
+                  Now
+                </el-button>
               </div>
             </div>
             <div class="price-item-b price-plus" v-if="item.level == 3">
@@ -214,47 +221,49 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{item.money}}/yr
+                    ￥{{ item.money }}/yr
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{item.dollar}}/yr
+                    ${{ item.dollar }}/yr
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
               </div>
               <div class="price-item-actual-money">
                 <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                   Value: ￥{{item.original_money}}
+                  Value: ￥{{ item.original_money }}
                 </template>
                 <template v-if="envName==='development' || envName==='production'">
-                   Value: ${{item.original_dollar}}
+                  Value: ${{ item.original_dollar }}
                 </template>
               </div>
               <div class="price-item-content">
-<!--                <div class="price-item-content-label">Plus Membership Includes:</div>-->
+                <!--                <div class="price-item-content-label">Plus Membership Includes:</div>-->
                 <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy Now</el-button>
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy
+                  Now
+                </el-button>
               </div>
             </div>
-<!--            <div class="price-item-b price-plus" v-if="item.level == 4">-->
-<!--              <div class="price-item-label">LIFETIME</div>-->
-<!--              <div class="price-item-money-mask">-->
-<!--                <div class="price-item-money-mask-money">${{item.dollar}}</div>-->
-<!--                <div class="price-item-money-mask-sjx"></div>-->
-<!--              </div>-->
-<!--              <div class="price-item-actual-money">-->
-<!--                Actual Value: ${{item.dollar*10}}-->
-<!--              </div>-->
-<!--              <div class="price-item-content">-->
-<!--                <div class="price-item-content-label">Lifetime Membership Includes:</div>-->
-<!--                <div class="price-item-content-content" v-html="item.desc"></div>-->
-<!--              </div>-->
-<!--              <div class="price-purchase">-->
-<!--                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--            <div class="price-item-b price-plus" v-if="item.level == 4">-->
+            <!--              <div class="price-item-label">LIFETIME</div>-->
+            <!--              <div class="price-item-money-mask">-->
+            <!--                <div class="price-item-money-mask-money">${{item.dollar}}</div>-->
+            <!--                <div class="price-item-money-mask-sjx"></div>-->
+            <!--              </div>-->
+            <!--              <div class="price-item-actual-money">-->
+            <!--                Actual Value: ${{item.dollar*10}}-->
+            <!--              </div>-->
+            <!--              <div class="price-item-content">-->
+            <!--                <div class="price-item-content-label">Lifetime Membership Includes:</div>-->
+            <!--                <div class="price-item-content-content" v-html="item.desc"></div>-->
+            <!--              </div>-->
+            <!--              <div class="price-purchase">-->
+            <!--                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>-->
+            <!--              </div>-->
+            <!--            </div>-->
 
           </template>
 
@@ -270,29 +279,29 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{item.money}}/yr
+                    ￥{{ item.money }}/yr
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{item.dollar}}/yr
+                    ${{ item.dollar }}/yr
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
               </div>
               <div class="price-item-actual-money">
                 <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                   Value: ￥{{item.original_money}}
+                  Value: ￥{{ item.original_money }}
                 </template>
                 <template v-if="envName==='development' || envName==='production'">
-                   Value: ${{item.original_dollar}}
+                  Value: ${{ item.original_dollar }}
                 </template>
               </div>
               <div class="price-item-content">
-<!--                <div class="price-item-content-label">Basic Membership Includes:</div>-->
+                <!--                <div class="price-item-content-label">Basic Membership Includes:</div>-->
                 <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
 
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" @click="zohoContactUs()"  round>Get Started</el-button>
+                <el-button class="price-purchase-btn" @click="zohoContactUs()" round>Get Started</el-button>
               </div>
             </div>
             <div class="price-item-v price-pro-v" v-if="item.level == 2">
@@ -300,28 +309,30 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{item.money}}/yr
+                    ￥{{ item.money }}/yr
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{item.dollar}}/yr
+                    ${{ item.dollar }}/yr
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
               </div>
               <div class="price-item-actual-money">
                 <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                   Value: ￥{{item.original_money}}
+                  Value: ￥{{ item.original_money }}
                 </template>
                 <template v-if="envName==='development' || envName==='production'">
-                   Value: ${{item.original_dollar}}
+                  Value: ${{ item.original_dollar }}
                 </template>
               </div>
               <div class="price-item-content">
-<!--                <div class="price-item-content-label">Pro Membership Includes:</div>-->
+                <!--                <div class="price-item-content-label">Pro Membership Includes:</div>-->
                 <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy Now</el-button>
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy
+                  Now
+                </el-button>
               </div>
 
             </div>
@@ -330,48 +341,50 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{item.money}}/yr
+                    ￥{{ item.money }}/yr
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{item.dollar}}/yr
+                    ${{ item.dollar }}/yr
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
               </div>
               <div class="price-item-actual-money">
                 <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                   Value: ￥{{item.original_money}}
+                  Value: ￥{{ item.original_money }}
                 </template>
                 <template v-if="envName==='development' || envName==='production'">
-                   Value: ${{item.original_dollar}}
+                  Value: ${{ item.original_dollar }}
                 </template>
               </div>
               <div class="price-item-content">
-<!--                <div class="price-item-content-label">Plus Membership Includes:</div>-->
+                <!--                <div class="price-item-content-label">Plus Membership Includes:</div>-->
                 <div class="price-item-content-content" v-html="item.desc"></div>
               </div>
               <div class="price-purchase">
-                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy Now</el-button>
+                <el-button class="price-purchase-btn" round @click="purchase(item.id,item.dollar,item.level_en)">Buy
+                  Now
+                </el-button>
               </div>
 
             </div>
-<!--            <div class="price-item-v price-plus" v-if="item.level == 4">-->
-<!--              <div class="price-item-label">LIFETIME</div>-->
-<!--              <div class="price-item-money-mask">-->
-<!--                <div class="price-item-money-mask-money">${{item.dollar}}</div>-->
-<!--                <div class="price-item-money-mask-sjx"></div>-->
-<!--              </div>-->
-<!--              <div class="price-item-actual-money">-->
-<!--                Actual Value: ${{item.dollar*10}}-->
-<!--              </div>-->
-<!--              <div class="price-item-content">-->
-<!--                <div class="price-item-content-label">Lifetime Membership Includes:</div>-->
-<!--                <div class="price-item-content-content" v-html="item.desc"></div>-->
-<!--              </div>-->
-<!--              <div class="price-purchase">-->
-<!--                <el-button class="price-purchase-btn" @click="zohoContactUs()" round>Get Started</el-button>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--            <div class="price-item-v price-plus" v-if="item.level == 4">-->
+            <!--              <div class="price-item-label">LIFETIME</div>-->
+            <!--              <div class="price-item-money-mask">-->
+            <!--                <div class="price-item-money-mask-money">${{item.dollar}}</div>-->
+            <!--                <div class="price-item-money-mask-sjx"></div>-->
+            <!--              </div>-->
+            <!--              <div class="price-item-actual-money">-->
+            <!--                Actual Value: ${{item.dollar*10}}-->
+            <!--              </div>-->
+            <!--              <div class="price-item-content">-->
+            <!--                <div class="price-item-content-label">Lifetime Membership Includes:</div>-->
+            <!--                <div class="price-item-content-content" v-html="item.desc"></div>-->
+            <!--              </div>-->
+            <!--              <div class="price-purchase">-->
+            <!--                <el-button class="price-purchase-btn" @click="zohoContactUs()" round>Get Started</el-button>-->
+            <!--              </div>-->
+            <!--            </div>-->
 
           </template>
 
@@ -421,10 +434,10 @@
         </div>
 
         <el-dialog v-model="paypalVisible" title="Click to pay" width="30%" center>
-<!--          <div id="paypal-id"></div>-->
-            <div class="paypal-btn" @click="paypalToPay()">
-              <el-image class="paypal-logo-img" :src="paypalLogoImg"></el-image>
-            </div>
+          <!--          <div id="paypal-id"></div>-->
+          <div class="paypal-btn" @click="paypalToPay()">
+            <el-image class="paypal-logo-img" :src="paypalLogoImg"></el-image>
+          </div>
         </el-dialog>
       </el-col>
     </el-row>
@@ -454,38 +467,38 @@ export default {
       envName
     }
   },
-  data(){
+  data() {
     return {
       paypalLogoImg,
-      paypalUrl:'',
-      vipListData:[]
+      paypalUrl: '',
+      vipListData: []
     }
   },
   mounted() {
     let token = localStorage.getItem('token')
 
-    if(token){
+    if (token) {
       this.getVipList(this.identity)
-    }else{
+    } else {
       this.identity = 1
       this.getVipList(1)
     }
 
   },
   methods: {
-    getVipList(identity){
+    getVipList(identity) {
       let params = {
-        identity:identity,
-        token:localStorage.getItem('token')
+        identity: identity,
+        token: localStorage.getItem('token')
       }
 
-      MEMBER_VIP_LIST(params).then(res=>{
+      MEMBER_VIP_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.vipListData = res.message
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
@@ -494,21 +507,21 @@ export default {
       this.identity = value
       this.getVipList(value)
     },
-    paypalToPay(){
-      window.open(this.paypalUrl,'_blank')
+    paypalToPay() {
+      window.open(this.paypalUrl, '_blank')
     },
-    purchase(id,amount,level_en){
+    purchase(id, amount, level_en) {
 
       let token = localStorage.getItem('token')
 
-      if(!token || token === ''){
+      if (!token || token === '') {
         return this.$router.push({
-          path:'/edupassport',
-          query:{type:'login'}
+          path: '/edupassport',
+          query: {type: 'login'}
         })
       }
 
-      this.paypalVisible=true
+      this.paypalVisible = true
 
       let product = id
       let shipping = 0
@@ -518,8 +531,8 @@ export default {
       let userId = localStorage.getItem('uid')
 
       let apiDomain = process.env.VUE_APP_URL
-      this.paypalUrl = apiDomain + 'pay/paypal?product='+product + '&price='+amount + '&shipping='+shipping+'&desc='+desc
-      +'&level_id='+levelId+'&identity='+identity + '&user_id='+userId
+      this.paypalUrl = apiDomain + 'pay/paypal?product=' + product + '&price=' + amount + '&shipping=' + shipping + '&desc=' + desc
+          + '&level_id=' + levelId + '&identity=' + identity + '&user_id=' + userId
 
       // loadScript({
       //       "client-id": "ARBRiffHCNjNTHo1cO6wmW7TPlEWOW84VqW1o_5wG6koeavGacLIaROjXXbbvwb2uT0A7suHDHzbi0w8",
@@ -583,8 +596,8 @@ export default {
       //     });
 
     },
-    zohoContactUs(){
-      window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4','_blank')
+    zohoContactUs() {
+      window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
     }
   }
 }
@@ -615,14 +628,6 @@ export default {
 .price-row {
   margin: 0 auto;
   padding: 40px 0 100px 0;
-}
-
-@media screen and (min-width: 1400px) {
-  .price-row {
-    //width: 1400px;
-    width:1100px;
-  }
-
 }
 
 .price-label-container {
@@ -662,10 +667,12 @@ export default {
   background-color: #00b3d2;
   color: #ffffff;
 }
+
 .switch-identity-item-active-e {
   background-color: #FF2870;
   color: #ffffff;
 }
+
 .switch-identity-item-active-v {
   background-color: #8E134C;
   color: #ffffff;
@@ -701,9 +708,10 @@ export default {
   color: #FFFFFF;
 }
 
-.price-item-e:hover .price-item-actual-money{
+.price-item-e:hover .price-item-actual-money {
   color: #FFFFFF;
 }
+
 .price-item-b {
   flex: 1;
   margin: 10px;
@@ -724,9 +732,10 @@ export default {
   color: #FFFFFF;
 }
 
-.price-item-b:hover .price-item-actual-money{
+.price-item-b:hover .price-item-actual-money {
   color: #FFFFFF;
 }
+
 .price-item-v {
   flex: 1;
   margin: 10px;
@@ -747,7 +756,7 @@ export default {
   color: #FFFFFF;
 }
 
-.price-item-v:hover .price-item-actual-money{
+.price-item-v:hover .price-item-actual-money {
   color: #FFFFFF;
 }
 
@@ -760,36 +769,36 @@ export default {
   background-color: #FF2870;
   transform: scale(1.05);
   z-index: 990;
-  color:#ffffff;
+  color: #ffffff;
 }
 
 
-.price-pro-e .price-item-actual-money{
-  color:#FFFFFF;
+.price-pro-e .price-item-actual-money {
+  color: #FFFFFF;
 }
 
 .price-pro-b {
-background-color: #00B2D2;
+  background-color: #00B2D2;
   transform: scale(1.05);
   z-index: 990;
-color:#ffffff;
+  color: #ffffff;
 }
 
 
-.price-pro-b .price-item-actual-money{
-color:#FFFFFF;
+.price-pro-b .price-item-actual-money {
+  color: #FFFFFF;
 }
 
 .price-pro-v {
-background-color: #8E134C;
+  background-color: #8E134C;
   transform: scale(1.05);
   z-index: 990;
-color:#ffffff;
+  color: #ffffff;
 }
 
 
-.price-pro-v .price-item-actual-money{
-color:#FFFFFF;
+.price-pro-v .price-item-actual-money {
+  color: #FFFFFF;
 }
 
 
@@ -814,7 +823,6 @@ color:#FFFFFF;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.1);
   font-size: 24px;
-  //letter-spacing: 2px;
   padding: 10px 0;
   font-weight: bold;
 }
@@ -843,9 +851,8 @@ color:#FFFFFF;
   font-weight: bold;
 }
 
-.price-item-content-content{
-  padding-top:10px;
-  //padding-left: 20px;
+.price-item-content-content {
+  padding-top: 10px;
 }
 
 .price-purchase {
@@ -873,38 +880,98 @@ color:#FFFFFF;
 .price-help-container span {
   color: #00b3d2;
   text-decoration: underline;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .faq-row {
   background-color: #FFFFFF;
   padding: 40px;
 }
-.faq-label-container{
+
+.faq-label-container {
   text-align: center;
 }
 
 .faq-content-container {
   width: 60%;
-  margin: 40px auto 80px ;
+  margin: 40px auto 80px;
 
 }
 
-.paypal-btn{
+.paypal-btn {
   border: 1px solid #EEEEEE;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
 }
 
-.paypal-btn:hover{
+.paypal-btn:hover {
   border: 1px solid #00b3d2;
 }
 
-.paypal-logo-img{
+.paypal-logo-img {
   width: 100%;
   transform: scale(0.8);
+}
+
+@media screen and (min-width: 1200px) {
+  .price-row {
+    width: 1100px;
+  }
+
+
+}
+
+@media screen and (max-width: 768px) {
+  .price-label-tips {
+    font-size: 12px;
+    padding:0 10px;
+  }
+
+  .switch-identity-container {
+    margin-top: 20px;
+  }
+
+  .switch-identity-item {
+    font-size: 12px;
+    padding: 0 10px;
+  }
+
+  .price-container {
+    flex-direction: column;
+    margin-top: 0;
+    padding: 0 20px;
+  }
+
+  .price-item-e {
+    width: 100%;
+    margin: 30px 0 0 0;
+
+  }
+
+  .price-item-b {
+    width: 100%;
+    margin: 30px 0 0 0;
+
+  }
+
+  .price-item-v {
+    width: 100%;
+    margin: 30px 0 0 0;
+
+  }
+
+  .faq-row {
+    padding: 20px;
+  }
+
+  .faq-content-container {
+    width: 100%;
+    margin: 10px;
+  }
+
+
 }
 
 </style>

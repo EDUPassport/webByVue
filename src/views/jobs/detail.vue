@@ -784,7 +784,7 @@ export default {
 }
 
 .detail-row {
-  width: 1100px;
+
   margin: 0 auto;
   text-align: left;
   padding: 20px 0;
@@ -1450,4 +1450,34 @@ export default {
 .working-hours-hours{
   margin-left: 20px;
 }
+
+@media screen and (min-width: 1200px) {
+  .detail-row{
+    width: 1100px;
+  }
+}
+
+@media screen and (max-width: 768px){
+  .job-title{
+    text-align:center;
+    padding:4px;
+  }
+  .job-address-salary{
+    flex-direction:column;
+
+  }
+  .job-address{
+    padding:4px;
+
+  }
+  .job-salary{
+    padding:4px;
+  }
+
+  .job-xll-r-container{
+    padding:20px;
+  }
+}
+
+
 </style>

@@ -213,6 +213,8 @@ export default {
           console.log(action)
           if(action==='confirm'){
             console.log('用户点击确定')
+            window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+
           }
         }
 
@@ -253,7 +255,6 @@ export default {
   color: #FFFFFF !important;
 }
 .favorites-container {
-  width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -435,5 +436,17 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
+
+@media screen and (min-width: 1200px){
+  .favorites-container{
+    width: 1100px;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+
+}
+
 
 </style>

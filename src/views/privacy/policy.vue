@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <el-row align="top" justify="center">
-      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+      <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
         <meSideMenu></meSideMenu>
       </el-col>
-      <el-col class="policy-row-container" :xs="20" :sm="20" :md="20" :lg="20" :xl="20">
+      <el-col class="policy-row-container" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
         <div class="policy-container">
           <p>
             This Privacy Policy describes how your personal information is collected, used, and shared when
@@ -249,7 +249,7 @@ export default {
 
 <style scoped>
 .container{
-  width: 1100px;
+
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -276,4 +276,17 @@ export default {
   li{
 
   }
+
+  @media screen and (min-width: 1200px) {
+    .container{
+      width: 1100px;
+    }
+  }
+
+  @media screen and (max-width: 768px){
+    .policy-container{
+      padding: 10px;
+    }
+  }
+
 </style>

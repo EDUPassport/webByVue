@@ -171,7 +171,6 @@ export default {
 }
 
 .profile-container {
-  width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -333,4 +332,36 @@ export default {
 .actived-2 {
   background-color: #FF2870;
 }
+
+@media screen and (min-width: 1200px){
+  .profile-container{
+    width: 1100px;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+  .jobs-list-item-title a{
+    font-size: 14px;
+  }
+  .jobs-list-item-name{
+    margin-top: 4px;
+    font-size:12px;
+  }
+  .jobs-list-item-desc{
+    display:none;
+  }
+  .jobs-list-item-readmore{
+    margin-top:4px;
+    font-size:14px;
+  }
+  .jobs-list-item-address{
+    margin-top:4px;
+    font-size:12px;
+  }
+  .jobs-list-item-l{
+    height: 100px;
+  }
+}
+
 </style>

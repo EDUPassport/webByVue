@@ -17,7 +17,7 @@
       </el-header>
       <el-main>
         <el-row class="xll-login-row-container" justify="center" align="middle" v-if="showValue == 'login' ">
-          <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
+          <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10">
             <div class="xll-login-container">
               <div class="login-tabs-container">
                 <div class="login-label"
@@ -226,7 +226,7 @@
               </div>
             </div>
           </el-col>
-          <el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">
+          <el-col :xs="0" :sm="0" :md="14" :lg="14" :xl="14">
             <div class="xll-ads-container">
               <!--              <el-image :src="shanghaiImg" class="ads-image" ></el-image>-->
             </div>
@@ -234,7 +234,7 @@
         </el-row>
 
         <el-row class="xll-register-row-container" justify="center" align="middle" v-if="showValue == 'sign-up' ">
-          <el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">
+          <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
             <div class="xll-register-container">
               <div class="login-tabs-container">
                 <div class="login-label"
@@ -1862,6 +1862,10 @@ export default {
   .xll-register-row-container {
     width: 1100px;
   }
+
+}
+
+@media screen and (max-width: 768px){
 
 }
 </style>

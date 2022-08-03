@@ -278,7 +278,6 @@ export default {
 }
 
 .profile-container {
-  width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -571,4 +570,34 @@ export default {
 .actived-2 {
   background-color: #FF2870;
 }
+
+@media screen and (min-width: 1200px){
+  .profile-container{
+    width: 1100px;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+  .deals-r-container{
+    padding: 0;
+
+  }
+
+  .deals-list-container{
+    padding: 20px;
+    border-radius: 0;
+    flex-direction: column;
+  }
+
+  .events-item{
+    width:100%;
+  }
+  .events-pagination{
+    padding:20px 8px;
+  }
+
+}
+
+
 </style>

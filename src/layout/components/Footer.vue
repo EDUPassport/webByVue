@@ -4,7 +4,7 @@
 <!--    <el-backtop :right="10"  :bottom="74" />-->
     <el-footer height="auto" class="footer-bg">
       <el-row class="footer-row" :gutter="0" align="top" justify="center">
-        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="3">
+        <el-col :xs="0" :sm="3" :md="3" :lg="3" :xl="3">
           <div class="esl-logo-container">
             <el-image class="esl-logo" :src="imgLogo"></el-image>
           </div>
@@ -12,7 +12,7 @@
             Platform for today's education needs, people, and businesses.
           </div>
         </el-col>
-        <el-col :xs="24" :sm="{span:5,offset:1}" :md="{span:5,offset:1}" :lg="{span:5,offset:1}" :xl="{span:5,offset:1}">
+        <el-col :xs="0" :sm="{span:5,offset:1}" :md="{span:5,offset:1}" :lg="{span:5,offset:1}" :xl="{span:5,offset:1}">
           <div class="footer-nav-label">
             Services
           </div>
@@ -46,7 +46,7 @@
           </div>
 
         </el-col>
-        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
+        <el-col :xs="0" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
           <div class="footer-nav-label">
             Consulting
           </div>
@@ -64,7 +64,7 @@
           </div>
 
         </el-col>
-        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
+        <el-col :xs="0" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
           <div class="footer-nav-label">
             Company
           </div>
@@ -94,7 +94,7 @@
           </div>
 
         </el-col>
-        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
+        <el-col :xs="0" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
           <div class="footer-nav-label">
             Get Help
           </div>
@@ -322,5 +322,17 @@ export default {
   }
 }
 
+@media screen and (max-width: 768px ) {
+  .footer-row{
+    padding:10px 0;
+  }
+  .footer-b-tips{
+    text-align: center;
+  }
 
+  .footer-b{
+    padding-bottom: 100px;
+  }
+
+}
 </style>

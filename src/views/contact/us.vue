@@ -13,7 +13,7 @@
     </el-col>
   </el-row>
   <el-row class="contact-form-row" :gutter="0" align="middle" justify="center">
-    <el-col class="contact-form-container" :xs="24" :sm="16" :md="16" :lg="16" :xl="16">
+    <el-col class="contact-form-container" :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
       <el-form
           :model="usForm"
           :rules="usRules"
@@ -47,7 +47,7 @@
       </div>
 
     </el-col>
-    <el-col class="contact-detail-bg" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+    <el-col class="contact-detail-bg" :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
       <div class="contact-detail-container">
         <div class="contact-detail-label">CONTACT DETAILS</div>
         <div class="contact-detail-underline"></div>
@@ -273,6 +273,14 @@ export default {
   margin-top: 40px;
 }
 
+.submit-btn-container{
+  text-align: center;
+}
+
+.submit-btn{
+  font-size: 14px;
+}
+
 @media screen and (min-width: 1200px){
   .map-row{
     width: 1100px;
@@ -283,11 +291,16 @@ export default {
 
 }
 
-.submit-btn-container{
-  text-align: center;
+@media screen and (max-width: 768px){
+  .map-row{
+    padding:0 20px;
+  }
+
+  .contact-form-row{
+    border-radius: 0;
+    height: auto;
+  }
+
 }
 
-.submit-btn{
-  font-size: 14px;
-}
 </style>

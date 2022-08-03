@@ -333,7 +333,7 @@
                     </router-link>
                   </div>
                   <div class="hot-deals-item-name">
-                    {{item.desc}}
+                    {{ item.desc }}
                   </div>
                 </div>
               </div>
@@ -346,7 +346,7 @@
                   <!--                  {{ item.vendor_type_name }}-->
                 </div>
                 <div class="hot-deals-item-b-r">
-<!--                  {{ item.location }}-->
+                  <!--                  {{ item.location }}-->
                   <template v-if="item.user_info">
                     {{ item.user_info.vendor_name_en }}
                   </template>
@@ -392,7 +392,7 @@
       <el-row class="popular-work-row" :gutter="0" align="middle" justify="center">
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 
-          <swiper :slidesPerView="3" :spaceBetween="30"
+          <swiper :slidesPerView="popularWorkSliderNum" :spaceBetween="30"
                   :pagination='{"clickable": true}'
                   :autoplay='{"delay": 2500,"disableOnInteraction": false}'
                   :navigation="false"
@@ -414,7 +414,8 @@
     <!-- articles industry news   -->
     <div class="industry-news-container" v-loading="articleListData.length<=0" v-if="industryShowStatus">
       <el-row class="industry-news-row" :gutter="0" align="middle" justify="center">
-        <el-col :xs="7" :sm="7" :md="7" :lg="7" :xl="8">
+
+        <el-col :xs="20" :sm="20" :md="7" :lg="7" :xl="8" class="industry-news-margin">
           <div class="industry-articles-label">Articles</div>
           <div class="industry-news-label">Industry News</div>
           <div class="industry-news-link-container">
@@ -428,9 +429,11 @@
           <!--            <el-button type="primary">Read More ></el-button>-->
           <!--          </div>-->
         </el-col>
-        <el-col :xs="{span:7,offset:1}" :sm="{span:7,offset:1}" :md="{span:7,offset:1}" :lg="{span:7,offset:1}"
+
+        <el-col :xs="22" :sm="20" :md="{span:7,offset:1}" :lg="{span:7,offset:1}"
                 :xl="{span:7,offset:1}"
                 v-for="(item,index) in articleListLimitData" :key="index"
+                class="industry-news-margin"
         >
           <div class="industry-item" v-if="index<2">
             <div class="industry-item-t">
@@ -573,6 +576,7 @@ export default {
 
       imgLogo,
       featuredJobSliderNum: 4,
+      popularWorkSliderNum: 3,
       xllSliderData: [
         {
           name: 'beijing',
@@ -661,30 +665,38 @@ export default {
 
     if (Math.floor(screenWidth) < 768) {
       this.featuredJobSliderNum = 2
+      this.popularWorkSliderNum = 1
     }
     if (Math.floor(screenWidth) >= 768 && Math.floor(screenWidth) < 992) {
       this.featuredJobSliderNum = 2
+      this.popularWorkSliderNum = 2
     }
     if (Math.floor(screenWidth) >= 992 && Math.floor(screenWidth) < 1200) {
       this.featuredJobSliderNum = 3
+      this.popularWorkSliderNum = 3
     }
     if (Math.floor(screenWidth) >= 1200) {
       this.featuredJobSliderNum = 4
+      this.popularWorkSliderNum = 3
     }
 
     window.onresize = () => {
       let screenWidth2 = document.body.clientWidth
       if (Math.floor(screenWidth2) < 768) {
         this.featuredJobSliderNum = 2
+        this.popularWorkSliderNum = 1
       }
       if (Math.floor(screenWidth2) >= 768 && Math.floor(screenWidth2) < 992) {
         this.featuredJobSliderNum = 2
+        this.popularWorkSliderNum = 2
       }
       if (Math.floor(screenWidth2) >= 992 && Math.floor(screenWidth2) < 1200) {
         this.featuredJobSliderNum = 3
+        this.popularWorkSliderNum = 3
       }
       if (Math.floor(screenWidth2) >= 1200) {
         this.featuredJobSliderNum = 4
+        this.popularWorkSliderNum = 3
       }
 
       // console.log(document.body.clientWidth)
@@ -708,10 +720,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -725,10 +737,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -751,10 +763,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -777,10 +789,10 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -801,10 +813,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -820,10 +832,10 @@ export default {
         this.businessListData = res.message.data;
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -840,10 +852,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -861,10 +873,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -897,7 +909,7 @@ export default {
             adsDataNews = adsData.filter(item => item.name == 'vendor_industry_news');
           }
           let articleListData = [];
-          if(adsDataNews[0]){
+          if (adsDataNews[0]) {
             articleListData = adsDataNews[0].data
           }
           if (articleListData.length <= 0) {
@@ -910,10 +922,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -941,13 +953,13 @@ export default {
           }
         }).catch(err => {
           console.log(err)
-          if(err.code === 400){
+          if (err.code === 400) {
             this.$message.error('Please complete your profile in order to apply')
-          }else{
-            if(err.msg){
+          } else {
+            if (err.msg) {
               this.$message.error(err.msg)
             }
-            if(err.message){
+            if (err.message) {
               this.$message.error(err.message)
             }
           }
@@ -976,10 +988,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -998,10 +1010,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1022,10 +1034,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1044,10 +1056,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1059,8 +1071,8 @@ export default {
     signUp() {
       this.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
     },
-    turnArticleLink(link){
-      window.open(link,'_blank')
+    turnArticleLink(link) {
+      window.open(link, '_blank')
     }
 
   }
@@ -1916,7 +1928,7 @@ export default {
 .industry-item-t-img {
   width: 100%;
   height: 100%;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .industry-item-article-tag {
@@ -2109,7 +2121,7 @@ export default {
   }
 
   .xllSwiper {
-    height: 240px;
+    height: 190px;
   }
 
   .xll-find-best-row h2 {
@@ -2119,22 +2131,52 @@ export default {
   .xll-find-best-row h1 {
     font-size: 16px;
   }
+
   .hot-deals-item {
     width: 48%;
   }
-  .hot-deals-item-more{
+
+  .hot-deals-item-more {
     width: 48%;
   }
+
+  .industry-news-margin {
+    margin-top: 20px;
+  }
+
+  .popular-work-container {
+    padding: 20px;
+
+  }
+
+  .popular-work-title {
+    font-size: 24px;
+  }
+
+  .hot-deals-container {
+    padding: 0 20px;
+  }
+
+  .hot-deals-item {
+    width: 100%;
+  }
+
+  .hot-deals-item-more {
+    width: 100%;
+  }
+
 }
 
 @media screen and (min-width: 769px) and (max-width: 992px) {
   .xllSwiper {
     height: 300px;
   }
+
   .hot-deals-item {
     width: 48%;
   }
-  .hot-deals-item-more{
+
+  .hot-deals-item-more {
     width: 48%;
   }
 

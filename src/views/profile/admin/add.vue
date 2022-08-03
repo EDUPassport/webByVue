@@ -446,7 +446,7 @@ export default {
 }
 
 .profile-container {
-  width: 1100px;
+
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -509,4 +509,21 @@ export default {
 .qx-checked-square-active {
   background-color: #00B2D2;
 }
+
+@media screen and (min-width:1200px) {
+  .profile-container{
+    width:1100px;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+  .add-agent-bg{
+    padding:20px;
+  }
+  .add-agent-container{
+    padding:20px;
+  }
+}
+
 </style>

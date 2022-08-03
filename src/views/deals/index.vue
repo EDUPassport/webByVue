@@ -914,4 +914,27 @@ export default {
   padding:50px 150px;
 }
 
+@media screen and (max-width: 768px){
+  .sub-cate-container{
+    overflow-y: scroll;
+    padding:0;
+  }
+  .sub-cate-icon{
+    width:50px;
+    height:50px;
+  }
+
+  .featured-jobs-container{
+    display: none;
+  }
+
+  .featured-deals-container{
+    display:none;
+  }
+  .articles-container{
+    display:none;
+  }
+
+}
+
 </style>

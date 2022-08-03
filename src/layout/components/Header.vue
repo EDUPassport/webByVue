@@ -119,43 +119,7 @@
                                             </el-dropdown-item>
                                           </div>
 
-
-                                          <!--                                        <template v-if="educatorContactData.name">-->
-                                          <!--                                          <el-dropdown-item-->
-                                          <!--                                              class="xll-dropdown-item"-->
-                                          <!--                                              @click="changeIdentity(educatorContactData.id,1,2)">-->
-                                          <!--                                              {{educatorContactData.name}}-->
-                                          <!--                                          </el-dropdown-item>-->
-                                          <!--                                        </template>-->
-
-                                          <!--                                        <template v-else>-->
-                                          <!--                                          <el-dropdown-item-->
-                                          <!--                                              class="xll-dropdown-item"-->
-                                          <!--                                              @click="changeIdentity(educatorContactData.id,1,2)"-->
-                                          <!--                                          >-->
-                                          <!--                                            <div class="xll-add-icon-container" >-->
-                                          <!--                                              <span>Add</span>-->
-                                          <!--                                              <el-icon class="xll-icon-circle-plus-1" :size="14">-->
-                                          <!--                                                <CirclePlus/>-->
-                                          <!--                                              </el-icon>-->
-                                          <!--                                            </div>-->
-                                          <!--                                          </el-dropdown-item>-->
-                                          <!--                                        </template>-->
-
                                         </el-dropdown-menu>
-
-                                        <!--                                      <el-dropdown-menu v-else>-->
-
-                                        <!--                                        <el-dropdown-item class="xll-dropdown-item" @click="createRole(1)">-->
-                                        <!--                                          <div class="xll-add-icon-container" >-->
-                                        <!--                                            <span>Add</span>-->
-                                        <!--                                            <el-icon class="xll-icon-circle-plus-1" :size="14">-->
-                                        <!--                                              <CirclePlus/>-->
-                                        <!--                                            </el-icon>-->
-                                        <!--                                          </div>-->
-                                        <!--                                        </el-dropdown-item>-->
-
-                                        <!--                                      </el-dropdown-menu>-->
 
                                       </template>
                                     </el-dropdown>
@@ -353,7 +317,7 @@
               <!--                <router-link to="/industry/news" exact>News</router-link>-->
               <!--              </div>-->
               <div class="nav-link-item">
-                <router-link to="/blog/list" exact>Blog</router-link>
+                <span class="zoho-blog-menu-2" @click="turnZohoBlog()">Blog</span>
               </div>
               <div class="nav-link-item">
                 <router-link to="/contact/us" exact> Contact</router-link>

@@ -582,7 +582,7 @@ export default {
 }
 
 .profile-container {
-  width: 1100px;
+
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -763,7 +763,8 @@ export default {
 }
 
 .xll-ads-l-img {
-//width: 100%; height: 100%;
+
+  height: 100%;
   border-radius: 10px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
@@ -891,4 +892,28 @@ export default {
   background-color: #0AA0A8;
   color: #FFFFFF;
 }
+
+@media screen and  (min-width:1200px) {
+  .profile-container{
+    width: 1100px;
+  }
+}
+
+@media screen and (max-width: 768px){
+  .dashboard-content{
+
+  }
+  .dashboard-item{
+    margin-top:10px;
+  }
+  .dashboard-item-l-icon{
+    width:30px;
+    height: 30px;
+  }
+
+
+
+}
+
+
 </style>

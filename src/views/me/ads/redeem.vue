@@ -540,7 +540,6 @@ export default {
 }
 
 .favorites-container {
-  width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -756,5 +755,17 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
+
+@media screen and (min-width: 1200px){
+  .favorites-container{
+    width: 1100px;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+
+}
+
 
 </style>

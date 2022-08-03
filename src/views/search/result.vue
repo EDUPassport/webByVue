@@ -14,7 +14,7 @@
 
           </div>
           <div class="result-content-container" v-loading="searchLoadingStatus">
-            <div class="content-l" >
+            <div class="content-l">
               <div class="content-l-content" v-if="jobsData.length>0 || dealsData.length>0">
                 <div v-if="jobsData.length>0">
                   <div class="content-item" v-for="(item,index) in jobsData" :key="index">
@@ -42,34 +42,10 @@
                     </div>
                   </div>
                 </div>
-                <!--              <div>-->
-                <!--                <div class="content-item" v-for="(item,index) in businessData" :key="index">-->
-                <!--                  <div class="content-item-title">{{ item.business_name }} <span>Tag: Business</span></div>-->
-                <!--                  <div class="content-item-desc">-->
-                <!--                    {{ item.business_bio }}-->
-                <!--                  </div>-->
-                <!--                </div>-->
-                <!--              </div>-->
-                <!--              <div>-->
-                <!--                <div class="content-item" v-for="(item,index) in vendorData" :key="index">-->
-                <!--                  <div class="content-item-title">{{ item.vendor_name_en }} <span>Tag: Vendor</span></div>-->
-                <!--                  <div class="content-item-desc">-->
-                <!--                    {{ item.vendor_bio }}-->
-                <!--                  </div>-->
-                <!--                </div>-->
-                <!--              </div>-->
 
-                <!--              <div>-->
-                <!--                <div class="content-item" v-for="(item,index) in eventsData" :key="index">-->
-                <!--                  <div class="content-item-title">{{ item.name }} <span>Tag: Event</span></div>-->
-                <!--                  <div class="content-item-desc">-->
-                <!--                    {{ item.desc }}-->
-                <!--                  </div>-->
-                <!--                </div>-->
-                <!--              </div>-->
               </div>
 
-              <div v-else class="empty-result-container" >
+              <div v-else class="empty-result-container">
                 No search results
               </div>
 
@@ -77,11 +53,13 @@
                 <el-button class="prev-container" type="primary"
                            :disabled="!showPrevPaginationStatus"
                            round
-                           @click="showPrevPage()">Prev</el-button>
+                           @click="showPrevPage()">Prev
+                </el-button>
                 <el-button class="next-container" type="primary"
                            :disabled="!showNextPaginationStatus"
                            round
-                           @click="showNextPage()">Next</el-button>
+                           @click="showNextPage()">Next
+                </el-button>
               </div>
 
             </div>
@@ -113,12 +91,6 @@
             </div>
           </div>
 
-          <!--          <div class="search-other-container">-->
-          <!--            <div class="search-other-label">Find what you were looking for?</div>-->
-          <!--            <div class="search-other-btn-container">-->
-          <!--              <el-button class="search-other-btn" type="primary">Try ANOTHER SEARCH</el-button>-->
-          <!--            </div>-->
-          <!--          </div>-->
         </el-col>
       </div>
 
@@ -127,13 +99,13 @@
 </template>
 
 <script>
-import {ES_SEARCH, TAG_LIST} from "../../api/api";
+import {ES_SEARCH, TAG_LIST} from "@/api/api";
 
 export default {
   name: "result",
   data() {
     return {
-      searchLoadingStatus: true,
+      searchLoadingStatus: false,
       searchSiteValue: '',
       tagsList: [],
       tagsData: [],
@@ -150,15 +122,15 @@ export default {
       jobsData: [],
 
       showPaginationStatus: false,
-      showNextPaginationStatus:true,
-      showPrevPaginationStatus:true,
+      showNextPaginationStatus: true,
+      showPrevPaginationStatus: true,
     }
   },
   mounted() {
     let kw = this.$route.query.keyword
     if (kw && kw != '') {
       this.keyword = kw
-      this.getEsSearch(this.page, this.limit, kw)
+      // this.getEsSearch(this.page, this.limit, kw)
     } else {
       this.searchLoadingStatus = false
     }
@@ -175,7 +147,7 @@ export default {
         if (res.code == 200) {
           this.tagsData = res.message.data;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -235,17 +207,17 @@ export default {
           }
           let jobLen = jobsData.length
           let dealLen = dealsData.length
-          if(page == 1){
+          if (page == 1) {
             this.showPaginationStatus = jobLen + dealLen >= 10;
             this.showPrevPaginationStatus = false;
-          }else{
+          } else {
             this.showPaginationStatus = true;
             this.showPrevPaginationStatus = true;
             this.showNextPaginationStatus = jobLen + dealLen > 0;
           }
           this.searchLoadingStatus = false
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -282,7 +254,7 @@ export default {
 }
 
 .result-container {
-  width: 1100px;
+
   margin: 0 auto;
   background-color: #FFFFFF;
   padding: 20px;
@@ -453,9 +425,10 @@ export default {
   font-size: 14px;
 }
 
-.content-l-content{
+.content-l-content {
   min-height: 400px;
 }
+
 .empty-result-container {
   width: 70%;
   min-height: 400px;
@@ -464,4 +437,35 @@ export default {
   font-size: 14px;
   color: #808080;
 }
+
+@media screen and (min-width: 1200px) {
+  .result-container {
+    width: 1100px;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+
+  .result-content-container {
+    padding: 10px;
+    flex-direction: column;
+  }
+
+  .empty-result-container{
+    width: 100%;
+    padding: 20px 0;
+  }
+
+  .content-l{
+    width:100%;
+  }
+  .content-r{
+    width:100%;
+    padding:0;
+  }
+
+}
+
+
 </style>
