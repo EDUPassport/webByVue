@@ -18,7 +18,7 @@
             <div class="deals-list-content">
               <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index">
 
-                <div class="deals-item-bg" :style="'background-image:url('+ item.user_info.profile_photo + ')'">
+                <div class="deals-item-bg" :style="'background-image:url('+ item.company_profile_photo + ')'">
                   <div class="deals-item-t">
                     <div class="deals-item-t-l">
                       <template v-if="item.company_logo">
@@ -164,7 +164,7 @@ export default {
 }
 
 .profile-container {
-  width: 1100px;
+
   margin: 0 auto;
   padding: 20px 0;
 }
@@ -344,5 +344,43 @@ export default {
 
 .actived-2 {
   background-color: #FF2870;
+}
+
+@media screen and (min-width: 1200px){
+  .profile-container{
+    width: 1100px;
+  }
+}
+
+@media screen and (max-width: 768px){
+  .sub-cate-container{
+    overflow-y: scroll;
+    padding:0;
+  }
+  .sub-cate-icon{
+    width:50px;
+    height:50px;
+  }
+
+  .featured-jobs-container{
+    display: none;
+  }
+
+  .featured-deals-container{
+    display:none;
+  }
+  .articles-container{
+    display:none;
+  }
+
+  .deals-container{
+    flex-direction: column;
+    padding:0;
+  }
+
+  .deals-item{
+    width:100%;
+  }
+
 }
 </style>

@@ -2,7 +2,8 @@
 <div v-if="isShow">
   <el-dialog :model-value="isShow"
              @close="handleClose()"
-             title="Forgot Password" width="50%" center>
+             title="Forgot Password"
+             :width="dialogWidthValue" center>
 
     <div class="switch-container">
       <div class="switch-item"
@@ -103,13 +104,13 @@
           </el-form-item>
 
           <el-form-item label="New Password" prop="password" required>
-            <el-input size="medium" placeholder="New Password" 
+            <el-input size="medium" placeholder="New Password"
                       type="password"
                       v-model="forgotForm2.password"></el-input>
           </el-form-item>
 
           <el-form-item label="Confirm Password" prop="confirm_password" required>
-            <el-input size="medium" placeholder="Confirm Your New Password" 
+            <el-input size="medium" placeholder="Confirm Your New Password"
                       type="password"
                       v-model="forgotForm2.confirm_password"></el-input>
           </el-form-item>
@@ -206,6 +207,7 @@ export default {
   },
   data(){
     return {
+      dialogWidthValue:'50%',
       forgotForm1:{
         email: '',
         email_code: '',
@@ -248,6 +250,43 @@ export default {
       }
 
     }
+  },
+  mounted() {
+    let screenWidth = document.body.clientWidth
+
+    if (Math.floor(screenWidth) < 768) {
+      this.dialogWidthValue = "90%"
+    }
+    if (Math.floor(screenWidth) >= 768 && Math.floor(screenWidth) < 992) {
+      this.dialogWidthValue = "90%"
+    }
+    if (Math.floor(screenWidth) >= 992 && Math.floor(screenWidth) < 1200) {
+      this.dialogWidthValue = "50%"
+    }
+    if (Math.floor(screenWidth) >= 1200) {
+      this.dialogWidthValue = "50%"
+    }
+
+    window.onresize = () => {
+      let screenWidth2 = document.body.clientWidth
+      if (Math.floor(screenWidth2) < 768) {
+        this.dialogWidthValue = "90%"
+      }
+      if (Math.floor(screenWidth2) >= 768 && Math.floor(screenWidth2) < 992) {
+        this.dialogWidthValue = "90%"
+      }
+      if (Math.floor(screenWidth2) >= 992 && Math.floor(screenWidth2) < 1200) {
+        this.dialogWidthValue = "50%"
+      }
+      if (Math.floor(screenWidth2) >= 1200) {
+        this.dialogWidthValue = "50%"
+      }
+
+      // console.log(document.body.clientWidth)
+    }
+  },
+  unmounted() {
+    window.onresize = null
   },
   methods:{
     getCheckCode(){
@@ -423,5 +462,13 @@ export default {
 .dialog{
   border-radius: 20px;
 }
+
+@media screen and (max-width: 768px){
+  .forgot-form-container{
+    padding:0;
+
+  }
+}
+
 
 </style>

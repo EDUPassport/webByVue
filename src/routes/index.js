@@ -77,12 +77,31 @@ const routes = [
                 }
             },
             {
+                path: '/jobs/applications',
+                name: 'jobApplications',
+                component: () => import('@/views/jobs/applications'),
+                meta: {
+                    titleC: 'China Applications',
+                    titleG: 'Global Applications',
+                    auth:true
+                }
+            },
+            {
                 path: '/info/company',
                 name: 'companyInfo',
                 component: () => import('@/views/info/company'),
                 meta: {
                     titleC: 'China Company Info',
                     titleG: 'Global Company Info',
+                }
+            },
+            {
+                path: '/info/personal',
+                name: 'personalInfo',
+                component: () => import('@/views/info/personal'),
+                meta: {
+                    titleC: 'China Personal Information',
+                    titleG: 'Global Personal Information',
                 }
             },
             {

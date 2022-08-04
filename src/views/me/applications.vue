@@ -14,7 +14,7 @@
             <template v-if="jobsData.length>0">
               <div class="list-item" v-for="(item,i) in jobsData" :key="i">
                 <div class="list-item-l">
-                  <el-image class="list-item-l-img" :src="item.logo"></el-image>
+                  <el-avatar class="list-item-l-img" :src="item.logo"></el-avatar>
                 </div>
                 <div class="list-item-r">
                   <div class="list-item-r-t">
@@ -22,11 +22,11 @@
                       {{ item.job_title }}
                     </router-link>
                   </div>
-                  <div class="list-item-r-mid">
-                    {{item.job.business_name}}
+                  <div class="list-item-r-mid" v-if="item.job.company_name">
+                    {{item.job.company_name}}
                   </div>
                   <div class="list-item-r-b">
-                    <div class="list-item-r-b-l">
+                    <div class="list-item-r-b-l" v-if="item.job.job_location">
                       {{item.job.job_location}}
                     </div>
                     <div class="list-item-r-b-r">
@@ -382,7 +382,35 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+    .list-item-l-img{
+      width:50px;
+      height: 50px;
+    }
+  .list-item-r-t a{
+    font-size: 14px;
+  }
+  .list-item-r-b{
+    flex-direction: column;
+  }
+  .list-item-r-mid{
+    margin-top:10px;
+    font-size:12px;
 
+  }
+  .list-item-r-b-l{
+    width: 100%;
+    font-size:12px;
+
+  }
+  .list-item-r-b-r{
+    width: 100%;
+    margin-top:10px;
+    font-size:12px;
+
+  }
+  .list-pagination{
+    text-align: center;
+  }
 }
 
 

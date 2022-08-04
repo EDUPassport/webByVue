@@ -91,7 +91,7 @@
           <div class="deals-container">
             <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index">
               <div class="deals-item-bg"
-                   :style="item.user_info.header_photo !='' ? 'background-image:url('+ item.user_info.header_photo + ')' : ''">
+                   :style="item.company_profile_photo !='' ? 'background-image:url('+ item.company_profile_photo + ')' : ''">
                 <div class="deals-item-t">
                   <div class="deals-item-t-l">
                     <template v-if="item.company_logo">
@@ -470,8 +470,8 @@ export default {
 
       let identity = localStorage.getItem('identity')
 
-      if(identity != 3){
-        this.selectRole(3)
+      if(identity != 5){
+        return this.$message.error('Oops! Your current identity is not an vendor, please switch to Vendor')
       }
 
       self.$router.push({path:'/deals/offer',query:{}})
@@ -933,6 +933,15 @@ export default {
   }
   .articles-container{
     display:none;
+  }
+
+  .deals-container{
+    flex-direction: column;
+    padding:0;
+  }
+
+  .deals-item{
+    width:100%;
   }
 
 }

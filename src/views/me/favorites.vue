@@ -10,7 +10,7 @@
             <template v-if="favoriteData.length>0">
               <div class="list-item" v-for="(item,i) in favoriteData" :key="i">
                 <div class="list-item-l">
-                  <el-image class="list-item-l-img" :src="item.type_url"></el-image>
+                  <el-avatar class="list-item-l-img" :src="item.type_url"></el-avatar>
                 </div>
                 <div class="list-item-r">
                   <div class="list-item-r-t">
@@ -50,8 +50,8 @@
             <el-carousel height="220px" indicator-position="none" >
               <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataTop" :key="i">
                 <div class="xll-ads-l">
-                  <el-image class="xll-ads-l-img"
-                            :src="item.user_url !='' ? item.user_url : item.url"></el-image>
+                  <el-avatar class="xll-ads-l-img"
+                            :src="item.user_url !='' ? item.user_url : item.url"></el-avatar>
                 </div>
                 <div class="xll-ads-r">
                   <h4>Advertise with Us</h4>
@@ -376,7 +376,13 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-
+  .list-item{
+    height: 100px;
+  }
+  .list-item-l-img{
+    width:50px;
+    height: 50px;
+  }
 }
 
 

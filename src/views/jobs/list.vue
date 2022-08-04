@@ -729,8 +729,8 @@ export default {
 
       let identity = localStorage.getItem('identity')
 
-      if(identity != 2){
-        this.selectRole(2)
+      if(identity == 1){
+        return this.$message.error('Oops! Your current identity is an educator, please switch to Education Business')
       }
 
       self.$router.push({path:'/jobs/post',query:{version_time:self.versionTime}})

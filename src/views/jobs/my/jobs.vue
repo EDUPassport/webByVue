@@ -56,6 +56,13 @@
                     </view>
                   </div>
 
+                  <div class="jobs-list-item-b-m">
+                    <el-button class="jobs-list-item-b-m-btn" type="primary" round @click="turnApplications(item.id,item.unread_id)">
+                      Applications ( {{item.resume_count}} ) <span v-if="item.unread_status" class="read-star"></span>
+                    </el-button>
+                  </div>
+
+
                   <div class="jobs-list-item-b-r">
                     <view class="jobs-list-item-date">
                       <el-icon>
@@ -99,7 +106,7 @@
 <script>
 import {randomString} from "@/utils";
 import meSideMenu from "@/components/meSideMenu";
-import {MY_JOBS} from '@/api/api';
+import {MY_JOBS,SET_READ} from '@/api/api';
 
 export default {
   name: "jobs",
@@ -160,6 +167,27 @@ export default {
       })
 
     },
+    turnApplications(id,unreadId){
+      let data = {
+        id:unreadId,
+        identity:localStorage.getItem('identity'),
+        status:1,
+        token:localStorage.getItem('token')
+      }
+      SET_READ(data).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.$router.push({path:'/jobs/applications',query:{id:id}})
+        }else{
+          console.log('set read:'+res.msg)
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+
+    }
+
 
   }
 }
@@ -287,6 +315,30 @@ export default {
   margin-left: 10px;
 }
 
+.jobs-list-item-b-l{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 30%;
+}
+
+
+.jobs-list-item-b-r{
+  width:40%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.jobs-list-item-b-m{
+  width: 30%;
+  text-align: left;
+}
+.jobs-list-item-b-m-btn{
+  position: relative;
+}
+
 .jobs-list-item-work-exp {
   font-size: 12px;
   margin-left: 10px;
@@ -331,6 +383,15 @@ export default {
 
 .actived-2 {
   background-color: #FF2870;
+}
+.read-star{
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background-color: red;
+  top: 0;
+  right: 1px;
 }
 
 @media screen and (min-width: 1200px){

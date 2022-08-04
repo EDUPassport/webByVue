@@ -20,7 +20,7 @@ export const EMAIL_REGISTER = (params) => post('email/register', params)
 export const EMAIL_LOGIN = (params) => post('email/login', params)
 
 // 获取deals列表
-export const DEALS_LIST = (params) => post('deals/dealsList', params)
+export const DEALS_LIST = (params) => get('deals/dealsList', params)
 
 // 获取广告列表
 export const ADS_LIST = (params) => get('ad/list', params)
@@ -338,3 +338,9 @@ export const JOBS_COUNTRY_LIST = (params) => get('jobsCountryList', params)
 
 // job applications
 export const JOBS_APPLICATIONS = (params) => get('job/getJobResume',params)
+
+// user unread
+export const USER_UNREAD = (params) => get('user/unread',params)
+
+// set read
+export const SET_READ = (params) => post('user/setRead', params)

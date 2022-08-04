@@ -44,6 +44,7 @@
       <div class="account-info-b">
         <div class="account-info-photo">
           <el-avatar :size="120" :src="info.headimgurl !='' ? info.headimgurl : defaultAvatar"></el-avatar>
+          <el-button style="margin-top:10px;" type="warning" round  @click="forgotPassword()" >Reset Password</el-button>
         </div>
 
         <div class="account-info-tags">
@@ -144,6 +145,7 @@
     </div>
 
     <SwitchProfile :isShow="showSwitchProfileStatus" :identity="identity" @close="closeSwitchProfile" ></SwitchProfile>
+    <ForgotPassword :type="1" :email="email" :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
 
   </div>
 </template>
@@ -155,6 +157,8 @@ import {computed,ref} from "vue";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 import {randomString} from "@/utils";
+import ForgotPassword from '@/components/forgotPassword';
+
 export default {
   name: "accountInfo",
   props: {
@@ -222,6 +226,8 @@ export default {
 
       showSwitchProfileStatus.value = value
     }
+    const forgotDialogVisible = ref(false)
+
 
     return {
       identity,
@@ -231,18 +237,30 @@ export default {
       closeSwitchProfile,
       findJob,
       offerDeal,
-      postJob
+      postJob,
+      forgotDialogVisible
+
     }
 
   },
   components:{
-    SwitchProfile
+    SwitchProfile,
+    ForgotPassword
   },
   data() {
     return {
       defaultAvatar,
       accountInfo: {}
     }
+  },
+  methods:{
+    forgotPassword() {
+      this.forgotDialogVisible = true
+    },
+    closeForgotDialog() {
+      this.forgotDialogVisible = false
+    }
+
   }
 
 }
@@ -333,6 +351,13 @@ export default {
 .account-info-photo {
   width: 20%;
   text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding:10px;
+
 }
 
 .account-photo-img {

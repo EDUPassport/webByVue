@@ -149,7 +149,8 @@
         </div>
 
         <div class="apply-btn-container">
-          <el-button class="apply-btn" type="primary" round @click="applyJobs(detailData.id)">Apply Now!</el-button>
+          <el-button :loading="applyBtnLoading" class="apply-btn" type="primary" round
+                     @click="applyJobs(detailData.id)">Apply Now!</el-button>
         </div>
 
       </el-col>
@@ -210,8 +211,8 @@
           <div class="company-bio-label-underline"></div>
           <div class="company-bio-content">
             <div class="company-logo-container">
-              <el-image class="company-logo" v-if="detailData.company"
-                        :src="detailData.company.logo"></el-image>
+              <el-avatar class="company-logo" v-if="detailData.company"
+                        :src="detailData.company.logo"></el-avatar>
             </div>
             <div class="company-bio-text" v-if="detailData.company">
               {{ detailData.company.desc }}
@@ -229,7 +230,7 @@
           <div class="contact-label">Contact Person</div>
           <div class="contact-content">
             <div class="contact-l">
-              <el-image class="contact-profile-photo" :src="detailData.user_contact.headimgurl"></el-image>
+              <el-avatar class="contact-profile-photo" :src="detailData.user_contact.headimgurl"></el-avatar>
             </div>
             <div class="contact-r">
               <div class="contact-r-t">
@@ -250,7 +251,7 @@
           <div class="other-jobs-content">
             <div class="other-jobs-item" v-for="(item,index) in otherJobsData" :key="index">
               <div class="other-jobs-l">
-                <el-image class="other-jobs-logo" v-if="detailData.company" :src="detailData.company.logo"></el-image>
+                <el-avatar class="other-jobs-logo" v-if="detailData.company" :src="detailData.company.logo"></el-avatar>
               </div>
               <div class="other-jobs-r">
                 <div class="other-jobs-r-t">
@@ -309,7 +310,8 @@ export default {
       isFavoriteValue:0,
       versionTime:randomString(),
       showSocialShareExpandStatus:false,
-      workingHoursData:[]
+      workingHoursData:[],
+      applyBtnLoading:false
     }
   },
   components:{
@@ -437,7 +439,7 @@ export default {
 
     },
     applyJobs(id) {
-
+      this.applyBtnLoading = true;
       let identity = localStorage.getItem('identity')
       let token = localStorage.getItem('token')
       if (identity == 1) {
@@ -448,6 +450,7 @@ export default {
         APPLY_JOBS(params).then(res => {
           if (res.code == 200) {
             this.$message.success('Apply Success')
+            this.applyBtnLoading = false;
           }
         }).catch(err=>{
           console.log(err)
@@ -462,10 +465,13 @@ export default {
             }
           }
 
+          this.applyBtnLoading = false;
+
         })
 
       } else {
         this.$message.warning('Please switch to an educator profile to be able to apply')
+        this.applyBtnLoading = false;
       }
 
 

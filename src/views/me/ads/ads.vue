@@ -135,7 +135,7 @@ export default {
     pay(){
       this.$msgbox({
         title:"Notice",
-        message:"Payment is not currently supported, please go to the mini program to pay.",
+        message:"Oops! Our system is down at the moment. Don’t worry our Account Manager has been notified and will be in touch with you soon.",
         dangerouslyUseHTMLString:false,
         type:"warning",
         center:true,
@@ -147,6 +147,8 @@ export default {
           console.log(action)
           if(action==='confirm'){
             console.log('用户点击确定')
+            window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4','_blank')
+
           }
         }
 
