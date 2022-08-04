@@ -344,3 +344,6 @@ export const USER_UNREAD = (params) => get('user/unread',params)
 
 // set read
 export const SET_READ = (params) => post('user/setRead', params)
+
+// 获取报名【event】人员
+export const EVENT_APPLICATIONS = (params) => get('/home/getEventApplicants',params)

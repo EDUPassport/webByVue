@@ -146,8 +146,11 @@
                     Time: {{$filters.timeFormatEvent(item.start_time,item.end_time)}}
                   </div>
                   <div class="event-r-btn">
+                    <el-button class="event-r-btn-btn1" type="primary" round
+                               @click="turnDetail(item.id,2)"
+                    >Event Details</el-button>
                     <el-button class="event-r-btn-btn" type="default" round
-                               @click="turnDetail(item.id)"
+                               @click="turnDetail(item.id,1)"
                     >RSVP</el-button>
                   </div>
                 </div>
@@ -262,8 +265,8 @@ export default {
       })
 
     },
-    turnDetail(id){
-      this.$router.push({path:'/events/detail',query:{id:id}})
+    turnDetail(id,t){
+      this.$router.push({path:'/events/detail',query:{id:id,t:t}})
     }
   }
 }
@@ -530,11 +533,18 @@ export default {
 
 }
 
+.event-r-btn-btn1{
+  padding:0 70px 0 100px;
+  color:#ffffff;
+  font-weight: bold;
+}
+
 .event-r-btn-btn{
   background-color: #B1C452;
   padding:0 100px;
   color:#ffffff;
   font-weight: bold;
+  margin-top:4px;
 }
 
 .events-pagination{
