@@ -157,6 +157,21 @@
                 </el-upload>
               </el-form-item>
 
+              <el-form-item label="Background Image" prop="background_image">
+                <el-upload
+                    class="license-uploader"
+                    action=""
+                    :headers="uploadHeaders"
+                    :show-file-list="false"
+                    :http-request="backgroundHttpRequest"
+                    :before-upload="beforeBackgroundPhotoUpload"
+                >
+                  <el-image v-if="backgroundPhotoUrl" :src="backgroundPhotoUrl" class="license-avatar"></el-image>
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+
+
               <el-form-item label="Intro Video" prop="video_url">
                 <el-upload
                     class="intro-video-uploader"
@@ -244,6 +259,8 @@ export default {
       logoPhotoUrl:'',
       licensePhotoUrl:'',
       introVideoUrl:'',
+      backgroundPhotoUrl:'',
+
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       basicForm: {
@@ -433,6 +450,68 @@ export default {
 
     },
     beforeLicensePhotoUpload(file) {
+      this.uploadLoadingStatus = true;
+
+      const isLt2M = file.size / 1024 / 1024 < 20
+
+      if (!isLt2M) {
+        this.$message.error('Avatar picture size can not exceed 20MB')
+      }
+      return isLt2M
+    },
+    backgroundHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      new ImageCompressor(options.file,{
+        quality:0.6,
+        success(file) {
+          // console.log(file)
+          const formData = new FormData();
+
+          formData.append('token',localStorage.getItem('token'))
+          // console.log(file)
+          let isInChina = process.env.VUE_APP_CHINA
+          if(isInChina === 'yes'){
+            formData.append('file[]',file,file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.data[0]['file_url'];
+                self.uploadLoadingStatus = false;
+                self.backgroundPhotoUrl = myFileUrl
+                self.basicForm.background_image = myFileUrl
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+          if(isInChina === 'no'){
+            formData.append('file',file,file.name)
+            UPLOAD_BY_SERVICE(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.message.file_path;
+                self.uploadLoadingStatus = false;
+                self.backgroundPhotoUrl = myFileUrl
+                self.basicForm.background_image = myFileUrl
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
+
+    },
+    beforeBackgroundPhotoUpload(file) {
       this.uploadLoadingStatus = true;
 
       const isLt2M = file.size / 1024 / 1024 < 20

@@ -184,12 +184,15 @@
                    v-for="(item,i) in userMenuCompanyData"
                    :key="i"
                    @click="selectCompanyToUpdate(item.user_id,item.id)">
-                <template v-if="identity == 1">
-                  {{item.name}}
+                <template v-if="item">
+                  <template v-if="identity == 1 ">
+                    {{item.name}}
+                  </template>
+                  <template v-if="identity != 1 && item.company_name">
+                    {{item.company_name}}
+                  </template>
                 </template>
-                <template v-else>
-                  {{item.company_name}}
-                </template>
+
 
               </div>
 

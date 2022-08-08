@@ -151,6 +151,11 @@
                 <div class="recruiter-license-container" v-if="companyInfo.license">
                   <el-image class="recruiter-license" :src="companyInfo.license"></el-image>
                 </div>
+
+                <div class="recruiter-license-container" v-if="companyInfo.background_image">
+                  <el-image class="recruiter-license" :src="companyInfo.background_image"></el-image>
+                </div>
+
 <!--                <div class="recruiter-license-container" v-if="companyInfo.business_reg_img">-->
 <!--                  <el-image class="recruiter-license" :src="companyInfo.business_reg_img"></el-image>-->
 <!--                </div>-->

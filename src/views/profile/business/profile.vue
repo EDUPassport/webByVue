@@ -145,6 +145,9 @@
                 <div class="recruiter-license-container" v-if="companyInfo.license">
                   <el-image class="recruiter-license" :src="companyInfo.license"></el-image>
                 </div>
+                <div class="recruiter-license-container" v-if="companyInfo.background_image">
+                  <el-image class="recruiter-license" :src="companyInfo.background_image"></el-image>
+                </div>
                 <div class="recruiter-video-container" v-if="companyInfo.video_url">
                   <video class="recruiter-video" :src="companyInfo.video_url" controls></video>
                 </div>
@@ -246,6 +249,9 @@
                 <div class="recruiter-license-container" v-if="companyInfo.license">
                   <el-image class="recruiter-license" :src="companyInfo.license"></el-image>
                 </div>
+                <div class="recruiter-license-container" v-if="companyInfo.background_image">
+                  <el-image class="recruiter-license" :src="companyInfo.background_image"></el-image>
+                </div>
                 <div class="recruiter-license-container" v-if="companyInfo.business_reg_img">
                   <el-image class="recruiter-license" :src="companyInfo.business_reg_img"></el-image>
                 </div>
@@ -310,6 +316,9 @@
 
                 <div class="recruiter-license-container" v-if="companyInfo.license">
                   <el-image class="recruiter-license" :src="companyInfo.license"></el-image>
+                </div>
+                <div class="recruiter-license-container" v-if="companyInfo.background_image">
+                  <el-image class="recruiter-license" :src="companyInfo.background_image"></el-image>
                 </div>
                 <div class="recruiter-license-container" v-if="companyInfo.business_reg_img">
                   <el-image class="recruiter-license" :src="companyInfo.business_reg_img"></el-image>
@@ -1361,7 +1370,6 @@ export default {
   text-align: left;
   background-color: #ffffff;
   border-radius: 20px;
-//background-color: aliceblue;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -1408,8 +1416,6 @@ export default {
 .basic-info-content {
   margin-top: 10px;
   border-radius:10px;
-//background-color: aliceblue;
-//padding:20px;
 }
 
 .basic-info-item {
