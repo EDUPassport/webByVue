@@ -36,8 +36,8 @@
               <el-form-item label="Email" prop="email">
                 <el-input v-model="basicForm.email" placeholder="Email"></el-input>
               </el-form-item>
-              <el-form-item label="Address" prop="address">
-                <el-input v-model="basicForm.address" placeholder="Address"></el-input>
+              <el-form-item label="Current Address" prop="address">
+                <el-input v-model="basicForm.address" placeholder="Current Address"></el-input>
               </el-form-item>
               <el-form-item label="Job Title" prop="job_title">
                 <el-input v-model="basicForm.job_title" placeholder="Job Title"></el-input>
@@ -46,7 +46,7 @@
                 <el-input type="textarea" v-model="basicForm.bio" placeholder="Introduction"></el-input>
               </el-form-item>
 
-              <el-form-item label="Nationality">
+              <el-form-item label="Nationality" prop="nationality">
                 <el-select v-model="basicForm.nationality"
                            filterable
                            placeholder="Select your nationality">
@@ -162,18 +162,18 @@ export default {
             trigger: 'blur',
           },
         ],
+        nationality: [
+          {
+            required: true,
+            message: 'Please select nationality',
+            trigger: 'change',
+          },
+        ],
         email: [
           {
             type: 'email',
             required: true,
             message: 'Please input email',
-            trigger: 'blur',
-          },
-        ],
-        job_title: [
-          {
-            required: true,
-            message: 'Please input job title',
             trigger: 'blur',
           },
         ],
@@ -308,9 +308,12 @@ export default {
         // console.log(res)
         if(res.code === 200){
           let pcAllData = res.message.pc;
-          let sData = pcAllData.filter(item=>item.identity == identity)
-          this.$store.commit('menuData', sData)
-          localStorage.setItem('menuData',JSON.stringify(sData))
+          if(pcAllData){
+            let sData = pcAllData.filter(item=>item.identity == identity)
+            this.$store.commit('menuData', sData)
+            localStorage.setItem('menuData',JSON.stringify(sData))
+          }
+
         }
 
       }).catch(err=>{

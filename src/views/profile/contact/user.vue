@@ -99,35 +99,58 @@
               </el-form-item>
 
               <el-form-item label="Location">
-                <el-select v-model="countryObj"
-                           @change="countryChange"
-                           value-key="id"
-                           filterable
-                           placeholder="Select Country">
-                  <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                             :value="item"></el-option>
-                </el-select>
 
-                <template v-if="provinceOptions.length>0">
-                  <el-select v-model="provinceObj"
-                             value-key="id"
-                             filterable
-                             @change="provinceChange"
-                             placeholder="Select Province">
-                    <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                               :value="item"></el-option>
-                  </el-select>
-                </template>
-                <template v-if="cityOptions.length>0">
-                  <el-select v-model="cityObj"
-                             value-key="id"
-                             filterable
-                             @change="cityChange"
-                             placeholder="Select City">
-                    <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                               :value="item"></el-option>
-                  </el-select>
-                </template>
+                <div class="xll-location-container">
+                  <div class="xll-location-l">
+                    <template v-if="haveLocationStatus">
+                      {{ $filters.countryInfoFormat(countryInfo) }}
+                    </template>
+
+                    <template v-else>
+                      <el-select v-model="countryObj"
+                                 @change="countryChange"
+                                 value-key="id"
+                                 filterable
+                                 placeholder="Select Country">
+                        <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                   :value="item"></el-option>
+                      </el-select>
+
+                      <template v-if="provinceOptions.length>0">
+                        <el-select v-model="provinceObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="provinceChange"
+                                   placeholder="Select Province">
+                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
+                      <template v-if="cityOptions.length>0">
+                        <el-select v-model="cityObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="cityChange"
+                                   placeholder="Select City">
+                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
+                    </template>
+                  </div>
+
+                  <div class="xll-location-r" >
+                    <el-button plain round v-if="haveLocationStatus"
+                               @click="changeEditLocation()">
+                        Edit
+                    </el-button>
+                    <el-button plain round v-if="showLocationCancelStatus"
+                               @click="changeCancelLocation()">
+                      Cancel
+                    </el-button>
+                  </div>
+
+                </div>
 
               </el-form-item>
 
@@ -204,15 +227,23 @@ export default {
       birthday:'',
       area_code:'+86'
     })
-    const checkContactPhone=(rule,value,callback)=>{
-      if(!value){
-        return callback(new Error('Please input  phone'))
-      }
-      if(!basicForm.area_code){
-        return callback(new Error('Please input area code'))
-      }
-      callback()
-    }
+
+    // const checkContactPhone=(rule,value,callback)=>{
+    //   if(!value){
+    //     return callback(new Error('Please input  phone'))
+    //   }
+    //   if(!basicForm.area_code){
+    //     return callback(new Error('Please input area code'))
+    //   }
+    //   callback()
+    // }
+    // phone: [
+    //   {
+    //     required: false,
+    //     validator:checkContactPhone,
+    //     trigger: 'blur',
+    //   },
+    // ],
 
     const basicRules = reactive({
       first_name: [
@@ -236,13 +267,7 @@ export default {
           trigger: 'change',
         }
       ],
-      phone: [
-        {
-          required: true,
-          validator:checkContactPhone,
-          trigger: 'blur',
-        },
-      ],
+
       email: [
         {
           required: true,
@@ -284,7 +309,10 @@ export default {
   data() {
     return {
       uploadLoadingStatus:false,
-
+      userContact:{},
+      countryInfo:'',
+      haveLocationStatus:false,
+      showLocationCancelStatus:false,
       sideMenuStatus:true,
       sexOptions: [
         {
@@ -387,6 +415,43 @@ export default {
 
   },
   methods: {
+
+    changeEditLocation(){
+      this.haveLocationStatus = false;
+      this.showLocationCancelStatus = true;
+
+      this.countryName = '';
+      this.countryNameCn  = '';
+
+      this.provinceName = '';
+      this.provinceNameCn = '';
+
+      this.cityName = '';
+      this.cityNameCn = '';
+
+    },
+    changeCancelLocation(){
+      this.haveLocationStatus = true;
+      this.showLocationCancelStatus = false;
+
+      let userContact = this.userContact;
+
+      if(userContact.country_info){
+        let countryInfoArr = JSON.parse(userContact.country_info)
+        this.countryName = countryInfoArr.country_name_en;
+        this.countryNameCn  = countryInfoArr.country_name_cn;
+        this.provinceName = countryInfoArr.province_name_en;
+        this.provinceNameCn = countryInfoArr.province_name_cn;
+        this.cityName = countryInfoArr.city_name_en;
+        this.cityNameCn = countryInfoArr.city_name_cn;
+        this.districtName = countryInfoArr.district_name_en;
+        this.districtNameCn = countryInfoArr.district_name_cn;
+
+        this.basicForm.country_info = userContact.country_info;
+
+      }
+
+    },
     cancelUploadProfile(){
       this.uploadLoadingStatus = false;
     },
@@ -401,7 +466,7 @@ export default {
         console.log(res)
         if(res.code == 200){
           let userContact = res.message.user_contact;
-
+          this.userContact = userContact;
           if(userContact){
 
             this.basicForm.first_name = userContact.first_name;
@@ -467,7 +532,7 @@ export default {
         // console.log(res)
         if(res.code == 200){
           let userContact = res.message.user_contact;
-
+          this.userContact = userContact;
           if(userContact){
 
             this.basicForm.first_name = userContact.first_name;
@@ -520,7 +585,12 @@ export default {
                   this.cityNameCn = countryInfoArr.city_name_cn;
                   this.districtName = countryInfoArr.district_name_en;
                   this.districtNameCn = countryInfoArr.district_name_cn;
+
               this.basicForm.country_info = userContact.country_info;
+
+              this.countryInfo = userContact.country_info;
+              this.haveLocationStatus = true;
+
             }
 
           }
@@ -622,7 +692,7 @@ export default {
 
               if(i == 1){
                 if(action == 'edit'){
-                  this.$router.push('/educator/profile')
+                  this.$router.push('/overview?identity='+i)
                 }else{
                   let strObj = {
                     i:i,
@@ -636,7 +706,7 @@ export default {
 
               if(i == 2 || i == 3 || i == 4){
                 if(action == 'edit'){
-                  this.$router.push('/business/profile')
+                  this.$router.push('/overview?identity='+i)
                 }else{
                   let strObj = {
                     i:i,
@@ -651,7 +721,7 @@ export default {
 
               if(i == 5){
                 if(action == 'edit'){
-                  this.$router.push('/vendor/profile')
+                  this.$router.push('/overview?identity='+i)
                 }else{
                   let strObj = {
                     i:i,
@@ -947,7 +1017,6 @@ export default {
   display: block;
 }
 
-
 .contact-phone-container{
   display: flex;
   flex-direction: row;
@@ -969,6 +1038,21 @@ export default {
 
 .submit-btn{
   width:40%;
+}
+
+.xll-location-container{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content: flex-start;
+
+}
+.xll-location-l{
+
+}
+
+.xll-location-r{
+  margin-left:20px;
 }
 
 @media screen and (min-width: 1200px){

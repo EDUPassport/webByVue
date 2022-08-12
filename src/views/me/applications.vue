@@ -8,7 +8,10 @@
         <el-col class="list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
           <div class="list-container" >
             <div class="list-label">
-              My Job Applications
+              <div class="list-label-l">My Job Applications</div>
+              <div class="list-label-r">
+                <el-button type="primary" @click="turnJobsList()">Checkout these Jobs</el-button>
+              </div>
             </div>
             <div class="list-label-underline"></div>
             <template v-if="jobsData.length>0">
@@ -40,7 +43,7 @@
             </template>
             <template v-else>
               <div class="empty-tips">
-                No Job Applications yet.
+                Oops! You have no job applications at this time.
               </div>
             </template>
           </div>
@@ -107,6 +110,9 @@ export default {
     this.getAdsList()
   },
   methods: {
+    turnJobsList(){
+      this.$router.push({path:'/jobs',query:{}})
+    },
     turnBanner(link){
       console.log(link)
       if (link != '') {
@@ -218,10 +224,19 @@ export default {
   border-radius: 10px;
 }
 .list-label{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+
+}
+.list-label-l{
   font-size: 22px;
   font-weight: bold;
   text-align: left;
 }
+
 
 .list-label-underline{
   width: 80px;
@@ -305,6 +320,7 @@ export default {
 
 .list-pagination {
   margin-top: 20px;
+  text-align:center;
 }
 
 .ads-container {
@@ -343,7 +359,7 @@ export default {
   height: 100%;
 }
 .xll-ads-l-img{
-//width: 100%;
+
   height: 100%;
   border-radius:10px;
   box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);

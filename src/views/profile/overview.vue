@@ -50,7 +50,7 @@
                     <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
                   </div>
                   <div class="dashboard-item-r">
-                    <router-link to="/jobs">Job Posts</router-link>
+                    <router-link to="/jobs">My Jobs</router-link>
                   </div>
                 </div>
                 <div class="dashboard-item events-bg" @click="myEventsHref()">
@@ -107,10 +107,64 @@
                        :level="accountInfoLevel" :vip-due-time="accountInfoVipDueTime"
                        :category-str="accountInfoCategoryStr"
                        :identityActionStatus="true"
+                       :profilePercentage="profilePercentage"
           ></accountInfo>
 
+          <div class="basic-info-bg">
+            <div class="basic-info-container">
+              <div class="basic-info-t">
+                <div class="basic-info-label">
+                  <h4>General Private Information (Seen only by you) </h4>
+                  <div class="profile-underline-1"></div>
+                </div>
+                <div class="basic-info-edit" @click="editBasicInfo()">
+                  <el-icon :size="18">
+                    <edit/>
+                  </el-icon>
+                </div>
+              </div>
 
-          <div class="admin-container" v-if="isThirdCompanyStatus != 1">
+              <div class="basic-info-content">
+
+                <div class="basic-info-item">
+                  <div class="basic-info-item-l">First & Last Name:</div>
+                  <div class="basic-info-item-r">{{ userContact.first_name }} {{ userContact.last_name }}</div>
+                </div>
+
+                <div class="basic-info-item" v-if="userContact.sex">
+                  <div class="basic-info-item-l">Gender:</div>
+                  <div class="basic-info-item-r">
+                    <template v-if="userContact.sex == 1">Male</template>
+                    <template v-if="userContact.sex == 2">Female</template>
+                    <template v-if="userContact.sex == 3">Undisclosed</template>
+                  </div>
+                </div>
+                <div class="basic-info-item" v-if="userContact.phone">
+                  <div class="basic-info-item-l">Phone #:</div>
+                  <div class="basic-info-item-r">{{ userContact.phone }}</div>
+                </div>
+
+                <div class="basic-info-item" v-if="userContact.email">
+                  <div class="basic-info-item-l">Email: </div>
+                  <div class="basic-info-item-r">{{ userContact.email }}</div>
+                </div>
+
+                <div class="basic-info-item" v-if="userContact.birthday">
+                  <div class="basic-info-item-l">Birthdate:</div>
+                  <div class="basic-info-item-r">{{ userContact.birthday }}</div>
+                </div>
+
+                <div class="basic-info-item" v-if="userContact.country_info">
+                  <div class="basic-info-item-l">Location:</div>
+                  <div class="basic-info-item-r">{{ $filters.countryInfoFormat(userContact.country_info)  }}</div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="admin-container" v-if="isThirdCompanyStatus != 1 && identity != 1">
             <h3>Account Administrators</h3>
             <div class="admin-content-container">
               <h4>Contributors</h4>
@@ -222,6 +276,7 @@ import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
 import {onBeforeRouteUpdate} from "vue-router";
 import {computed, ref} from "vue";
+import {encode} from "js-base64";
 
 export default {
   name: "index",
@@ -574,6 +629,15 @@ export default {
       })
 
     },
+    editBasicInfo() {
+      let strObj = {
+        i: this.identity,
+        action:'edit'
+      }
+      let str = encode(JSON.stringify(strObj))
+
+      this.$router.push({path:'/profile/contact/user',query:{s:str}})
+    }
 
   }
 }
@@ -895,6 +959,84 @@ export default {
   background-color: #0AA0A8;
   color: #FFFFFF;
 }
+
+.basic-info-bg{
+  padding:10px 20px;
+  margin-top: 20px;
+}
+
+.basic-info-container {
+
+  padding: 20px;
+  text-align: left;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.basic-info-t {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.basic-info-label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.basic-info-edit {
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.basic-info-edit:hover {
+  color: #00b3d2;
+}
+
+.basic-info-content {
+  margin-top: 10px;
+  border-radius:10px;
+}
+
+.basic-info-item {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  border-bottom:1px solid #FFFFFF;
+}
+
+.basic-info-item-l{
+
+  width:20%;
+  text-align: left;
+  background-color: #f4f5f6;
+  padding:10px 0 10px 20px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  line-height: 24px;
+  min-height:24px;
+  font-size: 14px;
+  color:#333333;
+}
+
+.basic-info-item-r{
+  font-size:14px;
+  width:80%;
+  text-align: left;
+  background-color: #eeeeee;
+  padding:10px;
+
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  line-height: 24px;
+  min-height:24px;
+}
+
+
 
 @media screen and  (min-width:1200px) {
   .profile-container{

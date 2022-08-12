@@ -114,41 +114,74 @@ app.use(VueSocialSharing)
 app.config.globalProperties.$store = store
 app.config.globalProperties.$filters = {
     newsDateFormat(value){
-        let eParse = new Date(value)
-        // console.log(eParse)
-        return ymdFormat(eParse,'en-US')
+        if(value){
+            let eParse = new Date(value.replace(/-/g,"/"))
+            return ymdFormat(eParse,'en-US')
+        }
     },
     ymdFormatTimestamp(value){
         return ymdFormatTimestamp(value,'en-US')
     },
     howLongFormat(value){
-        let eParse = Date.parse(value) / 1000
-        return howLong(eParse,'en-US')
+        if(value){
+            let eParse = Date.parse(value.replace(/-/g,"/")) / 1000
+            return howLong(eParse,'en-US')
+        }
     },
     ymdFormatEvent(timeStr){
         let monthArr = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Spt.", "Oct.", "Nov.", "Dec."];
 
-        let time = new Date(timeStr)
-        let year = time.getFullYear();
-        let month = monthArr[time.getMonth()];
-        let day = time.getDate();
+        if(timeStr){
+            let time = new Date(timeStr.replace(/-/g,"/"))
+            let year = time.getFullYear();
+            let month = monthArr[time.getMonth()];
+            let day = time.getDate();
 
-        return  month + ' ' + day + ', ' + year;
+            return  month + ' ' + day + ', ' + year;
+        }
     },
     timeFormatEvent(startTimeStr,endTimeStr){
 
-        let startTime =  new Date(startTimeStr);
-        let endTime =  new Date(endTimeStr);
+        if(startTimeStr && endTimeStr){
+            let startTime =  new Date(startTimeStr.replace(/-/g,"/"));
+            let endTime =  new Date(endTimeStr.replace(/-/g,"/"));
 
-        let startHourTag = startTime.getHours()>11 ? 'pm' : 'am';
-        let startHour = startTime.getHours() > 12 ? startTime.getHours()-12 : startTime.getHours();
-        let startMin = startTime.getMinutes() < 10 ? "0"+startTime.getMinutes() : startTime.getMinutes();
+            let startHourTag = startTime.getHours()>11 ? 'pm' : 'am';
+            let startHour = startTime.getHours() > 12 ? startTime.getHours()-12 : startTime.getHours();
+            let startMin = startTime.getMinutes() < 10 ? "0"+startTime.getMinutes() : startTime.getMinutes();
 
-        let endHourTag = endTime.getHours()>11 ? 'pm' : 'am';
-        let endHour = endTime.getHours() > 12 ? endTime.getHours()-12 : endTime.getHours();
-        let endMin = endTime.getMinutes() < 10 ? "0"+endTime.getMinutes() : endTime.getMinutes();
+            let endHourTag = endTime.getHours()>11 ? 'pm' : 'am';
+            let endHour = endTime.getHours() > 12 ? endTime.getHours()-12 : endTime.getHours();
+            let endMin = endTime.getMinutes() < 10 ? "0"+endTime.getMinutes() : endTime.getMinutes();
 
-        return  startHour+':'+startMin + '' + startHourTag + ' - '+ endHour+':'+endMin+''+endHourTag;
+            return  startHour+':'+startMin + '' + startHourTag + ' - '+ endHour+':'+endMin+''+endHourTag;
+        }
+    },
+    compareTimeWithCurrentTime(time){
+        let timeStr = time.replace(/-/g,"/")
+
+        let myDate = new Date();
+        let year = myDate.getFullYear()
+        let month = myDate.getMonth()  + 1
+        let day = myDate.getDate()
+        let mTime = year + '-' + month + '-' + day;
+        let mDate = new Date(mTime)
+        let aDate = new Date(timeStr)
+
+        return aDate.getTime() < mDate.getTime();
+
+    },
+    doRepAdvance(s){
+        if(s){
+            let str=s.replace(/(\n)/g, " ");
+            str=str.replace(/(\t)/g, " ");
+            str=str.replace(/(\r)/g, " ");
+            str=str.replace(/<\/?[^>]*>/g, " ");
+            // str=str.replace(/\s*/g, "");
+            str=str.replace(/<\/?.+?\/?>/g, "");
+            return str;
+        }
+
     },
     countryInfoFormat(value){
         // console.log(value)

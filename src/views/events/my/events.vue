@@ -12,9 +12,13 @@
             <div class="deals-list-t">
               <div class="deals-list-label">My Events</div>
               <div class="deals-list-t-r">
+                <el-button class="post-event-btn" type="primary" round @click="turnPostEvent()">
+                  Post an Event
+                </el-button>
                 <el-select v-model="categoryId"
                            clearable
                            @change="getMyEvents(eventPage,eventLimit)"
+                           style="margin-left: 20px;"
                            class="m-2" placeholder="Select" size="large">
                   <el-option
                       v-for="item in categoryOptions"
@@ -269,6 +273,9 @@ export default {
     },
     turnDetail(id,t){
       this.$router.push({path:'/events/detail',query:{id:id,t:t}})
+    },
+    turnPostEvent(){
+      this.$router.push({path:'/events/post',query:{}})
     }
 
   }

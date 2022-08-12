@@ -149,7 +149,7 @@
                     <div class="featured-jobs-b-r">
                       <el-icon>
                         <Calendar/>
-                      </el-icon> &nbsp;
+                      </el-icon>
                       {{ $filters.howLongFormat(item.refresh_time) }}
                     </div>
 

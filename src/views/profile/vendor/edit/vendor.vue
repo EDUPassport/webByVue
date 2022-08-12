@@ -92,36 +92,60 @@
 
               <el-form-item label="Location">
 
-                <el-select v-model="countryObj"
-                           @change="countryChange"
-                           value-key="id"
-                           filterable
-                           placeholder="Select Country">
-                  <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                             :value="item"></el-option>
-                </el-select>
+                <div class="xll-location-container">
+                  <div class="xll-location-l">
+                    <template v-if="haveLocationStatus">
+                      {{ $filters.countryInfoFormat(countryInfo) }}
+                    </template>
 
-                <template v-if="provinceOptions.length>0">
-                  <el-select v-model="provinceObj"
-                             value-key="id"
-                             filterable
-                             @change="provinceChange"
-                             placeholder="Select Province">
-                    <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                               :value="item"></el-option>
-                  </el-select>
-                </template>
-                <template v-if="cityOptions.length>0">
-                  <el-select v-model="cityObj"
-                             value-key="id"
-                             filterable
-                             @change="cityChange"
-                             placeholder="Select City">
-                    <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                               :value="item"></el-option>
-                  </el-select>
-                </template>
+                    <template v-else>
+                      <el-select v-model="countryObj"
+                                 @change="countryChange"
+                                 value-key="id"
+                                 filterable
+                                 placeholder="Select Country">
+                        <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                   :value="item"></el-option>
+                      </el-select>
+
+                      <template v-if="provinceOptions.length>0">
+                        <el-select v-model="provinceObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="provinceChange"
+                                   placeholder="Select Province">
+                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
+                      <template v-if="cityOptions.length>0">
+                        <el-select v-model="cityObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="cityChange"
+                                   placeholder="Select City">
+                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
+                    </template>
+                  </div>
+
+                  <div class="xll-location-r" >
+                    <el-button plain round v-if="haveLocationStatus"
+                               @click="changeEditLocation()">
+                      Edit
+                    </el-button>
+                    <el-button plain round v-if="showLocationCancelStatus"
+                               @click="changeCancelLocation()">
+                      Cancel
+                    </el-button>
+                  </div>
+
+                </div>
+
               </el-form-item>
+
               <el-form-item label="Add Location Pin">
                 <div class="map-container">
                   <div id="mapContainer" class="basemap"></div>
@@ -228,6 +252,10 @@ export default {
   },
   data() {
     return {
+      companyInfo:{},
+      countryInfo:'',
+      haveLocationStatus:false,
+      showLocationCancelStatus:false,
       uploadLoadingStatus:false,
       sideMenuStatus:true,
       submitLoadingValue:false,
@@ -352,7 +380,41 @@ export default {
 
   },
   methods: {
+    changeEditLocation(){
+      this.haveLocationStatus = false;
+      this.showLocationCancelStatus = true;
 
+      this.countryName = '';
+      this.countryNameCn  = '';
+
+      this.provinceName = '';
+      this.provinceNameCn = '';
+
+      this.cityName = '';
+      this.cityNameCn = '';
+
+
+    },
+    changeCancelLocation(){
+      this.haveLocationStatus = true;
+      this.showLocationCancelStatus = false;
+
+      let companyInfo = this.companyInfo;
+
+      if(companyInfo.country_info){
+        let countryInfoArr = JSON.parse(companyInfo.country_info)
+        this.countryName = countryInfoArr.country_name_en;
+        this.countryNameCn  = countryInfoArr.country_name_cn;
+        this.provinceName = countryInfoArr.province_name_en;
+        this.provinceNameCn = countryInfoArr.province_name_cn;
+        this.cityName = countryInfoArr.city_name_en;
+        this.cityNameCn = countryInfoArr.city_name_cn;
+
+        this.basicForm.country_info = companyInfo.country_info;
+
+      }
+
+    },
     async getSubIdentityList(){
       let params = {
         pid: 5,
@@ -740,9 +802,12 @@ export default {
         // console.log(res)
         if(res.code === 200){
           let pcAllData = res.message.pc;
-          let sData = pcAllData.filter(item=>item.identity == identity)
-          this.$store.commit('menuData', sData)
-          localStorage.setItem('menuData',JSON.stringify(sData))
+          if(pcAllData){
+            let sData = pcAllData.filter(item=>item.identity == identity)
+            this.$store.commit('menuData', sData)
+            localStorage.setItem('menuData',JSON.stringify(sData))
+          }
+
         }
 
       }).catch(err=>{
@@ -925,6 +990,21 @@ export default {
           }
           if(companyInfo.country_info){
             this.basicForm.country_info = companyInfo.country_info;
+
+            let countryInfoArr = JSON.parse(companyInfo.country_info)
+
+            this.countryName = countryInfoArr.country_name_en;
+            this.countryNameCn  = countryInfoArr.country_name_cn;
+            this.provinceName = countryInfoArr.province_name_en;
+            this.provinceNameCn = countryInfoArr.province_name_cn;
+            this.cityName = countryInfoArr.city_name_en;
+            this.cityNameCn = countryInfoArr.city_name_cn;
+
+            this.basicForm.country_info = companyInfo.country_info;
+            this.countryInfo = companyInfo.country_info;
+
+            this.haveLocationStatus = true;
+
           }
 
           if(companyInfo.country_id){
@@ -1032,6 +1112,19 @@ export default {
           }
           if(companyInfo.country_info){
             this.basicForm.country_info = companyInfo.country_info;
+            let countryInfoArr = JSON.parse(companyInfo.country_info)
+
+            this.countryName = countryInfoArr.country_name_en;
+            this.countryNameCn  = countryInfoArr.country_name_cn;
+            this.provinceName = countryInfoArr.province_name_en;
+            this.provinceNameCn = countryInfoArr.province_name_cn;
+            this.cityName = countryInfoArr.city_name_en;
+            this.cityNameCn = countryInfoArr.city_name_cn;
+
+            this.basicForm.country_info = companyInfo.country_info;
+            this.countryInfo = companyInfo.country_info;
+
+            this.haveLocationStatus = true;
           }
 
           if(companyInfo.country_id){
@@ -1332,6 +1425,22 @@ export default {
 .submit-btn{
   width:40%;
 }
+
+.xll-location-container{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content: flex-start;
+
+}
+.xll-location-l{
+
+}
+
+.xll-location-r{
+  margin-left:20px;
+}
+
 
 @media screen and (min-width:1200px) {
   .basic-container{

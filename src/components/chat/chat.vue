@@ -440,21 +440,19 @@ export default {
 
 .chat-container{
   position: fixed;
-  bottom: 80px;
-  right: 10px;
+  bottom: 110px;
+  right: 30px;
   z-index: 990;
 
 }
 
 .chat-icon-container{
-  //background-color: #27799F;
   border:none;
   position: relative;
   cursor: pointer;
   display:flex;
   align-items:center;
   justify-content: center;
-  //box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
 }
 
 .xll-chat-icon-container{
@@ -481,14 +479,12 @@ export default {
 
 .chat-content-container{
   position: fixed;
-  bottom: 138px;
-  right: 10px;
+  bottom: 165px;
+  right: 30px;
   z-index: 990;
 
   background-color: #FFFFFF;
-  //border-top-left-radius: 10px;
-  //border-top-right-radius: 10px;
-  //border-bottom-left-radius: 10px;
+
   border-radius:10px;
   border: 1px solid #EEEEEE;
 

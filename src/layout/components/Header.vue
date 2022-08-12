@@ -103,12 +103,13 @@
                                                 {{item.name}}
                                               </template>
                                               <template v-else>
-                                                Default ID : {{item.id}}
+<!--                                                Default ID : {{item.id}}-->
+                                                Click to Update Profile
                                               </template>
                                             </el-dropdown-item>
                                           </div>
 
-                                          <div class="xll-sub-dropdown">
+                                          <div class="xll-sub-dropdown" v-else>
                                             <el-dropdown-item class="xll-dropdown-item" @click="createRole(1)">
                                               <div class="xll-add-icon-container" >
                                                 <span>Add</span>
@@ -159,7 +160,8 @@
                                                 {{item.company_name}}
                                               </template>
                                               <template v-else>
-                                                Default ID: {{item.id}}
+<!--                                                Default ID: {{item.id}}-->
+                                                Click to Update Profile
                                               </template>
                                             </el-dropdown-item>
                                           </div>
@@ -174,7 +176,8 @@
                                                 {{item.company_name}}
                                               </template>
                                               <template v-else>
-                                                Company ID: {{item.id}}
+<!--                                                Company ID: {{item.id}}-->
+                                                Click to Update Profile
                                               </template>
                                             </el-dropdown-item>
                                           </div>
@@ -188,7 +191,8 @@
                                                 {{item.company_name}}
                                               </template>
                                               <template v-else>
-                                                Default ID: {{item.id}}
+<!--                                                Default ID: {{item.id}}-->
+                                                Click to Update Profile
                                               </template>
                                             </el-dropdown-item>
                                           </div>
@@ -242,7 +246,8 @@
                                                 {{item.company_name}}
                                               </template>
                                               <template v-else>
-                                                Default ID: {{item.id}}
+<!--                                                Default ID: {{item.id}}-->
+                                                Click to Update Profile
                                               </template>
                                             </el-dropdown-item>
                                           </template>

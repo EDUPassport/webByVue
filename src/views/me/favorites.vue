@@ -30,7 +30,7 @@
             </template>
             <template v-else>
               <div class="empty-tips">
-                You have no favorites yet.
+                You have no favorites yet. <br>
                 Click on the heartshapes on any job, event or deal to favorite it.
               </div>
             </template>
@@ -305,8 +305,9 @@ export default {
 }
 
 .empty-tips{
-  font-size: 14px;
-  color: #808080;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000000;
   text-align: center;
 }
 
@@ -336,8 +337,9 @@ export default {
   width:60%;
   height: 100%;
 }
-.xll-ads-l-img{
 
+.xll-ads-l-img{
+  width:100%;
   height: 100%;
   border-radius:10px;
   box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);

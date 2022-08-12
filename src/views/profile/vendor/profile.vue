@@ -10,60 +10,16 @@
           <accountInfo :info="userContact" :phone="userContact.phone" :email="userContact.email"
                        :level="companyInfo.vip_level" :vip-due-time="companyInfo.vip_due_time"
                        :category-str="companyInfo.category_name_en  "
+                       :identityActionStatus="false"
                        :percentage-status="true" :profile-percentage="userContact.is_vendor"
           ></accountInfo>
 
           <div class="educator-r-container">
-            <div class="basic-info-container">
+
+            <div class="basic-info-container ">
               <div class="basic-info-t">
                 <div class="basic-info-label">
-                  <h4>Your Basic Info</h4>
-                  <div class="profile-underline-1"></div>
-                </div>
-                <div class="basic-info-edit" @click="editBasicInfo()">
-                  <el-icon :size="18">
-                    <edit/>
-                  </el-icon>
-                </div>
-              </div>
-
-              <div class="basic-info-content">
-
-                <div class="basic-info-item">
-                  <div class="basic-info-item-l">First & Last Name:</div>
-                  <div class="basic-info-item-r">{{ userContact.first_name }} {{ userContact.last_name }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.sex">
-                  <div class="basic-info-item-l">Gender:</div>
-                  <div class="basic-info-item-r">
-                    <template v-if="userContact.sex == 1">Male</template>
-                    <template v-if="userContact.sex == 2">Female</template>
-                    <template v-if="userContact.sex == 3">Undisclosed</template>
-                  </div>
-                </div>
-                <div class="basic-info-item" v-if="userContact.phone">
-                  <div class="basic-info-item-l">Phone #:</div>
-                  <div class="basic-info-item-r">{{ userContact.phone }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.email">
-                  <div class="basic-info-item-l">Email: </div>
-                  <div class="basic-info-item-r">{{ userContact.email }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.birthday">
-                  <div class="basic-info-item-l">Birthdate:</div>
-                  <div class="basic-info-item-r">{{ userContact.birthday }}</div>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="basic-info-container basic-info-margin">
-              <div class="basic-info-t">
-                <div class="basic-info-label">
-                  <h4>Company Contact Info</h4>
+                  <h4>Contact Person's Information</h4>
                   <div class="profile-underline-1"></div>
                 </div>
                 <div class="basic-info-edit" @click="editCompanyContactInfo()">
@@ -152,7 +108,8 @@
                   <el-image class="recruiter-license" :src="companyInfo.license"></el-image>
                 </div>
 
-                <div class="recruiter-license-container" v-if="companyInfo.background_image">
+                <div class="recruiter-license-container"
+                     v-if="companyInfo.background_image && companyInfo.background_image !='0'">
                   <el-image class="recruiter-license" :src="companyInfo.background_image"></el-image>
                 </div>
 
@@ -167,7 +124,7 @@
 
             <div class="media-container">
               <div class="media-label">
-                <div class="media-label-text">Marketing Photos</div>
+                <div class="media-label-text">Marketing Photos (Not more than 20MB)</div>
                 <div class="profile-underline-1"></div>
               </div>
 
@@ -184,7 +141,7 @@
                   <div class="account-images-t-edit"
                        v-if="editAccountImageStatus"
                        @click="uploadAccountImages()">
-                    Upload
+                    Save
                   </div>
 
                 </div>

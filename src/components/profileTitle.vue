@@ -15,16 +15,7 @@
 <script>
 export default {
   name: "profileTitle",
-  props:{
-    i:{
-      type:Number,
-      default:0
-    },
-    action:{
-      type:String,
-      default:''
-    }
-  }
+  props:['i','action']
 }
 </script>
 

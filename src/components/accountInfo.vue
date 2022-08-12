@@ -13,7 +13,9 @@
             </el-progress>
 
             <div class="percentage-progress-post-job">
-              <span>Post Job</span>
+              <span v-if="identity == 1">Apply for a job</span>
+              <span v-if="identity == 2 || identity == 3 || identity ==4">Post a Job</span>
+              <span v-if="identity == 5">Offer a Deal</span>
             </div>
 
           </div>
@@ -23,18 +25,21 @@
       </div>
 
       <div class="account-info-action-btn-container" v-if="identityActionStatus">
-        <el-button class="action-info-action-btn" type="primary"
-                   @click="findJob()"
-        v-if="identity==1"
-        >Find a Job</el-button>
-        <el-button class="action-info-action-btn" type="primary"
-        v-if="identity == 2 || identity == 3 || identity == 4"
-                   @click="postJob()"
-        >Post a Job</el-button>
-        <el-button class="action-info-action-btn" type="primary"
-                   @click="offerDeal()"
-        v-if="identity == 5"
-        >Offer a Deal</el-button>
+        <template  v-if="identity==1">
+          <el-button class="action-info-action-btn" type="primary"
+                     :disabled="profilePercentage<80"
+                     @click="findJob()">Find a Job</el-button>
+        </template>
+        <template v-if="identity == 2 || identity == 3 || identity == 4">
+          <el-button class="action-info-action-btn" type="primary"
+                     :disabled="profilePercentage< 80"
+                     @click="postJob()">Post a Job</el-button>
+        </template>
+        <template v-if="identity == 5">
+          <el-button class="action-info-action-btn" type="primary"
+                     :disabled="profilePercentage<80"
+                     @click="offerDeal()">Offer a Deal</el-button>
+        </template>
       </div>
 
     </div>
@@ -67,7 +72,7 @@
 
           </div>
 
-          <div class="account-info-tag">
+          <div class="account-info-tag" v-if="info.first_name && info.last_name">
             <div class="account-info-tag-l">
               Name:
             </div>
@@ -94,12 +99,18 @@
             </div>
           </div>
 
-          <div class="account-info-tag" v-if="categoryStr">
+          <div class="account-info-tag" v-if="categoryStr  ">
             <div class="account-info-tag-l">
               Category:
             </div>
             <div class="account-info-tag-r">
-              <span>{{categoryStr}}</span>
+              <template v-if="categoryStr == '0'">
+                <span>-Select Category-</span>
+              </template>
+              <template v-else>
+                <span>{{categoryStr}}</span>
+              </template>
+
             </div>
 
           </div>
@@ -134,7 +145,18 @@
                 Membership Expiration Date:
               </div>
               <div class="account-info-tag-r">
-                <span>{{ vipDueTime }}</span>
+
+                <template v-if="vipDueTime == '1970-00-00 00:00:00' ">
+                  <span> 0000-00-00 00:00:00 </span>
+                </template>
+                <template v-else>
+                  <span>{{ vipDueTime }}</span>
+                </template>
+
+                <template v-if="$filters.compareTimeWithCurrentTime(vipDueTime) && level != 1">
+                  <el-button class="renew-btn" type="primary" round @click="turnUpgrade()" >Renew</el-button>
+                </template>
+
               </div>
 
             </div>
@@ -253,6 +275,7 @@ export default {
       accountInfo: {}
     }
   },
+
   methods:{
     forgotPassword() {
       this.forgotDialogVisible = true
@@ -397,7 +420,9 @@ export default {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
-
+.renew-btn{
+  margin-left:10px;
+}
 .account-info-tag span {
   margin-left: 10px;
   background-color: #EEEEEE;

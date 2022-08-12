@@ -86,41 +86,65 @@
                     format="YYYY"
                     value-format="YYYY"
                     placeholder="Year Founded"
+                    :disabledDate="birthdayDisabledDate"
                     style="width: 100%"
                 ></el-date-picker>
               </el-form-item>
 
               <el-form-item label="Location">
 
-                <el-select v-model="countryObj"
-                           @change="countryChange"
-                           value-key="id"
-                           filterable
-                           placeholder="Select Country">
-                  <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                             :value="item"></el-option>
-                </el-select>
+                <div class="xll-location-container">
+                  <div class="xll-location-l">
+                    <template v-if="haveLocationStatus">
+                      {{ $filters.countryInfoFormat(countryInfo) }}
+                    </template>
 
-                <template v-if="provinceOptions.length>0">
-                  <el-select v-model="provinceObj"
-                             value-key="id"
-                             filterable
-                             @change="provinceChange"
-                             placeholder="Select Province">
-                    <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                               :value="item"></el-option>
-                  </el-select>
-                </template>
-                <template v-if="cityOptions.length>0">
-                  <el-select v-model="cityObj"
-                             value-key="id"
-                             filterable
-                             @change="cityChange"
-                             placeholder="Select City">
-                    <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                               :value="item"></el-option>
-                  </el-select>
-                </template>
+                    <template v-else>
+                      <el-select v-model="countryObj"
+                                 @change="countryChange"
+                                 value-key="id"
+                                 filterable
+                                 placeholder="Select Country">
+                        <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                   :value="item"></el-option>
+                      </el-select>
+
+                      <template v-if="provinceOptions.length>0">
+                        <el-select v-model="provinceObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="provinceChange"
+                                   placeholder="Select Province">
+                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
+                      <template v-if="cityOptions.length>0">
+                        <el-select v-model="cityObj"
+                                   value-key="id"
+                                   filterable
+                                   @change="cityChange"
+                                   placeholder="Select City">
+                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                     :value="item"></el-option>
+                        </el-select>
+                      </template>
+                    </template>
+                  </div>
+
+                  <div class="xll-location-r" >
+                    <el-button plain round v-if="haveLocationStatus"
+                               @click="changeEditLocation()">
+                      Edit
+                    </el-button>
+                    <el-button plain round v-if="showLocationCancelStatus"
+                               @click="changeCancelLocation()">
+                      Cancel
+                    </el-button>
+                  </div>
+
+                </div>
+
               </el-form-item>
               <el-form-item label="Add Location Pin">
                 <div class="map-container">
@@ -214,8 +238,7 @@
                 <el-input v-model="tuitionValue" type="number" placeholder="Tuition/Year">
                   <template #prepend>
                     <el-select v-model="currencyValue" placeholder="Currency" style="width: 115px">
-                      <el-option label="CNY" :value="1" />
-                      <el-option label="USD" :value="2" />
+                      <el-option :label="item.object_en" :value="item.id" v-for="(item,i) in currencyList" :key="i"/>
                     </el-select>
                   </template>
                 </el-input>
@@ -353,11 +376,24 @@ export default {
     profileTitle,
     xllLoading
   },
+  setup(){
+    const birthdayDisabledDate = (date)=>{
+      let myDate = new Date();
+      return date.getTime() >= myDate.getTime();
+    }
+    return {
+      birthdayDisabledDate
+    }
+  },
   data() {
     return {
+      companyInfo:{},
+      countryInfo:'',
+      haveLocationStatus:false,
+      showLocationCancelStatus:false,
       uploadLoadingStatus:false,
       tuitionValue:0,
-      currencyValue:2,
+      currencyValue: 118,
       sideMenuStatus:true,
       submitLoadingValue:false,
       phoneCodeData:phoneCodeData,
@@ -397,8 +433,7 @@ export default {
         video_url:'',
         year_founded:'',
         tuition_type: '',
-        tuition_dollar:'',
-        tuition_rmb:'',
+        tuition:'',
         business_reg_img:'',
         technology_available: '',
         website:'',
@@ -470,6 +505,7 @@ export default {
       selectSchoolFacilitesList: [],
       selectSchoolFacilitesArr: [],
       businessInfo: {},
+      currencyList:[],
 
       i:0,
       id:0,
@@ -485,9 +521,10 @@ export default {
 
     this.initMap()
 
-    this.turnSearchTags(73);
-    this.turnSearchTags(1);
-    this.turnSearchTags(147);
+    // this.turnSearchTags(73);
+    // this.turnSearchTags(1);
+    // this.turnSearchTags(147);
+    this.getUserObjectList()
 
     let str = this.$route.query.s;
 
@@ -515,6 +552,42 @@ export default {
 
   },
   methods: {
+
+    changeEditLocation(){
+      this.haveLocationStatus = false;
+      this.showLocationCancelStatus = true;
+
+      this.countryName = '';
+      this.countryNameCn  = '';
+
+      this.provinceName = '';
+      this.provinceNameCn = '';
+
+      this.cityName = '';
+      this.cityNameCn = '';
+
+
+    },
+    changeCancelLocation(){
+      this.haveLocationStatus = true;
+      this.showLocationCancelStatus = false;
+
+      let companyInfo = this.companyInfo;
+
+      if(companyInfo.country_info){
+        let countryInfoArr = JSON.parse(companyInfo.country_info)
+        this.countryName = countryInfoArr.country_name_en;
+        this.countryNameCn  = countryInfoArr.country_name_cn;
+        this.provinceName = countryInfoArr.province_name_en;
+        this.provinceNameCn = countryInfoArr.province_name_cn;
+        this.cityName = countryInfoArr.city_name_en;
+        this.cityNameCn = countryInfoArr.city_name_cn;
+
+        this.basicForm.country_info = companyInfo.country_info;
+
+      }
+
+    },
 
     async getSubIdentityList(){
       let params = {
@@ -941,14 +1014,12 @@ export default {
 
       this.basicForm.country_info = JSON.stringify(countryObj)
 
-      if(this.currencyValue == 1){
-        this.basicForm.tuition_rmb = this.tuitionValue
-        this.basicForm.tuition_type = 1
+      if(this.tuitionValue){
+        this.basicForm.tuition = this.tuitionValue
       }
 
-      if(this.currencyValue == 2){
-        this.basicForm.tuition_dollar = this.tuitionValue
-        this.basicForm.tuition_type = 2
+      if(this.currencyValue){
+        this.basicForm.tuition_type = this.currencyValue
       }
 
       let action = this.action;
@@ -1024,9 +1095,12 @@ export default {
         // console.log(res)
         if(res.code === 200){
           let pcAllData = res.message.pc;
-          let sData = pcAllData.filter(item=>item.identity == identity)
-          this.$store.commit('menuData', sData)
-          localStorage.setItem('menuData',JSON.stringify(sData))
+          if(pcAllData){
+            let sData = pcAllData.filter(item=>item.identity == identity)
+            this.$store.commit('menuData', sData)
+            localStorage.setItem('menuData',JSON.stringify(sData))
+          }
+
         }
 
       }).catch(err=>{
@@ -1148,6 +1222,7 @@ export default {
           // let userContact = res.message.user_contact;
 
           let schoolInfo = res.message.user_contact.company;
+          this.companyInfo = schoolInfo;
 
           if (schoolInfo.company_name) {
             this.basicForm.company_name = schoolInfo.company_name;
@@ -1198,6 +1273,11 @@ export default {
             this.basicForm.logo = schoolInfo.logo;
           }
 
+          if (schoolInfo.background_image && schoolInfo.background_image != '0') {
+            this.backgroundPhotoUrl = schoolInfo.background_image;
+            this.basicForm.background_image = schoolInfo.background_image;
+          }
+
           if (schoolInfo.business_reg_img) {
             this.businessRegPhotoUrl = schoolInfo.business_reg_img;
             this.basicForm.business_reg_img = schoolInfo.business_reg_img;
@@ -1211,21 +1291,29 @@ export default {
             this.basicForm.year_founded = schoolInfo.year_founded.toString();
           }
           if (schoolInfo.tuition_type) {
-            this.basicForm.tuition_type = schoolInfo.tuition_type;
             this.currencyValue = schoolInfo.tuition_type;
-
-            if(schoolInfo.tuition_type == 1){
-              this.basicForm.tuition_rmb = schoolInfo.tuition_rmb;
-              this.tuitionValue = schoolInfo.tuition_rmb;
-            }
-            if(schoolInfo.tuition_type == 2){
-              this.basicForm.tuition_dollar = schoolInfo.tuition_dollar;
-              this.tuitionValue =  schoolInfo.tuition_dollar;
-            }
-
           }
+
+          if(schoolInfo.tuition){
+            this.tuitionValue = schoolInfo.tuition;
+          }
+
           if(schoolInfo.country_info){
             this.basicForm.country_info = schoolInfo.country_info;
+
+            let countryInfoArr = JSON.parse(schoolInfo.country_info)
+            this.countryName = countryInfoArr.country_name_en;
+            this.countryNameCn  = countryInfoArr.country_name_cn;
+            this.provinceName = countryInfoArr.province_name_en;
+            this.provinceNameCn = countryInfoArr.province_name_cn;
+            this.cityName = countryInfoArr.city_name_en;
+            this.cityNameCn = countryInfoArr.city_name_cn;
+
+            this.basicForm.country_info = schoolInfo.country_info;
+            this.countryInfo = schoolInfo.country_info;
+
+            this.haveLocationStatus = true;
+
           }
 
           if(schoolInfo.country_id){
@@ -1288,6 +1376,44 @@ export default {
         this.$message.error(err.msg)
       })
 
+    },
+    async getUserObjectList() {
+      let data = {
+
+      }
+      USER_OBJECT_LIST(data).then(res => {
+        if (res.code == 200) {
+
+          this.editStudentAgeList = res.message.filter(item => item.pid === 73)
+          this.editSubjectList = res.message.filter(item => item.pid === 1)
+          this.editSchoolFacilitesList = res.message.filter(item => item.pid === 147)
+          this.currencyList = res.message.filter(item => item.pid === 117); // currency
+
+          // this.benefitsList = res.message.filter(item => item.pid === 6); //benefits
+          // this.ageToTeachList = res.message.filter(item => item.pid === 4); //age to teach
+          // // this.employmentTypeList = res.message.filter(item => item.pid === 3); //employment type
+          // this.paymentPeriodList = res.message.filter(item => item.pid ===
+          //     111); // payment period
+          //
+          // this.teachingCertificateList = res.message.filter(item => item.pid ===
+          //     7); //teaching certificate ...
+          // this.teachingExpList = res.message.filter(item => item.pid === 120); //teaching exp
+          // this.educationList = res.message.filter(item => item.pid === 125); // education
+          // this.languagesList = res.message.filter(item => item.pid === 2); // language ..
+          // this.jobTitleList = res.message.filter(item => item.pid === 103); //job title
+          // this.startDateList = res.message.filter(item => item.pid === 108); // start date
+          // this.subjectList = res.message.filter(item => item.pid === 1); //subject
+          // this.ageList = res.message.filter(item => item.pid === 131); //age list
+        }
+      }).catch(err => {
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+      })
     },
     async turnSearchTags(type) {
       // student age
@@ -1794,6 +1920,22 @@ export default {
 
 .submit-btn{
   width:40%;
+}
+
+
+.xll-location-container{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content: flex-start;
+
+}
+.xll-location-l{
+
+}
+
+.xll-location-r{
+  margin-left:20px;
 }
 
 @media screen and (min-width: 1200px){

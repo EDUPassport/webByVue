@@ -14,54 +14,10 @@
           ></accountInfo>
 
           <div class="educator-r-container">
+
             <div class="basic-info-container">
               <div class="basic-info-t">
-                <div class="basic-info-label">Basic Info</div>
-                <div class="basic-info-edit" @click="editBasicInfo()">Edit</div>
-              </div>
-
-              <div class="basic-info-content">
-
-                <div class="basic-info-item">
-                  <div class="basic-info-item-l">First & Last Name:</div>
-                  <div class="basic-info-item-r">{{ userContact.first_name }} {{ userContact.last_name }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.sex">
-                  <div class="basic-info-item-l">Gender:</div>
-                  <div class="basic-info-item-r">
-                    <template v-if="userContact.sex == 1">Male</template>
-                    <template v-if="userContact.sex == 2">Female</template>
-                    <template v-if="userContact.sex == 3">Undisclosed</template>
-                  </div>
-                </div>
-                <div class="basic-info-item" v-if="userContact.phone">
-                  <div class="basic-info-item-l">Phone #:</div>
-                  <div class="basic-info-item-r">{{ userContact.phone }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.email">
-                  <div class="basic-info-item-l">Email: </div>
-                  <div class="basic-info-item-r">{{ userContact.email }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.birthday">
-                  <div class="basic-info-item-l">Birthdate:</div>
-                  <div class="basic-info-item-r">{{ userContact.birthday }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.country_info">
-                  <div class="basic-info-item-l">Location:</div>
-                  <div class="basic-info-item-r">{{ $filters.countryInfoFormat(userContact.country_info) }}</div>
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="basic-info-container basic-info-margin">
-              <div class="basic-info-t">
-                <div class="basic-info-label">Educator Contact Info</div>
+                <div class="basic-info-label">Educator Display Profile</div>
                 <div class="basic-info-edit" @click="editEducatorContactInfo()">Edit</div>
               </div>
 
@@ -552,7 +508,7 @@
                   <div class="account-images-t-edit"
                        v-if="editAccountImageStatus"
                        @click="uploadAccountImages()">
-                    Upload
+                    Save
                   </div>
                 </div>
                 <div class="account-images-content">
@@ -623,7 +579,7 @@
               </div>
               <div class="my-resume-container">
                 <div class="my-resume-t">
-                  <div class="my-resume-t-label">Your Resume</div>
+                  <div class="my-resume-t-label">Your Resume [PDF]</div>
                   <template v-if="resumeUrl">
                     <div class="my-resume-t-edit"
                          v-if="editResumeStatus"
@@ -2404,7 +2360,8 @@ export default {
       })
     },
     handleResumeSuccess(res, file) {
-      this.$loading().close()
+      // this.$loading().close()
+      this.uploadLoadingStatus = false;
 
       this.resumeUrl = URL.createObjectURL(file.raw)
       let params = {
@@ -2425,9 +2382,10 @@ export default {
     },
     beforeResumeUpload(file) {
       console.log(file)
-      this.$loading({
-        text:'Uploading...'
-      })
+      this.uploadLoadingStatus = true;
+      // this.$loading({
+      //   text:'Uploading...'
+      // })
     },
     addOwnSubject() {
       this.addSubjectStatus = false;

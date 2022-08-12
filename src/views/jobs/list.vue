@@ -169,7 +169,7 @@
                   {{ item.address }}
                 </div>
                 <div class="jobs-list-item-desc">
-                  {{ item.desc }}
+                  {{ $filters.doRepAdvance(item.desc)  }}
                 </div>
                 <div class="jobs-list-item-readmore">
                   <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">Read More...</router-link>

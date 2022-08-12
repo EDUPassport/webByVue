@@ -71,7 +71,10 @@
                         </div>
                         <div class="job-detail-china-tips">
                           Not clear? Need help setting up?
-                          <el-link href="https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4" >Account Management</el-link>
+                          <el-link
+                              href="https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4">
+                            Account Management
+                          </el-link>
                           is here !
                         </div>
                       </template>
@@ -282,7 +285,7 @@
 
 
                   </el-form-item>
-                  <el-form-item label="Additional Job information" required>
+                  <el-form-item label="Additional Job information">
                     <el-input v-model="jobForm.desc" type="textarea"
                               placeholder="Please enter additional job information"></el-input>
                   </el-form-item>
@@ -775,9 +778,9 @@ export default {
       jobForm: {
         job_title: '',
         job_location: '',
-        country_id:'',
-        state_id:'',
-        town_id:'',
+        country_id: '',
+        state_id: '',
+        town_id: '',
 
         apply_due_date: '',
         is_online: 0,
@@ -809,7 +812,7 @@ export default {
         entry_date: '',
         company_id: '',
         company_name: '',
-        identity:'',
+        identity: '',
         currency: '',
         is_mom_language: 0,
         employment_type: '',
@@ -817,8 +820,8 @@ export default {
         working_hours: '',
         version_time: '',
         address: '',
-        state:'',
-        town:'',
+        state: '',
+        town: '',
         lat: '',
         lng: '',
         international: 0,
@@ -835,26 +838,26 @@ export default {
         ],
       },
 
-      sLocationType:1,
-      countryObj:{},
-      provinceObj:{},
-      cityObj:{},
-      countryName:'',
-      countryNameCn:'',
-      provinceName:'',
-      provinceNameCn:'',
-      cityName:'',
-      cityNameCn:'',
+      sLocationType: 1,
+      countryObj: {},
+      provinceObj: {},
+      cityObj: {},
+      countryName: '',
+      countryNameCn: '',
+      provinceName: '',
+      provinceNameCn: '',
+      cityName: '',
+      cityNameCn: '',
 
-      countryOptions:[],
+      countryOptions: [],
       provinceOptions: [],
       cityOptions: [],
 
     }
   },
-  computed:{
-    identity:{
-      get(){
+  computed: {
+    identity: {
+      get() {
         return this.$store.state.identity
       }
     }
@@ -873,69 +876,68 @@ export default {
     getBasicInfo(identity) {
 
       let params = {
-        identity:identity
+        identity: identity
       }
 
       USER_INFO_BY_TOKEN_V2(params).then(res => {
         // console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let userContact = res.message.user_contact;
 
-          if(userContact){
+          if (userContact) {
             this.jobForm.company_id = userContact.company_id;
             this.jobForm.company_name = userContact.company.company_name;
 
           }
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    getAllCountry(){
-      let params = {
-      }
-      GET_COUNTRY_LIST(params).then(res=>{
+    getAllCountry() {
+      let params = {}
+      GET_COUNTRY_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.countryOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    getAllProvinces(countryId){
+    getAllProvinces(countryId) {
       let params = {
-        country_id:countryId
+        country_id: countryId
       }
-      GET_COUNTRY_LIST(params).then(res=>{
+      GET_COUNTRY_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.provinceOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    getAllCitys(countryId,stateId){
+    getAllCitys(countryId, stateId) {
       let params = {
-        country_id:countryId,
-        state_id:stateId
+        country_id: countryId,
+        state_id: stateId
       }
-      GET_COUNTRY_LIST(params).then(res=>{
+      GET_COUNTRY_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.cityOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    countryChange(e){
+    countryChange(e) {
       console.log(e)
-      this.jobForm.state_id=undefined
+      this.jobForm.state_id = undefined
       this.jobForm.town_id = undefined
 
       this.provinceOptions = []
@@ -956,7 +958,7 @@ export default {
       this.provinceName = e.name
       this.provinceNameCn = e.name
 
-      this.getAllCitys(this.jobForm.country_id,e.id)
+      this.getAllCitys(this.jobForm.country_id, e.id)
     },
     cityChange(e) {
       console.log(e)
@@ -1030,20 +1032,57 @@ export default {
       this.jobForm.state_id = undefined;
       this.jobForm.town_id = undefined;
 
-      if(tab.paneName=='first'){
-        this.countryName = 'China'
-        this.getAllAreas(0)
-        this.cityOptions = []
-        this.districtOptions = []
-      }
+      if (tab.paneName == 'first') {
+        let countryObj = {
+          "id": 45,
+          "name": "China",
+          "iso3": "CHN",
+          "numeric_code": "156",
+          "iso2": "CN",
+          "phonecode": "86",
+          "capital": "Beijing",
+          "currency": "CNY",
+          "currency_name": "Chinese yuan",
+          "currency_symbol": "¥",
+          "tld": ".cn",
+          "native": "中国",
+          "region": "Asia",
+          "subregion": "Eastern Asia",
+          "timezones": "[{\"zoneName\":\"Asia/Shanghai\",\"gmtOffset\":28800,\"gmtOffsetName\":\"UTC+08:00\",\"abbreviation\":\"CST\",\"tzName\":\"China Standard Time\"},{\"zoneName\":\"Asia/Urumqi\",\"gmtOffset\":21600,\"gmtOffsetName\":\"UTC+06:00\",\"abbreviation\":\"XJT\",\"tzName\":\"China Standard Time\"}]",
+          "translations": "{\"kr\":\"중국\",\"pt-BR\":\"China\",\"pt\":\"China\",\"nl\":\"China\",\"hr\":\"Kina\",\"fa\":\"چین\",\"de\":\"China\",\"es\":\"China\",\"fr\":\"Chine\",\"ja\":\"中国\",\"it\":\"Cina\",\"cn\":\"中国\",\"tr\":\"Çin\"}",
+          "latitude": "35.00000000",
+          "longitude": "105.00000000",
+          "emoji": "🇨🇳",
+          "emojiU": "U+1F1E8 U+1F1F3",
+          "created_at": "2018-07-21 07:11:03",
+          "updated_at": "2022-05-21 21:11:20",
+          "flag": 1,
+          "wikiDataId": "Q148"
+        }
 
-      if(tab.paneName=='second'){
+        this.jobForm.state_id = undefined
+        this.jobForm.town_id = undefined
 
-        this.getAllCountry(0)
         this.provinceOptions = []
         this.cityOptions = []
-        this.districtOptions = []
+
+        this.jobForm.country_id = countryObj.id
+        this.countryName = countryObj.name
+        this.countryNameCn = countryObj.name
+        this.getAllProvinces(countryObj.id)
+        this.countryObj = countryObj
+
       }
+
+      if (tab.paneName == 'second') {
+        this.countryObj = {}
+        this.jobForm.state_id = undefined
+        this.jobForm.town_id = undefined
+
+        this.provinceOptions = []
+        this.cityOptions = []
+      }
+
 
     },
     selectEmploymentType(value) {
@@ -1324,10 +1363,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1362,10 +1401,10 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1401,10 +1440,10 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1439,10 +1478,10 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1477,10 +1516,10 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1515,10 +1554,10 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1547,10 +1586,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -1592,35 +1631,6 @@ export default {
       console.log(this.selectWeekItemData)
 
     },
-    testName(){
-      let jobLocationValue = ''
-      let countryName = this.countryName
-      let provinceName = this.provinceName
-      let cityName = this.cityName
-      let districtName = this.districtName
-
-      console.log(countryName)
-      console.log(provinceName)
-      console.log(cityName)
-      console.log(districtName)
-
-      if(countryName ){
-        jobLocationValue = countryName
-      }
-      if(countryName && provinceName ){
-        jobLocationValue = provinceName+', '+countryName
-      }
-
-      if(countryName && provinceName && cityName ){
-        jobLocationValue =  cityName + ', '+provinceName+', '+countryName
-      }
-
-      if(countryName && provinceName && cityName && districtName){
-        jobLocationValue = districtName + ', '+ cityName + ', '+provinceName+', '+countryName
-      }
-      console.log(jobLocationValue)
-
-    },
     submitJob(formName, submitType) {
       let that = this;
 
@@ -1628,7 +1638,7 @@ export default {
         return this.$message.warning('Employment Type')
       }
 
-      if (this.ownJobTitleValue.length<=0) {
+      if (this.ownJobTitleValue.length <= 0) {
         return this.$message.warning('Job Title')
       }
 
@@ -1647,22 +1657,22 @@ export default {
       // console.log(cityName)
       // console.log(districtName)
 
-      if(countryName ){
+      if (countryName) {
         jobLocationValue = countryName
       }
-      if(countryName && provinceName ){
-        jobLocationValue = provinceName+', '+countryName
+      if (countryName && provinceName) {
+        jobLocationValue = provinceName + ', ' + countryName
       }
 
-      if(countryName && provinceName && cityName ){
-        jobLocationValue =  cityName + ', '+provinceName+', '+countryName
+      if (countryName && provinceName && cityName) {
+        jobLocationValue = cityName + ', ' + provinceName + ', ' + countryName
       }
 
-      if(countryName && provinceName && cityName && districtName){
-        jobLocationValue = districtName + ', '+ cityName + ', '+provinceName+', '+countryName
+      if (countryName && provinceName && cityName && districtName) {
+        jobLocationValue = districtName + ', ' + cityName + ', ' + provinceName + ', ' + countryName
       }
 
-      this.jobForm.job_location  = jobLocationValue
+      this.jobForm.job_location = jobLocationValue
 
       if (this.selectEmploymentTypeList.length > 0) {
         let employmentTypeList = this.selectEmploymentTypeList;
@@ -1675,7 +1685,7 @@ export default {
         that.jobForm.currency = '';
       }
 
-      if(this.ownJobTitleValue){
+      if (this.ownJobTitleValue) {
         that.jobForm.job_title = this.ownJobTitleValue;
       }
 
@@ -1699,6 +1709,7 @@ export default {
       this.$loading({
         text: 'Loading...'
       })
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let data = Object.assign({}, that.jobForm);
@@ -1733,10 +1744,10 @@ export default {
             }
           }).catch(err => {
             console.log(err)
-            if(err.msg){
+            if (err.msg) {
               this.$message.error(err.msg)
             }
-            if(err.message){
+            if (err.message) {
               this.$message.error(err.message)
             }
           })
@@ -1752,7 +1763,7 @@ export default {
       let self = this;
       let uid = localStorage.getItem('uid')
       this.$loading({
-        text:'Loading'
+        text: 'Loading'
       })
 
       let params = {
@@ -1765,33 +1776,33 @@ export default {
           let aParams = {
             data: JSON.stringify(res.message)
           }
-          let baseUrl =  process.env.VUE_APP_SYNC_BUSINESS_BASE_URL
+          let baseUrl = process.env.VUE_APP_SYNC_BUSINESS_BASE_URL
 
-          axios.post('home/syncUserInfo',aParams,{
-            baseURL:baseUrl,
-            timeout:10000
-          }).then(res=>{
+          axios.post('home/syncUserInfo', aParams, {
+            baseURL: baseUrl,
+            timeout: 10000
+          }).then(res => {
             console.log(res)
-            if(res.code == 200){
+            if (res.code == 200) {
               this.$loading().close()
               this.$msgbox({
                 title: 'Success',
-                message:'Your information has been synchronized, please log in ',
-                type:'success',
-                confirmButtonText:'Login',
-                callback(action){
+                message: 'Your information has been synchronized, please log in ',
+                type: 'success',
+                confirmButtonText: 'Login',
+                callback(action) {
                   console.log(action)
-                  if(action === 'confirm'){
+                  if (action === 'confirm') {
                     let redirectParamsObj = {
-                      path:'/jobs/post',
-                      query:{
-                        version_time:self.$route.query.version_time
+                      path: '/jobs/post',
+                      query: {
+                        version_time: self.$route.query.version_time
                       }
                     }
 
-                    let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
-                    let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/edupassport?type=login&redirect_params='+redirectParamsStr
-                    window.open(exchange_domain,'_blank')
+                    let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
+                    let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/edupassport?type=login&redirect_params=' + redirectParamsStr
+                    window.open(exchange_domain, '_blank')
                   }
 
                 }
@@ -1799,27 +1810,27 @@ export default {
 
               })
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$loading().close()
             this.$msgbox({
-              title:err.msg,
-              message:err.msg,
-              type:'success',
-              confirmButtonText:'Login',
-              callback(action){
+              title: err.msg,
+              message: err.msg,
+              type: 'success',
+              confirmButtonText: 'Login',
+              callback(action) {
                 console.log(action)
-                if(action === 'confirm'){
+                if (action === 'confirm') {
                   let redirectParamsObj = {
-                    path:'/jobs/post',
-                    query:{
-                      version_time:self.$route.query.version_time
+                    path: '/jobs/post',
+                    query: {
+                      version_time: self.$route.query.version_time
                     }
                   }
 
-                  let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
-                  let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/edupassport?type=login&redirect_params='+redirectParamsStr
-                  window.open(exchange_domain,'_blank')
+                  let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
+                  let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/edupassport?type=login&redirect_params=' + redirectParamsStr
+                  window.open(exchange_domain, '_blank')
                 }
               }
 
@@ -1834,10 +1845,10 @@ export default {
 
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
         this.$loading().close()
@@ -1854,10 +1865,10 @@ export default {
         console.log(res)
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -2127,14 +2138,14 @@ export default {
   padding: 0 10px;
 }
 
-@media screen and (min-width: 1200px){
-  .profile-container{
+@media screen and (min-width: 1200px) {
+  .profile-container {
     width: 1100px;
   }
 
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
 
 }
 
