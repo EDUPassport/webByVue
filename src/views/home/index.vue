@@ -310,7 +310,7 @@
                 <div class="hot-deals-item-t">
                   <div class="hot-deals-item-t-l">
                     <template v-if="item.user_info">
-                      <el-image class="hot-deals-logo" :src="item.user_info.logo"></el-image>
+                      <el-avatar class="hot-deals-logo" :src="item.user_info.logo"></el-avatar>
                     </template>
                   </div>
                   <div class="hot-deals-item-t-r" v-if="item.is_favorite && item.is_favorite==1"
@@ -341,7 +341,7 @@
               <div class="hot-deals-item-b">
                 <div class="hot-deals-item-b-l">
                   <template v-if="item.vendor_type_icon">
-                    <el-image class="hot-deal-type-icon" :src="item.vendor_type_icon.icon_url"></el-image>
+                    <el-avatar class="hot-deal-type-icon" :src="item.vendor_type_icon.icon_url"></el-avatar>
                   </template>
                   <!--                  {{ item.vendor_type_name }}-->
                 </div>
@@ -358,7 +358,7 @@
             <div class="hot-deals-item-more">
               <div class="hot-deals-item-more-logo-container" v-if="featuredDealsLogoData.length>0">
                 <div class="hot-deals-item-more-logo-item" v-for="(item,i) in featuredDealsLogoData" :key="i">
-                  <el-image class="hot-deals-item-more-logo" :src="item.logo_url" fit="fill"></el-image>
+                  <el-avatar class="hot-deals-item-more-logo" :src="item.logo_url" fit="fill"></el-avatar>
                 </div>
               </div>
               <div class="hot-deals-item-more-tips">

@@ -60,6 +60,12 @@
                     <el-button class="jobs-list-item-b-m-btn" type="primary" round @click="turnApplications(item.id,item.unread_id)">
                       Applications ( {{item.resume_count}} ) <span v-if="item.unread_status" class="read-star"></span>
                     </el-button>
+
+                    <el-button class="jobs-list-item-b-m-btn" type="warning" round
+                               @click="turnEditJobs(item.id)">
+                      Edit
+                    </el-button>
+
                   </div>
 
 
@@ -186,7 +192,11 @@ export default {
       })
 
 
+    },
+    turnEditJobs(jobId){
+      this.$router.push({path:'/jobs/post',query:{job_id:jobId}})
     }
+
 
 
   }

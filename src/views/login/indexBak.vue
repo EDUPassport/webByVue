@@ -1,17 +1,5 @@
 <template>
   <div class="bg">
-
-    <div class="login-container">
-      <div class="login-l">
-        EDU
-        <span>PASSPORT</span>
-      </div>
-      <div class="login-m">
-
-      </div>
-      <div class="login-r"></div>
-    </div>
-
     <el-container class="login-container">
       <el-header class="container-1" height="auto">
         <el-row justify="center" align="middle">
@@ -1514,10 +1502,7 @@ export default {
 </script>
 
 <style scoped>
-.login-container{
-  max-width:1920px;
 
-}
 .container-1 {
   padding-top: 20px;
   position: relative;

@@ -609,7 +609,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 import meSideMenu from "@/components/meSideMenu";
 import {
-  USER_OBJECT_LIST, ADD_JOB,
+  USER_OBJECT_LIST, ADD_JOB,JOB_DETAIL,
   JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO, GET_COUNTRY_LIST, USER_INFO_BY_TOKEN_V2
 } from '@/api/api';
 // import {ref} from "vue";
@@ -871,8 +871,291 @@ export default {
 
     this.getUserObjectList()
 
+    let jobId = this.$route.query.job_id;
+    if(jobId){
+      this.getJobDetail(jobId)
+    }
+
+
   },
   methods: {
+    getJobDetail(id) {
+      let that = this;
+      let params = {
+        job_id: id
+      }
+      JOB_DETAIL(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.detailData = res.message
+
+          const workHours = res.message.working_hours
+          if (workHours) {
+            // this.jobForm.working_hours = JSON.parse(workHours)
+            this.workingHoursData = JSON.parse(workHours)
+          }
+
+          this.initMap(res.message.lng,res.message.lat)
+
+          let jobMessage = res.message;
+
+          that.jobForm.job_title = jobMessage.job_title;
+          that.ownJobTitleValue = jobMessage.job_title;
+
+          that.jobForm.job_location = jobMessage.job_location;
+          that.jobForm.age_min = jobMessage.age_min;
+          that.jobForm.age_max = jobMessage.age_max;
+          that.jobForm.is_online = jobMessage.is_online;
+          that.jobForm.salary_min = jobMessage.salary_min.toString();
+          that.jobForm.salary_max = jobMessage.salary_max.toString();
+          that.jobForm.currency = jobMessage.currency;
+          that.jobForm.business_id = jobMessage.business_id;
+          that.jobForm.business_name = jobMessage.business_name;
+          that.jobForm.employment_type = jobMessage.employment_type;
+
+          that.jobForm.desc = jobMessage.desc;
+          that.jobForm.numbers = jobMessage.numbers;
+          that.jobForm.is_equal = jobMessage.is_equal;
+          that.jobForm.is_cpr = jobMessage.is_cpr;
+          that.jobForm.is_first_aide = jobMessage.is_first_aide;
+          that.jobForm.is_mom_language = jobMessage.is_mom_language;
+          that.jobForm.is_teaching_exp = jobMessage.is_teaching_exp;
+          that.jobForm.is_interview = jobMessage.is_interview;
+          that.jobForm.interview_name = jobMessage.interview_name;
+          that.jobForm.nationality = jobMessage.nationality;
+          that.jobForm.interview_nationlity = jobMessage.interview_nationlity;
+          that.jobForm.entry_date = jobMessage.entry_date;
+          that.jobForm.is_teaching_license = jobMessage.is_teaching_license;
+          that.jobForm.version_time = jobMessage.version_time;
+
+          that.jobForm.province = jobMessage.province;
+          that.jobForm.city = jobMessage.city;
+          that.jobForm.district = jobMessage.district;
+
+          that.jobForm.class_size = jobMessage.class_size;
+          that.jobForm.working_hours = jobMessage.working_hours;
+
+          that.jobForm.address = jobMessage.address;
+          that.jobForm.lat = jobMessage.lat;
+          that.jobForm.lng = jobMessage.lng;
+          that.jobForm.international = jobMessage.international;
+          that.jobForm.nation_address = jobMessage.nation_address;
+
+          let ageMin = jobMessage.age_min
+          let ageMax = jobMessage.age_max
+          this.ageValue = [ageMin, ageMax]
+
+          // job title
+          if (jobMessage.job_title) {
+            let arr = this.jobTitleList.filter(item => item.object_en == jobMessage.job_title);
+            let arrcn = this.jobTitleList.filter(item => item.object_cn == jobMessage.job_title);
+            if (arr.length > 0 || arrcn.length > 0) {
+              this.selectJobTitleList = arr;
+            } else {
+              let obj = {
+                id: 0,
+                object_en: jobMessage.job_title,
+                object_pid: 6
+              };
+              this.ownJobTitleList.push(obj);
+              this.selectJobTitleList.push(obj);
+            }
+          }
+
+          // start date
+          if (jobMessage.entry_date) {
+            let arr = this.startDateList.filter(item => item.object_en == jobMessage.entry_date);
+            let arrcn = this.startDateList.filter(item => item.object_cn == jobMessage.entry_date);
+            if (arr.length > 0 || arrcn.length > 0) {
+              this.selectStartDateList = arr;
+            } else {
+              let obj = {
+                id: 0,
+                object_en: jobMessage.entry_date,
+                object_pid: 108
+              };
+              this.ownStartDateList.push(obj);
+              this.selectStartDateList.push(obj);
+            }
+          }
+          // currency
+          if (jobMessage.currency) {
+            let arr = this.currencyList.filter(item => item.object_en == jobMessage.currency);
+            let arrcn = this.currencyList.filter(item => item.object_cn == jobMessage.currency);
+            // console.log(arr)
+            if (arr.length > 0 || arrcn.length > 0) {
+              this.selectCurrencyList = arr;
+            } else {
+              let obj = {
+                id: 0,
+                object_en: jobMessage.currency,
+                object_pid: 117
+              };
+              this.ownCurrencyList.push(obj);
+              this.selectCurrencyList.push(obj);
+            }
+
+          }
+
+          if (jobMessage.benefits) {
+            let c = [];
+            let a = jobMessage.benefits;
+            a.forEach(benefit => {
+              if (benefit.object_id !== 0) {
+                let b = this.benefitsList.filter(item => item.id === benefit.object_id)
+                c.push(b[0])
+              } else {
+                let obj = {
+                  id: 0,
+                  object_name: benefit.object_en,
+                  object_pid: benefit.object_pid
+                }
+                this.ownBenefitsList.push(obj);
+                c.push(obj);
+              }
+
+            })
+
+            this.selectBenefitsList = c;
+          }
+
+          if (jobMessage.age_to_teach) {
+            let c = [];
+            let a = jobMessage.age_to_teach;
+            // console.log(a)
+            a.forEach(ageToTeach => {
+              if (ageToTeach.object_id !== 0) {
+                // console.log(that.ageToTeachList)
+                let b = that.ageToTeachList.filter(item => item.id === ageToTeach.object_id)
+                // console.log(b)
+                c.push(b[0])
+              } else {
+                let obj = {
+                  id: 0,
+                  object_name: ageToTeach.object_en,
+                  object_pid: ageToTeach.object_pid
+                }
+                that.ownAgeToTeachList.push(obj);
+                c.push(obj);
+              }
+
+            })
+            that.selectAgeToTeachList = c;
+
+          }
+
+          if (jobMessage.subject) {
+            let c = [];
+            let a = jobMessage.subject;
+            a.forEach(subject => {
+              if (subject.object_id !== 0) {
+                let b = this.subjectList.filter(item => item.id === subject.object_id)
+                c.push(b[0])
+              } else {
+                let obj = {
+                  id: 0,
+                  object_name: subject.object_en,
+                  object_pid: subject.object_pid
+                }
+                this.ownSubjectList.push(obj);
+                c.push(obj);
+              }
+
+            })
+            this.selectSubjectList = c;
+
+          }
+
+          if (jobMessage.Teaching_certificate) {
+            let c = [];
+            let a = jobMessage.Teaching_certificate;
+            a.forEach(teachCer => {
+              if (teachCer.object_id !== 0) {
+                let b = this.teachingCertificateList.filter(item => item.id === teachCer.object_id)
+                c.push(b[0])
+              } else {
+                let obj = {
+                  id: 0,
+                  object_name: teachCer.object_en,
+                  object_pid: teachCer.object_pid
+                }
+                this.ownTeachingCertificateList.push(obj);
+                c.push(obj);
+              }
+
+            })
+            this.selectTeachingCertificateList = c;
+          }
+
+          if (jobMessage.languages) {
+            let c = [];
+            let a = jobMessage.languages;
+            a.forEach(language => {
+              if (language.object_id !== 0) {
+                let b = this.languagesList.filter(item => item.id === language.object_id)
+                c.push(b[0])
+              } else {
+                let obj = {
+                  id: 0,
+                  object_name: language.object_en,
+                  object_pid: language.object_pid
+                }
+                this.ownLanguagesList.push(obj);
+                c.push(obj);
+              }
+
+            })
+            this.selectLanguagesList = c;
+          }
+
+          if (jobMessage.employment_type != '') {
+            this.selectEmploymentTypeList = this.employmentTypeList.filter(item => item.id == jobMessage.employment_type)
+          }
+
+          if (jobMessage.apply_due_date != '' && jobMessage.apply_due_date != '0000-00-00') {
+            that.jobForm.apply_due_date = jobMessage.apply_due_date;
+          }
+          if (jobMessage.payment_period) {
+            that.jobForm.payment_period = jobMessage.payment_period;
+            that.jobForm.jobForm = jobMessage.payment_period_en;
+          }
+
+          if (jobMessage.street_address) {
+            that.jobForm.street_address = jobMessage.street_address;
+          }
+
+          if (jobMessage.sex) {
+            that.jobForm.sex = jobMessage.sex;
+            if (jobMessage.sex == 1) {
+              that.jobForm.sex_name = 'Male'
+            }
+            if (jobMessage.sex == 2) {
+              that.jobForm.sex_name = 'Female'
+            }
+            if (jobMessage.sex == 3) {
+              that.jobForm.sex_name = 'Both'
+            }
+          }
+
+          if (jobMessage.teaching_times) {
+            that.jobForm.teaching_times = jobMessage.teaching_times;
+            that.jobForm.teaching_times_str = jobMessage.teaching_times_en;
+          }
+
+          if (jobMessage.education) {
+            that.jobForm.education = jobMessage.education;
+            that.jobForm.education_str = jobMessage.education_en;
+          }
+
+
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
     getBasicInfo(identity) {
 
       let params = {
@@ -1652,10 +1935,6 @@ export default {
       let cityName = this.cityName
       let districtName = this.districtName
 
-      // console.log(countryName)
-      // console.log(provinceName)
-      // console.log(cityName)
-      // console.log(districtName)
 
       if (countryName) {
         jobLocationValue = countryName
@@ -1706,6 +1985,12 @@ export default {
       //   that.form.job_id = this.jobId;
       // }
       // console.log(that.jobForm);
+      let jobIdFrom = this.$route.query.job_id
+
+      if(jobIdFrom){
+        that.jobForm.job_id = jobIdFrom
+      }
+
       this.$loading({
         text: 'Loading...'
       })

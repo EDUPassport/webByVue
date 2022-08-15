@@ -3,8 +3,13 @@
     <el-affix :offset="0" :z-index="1000">
       <el-header class="header-container" height="auto">
         <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
-          <el-col class="logo-container" :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
-            <el-image class="logo-img" :src="logoImg" fit="fill" @click="turnHome()"></el-image>
+          <el-col :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
+
+            <div  class="logo-container">
+              <el-image class="logo-img" :src="logoImg" fit="fill" @click="turnHome()"></el-image>
+              <div class="logo-beta">Beta</div>
+            </div>
+
           </el-col>
 
           <el-col :xs="0" :sm="0" :md="0" :lg="17" :xl="17">
@@ -1069,12 +1074,28 @@ export default {
 
 .logo-container {
   text-align: left;
+  position: relative;
+  width: 60px;
+  height: 60px;
 }
+
 
 .logo-img {
   width: 60px;
   height: 60px;
   cursor: pointer;
+}
+
+.logo-beta{
+  position: absolute;
+  font-size: 12px;
+  top:0;
+  right:-32px;
+  background-color:#004956;
+  padding:2px 10px;
+  border-radius:10px;
+  color:#EEEEEE;
+
 }
 
 .nav-link-container {

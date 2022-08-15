@@ -7,6 +7,7 @@
         <el-col :xs="0" :sm="3" :md="3" :lg="3" :xl="3">
           <div class="esl-logo-container">
             <el-image class="esl-logo" :src="imgLogo"></el-image>
+            <div class="logo-beta">Beta</div>
           </div>
           <div class="esl-intro">
             Platform for today's education needs, people, and businesses.
@@ -60,7 +61,7 @@
             <router-link to="/food4edu">Food For Education</router-link>
           </div>
           <div class="footer-nav-item">
-            <router-link to="#">Schedule a Meeting</router-link>
+            <el-link href="https://book.edupassport.io/" target="_blank">Schedule a Meeting</el-link>
           </div>
 
         </el-col>
@@ -247,9 +248,28 @@ export default {
   margin: 0 auto;
   padding: 20px 40px;
 }
+
+.esl-logo-container{
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
 .esl-logo {
   width: 80px;
   height: 80px;
+}
+
+.logo-beta{
+  position: absolute;
+  font-size: 12px;
+  top:0;
+  right:-32px;
+  background-color:#004956;
+  padding:2px 10px;
+  border-radius:10px;
+  color:#EEEEEE;
+
 }
 
 .esl-intro{
