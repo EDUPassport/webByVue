@@ -12,7 +12,7 @@
           <div class="jobs-filter-location">
             <el-select class="jobs-filter-select" v-model="locationValue" clearable placeholder="Location"
                        @change="locationChange"
-                       size="medium">
+                       size="default">
               <el-option
                   v-for="item in locationOptions"
                   :key="item.id"
@@ -25,7 +25,7 @@
           <div class="jobs-filter-salary">
             <el-select class="jobs-filter-select" v-model="salaryValue" clearable
                        @change="salaryChange"
-                       placeholder="Salary" size="medium">
+                       placeholder="Salary" size="default">
               <el-option
                   v-for="item in salaryOptions"
                   :key="item.value"
@@ -38,7 +38,7 @@
           <div class="jobs-filter-gender">
             <el-select class="jobs-filter-select" v-model="genderValue" clearable
                        @change="genderChange"
-                       placeholder="Gender" size="medium">
+                       placeholder="Gender" size="default">
               <el-option
                   v-for="item in genderOptions"
                   :key="item.value"
@@ -51,7 +51,7 @@
           <div class="jobs-filter-job-type">
             <el-select class="jobs-filter-select" v-model="jobTypeValue" clearable
                        @change="jobTypeChange"
-                       placeholder="Job Type" size="medium">
+                       placeholder="Job Type" size="default">
               <el-option
                   v-for="item in jobTypeOptions"
                   :key="item.value"
@@ -65,7 +65,7 @@
             <el-select class="jobs-filter-select" v-model="studentAgeValue" clearable
                        @change="studentAgeChange"
                        placeholder="Student Age"
-                       size="medium">
+                       size="default">
               <el-option
                   v-for="item in studentAgeOptions"
                   :key="item.value"
@@ -80,7 +80,7 @@
             <el-select class="jobs-filter-select" v-model="onlineValue" clearable
                        @change="onlineChange"
                        placeholder="Online/Offline"
-                       size="medium">
+                       size="default">
               <el-option
                   v-for="item in onlineOptions"
                   :key="item.value"
@@ -1203,7 +1203,7 @@ export default {
 
 @media screen  and (min-width: 1200px){
   .bg-container{
-    width:1100px;
+    /*width:1100px;*/
   }
 }
 </style>

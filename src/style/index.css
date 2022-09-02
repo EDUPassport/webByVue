@@ -1,18 +1,70 @@
 @charset "UTF-8";
+
 :root {
-    --el-color-primary: #217CA3;
+    --el-color-primary-light-5:#9173ff;
+    --el-color-primary: #49397f;
+    --el-font-family:BCM,AssiRegular,BCRegular,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif
+}
+
+.el-button{
+    --el-button-border-color: #000000;
 }
 
 .el-button--primary {
     --el-button-font-color: #ffffff;
-    --el-button-background-color: #217CA3;
-    --el-button-border-color: #217CA3;
-    --el-button-hover-color: rgb(59, 179, 185);
+    --el-button-background-color: #49397f;
+    --el-button-border-color: #9173ff;
+    --el-button-hover-color: #cdbff;
     --el-button-active-font-color: #e6e6e6;
-    --el-button-active-background-color: #00b3d2;
-    --el-button-active-border-color: #00b3d2
+    --el-button-active-background-color: #9173ff;
+    --el-button-active-border-color: #cdbff;
+    --el-button-disabled-bg-color: rgba(102, 80, 179, .5);
+    --el-button-disabled-border-color: rgba(102, 80, 179, .5);
+}
+
+.el-input--large{
+    --el-input-height: 73px;
+}
+
+.el-input--large .el-input__wrapper{
+
+}
+
+.el-input--large .el-input__inner{
+    font-family: AssiRegular, serif;
+    font-size: 18px;
+    color:#262626;
+}
+
+.el-input--default .el-input__wrapper{
+    height: 50px;
+}
+
+.el-input--default .el-input__inner{
+    font-size: 18px;
+    font-family: AssiRegular, serif;
+
+}
+
+.el-form--default.el-form--label-top .el-form-item .el-form-item__label{
+    font-family: BarlowM, serif;
+    font-size:20px;
+    color:#262626;
+}
+
+.el-checkbox.el-checkbox--large .el-checkbox__label{
+    font-size: 18px;
+    font-family: AssiRegular, serif;
+    color:#262626;
+}
+
+.el-divider__text{
+    font-family: AssiRegular, serif;
+    color:#262626;
+    font-size: 18px;
+
 }
 
 .el-select__caret{
-    color:#0A1E76 !important;
+    color:#49397f !important;
 }

@@ -51,7 +51,7 @@
               <div class="search-keywords">
                 <!--                @change="searchNow()"-->
                 <el-input class="search-keywords-input" placeholder="Enter Keyword..."
-                          size="medium"
+                          size="default"
                           v-model="searchKeywordsValue">
                 </el-input>
               </div>
@@ -340,15 +340,15 @@
 
               <div class="hot-deals-item-b">
                 <div class="hot-deals-item-b-l">
-                  <template v-if="item.vendor_type_icon">
-                    <el-avatar class="hot-deal-type-icon" :src="item.vendor_type_icon.icon_url"></el-avatar>
+                  <template v-if="item.company_category_logo">
+                    <el-avatar class="hot-deal-type-icon" :src="item.company_category_logo"></el-avatar>
                   </template>
                   <!--                  {{ item.vendor_type_name }}-->
                 </div>
                 <div class="hot-deals-item-b-r">
                   <!--                  {{ item.location }}-->
-                  <template v-if="item.user_info">
-                    {{ item.user_info.vendor_name_en }}
+                  <template v-if="item.company_name">
+                    {{ item.user_info.company_name }}
                   </template>
                 </div>
               </div>

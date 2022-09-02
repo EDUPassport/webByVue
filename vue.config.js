@@ -1,3 +1,11 @@
+const { FileSystemIconLoader } = require('unplugin-icons/loaders')
+const Icons = require('unplugin-icons/webpack')
+// 引入自动引入插件
+const Components = require('unplugin-vue-components/webpack')
+const IconsResolver = require('unplugin-icons/resolver')
+const AutoImport = require('unplugin-auto-import/webpack')
+// const {ElementPlusResolver} = require('unplugin-vue-components/resolvers')
+
 module.exports = {
     outputDir: process.env.outputDir,
     filenameHashing: true,
@@ -45,9 +53,38 @@ module.exports = {
                 }
             ]
         },
+        plugins:[
+            AutoImport({
+               resolvers:[
+
+               ]
+            }),
+            Components({
+                resolvers: [
+                    IconsResolver({
+                        prefix: 'icon',
+                        alias: {
+                            system: 'system-uicons'
+                        },
+                        // 标识自定义图标集
+                        customCollections: ['login','edu']
+                    })
+                ]
+            }),
+            Icons(
+              {
+                  compiler:'vue3',
+                  autoInstall:true,
+                  customCollections:{
+                      login:FileSystemIconLoader('src/assets/svg/login',svg=>svg.replace(/^<svg /, '<svg fill="currentColor" ')),
+                      edu:FileSystemIconLoader('src/assets/svg/edu',svg=>svg.replace(/^<svg /, '<svg fill="currentColor" '))
+                  }
+              }
+          )
+        ],
         devServer: {
             allowedHosts: [
-                'esl.vaiwan.cn'
+                '810a-183-208-226-152.jp.ngrok.io'
             ],
             proxy: {
                 '/hcaptcha': {

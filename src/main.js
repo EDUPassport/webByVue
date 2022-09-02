@@ -3,11 +3,10 @@ import App from './App.vue'
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-// import '../theme/index.css'
 import './style/index.css'
 // import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import en from 'element-plus/es/locale/lang/en'
-// import 'element-plus/theme-chalk/index.css'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import {createI18n} from 'vue-i18n'
 import xllZhCN from './language/zh-cn'
@@ -16,12 +15,7 @@ import router from "./routes"
 import './assets/css/aliIcon/iconfont.css'
 import 'animate.css'
 import VTypical from 'vue-typical'
-import './assets/font/font.css'
-
-import { LocationFilled,Stopwatch ,Calendar,ArrowRightBold,Share,Edit,ArrowDown,Menu,ChatLineSquare,
-    ArrowDownBold,ArrowUpBold,ArrowLeft,CirclePlus,
-    MoreFilled, Mic,Picture, VideoCamera ,Folder,CircleClose,SuccessFilled,Failed,UploadFilled,Back}
-    from '@element-plus/icons'
+import 'index.css'
 
 import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
@@ -36,16 +30,6 @@ import IMService from "./assets/lib/imservice"
 import Vue3CountryIntl from 'vue3-country-intl';
 // 引入css
 import 'vue3-country-intl/lib/vue3-country-intl.css'
-
-// const version = process.env.VERSION
-// const localVersion = localStorage.getItem('projectVersion')
-//
-// if (!localVersion || Number(version)  !== Number(localVersion)) {
-//     // localStorage.clear()
-//     localStorage.setItem('projectVersion', version)
-//     window.location.reload()
-//     console.log('version:'+version)
-// }
 
 const messages = {
     en: {
@@ -72,35 +56,16 @@ const goEasy = GoEasy.getInstance({
 });
 
 const app = createApp(App)
-app.component('LocationFilled',LocationFilled )
-app.component('Stopwatch',Stopwatch )
-app.component('Calendar',Calendar )
-app.component('ArrowRightBold',ArrowRightBold )
-app.component('Share',Share)
-app.component('edit',Edit)
-app.component('ArrowDown',ArrowDown)
-app.component('ArrowLeft',ArrowLeft)
-app.component('Menu',Menu)
-app.component('ChatLineSquare',ChatLineSquare)
-app.component('MoreFilled',MoreFilled)
-app.component('Mic',Mic)
-app.component('Picture',Picture)
-app.component('VideoCamera',VideoCamera)
-app.component('Folder',Folder)
-app.component('CircleClose',CircleClose)
-app.component('SuccessFilled',SuccessFilled)
-app.component('Failed',Failed)
-app.component('UploadFilled',UploadFilled)
-app.component('Back',Back)
-app.component('ArrowDownBold',ArrowDownBold)
-app.component('ArrowUpBold',ArrowUpBold)
-app.component('CirclePlus',CirclePlus)
+
+for(const [key,component] of Object.entries(ElementPlusIconsVue)){
+    app.component(key,component)
+}
 
 app.component(Vue3CountryIntl.name, Vue3CountryIntl)
 
 app.use(router)
 app.use(store)
-app.use(ElementPlus, {locale: en, size: 'small', zIndex: 2000})
+app.use(ElementPlus, {locale: en, size:'default', zIndex: 2000})
 app.use(i18n)
 app.use(VTypical, {
     /* options */

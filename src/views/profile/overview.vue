@@ -1,229 +1,302 @@
 <template>
   <div class="bg">
-    <div class="profile-container">
-      <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <meSideMenu></meSideMenu>
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+    <div class="overview-container">
+      <div class="overview-l-container">
+        <meSideMenu></meSideMenu>
+      </div>
+      <div class="overview-r-container">
+        <div class="overview-r-container-bg">
           <div class="dashboard-container">
-            <div class="dashboard-top-container">
-              <div class="dashboard-label">Dashboard</div>
-              <div class="dashboard-profile-percentage">
-                <h4>Profile:</h4>
-                <div class="percentage-progress-container-bg">
-                  <div class="percentage-progress-container">
-                    <el-progress class="percentage-progress"
-                                 :text-inside="true"
-                                 :stroke-width="20"
-                                 :percentage="profilePercentage" color="#b1c452">
-                    </el-progress>
+            <div class="dashboard-1-container">
+              <div class="dashboard-1">
+                <div class="dashboard-1-label">New applications</div>
+                <div class="dashboard-1-number">
+                  +7
+                </div>
+                <div class="dashboard-1-tips">
+                  total:21 applications
+                </div>
+              </div>
 
-                    <div class="percentage-progress-post-job">
-                      <span v-if="identity == 1">Apply for a job</span>
-                      <span v-if="identity == 2 || identity == 3 || identity ==4">Post a Job</span>
-                      <span v-if="identity == 5">Offer a Deal</span>
+              <div class="dashboard-1">
+                <div class="dashboard-1-label">Views this month</div>
+                <div class="dashboard-1-number">
+                  +18
+                </div>
+                <div class="dashboard-1-tips">
+                  total:156 views
+                </div>
+              </div>
+
+              <div class="dashboard-1">
+                <div class="dashboard-1-label">New educators</div>
+                <div class="dashboard-1-number">
+                  +48
+                </div>
+                <div class="dashboard-1-tips">
+                  total:892 educators
+                </div>
+              </div>
+
+              <div class="dashboard-1">
+                <div class="dashboard-1-label">Jobs posted</div>
+                <div class="dashboard-1-number">
+                  3/ <el-icon> <IconIcOutlineAllInclusive /> </el-icon>
+                </div>
+                <div class="dashboard-1-tips">
+                  <span>this month</span>
+                  <el-button class="dashboard-post-a-job-btn"
+                             type="primary" round>
+                    POST A JOB
+                  </el-button>
+                </div>
+              </div>
+
+              <div class="dashboard-1  dashboard-1-bg-1">
+                <div class="dashboard-1-label">Quick actions</div>
+                <div class="dashboard-1-actions">
+                  <el-button class="dashboard-1-action-btn" plain round>
+                    UPGRADE
+                  </el-button>
+                  <el-button class="dashboard-1-action-btn" plain round>
+                    ADVERTISE
+                  </el-button>
+                </div>
+              </div>
+
+            </div>
+            <div class="dashboard-applications">
+              <div class="dashboard-applications-label">
+                <span>New applicants(7)</span>
+                <el-button class="dashboard-applications-all-btn" link>
+                  ALL APPLICATIONS
+                </el-button>
+              </div>
+              <div class="dashboard-application-container">
+                <div class="dashboard-application">
+
+                  <div class="dashboard-application-basic">
+                    <div class="dashboard-application-basic-l">
+                      <el-avatar class="dashboard-application-avatar-img" :src="defaultAvatar"></el-avatar>
+                    </div>
+                    <div class="dashboard-application-basic-r">
+                      <div class="dashboard-application-name">Andrew Christian</div>
+                      <div class="dashboard-application-n">
+                        <div class="dashboard-application-n-1">Spain</div>
+                        <div class="dashboard-application-n-2">12 years</div>
+                      </div>
                     </div>
 
                   </div>
 
-                </div>
-
-              </div>
-            </div>
-
-            <div class="dashboard-content">
-              <template v-if="identity == 1">
-                <div class="dashboard-item events-bg" @click="applicationsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/me/applications">My Job Applications</router-link>
-                  </div>
-                </div>
-
-              </template>
-              <template v-if="identity == 2 || identity == 3 || identity == 4">
-                <div class="dashboard-item jobs-bg" @click="jobPostsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/jobs">My Jobs</router-link>
-                  </div>
-                </div>
-                <div class="dashboard-item events-bg" @click="myEventsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/events/myEvents">My Events</router-link>
-                  </div>
-                </div>
-
-              </template>
-              <template v-if="identity == 5">
-                <div class="dashboard-item deals-bg" @click="myDealsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/deals/myDeals"> My Deals</router-link>
-                  </div>
-                </div>
-                <div class="dashboard-item events-bg" @click="myEventsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/events/myEvents">My Events</router-link>
-                  </div>
-                </div>
-              </template>
-
-              <!--              <div class="dashboard-item ads-bg">-->
-              <!--                <div class="dashboard-item-l">-->
-              <!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
-              <!--                </div>-->
-              <!--                <div class="dashboard-item-r">-->
-              <!--                  <router-link to="/">My Ads</router-link>-->
-              <!--                </div>-->
-              <!--              </div>-->
-
-              <div class="dashboard-item favorites-bg" @click="myFavoritesHref()">
-                <div class="dashboard-item-l">
-                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                </div>
-                <div class="dashboard-item-r">
-                  <router-link to="/favorites">My Favorites</router-link>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <accountInfo :info="userContact" :phone="userContact.phone" :email="userContact.email"
-                       :level="accountInfoLevel" :vip-due-time="accountInfoVipDueTime"
-                       :category-str="accountInfoCategoryStr"
-                       :identityActionStatus="true"
-                       :profilePercentage="profilePercentage"
-          ></accountInfo>
-
-          <div class="basic-info-bg">
-            <div class="basic-info-container">
-              <div class="basic-info-t">
-                <div class="basic-info-label">
-                  <h4>General Private Information (Seen only by you) </h4>
-                  <div class="profile-underline-1"></div>
-                </div>
-                <div class="basic-info-edit" @click="editBasicInfo()">
-                  <el-icon :size="18">
-                    <edit/>
-                  </el-icon>
-                </div>
-              </div>
-
-              <div class="basic-info-content">
-
-                <div class="basic-info-item">
-                  <div class="basic-info-item-l">First & Last Name:</div>
-                  <div class="basic-info-item-r">{{ userContact.first_name }} {{ userContact.last_name }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.sex">
-                  <div class="basic-info-item-l">Gender:</div>
-                  <div class="basic-info-item-r">
-                    <template v-if="userContact.sex == 1">Male</template>
-                    <template v-if="userContact.sex == 2">Female</template>
-                    <template v-if="userContact.sex == 3">Undisclosed</template>
-                  </div>
-                </div>
-                <div class="basic-info-item" v-if="userContact.phone">
-                  <div class="basic-info-item-l">Phone #:</div>
-                  <div class="basic-info-item-r">{{ userContact.phone }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.email">
-                  <div class="basic-info-item-l">Email: </div>
-                  <div class="basic-info-item-r">{{ userContact.email }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.birthday">
-                  <div class="basic-info-item-l">Birthdate:</div>
-                  <div class="basic-info-item-r">{{ userContact.birthday }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="userContact.country_info">
-                  <div class="basic-info-item-l">Location:</div>
-                  <div class="basic-info-item-r">{{ $filters.countryInfoFormat(userContact.country_info)  }}</div>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-
-          <div class="admin-container" v-if="isThirdCompanyStatus != 1 && identity != 1">
-            <h3>Account Administrators</h3>
-            <div class="admin-content-container">
-              <h4>Contributors</h4>
-              <div class="admin-content-underline"></div>
-              <div class="admin-list-container">
-                <template v-if="assignUserData.length>0">
-                  <div class="admin-item-container"
-                       v-for="(item,i) in assignUserData" :key="i"
-                       @click="showMyCompany(item.id)"
-                  >
-                    <div class="admin-item-img-container">
-                      <el-image class="admin-item-img"
-                                :src="item.headimgurl ? item.headimgurl : defaultAvatar ">
-
-                      </el-image>
-                    </div>
-                    <div class="admin-item-name">{{ item.first_name }} {{item.last_name}}</div>
-                    <div class="admin-item-role">
-                      <template v-if="item.identity === 1">Educator</template>
-                      <template v-if="item.identity === 2">Recruiter</template>
-                      <template v-if="item.identity === 3">School</template>
-                      <template v-if="item.identity === 4">Other</template>
-                      <template v-if="item.identity === 5">Vendor</template>
+                  <div class="dashboard-application-job">
+                    <div class="dashboard-application-job-1">Classroom Teacher</div>
+                    <div class="dashboard-application-job-2">
+                      position applied for
                     </div>
                   </div>
 
-                </template>
+                  <div class="dashboard-application-match">
+                    <div class="dashboard-application-match-1">89%</div>
+                    <div class="dashboard-application-match-2">match meter</div>
+                  </div>
 
-              </div>
-
-              <div class="add-admin">
-                <el-button type="primary" @click="addAdmin()">Add an Admin</el-button>
-              </div>
-
-            </div>
-          </div>
-
-
-          <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataBottom.length>0">
-            <el-carousel height="220px" indicator-position="none">
-              <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataBottom" :key="i">
-                <div class="xll-ads-l">
-                  <el-image class="xll-ads-l-img"
-                            :src="item.user_url !='' ? item.user_url : item.url"></el-image>
-                </div>
-                <div class="xll-ads-r">
-                  <h4>Advertise with Us</h4>
-                  <h5>Description:</h5>
-                  <div class="xll-ads-r-desc">
-                    Your Adverts and their description will be displayed here.
-                    Just click on the banner
+                  <div class="dashboard-view-application">
+                    <el-button class="dashboard-view-application-btn" plain round @click="viewApplicationEvent()">
+                      VIEW APPLICATION
+                    </el-button>
                   </div>
 
                 </div>
-              </el-carousel-item>
-            </el-carousel>
+
+                <div class="dashboard-application-expand" v-if="expandStatus">
+                  <div class="dashboard-work-exp">
+                    <div class="dashboard-work-exp-label">
+                      <span>Working experience</span>
+                      <el-button class="dashboard-view-detail-btn" link>
+                        VIEW DETAILS
+                      </el-button>
+                    </div>
+                    <div class="dashboard-work-exp-c">
+                      <div class="dashboard-work-exp-c-item">
+                        <div class="dashboard-work-exp-c-item-label">ESL Teacher</div>
+                        <div class="dashboard-work-exp-c-item-text">
+                          EF English First, Singapore
+                        </div>
+                        <div class="dashboard-work-exp-c-item-text">
+                          2010-now(12 years)
+                        </div>
+                      </div>
+
+                      <div class="dashboard-work-exp-c-item">
+                        <div class="dashboard-work-exp-c-item-label">Kindergarten Teacher</div>
+                        <div class="dashboard-work-exp-c-item-text">
+                          Kindergarten for dogs, Philladelphia,PA
+                        </div>
+                        <div class="dashboard-work-exp-c-item-text">
+                          2008-2010(2 years)
+                        </div>
+                      </div>
+
+                      <div class="dashboard-work-exp-c-item">
+                        <div class="dashboard-work-exp-c-item-label">Tutor</div>
+                        <div class="dashboard-work-exp-c-item-text">
+                          Self, Springfield, il
+                        </div>
+                        <div class="dashboard-work-exp-c-item-text">
+                          2000-2008(8 years)
+                        </div>
+                      </div>
+
+                      <div class="dashboard-work-exp-c-item">
+                        <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>
+                      </div>
+
+
+                    </div>
+                  </div>
+
+                  <div class="dashboard-education-cer">
+                    <div class="dashboard-education-cer-label">
+                      Education & Certifications
+                    </div>
+                    <div class="dashboard-education-cer-c">
+                      <div class="dashboard-education-cer-c-item">
+                        <div class="dashboard-education-cer-c-label">
+                          University of California,Los Angeles
+                        </div>
+                        <div class="dashboard-education-cer-c-text">
+                          Master's degree,Applied Linguistics
+                        </div>
+                        <div class="dashboard-education-cer-c-text">
+                          Sep 2011 - Sep 2013
+                        </div>
+                      </div>
+
+                      <div class="dashboard-education-cer-c-item">
+                        <div class="dashboard-education-cer-c-label">
+                          San Diego State University
+                        </div>
+                        <div class="dashboard-education-cer-c-text">
+                          Bachelor's degree,Linguistics
+                        </div>
+                        <div class="dashboard-education-cer-c-text">
+                          Sep 2008 - May 2011
+                        </div>
+                      </div>
+
+
+                      <div class="dashboard-education-cer-c-item">
+                        <div class="dashboard-education-cer-c-label">
+                          Certificates and Diplomas
+                        </div>
+                        <div class="dashboard-education-cer-c-text">
+                          TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3
+                        </div>
+                      </div>
+
+                      <div class="dashboard-education-cer-c-item">
+                        <div class="dashboard-education-cer-c-label">
+                          Languages
+                        </div>
+                        <div class="dashboard-education-cer-c-text">
+                          English(native)
+                        </div>
+                        <div class="dashboard-education-cer-c-text">
+                          Korean(fluent)
+                        </div>
+                        <div class="dashboard-education-cer-c-text">
+                          Turkish(beginner)
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="dashboard-application-b">
+                    <div class="dashboard-application-b-l">
+                      <el-button class="dashboard-application-b-l-btn-1" plain round>
+                        VIEW PROFILE
+                      </el-button>
+                      <el-button class="dashboard-application-b-l-btn-1" plain round>
+                        RESUME
+                      </el-button>
+                    </div>
+                    <div class="dashboard-application-b-r">
+                      <el-button class="dashboard-application-b-l-btn-1" link round>
+                        NOT INTERESTED
+                      </el-button>
+                      <el-button class="dashboard-application-b-l-btn-2" type="primary" round>
+                        SHORTLIST IT
+                      </el-button>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+            <div class="admin-container" v-if="isThirdCompanyStatus != 1 && identity != 1">
+              <h3>Account Administrators</h3>
+              <div class="admin-content-container">
+                <h4>Contributors</h4>
+                <div class="admin-content-underline"></div>
+                <div class="admin-list-container">
+                  <template v-if="assignUserData.length>0">
+                    <div class="admin-item-container"
+                         v-for="(item,i) in assignUserData" :key="i"
+                         @click="showMyCompany(item.id)"
+                    >
+                      <div class="admin-item-img-container">
+                        <el-image class="admin-item-img"
+                                  :src="item.headimgurl ? item.headimgurl : defaultAvatar ">
+
+                        </el-image>
+                      </div>
+                      <div class="admin-item-name">{{ item.first_name }} {{ item.last_name }}</div>
+                      <div class="admin-item-role">
+                        <template v-if="item.identity === 1">Educator</template>
+                        <template v-if="item.identity === 2">Recruiter</template>
+                        <template v-if="item.identity === 3">School</template>
+                        <template v-if="item.identity === 4">Other</template>
+                        <template v-if="item.identity === 5">Vendor</template>
+                      </div>
+                    </div>
+
+                  </template>
+
+                </div>
+
+                <div class="add-admin">
+                  <el-button type="primary" @click="addAdmin()">Add an Admin</el-button>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataBottom.length>0">
+              <el-carousel height="220px" indicator-position="none">
+                <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataBottom" :key="i">
+                  <div class="xll-ads-l">
+                    <el-image class="xll-ads-l-img"
+                              :src="item.user_url !='' ? item.user_url : item.url"></el-image>
+                  </div>
+                  <div class="xll-ads-r">
+                    <h4>Advertise with Us</h4>
+                    <h5>Description:</h5>
+                    <div class="xll-ads-r-desc">
+                      Your Adverts and their description will be displayed here.
+                      Just click on the banner
+                    </div>
+
+                  </div>
+                </el-carousel-item>
+              </el-carousel>
+
+            </div>
 
           </div>
-
           <el-dialog
               v-model="dialogUserMenuCompanyVisible"
               title="Choose a Company"
@@ -240,10 +313,10 @@
                    @click="selectCompanyToUpdate(item.user_id,item.id)">
                 <template v-if="item">
                   <template v-if="identity == 1 ">
-                    {{item.name}}
+                    {{ item.name }}
                   </template>
                   <template v-if="identity != 1 && item.company_name">
-                    {{item.company_name}}
+                    {{ item.company_name }}
                   </template>
                 </template>
 
@@ -253,17 +326,17 @@
             </div>
           </el-dialog>
 
+        </div>
 
 
-        </el-col>
-      </el-row>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script>
 import defaultAvatar from '@/assets/default/avatar.png'
-import accountInfo from "../../components/accountInfo";
 import meSideMenu from "@/components/meSideMenu";
 import {
   ADS_LIST, ALL_ASSIGN_USERS,
@@ -281,8 +354,7 @@ import {encode} from "js-base64";
 export default {
   name: "index",
   components: {
-    meSideMenu,
-    accountInfo
+    meSideMenu
   },
   setup() {
 
@@ -297,10 +369,10 @@ export default {
     }
 
   },
-  watch:{
-    allIdentityChanged(newValue){
+  watch: {
+    allIdentityChanged(newValue) {
       // console.log(newValue)
-      if(newValue){
+      if (newValue) {
         this.getAllAssignUsers()
         this.getBasicInfo(this.identity)
       }
@@ -312,8 +384,8 @@ export default {
         return this.$store.state.isThirdCompanyStatus
       }
     },
-    allIdentityChanged:{
-      get(){
+    allIdentityChanged: {
+      get() {
         return this.$store.state.allIdentityChanged
       }
     }
@@ -321,6 +393,7 @@ export default {
   },
   data() {
     return {
+      expandStatus:false,
       dashboardListsImg,
       dashboardAdsImg,
       defaultAvatar,
@@ -338,11 +411,11 @@ export default {
       accountInfoVipDueTime: '',
       accountInfoCategoryStr: '',
 
-      assignUserData:[],
-      dialogUserMenuCompanyVisible:false,
-      userMenuCompanyData:[],
+      assignUserData: [],
+      dialogUserMenuCompanyVisible: false,
+      userMenuCompanyData: [],
 
-      anotherUserId:0
+      anotherUserId: 0
 
     }
   },
@@ -364,37 +437,43 @@ export default {
     this.getAllAssignUsers()
   },
   methods: {
-    selectCompanyToUpdate(userId,companyId){
-      this.$router.push({path:'/profile/admin/add',query:{action:'edit',uid:this.anotherUserId,cuid:userId,cId:companyId}})
+    viewApplicationEvent(){
+      this.expandStatus = !this.expandStatus
     },
-    showMyCompany(userId){
+    selectCompanyToUpdate(userId, companyId) {
+      this.$router.push({
+        path: '/profile/admin/add',
+        query: {action: 'edit', uid: this.anotherUserId, cuid: userId, cId: companyId}
+      })
+    },
+    showMyCompany(userId) {
       this.anotherUserId = userId
       let params = {
-        user_id:userId
+        user_id: userId
       }
-      USER_MENU_COMPANY(params).then(res=>{
+      USER_MENU_COMPANY(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.dialogUserMenuCompanyVisible = true;
           this.userMenuCompanyData = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    getAllAssignUsers(){
+    getAllAssignUsers() {
       let params = {}
-      ALL_ASSIGN_USERS(params).then(res=>{
+      ALL_ASSIGN_USERS(params).then(res => {
         console.log(res)
-        if(res.code === 200){
+        if (res.code === 200) {
           this.assignUserData = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    addAdmin(){
-      this.$router.push({path:'/profile/admin/add',query:{}})
+    addAdmin() {
+      this.$router.push({path: '/profile/admin/add', query: {}})
     },
     getPercentage(identity) {
       if (identity == 1) {
@@ -632,11 +711,11 @@ export default {
     editBasicInfo() {
       let strObj = {
         i: this.identity,
-        action:'edit'
+        action: 'edit'
       }
       let str = encode(JSON.stringify(strObj))
 
-      this.$router.push({path:'/profile/contact/user',query:{s:str}})
+      this.$router.push({path: '/profile/contact/user', query: {s: str}})
     }
 
   }
@@ -645,162 +724,35 @@ export default {
 
 <style scoped>
 .bg {
-  background-color: #f5f6f7;
+  background-color: #F0F2F5;
 }
 
-.profile-container {
-
-  margin: 0 auto;
-  padding: 20px 0;
-}
-
-
-.dashboard-container {
-  padding: 20px;
-  text-align: left;
-}
-
-.dashboard-top-container {
+.overview-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-}
-
-.dashboard-label {
-
-}
-
-.dashboard-profile-percentage {
-  width: 50%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-}
-
-.percentage-progress-container-bg {
-  background-color: #ffffff;
-  padding: 10px;
-  width: 80%;
-  border-radius: 20px;
-}
-
-.percentage-progress-container {
-  width: 100%;
-  height: 20px;
-  position: relative;
-}
-
-.percentage-progress {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-
-}
-
-.percentage-progress-post-job {
-  width: 80%;
-  position: absolute;
-  height: 10px;
-  bottom: 20px;
-  border-right: 1px solid #808080;
-}
-
-.percentage-progress-post-job span {
-  position: absolute;
-  right: -30px;
-  top: -16px;
-  font-size: 12px;
-}
-
-.dashboard-label {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.dashboard-content {
-  padding: 20px;
-  margin-top: 20px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
-
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-
-}
-
-.dashboard-item {
-  width: 45%;
-  cursor: pointer;
-  background-color: #EEEEEE;
-  color: #ffffff;
-  margin-top: 20px;
-  padding: 1%;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
 }
 
-.dashboard-item-l {
+.overview-l-container{
 
 }
 
-.dashboard-item-l-icon {
-  width: 50px;
-  height: 50px;
+.overview-r-container{
+  width:calc(100% - 160px);
 }
 
-.dashboard-item-r {
-  padding-left: 20px;
+.overview-r-container-bg{
+  padding:30px 50px 50px 50px;
+}
+
+.dashboard-container {
+
 }
 
 .dashboard-item-r a {
   text-decoration: none;
   color: #FFFFFF;
-}
-
-.ads-container {
-  margin-top: 20px;
-  padding: 0 20px;
-  text-align: center;
-}
-
-.ads-img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-.jobs-bg {
-  background-color: #870043;
-}
-
-.deals-bg {
-  background-color: #48cdda;
-}
-
-.ads-bg {
-  background-color: #20aec6;
-}
-
-.events-bg {
-  background-color: #A8BD4E;
-}
-
-.favorites-bg {
-  background-color: #FE2563;
-}
-
-.msg-bg {
-  background-color: #00525F;
 }
 
 
@@ -903,7 +855,7 @@ export default {
 .admin-item-container {
   margin-left: 20px;
   margin-top: 20px;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .admin-item-img-container {
@@ -936,6 +888,7 @@ export default {
   top: 20px;
 
 }
+
 .switch-account-tips {
   font-size: 16px;
   text-align: center;
@@ -960,103 +913,317 @@ export default {
   color: #FFFFFF;
 }
 
-.basic-info-bg{
-  padding:10px 20px;
+
+.dashboard-1-container {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+}
+
+.dashboard-1 {
+  background-color: #FFFFFF;
+  padding: 20px;
+  box-shadow: 0px 3px 23px 1px rgba(0, 0, 0, 0.07);
+  border-radius: 18px;
+  margin-right: 20px;
   margin-top: 20px;
 }
 
-.basic-info-container {
 
-  padding: 20px;
-  text-align: left;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+
+.dashboard-1-bg-1 {
+  box-shadow: 0px 3px 23px 1px rgba(102, 80, 179, 0.29);
+  background: #E7DEFF;
 }
 
-.basic-info-t {
+.dashboard-1-label {
+  font-size: 30px;
+  font-family: BSemiBold, serif;
+  font-weight: 600;
+  color: #262626;
+
+}
+
+.dashboard-1-actions {
+  margin-top: 20px;
+}
+
+.dashboard-1-action-btn {
+  font-size: 20px;
+
+}
+
+.dashboard-1-number {
+  font-weight: bold;
+  font-size: 60px;
+  font-family: BCBold, serif;
+  color: #6650B3;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-1-tips {
+  font-size: 23px;
+  font-family: Assistant-SemiBold, serif;
+  color: #262626;
+}
+
+.dashboard-post-a-job-btn {
+  margin-left: 15px;
+}
+
+
+.dashboard-applications {
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+
+}
+
+.dashboard-applications-label {
+  font-size: 30px;
+  font-family: BSemiBold, serif;
+  font-weight: 600;
+  color: #262626;
+}
+
+.dashboard-applications-all-btn {
+  font-size: 20px;
+  font-family: BCM, serif;
+  color: #6650B3;
+  margin-left: 10px;
+}
+
+.dashboard-application-container {
+  margin-top: 20px;
+  height: 588px;
+  overflow-y: scroll;
+}
+
+.dashboard-application {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 2px solid #f0f2f5;
 }
 
-.basic-info-label {
-  font-size: 16px;
-  font-weight: bold;
+
+.dashboard-application-basic {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
 }
 
-.basic-info-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
+.dashboard-application-basic-l {
+
 }
 
-.basic-info-edit:hover {
-  color: #00b3d2;
+.dashboard-application-avatar-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 70px;
 }
 
-.basic-info-content {
-  margin-top: 10px;
-  border-radius:10px;
+
+.dashboard-application-basic-r {
+  margin-left: 10px;
 }
 
-.basic-info-item {
+.dashboard-application-name {
+  font-size: 26px;
+  font-family: BarlowM, serif;
+  color: #262626;
+}
+
+.dashboard-application-n {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 15px;
+}
+
+.dashboard-application-n-1 {
+  font-size: 18px;
+  font-family: AssiRegular, serif;
+  color: #262626;
+}
+
+.dashboard-application-n-2 {
+  margin-left: 10px;
+  font-size: 18px;
+  font-family: AssiRegular, serif;
+  color: #262626;
+}
+
+.dashboard-application-job {
+  flex: 1;
+}
+
+.dashboard-application-job-1 {
+  font-size: 26px;
+  font-family: BarlowM, serif;
+  color: #262626;
+}
+
+.dashboard-application-job-2 {
+  margin-top: 15px;
+  font-size: 18px;
+  font-family: AssiRegular, serif;
+  color: #262626;
+}
+
+.dashboard-application-match {
+  flex: 1;
+}
+
+.dashboard-application-match-1 {
+  font-size: 26px;
+  font-family: BarlowM, serif;
+  color: #262626;
+}
+
+.dashboard-application-match-2 {
+  margin-top: 15px;
+  font-size: 18px;
+  font-family: AssiRegular, serif;
+  color: #262626;
+}
+
+.dashboard-view-application {
+  flex: 1;
+}
+
+.dashboard-view-application-btn {
+  font-size: 20px;
+  font-family: BCM, serif;
+  color: #262626;
+}
+
+.dashboard-application-expand {
+  padding: 20px;
+
+}
+
+.dashboard-work-exp {
+
+}
+
+.dashboard-work-exp-label {
+  border-bottom: 2px solid #B3B3B3;
+}
+
+.dashboard-work-exp-label span{
+  font-size: 26px;
+  font-family: BarlowM, serif;
+  font-weight: 500;
+  color: #262626;
+}
+.dashboard-view-detail-btn{
+  font-size: 20px;
+  font-weight: 500;
+  color: #6650B3;
+  margin-left: 10px;
+}
+
+.dashboard-work-exp-c {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  margin-top:15px;
+}
+
+.dashboard-work-exp-c-item {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.dashboard-work-exp-c-item-label {
+  font-size: 23px;
+  font-family: Assistant-SemiBold, serif;
+  font-weight: 600;
+  color: #262626;
+}
+
+.dashboard-work-exp-c-item-text {
+  font-size: 23px;
+  font-family: AssiRegular, serif;
+  font-weight: 400;
+  color: #262626;
+}
+
+.dashboard-education-cer {
+  margin-top: 50px;
+}
+
+.dashboard-education-cer-label {
+  font-size: 26px;
+  font-family: BarlowM, serif;
+  font-weight: 500;
+  color: #262626;
+}
+
+.dashboard-education-cer-c {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+}
+
+.dashboard-education-cer-c-item {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.dashboard-education-cer-c-label {
+  font-size: 23px;
+  font-family: Assistant-SemiBold, serif;
+  font-weight: 600;
+  color: #262626;
+}
+
+.dashboard-education-cer-c-text {
+  font-size: 23px;
+  font-family: AssiRegular, serif;
+  font-weight: 400;
+  color: #262626;
+}
+
+.dashboard-application-b {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  border-bottom:1px solid #FFFFFF;
+  margin-top:50px;
+
 }
 
-.basic-info-item-l{
+.dashboard-application-b-l {
 
-  width:20%;
-  text-align: left;
-  background-color: #f4f5f6;
-  padding:10px 0 10px 20px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  line-height: 24px;
-  min-height:24px;
-  font-size: 14px;
-  color:#333333;
 }
 
-.basic-info-item-r{
-  font-size:14px;
-  width:80%;
-  text-align: left;
-  background-color: #eeeeee;
-  padding:10px;
-
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  line-height: 24px;
-  min-height:24px;
+.dashboard-application-b-l-btn-1{
+  font-size: 20px;
+  font-weight: 500;
+  color: #262626;
 }
 
-
-
-@media screen and  (min-width:1200px) {
-  .profile-container{
-    width: 1100px;
-  }
+.dashboard-application-b-l-btn-2{
+  font-size: 20px;
+  font-weight: 500;
+  color: #FFFFFF;
 }
 
-@media screen and (max-width: 768px){
-  .dashboard-content{
-
-  }
-  .dashboard-item{
-    margin-top:10px;
-  }
-  .dashboard-item-l-icon{
-    width:30px;
-    height: 30px;
-  }
-
-
+.dashboard-application-b-r {
 
 }
 

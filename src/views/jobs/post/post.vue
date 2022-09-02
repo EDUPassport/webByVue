@@ -1,601 +1,686 @@
 <template>
   <div class="bg">
-    <div class="profile-container">
-      <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <meSideMenu></meSideMenu>
-        </el-col>
-        <el-col class="job-r-container" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+    <div class="post-container">
+      <div class="post-l-container">
+        <meSideMenu></meSideMenu>
+      </div>
+      <div class="post-r-container">
+        <div class="post-r-container-bg">
+
+          <div class="account-profile-t">
+
+            <div class="account-profile-t-l">New job post</div>
+            <div class="account-profile-t-r">
+
+              <el-button class="account-profile-discard-btn" link round>
+                DISCARD
+              </el-button>
+              <el-button class="account-profile-draft-btn" plain round>
+                SAVE AS DRAFT
+              </el-button>
+              <el-button class="account-profile-save-btn" type="primary" round
+                         :loading="submitLoadingValue"
+                         @click="submitJob('jobForms',3)">
+                SAVE AND SUBMIT
+              </el-button>
+            </div>
+
+          </div>
+
           <div class="job-form-container">
             <el-form
-                ref="jobForm"
+                ref="jobForms"
                 :model="jobForm"
                 :rules="jobRules"
                 label-width="120px"
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <div class="job-detail-container">
-                <div class="job-detail-label">
-                  Job Details
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  1.School information
                 </div>
-                <div class="job-detail-content">
-                  <el-tabs
-                      class="is-international-container"
-                      v-model="isInternationalName "
-                      type="border-card" @tab-click="handleIsInternationalClick">
-                    <el-tab-pane label="China" name="first">
-                      <template v-if="envName==='developmentCN' || envName==='productionCN' ">
-                        <el-form-item label="Job Location">
-                          <el-select v-model="countryObj"
-                                     @change="countryChange"
-                                     value-key="id"
-                                     filterable
-                                     placeholder="Select Country">
-                            <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                                       :value="item"></el-option>
-                          </el-select>
+                <div class="account-profile-item-c">
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="School name" >
+                        <div class="job-company-name">{{jobForm.company_name}}</div>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-tabs
+                          class="is-international-container"
+                          v-model="isInternationalName "
+                          type="border-card" @tab-click="handleIsInternationalClick">
+                        <el-tab-pane label="China" name="first">
+                          <template v-if="envName==='developmentCN' || envName==='productionCN' ">
+                            <el-form-item  label="Job Location">
+                              <el-select v-model="countryObj"
+                                         class="job-location-select"
+                                         @change="countryChange"
+                                         value-key="id"
+                                         filterable
+                                         placeholder="Select Country">
+                                <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
 
-                          <template v-if="provinceOptions.length>0">
-                            <el-select v-model="provinceObj"
+                              <template v-if="provinceOptions.length>0">
+                                <el-select v-model="provinceObj"
+                                           class="job-location-select"
+                                           value-key="id"
+                                           filterable
+                                           @change="provinceChange"
+                                           placeholder="Select Province">
+                                  <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                             :value="item"></el-option>
+                                </el-select>
+                              </template>
+                              <template v-if="cityOptions.length>0">
+                                <el-select v-model="cityObj"
+                                           class="job-location-select"
+                                           value-key="id"
+                                           filterable
+                                           @change="cityChange"
+                                           placeholder="Select City">
+                                  <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                             :value="item"></el-option>
+                                </el-select>
+                              </template>
+                            </el-form-item>
+                          </template>
+                          <template v-if="envName==='development' || envName==='production' ">
+                            <h4>
+                              Oops.. sorry, due to data laws, to post a job on the
+                              Chinese
+                              platform, you first need
+                              to redirect to and post a job there
+                            </h4>
+                            <div class="job-detail-china-btn-container">
+                              <el-button class="job-detail-china-btn" type="primary" @click="letGo()">OK, let's go
+                              </el-button>
+                            </div>
+                            <div class="job-detail-china-tips">
+                              Not clear? Need help setting up?
+                              <el-link
+                                  href="https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4">
+                                Account Management
+                              </el-link>
+                              is here !
+                            </div>
+                          </template>
+
+                        </el-tab-pane>
+                        <el-tab-pane label="International" name="second">
+                          <el-form-item  label="Job Location">
+                            <el-select v-model="countryObj"
+                                       class="job-location-select"
+                                       @change="countryChange"
                                        value-key="id"
                                        filterable
-                                       @change="provinceChange"
-                                       placeholder="Select Province">
-                              <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                       placeholder="Select Country">
+                              <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
                                          :value="item"></el-option>
                             </el-select>
-                          </template>
-                          <template v-if="cityOptions.length>0">
-                            <el-select v-model="cityObj"
-                                       value-key="id"
-                                       filterable
-                                       @change="cityChange"
-                                       placeholder="Select City">
-                              <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                                         :value="item"></el-option>
-                            </el-select>
-                          </template>
-                        </el-form-item>
-                      </template>
-                      <template v-if="envName==='development' || envName==='production' ">
-                        <h4>
-                          Oops.. sorry, due to data laws, to post a job on the
-                          Chinese
-                          platform, you first need
-                          to redirect to and post a job there
-                        </h4>
-                        <div class="job-detail-china-btn-container">
-                          <el-button class="job-detail-china-btn" type="primary" @click="letGo()">OK, let's go
-                          </el-button>
-                        </div>
-                        <div class="job-detail-china-tips">
-                          Not clear? Need help setting up?
-                          <el-link
-                              href="https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4">
-                            Account Management
-                          </el-link>
-                          is here !
-                        </div>
-                      </template>
 
-                    </el-tab-pane>
-                    <el-tab-pane label="International" name="second">
-                      <el-form-item label="Job Location">
-                        <el-select v-model="countryObj"
-                                   @change="countryChange"
-                                   value-key="id"
-                                   filterable
-                                   placeholder="Select Country">
-                          <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                                     :value="item"></el-option>
-                        </el-select>
+                            <template v-if="provinceOptions.length>0">
+                              <el-select v-model="provinceObj"
+                                         class="job-location-select"
+                                         value-key="id"
+                                         filterable
+                                         @change="provinceChange"
+                                         placeholder="Select Province">
+                                <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
+                            </template>
+                            <template v-if="cityOptions.length>0">
+                              <el-select v-model="cityObj"
+                                         class="job-location-select"
+                                         value-key="id"
+                                         filterable
+                                         @change="cityChange"
+                                         placeholder="Select City">
+                                <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
+                            </template>
 
-                        <template v-if="provinceOptions.length>0">
-                          <el-select v-model="provinceObj"
-                                     value-key="id"
-                                     filterable
-                                     @change="provinceChange"
-                                     placeholder="Select Province">
-                            <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                                       :value="item"></el-option>
-                          </el-select>
-                        </template>
-                        <template v-if="cityOptions.length>0">
-                          <el-select v-model="cityObj"
-                                     value-key="id"
-                                     filterable
-                                     @change="cityChange"
-                                     placeholder="Select City">
-                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                                       :value="item"></el-option>
-                          </el-select>
-                        </template>
+                          </el-form-item>
+                        </el-tab-pane>
+
+                      </el-tabs>
+
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item  label="Add Location Pin">
+                        <div class="map-container">
+                          <div id="mapContainer" class="basemap"></div>
+                        </div>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+
+                </div>
+              </div>
+
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  2.Job details
+                </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="Job Title" required prop="job_title">
+
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add">
+                            <el-input type="text" v-model="jobForm.job_title"
+                                      placeholder="Your job title"></el-input>
+                          </div>
+                        </div>
+
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class="item.object_en == jobForm.job_title ? 'tags-active' : '' "
+                                 v-for="(item,index) in jobTitleList" :key="index"
+                                 @click="selectJobTitle(item)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                        </div>
 
                       </el-form-item>
-                    </el-tab-pane>
 
-                  </el-tabs>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Start Date">
 
-                  <el-form-item label="Add Location Pin">
-                    <div class="map-container">
-                      <div id="mapContainer" class="basemap"></div>
-                    </div>
-
-                  </el-form-item>
-                  <el-form-item label="Number of Vacancies">
-                    <el-input v-model="jobForm.numbers" type="number" placeholder="Number of Vacancies"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Employment Type" required>
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class="selectEmploymentTypeList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in employmentTypeList" :key="index"
-                             @click="selectEmploymentType(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                    </div>
-                  </el-form-item>
-                  <el-form-item label="Is this an Online Job?">
-                    <el-switch v-model="jobForm.is_online"></el-switch>
-                  </el-form-item>
-                </div>
-              </div>
-
-              <div class="position-info-container">
-                <div class="position-info-label">General Position Info</div>
-                <div class="position-info-content">
-                  <el-form-item label="Job Title" required>
-
-                    <div class="object-tags-add">
-                      <div class="object-tags-item-add">
-                        <el-input type="text" v-model="ownJobTitleValue"
-                                  placeholder="Job Title"></el-input>
-                      </div>
-                    </div>
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class="item.object_en == ownJobTitleValue ? 'tags-active' : '' "
-                             v-for="(item,index) in jobTitleList" :key="index"
-                             @click="selectJobTitle(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                    </div>
-
-                  </el-form-item>
-                  <el-form-item label="Application Deadline">
-                    <el-date-picker
-                        v-model="jobForm.apply_due_date"
-                        type="date"
-                        placeholder="Application Deadline"
-                        format="YYYY-MM-DD"
-                        value-format="YYYY-MM-DD"
-                    >
-                    </el-date-picker>
-                  </el-form-item>
-                  <el-form-item label="Start Date">
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectStartDateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in startDateList" :key="index"
-                             @click="selectStartDate(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectStartDateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownStartDateList" :key="index"
-                             @click="selectStartDate(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addStartDateStatus==false"
-                             @click="addStartDateStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addStartDateStatus">
-                          <el-input type="text" v-model="ownStartDateValue"
-                                    placeholder="Add start date"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownStartDateValue.length>0"
-                                       @click="addOwnStartDate">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownStartDateValue.length==0"
-                                       @click="addStartDateStatus=false">Cancel
-                            </el-button>
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add" >
+                            <el-input type="text" v-model="jobForm.entry_date"
+                                      placeholder="Specific date, if applicable"></el-input>
                           </div>
                         </div>
-                      </div>
-                    </div>
 
-
-                  </el-form-item>
-                  <el-form-item label="Student Ages">
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectAgeToTeachList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ageToTeachList" :key="index"
-                             @click="selectAgeToTeach(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                    </div>
-
-                  </el-form-item>
-                  <el-form-item label="Class Size (Students)">
-                    <el-input v-model="jobForm.class_size" placeholder="Class Size / Students"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Subject(s)">
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in subjectList" :key="index"
-                             @click="selectSubject(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownSubjectList" :key="index"
-                             @click="selectSubject(item)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addSubjectStatus==false"
-                             @click="addSubjectStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addSubjectStatus">
-                          <el-input type="text" v-model="ownSubjectValue"
-                                    placeholder="Add your subject"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownSubjectValue.length>0"
-                                       @click="addOwnSubject">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownSubjectValue.length==0"
-                                       @click="addSubjectStatus=false">Cancel
-                            </el-button>
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" item.object_en == jobForm.entry_date ? 'tags-active' : '' "
+                                 v-for="(item,index) in startDateList" :key="index"
+                                 @click="selectStartDate(item)">
+                              {{ item.object_en }}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                      </el-form-item>
 
-
-                  </el-form-item>
-                  <el-form-item label="Additional Job information">
-                    <el-input v-model="jobForm.desc" type="textarea"
-                              placeholder="Please enter additional job information"></el-input>
-                  </el-form-item>
-
-                </div>
-              </div>
-
-              <div class="compensation-container">
-                <div class="compensation-label">Compensation</div>
-                <div class="compensation-content">
-                  <el-form-item label="Salary (Min)" required>
-                    <el-input v-model="jobForm.salary_min" placeholder="Enter min salary"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Salary (Max)" required>
-                    <el-input v-model="jobForm.salary_max" placeholder="Enter max salary"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Payment Period" required>
-                    <el-select v-model="jobForm.payment_period"
-                               filterable
-                               placeholder="Choose Payment Period">
-                      <el-option v-for="(item,i) in paymentPeriodList" :key="i" :label="item.object_en"
-                                 :value="item.id"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="Currency" required>
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCurrencyList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in currencyList" :key="index"
-                             @click="selectCurrency(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCurrencyList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownCurrencyList" :key="index"
-                             @click="selectCurrency(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addCurrencyStatus==false"
-                             @click="addCurrencyStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addCurrencyStatus">
-                          <el-input type="text" v-model="ownCurrencyValue"
-                                    placeholder="Add your currency"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCurrencyValue.length>0"
-                                       @click="addOwnCurrency">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCurrencyValue.length==0"
-                                       @click="addCurrencyStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </el-form-item>
-                  <el-form-item label="Working Hours">
-                    <div class="working-hours-show-container" v-if="workingHoursData.length>0">
-
-                      <div class="working-hours-show-item" v-for="(item,index) in workingHoursData" :key="index">
-                        <div class="week-show-item" v-for="(week,i) in item.week" :key="i">
-                          <span v-if="week==1 ">M</span>
-                          <span v-if="week==2 ">T</span>
-                          <span v-if="week==3 ">W</span>
-                          <span v-if="week==4 ">Th</span>
-                          <span v-if="week==5 ">F</span>
-                          <span v-if="week==6 ">Sa</span>
-                          <span v-if="week==7 ">Su</span>
-                        </div>
-                        <view class="hours-show-container">{{ item.hours }}</view>
-                      </div>
-                    </div>
-                    <div class="working-hours-add" @click="addWorkingHours">Add+</div>
-                    <div class="working-hours-container" v-if="workingHoursContainerStatus">
-                      <div class="week-container">
-                        <div class="week-item" v-for="(item,index) in weekList" :key="index"
-                             @click="selectWeekItem(item.id)"
-                             :class="selectWeekItemData.indexOf(item.id) == -1 ? '' : 'week-item-active'">
-                          <span>{{ item.name_en }}</span>
-                        </div>
-                      </div>
-                      <div class="hours-container">
-                        <el-time-select
-                            v-model="workStartTime"
-                            placeholder="Start time"
-                            start="00:00"
-                            step="00:15"
-                            end="24:00"
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Application Deadline">
+                        <el-date-picker
+                            v-model="jobForm.apply_due_date"
+                            type="date"
+                            placeholder="Select date, if applicable"
+                            format="YYYY-MM-DD"
+                            value-format="YYYY-MM-DD"
                         >
-                        </el-time-select>
-                        <el-time-select
-                            v-model="workEndTime"
-                            :min-time="workStartTime"
-                            placeholder="End time"
-                            start="00:00"
-                            step="00:15"
-                            end="24:00"
+                        </el-date-picker>
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Employment Type" required>
+
+                        <div class="xll-tags-container">
+                          <div class="xll-tags">
+                            <div class="xll-tags-item"
+                                 :class="selectEmploymentTypeList.findIndex((element)=>element===item) == -1 ? '' : 'xll-tags-active' "
+                                 v-for="(item,index) in employmentTypeList" :key="index"
+                                 @click="selectEmploymentType(item)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                        </div>
+                      </el-form-item>
+                      <div class="xll-checkbox-container">
+                        <el-checkbox v-model="jobForm.is_online" label="THIS IS AN ONLINE JOB" size="large"></el-checkbox>
+                        <!--                          <el-checkbox label="NON-STANDARD WORKING HOURS" size="large"></el-checkbox>-->
+                      </div>
+
+                    </el-col>
+                  </el-row>
+
+                  <el-row :gutter="50">
+                    <el-col :span="24">
+                      <el-form-item label="Job description">
+                        <el-input v-model="jobForm.desc" type="textarea"
+                                  :rows="4"
+                                  placeholder="Be as detailed as possible about responsibilities."></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+
+                </div>
+              </div>
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  3. Compensation
+                </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="Salary" >
+
+                        <div class="xll-salary-container">
+                          <el-select
+                              v-model="jobForm.currency"
+                              class="xll-currency-select"
+                              placeholder="Select" >
+                            <el-option
+                                v-for="(item,index) in currencyList"
+                                :key="index"
+                                :label="item.object_en"
+                                :value="item.id"
+                            >
+                            </el-option>
+                          </el-select>
+                          <el-input class="xll-min-salary" v-model="jobForm.salary_min" placeholder="min"></el-input>
+                          <div class="xll-salary-line">-</div>
+                          <el-input class="xll-max-salary" v-model="jobForm.salary_max" placeholder="max"></el-input>
+                          <el-select class="xll-payment-select" v-model="jobForm.payment_period"
+                                     filterable
+                                     placeholder="Choose Payment Period">
+                            <el-option v-for="(item,i) in paymentPeriodList" :key="i" :label="item.object_en"
+                                       :value="item.id"></el-option>
+                          </el-select>
+                        </div>
+
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Benefits">
+
+
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add">
+                            <el-input type="text"
+                                      v-model="ownBenefitsValue"
+                                      placeholder='Click "add" after each entry '
+                            >
+                            </el-input>
+                            <div class="object-tags-item-btn-container">
+                              <el-button class="object-tags-item-btn"
+                                         type="primary"
+                                         link
+                                         @click="addOwnBenefits">
+                                ADD
+                              </el-button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in benefitsList" :key="index"
+                                 @click="selectBenefits(item)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ownBenefitsList" :key="index"
+                                 @click="selectBenefits(item)">
+                              {{ item.object_name }}
+                            </div>
+                          </div>
+
+                        </div>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                      <el-form-item label="Number of Vacancies">
+                        <el-input v-model="jobForm.numbers" type="number" placeholder="Number of Vacancies"></el-input>
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+
+                </div>
+              </div>
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  4. Class details
+                </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="Subjects">
+
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add">
+                            <el-input type="text"
+                                      v-model="ownSubjectValue"
+                                      placeholder='Click "add" after each entry '
+                            >
+                            </el-input>
+                            <div class="object-tags-item-btn-container">
+                              <el-button class="object-tags-item-btn"
+                                         link
+                                         type="primary"
+                                         @click="addOwnSubject">
+                                ADD
+                              </el-button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in subjectList" :key="index"
+                                 @click="selectSubject(item)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ownSubjectList" :key="index"
+                                 @click="selectSubject(item)">
+                              {{ item.object_name }}
+                            </div>
+                          </div>
+
+                        </div>
+
+
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Class Size">
+                        <el-input v-model="jobForm.class_size" placeholder="Number of students per class"></el-input>
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Student Ages">
+
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectAgeToTeachList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ageToTeachList" :key="index"
+                                 @click="selectAgeToTeach(item)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                        </div>
+
+                      </el-form-item>
+
+                    </el-col>
+
+                  </el-row>
+
+                </div>
+              </div>
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  5. Requirements
+                </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="Languages">
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add">
+                            <el-input type="text" v-model="ownLanguagesValue"
+                                      placeholder='Click "add" after each entry '>
+                            </el-input>
+                            <div class="object-tags-item-btn-container">
+                              <el-button class="object-tags-item-btn"
+                                         link
+                                         type="primary"
+                                         @click="addOwnLanguages">
+                                ADD
+                              </el-button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectLanguagesList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in languagesList" :key="index"
+                                 @click="selectLanguages(item)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectLanguagesList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ownLanguagesList" :key="index"
+                                 @click="selectLanguages(item)">
+                              {{ item.object_name }}
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </el-form-item>
+
+                    </el-col>
+
+                    <el-col :span="6">
+                      <el-form-item label="Teaching license and certificates">
+                        <el-checkbox v-model="jobForm.is_teaching_license"
+                                     label="TEACHING LICENSE REQUIRED">
+                        </el-checkbox>
+                        <el-checkbox v-model="jobForm.is_teaching_exp"
+                                     label="TEACHING CERTIFICATE(S) REQUIRED">
+                        </el-checkbox>
+                        <div class="object-tags-container">
+
+                          <div class="object-tags-add">
+                            <div class="object-tags-item-add" >
+                              <el-input type="text" v-model="ownTeachingCertificateValue"
+                                        placeholder='Click "add" after each entry'>
+                              </el-input>
+                              <div class="object-tags-item-btn-container">
+                                <el-button class="object-tags-item-btn"
+                                           link
+                                           type="primary"
+                                           @click="addOwnTeachingCertificate">
+                                  ADD
+                                </el-button>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectTeachingCertificateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in teachingCertificateList" :key="index"
+                                 @click="selectTeachingCertificate(item)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectTeachingCertificateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ownTeachingCertificateList" :key="index"
+                                 @click="selectTeachingCertificate(item)">
+                              {{ item.object_name }}
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Minimum degree and experience">
+                        <el-select v-model="jobForm.education" placeholder="Minimum degree">
+                          <el-option v-for="(item,i) in educationList" :key="i" :label="item.object_en"
+                                     :value="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+
+                      <el-form-item label="" v-if="jobForm.is_teaching_exp">
+                        <el-select v-model="jobForm.teaching_times" placeholder="Minimum years of experience">
+                          <el-option v-for="(item,i) in teachingExpList" :key="i" :label="item.object_en"
+                                     :value="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+
+                      <el-form-item label="Native Speaker">
+                        <el-switch v-model="jobForm.is_mom_language"></el-switch>
+                      </el-form-item>
+
+                    </el-col>
+                  </el-row>
+
+                </div>
+              </div>
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  6. Other requirements
+                </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+
+                      <el-form-item label="Additional certification">
+                        <el-checkbox
+                            v-model="jobForm.is_cpr"
+                            label="CPR CERTIFICATE"
                         >
-                        </el-time-select>
-                      </div>
-                      <div class="working-hours-button">
-                        <el-button type="primary" @click="addWorkingHoursConfirm">Confirm</el-button>
-                      </div>
-                    </div>
+                        </el-checkbox>
+                        <el-checkbox
+                            v-model="jobForm.is_first_aide"
+                            label="FIRST AID CERTIFICATE"
+                        >
+                        </el-checkbox>
 
-                  </el-form-item>
-                  <el-form-item label="Benefits">
+                      </el-form-item>
 
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in benefitsList" :key="index"
-                             @click="selectBenefits(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownBenefitsList" :key="index"
-                             @click="selectBenefits(item)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addBenefitsStatus==false"
-                             @click="addBenefitsStatus=true">Add+
-                        </div>
-                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Gender">
+                        <el-select v-model="jobForm.sex"
+                                   :popper-append-to-body="false"
+                                   placeholder="Select your gender">
+                          <el-option v-for="(item,i) in sexOptions" :key="i" :label="item.object_en"
+                                     :value="item.value"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="Applicant's age">
+                        <el-slider v-model="ageValue" range show-stops :max="100"></el-slider>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addBenefitsStatus">
-                          <el-input type="text" v-model="ownBenefitsValue"
-                                    placeholder="Add your benefits"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownBenefitsValue.length>0"
-                                       @click="addOwnBenefits">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownBenefitsValue.length==0"
-                                       @click="addBenefitsStatus=false">Cancel
-                            </el-button>
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="Will you accept applicant of different skin colors?(Equal Opportunity)">
+                        <el-switch v-model="jobForm.is_equal"></el-switch>
+                      </el-form-item>
+
+                    </el-col>
+
+                    <el-col :span="18">
+                      <el-form-item label="Working Hours">
+                        <div class="working-hours-show-container" v-if="workingHoursData.length>0">
+
+                          <div class="working-hours-show-item" v-for="(item,index) in workingHoursData" :key="index">
+                            <div class="week-show-item" v-for="(week,i) in item.week" :key="i">
+                              <span v-if="week==1 ">M</span>
+                              <span v-if="week==2 ">T</span>
+                              <span v-if="week==3 ">W</span>
+                              <span v-if="week==4 ">Th</span>
+                              <span v-if="week==5 ">F</span>
+                              <span v-if="week==6 ">Sa</span>
+                              <span v-if="week==7 ">Su</span>
+                            </div>
+                            <view class="hours-show-container">{{ item.hours }}</view>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                        <div class="working-hours-add" @click="addWorkingHours">Add+</div>
+                        <div class="working-hours-container" v-if="workingHoursContainerStatus">
+                          <div class="week-container">
+                            <div class="week-item" v-for="(item,index) in weekList" :key="index"
+                                 @click="selectWeekItem(item.id)"
+                                 :class="selectWeekItemData.indexOf(item.id) == -1 ? '' : 'week-item-active'">
+                              <span>{{ item.name_en }}</span>
+                            </div>
+                          </div>
+                          <div class="hours-container">
+                            <el-time-select
+                                v-model="workStartTime"
+                                placeholder="Start time"
+                                start="00:00"
+                                step="00:15"
+                                end="24:00"
+                            >
+                            </el-time-select>
+                            <el-time-select
+                                v-model="workEndTime"
+                                :min-time="workStartTime"
+                                placeholder="End time"
+                                start="00:00"
+                                step="00:15"
+                                end="24:00"
+                            >
+                            </el-time-select>
+                          </div>
+                          <div class="working-hours-button">
+                            <el-button type="primary" @click="addWorkingHoursConfirm">Confirm</el-button>
+                          </div>
+                        </div>
+
+                      </el-form-item>
+
+                    </el-col>
 
 
-                  </el-form-item>
+                  </el-row>
+
                 </div>
-              </div>
-
-              <div class="applicant-container">
-                <div class="applicant-label">Applicant Requirements</div>
-                <div class="applicant-content">
-                  <el-form-item label="Native Speaker">
-                    <el-switch v-model="jobForm.is_mom_language"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="Teaching License">
-                    <el-switch v-model="jobForm.is_teaching_license"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="Gender">
-                    <el-select v-model="jobForm.sex" placeholder="Select your gender">
-                      <el-option v-for="(item,i) in sexOptions" :key="i" :label="item.object_en"
-                                 :value="item.value"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="Teaching Certificate(s)">
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectTeachingCertificateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in teachingCertificateList" :key="index"
-                             @click="selectTeachingCertificate(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectTeachingCertificateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownTeachingCertificateList" :key="index"
-                             @click="selectTeachingCertificate(item)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addTeachingCertificateStatus==false"
-                             @click="addTeachingCertificateStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addTeachingCertificateStatus">
-                          <el-input type="text" v-model="ownTeachingCertificateValue"
-                                    placeholder="Add your teaching certificate"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownTeachingCertificateValue.length>0"
-                                       @click="addOwnTeachingCertificate">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownTeachingCertificateValue.length==0"
-                                       @click="addTeachingCertificateStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-
-                  </el-form-item>
-                  <el-form-item label="CPR Certified">
-                    <el-switch v-model="jobForm.is_cpr"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="First Aid Certified">
-                    <el-switch v-model="jobForm.is_first_aide"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="Teaching Experience">
-                    <el-switch v-model="jobForm.is_teaching_exp"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="" v-if="jobForm.is_teaching_exp">
-                    <el-select v-model="jobForm.teaching_times" placeholder="Choose Teaching Experience">
-                      <el-option v-for="(item,i) in teachingExpList" :key="i" :label="item.object_en"
-                                 :value="item.id"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="Minimum Education Certificate">
-                    <el-select v-model="jobForm.education" placeholder="Choose Degree Level">
-                      <el-option v-for="(item,i) in educationList" :key="i" :label="item.object_en"
-                                 :value="item.id"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="Languages">
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectLanguagesList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in languagesList" :key="index"
-                             @click="selectLanguages(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectLanguagesList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownLanguagesList" :key="index"
-                             @click="selectLanguages(item)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addLanguagesStatus==false"
-                             @click="addLanguagesStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addLanguagesStatus">
-                          <el-input type="text" v-model="ownLanguagesValue"
-                                    placeholder="Add your language"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownLanguagesValue.length>0"
-                                       @click="addOwnLanguages">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownLanguagesValue.length==0"
-                                       @click="addLanguagesStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </el-form-item>
-                  <el-form-item label="Age">
-                    <el-slider v-model="ageValue" range show-stops :max="100"></el-slider>
-                  </el-form-item>
-                  <el-form-item label="Will you accept applicant of different skin colors?(Equal Opportunity)">
-                    <el-switch v-model="jobForm.is_equal"></el-switch>
-                  </el-form-item>
-                </div>
-              </div>
-
-              <div class="submit-container">
-                <el-form-item>
-                  <el-button type="primary" @click="submitJob('jobForm',3)">Submit</el-button>
-                </el-form-item>
               </div>
 
             </el-form>
           </div>
-        </el-col>
-      </el-row>
+
+        </div>
+
+      </div>
+
     </div>
   </div>
 </template>
@@ -612,7 +697,7 @@ import {
   USER_OBJECT_LIST, ADD_JOB,JOB_DETAIL,
   JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO, GET_COUNTRY_LIST, USER_INFO_BY_TOKEN_V2
 } from '@/api/api';
-// import {ref} from "vue";
+import {ref, reactive} from "vue";
 import axios from 'axios'
 import {encode} from "js-base64";
 
@@ -626,15 +711,103 @@ export default {
 
     const goDomain = process.env.VUE_APP_EXCHANGE_DOMAIN
 
+    const jobForms = ref(null)
+
+    const jobForm = reactive(
+        {
+          job_title: '',
+          job_location: '',
+          country_id: '',
+          state_id: '',
+          town_id: '',
+
+          apply_due_date: '',
+          is_online: 0,
+          salary_min: '',
+          salary_max: '',
+          payment_period: '',
+          payment_period_str: '',
+          desc: '',
+          numbers: 1,
+          is_equal: 0,
+          sex: '',
+          sex_name: '',
+          is_cpr: 0,
+          is_first_aide: 0,
+          is_teaching_exp: 0,
+          teaching_times: '',
+          teaching_times_str: '',
+          is_teaching_license: 0,
+          education: '',
+          education_str: '',
+          nationality: '',
+          age: '',
+          age_min: '',
+          age_max: '',
+          is_interview: 1,
+          interview_name: '',
+          interview_nationlity: '',
+          interview_imgurl: '',
+          entry_date: '',
+          company_id: '',
+          company_name: '',
+          identity: '',
+          currency: '',
+          is_mom_language: 0,
+          employment_type: '',
+          class_size: '',
+          working_hours: '',
+          version_time: '',
+          address: '',
+          state: '',
+          town: '',
+          lat: '',
+          lng: '',
+          international: 0,
+          nation_address: '',
+          token: localStorage.getItem('token')
+        }
+    )
+
+    const validatorOwnJobTitle = (rule,value,callback)=>{
+      if(!jobForm.job_title){
+        return callback(new Error('Please input job title'))
+      }
+      callback()
+    }
+
+    const jobRules = reactive(
+        {
+          job_title: [
+            {
+              validator: validatorOwnJobTitle,
+              message: 'Please input',
+              trigger: 'change',
+            },
+          ],
+          job_location: [
+            {
+              required: false,
+              message: 'Please input',
+              trigger: 'change',
+            },
+          ],
+        }
+    )
+
     return {
       envName,
-      goDomain
+      goDomain,
+      jobForms,
+      jobForm,
+      jobRules
 
     }
 
   },
   data() {
     return {
+      submitLoadingValue:false,
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       isInternationalName: 'first',
@@ -775,69 +948,6 @@ export default {
       educationList: [],
       ageValue: [18, 60],
 
-      jobForm: {
-        job_title: '',
-        job_location: '',
-        country_id: '',
-        state_id: '',
-        town_id: '',
-
-        apply_due_date: '',
-        is_online: 0,
-        salary_min: '',
-        salary_max: '',
-        payment_period: '',
-        payment_period_str: '',
-        desc: '',
-        numbers: 1,
-        is_equal: 0,
-        sex: '',
-        sex_name: '',
-        is_cpr: 0,
-        is_first_aide: 0,
-        is_teaching_exp: 0,
-        teaching_times: '',
-        teaching_times_str: '',
-        is_teaching_license: 0,
-        education: '',
-        education_str: '',
-        nationality: '',
-        age: '',
-        age_min: '',
-        age_max: '',
-        is_interview: 1,
-        interview_name: '',
-        interview_nationlity: '',
-        interview_imgurl: '',
-        entry_date: '',
-        company_id: '',
-        company_name: '',
-        identity: '',
-        currency: '',
-        is_mom_language: 0,
-        employment_type: '',
-        class_size: '',
-        working_hours: '',
-        version_time: '',
-        address: '',
-        state: '',
-        town: '',
-        lat: '',
-        lng: '',
-        international: 0,
-        nation_address: '',
-        token: localStorage.getItem('token')
-      },
-      jobRules: {
-        job_location: [
-          {
-            required: false,
-            message: 'Please input',
-            trigger: 'change',
-          },
-        ],
-      },
-
       sLocationType: 1,
       countryObj: {},
       provinceObj: {},
@@ -879,6 +989,7 @@ export default {
 
   },
   methods: {
+
     getJobDetail(id) {
       let that = this;
       let params = {
@@ -947,6 +1058,8 @@ export default {
 
           // job title
           if (jobMessage.job_title) {
+            this.jobForm.job_title = jobMessage.job_title;
+
             let arr = this.jobTitleList.filter(item => item.object_en == jobMessage.job_title);
             let arrcn = this.jobTitleList.filter(item => item.object_cn == jobMessage.job_title);
             if (arr.length > 0 || arrcn.length > 0) {
@@ -957,13 +1070,14 @@ export default {
                 object_en: jobMessage.job_title,
                 object_pid: 6
               };
-              this.ownJobTitleList.push(obj);
               this.selectJobTitleList.push(obj);
             }
           }
 
           // start date
           if (jobMessage.entry_date) {
+            this.jobForm.entry_date = jobMessage.entry_date;
+
             let arr = this.startDateList.filter(item => item.object_en == jobMessage.entry_date);
             let arrcn = this.startDateList.filter(item => item.object_cn == jobMessage.entry_date);
             if (arr.length > 0 || arrcn.length > 0) {
@@ -974,7 +1088,6 @@ export default {
                 object_en: jobMessage.entry_date,
                 object_pid: 108
               };
-              this.ownStartDateList.push(obj);
               this.selectStartDateList.push(obj);
             }
           }
@@ -1404,37 +1517,13 @@ export default {
     },
     selectJobTitle(value) {
       // console.log(value)
-      this.ownJobTitleValue = value.object_en;
+      this.jobForm.job_title = value.object_en;
 
-    },
-    addOwnStartDate() {
-      this.addStartDateStatus = false;
-      let obj = {
-        id: 0,
-        object_en: this.ownStartDateValue,
-        object_pid: 6
-      }
-      this.ownStartDateList.push(obj);
-      this.ownStartDateValue = '';
-      let index = this.selectStartDateList.findIndex((element) => element === obj);
-
-      if (index == -1) {
-        this.selectStartDateList.splice(index, 1, obj);
-
-      } else {
-        this.selectStartDateList.splice(index, 1);
-      }
-      // console.log(this.selectStartDateList)
     },
     selectStartDate(value) {
-      let index = this.selectStartDateList.findIndex((element) => element === value);
 
-      if (index == -1) {
-        this.selectStartDateList.splice(index, 1, value);
-      } else {
-        this.selectStartDateList.splice(index, 1);
-      }
-      // console.log(this.selectStartDateList)
+      this.jobForm.entry_date = value.object_en;
+
     },
     addOwnAgeToTeach() {
       this.addAgeToTeachStatus = false;
@@ -1921,14 +2010,6 @@ export default {
         return this.$message.warning('Employment Type')
       }
 
-      if (this.ownJobTitleValue.length <= 0) {
-        return this.$message.warning('Job Title')
-      }
-
-      if (this.selectCurrencyList.length <= 0) {
-        return this.$message.warning('Currency')
-      }
-
       let jobLocationValue = ''
       let countryName = this.countryName
       let provinceName = this.provinceName
@@ -1962,17 +2043,6 @@ export default {
         that.jobForm.currency = currency[0].object_en;
       } else {
         that.jobForm.currency = '';
-      }
-
-      if (this.ownJobTitleValue) {
-        that.jobForm.job_title = this.ownJobTitleValue;
-      }
-
-      if (this.selectStartDateList.length > 0) {
-        let startDate = this.selectStartDateList;
-        that.jobForm.entry_date = startDate[0].object_en;
-      } else {
-        that.jobForm.entry_date = '';
       }
 
       that.jobForm.age_min = this.ageValue[0];
@@ -2171,14 +2241,58 @@ export default {
   background-color: #f5f6f7;
 }
 
-.profile-container {
-  margin: 0 auto;
-  padding: 20px 0;
+.post-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.job-r-container {
-  padding: 0 20px;
+.post-l-container{
+
 }
+
+.post-r-container{
+  width:calc(100% - 160px);
+}
+
+.post-r-container-bg{
+  padding:30px 50px 50px 50px;
+}
+
+
+.account-profile-t{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 40px 0;
+}
+
+.account-profile-t-l{
+  font-family: BSemiBold, serif;
+  font-size:30px;
+  color:#262626;
+
+}
+
+.account-profile-t-r{
+
+}
+
+.account-profile-discard-btn{
+  font-size:20px;
+}
+
+.account-profile-draft-btn{
+  background-color: #E7DEFF;
+  font-size:20px;
+}
+
+.account-profile-save-btn{
+  font-size:20px;
+}
+
 
 .job-detail-container {
   background-color: #FFFFFF;
@@ -2200,8 +2314,13 @@ export default {
   margin-top: 10px;
 }
 
+.job-location-select{
+  margin-top: 15px;
+}
+
 .map-container {
-  height: 300px;
+  width: 100%;
+  height: 160px;
 }
 
 .basemap {
@@ -2272,11 +2391,13 @@ export default {
 }
 
 .object-tags-item {
-  background-color: rgba(0, 179, 210, 0.1);
+  background-color: #F0F2F5;
+  border:1px solid #262626;
   padding: 4px 10px;
   border-radius: 6px;
   margin: 10px;
-  font-size: 14px;
+  font-size: 20px;
+  font-family: BCM, serif;
   cursor: pointer;
 }
 
@@ -2287,15 +2408,24 @@ export default {
 
 .object-tags-item-add {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  position: relative;
+}
+
+.object-tags-item-btn-container{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+}
+
+.object-tags-item-btn{
+  color:#262626;
+  font-size: 20px;
 }
 
 
 .tags-active {
-  background-color: #00CE47;
+  background-color: #6650B3;
   color: #FFFFFF;
 }
 
@@ -2423,10 +2553,188 @@ export default {
   padding: 0 10px;
 }
 
+.job-form-container{
+  height: 800px;
+  overflow: auto;
+}
+
+.account-profile-item-container{
+  padding: 50px;
+  border-radius: 38px;
+  background-color: #ffffff;
+  margin-bottom: 50px;
+
+}
+
+
+.account-profile-item-label{
+  font-family: BarlowM, serif;
+  font-size:26px;
+  color:#262626;
+}
+
+.account-profile-item-c{
+  margin-top:15px;
+}
+.job-company-name{
+  font-size: 23px;
+  font-family:AssiRegular, serif;
+  color:#262626;
+}
+.account-profile-item-c-item{
+  width:100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.account-profile-item-c-item-1{
+  width:100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+
+.account-profile-category{
+  width:30%;
+}
+
+.account-profile-form-item{
+
+}
+
+.account-profile-form-item-map{
+
+}
+
+.account-profile-item-textarea{
+  width:100%;
+}
+
+
+.account-profile-item-location{
+  width:60%;
+}
+
+.account-profile-item-map{
+  width:40%;
+}
+
+/deep/ .el-input--default .el-input__wrapper{
+  /*min-width: 350px;*/
+}
+
+.upload-photo-img{
+  width:70px;
+}
+
+.upload-photo-img-1{
+  width:200px;
+}
+
+.xll-tags-container{
+
+
+}
+
+.xll-tags{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.xll-tags-item{
+  background-color: #F0F2F5;
+  /*border:1px solid #262626;*/
+  height: 40px;
+  line-height: 40px;
+  padding: 0 10px;
+  font-size: 20px;
+  font-family: BCM, serif;
+  cursor: pointer;
+}
+
+.xll-tags-item:nth-child(1){
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+  border: 1px solid #262626;
+}
+
+.xll-tags-item:nth-child(2){
+
+  border-top: 1px solid #262626;
+  border-bottom: 1px solid #262626;
+}
+
+.xll-tags-item:nth-child(3){
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border: 1px solid #262626;
+}
+.xll-tags-active{
+  background-color: #6650B3;
+  color: #FFFFFF;
+}
+
+.xll-checkbox-container{
+  /*margin-top: 10px;*/
+}
+
+.xll-salary-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+}
+
+/deep/ .xll-currency-select .el-input__wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: unset;
+}
+
+/deep/ .xll-currency-select .el-input__inner{
+   width: 10px;
+  border: 0;
+}
+
+/deep/ .xll-currency-select .el-input__suffix{
+  height: auto;
+}
+/deep/ .xll-currency-select .el-input__suffix-inner>:first-child{
+  margin-left: 0;
+}
+/deep/ .xll-currency-select .el-select .el-input.is-focus .el-input__wrapper{
+  box-shadow: unset;
+}
+
+.xll-min-salary{
+  margin-left: 5px;
+  width: 120px;
+}
+.xll-salary-line{
+  width: 20px;
+  text-align: center;
+}
+.xll-max-salary{
+  margin-left: 5px;
+  width: 120px;
+}
+.xll-payment-select{
+  margin-left: 5px;
+}
+
+
 @media screen and (min-width: 1200px) {
-  .profile-container {
-    width: 1100px;
-  }
+
 
 }
 

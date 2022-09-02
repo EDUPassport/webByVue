@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ChatComponent></ChatComponent>
+<!--    <ChatComponent></ChatComponent>-->
 <!--    <el-backtop :right="10"  :bottom="74" />-->
     <el-footer height="auto" class="footer-bg">
       <el-row class="footer-row" :gutter="0" align="top" justify="center">
@@ -175,7 +175,7 @@ import linkedinImg from '@/assets/footer/linkedin.png'
 import facebookImg from '@/assets/footer/facebook.png'
 import instagramImg from '@/assets/footer/instagram-fill.png'
 import {ADD_SUBSCRIBE_EMAIL} from '@/api/api'
-import ChatComponent from '@/components/chat/chat'
+// import ChatComponent from '@/components/chat/chat'
 
 export default {
   name: "Footer",
@@ -212,7 +212,7 @@ export default {
     }
   },
   components:{
-    ChatComponent
+
   },
   methods:{
     subscribe(){
@@ -238,9 +238,10 @@ export default {
 <style scoped>
 
 .footer-bg {
-  background-color: #162028;
-  color: #ffffff;
+  background-color: #FFFFFF;
+  color: #262626;
   text-align: left;
+  padding-top: 50px;
 
 }
 .footer-row{
@@ -335,10 +336,10 @@ export default {
 @media screen and (min-width: 1200px) {
 
   .footer-row{
-    width: 1100px;
+    /*width: 1100px;*/
   }
   .footer-b {
-    width: 1100px;
+    /*width: 1100px;*/
   }
 }
 

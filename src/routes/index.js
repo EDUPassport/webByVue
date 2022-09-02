@@ -16,6 +16,7 @@ const routes = [
             {
                 path: '/home',
                 name: 'home',
+                alias:'/',
                 component: () => import('@/views/home/index'),
                 meta: {
                     titleC: 'China Home',
@@ -186,6 +187,33 @@ const routes = [
                 }
             },
             {
+                path: '/account/home',
+                name: 'accountHome',
+                component: () => import('@/views/account/home'),
+                meta: {
+                    titleC: 'China Account information',
+                    titleG: 'Global Account information',
+                }
+            },
+            {
+                path: '/jobs/home',
+                name: 'jobsHome',
+                component: () => import('@/views/jobs/home'),
+                meta: {
+                    titleC: 'China jobs and applications',
+                    titleG: 'Global jobs and applications',
+                }
+            },
+            {
+                path: '/chat/messages',
+                name: 'chatMessages',
+                component: () => import('@/views/chat/messages'),
+                meta: {
+                    titleC: 'China Chat Messages',
+                    titleG: 'Global Chat Messages',
+                }
+            },
+            {
                 path: '/favorites',
                 name: 'favorites',
                 component: () => import('@/views/me/favorites'),
@@ -243,6 +271,16 @@ const routes = [
                 }
             },
             {
+                path: '/educator/edit/home',
+                name: 'editEducatorHome',
+                component: () => import('@/views/profile/educator/edit/home'),
+                meta: {
+                    activeMenu: "/account/home",
+                    titleC: 'China Add Profile',
+                    titleG: 'Global Add Profile',
+                }
+            },
+            {
                 path: '/educator/edit/basic',
                 name: 'editEducatorBasic',
                 component: () => import('@/views/profile/educator/edit/basic'),
@@ -286,7 +324,7 @@ const routes = [
                 name: 'editRecruiter',
                 component: () => import('@/views/profile/business/edit/recruiter'),
                 meta: {
-                    activeMenu: "/business/profile",
+                    activeMenu: "/account/home",
                     titleC: 'China Edit Recruiter Info',
                     titleG: 'Global Edit Recruiter Info',
                 }
@@ -296,7 +334,7 @@ const routes = [
                 name: 'editBusinessOther',
                 component: () => import('@/views/profile/business/edit/other'),
                 meta: {
-                    activeMenu: "/business/profile",
+                    activeMenu: "/account/home",
                     titleC: 'China Edit Other Info',
                     titleG: 'Global Edit Other Info',
                 }
@@ -306,7 +344,7 @@ const routes = [
                 name: 'editSchoolInfo',
                 component: () => import('@/views/profile/business/edit/school'),
                 meta: {
-                    activeMenu: "/business/profile",
+                    activeMenu: "/account/home",
                     titleC: 'China Edit School Info',
                     titleG: 'Global Edit School Info',
                 }
@@ -325,7 +363,7 @@ const routes = [
                 name: 'editVendor',
                 component: () => import('@/views/profile/vendor/edit/vendor'),
                 meta: {
-                    activeMenu: "/vendor/profile",
+                    activeMenu: "/account/home",
                     titleC: 'China Edit Vendor Info',
                     titleG: 'Global Edit Vendor Info',
                 }
@@ -409,6 +447,15 @@ const routes = [
                 meta:{
                     titleC: 'China Paypal',
                     titleG: 'Global Paypal',
+                }
+            },
+            {
+                path:'/perks/home',
+                name:'perksHome',
+                component:()=>import('@/views/perks/home'),
+                meta:{
+                    titleC: 'China Perks',
+                    titleG: 'Global Perks',
                 }
             },
             {
@@ -502,6 +549,15 @@ const routes = [
         meta: {
             titleC: 'China EDU Passport Login and Sign Up',
             titleG: 'Global Login EDU Passport Login and Sign Up',
+        },
+    },
+    {
+        path: '/edupassport/signup',
+        name: 'edupassportSignUp',
+        component: () => import('@/views/login/register/index'),
+        meta: {
+            titleC: 'China EDU Passport Sign Up',
+            titleG: 'Global Login EDU Passport Sign Up',
         },
     },
     {

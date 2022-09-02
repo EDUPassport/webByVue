@@ -2,19 +2,24 @@
   <div class="bg">
     <div class="basic-container">
 
-      <profileTitle :i="i" :action="action"></profileTitle>
+      <div class="basic-l-container">
+        <meSideMenu></meSideMenu>
+      </div>
 
-      <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4" v-if="sideMenuStatus">
-          <meSideMenu></meSideMenu>
-        </el-col>
-        <el-col class="basic-r-container" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
-          <div class="basic-breadcrumb-container">
-            <el-breadcrumb separator="/">
-              <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-              <el-breadcrumb-item :to="{ path: '/business/profile' }">Profile</el-breadcrumb-item>
-              <el-breadcrumb-item>School</el-breadcrumb-item>
-            </el-breadcrumb>
+      <div class="basic-r-container">
+        <div class="basic-r-container-bg">
+          <div class="account-profile-t">
+            <div class="account-profile-t-l">Your profile</div>
+            <div class="account-profile-t-r">
+              <el-button class="account-profile-cancel-btn" plain round>
+                CANCEL
+              </el-button>
+              <el-button class="account-profile-save-btn" type="primary" round
+                         :loading="submitLoadingValue"
+                         @click="submitForm('basicForm')">
+                SAVE
+              </el-button>
+            </div>
           </div>
 
           <div class="basic-form">
@@ -26,317 +31,550 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <el-form-item label="Company Name" prop="company_name">
-                <el-input v-model="basicForm.company_name" placeholder="Company Name"></el-input>
-              </el-form-item>
-              <el-form-item label="Business Introduction" prop="desc">
-                <el-input v-model="basicForm.desc" type="textarea"
-                          placeholder="Business Introduction"></el-input>
-              </el-form-item>
 
-              <el-form-item label="Work Email">
-                <el-input v-model="basicForm.work_email" placeholder="Please input"></el-input>
-              </el-form-item>
-              <el-form-item label="Website">
-                <el-input v-model="basicForm.website" placeholder="Please input"></el-input>
-              </el-form-item>
-
-              <el-form-item label="Work Phone #" prop="phone" >
-                <div class="contact-phone-container">
-                  <div class="contact-phone-l">
-                    <!--                    @onChange="onDefaultChange"-->
-                    <el-select v-model="basicForm.country_code" filterable class="m-2" placeholder="Select" >
-                      <el-option
-                          v-for="item in phoneCodeData"
-                          :key="item.phone_code"
-                          :label="item.en+' '+item.phone_code"
-                          :value="item.phone_code"
-                      >
-                        <span style="float: left">{{ item.en }}</span>
-                        <span style=" float: right;color: var(--el-text-color-secondary);font-size: 13px;">
-                          {{ item.phone_code }}
-                        </span>
-                      </el-option>
-                    </el-select>
-                  </div>
-                  <div class="contact-phone-r">
-                    <el-input v-model="basicForm.work_phone" placeholder="Phone #"></el-input>
-                  </div>
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  1.Basic information
                 </div>
-              </el-form-item>
+                <div class="account-profile-item-c">
 
-              <el-form-item label="Logo Photo" prop="logo">
-                <el-upload
-                    class="profile-uploader"
-                    action=""
-                    :headers="uploadHeaders"
-                    :show-file-list="false"
-                    :http-request="logoPhotoHttpRequest"
-                    :before-upload="beforeLogoPhotoUpload"
-                >
-                  <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="profile-avatar"></el-image>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item  label="School name" prop="company_name">
+                        <el-input v-model="basicForm.company_name" placeholder="School name"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Address">
+                        <el-input v-model="basicForm.address" placeholder="Street name,building,apartment"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item  label="Website">
+                        <el-input v-model="basicForm.website" placeholder="https://"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item class="account-profile-item-location" label="Location">
+                        <div class="xll-location-container">
+                          <div class="xll-location-l">
+                            <template v-if="haveLocationStatus">
+                              {{ $filters.countryInfoFormat(countryInfo) }}
+                            </template>
 
-              <el-form-item label="Year Founded">
-                <el-date-picker
-                    v-model="basicForm.year_founded"
-                    type="year"
-                    format="YYYY"
-                    value-format="YYYY"
-                    placeholder="Year Founded"
-                    :disabledDate="birthdayDisabledDate"
-                    style="width: 100%"
-                ></el-date-picker>
-              </el-form-item>
+                            <template v-else>
+                              <el-select v-model="countryObj"
+                                         @change="countryChange"
+                                         value-key="id"
+                                         filterable
+                                         placeholder="Select Country">
+                                <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
 
-              <el-form-item label="Location">
+                              <template v-if="provinceOptions.length>0">
+                                <el-select v-model="provinceObj"
+                                           class="account-location-select"
+                                           value-key="id"
+                                           filterable
+                                           @change="provinceChange"
+                                           placeholder="Select Province">
+                                  <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                             :value="item"></el-option>
+                                </el-select>
+                              </template>
+                              <template v-if="cityOptions.length>0">
+                                <el-select v-model="cityObj"
+                                           class="account-location-select"
+                                           value-key="id"
+                                           filterable
+                                           @change="cityChange"
+                                           placeholder="Select City">
+                                  <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                             :value="item"></el-option>
+                                </el-select>
+                              </template>
+                            </template>
+                          </div>
 
-                <div class="xll-location-container">
-                  <div class="xll-location-l">
-                    <template v-if="haveLocationStatus">
-                      {{ $filters.countryInfoFormat(countryInfo) }}
-                    </template>
+                          <div class="xll-location-r" >
+                            <el-button plain round v-if="haveLocationStatus"
+                                       @click="changeEditLocation()">
+                              Edit
+                            </el-button>
+                            <el-button plain round v-if="showLocationCancelStatus"
+                                       @click="changeCancelLocation()">
+                              Cancel
+                            </el-button>
+                          </div>
 
-                    <template v-else>
-                      <el-select v-model="countryObj"
-                                 @change="countryChange"
-                                 value-key="id"
-                                 filterable
-                                 placeholder="Select Country">
-                        <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                                   :value="item"></el-option>
-                      </el-select>
+                        </div>
 
-                      <template v-if="provinceOptions.length>0">
-                        <el-select v-model="provinceObj"
-                                   value-key="id"
-                                   filterable
-                                   @change="provinceChange"
-                                   placeholder="Select Province">
-                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                                     :value="item"></el-option>
-                        </el-select>
-                      </template>
-                      <template v-if="cityOptions.length>0">
-                        <el-select v-model="cityObj"
-                                   value-key="id"
-                                   filterable
-                                   @change="cityChange"
-                                   placeholder="Select City">
-                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                                     :value="item"></el-option>
-                        </el-select>
-                      </template>
-                    </template>
-                  </div>
+                      </el-form-item>
 
-                  <div class="xll-location-r" >
-                    <el-button plain round v-if="haveLocationStatus"
-                               @click="changeEditLocation()">
-                      Edit
-                    </el-button>
-                    <el-button plain round v-if="showLocationCancelStatus"
-                               @click="changeCancelLocation()">
-                      Cancel
-                    </el-button>
-                  </div>
+                    </el-col>
+                  </el-row>
+
+                  <el-row :gutter="50">
+                    <el-col :span="12">
+                      <el-form-item label="Add Location Pin">
+                        <div class="map-container">
+                          <div id="mapContainer" class="basemap"></div>
+                        </div>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
 
                 </div>
+              </div>
 
-              </el-form-item>
-              <el-form-item label="Add Location Pin">
-                <div class="map-container">
-                  <div id="mapContainer" class="basemap"></div>
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  2.Contact information
                 </div>
-              </el-form-item>
-              <el-form-item label="Edu-Business Categories (Choose 1)" prop="category_id" required>
-                <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
-                  <div v-if="item['children'].length>0" class="category-parent">
-                  </div>
-                  <div v-if="item['children'].length===0" class="categories-tags-item"
-                       :class="selectBusinessTypeList.findIndex(element=>element.id === item.id) == -1 ? '' : 'tag-active' "
-                       @click="selectBusinessType(item)">
-                    {{ item.identity_name }}
-                  </div>
-                  <div class="categories-tags-item" v-for="(child,key) in item['children']" :key="key"
-                       :class="selectBusinessTypeList.findIndex(element=>element.id === child.id) == -1 ? '' : 'tag-active' "
-                       @click="selectBusinessType(child)">
-                    {{ child.identity_name }}
-                  </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="Displayed name" prop="display_name">
+                        <el-input v-model="basicForm.display_name"
+                                  placeholder="Name that will be visible to others">
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Job title" prop="job_title">
+                        <el-input v-model="basicForm.job_title"
+                                  placeholder="eg, HR, recruiter, etc.">
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item  label="E-mail address">
+                        <el-input v-model="basicForm.work_email"
+                                  placeholder="Your business email address">
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item  label="Phone number" prop="phone" >
+                        <div class="contact-phone-container">
+                          <div class="contact-phone-l">
+                            <!--                    @onChange="onDefaultChange"-->
+                            <el-select v-model="basicForm.country_code" filterable class="m-2" placeholder="Select" >
+                              <el-option
+                                  v-for="item in phoneCodeData"
+                                  :key="item.phone_code"
+                                  :label="item.en+' '+item.phone_code"
+                                  :value="item.phone_code"
+                              >
+                                <span style="float: left">{{ item.en }}</span>
+                                <span style=" float: right;color: var(--el-text-color-secondary);font-size: 13px;">
+                                    {{ item.phone_code }}
+                                </span>
+                              </el-option>
+                            </el-select>
+                          </div>
+                          <div class="contact-phone-r">
+                            <el-input v-model="basicForm.work_phone" placeholder="Phone #"></el-input>
+                          </div>
+                        </div>
+                      </el-form-item>
+
+                    </el-col>
+                  </el-row>
                 </div>
-              </el-form-item>
+              </div>
 
-              <el-form-item label="Business registration certificate" prop="business_reg_img">
-                <el-upload
-                    class="business-reg-uploader"
-                    action=""
-                    :headers="uploadHeaders"
-                    :show-file-list="false"
-                    :http-request="businessRegPhotoHttpRequest"
-                    :before-upload="beforeBusinessRegPhotoUpload"
-                >
-                  <el-image v-if="businessRegPhotoUrl" :src="businessRegPhotoUrl" class="business-reg-avatar"></el-image>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>
-
-              <el-form-item label="License" prop="license">
-                <el-upload
-                    class="business-reg-uploader"
-                    action=""
-                    :headers="uploadHeaders"
-                    :show-file-list="false"
-                    :http-request="licenseHttpRequest"
-                    :before-upload="beforeLicensePhotoUpload"
-                >
-                  <el-image v-if="licensePhotoUrl" :src="licensePhotoUrl" class="business-reg-avatar"></el-image>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>
-
-              <el-form-item label="Background Image" prop="background_image">
-                <el-upload
-                    class="business-reg-uploader"
-                    action=""
-                    :headers="uploadHeaders"
-                    :show-file-list="false"
-                    :http-request="backgroundHttpRequest"
-                    :before-upload="beforeBackgroundPhotoUpload"
-                >
-                  <el-image v-if="backgroundPhotoUrl" :src="backgroundPhotoUrl" class="business-reg-avatar"></el-image>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>
-
-
-
-              <el-form-item label="Intro Video" prop="video_url">
-                <el-upload
-                    class="intro-video-uploader"
-                    action=""
-                    :headers="uploadHeaders"
-                    :show-file-list="false"
-                    :http-request="videoHttpRequest"
-                    :before-upload="beforeIntroVideoUpload"
-                >
-                  <video v-if="introVideoUrl" :src="introVideoUrl" controls class="intro-video-avatar"/>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>
-
-              <el-form-item label="Technology Available" prop="technology_available">
-                <el-input v-model="basicForm.technology_available" type="textarea"
-                          placeholder="Computers, Smart screens, 3D Printing, etc..."></el-input>
-              </el-form-item>
-              <el-form-item label="Field Trips">
-                <el-switch v-model="basicForm.felds_trips"></el-switch>
-              </el-form-item>
-
-              <el-form-item label="Tuition (One Year)">
-                <el-input v-model="tuitionValue" type="number" placeholder="Tuition/Year">
-                  <template #prepend>
-                    <el-select v-model="currencyValue" placeholder="Currency" style="width: 115px">
-                      <el-option :label="item.object_en" :value="item.id" v-for="(item,i) in currencyList" :key="i"/>
-                    </el-select>
-                  </template>
-                </el-input>
-              </el-form-item>
-
-              <el-form-item label="Curriculum" prop="curriculum">
-                <el-input v-model="basicForm.staff_student_ratio" type="textarea"
-                          placeholder="Oxford Reading Tree, McGraw Hill,etc..."></el-input>
-              </el-form-item>
-
-              <el-form-item label="Average class size">
-                <el-input v-model="basicForm.class_size" type="number" placeholder="25 Students"></el-input>
-              </el-form-item>
-
-              <el-form-item label="Our Students Age">
-                <div class="object-tags-container">
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectStudentAgeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in editStudentAgeList" :key="index"
-                         @click="selectStudentAge(item,1)">
-                      {{ item.object_en }}
-                    </div>
-                  </div>
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  3.Business information
                 </div>
-              </el-form-item>
+                <div class="account-profile-item-c">
 
-              <el-form-item label="Subjects We Teach">
-                <div class="object-tags-container">
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectSubjectList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in editSubjectList" :key="index"
-                         @click="selectSubject(item,1)">
-                      {{ item.object_en }}
-                    </div>
-                  </div>
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectSubjectList.findIndex((element)=>element==item) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in ownSubjectList" :key="index"
-                         @click="selectSubject(item,2)">
-                      {{ item.object_name }}
-                    </div>
-                  </div>
-                  <div class="object-tags">
-                    <div class="object-tags-item" v-if="addSubjectStatus==false"
-                         @click="addSubjectStatus=true">Add+
-                    </div>
-                  </div>
+                  <el-row :gutter="50">
 
-                  <div class="object-tags-add">
-                    <div class="object-tags-item-add" v-if="addSubjectStatus">
-                      <el-input type="text" v-model="ownSubjectValue"
-                                placeholder="Add subject"></el-input>
-                      <div class="object-tags-item-btn-container">
-                        <el-button class="object-tags-item-btn" type="primary"
-                                   v-if="ownSubjectValue.length>0"
-                                   @click="addOwnSubject">Confirm
-                        </el-button>
-                        <el-button class="object-tags-item-btn" type="primary"
-                                   v-if="ownSubjectValue.length==0"
-                                   @click="addSubjectStatus=false">Cancel
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
+                    <el-col :span="6">
+                      <el-form-item class="account-profile-category" label="Category" prop="category_id" required>
+                        <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
+                          <div v-if="item['children'].length>0" class="category-parent">
+                          </div>
+                          <div v-if="item['children'].length===0" class="categories-tags-item"
+                               :class="selectBusinessTypeList.findIndex(element=>element.id === item.id) == -1 ? '' : 'tag-active' "
+                               @click="selectBusinessType(item)">
+                            {{ item.identity_name }}
+                          </div>
+                          <div class="categories-tags-item" v-for="(child,key) in item['children']" :key="key"
+                               :class="selectBusinessTypeList.findIndex(element=>element.id === child.id) == -1 ? '' : 'tag-active' "
+                               @click="selectBusinessType(child)">
+                            {{ child.identity_name }}
+                          </div>
+                        </div>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                      <el-form-item
+                          label="Business registration certificate"
+                          prop="business_reg_img">
+                        <el-upload
+                            class="profile-uploader"
+                            action=""
+                            :headers="uploadHeaders"
+                            :show-file-list="false"
+                            :http-request="businessRegPhotoHttpRequest"
+                            :before-upload="beforeBusinessRegPhotoUpload"
+                        >
+                          <el-icon :size="45" >
+                            <IconBiPlusSquare />
+                          </el-icon>
+                        </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="businessRegPhotoUrl">
+                              <el-image :src="businessRegPhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(businessRegPhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                      <el-form-item label="License" prop="license">
+                        <el-upload
+                            class="profile-uploader"
+                            action=""
+                            :headers="uploadHeaders"
+                            :show-file-list="false"
+                            :http-request="licenseHttpRequest"
+                            :before-upload="beforeLicensePhotoUpload"
+                        >
+                          <el-icon :size="45">
+                            <IconBiPlusSquare />
+                          </el-icon>
+                        </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="licensePhotoUrl">
+                              <el-image :src="licensePhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(licensePhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
+                          <el-image :src="dialogSingleImageUrl"></el-image>
+                        </el-dialog>
+
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                      <el-form-item label="Year of establishment">
+                        <el-date-picker
+                            v-model="basicForm.year_founded"
+                            type="year"
+                            format="YYYY"
+                            value-format="YYYY"
+                            placeholder="eg, 1890"
+                            :disabledDate="birthdayDisabledDate"
+                            style="width: 100%"
+                        ></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
                 </div>
+              </div>
 
-              </el-form-item>
-
-              <el-form-item label="School Facilities">
-                <div class="object-tags-container">
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectSchoolFacilitesList.findIndex((element)=>element.id==item.id) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in editSchoolFacilitesList" :key="index"
-                         @click="selectSchoolFacilites(item,1)">
-                      {{ item.object_en }}
-                    </div>
-                  </div>
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  4.Courses and classes
                 </div>
-              </el-form-item>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="Subjects we teach">
+
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add">
+                            <el-input type="text"
+                                      v-model="ownSubjectValue"
+                                      placeholder='Click "add" after each entry '>
+                            </el-input>
+                            <div class="object-tags-item-btn-container">
+                              <el-button class="object-tags-item-btn"
+                                         link
+                                         type="primary"
+                                         @click="addOwnSubject">
+                                 ADD
+                              </el-button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectSubjectList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in editSubjectList" :key="index"
+                                 @click="selectSubject(item,1)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectSubjectList.findIndex((element)=>element==item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ownSubjectList" :key="index"
+                                 @click="selectSubject(item,2)">
+                              {{ item.object_name }}
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item  label="Student's age">
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectStudentAgeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in editStudentAgeList" :key="index"
+                                 @click="selectStudentAge(item,1)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                        </div>
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item  label="Average class size">
+                        <el-input v-model="basicForm.class_size" type="number" placeholder="Number of students per class"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item  label="School organizes field trips">
+                        <el-switch v-model="basicForm.felds_trips"></el-switch>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="Core Curriculum" prop="curriculum">
+                        <el-input v-model="basicForm.staff_student_ratio" type="textarea"
+                                  placeholder="List courses you teach">
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item  label="Available technologies" prop="technology_available">
+                        <el-input v-model="basicForm.technology_available" type="textarea"
+                                  placeholder="Computers, Smart screens, 3D Printing, etc...">
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                      <el-form-item  label="Facilities">
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectSchoolFacilitesList.findIndex((element)=>element.id==item.id) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in editSchoolFacilitesList" :key="index"
+                                 @click="selectSchoolFacilites(item,1)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                        </div>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                      <el-form-item  label="Tuition">
+                        <el-input v-model="tuitionValue" type="number" placeholder="amount per year">
+                          <template #prepend>
+                            <el-select v-model="currencyValue" placeholder="Currency" style="width: 115px">
+                              <el-option :label="item.object_en" :value="item.id" v-for="(item,i) in currencyList" :key="i"/>
+                            </el-select>
+                          </template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+
+                </div>
+              </div>
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  5.About school
+                </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+                    <el-col :span="24">
+                      <el-form-item class="account-profile-item-textarea"
+                                    label="Introduction" prop="desc">
+                        <el-input v-model="basicForm.desc"
+                                  type="textarea"
+                                  :rows="4"
+                                  placeholder="Write a couple of paragraphs about your school and why educators would want to teach there.">
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item  label="Logo" prop="logo">
+                        <el-upload
+                            class="profile-uploader"
+                            action=""
+                            :headers="uploadHeaders"
+                            :show-file-list="false"
+                            :http-request="logoPhotoHttpRequest"
+                            :before-upload="beforeLogoPhotoUpload"
+                        >
+                          <el-icon :size="45">
+                            <IconBiPlusSquare />
+                          </el-icon>
+                        </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="logoPhotoUrl">
+                              <el-image :src="logoPhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(logoPhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item
+                          label="Introduction Video" prop="video_url">
+                        <el-upload
+                            class="profile-uploader"
+                            action=""
+                            :headers="uploadHeaders"
+                            :show-file-list="false"
+                            :http-request="videoHttpRequest"
+                            :before-upload="beforeIntroVideoUpload"
+                        >
+                          <video v-if="introVideoUrl" :src="introVideoUrl" controls class="upload-photo-img-1"/>
+                          <el-icon v-else :size="45">
+                            <IconBiPlusSquare />
+                          </el-icon>
+                        </el-upload>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item
+                          label="Background Image" prop="background_image">
+                        <el-upload
+                            class="profile-uploader"
+                            action=""
+                            :headers="uploadHeaders"
+                            :show-file-list="false"
+                            :http-request="backgroundHttpRequest"
+                            :before-upload="beforeBackgroundPhotoUpload"
+                        >
+                          <el-icon :size="45">
+                            <IconBiPlusSquare />
+                          </el-icon>
+                        </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="backgroundPhotoUrl">
+                              <el-image :src="backgroundPhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(backgroundPhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Profile Photo" prop="profile_photo">
+                        <el-upload
+                            class="profile-uploader"
+                            action=""
+                            :headers="uploadHeaders"
+                            :show-file-list="false"
+                            :http-request="profilePhotoHttpRequest"
+                            :before-upload="beforeProfilePhotoUpload"
+                        >
+                          <el-icon :size="45">
+                            <IconBiPlusSquare />
+                          </el-icon>
+                        </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="profilePhotoUrl">
+                              <el-image :src="profilePhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(profilePhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+                </div>
+              </div>
 
             </el-form>
 
           </div>
 
-          <div class="submit-btn-container">
-            <el-button type="primary"
-                       :loading="submitLoadingValue"
-                       class="submit-btn"
-                       @click="submitForm('basicForm')">
-              Submit
-            </el-button>
-          </div>
-        </el-col>
-      </el-row>
+        </div>
+
+      </div>
+
     </div>
 
     <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()" ></xllLoading>
@@ -347,7 +585,7 @@
 <script>
 import xllLoading from "@/components/xllLoading"
 
-import profileTitle from "@/components/profileTitle"
+// import profileTitle from "@/components/profileTitle"
 import meSideMenu from "@/components/meSideMenu";
 import {
   USER_OBJECT_LIST,
@@ -368,12 +606,10 @@ import {countriesData} from "@/utils/data";
 import {decode} from "js-base64";
 import ImageCompressor from 'compressorjs'
 
-
 export default {
   name: "school",
   components: {
     meSideMenu,
-    profileTitle,
     xllLoading
   },
   setup(){
@@ -404,6 +640,7 @@ export default {
       uploadData: {
         token: localStorage.getItem('token')
       },
+      profilePhotoUrl:'',
       logoPhotoUrl:'',
       licensePhotoUrl:'',
       businessRegPhotoUrl:'',
@@ -412,6 +649,11 @@ export default {
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       basicForm: {
+
+        display_name: "",
+        job_title:'',
+        profile_photo:'',
+        website:'',
         company_name:'',
         license:'',
         logo:'',
@@ -436,7 +678,6 @@ export default {
         tuition:'',
         business_reg_img:'',
         technology_available: '',
-        website:'',
         staff_student_ratio:'',
         class_size:''
       },
@@ -510,7 +751,13 @@ export default {
       i:0,
       id:0,
       cid:0,
-      action:''
+      action:'',
+
+      dialogVideoVisible:false,
+      dialogVideoUrl:'',
+      dialogSingleImageVisible:false,
+      dialogSingleImageUrl:'',
+
 
     }
   },
@@ -538,7 +785,7 @@ export default {
       this.action = strObj.action;
 
       if(strObj.action == 'add'){
-        this.sideMenuStatus = false;
+        // this.sideMenuStatus = false;
         this.getBasicInfo(strObj.i)
       }
 
@@ -801,6 +1048,69 @@ export default {
       }
       return isLt2M
     },
+    profilePhotoHttpRequest(options){
+      let self = this;
+      // console.log(options)
+      new ImageCompressor(options.file,{
+        quality:0.6,
+        success(file) {
+          // console.log(file)
+          const formData = new FormData();
+
+          formData.append('token',localStorage.getItem('token'))
+          // console.log(file)
+          let isInChina = process.env.VUE_APP_CHINA
+          if(isInChina === 'yes'){
+            formData.append('file[]',file,file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.data[0]['file_url'];
+                self.uploadLoadingStatus = false;
+                self.profilePhotoUrl = myFileUrl
+                self.basicForm.profile_photo = myFileUrl
+
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+          if(isInChina === 'no'){
+            formData.append('file',file,file.name)
+            UPLOAD_BY_SERVICE(formData).then(res=>{
+              // console.log(res)
+              if(res.code == 200){
+                let myFileUrl = res.message.file_path;
+                self.uploadLoadingStatus = false;
+                self.profilePhotoUrl = myFileUrl
+                self.basicForm.profile_photo = myFileUrl
+              }
+            }).catch(err=>{
+              console.log(err)
+            })
+
+          }
+
+        },
+        error(err){
+          console.log(err.message)
+        }
+
+      })
+
+    },
+    beforeProfilePhotoUpload(file) {
+      this.uploadLoadingStatus = true;
+
+      const isLt2M = file.size / 1024 / 1024 < 20
+
+      if (!isLt2M) {
+        this.$message.error('Avatar picture size can not exceed 20MB')
+      }
+      return isLt2M
+    },
     logoPhotoHttpRequest(options){
       let self = this;
       // console.log(options)
@@ -854,6 +1164,7 @@ export default {
       })
 
     },
+
     beforeLogoPhotoUpload(file) {
       this.uploadLoadingStatus = true;
 
@@ -1071,10 +1382,14 @@ export default {
             }
           }).catch(err => {
             console.log(err)
+            this.submitLoadingValue = false;
+
             this.$message.error(err.msg)
           })
 
         } else {
+          this.submitLoadingValue = false;
+
           console.log('error submit!!')
           return false
         }
@@ -1686,7 +2001,23 @@ export default {
         console.log(err)
       })
 
-    }
+    },
+    handleAccountImagePreview(file) {
+      // console.log(file)
+      this.dialogAccountImageUrl = file.url
+      this.dialogAccountImageVisible = true
+
+    },
+    handleVideoPreview(file) {
+      // console.log(file)
+      this.dialogVideoUrl = file;
+      this.dialogVideoVisible = true
+
+    },
+    handleSingleImagePreview(file){
+      this.dialogSingleImageUrl = file
+      this.dialogSingleImageVisible = true;
+    },
 
 
   }
@@ -1694,24 +2025,63 @@ export default {
 </script>
 
 <style scoped>
+
 .bg {
-  background-color: #f5f6f7;
+  background-color: #F0F2F5;
 }
 
 .basic-container {
-  margin: 0 auto;
-  padding: 20px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.basic-r-container {
-  padding: 20px;
+.basic-l-container{
+
+}
+
+.basic-r-container{
+  width:calc(100% - 160px);
+}
+
+.basic-r-container-bg{
+  padding:30px 50px 50px 50px;
+}
+
+.account-profile-t{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 40px 0;
+}
+
+.account-profile-t-l{
+  font-family: BSemiBold, serif;
+  font-size:30px;
+  color:#262626;
+
+}
+
+.account-profile-t-r{
+
+}
+
+.account-profile-cancel-btn{
+  font-size:20px;
+}
+
+.account-profile-save-btn{
+  font-size:20px;
 }
 
 .basic-form {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
+  padding-bottom: 50px;
+  /*height: 800px;*/
+  overflow-y: scroll;
 }
+
 
 .demo-ruleForm {
   text-align: left;
@@ -1745,13 +2115,14 @@ export default {
   background-color: #EEEEEE;
   margin-top: 10px;
   margin-left: 10px;
-  border-radius: 10px;
-  font-size: 14px;
+  border-radius: 6px;
+  font-size: 20px;
   cursor: pointer;
+  font-family: BCM, serif;
 }
 
 .tag-active {
-  background-color: #00b3d2;
+  background-color: #6650B3;
   color: #FFFFFF;
 }
 
@@ -1790,11 +2161,13 @@ export default {
 }
 
 .object-tags-item {
-  background-color: rgba(0, 179, 210, 0.1);
+  background-color: #F0F2F5;
+  border:1px solid #262626;
   padding: 4px 10px;
   border-radius: 6px;
   margin: 10px;
-  font-size: 14px;
+  font-size: 20px;
+  font-family: BCM, serif;
   cursor: pointer;
 }
 
@@ -1805,18 +2178,26 @@ export default {
 
 .object-tags-item-add {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  position: relative;
+}
+
+.object-tags-item-btn-container{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+}
+
+.object-tags-item-btn{
+  color:#262626;
+  font-size: 20px;
 }
 
 
 .tags-active {
-  background-color: #00CE47;
+  background-color: #6650B3;
   color: #FFFFFF;
 }
-
 
 .basic-breadcrumb-container {
   padding: 10px;
@@ -1834,8 +2215,9 @@ export default {
   height: 100%;
 
 }
+
 .business-reg-uploader{
-  border: 1px dashed #EEEEEE;
+
   text-align: center;
   padding:8px;
   border-radius:10px;
@@ -1845,35 +2227,7 @@ export default {
   border-color: #0AA0A8;
 }
 
-/deep/ .profile-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-/deep/ .profile-uploader .el-upload:hover {
-  border-color: #0AA0A8;
-}
-
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-
-.profile-avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
 .intro-video-uploader {
-  border: 1px dashed #d9d9d9;
   padding:8px;
   text-align: center;
   border-radius:10px;
@@ -1881,15 +2235,6 @@ export default {
 
 .intro-video-uploader:hover {
   border-color: #0AA0A8;
-}
-
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
 }
 
 .intro-video-avatar {
@@ -1938,9 +2283,82 @@ export default {
   margin-left:20px;
 }
 
+.account-location-select{
+  margin-top:15px;
+}
+
+.account-profile-item-container{
+  padding: 50px;
+  border-radius: 38px;
+  background-color: #ffffff;
+  margin-bottom: 50px;
+
+}
+
+.account-profile-item-label{
+  font-family: BarlowM, serif;
+  font-size:26px;
+  color:#262626;
+}
+
+.account-profile-item-c{
+  margin-top:15px;
+}
+
+.account-profile-item-c-item{
+  width:100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.account-profile-item-c-item-1{
+  width:100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+
+.account-profile-category{
+  width:100%;
+}
+
+.account-profile-form-item{
+  width: 350px;
+  margin-right: 50px;
+}
+
+.account-profile-item-textarea{
+  width:100%;
+}
+
+
+.account-profile-item-location{
+  width:60%;
+}
+
+.account-profile-item-map{
+  width:40%;
+}
+
+/deep/ .el-input--default .el-input__wrapper{
+  /*min-width: 350px;*/
+}
+
+.upload-photo-img{
+  width:70px;
+}
+
+.upload-photo-img-1{
+  width: 100%;
+}
+
 @media screen and (min-width: 1200px){
   .basic-container{
-    width: 1100px;
+
   }
 }
 

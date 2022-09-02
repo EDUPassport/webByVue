@@ -7,32 +7,84 @@
 
     <div class="profile-l-container" v-if="showSideMenuStatus">
 
-      <div class="profile-photo-container">
-        <el-avatar :size="120" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
-        <div class="profile-xll-username">
-          <span>{{username}}</span>
-        </div>
-      </div>
+<!--      <div class="profile-photo-container">-->
+<!--        <el-avatar :size="120" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>-->
+<!--        <div class="profile-xll-username">-->
+<!--          <span>{{username}}</span>-->
+<!--        </div>-->
+<!--      </div>-->
+
       <div class="l-container">
         <div class="l-item">
-          <router-link :to="{path:'/overview',query:{identity:identity}}" exact>Overview</router-link>
+          <router-link :to="{path:'/overview',query:{identity:identity}}" exact>
+            <el-icon :size="45">
+              <IconEduHomeNofill />
+            </el-icon>
+            <span>Overview</span>
+          </router-link>
         </div>
-        <div class="l-item">
-          <div  class="l-item-msg"
-                :class="activeMsg ? 'l-item-msg-active' : ''"
-                @click="turnMyMessages()">My Messages</div>
+        <div class="l-item l-item-margin">
+          <router-link :class="selectedKeys === '/account/home'  ? 'router-link-exact-active' : '' "
+                       :to="{path:'/account/home',query:{}}" exact>
+            <el-icon :size="45">
+              <IconEduAccountCircleNofill />
+            </el-icon>
+            <span>Account</span>
+          </router-link>
         </div>
 
-        <div class="l-item"
+        <div class="l-item l-item-margin">
+          <router-link :class="selectedKeys === '/jobs/home'  ? 'router-link-exact-active' : '' "
+                       :to="{path:'/jobs/home',query:{}}" exact>
+            <el-icon :size="45">
+              <IconEduApplicationNofill />
+            </el-icon>
+            <span>Jobs and Applications</span>
+          </router-link>
+        </div>
+
+        <div class="l-item l-item-margin">
+          <router-link :to="{path:'/chat/messages',query:{}}" exact>
+            <el-icon :size="45">
+              <IconEduChatNofill />
+            </el-icon>
+            <span>Messages</span>
+          </router-link>
+        </div>
+        <div class="l-item l-item-margin">
+          <router-link :class="selectedKeys === '/perks/home'  ? 'router-link-exact-active' : '' "
+                       :to="{path:'/perks/home',query:{}}" exact>
+            <el-icon :size="45">
+              <IconEduHomeNofill />
+            </el-icon>
+            <span>Perks</span>
+          </router-link>
+        </div>
+<!--        <div class="l-item l-item-margin">-->
+<!--          <div  class="l-item-msg"-->
+<!--                :class="activeMsg ? 'l-item-msg-active' : ''"-->
+<!--                @click="turnMyMessages()">-->
+<!--            <el-icon :size="45">-->
+<!--              <IconEduChatNofill />-->
+<!--            </el-icon>-->
+<!--           <span>Messages</span>-->
+<!--          </div>-->
+<!--        </div>-->
+
+        <div class="l-item l-item-margin"
              v-for="(item,i) in menuData" :Key="i"
              :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' ">
           <template v-if="item.link === '/jobs/post' ">
             <router-link :to="{path:item.link,query:{version_time:versionTime}}" exact>
-              {{item.menu_name_en}}
+              <el-image class="xll-icon-image" :src="item.icon"></el-image>
+              <span>{{item.menu_name_en}}</span>
             </router-link>
           </template>
           <template v-else>
-            <router-link :to="{path:item.link}" exact>{{item.menu_name_en}}</router-link>
+            <router-link :to="{path:item.link}" exact>
+              <el-image  class="xll-icon-image" :src="item.icon"></el-image>
+              <span>{{item.menu_name_en}}</span>
+            </router-link>
           </template>
 
         </div>
@@ -182,10 +234,10 @@ export default {
 
 <style scoped>
 .profile-l-container{
-
+  width: 160px;
   min-height: 100vh;
-  background-color: #0A1E76;
-  border-radius: 10px;
+  background-color: #ffffff;
+
   padding-bottom: 20px;
 }
 .profile-photo-container{
@@ -214,44 +266,85 @@ export default {
 .l-item{
 
 }
+
+.l-item-margin{
+  margin-top: 20px;
+}
+
 .l-item-msg{
-  background-color: #0A1E76;
-  font-size: 14px;
-  line-height: 40px;
-  padding-left: 20px;
-  color:#FFFFFF;
+  width:108px;
+
+  margin: 0 auto;
+  text-align: center;
+  padding:10px;
+  border-radius: 15px;
+
+  font-size: 24px;
+  font-family: BCRegular, serif;
+  line-height: 29px;
+
   cursor:pointer;
-  font-weight: bold;
+
 }
+
 .l-item-msg-active{
-  background-color: #0C1954;
+  background-color: #F0F2F5;
+  color: #6650B3 !important;
 }
+
 .l-item-msg:hover{
-  background-color: #0C1954;
+  background-color: #F0F2F5;
+  color: #6650B3 !important;
 }
 
 .l-item a:hover{
-  background-color: #0C1954;
-}
-.l-item a{
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 40px;
-  text-decoration: none;
-  color: #ffffff;
-  display: block;
-  padding-left: 20px;
+  background-color: #F0F2F5;
+  color: #6650B3 !important;
 }
 
-.router-link-exact-active {
-  background-color: #0C1954;
-  color: #ffffff !important;
+.l-item a{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
+
+  width:108px;
+  min-height: 94px;
+
+  margin: 0 auto;
+  text-align: center;
+  padding:10px;
+  border-radius: 15px;
+
+  font-size: 24px;
+  font-family: BCRegular, serif;
+  line-height: 29px;
+  text-decoration: none;
+  color: #262626;
+
 }
+
+.l-item a span{
+  margin-top:10px;
+}
+
+
+.router-link-exact-active {
+  background-color: #F0F2F5;
+  color: #6650B3 !important;
+}
+
+
 .menu-btn-container{
   display: none;
 }
 .menu-btn{
   margin:10px 20px;
+}
+
+.xll-icon-image{
+  width: 30px;
+  height: 30px;
 }
 
 @media screen and (max-width: 768px) {

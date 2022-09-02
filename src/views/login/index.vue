@@ -1,529 +1,271 @@
 <template>
-  <div class="bg">
+  <div class="login-bg">
 
-    <div class="login-container">
-      <div class="login-l">
-        EDU
-        <span>PASSPORT</span>
-      </div>
-      <div class="login-m">
-
-      </div>
-      <div class="login-r"></div>
-    </div>
-
-    <el-container class="login-container">
-      <el-header class="container-1" height="auto">
-        <el-row justify="center" align="middle">
-          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-            <div class="logo-container">
-              <router-link class="logo-title" to="/">
-                <el-image class="logo-img" :src="imgLogo" fit="contain"></el-image>
-              </router-link>
-            </div>
-          </el-col>
-        </el-row>
-        <div class="go-home-container">
-          <el-button class="go-home-btn" type="primary" round @click="goHome()">Home</el-button>
+    <el-row justify="center" align="top" class="login-container">
+      <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
+        <div class="login-l">
+          <div class="login-l-edu">EDU</div>
+          <div class="login-l-passport">PASSPORT</div>
         </div>
-      </el-header>
-      <el-main>
-        <el-row class="xll-login-row-container" justify="center" align="middle" v-if="showValue == 'login' ">
-          <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10">
-            <div class="xll-login-container">
-              <div class="login-tabs-container">
-                <div class="login-label"
-                     :class="showValue=='login' ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister('login')"
-                >Login
-                </div>
-                <div class="register-label"
-                     :class="showValue=='sign-up' ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister('sign-up')"
-                >Register
-                </div>
-              </div>
-              <div class="xll-login-form-container">
-                <template v-if="loginEmailStatus">
-                  <el-form
+      </el-col>
+      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
 
-                      :model="loginForm"
-                      :rules="loginRules"
-                      ref="loginForm"
-                      label-width="100px"
-                      label-position="top"
-                      class="demo-ruleForm"
-                  >
-                    <el-form-item label="Email" prop="email">
-                      <el-input size="medium" placeholder="Email" v-model="loginForm.email"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Password" prop="password">
-                      <el-input size="medium" placeholder="Password" type="password"
-                                show-password
-                                v-model="loginForm.password"></el-input>
-                    </el-form-item>
+        <div class="login-m">
+          <h1>Log in</h1>
+
+          <div class="xll-login-form-container">
+            <template v-if="loginEmailStatus">
+              <el-form
+                  :model="loginForm"
+                  :rules="loginRules"
+                  ref="loginForm"
+                  label-width="100px"
+                  label-position="top"
+                  class="demo-ruleForm"
+              >
+                <el-form-item  prop="email">
+                  <el-input size="large" placeholder="Email Address" v-model="loginForm.email"></el-input>
+                </el-form-item>
+                <el-form-item style="margin-top:25px;"  prop="password">
+                  <el-input size="large" placeholder="Password" type="password"
+                            show-password
+                            v-model="loginForm.password"></el-input>
+                </el-form-item>
+
+                <div class="remeber-forgot-container">
+                  <div class="remeber-container">
+                    <el-checkbox size="large" v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
+                  </div>
+                  <div class="forgot-password-container">
+                    <div class="forgot-password-btn"  @click="forgotPassword()">
+                      Forgot password?
+                    </div>
+                  </div>
+                </div>
+
+                <el-form-item>
+                  <el-button class="submit-btn"
+                             round
+                             type="primary"
+                             size="large"
+                             :loading="submitLoginLoadingStatus"
+                             @click="submitLoginForm('loginForm')">
+                    Login
+                  </el-button>
+                </el-form-item>
+              </el-form>
+            </template>
+            <template v-if="loginPhoneStatus">
+              <!--                手机号 验证码登录-->
+              <template v-if="loginByPhoneWithSmsStatus">
+                <el-form
+                    :model="loginPhoneSmsForm"
+                    :rules="loginPhoneSmsRules"
+                    ref="loginPhoneSmsForm"
+                    :hide-required-asterisk="true"
+                    label-position="top"
+                    class="demo-ruleForm"
+                >
+                  <el-form-item label="Phone #" prop="phone">
+                    <template #label>
+                      <span class="login-require-star">*</span>
+                      <span class="login-label-text">Phone #</span>
+                    </template>
+                    <el-input size="large" placeholder="Phone #"
+                              v-model="loginPhoneSmsForm.phone"></el-input>
+                  </el-form-item>
+
+                  <el-form-item label="6 Digit Code" prop="phone_code">
+                    <template #label>
+                      <div class="password-container">
+                        <div class="password-l">
+                          <span class="login-require-star">*</span>
+                          <span class="login-label-text">6 Digit Code</span>
+                        </div>
+                        <div class="password-r">
+                          <el-button link size="large" @click="switchToPhoneBySms()">
+                            Log in via password
+                          </el-button>
+                        </div>
+                      </div>
+                    </template>
+                    <div class="xll-input-container">
+                      <div class="xll-input-input">
+                        <el-input size="large" placeholder="Code"
+                                  v-model="loginPhoneSmsForm.code">
+                        </el-input>
+                      </div>
+                      <el-button class="xll-input-btn" type="primary" round
+                                 size="large"
+                                 :loading="checkCodeBtn.loading"
+                                 :disabled="checkCodeBtn.disabled"
+                                 @click="getCheckCode()"
+                      >{{ checkCodeBtn.text }}
+                      </el-button>
+                    </div>
+                  </el-form-item>
+
+                  <div class="remeber-forgot-container">
                     <div class="remeber-container">
                       <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
                     </div>
-                    <!--                          <div class="hcaptcha-container">-->
-                    <!--                            <hcaptcha-->
-                    <!--                                sitekey="ad946ce8-55f2-4b65-97d5-0c42eccf794d"-->
-                    <!--                                @verify="humanVerify"-->
-                    <!--                            />-->
-                    <!--                          </div>-->
-                    <el-form-item>
-                      <el-button class="submit-btn"
-                                 round
-                                 type="primary"
-                                 :loading="submitLoginLoadingStatus"
-                                 @click="submitLoginForm('loginForm')">
-                        Login
+                    <div class="forgot-password-container">
+                      <el-button link  size="large" class="forgot-password-btn" @click="forgotPassword()">Forgot password?
                       </el-button>
-                    </el-form-item>
-                  </el-form>
-                </template>
-                <template v-if="loginPhoneStatus">
-                  <!--                手机号 验证码登录-->
-                  <template v-if="loginByPhoneWithSmsStatus">
-                    <el-form
-                        :model="loginPhoneSmsForm"
-                        :rules="loginPhoneSmsRules"
-                        ref="loginPhoneSmsForm"
-                        :hide-required-asterisk="true"
-                        label-position="top"
-                        class="demo-ruleForm"
-                    >
-                      <el-form-item label="Phone #" prop="phone">
-                        <template #label>
-                          <span class="login-require-star">*</span>
-                          <span class="login-label-text">Phone #</span>
-                        </template>
-                        <el-input size="medium" placeholder="Phone #"
-                                  v-model="loginPhoneSmsForm.phone"></el-input>
-                      </el-form-item>
+                    </div>
+                  </div>
 
-                      <el-form-item label="6 Digit Code" prop="phone_code">
-                        <template #label>
-                          <div class="password-container">
-                            <div class="password-l">
-                              <span class="login-require-star">*</span>
-                              <span class="login-label-text">6 Digit Code</span>
-                            </div>
-                            <div class="password-r">
-                              <el-button type="text" @click="switchToPhoneBySms()">
-                                Log in via password
-                              </el-button>
-                            </div>
-                          </div>
-                        </template>
-                        <div class="xll-input-container">
-                          <div class="xll-input-input">
-                            <el-input size="medium" placeholder="Code"
-                                      v-model="loginPhoneSmsForm.code">
-                            </el-input>
-                          </div>
-                          <el-button class="xll-input-btn" type="primary" round
-                                     :loading="checkCodeBtn.loading"
-                                     :disabled="checkCodeBtn.disabled"
-                                     @click="getCheckCode()"
-                          >{{ checkCodeBtn.text }}
+                  <el-form-item>
+                    <el-button class="submit-btn"
+                               size="large"
+                               round
+                               type="primary"
+                               @click="submitLoginPhoneSmsForm('loginPhoneSmsForm')">
+                      LOGIN
+                    </el-button>
+                  </el-form-item>
+                </el-form>
+              </template>
+
+              <!--               手机号码密码登录-->
+              <template v-if="loginByPhoneWithPasswordStatus">
+                <el-form
+                    :model="loginPhonePassForm"
+                    :rules="loginPhonePassRules"
+                    ref="loginPhonePassForm"
+                    :hide-required-asterisk="true"
+                    label-position="top"
+                    class="demo-ruleForm"
+                >
+                  <el-form-item label="Phone #" prop="phone">
+                    <template #label>
+                      <span class="login-require-star">*</span>
+                      <span class="login-label-text">Phone #</span>
+                    </template>
+                    <el-input size="large" placeholder="Phone #"
+                              v-model="loginPhonePassForm.phone"></el-input>
+                  </el-form-item>
+
+                  <el-form-item label="Password" prop="password">
+                    <template #label>
+                      <div class="password-container">
+                        <div class="password-l">
+                          <span class="login-require-star">*</span>
+                          <span class="login-label-text">Password</span>
+                        </div>
+                        <div class="password-r">
+                          <el-button  link size="large" @click="switchToPhoneBySms()">
+                            Log in via SMS verification code
                           </el-button>
                         </div>
-                      </el-form-item>
-
-                      <div class="remeber-container">
-                        <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
                       </div>
+                    </template>
+                    <el-input size="large" placeholder="Password" type="password"
+                              show-password
+                              v-model="loginPhonePassForm.password"></el-input>
+                  </el-form-item>
 
-                      <el-form-item>
-                        <el-button class="submit-btn"
-                                   round
-                                   type="primary"
-                                   @click="submitLoginPhoneSmsForm('loginPhoneSmsForm')">
-                          Login
-                        </el-button>
-                      </el-form-item>
-                    </el-form>
-                  </template>
-
-                  <!--               手机号码密码登录-->
-                  <template v-if="loginByPhoneWithPasswordStatus">
-                    <el-form
-                        :model="loginPhonePassForm"
-                        :rules="loginPhonePassRules"
-                        ref="loginPhonePassForm"
-                        :hide-required-asterisk="true"
-                        label-position="top"
-                        class="demo-ruleForm"
-                    >
-                      <el-form-item label="Phone #" prop="phone">
-                        <template #label>
-                          <span class="login-require-star">*</span>
-                          <span class="login-label-text">Phone #</span>
-                        </template>
-                        <el-input size="medium" placeholder="Phone #"
-                                  v-model="loginPhonePassForm.phone"></el-input>
-                      </el-form-item>
-
-                      <el-form-item label="Password" prop="password">
-                        <template #label>
-                          <div class="password-container">
-                            <div class="password-l">
-                              <span class="login-require-star">*</span>
-                              <span class="login-label-text">Password</span>
-                            </div>
-                            <div class="password-r">
-                              <el-button type="text" @click="switchToPhoneBySms()">
-                                Log in via SMS verification code
-                              </el-button>
-                            </div>
-                          </div>
-                        </template>
-                        <el-input size="medium" placeholder="Password" type="password"
-                                  show-password
-                                  v-model="loginPhonePassForm.password"></el-input>
-                      </el-form-item>
-
-                      <div class="remeber-container">
-                        <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
-                      </div>
-                      <el-form-item>
-                        <el-button class="submit-btn"
-                                   round
-                                   type="primary"
-                                   @click="submitLoginPhonePassForm('loginPhonePassForm')">
-                          Login
-                        </el-button>
-                      </el-form-item>
-                    </el-form>
-                  </template>
-                </template>
-
-
-                <!--                <div class="facebook-btn-container">-->
-                <!--                  <el-button @click="linkedinSignIn()" class="apple-btn" plain round-->
-                <!--                             icon="iconfont  el-icon-alifacebook">-->
-                <!--                    Facebook Sign in-->
-                <!--                  </el-button>-->
-                <!--                </div>-->
-                <div class="phone-btn-container">
-                  <el-button v-if="!loginPhoneStatus" @click="loginWithPhone()" class="login-option-btn" plain round
-                             icon="iconfont xll-icon el-icon-aliphone">
-                    Login with Phone number
-                  </el-button>
-                  <el-button v-if="!loginEmailStatus" @click="loginWithPhone()" class="login-option-btn" plain round
-                             icon="iconfont xll-icon  el-icon-aliemail">
-                    Login with Email
-                  </el-button>
-                </div>
-
-                <div class="facebook-btn-container">
-                  <el-button @click="linkedinSignIn()" class="login-option-btn" plain round
-                             icon="iconfont xll-icon  el-icon-alilinkedin">
-                    Linkedin Sign in
-                  </el-button>
-                </div>
-
-                <div class="google-btn-container">
-                  <el-button @click="googleSignIn()" class="login-option-btn" plain round
-                             icon="iconfont xll-icon  el-icon-aligoogle">
-                    Google Sign in
-                  </el-button>
-                </div>
-
-                <div class="forgot-password-container">
-                  <el-button type="text" class="forgot-password-btn" @click="forgotPassword()">Forgot Password
-                  </el-button>
-                </div>
-              </div>
-            </div>
-          </el-col>
-          <el-col :xs="0" :sm="0" :md="14" :lg="14" :xl="14">
-            <div class="xll-ads-container">
-              <!--              <el-image :src="shanghaiImg" class="ads-image" ></el-image>-->
-            </div>
-          </el-col>
-        </el-row>
-
-        <el-row class="xll-register-row-container" justify="center" align="middle" v-if="showValue == 'sign-up' ">
-          <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
-            <div class="xll-register-container">
-              <div class="login-tabs-container">
-                <div class="login-label"
-                     :class="showValue=='login' ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister('login')"
-                >Login
-                </div>
-                <div class="register-label"
-                     :class="showValue=='sign-up' ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister('sign-up')"
-                >Register
-                </div>
-              </div>
-              <div class="xll-register-form-container">
-                <template v-if="loginEmailStatus">
-                  <el-form
-                      :model="registerForm"
-                      :rules="registerRules"
-                      ref="registerForm"
-                      label-width="160px"
-                      label-position="top"
-                      class="demo-ruleForm"
-                  >
-                    <el-form-item label="First Name" prop="first_name" required>
-                      <el-input size="medium" placeholder="First Name" v-model="registerForm.first_name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Last Name" prop="last_name" required>
-                      <el-input size="medium" placeholder="Last Name" v-model="registerForm.last_name"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="Email" prop="email" required>
-                      <el-input size="medium" placeholder="name@domain.com"
-                                v-model="registerForm.email">
-                        <template #append>
-                          <el-button class="send-code-btn" :loading="sendCodeLoading" @click="sendEmailCode">Send Code
-                          </el-button>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                    <el-form-item label="Email Activation Code" prop="code" required>
-                      <el-input size="medium" placeholder="6 digit code"
-                                v-model="registerForm.code"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="Password" prop="password" required>
-                      <el-input size="medium" placeholder="Password"
-                                show-password
-                                type="password"
-                                v-model="registerForm.password"
-                      ></el-input>
-                    </el-form-item>
-                    <el-form-item label="Confirm Password" prop="c_password" required>
-                      <el-input size="medium" type="password" placeholder="Confirm"
-                                show-password
-                                v-model="registerForm.c_password"
-                      ></el-input>
-                    </el-form-item>
-                    <div class="identity-container">
-                      <div class="identity-label">I am a/an</div>
-                      <div class="identity-content">
-                        <div class="identity-btn"
-                             :class="identityValue == 1 ? 'identity-educator-active' : '' "
-                             @click="selectedIdentity(1)">Educator
-                        </div>
-                        <template v-if="identityBusinessCheckedStatus">
-                          <div class="identity-btn identity-btn-margin"
-                               :class="identityBusinessCheckedStatus ? 'identity-business-active' : '' "
-                               @click="businessDialogStatus=true">
-                            {{identityBusinessStr}}
-                          </div>
-                        </template>
-                        <template v-else>
-                          <div class="identity-btn identity-btn-margin"  @click="selectEducationBusiness()">
-                            {{identityBusinessStr}}
-                          </div>
-                        </template>
-                        <div class="identity-btn identity-btn-margin"
-                             :class="identityValue == 5 ? 'identity-vendor-active' : '' "
-                             @click="selectedIdentity(5)">Vendor
-                        </div>
-                      </div>
-
-                      <div class="business-dialog-container" v-if="businessDialogStatus">
-                        <div class="business-dialog-close" @click="closeBusinessDialog()">
-                          <el-icon :size="30" >
-                            <circle-close />
-                          </el-icon>
-                        </div>
-                        <h3>Welcome Education Business</h3>
-                        <span>Which would you say best describes your business? </span>
-                        <div class="business-identity-container">
-                          <div class="business-identity-item"
-                               @click="selectedIdentityBusiness(2,'Recruiter')"
-                               :class="identityValue == 2 ? 'identity-business-active' : '' "
-                          >Recruiter</div>
-                          <div class="business-identity-item"
-                               @click="selectedIdentityBusiness(3,'School')"
-                               :class="identityValue == 3 ? 'identity-business-active' : '' "
-                          >School</div>
-                          <div class="business-identity-item"
-                               @click="selectedIdentityBusiness(4,'Other')"
-                               :class="identityValue == 4 ? 'identity-business-active' : '' "
-                          >Other</div>
-                        </div>
-
-                        <div class="business-dialog-btn-container">
-                          <el-button class="business-dialog-submit-btn" type="primary" round
-                                     @click="submitIdentityBusiness()"
-                          >Submit</el-button>
-                        </div>
-                      </div>
-
+                  <div class="remeber-forgot-container">
+                    <div class="remeber-container">
+                      <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
                     </div>
-
-                    <el-form-item>
-                      <el-button class="submit-btn"
-                                 type="primary"
-                                 round
-                                 :loading="submitRegisterLoadingStatus"
-                                 @click="submitRegisterForm('registerForm')">
-                        Submit
+                    <div class="forgot-password-container">
+                      <el-button link  size="large" class="forgot-password-btn" @click="forgotPassword()">Forgot password?
                       </el-button>
-                    </el-form-item>
-                  </el-form>
-
-                </template>
-
-                <template v-if="loginPhoneStatus">
-                  <el-form
-                      :model="registerPhoneForm"
-                      :rules="registerPhoneRules"
-                      ref="registerPhoneForm"
-                      label-width="160px"
-                      label-position="top"
-                      class="demo-ruleForm"
-                  >
-                    <el-form-item label="First Name" prop="first_name" required>
-                      <el-input size="medium" placeholder="First Name" v-model="registerPhoneForm.first_name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Last Name" prop="last_name" required>
-                      <el-input size="medium" placeholder="Last Name" v-model="registerPhoneForm.last_name"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="Phone #" prop="phone">
-                      <el-input size="medium" placeholder="Phone #"
-                                v-model="registerPhoneForm.phone"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="6 Digit Code" prop="phone_code">
-                      <template #label>
-                        <div class="password-container">
-                          <div class="password-l">
-                            <span class="login-require-star">*</span>
-                            <span class="login-label-text">6 Digit Code</span>
-                          </div>
-                          <div class="password-r">
-
-                          </div>
-                        </div>
-                      </template>
-                      <div class="xll-input-container">
-                        <div class="xll-input-input">
-                          <el-input size="medium" placeholder="Code"
-                                    v-model="registerPhoneForm.code">
-                          </el-input>
-                        </div>
-                        <el-button class="xll-input-btn" type="primary" round
-                                   :loading="checkCodeBtn.loading"
-                                   :disabled="checkCodeBtn.disabled"
-                                   @click="getCheckCodeForRegister()"
-                        >{{ checkCodeBtn.text }}
-                        </el-button>
-                      </div>
-                    </el-form-item>
-
-                    <el-form-item label="Password" prop="password" required>
-                      <el-input size="medium" placeholder="Password"
-                                show-password
-                                type="password"
-                                v-model="registerPhoneForm.password"
-                      ></el-input>
-                    </el-form-item>
-                    <el-form-item label="Confirm Password" prop="c_password" required>
-                      <el-input size="medium" type="password" placeholder="Confirm"
-                                show-password
-                                v-model="registerPhoneForm.c_password"
-                      ></el-input>
-                    </el-form-item>
-                    <div class="identity-container">
-                      <div class="identity-label">I am a/an</div>
-                      <div class="identity-content">
-                        <div class="identity-btn"
-                             :class="identityValue == 1 ? 'identity-educator-active' : '' "
-                             @click="selectedIdentity(1)">Educator
-                        </div>
-                        <template v-if="identityBusinessCheckedStatus">
-                          <div class="identity-btn identity-btn-margin"
-                               :class="identityBusinessCheckedStatus ? 'identity-business-active' : '' "
-                               @click="businessDialogStatus=true">
-                            {{identityBusinessStr}}
-                          </div>
-                        </template>
-                        <template v-else>
-                          <div class="identity-btn identity-btn-margin"  @click="selectEducationBusiness()">
-                            {{identityBusinessStr}}
-                          </div>
-                        </template>
-                        <div class="identity-btn identity-btn-margin"
-                             :class="identityValue == 5 ? 'identity-vendor-active' : '' "
-                             @click="selectedIdentity(5)">Vendor
-                        </div>
-                      </div>
-
-                      <div class="business-dialog-container" v-if="businessDialogStatus">
-                        <div class="business-dialog-close" @click="closeBusinessDialog()">
-                          <el-icon :size="30" >
-                            <circle-close />
-                          </el-icon>
-                        </div>
-                        <h3>Welcome Education Business</h3>
-                        <span>Which would you say best describes your business? </span>
-                        <div class="business-identity-container">
-                          <div class="business-identity-item"
-                               @click="selectedIdentityBusiness(2,'Recruiter')"
-                               :class="identityValue == 2 ? 'identity-business-active' : '' "
-                          >Recruiter</div>
-                          <div class="business-identity-item"
-                               @click="selectedIdentityBusiness(3,'School')"
-                               :class="identityValue == 3 ? 'identity-business-active' : '' "
-                          >School</div>
-                          <div class="business-identity-item"
-                               @click="selectedIdentityBusiness(4,'Other')"
-                               :class="identityValue == 4 ? 'identity-business-active' : '' "
-                          >Other</div>
-                        </div>
-
-                        <div class="business-dialog-btn-container">
-                          <el-button class="business-dialog-submit-btn" type="primary" round
-                                     @click="submitIdentityBusiness()"
-                          >Submit</el-button>
-                        </div>
-                      </div>
-
                     </div>
+                  </div>
 
-                    <el-form-item>
-                      <el-button class="submit-btn"
-                                 type="primary"
-                                 round
-                                 :loading="submitRegisterLoadingStatus"
-                                 @click="submitRegisterPhoneForm('registerPhoneForm')">
-                        Submit
-                      </el-button>
-                    </el-form-item>
-                  </el-form>
+                  <el-form-item>
+                    <el-button class="submit-btn"
+                               size="large"
+                               round
+                               type="primary"
+                               @click="submitLoginPhonePassForm('loginPhonePassForm')">
+                      LOGIN
+                    </el-button>
+                  </el-form-item>
 
+                </el-form>
+              </template>
+            </template>
+
+            <div class="xll-divider">
+              <el-divider content-position="center">or</el-divider>
+            </div>
+
+            <div class="sign-in-btn-container">
+              <el-button v-if="!loginPhoneStatus" size="large"
+                         @click="loginWithPhone()"
+                         class="login-option-btn" link round>
+                <template #icon>
+                  <el-icon>
+                    <IconEduPhoneIcon />
+                  </el-icon>
                 </template>
-
-              </div>
+                 SIGN IN WITH PHONE NUMBER
+              </el-button>
+              <el-button v-if="!loginEmailStatus"
+                         @click="loginWithPhone()"
+                         class="login-option-btn"
+                         link round
+                         size="large"
+              >
+                <template #icon>
+                  <el-icon>
+                    <IconLoginApple />
+                  </el-icon>
+                </template>
+                 SIGN IN WITH EMAIL
+              </el-button>
             </div>
 
-          </el-col>
-        </el-row>
-
-      </el-main>
-
-      <el-footer class="footer-container" height="auto">
-
-        <el-row justify="center" align="middle">
-          <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="6">
-            <div class="footer-content">
-              <!--                <router-link to="/privacy">Privacy & terms</router-link>-->
+            <div class="sign-in-btn-container">
+              <el-button @click="linkedinSignIn()"
+                         size="large"
+                         class="login-option-btn" link round
+                         >
+                <template #icon>
+                  <el-icon>
+                    <IconLogosLinkedinIcon />
+                  </el-icon>
+                </template>
+                 SIGN IN WITH LINKEDIN
+              </el-button>
             </div>
-          </el-col>
-        </el-row>
-      </el-footer>
-    </el-container>
+
+            <div class="sign-in-btn-container">
+              <el-button @click="googleSignIn()"
+                         size="large"
+                         class="login-option-btn"
+                         link round
+                        >
+                <template #icon>
+                  <el-icon>
+                    <IconLogosGoogleIcon></IconLogosGoogleIcon>
+                  </el-icon>
+                </template>
+                 SIGN IN WITH GOOGLE
+              </el-button>
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </el-col>
+      <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
+        <div class="login-r">
+          <div class="sign-up">
+            <el-button class="sign-up-btn" size="large" plain round @click="signUp()">SIGN UP</el-button>
+          </div>
+          <div class="login-close">
+            <el-button class="login-close-btn" size="large" link @click="goHome()" >CLOSE</el-button>
+          </div>
+        </div>
+      </el-col>
+
+    </el-row>
 
     <ForgotPassword :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
 
@@ -532,6 +274,7 @@
 </template>
 
 <script>
+
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
 import imgLogo from '@/assets/logo.png'
 //WEIXIN_SEND_SMS
@@ -545,7 +288,7 @@ import {
 //LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
 import axios from "axios";
-import shanghaiImg from '@/assets/bg/bg-shanghai.jpg'
+
 import {randomString} from '@/utils'
 import {useStore} from 'vuex'
 import {reactive, ref} from "vue";
@@ -557,7 +300,6 @@ export default {
   data() {
     return {
       imgLogo,
-      shanghaiImg,
       identityBusinessCheckedStatus:false,
       identityBusinessStrBefore:"",
       identityBusinessStr:'Education-Business',
@@ -814,6 +556,9 @@ export default {
         }
       })
 
+    },
+    signUp(){
+      this.$router.push('/edupassport/signup')
     },
     goHome() {
       this.$router.push('/home')
@@ -1514,45 +1259,81 @@ export default {
 </script>
 
 <style scoped>
+
+.login-bg{
+  min-height: 100vh;
+  background-color: #F0F2F5;
+
+}
+
 .login-container{
   max-width:1920px;
-
-}
-.container-1 {
-  padding-top: 20px;
-  position: relative;
+  padding-top: 52px;
 }
 
-.go-home-container {
-  position: absolute;
-  left: 20px;
-  top: 20px;
+.login-l{
+  padding-left: 50px;
 }
 
-.go-home-btn {
-  font-size: 14px;
+.login-l-edu{
+  font-family: BCExtraBold , serif;
+  font-size:40px;
 }
 
-.logo-container {
+.login-l-passport{
+  font-family: BCSemiBold, serif;
+  font-size:17px;
+}
+
+
+
+.login-m{
+  width:576px;
+  margin:0 auto;
+}
+
+.login-m h1{
+  text-align: center;
+}
+
+.xll-login-form-container{
+  margin-top:67px;
+}
+
+.xll-divider{
+  margin-top:50px;
+}
+
+.sign-in-btn-container{
+
+}
+
+.login-r{
+  padding-right: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+
 }
 
-.logo-img {
-  width: 100px;
-  height: 100px;
+.sign-up{
+
+}
+.sign-up-btn{
+  font-size: 20px;
+  color:#262626;
 }
 
-.logo-title {
-  text-decoration: none;
+.login-close{
+  margin-left: 20px;
 }
 
-.create-account-tips {
-  color: #808080;
-  padding: 10px;
+.login-close-btn{
+  font-size: 20px;
+  color:#262626;
 }
+
 
 .create-account-link a {
   text-decoration: none;
@@ -1561,152 +1342,50 @@ export default {
   font-weight: bold;
 }
 
-.xll-login-row-container {
-  /*width: 1100px;*/
-  margin: 0 auto;
-  border-radius: 20px;
-  background-color: #DAEBCF;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
-  overflow: hidden;
-  background-image: url("../../assets/bg/bg-shanghai.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.xll-login-container {
-  overflow: hidden;
-  background-color: #FFFFFF;
-}
-
-.xll-login-form-container {
-  padding: 20px 20px 20px 20px;
-}
-
-.xll-register-row-container {
-  /*width: 1100px;*/
-  margin: 0 auto;
-}
-
-.xll-register-container {
-  overflow: hidden;
-  background-color: #FFFFFF;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
-  border-radius: 20px;
-}
-
-.xll-register-form-container {
-  padding: 20px 20px 40px 20px;
-}
-
-
-.login-tabs-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #EEEEEE;
-}
-
-.login-label {
-  width: 50%;
-  font-size: 16px;
-  padding: 10px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.login-label:hover {
-  background-color: #0AA0A8;
-  color: #FFFFFF;
-}
-
-.login-tab-active {
-  background-color: #0AA0A8;
-  color: #FFFFFF;
-}
-
-.register-label {
-  width: 50%;
-  text-align: center;
-  font-size: 16px;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.register-label:hover {
-  background-color: #0AA0A8;
-  color: #FFFFFF;
-}
-
-.phone-btn-container {
-  margin-top: 10px;
-}
-
-.facebook-btn-container {
-  margin-top: 10px;
-}
-
-.google-btn-container {
-  margin-top: 10px;
-}
-
 .forgot-password-container {
-  margin-top: 10px;
   text-align: center;
 }
 
 .forgot-password-btn {
-  font-size: 16px;
+  font-size: 18px;
+  color:#262626;
+  font-family: AssiRegular, serif;
+  cursor: pointer;
 }
 
-.google-btn {
-  width: 100%;
-  font-size: 16px;
+.forgot-password-btn:hover{
+  color:#000000;
   font-weight: bold;
-  line-height: 26px;
 }
 
-.apple-btn {
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 26px;
-}
-
-.linkedin-btn {
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 26px;
-}
 
 .login-option-btn {
+  font-family: BCM,serif;
   width: 100%;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 20px;
+  margin-top:50px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
 }
 
 .submit-btn {
-  width: 100%;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 26px;
-  margin-top: 20px;
+  font-family: BCM,serif;
+  width: 90px;
+  height: 40px;
+  margin: 50px auto 0;
+  font-size: 20px;
+  background-color:#6650B3;
 }
 
+.remeber-forgot-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 
-.footer-container {
-  margin-top: 20px;
-}
-
-.footer-content a {
-  text-decoration: none;
-  color: #808080;
 }
 
 .remeber-container {
@@ -1718,125 +1397,6 @@ export default {
   margin-top: 20px;
 }
 
-.business-dialog-container{
-  position: absolute;
-  background-color: #ffffff;
-  bottom: 30px;
-  left:0;
-  right:0;
-  margin:auto;
-  width:100%;
-  //padding: 20px;
-  padding:40px 0 20px 0;
-  text-align: center;
-  border-radius: 20px;
-  box-shadow: 0 0 10px 0 rgba(0,0,0,0.4);
-}
-
-.business-dialog-close{
-  position: absolute;
-  right: 10px;
-  top:10px;
-  cursor: pointer;
-
-}
-
-.business-dialog-container h3{
-
-}
-.business-dialog-container span{
-  font-size: 14px;
-  color:#808080;
-  line-height: 30px;
-}
-
-.business-identity-container{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.business-identity-item{
-  flex:1;
-  margin:10px;
-  background-color: #f5f6f7;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.business-dialog-btn-container{
-  margin-top: 20px;
-}
-
-.business-dialog-submit-btn{
-
-}
-
-.identity-container {
-  position: relative;
-}
-
-.identity-label {
-  font-size: 14px;
-  text-align: left;
-  padding: 10px 0;
-}
-
-.identity-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.identity-btn {
-  background-color: #f5f6f7;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.identity-btn-margin {
-  margin-left: 10px;
-}
-
-.identity-educator-active {
-  background-color: #00b3d2;
-  color: #ffffff;
-}
-
-.identity-business-active {
-  background-color: #d2005b;
-  color: #ffffff;
-}
-
-.identity-vendor-active {
-  background-color: #b1c452;
-  color: #ffffff;
-}
-
-.send-code-btn {
-  background-color: #0AA0A8 !important;
-  color: #ffffff !important;
-  padding: 10px;
-}
-
-.xll-ads-container {
-  height: 100%;
-}
-
-.ads-image {
-  width: 100%;
-  height: 100%;
-}
-
-/deep/ .xll-icon {
-  font-size: 24px;
-}
 
 .login-require-star {
   color: #ff2870;
@@ -1870,13 +1430,6 @@ export default {
 }
 
 @media screen and (min-width: 1200px) {
-  .xll-login-row-container {
-    width: 1100px;
-  }
-
-  .xll-register-row-container {
-    width: 1100px;
-  }
 
 }
 

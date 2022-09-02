@@ -1,923 +1,474 @@
 <template>
   <div class="bg">
     <div class="educator-container">
-      <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <meSideMenu></meSideMenu>
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
 
-          <accountInfo :info="userContact" :phone="userContact.phone" :email="userContact.email"
-                       :level="educatorContact.vip_level" :vip-due-time="educatorContact.vip_due_time"
-                       :category-str="educatorContact.sub_identity_name_en"
-                       :percentage-status="true" :profile-percentage="userContact.is_educator"
-          ></accountInfo>
+      <div class="educator-l-container">
+        <meSideMenu></meSideMenu>
+      </div>
+      <div class="educator-r-container">
+        <div class="educator-r-container-bg">
 
-          <div class="educator-r-container">
-
-            <div class="basic-info-container">
-              <div class="basic-info-t">
-                <div class="basic-info-label">Educator Display Profile</div>
-                <div class="basic-info-edit" @click="editEducatorContactInfo()">Edit</div>
-              </div>
-
-              <div class="basic-info-content">
-
-                <div class="basic-info-item" v-if="educatorContact.name">
-                  <div class="basic-info-item-l">Name: </div>
-                  <div class="basic-info-item-r">{{ educatorContact.name }}</div>
-                </div>
-
-                <div class="basic-info-item" v-if="educatorContact.phone">
-                  <div class="basic-info-item-l">Phone #:</div>
-                  <div class="basic-info-item-r">{{ educatorContact.phone }}</div>
-                </div>
-                <div class="basic-info-item" v-if="educatorContact.email">
-                  <div class="basic-info-item-l"> Email:</div>
-                  <div class="basic-info-item-r">{{ educatorContact.email }}</div>
-                </div>
-                <div class="basic-info-item" v-if="educatorContact.job_title">
-                  <div class="basic-info-item-l">Job Title:</div>
-                  <div class="basic-info-item-r">{{ educatorContact.job_title }}</div>
-                </div>
-                <div class="basic-info-item">
-                  <div class="basic-info-item-l">Job Seeking :</div>
-                  <div class="basic-info-item-r">
-                    <el-switch v-model="educatorContact.is_seeking" :active-value="1" disabled></el-switch>
-                  </div>
-                </div>
-                <div class="basic-info-item">
-                  <div class="basic-info-item-l">Public Profile:</div>
-                  <div class="basic-info-item-r">
-                    <el-switch v-model="educatorContact.is_public" :active-value="1" disabled></el-switch>
-                  </div>
-                </div>
-
-                <div class="basic-info-item" v-if="educatorContact.nationality">
-                  <div class="basic-info-item-l">Nationality:</div>
-                  <div class="basic-info-item-r">{{ educatorContact.nationality }}</div>
-                </div>
-                <div class="basic-info-item" v-if="educatorContact.address">
-                  <div class="basic-info-item-l">Address: </div>
-                  <div class="basic-info-item-r">{{ educatorContact.address }}</div>
-                </div>
-                <div class="basic-info-item" v-if="educatorContact.sub_identity_name_en">
-                  <div class="basic-info-item-l">Educator Category:</div>
-                  <div class="basic-info-item-r">{{ educatorContact.sub_identity_name_en }}</div>
-                </div>
-                <div class="basic-info-item" v-if="educatorContact.bio">
-                  <div class="basic-info-item-l">Introduction: </div>
-                  <div class="basic-info-item-r">{{ educatorContact.bio }}</div>
-                </div>
-
-              </div>
+          <div class="account-profile-t">
+            <div class="account-profile-t-l">
+              <el-button  class="account-profile-back-btn" type="primary" link >
+                Back
+              </el-button>
             </div>
-
-
-            <div class="credentials-container">
-              <div class="credentials-label">Credentials</div>
-              <div class="credentials-content">
-                <div class="languages-container">
-                  <div class="languages-t">
-                    <div class="languages-label">Languages</div>
-                    <div class="languages-edit" @click="editLanguages()">Edit</div>
-                  </div>
-                  <div class="languages-content" v-if="educatorContact.languages">
-                    <div class="languages-item" v-for="(item,i) in educatorContact.languages" :key="i">
-                      <div class="languages-item-l">{{ item.object_en }}</div>
-                      <div class="languages-item-r">
-                        <el-rate
-                            v-model="item.object_score"
-                            disabled
-                            :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                        >
-                        </el-rate>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="certifications-container">
-                  <div class="certifications-t">
-                    <div class="certifications-label">Certifications</div>
-                    <div class="certifications-edit" v-if="!canEditCertifications"
-                         @click="turnIndexList(7)">Edit
-                    </div>
-                    <div class="certifications-edit" v-if="canEditCertifications"
-                         @click="certificationsConfirm()">Confirm
-                    </div>
-                  </div>
-                  <div class="certifications-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditCertifications === false">
-                      <div class="object-show-item" v-for="(cer,i) in certificationsList" :key="i">
-                        {{ cer.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditCertifications">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCertificationsList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editCertificationsList" :key="index"
-                             @click="selectCertifications(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCertificationsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownCertificationsList" :key="index"
-                             @click="selectCertifications(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addCertificationsStatus==false"
-                             @click="addCertificationsStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addCertificationsStatus">
-                          <el-input type="text" v-model="ownCertificationsValue"
-                                    placeholder="Add certifications"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCertificationsValue.length>0"
-                                       @click="addOwnCertifications">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCertificationsValue.length==0"
-                                       @click="addCertificationsStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                </div>
-                <div class="education-container">
-                  <div class="education-t">
-                    <div class="education-t-label">Education</div>
-                    <div class="education-t-edit" @click="addUserEducation()">Add+</div>
-                  </div>
-                  <div class="education-content">
-                    <template v-for="(education,i) in educationInfo" :key="i">
-                      <div class="education-item" v-if="i<educationNum">
-                        <div class="education-school-name" @click="turnEditEducation(education)">
-                          {{ education.school_name }}
-                        </div>
-                        <div class="education-item-2">
-                          <div class="education-field">{{ education.field_of_study }}</div>
-                        </div>
-                        <div class="education-item-3">
-                          <div class="education-degree">{{ education.degree }}</div>
-                          <div class="education-date">
-                            {{
-                              $filters.ymdFormatTimestamp(education.start_time)
-                            }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-                    <template v-if="educationInfo.length>0">
-                      <div class="show-more" v-if="showMoreEducationStatus " @click="showMoreEducation">
-                        Show More
-                      </div>
-                    </template>
-
-                  </div>
-
-                </div>
-              </div>
+            <div class="account-profile-t-r">
+              <el-button class="account-profile-cancel-btn" plain round>
+                FAVORITED
+              </el-button>
+              <el-button class="account-profile-save-btn" type="primary" round
+                         >
+                SEND A MESSAGE
+              </el-button>
             </div>
+          </div>
 
-            <div class="experience-container">
-              <div class="experience-label">Experience</div>
-              <div class="experience-content">
-                <div class="teaching-experience">
-                  <div class="teaching-exp-t">
-                    <div class="teaching-exp-label">Teaching Experience</div>
-                    <div class="teaching-exp-edit" v-if="!canEditTeachExp"
-                         @click="turnIndexList(120)">Edit
-                    </div>
-                    <div class="teaching-exp-edit" v-if="canEditTeachExp"
-                         @click="teachExpConfirm()">Confirm
-                    </div>
-                  </div>
-                  <div class="teaching-exp-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditTeachExp === false">
-                      <div class="object-show-item" v-for="(item,i) in teachExpList" :key="i">
-                        {{ item.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditTeachExp">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectTeachExpList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editTeachExpList" :key="index"
-                             @click="selectTeachExp(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectTeachExpList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownTeachExpList" :key="index"
-                             @click="selectTeachExp(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                    </div>
+          <div class="profile-c-container">
 
-                  </div>
-                </div>
-                <div class="places-traveled">
-                  <div class="places-traveled-t">
-                    <div class="places-traveled-label"> Places Traveled</div>
-                    <div class="places-traveled-edit" v-if="!canEditCountriesTraveled"
-                         @click="turnIndexList(8)">Edit
-                    </div>
-                    <div class="places-traveled-edit" v-if="canEditCountriesTraveled"
-                         @click="countriesTraveledConfirm()">Confirm
-                    </div>
-                  </div>
-                  <div class="places-traveled-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditCountriesTraveled === false">
-                      <div class="object-show-item" v-for="(item,i) in countriesTraveledList" :key="i">
-                        {{ item.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditCountriesTraveled">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCountriesTraveledList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editCountriesTraveledList" :key="index"
-                             @click="selectCountriesTraveled(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCountriesTraveledList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownCountriesTraveledList" :key="index"
-                             @click="selectCountriesTraveled(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addCountriesTraveledStatus==false"
-                             @click="addCountriesTraveledStatus=true">Add+
-                        </div>
-                      </div>
+            <div class="profile-1-container">
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addCountriesTraveledStatus">
-                          <el-input type="text" v-model="ownCountriesTraveledValue"
-                                    placeholder="Add certifications"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCountriesTraveledValue.length>0"
-                                       @click="addOwnCountriesTraveled()">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCountriesTraveledValue.length==0"
-                                       @click="addCountriesTraveledStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="places-lived">
-                  <div class="places-lived-t">
-                    <div class="places-lived-label">Places Lived</div>
-                    <div class="places-lived-edit" v-if="!canEditCountriesLived"
-                         @click="turnIndexList(9)">Edit
-                    </div>
-                    <div class="places-lived-edit" v-if="canEditCountriesLived"
-                         @click="countriesLivedConfirm()">Confirm
-                    </div>
-                  </div>
-                  <div class="places-lived-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditCountriesLived === false">
-                      <div class="object-show-item" v-for="(cer,i) in countriesLivedList" :key="i">
-                        {{ cer.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditCountriesLived">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCountriesLivedList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editCountriesLivedList" :key="index"
-                             @click="selectCountriesLived(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCountriesLivedList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownCountriesLivedList" :key="index"
-                             @click="selectCountriesLived(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addCountriesLivedStatus==false"
-                             @click="addCountriesLivedStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addCountriesLivedStatus">
-                          <el-input type="text" v-model="ownCountriesLivedValue"
-                                    placeholder="Add certifications"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCountriesLivedValue.length>0"
-                                       @click="addOwnCountriesLived">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCountriesLivedValue.length==0"
-                                       @click="addCountriesLivedStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-                <div class="work-exp-container">
-                  <div class="work-exp-t">
-                    <div class="work-exp-t-label">Work Experience</div>
-                    <div class="work-exp-t-edit" @click="addEducationWork()">Add+</div>
-                  </div>
-                  <div class="work-exp-content">
-                    <div v-for="(work,i) in workInfo" :key="i">
-                      <div class="work-exp-b-item" v-if="i<=workExpNum">
-                        <div class="work-exp-item-1">
-                          {{ work.company_name }}
-                        </div>
-                        <div class="work-exp-item-2">
-                          <div class="work-exp-job-title"
-                               @click="turnEditWorkExperience(work)">{{ work.title }}
-                          </div>
-                          <div class="work-exp-date">
-                            {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
-                              $filters.ymdFormatTimestamp(work.work_time_to)
-                            }}
-                          </div>
-                        </div>
-                        <div class="work-exp-item-3">{{ work.location }}</div>
-
-                        <div class="work-exp-item-4">
-                          {{ work.teaching_experience }}
-                        </div>
-
-                      </div>
-                    </div>
-                    <template v-if="workInfo.length>0">
-                      <div class="show-more" v-if="showMoreWorkExpStatus" @click="showMoreWorkExp">
-                        Show More
-                      </div>
-                    </template>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="interest-container">
-              <div class="interest-t">
-                <div class="interest-label">Interest</div>
-                <div class="interest-edit" @click="canEditHobby=true" v-if="canEditHobby===false">Edit</div>
-                <div class="interest-edit" @click="hobbyConfirm()" v-if="canEditHobby">Confirm</div>
+              <div class="profile-background-container"
+                   :style="'background-image:url('+ backgroundUrl +')'"
+              >
               </div>
 
-              <div class="interest-content">
-                <!--                    展示 -->
-                <div class="object-show-container" v-if="canEditHobby === false">
-                  <div class="object-show-item" v-for="(item,i) in hobbiesList" :key="i">
-                    {{ item }}
-                  </div>
-                </div>
-                <!--                    编辑-->
-                <div class="object-tags-container" v-if="canEditHobby">
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectHobbyInfoList.indexOf(item) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in editHobbyInfoList" :key="index"
-                         @click="selectHobby(item,1)">
-                      {{ item }}
-                    </div>
-                  </div>
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectHobbyInfoList.indexOf(item) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in ownHobbyInfoList" :key="index"
-                         @click="selectHobby(item,2)">
-                      {{ item }}
-                    </div>
-                  </div>
-                  <div class="object-tags">
-                    <div class="object-tags-item" v-if="addHobbyInfoStatus==false"
-                         @click="addHobbyInfoStatus=true">Add+
-                    </div>
-                  </div>
+              <el-row :gutter="0">
 
-                  <div class="object-tags-add">
-                    <div class="object-tags-item-add" v-if="addHobbyInfoStatus">
-                      <el-input type="text" v-model="ownHobbyInfoValue"
-                                placeholder="Add Hobbies"></el-input>
-                      <div class="object-tags-item-btn-container">
-                        <el-button class="object-tags-item-btn" type="primary"
-                                   v-if="ownHobbyInfoValue.length>0"
-                                   @click="addOwnHobby()">Confirm
-                        </el-button>
-                        <el-button class="object-tags-item-btn" type="primary"
-                                   v-if="ownHobbyInfoValue.length==0"
-                                   @click="addHobbyInfoStatus=false">Cancel
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                <el-col :span="24" class="basic-info-1-container">
 
-            <div class="media-container">
-<!--              <div class="profile-photo-container">-->
-<!--                <div class="profile-photo-t">-->
-<!--                  <div class="profile-photo-t-label">Profile Photo</div>-->
-<!--                </div>-->
-<!--                <div class="profile-photo-content">-->
-<!--                  <el-upload-->
-<!--                      class="profile-uploader"-->
-<!--                      :action="uploadActionUrl"-->
-<!--                      :headers="uploadHeaders"-->
-<!--                      :data="uploadData"-->
-<!--                      :show-file-list="false"-->
-<!--                      name="file[]"-->
-<!--                      :on-success="handleProfilePhotoSuccess"-->
-<!--                      :before-upload="beforeProfilePhotoUpload"-->
-<!--                  >-->
-<!--                    <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>-->
-<!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-<!--                  </el-upload>-->
-<!--                </div>-->
-<!--              </div>-->
-              <div class="background-banner-container">
-                <div class="background-banner-t">
-                  <div class="background-banner-t-label">Background Banner</div>
-                </div>
-                <div class="background-banner-content">
-                  <el-upload
-                      class="background-uploader"
-                      :action="uploadActionUrl"
-                      :headers="uploadHeaders"
-                      :data="uploadData"
-                      :show-file-list="false"
-                      name="file[]"
-                      :on-success="handleBackgroundSuccess"
-                      :before-upload="beforeBackgroundUpload"
-                  >
-                    <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar"></el-image>
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
-
-                </div>
-              </div>
-              <div class="account-images-container">
-                <div class="account-images-t">
-                  <div class="account-images-t-label">Account Images(6 max)</div>
-                  <div class="account-images-t-edit"
-                       v-if="!editAccountImageStatus"
-                       @click="editAccountImageStatus=true">
-                    Edit
-                  </div>
-                  <div class="account-images-t-edit"
-                       v-if="editAccountImageStatus"
-                       @click="uploadAccountImages()">
-                    Save
-                  </div>
-                </div>
-                <div class="account-images-content">
-                  <div class="account-images-item-container" v-if="!editAccountImageStatus">
-                    <div class="account-images-item" v-for="(item,i) in accountImageFileList" :key="i" >
-                      <el-image class="account-images-img" :src="item.url" fit="contain"
-                      @click="accountImagePreview(item.url)"
-                      ></el-image>
-                    </div>
-                  </div>
-                  <template v-if="editAccountImageStatus">
-                    <el-upload
-                        ref="accountImagesUpload"
-                        action="#"
-                        :headers="uploadHeaders"
-                        :data="uploadData"
-                        :auto-upload="false"
-                        name="file[]"
-                        list-type="picture-card"
-                        :limit="6"
-                        :multiple="true"
-                        :before-upload="beforeAccountImageUpload"
-                        :file-list="accountImageFileList"
-                        :on-change="handleAccountImageChange"
-                        :on-preview="handleAccountImagePreview"
-                        :on-remove="handleAccountImageRemove"
-
+                  <div class="basic-info-images-container">
+                    <el-avatar class="basic-info-profile-photo"
+                               :src="profilePhotoUrl"
                     >
-                      <i class="el-icon-plus"></i>
-                    </el-upload>
-
-                  </template>
-                  <el-dialog width="50%" v-model="dialogAccountImageVisible" center>
-                    <el-image :src="dialogAccountImageUrl"></el-image>
-                  </el-dialog>
-                </div>
-              </div>
-              <div class="intro-video-container">
-                <div class="intro-video-t">
-                  <div class="intro-video-t-label">Intro Video</div>
-                  <template v-if="introVideoUrl">
-                    <div class="intro-video-t-edit"
-                         v-if="editVideoStatus"
-                         @click="editVideoStatus=false">Edit</div>
-                    <div class="intro-video-t-edit"
-                         v-else
-                         @click="editVideoStatus=true">Cancel</div>
-                  </template>
-
-                </div>
-                <div class="intro-video-content">
-
-                  <el-upload
-                      v-if="!editVideoStatus || !introVideoUrl"
-                      class="intro-video-uploader"
-                      :action="uploadActionUrl"
-                      :headers="uploadHeaders"
-                      :data="uploadData"
-                      :show-file-list="false"
-                      name="file[]"
-                      :on-success="handleIntroVideoSuccess"
-                      :before-upload="beforeIntroVideoUpload"
-                  >
-                    <i class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
-                  <video v-else :src="introVideoUrl" controls class="intro-video-avatar"/>
-                </div>
-              </div>
-              <div class="my-resume-container">
-                <div class="my-resume-t">
-                  <div class="my-resume-t-label">Your Resume [PDF]</div>
-                  <template v-if="resumeUrl">
-                    <div class="my-resume-t-edit"
-                         v-if="editResumeStatus"
-                         @click="editResumeStatus=false">Edit</div>
-                    <div class="my-resume-t-edit"
-                         v-else
-                         @click="editResumeStatus=true">Cancel</div>
-                  </template>
-                </div>
-                <div class="my-resume-content">
-
-                  <el-upload
-                      v-if="!editResumeStatus || !resumeUrl"
-                      drag
-                      class="resume-uploader"
-                      :action="uploadActionUrl"
-                      :headers="uploadHeaders"
-                      :data="uploadData"
-                      :show-file-list="false"
-                      name="file[]"
-                      :on-success="handleResumeSuccess"
-                      :before-upload="beforeResumeUpload"
-                  >
-                    <el-icon class="el-icon--upload" :size="80">
-                      <upload-filled/>
-                    </el-icon>
-                    <div class="el-upload__text">
-                      Drop file here or <em>click to upload</em>
-                    </div>
-                    <template #tip>
-                      <div class="el-upload__tip">
-
+                    </el-avatar>
+                    <div class="basic-info-six-pic-container"
+                      @click="imagesDialogVisible=true"
+                    >
+                      <div class="basic-info-six-pic-1">
+                        <el-avatar class="basic-info-six-pic" :src="profilePhotoUrl" ></el-avatar>
                       </div>
-                    </template>
-                    <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-                  </el-upload>
-                  <a v-else :href="resumeUrl" target="_blank" class="resume-avatar">
-                    [PDF] Click to Preview
-                  </a>
+                      <div class="basic-info-six-pic-2">
+                        4 MORE
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="basic-info-c-container">
+                    <div class="basic-info-c-l">
+                      <div class="basic-info-c-name">
+                        {{ educatorContact.name }}
+                      </div>
+                      <div class="basic-info-c-title">
+                        {{ educatorContact.job_title }}
+                      </div>
+                      <div class="basic-info-c-nationality">
+                        {{ educatorContact.nationality }}
+                      </div>
+                      <div class="basic-c-tags">
+                        <el-tag class="basic-c-tag">Biology</el-tag>
+                        <el-tag class="basic-c-tag">Esl English</el-tag>
+                        <el-tag class="basic-c-tag">Drama</el-tag>
+                      </div>
+                    </div>
+                    <div class="basic-info-c-r">
+                      <p>
+                        {{educatorContact.bio}}
+                        <span>READ MORE</span>
+                      </p>
+                      <div class="basic-info-c-r-b">
+                        <div class="basic-info-c-hobbies">
+                          <div class="basic-info-c-hobby"
+                               v-for="(item,i) in countriesTraveledList" :key="i">
+                            {{ item.object_en }}
+                          </div>
+                        </div>
+                        <div class="basic-info-c-hobbies">
+                          <div class="basic-info-c-hobby"
+                               v-for="(item,i) in countriesLivedList" :key="i">
+                            {{ item.object_en }}
+                          </div>
+                        </div>
+                        <div class="basic-info-c-hobbies">
+                          <div class="basic-info-c-hobby" v-for="(item,i) in hobbiesList" :key="i">
+                            #{{ item }}
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </el-col>
+
+              </el-row>
+
+            </div>
+
+          </div>
+
+          <div class="profile-2-container">
+
+            <div class="exp-container">
+              <div class="exp-label">Experience</div>
+              <div class="exp-years">
+                <template v-for="(item,i) in teachExpList" :key="i">
+                  {{ item.object_en }}
+                </template>
+              </div>
+
+              <div class="exp-c-container">
+                <div class="exp-c-item"  v-for="(work,i) in workInfo" :key="i">
+                  <div class="exp-c-item-l">
+                    <el-avatar class="exp-c-item-l-icon"></el-avatar>
+                  </div>
+                  <div class="exp-c-item-r">
+                    <div class="exp-c-item-1"  @click="turnEditWorkExperience(work)">
+                      {{ work.title }}
+                    </div>
+                    <div class="exp-c-item-2">
+                      {{ work.company_name }}
+                    </div>
+                    <div class="exp-c-item-3">
+                      {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
+                        $filters.ymdFormatTimestamp(work.work_time_to)
+                      }}
+                    </div>
+                    <div class="exp-c-item-3">
+                      {{ work.location }}
+                    </div>
+                    <div class="exp-c-item-4">
+                      {{ work.teaching_experience }}
+                    </div>
+                    <div class="exp-c-item-readmore">READ MORE</div>
+                  </div>
                 </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="profile-3-container">
+
+            <div class="education-container">
+              <div class="education-label">Education</div>
+              <div class="education-c-container">
+
+                <div class="education-c-item" v-for="(education,i) in educationInfo" :key="i">
+                  <div class="education-c-item-l">
+                    <el-avatar class="education-c-item-l-icon"></el-avatar>
+                  </div>
+                  <div class="education-c-item-r">
+                    <div class="education-c-item-r-1" @click="turnEditEducation(education)">
+                      {{ education.school_name }}
+                    </div>
+                    <div class="education-c-item-r-2">
+                      {{ education.degree }}
+                    </div>
+                    <div class="education-c-item-r-3">
+                      {{
+                        $filters.ymdFormatTimestamp(education.start_time)
+                      }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
+                    </div>
+                    <div class="education-c-item-r-4">
+                      {{ education.field_of_study }}
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
+
+          </div>
+
+          <div class="profile-4-container">
+            <div class="languages-container">
+              <div class="languages-label">
+                Languages
+              </div>
+
+              <div class="languages-c-container" v-if="educatorContact.languages">
+                <div class="languages-c-item" v-for="(item,i) in educatorContact.languages" :key="i">
+                  <div class="languages-c-item-l">{{ item.object_en }}</div>
+                  <div class="languages-c-item-r">
+                    <el-rate
+                        v-model="item.object_score"
+                        disabled
+                        :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                    >
+                    </el-rate>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="profile-5-container">
 
             <div class="preferences-container">
               <div class="preferences-label">Preferences</div>
-              <div class="preferences-content">
-                <div class="subject-teach-container">
-                  <div class="subject-teach-t">
-                    <div class="subject-teach-t-label">Preferred Subject to Teach</div>
-                    <div class="subject-teach-t-edit" @click="turnIndexList(1)" v-if="canEditSubject===false">Edit</div>
-                    <div class="subject-teach-t-edit" @click="subjectConfirm" v-if="canEditSubject">Confirm</div>
-                  </div>
-                  <div class="subject-teach-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditSubject === false">
-                      <div class="object-show-item" v-for="(cer,i) in subjectList" :key="i">
-                        {{ cer.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditSubject">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectSubjectList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editSubjectList" :key="index"
-                             @click="selectSubject(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownSubjectList" :key="index"
-                             @click="selectSubject(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addSubjectStatus==false"
-                             @click="addSubjectStatus=true">Add+
-                        </div>
-                      </div>
+              <div class="preferences-c-container">
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addSubjectStatus">
-                          <el-input type="text" v-model="ownSubjectValue"
-                                    placeholder="Add subject"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownSubjectValue.length>0"
-                                       @click="addOwnSubject">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownSubjectValue.length==0"
-                                       @click="addSubjectStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
+                <div class="preferences-c-item">
+                  <div class="preferences-c-item-label">Certifications</div>
+                  <div class="object-show-container" >
+                    <div class="object-show-item" v-for="(cer,i) in certificationsList" :key="i">
+                      {{ cer.object_en }}
                     </div>
                   </div>
                 </div>
-                <div class="p-location-container">
-                  <div class="p-location-t">
-                    <div class="p-location-t-label">Location</div>
-                    <div class="p-location-t-edit" @click="turnIndexList(71)" v-if="canEditLocation===false">Edit</div>
-                    <div class="p-location-t-edit" @click="locationConfirm" v-if="canEditLocation">Confirm</div>
-                  </div>
-                  <div class="p-location-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditLocation === false">
-                      <div class="object-show-item" v-for="(cer,i) in locationList" :key="i">
-                        {{ cer.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditLocation">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectLocationList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editLocationList" :key="index"
-                             @click="selectLocation(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectLocationList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownLocationList" :key="index"
-                             @click="selectLocation(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addLocationStatus==false"
-                             @click="addLocationStatus=true">Add+
-                        </div>
-                      </div>
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addLocationStatus">
-                          <el-input type="text" v-model="ownLocationValue"
-                                    placeholder="Add location"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownLocationValue.length>0"
-                                       @click="addOwnLocation">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownLocationValue.length==0"
-                                       @click="addLocationStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
+                <div class="preferences-c-item">
+                  <div class="preferences-c-item-label">Subject to Teach</div>
+                  <div class="object-show-container">
+                    <div class="object-show-item" v-for="(cer,i) in subjectList" :key="i">
+                      {{ cer.object_en }}
                     </div>
-
                   </div>
                 </div>
-                <div class="p-job-type-container">
-                  <div class="p-job-type-t">
-                    <div class="p-job-type-t-label">Preferred Job Type</div>
-                    <div class="p-job-type-t-edit" @click="turnIndexList(3)" v-if="canEditJobType===false">Edit</div>
-                    <div class="p-job-type-t-edit" @click="jobTypeConfirm" v-if="canEditJobType">Confirm</div>
-                  </div>
-                  <div class="p-job-type-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditJobType === false">
-                      <div class="object-show-item" v-for="(cer,i) in jobTypeList" :key="i">
-                        {{ cer.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditJobType">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectJobTypeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editJobTypeList" :key="index"
-                             @click="selectJobType(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectJobTypeList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownJobTypeList" :key="index"
-                             @click="selectJobType(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addJobTypeStatus==false"
-                             @click="addJobTypeStatus=true">Add+
-                        </div>
-                      </div>
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addJobTypeStatus">
-                          <el-input type="text" v-model="ownJobTypeValue"
-                                    placeholder="Add job type"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownJobTypeValue.length>0"
-                                       @click="addOwnJobType">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownJobTypeValue.length==0"
-                                       @click="addJobTypeStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
+                <div class="preferences-c-item">
+                  <div class="preferences-c-item-label">Location</div>
+                  <div class="object-show-container">
+                    <div class="object-show-item" v-for="(cer,i) in locationList" :key="i">
+                      {{ cer.object_en }}
                     </div>
-
                   </div>
                 </div>
-                <div class="age-teach-container">
-                  <div class="age-teach-t">
-                    <div class="age-teach-t-label"> Preferred Age To Teach</div>
-                    <div class="age-teach-t-edit" @click="turnIndexList(4)" v-if="canEditAgeToTeach===false">Edit</div>
-                    <div class="age-teach-t-edit" @click="ageToTeachConfirm" v-if="canEditAgeToTeach">Confirm</div>
-                  </div>
-                  <div class="age-teach-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditAgeToTeach === false">
-                      <div class="object-show-item" v-for="(cer,i) in ageToTeachList" :key="i">
-                        {{ cer.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditAgeToTeach">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectAgeToTeachList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editAgeToTeachList" :key="index"
-                             @click="selectAgeToTeach(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectAgeToTeachList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownAgeToTeachList" :key="index"
-                             @click="selectAgeToTeach(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addAgeToTeachStatus==false"
-                             @click="addAgeToTeachStatus=true">Add+
-                        </div>
-                      </div>
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addAgeToTeachStatus">
-                          <el-input type="text" v-model="ownAgeToTeachValue"
-                                    placeholder="Add  age to teach"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownAgeToTeachValue.length>0"
-                                       @click="addOwnAgeToTeach">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownAgeToTeachValue.length==0"
-                                       @click="addAgeToTeachStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
+                <div class="preferences-c-item">
+                  <div class="preferences-c-item-label">Preferred Job Type</div>
+                  <div class="object-show-container">
+                    <div class="object-show-item" v-for="(cer,i) in jobTypeList" :key="i">
+                      {{ cer.object_en }}
                     </div>
-
                   </div>
                 </div>
-                <div class="p-benefits-container">
-                  <div class="p-benefits-t">
-                    <div class="p-benefits-t-label">Preferred Benefits</div>
-                    <div class="p-benefits-t-edit" @click="turnIndexList(6)" v-if="canEditBenefits===false">Edit</div>
-                    <div class="p-benefits-t-edit" @click="benefitsConfirm" v-if="canEditBenefits">Confirm</div>
+
+                <div class="preferences-c-item">
+                  <div class="preferences-c-item-label"> Preferred Age To Teach</div>
+                  <div class="object-show-container" >
+                    <div class="object-show-item" v-for="(cer,i) in ageToTeachList" :key="i">
+                      {{ cer.object_en }}
+                    </div>
                   </div>
-                  <div class="p-benefits-content">
-                    <!--                    展示 -->
-                    <div class="object-show-container" v-if="canEditBenefits === false">
-                      <div class="object-show-item" v-for="(cer,i) in benefitsList" :key="i">
-                        {{ cer.object_en }}
-                      </div>
-                    </div>
-                    <!--                    编辑-->
-                    <div class="object-tags-container" v-if="canEditBenefits">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectBenefitsList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in editBenefitsList" :key="index"
-                             @click="selectBenefits(item,1)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownBenefitsList" :key="index"
-                             @click="selectBenefits(item,2)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addBenefitsStatus==false"
-                             @click="addBenefitsStatus=true">Add+
-                        </div>
-                      </div>
+                </div>
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addBenefitsStatus">
-                          <el-input type="text" v-model="ownBenefitsValue"
-                                    placeholder="Add benefits"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownBenefitsValue.length>0"
-                                       @click="addOwnBenefits">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownBenefitsValue.length==0"
-                                       @click="addBenefitsStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
+                <div class="preferences-c-item">
+                  <div class="preferences-c-item-label">Preferred Benefits</div>
+                  <div class="object-show-container">
+                    <div class="object-show-item" v-for="(cer,i) in benefitsList" :key="i">
+                      {{ cer.object_en }}
                     </div>
+                  </div>
+                </div>
+              </div>
 
+            </div>
+
+          </div>
+
+          <div class="credentials-container">
+            <div class="credentials-label">Credentials</div>
+            <div class="credentials-content">
+              <div class="languages-container">
+                <div class="languages-t">
+                  <div class="languages-label">Languages</div>
+                  <div class="languages-edit" @click="editLanguages()">Edit</div>
+                </div>
+                <div class="languages-content" v-if="educatorContact.languages">
+                  <div class="languages-item" v-for="(item,i) in educatorContact.languages" :key="i">
+                    <div class="languages-item-l">{{ item.object_en }}</div>
+                    <div class="languages-item-r">
+                      <el-rate
+                          v-model="item.object_score"
+                          disabled
+                          :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                      >
+                      </el-rate>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
+          <div class="media-container">
+            <!--              <div class="profile-photo-container">-->
+            <!--                <div class="profile-photo-t">-->
+            <!--                  <div class="profile-photo-t-label">Profile Photo</div>-->
+            <!--                </div>-->
+            <!--                <div class="profile-photo-content">-->
+            <!--                  <el-upload-->
+            <!--                      class="profile-uploader"-->
+            <!--                      :action="uploadActionUrl"-->
+            <!--                      :headers="uploadHeaders"-->
+            <!--                      :data="uploadData"-->
+            <!--                      :show-file-list="false"-->
+            <!--                      name="file[]"-->
+            <!--                      :on-success="handleProfilePhotoSuccess"-->
+            <!--                      :before-upload="beforeProfilePhotoUpload"-->
+            <!--                  >-->
+            <!--                    <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>-->
+            <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+            <!--                  </el-upload>-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <div class="background-banner-container">
+              <div class="background-banner-t">
+                <div class="background-banner-t-label">Background Banner</div>
+              </div>
+              <div class="background-banner-content">
+                <el-upload
+                    class="background-uploader"
+                    :action="uploadActionUrl"
+                    :headers="uploadHeaders"
+                    :data="uploadData"
+                    :show-file-list="false"
+                    name="file[]"
+                    :on-success="handleBackgroundSuccess"
+                    :before-upload="beforeBackgroundUpload"
+                >
+                  <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar"></el-image>
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
 
-        </el-col>
-      </el-row>
+              </div>
+            </div>
+            <div class="account-images-container">
+              <div class="account-images-t">
+                <div class="account-images-t-label">Account Images(6 max)</div>
+                <div class="account-images-t-edit"
+                     v-if="!editAccountImageStatus"
+                     @click="editAccountImageStatus=true">
+                  Edit
+                </div>
+                <div class="account-images-t-edit"
+                     v-if="editAccountImageStatus"
+                     @click="uploadAccountImages()">
+                  Save
+                </div>
+              </div>
+              <div class="account-images-content">
+                <div class="account-images-item-container" v-if="!editAccountImageStatus">
+                  <div class="account-images-item" v-for="(item,i) in accountImageFileList" :key="i" >
+                    <el-image class="account-images-img" :src="item.url" fit="contain"
+                              @click="accountImagePreview(item.url)"
+                    ></el-image>
+                  </div>
+                </div>
+                <template v-if="editAccountImageStatus">
+                  <el-upload
+                      ref="accountImagesUpload"
+                      action="#"
+                      :headers="uploadHeaders"
+                      :data="uploadData"
+                      :auto-upload="false"
+                      name="file[]"
+                      list-type="picture-card"
+                      :limit="6"
+                      :multiple="true"
+                      :before-upload="beforeAccountImageUpload"
+                      :file-list="accountImageFileList"
+                      :on-change="handleAccountImageChange"
+                      :on-preview="handleAccountImagePreview"
+                      :on-remove="handleAccountImageRemove"
 
+                  >
+                    <i class="el-icon-plus"></i>
+                  </el-upload>
+
+                </template>
+                <el-dialog width="50%" v-model="dialogAccountImageVisible" center>
+                  <el-image :src="dialogAccountImageUrl"></el-image>
+                </el-dialog>
+
+              </div>
+            </div>
+            <div class="intro-video-container">
+              <div class="intro-video-t">
+                <div class="intro-video-t-label">Intro Video</div>
+                <template v-if="introVideoUrl">
+                  <div class="intro-video-t-edit"
+                       v-if="editVideoStatus"
+                       @click="editVideoStatus=false">Edit</div>
+                  <div class="intro-video-t-edit"
+                       v-else
+                       @click="editVideoStatus=true">Cancel</div>
+                </template>
+
+              </div>
+              <div class="intro-video-content">
+
+                <el-upload
+                    v-if="!editVideoStatus || !introVideoUrl"
+                    class="intro-video-uploader"
+                    :action="uploadActionUrl"
+                    :headers="uploadHeaders"
+                    :data="uploadData"
+                    :show-file-list="false"
+                    name="file[]"
+                    :on-success="handleIntroVideoSuccess"
+                    :before-upload="beforeIntroVideoUpload"
+                >
+                  <i class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+                <video v-else :src="introVideoUrl" controls class="intro-video-avatar"/>
+              </div>
+            </div>
+            <div class="my-resume-container">
+              <div class="my-resume-t">
+                <div class="my-resume-t-label">Your Resume [PDF]</div>
+                <template v-if="resumeUrl">
+                  <div class="my-resume-t-edit"
+                       v-if="editResumeStatus"
+                       @click="editResumeStatus=false">Edit</div>
+                  <div class="my-resume-t-edit"
+                       v-else
+                       @click="editResumeStatus=true">Cancel</div>
+                </template>
+              </div>
+              <div class="my-resume-content">
+
+                <el-upload
+                    v-if="!editResumeStatus || !resumeUrl"
+                    drag
+                    class="resume-uploader"
+                    :action="uploadActionUrl"
+                    :headers="uploadHeaders"
+                    :data="uploadData"
+                    :show-file-list="false"
+                    name="file[]"
+                    :on-success="handleResumeSuccess"
+                    :before-upload="beforeResumeUpload"
+                >
+                  <el-icon class="el-icon--upload" :size="80">
+                    <upload-filled/>
+                  </el-icon>
+                  <div class="el-upload__text">
+                    Drop file here or <em>click to upload</em>
+                  </div>
+                  <template #tip>
+                    <div class="el-upload__tip">
+
+                    </div>
+                  </template>
+                  <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+                </el-upload>
+                <a v-else :href="resumeUrl" target="_blank" class="resume-avatar">
+                  [PDF] Click to Preview
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
     <!--    languages -->
@@ -990,13 +541,62 @@
 
     </el-drawer>
 
+    <el-dialog v-model="imagesDialogVisible" fullscreen>
+      <swiper
+          :style="{
+      '--swiper-navigation-color': '#fff',
+      '--swiper-pagination-color': '#fff',
+    }"
+          :slidesPerView="3"
+          :spaceBetween="50"
+          :navigation="true"
+          :thumbs="{ swiper: thumbsSwiper }"
+          class="mySwiper2"
+      >
+        <swiper-slide v-for="(item,i) in accountImageFileList" :key="i">
+          <el-image :src="item.url"></el-image>
+        </swiper-slide>
+      </swiper>
+      <swiper
+          @swiper="setThumbsSwiper"
+          :spaceBetween="20"
+          :slidesPerView="5"
+          :freeMode="true"
+          :watchSlidesProgress="true"
+          class="mySwiper"
+      >
+        <swiper-slide v-for="(item,i) in accountImageFileList" :key="i">
+          <el-image :src="item.url"></el-image>
+        </swiper-slide>
+      </swiper>
+    </el-dialog>
+
     <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
   </div>
 </template>
 
 <script>
+
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from 'swiper/vue';
+
+// Import Swiper styles
+import 'swiper/css';
+
+import "swiper/css/free-mode"
+import "swiper/css/navigation"
+import "swiper/css/thumbs"
+
+import './style.css';
+
+
+// import required modules
+import SwiperCore, {Autoplay, FreeMode, Navigation, Pagination, Thumbs, Zoom} from 'swiper';
+SwiperCore.use([Autoplay, FreeMode, Navigation, Pagination, Thumbs, Zoom]);
+
 import meSideMenu from "@/components/meSideMenu";
-import accountInfo from "../../../components/accountInfo";
+import {ref} from 'vue'
+
 import {
   USER_OBJECT_LIST,
   ADD_PROFILE_V2,
@@ -1014,11 +614,27 @@ export default {
   name: "profile",
   components: {
     meSideMenu,
-    accountInfo,
-    xllLoading
+    xllLoading,
+    Swiper,
+    SwiperSlide,
+  },
+  setup() {
+
+    let thumbsSwiper = ref(null);
+
+    const setThumbsSwiper = (swiper) => {
+          thumbsSwiper.value = swiper;
+        }
+
+    return {
+      thumbsSwiper,
+      setThumbsSwiper
+    }
+
   },
   data() {
     return {
+      imagesDialogVisible:false,
       uploadLoadingStatus:false,
       editAccountImageStatus:false,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
@@ -1332,8 +948,8 @@ export default {
             this.hobbiesList = hobbies.split(',');
           }
 
-          if (educatorContact.profile_photo) {
-            this.profilePhotoUrl = educatorContact.profile_photo
+          if (userContact.headimgurl) {
+            this.profilePhotoUrl = userContact.headimgurl
           }
           if (educatorContact.background_image) {
             this.backgroundUrl = educatorContact.background_image
@@ -2893,12 +2509,47 @@ export default {
 }
 
 .educator-container {
-  margin: 0 auto;
-  padding: 20px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .educator-r-container {
-  padding: 10px 20px;
+  width:calc(100% - 160px);
+}
+
+.educator-r-container-bg{
+  padding:30px 50px 50px 50px;
+}
+
+.account-profile-t{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 40px 0;
+}
+
+.account-profile-t-l{
+  font-family: BSemiBold, serif;
+  font-size:30px;
+  color:#262626;
+
+}
+
+.account-profile-t-r{
+
+}
+.account-profile-back-btn{
+  font-size:20px;
+}
+.account-profile-cancel-btn{
+  font-size:20px;
+}
+
+.account-profile-save-btn{
+  font-size:20px;
 }
 
 .basic-info-margin{
@@ -3842,22 +3493,6 @@ export default {
   margin-top: 20px;
 }
 
-.object-show-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.object-show-item {
-  background-color: rgba(0, 179, 210, 0.1);
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin: 10px;
-  font-size: 14px;
-  cursor: pointer;
-}
 
 .object-tags-container {
   display: flex;
@@ -3904,9 +3539,437 @@ export default {
   color: #FFFFFF;
 }
 
+
+.profile-1-container{
+  background-color:#FFFFFF;
+  box-shadow: 0px 3px 23px #00000012;
+  border-radius: 18px;
+  margin-bottom:30px;
+}
+
+.profile-background-container{
+  height: 200px;
+  background-color: #262626;
+  border-radius: 18px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.basic-info-1-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.basic-info-images-container{
+  position: relative;
+  width:290px;
+  height: 200px;
+}
+
+.basic-info-profile-photo{
+  width:200px;
+  height: 200px;
+  position: absolute;
+  top:-100px;
+  left: 50px;
+  border:2px solid #EEEEEE;
+}
+
+.basic-info-six-pic-container{
+  position:absolute;
+  bottom:100px;
+  left: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.basic-info-six-pic-1{
+
+}
+
+.basic-info-six-pic-2{
+  font-size: 16px;
+  font-family: BCM, serif;
+  color: #262626;
+  cursor:pointer;
+}
+
+.basic-info-six-pic-2:hover{
+  color:#6650B3;
+
+}
+
+
+.basic-info-six-pic{
+  width: 66px;
+  height: 66px;
+  border:2px solid #EEEEEE;
+  cursor: pointer;
+}
+
+.basic-info-c-container{
+  width: calc( 100% - 290px );
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.basic-info-c-l{
+  width:40%;
+}
+
+
+.basic-info-c-name{
+  font-family: BSemiBold, serif;
+  font-size: 35px;
+  color: #262626;
+
+}
+
+.basic-info-c-title{
+  font-family: BarlowM, serif;
+  font-size: 26px;
+  color: #262626;
+}
+
+.basic-info-c-nationality{
+  font-family: AssiRegular, serif;
+  font-size: 23px;
+  color: #262626;
+}
+
+.basic-c-tags{
+  margin-top: 15px;
+}
+
+.basic-c-tag{
+  margin-right:10px;
+}
+
+.basic-info-c-r{
+  width: 60%;
+  padding-right: 20px;
+}
+
+.basic-info-c-r p{
+  font-size: 23px;
+  font-family: AssiRegular, serif;
+  color: #262626;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+-webkit-box-orient:vertical;
+
+}
+.basic-info-c-r span{
+  color:#6650B3;
+  font-size:20px;
+  font-family: BCM, serif;
+}
+
+.basic-info-c-r-b{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+}
+
+.basic-info-c-location{
+  margin-right:15px;
+  font-size: 23px;
+  font-family: AssiRegular, serif;
+  color:#262626;
+}
+
+.basic-info-c-hobbies{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.basic-info-c-hobby{
+  margin-right: 15px;
+  font-size: 23px;
+  font-family: Assistant-SemiBold, serif;
+  color:#262626;
+}
+
+.profile-2-container{
+  background-color:#FFFFFF;
+  box-shadow: 0px 3px 23px #00000012;
+  border-radius: 18px;
+  margin-bottom:30px;
+}
+
+.exp-container{
+  padding:50px;
+}
+
+.exp-label{
+  font-family:BSemiBold, serif;
+  font-size:30px;
+  color: #262626;
+
+}
+
+.exp-years{
+  font-family:BarlowM, serif;
+  font-size:20px;
+  color: #262626;
+}
+
+.exp-c-container{
+  margin-top: 20px;
+}
+
+.exp-c-item{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 25px;
+}
+
+.exp-c-item-l{
+
+}
+.exp-c-item-l-icon{
+  width:50px;
+  height: 50px;
+
+}
+.exp-c-item-r{
+  padding-left: 25px;
+}
+.exp-c-item-1{
+  font-family:Assistant-SemiBold, serif;
+  font-size:23px;
+  color: #262626;
+}
+.exp-c-item-2{
+  font-family:AssiRegular, serif;
+  font-size:23px;
+  color: #262626;
+}
+.exp-c-item-3{
+  font-family:AssiRegular, serif;
+  font-size:23px;
+  color: #262626;
+}
+
+.exp-c-item-4{
+  margin-top: 25px;
+  font-family:AssiRegular, serif;
+  font-size:23px;
+  color: #262626;
+}
+
+.exp-c-item-readmore{
+  font-family:BCM, serif;
+  font-size:20px;
+  color: #6650B3;
+}
+
+.profile-3-container{
+  background-color:#FFFFFF;
+  box-shadow: 0px 3px 23px #00000012;
+  border-radius: 18px;
+  margin-bottom:30px;
+}
+
+.education-container{
+  padding:50px;
+}
+
+.education-label{
+  font-family:BSemiBold, serif;
+  font-size:30px;
+  color: #262626;
+
+}
+
+.education-c-container{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+}
+
+.education-c-item{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: 25px 25px 25px 0;
+}
+
+.education-c-item-l{
+
+}
+.education-c-item-l-icon{
+  width:50px;
+  height: 50px;
+
+}
+
+.education-c-item-r{
+  padding-left: 25px;
+
+}
+
+.education-c-item-r-1{
+  font-family:Assistant-SemiBold, serif;
+  font-size:23px;
+  color: #262626;
+}
+
+.education-c-item-r-2{
+  font-family:AssiRegular, serif;
+  font-size:23px;
+  color: #262626;
+}
+
+.education-c-item-r-3{
+  font-family:AssiRegular, serif;
+  font-size:23px;
+  color: #262626;
+}
+
+.education-c-item-r-4{
+  margin-top: 25px;
+  font-family:AssiRegular, serif;
+  font-size:23px;
+  color: #262626;
+}
+
+.profile-4-container{
+  background-color:#FFFFFF;
+  box-shadow: 0 3px 23px #00000012;
+  border-radius: 18px;
+  margin-bottom:30px;
+}
+
+.languages-container{
+  padding:50px;
+}
+
+.languages-label{
+  font-family:BSemiBold, serif;
+  font-size:30px;
+  color: #262626;
+
+}
+
+.languages-c-container{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+}
+
+.languages-c-item{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: 25px 25px 25px 0;
+}
+
+.languages-c-item-l{
+  font-family:Assistant-SemiBold, serif;
+  font-size:23px;
+  color: #262626;
+}
+
+.languages-c-item-r{
+  padding-left: 25px;
+  font-family:AssiRegular, serif;
+  font-size:23px;
+  color: #262626;
+}
+
+
+.profile-5-container{
+  background-color:#FFFFFF;
+  box-shadow: 0px 3px 23px #00000012;
+  border-radius: 18px;
+  margin-bottom:30px;
+}
+
+.preferences-container{
+  padding:50px;
+}
+
+.preferences-label{
+  font-family:BSemiBold, serif;
+  font-size:30px;
+  color: #262626;
+
+}
+
+.preferences-c-container{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+}
+
+.preferences-c-item{
+  margin: 25px 25px 25px 0;
+}
+
+.preferences-c-item-label{
+  font-family:Assistant-SemiBold, serif;
+  font-size:23px;
+  color: #262626;
+}
+
+.object-show-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.object-show-item {
+  padding: 4px 10px;
+  background-color: #EEEEEE;
+  margin-top: 10px;
+  margin-left: 10px;
+  border-radius: 6px;
+  font-size: 20px;
+  cursor: pointer;
+  font-family: BCM, serif;
+}
+
+
+
+
 @media screen and (min-width: 1200px){
   .educator-container{
-    width: 1100px;
+    /*width: 1100px;*/
   }
 }
 
