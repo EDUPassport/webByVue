@@ -15,7 +15,7 @@ import router from "./routes"
 import './assets/css/aliIcon/iconfont.css'
 import 'animate.css'
 import VTypical from 'vue-typical'
-import 'index.css'
+import './assets/fonts/index.css'
 
 import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
