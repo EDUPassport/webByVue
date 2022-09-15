@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-scrollbar class="menu-xll-bg-container">
 
     <div class="menu-btn-container">
       <el-button class="menu-btn" type="primary" @click="showSideMenu()">Menu</el-button>
@@ -94,7 +94,7 @@
     </div>
 
 
-  </div>
+  </el-scrollbar>
 
 </template>
 
@@ -233,9 +233,14 @@ export default {
 </script>
 
 <style scoped>
+
+.menu-xll-bg-container{
+  height: calc(100vh - 140px);
+}
+
 .profile-l-container{
   width: 160px;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
   background-color: #ffffff;
 
   padding-bottom: 20px;

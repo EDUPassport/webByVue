@@ -2,246 +2,413 @@
   <div class="bg" v-loading="showLoadingStatus">
 
     <template v-if="exchangeAccountInfo">
-      <ExchangeAccountInfo :info="exchangeAccountInfo" ></ExchangeAccountInfo>
+      <ExchangeAccountInfo :info="exchangeAccountInfo"></ExchangeAccountInfo>
     </template>
 
-    <el-row class="bg-container" align="top" justify="center" >
-      <el-col :xs="22" :sm="22" :md="8" :lg="8" :xl="8">
-        <div class="jobs-filter-container">
-          <div class="jobs-filter-label">Find a job</div>
-          <div class="jobs-filter-location">
-            <el-select class="jobs-filter-select" v-model="locationValue" clearable placeholder="Location"
-                       @change="locationChange"
-                       size="default">
-              <el-option
-                  v-for="item in locationOptions"
-                  :key="item.id"
-                  :label="item.CityPinyin"
-                  :value="item.id"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="jobs-filter-salary">
-            <el-select class="jobs-filter-select" v-model="salaryValue" clearable
-                       @change="salaryChange"
-                       placeholder="Salary" size="default">
-              <el-option
-                  v-for="item in salaryOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="jobs-filter-gender">
-            <el-select class="jobs-filter-select" v-model="genderValue" clearable
-                       @change="genderChange"
-                       placeholder="Gender" size="default">
-              <el-option
-                  v-for="item in genderOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="jobs-filter-job-type">
-            <el-select class="jobs-filter-select" v-model="jobTypeValue" clearable
-                       @change="jobTypeChange"
-                       placeholder="Job Type" size="default">
-              <el-option
-                  v-for="item in jobTypeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="jobs-filter-student-age">
-            <el-select class="jobs-filter-select" v-model="studentAgeValue" clearable
-                       @change="studentAgeChange"
-                       placeholder="Student Age"
-                       size="default">
-              <el-option
-                  v-for="item in studentAgeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
+    <el-row class="bg-container" :gutter="0" align="top" justify="center">
 
-          <div class="jobs-filter-online">
-            <el-select class="jobs-filter-select" v-model="onlineValue" clearable
-                       @change="onlineChange"
-                       placeholder="Online/Offline"
-                       size="default">
-              <el-option
-                  v-for="item in onlineOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
+      <el-col class="jobs-filter-col" :xs="22" :sm="22" :md="4" :lg="4" :xl="4">
 
+        <div class="jobs-bg-filter-container">
+          <div class="jobs-filter-container">
+            <div class="jobs-filter-label">Find a job</div>
+            <div class="jobs-filter-location">
+              <el-select class="jobs-filter-select" v-model="locationValue" clearable placeholder="Location"
+                         @change="locationChange"
+                         size="default">
+                <el-option
+                    v-for="item in locationOptions"
+                    :key="item.id"
+                    :label="item.CityPinyin"
+                    :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="jobs-filter-salary">
+              <el-select class="jobs-filter-select" v-model="salaryValue" clearable
+                         @change="salaryChange"
+                         placeholder="Salary" size="default">
+                <el-option
+                    v-for="item in salaryOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="jobs-filter-gender">
+              <el-select class="jobs-filter-select" v-model="genderValue" clearable
+                         @change="genderChange"
+                         placeholder="Gender" size="default">
+                <el-option
+                    v-for="item in genderOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="jobs-filter-job-type">
+              <el-select class="jobs-filter-select" v-model="jobTypeValue" clearable
+                         @change="jobTypeChange"
+                         placeholder="Job Type" size="default">
+                <el-option
+                    v-for="item in jobTypeOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="jobs-filter-student-age">
+              <el-select class="jobs-filter-select" v-model="studentAgeValue" clearable
+                         @change="studentAgeChange"
+                         placeholder="Student Age"
+                         size="default">
+                <el-option
+                    v-for="item in studentAgeOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+
+            <div class="jobs-filter-online">
+              <el-select class="jobs-filter-select" v-model="onlineValue" clearable
+                         @change="onlineChange"
+                         placeholder="Online/Offline"
+                         size="default">
+                <el-option
+                    v-for="item in onlineOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+
+
+          </div>
 
         </div>
         <!--        featuredJobs jobs    -->
-        <featuredJobs></featuredJobs>
+        <!--        <featuredJobs></featuredJobs>-->
         <!--        latest industry articles-->
-        <latestIndustryNews></latestIndustryNews>
+        <!--        <latestIndustryNews></latestIndustryNews>-->
 
       </el-col>
-      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
 
-        <div class="xll-ads-container" v-if="jobsAdsListTop.length>0">
-          <el-carousel height="180px" indicator-position="none" >
-            <el-carousel-item class="xll-ads-swiper-item"
-                              v-for="(item,i) in jobsAdsListTop" :key="i"
-                              @click="turnBanner(item.link)"
-            >
-              <div class="xll-ads-l" >
-                <el-image class="xll-ads-l-img"
-                          :src="item.user_url !='' ? item.user_url : item.url">
-                  <template #error>
-                    <div class="image-ads-slot">
-                      <el-icon :size="80" color="#808080"><Picture /></el-icon>
-                    </div>
-                  </template>
-                </el-image>
-              </div>
-              <div class="xll-ads-r">
-                <h4>Advertise with Us</h4>
-                <h5>Description:</h5>
-                <div class="xll-ads-r-desc">
-                  Your Adverts and their description will be displayed here.
-                  Just click on the banner
-                </div>
+      <el-col class="jobs-list-col" :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
 
-              </div>
-            </el-carousel-item>
-          </el-carousel>
-
-        </div>
-
-        <div class="jobs-list-container" >
-          <div class="jobs-list-label-container">
-            <div class="jobs-list-label">We've found you {{ jobTotalNum }} open jobs</div>
-            <div class="post-a-job">
-              <el-button class="post-a-job-btn" type="primary" round @click="postJob()">Post a Job</el-button>
+        <el-scrollbar class="jobs-list-bg-container">
+          <div class="jobs-list-container">
+            <div class="jobs-list-label-container">
+              <div class="jobs-list-label">All jobs</div>
             </div>
-          </div>
-          <div class="jobs-list-content">
-            <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
 
-              <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                   @click="cancelFavorite(1,item.id,index)">
-                <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-              </div>
-              <div class="jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
-                <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-              </div>
-              <div class="jobs-list-item-l">
-                <el-image class="jobs-item-logo" :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
-                          fit="contain">
-                  <template #error>
-                    <div class="image-slot">
-                      <el-icon :size="60" color="#808080"><Picture /></el-icon>
-                    </div>
-                  </template>
-                </el-image>
-              </div>
-              <div class="jobs-list-item-r">
-                <div class="jobs-list-item-title">
-                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">{{ item.job_title }}</router-link>
-                </div>
-                <div class="jobs-list-item-name">
-                  {{ item.company_name }}
-                </div>
-                <div class="jobs-list-item-address">
-                  {{ item.address }}
-                </div>
-                <div class="jobs-list-item-desc">
-                  {{ $filters.doRepAdvance(item.desc)  }}
-                </div>
-                <div class="jobs-list-item-readmore">
-                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">Read More...</router-link>
-                </div>
-              </div>
+            <div class="jobs-list-content">
 
-              <div class="jobs-list-item-b">
-                <div class="jobs-list-item-b-l">
-                  <view class="jobs-list-item-work-type">
-                    <i class="iconfont el-icon-alishijian"></i>
-                    <span v-if="item.employment_type==1">FT</span>
-                    <span v-if="item.employment_type==2">PT</span>
-                    <span v-if="item.employment_type==3">S</span>
-                  </view>
-                  <view class="jobs-list-item-gender" v-if="item.sex == 1 || item.sex == 2">
-                    <i class="iconfont el-icon-alimale-female"></i>
-                    <span v-if="item.sex == 1">Male</span>
-                    <span v-if="item.sex == 2">Female</span>
-                  </view>
-                </div>
+              <div class="jobs-list-item "
+                   :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' "
+                   v-for="(item,index) in jobListData" :key="index">
 
-                <div class="jobs-list-item-b-r">
-                  <view class="jobs-list-item-date">
-                    <el-icon>
-                      <Calendar/>
-                    </el-icon>&nbsp;
-                    {{ $filters.howLongFormat(item.refresh_time) }}
-                  </view>
+                <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                     @click="cancelFavorite(1,item.id,index)">
+                  <el-icon :size="30" color="#9173ff">
+                    <CollectionTag />
+                  </el-icon>
+                </div>
+                <div class="jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
+                  <el-icon :size="30">
+                    <CollectionTag />
+                  </el-icon>
+                </div>
+                <div class="jobs-list-item-l">
+                  <el-image class="jobs-item-logo"
+                            :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+                            fit="contain">
+                    <template #error>
+                      <div class="image-slot">
+                        <el-icon :size="60" color="#808080">
+                          <Picture/>
+                        </el-icon>
+                      </div>
+                    </template>
+                  </el-image>
+                </div>
+                <div class="jobs-list-item-r">
+                  <div class="jobs-list-item-name">
+                    {{ item.company_name }}
+                  </div>
+
+                  <div class="jobs-list-item-title">
+                    <router-link :to="{'path':'/jobs',query:{id:item.id}}">{{ item.job_title }}</router-link>
+                  </div>
                   <view class="jobs-list-item-salary">
+                    <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
                     {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
+                    <span v-if="item.payment_period == 112">hourly</span>
+                    <span v-if="item.payment_period == 113">daily</span>
+                    <span v-if="item.payment_period == 114">weekly</span>
+                    <span v-if="item.payment_period == 115">monthly</span>
+                    <span v-if="item.payment_period == 116">annually</span>
                   </view>
-                </div>
-              </div>
+                  <div class="jobs-list-item-address">
+                    {{ item.address }}
+                  </div>
 
-            </div>
-          </div>
-          <div class="jobs-list-pagination">
-            <el-pagination layout="prev, pager, next" :default-current-page="1"
-                           @size-change="jobPageSizeChange"
-                           @current-change="jobPageChange"
-                           :current-page="jobPage" :page-size="jobLimit"
-                           :total="jobTotalNum"></el-pagination>
-          </div>
+                  <div class="jobs-list-item-b">
+                    <div class="jobs-list-item-b-l">
+                      <view class="jobs-list-item-work-type">
+                        <i class="iconfont el-icon-alishijian"></i>
+                        <span v-if="item.employment_type==1">FT</span>
+                        <span v-if="item.employment_type==2">PT</span>
+                        <span v-if="item.employment_type==3">S</span>
+                      </view>
 
-        </div>
-
-        <div class="xll-ads-container xll-ads-container-margin" v-if="jobsAdsListMid.length>0">
-          <el-carousel height="180px" indicator-position="none" >
-            <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in jobsAdsListMid" :key="i">
-              <div class="xll-ads-l">
-                <el-image class="xll-ads-l-img"
-                          :src="item.user_url !='' ? item.user_url : item.url">
-                  <template #error>
-                    <div class="image-ads-slot">
-                      <el-icon :size="80" color="#808080"><Picture /></el-icon>
                     </div>
-                  </template>
-                </el-image>
-              </div>
-              <div class="xll-ads-r">
-                <h4>Advertise with Us</h4>
-                <h5>Description:</h5>
-                <div class="xll-ads-r-desc">
-                  Your Adverts and their description will be displayed here.
-                  Just click on the banner
+
+                    <div class="jobs-list-item-b-r">
+                      <view class="jobs-list-item-date">
+                        <el-icon>
+                          <Calendar/>
+                        </el-icon>&nbsp;
+                        {{ $filters.howLongFormat(item.refresh_time) }}
+                      </view>
+
+                    </div>
+                  </div>
+
+
                 </div>
 
+
               </div>
-            </el-carousel-item>
-          </el-carousel>
+            </div>
+            <div class="jobs-list-pagination">
+              <el-pagination layout="prev, pager, next" :default-current-page="1"
+                             @size-change="jobPageSizeChange"
+                             @current-change="jobPageChange"
+                             :current-page="jobPage" :page-size="jobLimit"
+                             :total="jobTotalNum"></el-pagination>
+            </div>
+
+          </div>
+
+          <div class="xll-ads-container" v-if="jobsAdsListMid.length>0">
+            <div class="xll-ads-label">Sponsored</div>
+            <el-carousel height="80px" indicator-position="none">
+              <el-carousel-item class="xll-ads-swiper-item"
+                                v-for="(item,i) in jobsAdsListMid" :key="i"
+                                @click="turnBanner(item.link)"
+              >
+                <div class="xll-ads">
+
+                  <el-image class="xll-ads-img"
+                            :src="item.user_url !='' ? item.user_url : item.url">
+                    <template #error>
+                      <div class="image-ads-slot">
+                        <el-icon :size="80" color="#808080">
+                          <Picture/>
+                        </el-icon>
+                      </div>
+                    </template>
+                  </el-image>
+                </div>
+              </el-carousel-item>
+            </el-carousel>
+
+          </div>
+
+        </el-scrollbar>
+
+      </el-col>
+
+      <el-col class="job-detail-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+
+        <div class="job-detail-bg-container">
+
+          <div class="xll-ads-container" v-if="jobsAdsListTop.length>0">
+            <div class="xll-ads-label">Sponsored</div>
+            <el-carousel height="13vh" indicator-position="none">
+              <el-carousel-item class="xll-ads-swiper-item"
+                                v-for="(item,i) in jobsAdsListTop" :key="i"
+                                @click="turnBanner(item.link)"
+              >
+                <div class="xll-ads">
+                  <el-image class="xll-ads-img"
+                            :src="item.user_url !='' ? item.user_url : item.url">
+                    <template #error>
+                      <div class="image-ads-slot">
+                        <el-icon :size="80" color="#808080">
+                          <Picture/>
+                        </el-icon>
+                      </div>
+                    </template>
+                  </el-image>
+                </div>
+              </el-carousel-item>
+            </el-carousel>
+
+          </div>
+          <div class="job-detail-container">
+
+            <div class="job-detail-t">
+              <div class="job-detail-t-l">
+                <div class="job-detail-t-l-1" v-if="detailData.company">
+                  {{detailData.company.company_name}}
+                </div>
+                <div class="job-detail-t-l-2">
+                  {{detailData.job_title}}
+                </div>
+                <div class="job-detail-t-l-3">
+                  {{detailData.job_location}}
+                </div>
+              </div>
+              <div class="job-detail-t-r">
+                <el-button type="primary" round>QUICK APPLY</el-button>
+                <el-button plain round>SAVE</el-button>
+              </div>
+            </div>
+
+            <el-scrollbar class="job-detail-c">
+              <div class="job-detail-c-1">
+                <div class="job-detail-c-item">
+                  <div class="job-detail-c-item-l">Start date:</div>
+                  <div class="job-detail-c-item-r">{{detailData.entry_date}}</div>
+                </div>
+                <div class="job-detail-c-item">
+                  <div class="job-detail-c-item-l">Hours:</div>
+                  <div class="job-detail-c-item-r">
+                    <div class="working-hours">
+                      <div class="working-hours-item" v-for="(item,index) in workingHoursData" :key="index">
+                        <el-tag class="working-hours-week" v-for="(week,i) in item.week" :key="i">
+                          <span v-if="week==1">M</span>
+                          <span v-if="week==2">T</span>
+                          <span v-if="week==3">W</span>
+                          <span v-if="week==4">Th</span>
+                          <span v-if="week==5">F</span>
+                          <span v-if="week==6">Sa</span>
+                          <span v-if="week==7">Su</span>
+                        </el-tag>
+                        <span class="working-hours-hours">{{item.hours}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="job-detail-c-item">
+                  <div class="job-detail-c-item-l">Student's age:</div>
+                  <div class="job-detail-c-item-r">
+                    {{ $filters.userObjectFormat(detailData.age_to_teach)}}
+                  </div>
+                </div>
+                <div class="job-detail-c-item">
+                  <div class="job-detail-c-item-l">Subjects:</div>
+                  <div class="job-detail-c-item-r">
+                    {{ $filters.userObjectFormat(detailData.subject)}}
+                  </div>
+                </div>
+              </div>
+
+              <div class="job-detail-c-2">
+                <div class="job-detail-c-2-l">
+                  <div class="job-detail-c-item-label">Requirements:</div>
+                  <div class="job-detail-c-item-c">
+                    <div class="job-detail-c-item">
+                      <div class="job-detail-c-item-l">Teaching experience:</div>
+                      <div class="job-detail-c-item-r">
+                        {{detailData.teaching_times_en}}
+                      </div>
+                    </div>
+                    <div class="job-detail-c-item">
+                      <div class="job-detail-c-item-l">Minimum education:</div>
+                      <div class="job-detail-c-item-r">
+                        {{detailData.education_en}}
+                      </div>
+                    </div>
+                    <div class="job-detail-c-item">
+                      <div class="job-detail-c-item-l">Class size:</div>
+                      <div class="job-detail-c-item-r">
+                        {{detailData.class_size}}
+                      </div>
+                    </div>
+                    <div class="job-detail-c-item">
+                      <div class="job-detail-c-item-l">Number of Vacancies:</div>
+                      <div class="job-detail-c-item-r">
+                        {{detailData.numbers}}
+                      </div>
+                    </div>
+                    <div class="job-detail-c-item"
+                         v-if="detailData.apply_due_date && detailData.apply_due_date !='0000-00-00'"
+                    >
+                      <div class="job-detail-c-item-l">Application:</div>
+                      <div class="job-detail-c-item-r">
+                        {{detailData.apply_due_date}}
+                      </div>
+                    </div>
+
+                    <div class="job-detail-c-item">
+                      <div class="job-detail-c-item-l">Teaching certificates:</div>
+                      <div class="job-detail-c-item-r">CeLaa</div>
+                    </div>
+                    <div class="job-detail-c-item">
+                      Teaching license
+                    </div>
+                    <div class="job-detail-c-item">
+                      First AID certificate
+                    </div>
+                  </div>
+
+                </div>
+                <div class="job-detail-c-2-r">
+                  <div class="job-detail-c-item-label">Compensation:</div>
+                  <div class="job-detail-c-item-c">
+                    <div class="job-detail-c-item">
+                      <div class="job-detail-c-item-l">Salary range:</div>
+                      <div class="job-detail-c-item-r">
+                        {{ detailData.currency }} {{ detailData.salary_min }} - {{ detailData.salary_max }} /
+                        <span v-if="detailData.payment_period == 112">hourly</span>
+                        <span v-if="detailData.payment_period == 113">daily</span>
+                        <span v-if="detailData.payment_period == 114">weekly</span>
+                        <span v-if="detailData.payment_period == 115">monthly</span>
+                        <span v-if="detailData.payment_period == 116">annually</span>
+                      </div>
+                    </div>
+                    <div class="job-detail-c-item">
+                      <div class="job-detail-c-item-l">Benefits:</div>
+                      <div class="job-detail-c-item-r">
+                        {{ $filters.userObjectFormat(detailData.benefits)}}
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="job-detail-desc">
+                <div class="job-detail-desc-label">Job details:</div>
+                <div style="margin-top: 25px;" v-html="detailData.desc"></div>
+              </div>
+
+              <div class="map-container">
+                <div id="mapContainer" class="basemap"></div>
+              </div>
+
+            </el-scrollbar>
+
+          </div>
 
         </div>
+
 
       </el-col>
     </el-row>
@@ -250,7 +417,7 @@
 
 <script>
 import ads22Img from '@/assets/ads/22.png'
-import {useRouter,useRoute} from "vue-router";
+import {useRouter, useRoute} from "vue-router";
 import {
   ADS_LIST,
   JOB_LIST,
@@ -259,14 +426,19 @@ import {
   ADD_FAVORITE,
   CANCEL_FAVORITE,
   USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2,
-  JOBS_COUNTRY_LIST
+  JOBS_COUNTRY_LIST, JOB_DETAIL
 } from "@/api/api";
 
-import featuredJobs from "@/components/featuredJobs";
-import latestIndustryNews from "@/components/latestIndustryNews";
+// import featuredJobs from "@/components/featuredJobs";
+// import latestIndustryNews from "@/components/latestIndustryNews";
 import ExchangeAccountInfo from '@/components/jobs/exchangeInfo';
 import {encode} from "js-base64";
 import {randomString} from "@/utils";
+
+import mapboxgl from "mapbox-gl";
+import 'mapbox-gl/dist/mapbox-gl.css'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 export default {
   name: "list",
@@ -321,15 +493,15 @@ export default {
       ],
       studentAgeValue: '',
       studentAgeOptions: [],
-      onlineValue:'',
-      onlineOptions:[
+      onlineValue: '',
+      onlineOptions: [
         {
-          label:'Online',
-          value:1
+          label: 'Online',
+          value: 1
         },
         {
-          label:'Offline',
-          value:0
+          label: 'Offline',
+          value: 0
         }
 
       ],
@@ -341,16 +513,20 @@ export default {
       jobPage: 1,
       jobLimit: 10,
       jobTotalNum: 0,
-      showLoadingStatus:true,
-      versionTime:randomString(),
-      jobsAdsListTop:[],
-      jobsAdsListMid:[],
+      showLoadingStatus: true,
+      versionTime: randomString(),
+      jobsAdsListTop: [],
+      jobsAdsListMid: [],
+
+      detailData:{},
+      selectedJobId:0,
+      accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
+      mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
+      workingHoursData:[]
 
     }
   },
   components: {
-    featuredJobs,
-    latestIndustryNews,
     ExchangeAccountInfo
   },
   setup() {
@@ -365,9 +541,6 @@ export default {
     const onSlideChange = () => {
       console.log('slide change');
     };
-    // const getParams = () =>{
-    //   console.log(route.params)
-    // }
     const skipJobsList = (query) => {
       router.push({
         path: '/jobs',
@@ -381,89 +554,69 @@ export default {
       exchangeAccountInfo
     };
   },
-  created() {
-
-    console.log(this.$route.query)
+  beforeRouteUpdate(to){
+    console.log(to)
+    let jobId = to.query.id;
+    if(jobId){
+      this.selectedJobId = jobId
+      this.getJobDetail(jobId)
+    }
 
   },
   mounted() {
 
+    let jobId = this.$route.query.id
+
+    if(jobId){
+      this.selectedJobId = jobId
+      this.getJobDetail(jobId)
+    }
+
     this.getUserObjectList()
     this.getAdsList()
 
-
     let envName = process.env.VUE_APP_ENV_NAME
-    if(envName === 'development' || envName === 'production'){
+    if (envName === 'development' || envName === 'production') {
       this.getJobCountryList()
-      let countryValue= this.$route.query.country;
-      if(countryValue && countryValue !=''){
+      let countryValue = this.$route.query.country;
+      if (countryValue && countryValue != '') {
         this.locationValue = Number(countryValue)
       }
     }
 
-    if(envName === 'developmentCN' || envName === 'productionCN' ){
+    if (envName === 'developmentCN' || envName === 'productionCN') {
       this.getJobsAreaList()
-      let cityValue= this.$route.query.city;
-      if(cityValue && cityValue !=''){
+      let cityValue = this.$route.query.city;
+      if (cityValue && cityValue != '') {
         this.locationValue = Number(cityValue)
       }
     }
 
     this.getJobList(this.jobPage, this.jobLimit)
+
   },
   methods: {
-    turnBanner(link){
-      console.log(link)
-      if (link != '') {
-        window.location.href =  link
-      } else {
-        let token = localStorage.getItem('token')
-        if(!token){
-          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4','_blank')
-          return;
+    getJobDetail(id) {
+      let params = {
+        job_id: id
+      }
+      JOB_DETAIL(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.detailData = res.message
+
+          const workHours = res.message.working_hours
+          if (workHours) {
+            // this.jobForm.working_hours = JSON.parse(workHours)
+            this.workingHoursData = JSON.parse(workHours)
+          }
+
+          this.initMap(res.message.lng,res.message.lat)
+          // let userId = res.message.user_id
+          // this.getCompanyJobList(userId)
         }
-        this.$router.push('/me/ads/platform')
-      }
-    },
-    getAdsList(){
-      let ads_data = {
-        page: 1,
-        limit: 10000
-      }
-      ADS_LIST(ads_data).then(res=>{
-            if (res.code == 200) {
-              // console.log(rs.message)
-              let jobsAdsListTop = [];
-              let jobsAdsListMid = [];
-              let identity = localStorage.getItem('identity');
-
-              if (!identity) {
-                jobsAdsListTop = res.message.filter(item => item.name == 'guest_j2');
-                jobsAdsListMid = res.message.filter(item => item.name == 'guest_j3');
-              }
-              if (identity == 1) {
-                jobsAdsListTop = res.message.filter(item => item.name == 'educator_j2');
-                jobsAdsListMid = res.message.filter(item => item.name == 'educator_j3');
-              }
-              if (identity == 2) {
-                jobsAdsListTop = res.message.filter(item => item.name == 'business_j2');
-                jobsAdsListMid = res.message.filter(item => item.name == 'business_j3');
-              }
-              if (identity == 3) {
-                jobsAdsListTop = res.message.filter(item => item.name == 'vendor_j2');
-                jobsAdsListMid = res.message.filter(item => item.name == 'vendor_j3');
-              }
-
-              if(jobsAdsListTop.length>0){
-                this.jobsAdsListTop = jobsAdsListTop[0].data;
-              }
-              if(jobsAdsListMid.length>0){
-                this.jobsAdsListMid = jobsAdsListMid[0].data;
-              }
-
-            }
-
       }).catch(err=>{
+        console.log(err)
         if(err.msg){
           this.$message.error(err.msg)
         }
@@ -471,8 +624,100 @@ export default {
           this.$message.error(err.message)
         }
       })
+
     },
-    addFavorite(id, type, title, url,index) {
+    initMap(lng,lat){
+      mapboxgl.accessToken = this.accessToken;
+
+      const map = new mapboxgl.Map({
+        container: "mapContainer",
+        center: [lng, lat],
+        style: this.mapStyle,
+        zoom: 12
+      });
+      const nav = new mapboxgl.NavigationControl();
+      map.addControl(nav, "top-right");
+
+      const geolocate = new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      });
+
+      map.addControl(geolocate, "top-right")
+
+      const geocoder = new MapboxGeocoder({
+        "accessToken": this.accessToken,
+        "mapboxgl": mapboxgl
+      })
+
+      map.addControl(geocoder, 'top-left')
+      const marker = new mapboxgl.Marker()
+      marker.setLngLat([lng,lat]).addTo(map)
+
+    },
+    turnBanner(link) {
+      console.log(link)
+      if (link != '') {
+        window.location.href = link
+      } else {
+        let token = localStorage.getItem('token')
+        if (!token) {
+          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
+    getAdsList() {
+      let ads_data = {
+        page: 1,
+        limit: 10000
+      }
+      ADS_LIST(ads_data).then(res => {
+        if (res.code == 200) {
+          // console.log(rs.message)
+          let jobsAdsListTop = [];
+          let jobsAdsListMid = [];
+          let identity = localStorage.getItem('identity');
+
+          if (!identity) {
+            jobsAdsListTop = res.message.filter(item => item.name == 'guest_j2');
+            jobsAdsListMid = res.message.filter(item => item.name == 'guest_j3');
+          }
+          if (identity == 1) {
+            jobsAdsListTop = res.message.filter(item => item.name == 'educator_j2');
+            jobsAdsListMid = res.message.filter(item => item.name == 'educator_j3');
+          }
+          if (identity == 2) {
+            jobsAdsListTop = res.message.filter(item => item.name == 'business_j2');
+            jobsAdsListMid = res.message.filter(item => item.name == 'business_j3');
+          }
+          if (identity == 3) {
+            jobsAdsListTop = res.message.filter(item => item.name == 'vendor_j2');
+            jobsAdsListMid = res.message.filter(item => item.name == 'vendor_j3');
+          }
+
+          if (jobsAdsListTop.length > 0) {
+            this.jobsAdsListTop = jobsAdsListTop[0].data;
+          }
+          if (jobsAdsListMid.length > 0) {
+            this.jobsAdsListMid = jobsAdsListMid[0].data;
+          }
+
+        }
+
+      }).catch(err => {
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
+    addFavorite(id, type, title, url, index) {
       let params = {
         token: localStorage.getItem('token'),
         type: type,
@@ -486,40 +731,40 @@ export default {
           this.$message.success('Success')
           this.jobListData[index]['is_favorite'] = 1
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
 
     },
-    getJobCountryList(){
+    getJobCountryList() {
       let params = {}
-      JOBS_COUNTRY_LIST(params).then(res=>{
-        if(res.code == 200){
+      JOBS_COUNTRY_LIST(params).then(res => {
+        if (res.code == 200) {
           this.locationOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    getJobsAreaList(){
+    getJobsAreaList() {
       let params = {}
-      JOBS_AREA_LIST(params).then(res=>{
+      JOBS_AREA_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.locationOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -539,6 +784,7 @@ export default {
         page: page,
         limit: limit
       }
+
       let salaryValue = this.salaryValue
       if (salaryValue != '') {
         if (salaryValue == 1) {
@@ -561,11 +807,11 @@ export default {
 
       let envName = process.env.VUE_APP_ENV_NAME
 
-      if(this.locationValue != ''){
-        if(envName === 'development' || envName === 'production'){
+      if (this.locationValue != '') {
+        if (envName === 'development' || envName === 'production') {
           params.country = this.locationValue
         }
-        if(envName === 'developmentCN' || envName === 'productionCN'){
+        if (envName === 'developmentCN' || envName === 'productionCN') {
           params.city = this.locationValue
         }
       }
@@ -587,19 +833,30 @@ export default {
       JOB_LIST(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
+          let jobData = res.message.data;
+          let routeJobId = this.$route.query.id;
+          if(!routeJobId){
+
+            if(jobData.length>0){
+              this.selectedJobId = jobData[0]['id']
+              this.getJobDetail(jobData[0]['id'])
+            }
+
+          }
+
           this.jobListData = res.message.data
           // console.log(res.message.data)
           this.jobTotalNum = res.message.total
-          this.showLoadingStatus= false
+          this.showLoadingStatus = false
         } else {
           console.log(res.msg)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -625,17 +882,17 @@ export default {
 
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
     },
-    locationChange(e){
+    locationChange(e) {
       // console.log(e)
       this.jobListData = []
       this.showLoadingStatus = true
@@ -677,50 +934,50 @@ export default {
       this.onlineValue = e
       this.getJobList(this.jobPage, this.jobLimit)
     },
-    cancelFavorite(type,typeId,index){
+    cancelFavorite(type, typeId, index) {
       let params = {
-        token:localStorage.getItem('token'),
-        type:type,
-        type_id:typeId
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
       }
-      CANCEL_FAVORITE(params).then(res=>{
+      CANCEL_FAVORITE(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.jobListData[index]['is_favorite'] = 0
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
     },
-    postJob(){
+    postJob() {
       let token = localStorage.getItem('token')
       let self = this
 
-      if(!token || token == ''){
+      if (!token || token == '') {
         return this.$msgbox({
-          title:'Post a Job',
-          message:'Before posting a job, you need to log in',
-          type:'warning',
-          confirmButtonText:'Log in',
-          callback(action){
+          title: 'Post a Job',
+          message: 'Before posting a job, you need to log in',
+          type: 'warning',
+          confirmButtonText: 'Log in',
+          callback(action) {
             console.log(action)
-            if(action==='confirm'){
+            if (action === 'confirm') {
               let redirectParamsObj = {
-                path:'/jobs',
-                query:{
-                  id:self.$route.query.id
+                path: '/jobs',
+                query: {
+                  id: self.$route.query.id
                 }
               }
 
-              let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
+              let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
 
-              self.$router.push({path:'/edupassport',query:{redirect_params:redirectParamsStr}})
+              self.$router.push({path: '/edupassport', query: {redirect_params: redirectParamsStr}})
 
             }
           }
@@ -729,11 +986,11 @@ export default {
 
       let identity = localStorage.getItem('identity')
 
-      if(identity == 1){
+      if (identity == 1) {
         return this.$message.error('Oops! Your current identity is an educator, please switch to Education Business')
       }
 
-      self.$router.push({path:'/jobs/post',query:{version_time:self.versionTime}})
+      self.$router.push({path: '/jobs/post', query: {version_time: self.versionTime}})
 
     },
     selectRole(e) {
@@ -761,8 +1018,8 @@ export default {
 
         if (identity == 1) {
           if (isEducator > 10) {
-            educatorContact =  res.message.user_contact.educator_contact;
-            this.changeIdentity(educatorContact.id,1,2)
+            educatorContact = res.message.user_contact.educator_contact;
+            this.changeIdentity(educatorContact.id, 1, 2)
             this.$loading().close()
           } else {
             this.$loading().close()
@@ -778,7 +1035,7 @@ export default {
           if (isRecruiting > 10) {
 
             companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,2,2)
+            this.changeIdentity(companyInfo.id, 2, 2)
             // this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
@@ -795,7 +1052,7 @@ export default {
           if (isSchool > 10) {
 
             companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,3,2)
+            this.changeIdentity(companyInfo.id, 3, 2)
             // this.$router.push({path: '/overview', query: {identity: identity}})
             this.$loading().close()
           } else {
@@ -813,7 +1070,7 @@ export default {
           if (isOther > 10) {
             companyInfo = res.message.user_contact.company;
 
-            this.changeIdentity(companyInfo.id,4,2)
+            this.changeIdentity(companyInfo.id, 4, 2)
             this.$loading().close()
           } else {
             this.$loading().close()
@@ -829,7 +1086,7 @@ export default {
           if (isVendor > 10) {
 
             companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,5,2)
+            this.changeIdentity(companyInfo.id, 5, 2)
             this.$loading().close()
           } else {
             this.$loading().close()
@@ -857,13 +1114,13 @@ export default {
       SWITCH_IDENTITY_V2(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
-          this.$store.commit('allIdentityChanged',true )
+          this.$store.commit('allIdentityChanged', true)
 
-          localStorage.setItem('company_id',companyId)
+          localStorage.setItem('company_id', companyId)
           localStorage.setItem('identity', identity)
 
           let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData',str)
+          localStorage.setItem('menuData', str)
 
           this.$store.commit('identity', identity)
           this.$store.commit('menuData', res.message)
@@ -887,21 +1144,36 @@ export default {
 
 <style scoped>
 .bg {
-  background-color: #f5f6f7;
+  background-color: #FFFFFF;
 }
 
 .bg-container {
-  /*width: 1100px;*/
+  width: 100%;
   margin: 0 auto;
-  padding-top: 40px;
+}
+
+.jobs-filter-col{
+  padding-right: 13px;
+}
+
+.jobs-list-col{
+  padding-left: 12px;
+  padding-right: 13px;
+}
+
+.job-detail-col{
+  padding-left: 12px;
+}
+
+.jobs-bg-filter-container{
+
 }
 
 .jobs-filter-container {
-  background-color: #ffffff;
-  /*border: 1px solid #eeeeee;*/
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  background-color: #F0F2F5;
+  height: calc(100vh - 200px);
+  padding: 30px;
+  /*overflow-y: scroll;*/
 }
 
 .jobs-filter-label {
@@ -933,21 +1205,32 @@ export default {
 .jobs-filter-student-age {
   margin-top: 10px;
 }
-.jobs-filter-online{
-  margin-top:10px;
+
+.jobs-filter-online {
+  margin-top: 10px;
 }
 
 .jobs-filter-work-exp {
   margin-top: 10px;
 }
-.xll-ads-container{
-  padding: 0 20px;
+
+.xll-ads-container {
+  padding: 0 50px;
+  margin-bottom: 50px;
 }
-.xll-ads-container-margin{
-  margin-bottom: 20px;
+
+.xll-ads-label{
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color:#262626;
 }
-.xll-ads-swiper-item{
-  cursor:pointer;
+
+.xll-ads{
+
+}
+
+.xll-ads-swiper-item {
+  cursor: pointer;
   border-radius: 10px;
   height: 100%;
   background-color: #FFFFFF;
@@ -957,60 +1240,35 @@ export default {
   justify-content: space-between;
 }
 
-.xll-ads-l{
-  width:60%;
-  height: 100%;
-}
-.xll-ads-l-img{
-  height: 100%;
-  border-radius:10px;
-  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
-}
-
-.image-ads-slot{
+.image-ads-slot {
   text-align: center;
-  padding:50px 150px;
+  padding: 50px 150px;
 }
 
-.xll-ads-r{
-  width:36%;
-}
 
-.xll-ads-r{
-  padding-right: 4%;
-}
-.xll-ads-r h4{
-  color:#004956;
-}
-
-.xll-ads-r h5{
-  margin-top:20px;
-}
-
-.xll-ads-r-desc{
-  font-size: 14px;
-  margin-top: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
+.jobs-list-bg-container {
+  height: calc(100vh - 140px);
+  background-color: #F0F2F5;
 }
 
 .jobs-list-container {
-  padding: 20px;
+
 }
-.jobs-list-label-container{
+
+.jobs-list-label-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
+  padding: 25px 0 10px 25px;
 }
+
 .jobs-list-label {
-  font-size: 18px;
-  font-weight: bold;
   text-align: left;
+  font-size: 45px;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+
 }
 
 .jobs-list-content {
@@ -1021,96 +1279,80 @@ export default {
   position: relative;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
   margin-top: 10px;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
+
+  padding: 25px;
+
   text-align: left;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #262626;
+
 }
 
-.jobs-favorite{
+
+.jobs-list-item-active{
+  background-color: #FFFFFF;
+  box-shadow: 0 0 12px #6650B329;
+  border-bottom: none;
+}
+
+.jobs-favorite {
   position: absolute;
   right: 10px;
   top: 10px;
   cursor: pointer;
-
 }
 
-.xll-heart-icon{
+.xll-heart-icon {
   font-size: 24px;
 }
 
 .jobs-list-item-l {
-  width: 30%;
-  height: 180px;
+  width: 60px;
+
 }
 
 .jobs-item-logo {
-  width: 80%;
-  height: 80%;
+  width: 60px;
+  height: 60px;
   border-radius: 10px;
   border: 1px solid #EEEEEE;
 }
 
-.image-slot{
-  padding:40px;
+.image-slot {
+  padding: 40px;
   text-align: center;
 }
 
 .jobs-list-item-r {
-  width: 70%;
+  width: calc(100% - 80px);
+
 }
 
 .jobs-list-item-title a {
-  font-size: 18px;
-  font-weight: bold;
-  color: #000000;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color: #262626;
   text-decoration: none;
 }
 
 .jobs-list-item-title a:hover {
   text-decoration: underline;
-  font-size: 20px;
+  font-size: 26px;
 }
 
 .jobs-list-item-name {
   font-size: 16px;
-  color: #808080;
-  margin-top: 20px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
 }
 
 .jobs-list-item-address {
-  font-size: 14px;
-  color: #808080;
-  margin-top: 10px;
-}
-
-.jobs-list-item-desc {
-  font-size: 12px;
-  color: #808080;
-  margin-top: 10px;
-  overflow: hidden;
-  display: -webkit-box;
--webkit-box-orient: vertical;
--webkit-line-clamp: 4;
-}
-
-.jobs-list-item-readmore {
-  margin-top: 20px;
-}
-.jobs-list-item-readmore a{
-  font-size: 14px;
-  color: #808080;
-  text-decoration: none;
-}
-
-.jobs-list-item-readmore a:hover{
   font-size: 16px;
-  text-decoration: underline;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
 }
 
 .jobs-list-item-b {
@@ -1123,9 +1365,12 @@ export default {
 }
 
 .jobs-list-item-work-type {
-  font-size: 12px;
+  font-size: 16px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
 }
-.jobs-list-item-work-type span{
+
+.jobs-list-item-work-type span {
   margin-left: 4px;
 }
 
@@ -1133,7 +1378,8 @@ export default {
   margin-left: 5px;
   font-size: 12px;
 }
-.jobs-list-item-gender span{
+
+.jobs-list-item-gender span {
   margin-left: 4px;
 }
 
@@ -1142,68 +1388,139 @@ export default {
   font-size: 12px;
 }
 
-.jobs-list-item-work-exp span{
+.jobs-list-item-work-exp span {
   margin-left: 4px;
 }
 
 .jobs-list-item-date {
-  font-size: 12px;
+  font-size: 16px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
 }
 
 .jobs-list-item-salary {
-  font-size: 12px;
-  margin-left: 10px;
-  color: #00b3d2;
+  font-size: 16px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
 }
 
 .jobs-list-pagination {
   margin: 20px;
-  text-align: center;
-}
-@media screen and (max-width: 768px ){
-  .jobs-filter-container{
-    display:none;
-  }
-  .featured-jobs-container{
-    display: none;
-  }
-  .articles-container{
-    display:none;
-  }
-
-  .jobs-list-item{
-    /*padding:4px;*/
-  }
-
-  .jobs-list-item-title a{
-    font-size: 14px;
-  }
-  .jobs-list-item-name{
-    margin-top: 4px;
-    font-size:12px;
-  }
-  .jobs-list-item-desc{
-    display:none;
-  }
-  .jobs-list-item-readmore{
-    margin-top:4px;
-    font-size:14px;
-  }
-  .jobs-list-item-address{
-    margin-top:4px;
-    font-size:12px;
-  }
-  .jobs-list-item-l{
-    height: 100px;
-  }
-.image-slot{
-  padding:10px;
-}
+  display: flex;
+  justify-content: center;
 }
 
-@media screen  and (min-width: 1200px){
-  .bg-container{
-    /*width:1100px;*/
-  }
+.job-detail-bg-container{
+  background-color: #F0F2F5;
+  height: calc(100vh - 170px);
+  padding: 30px 30px 0 30px;
+}
+
+.job-detail-container{
+
+}
+
+.job-detail-t{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  height: 120px;
+
+}
+
+.job-detail-t-l{}
+.job-detail-t-l-1{
+  font-family:BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color:#6650B3;
+}
+.job-detail-t-l-2{
+  font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  color:#262626;
+}
+.job-detail-t-l-3{
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+}
+
+.job-detail-c{
+  height: calc(87vh - 365px);
+
+}
+
+.job-detail-c-1{
+
+}
+
+.job-detail-c-item{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.job-detail-c-item-l{
+  font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+}
+.job-detail-c-item-r{
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+  margin-left: 10px;
+}
+
+.job-detail-c-2{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+.job-detail-c-2-l{
+  width: 50%;
+}
+.job-detail-c-2-r{
+  width:50%;
+}
+
+.job-detail-c-item-label{
+  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color:#262626;
+}
+.job-detail-c-item-c{
+  margin-top: 25px;
+}
+.job-detail-desc{
+  margin-top: 50px;
+}
+.job-detail-desc-label{
+  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color:#262626;
+}
+
+.map-container{
+  margin-top: 25px;
+  margin-bottom: 50px;
+}
+
+#mapContainer{
+  height: 300px;
+}
+
+@media screen and (max-width: 768px ) {
+
+}
+
+@media screen  and (min-width: 1200px) {
+
 }
 </style>

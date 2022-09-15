@@ -1099,13 +1099,10 @@ export default {
 
 <style scoped>
 .header-container {
-  max-width: 1920px;
-  margin: 0 auto;
   height: 140px;
-  /*padding: 10px 40px;*/
   background-color: #FFFFFF;
   color: #262626;
-  font-family: BCRegular, serif;
+  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .header-row-container {
@@ -1117,12 +1114,12 @@ export default {
 }
 
 .logo-edu{
-  font-family: BCExtraBold , serif;
+  font-family: BCExtraBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:40px;
 }
 
 .logo-passport{
-  font-family: BCSemiBold, serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:17px;
 }
 
@@ -1244,7 +1241,7 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 
 }
 
@@ -1262,7 +1259,7 @@ export default {
   cursor: pointer;
   color: #262626;
   font-size: 24px;
-  font-family: BCRegular, serif;
+  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 
 }
 

@@ -24,8 +24,7 @@
                         }}
                       </router-link>
                       <span>Job</span></div>
-                    <div class="content-item-desc">
-                      {{ item.desc }}
+                    <div class="content-item-desc" v-html="item.desc">
                     </div>
                   </div>
                 </div>

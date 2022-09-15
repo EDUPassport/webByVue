@@ -31,6 +31,8 @@ import Vue3CountryIntl from 'vue3-country-intl';
 // 引入css
 import 'vue3-country-intl/lib/vue3-country-intl.css'
 
+import VueQrcode from '@chenfengyuan/vue-qrcode';
+
 const messages = {
     en: {
         message: xllEnUS
@@ -62,6 +64,7 @@ for(const [key,component] of Object.entries(ElementPlusIconsVue)){
 }
 
 app.component(Vue3CountryIntl.name, Vue3CountryIntl)
+app.component(VueQrcode.name, VueQrcode)
 
 app.use(router)
 app.use(store)

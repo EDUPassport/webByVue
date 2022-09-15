@@ -216,11 +216,25 @@
                             :http-request="businessRegPhotoHttpRequest"
                             :before-upload="beforeBusinessRegPhotoUpload"
                         >
-                          <el-image v-if="businessRegPhotoUrl" :src="businessRegPhotoUrl" class="upload-photo-img-1"></el-image>
-                          <el-icon v-else :size="45">
+                          <el-icon :size="45">
                             <IconBiPlusSquare />
                           </el-icon>
                         </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="businessRegPhotoUrl">
+                              <el-image :src="businessRegPhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(businessRegPhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </el-form-item>
 
                     </el-col>
@@ -234,11 +248,26 @@
                             :http-request="licenseHttpRequest"
                             :before-upload="beforeLicensePhotoUpload"
                         >
-                          <el-image v-if="licensePhotoUrl" :src="licensePhotoUrl" class="upload-photo-img-1"></el-image>
-                          <el-icon  v-else :size="45">
+                          <el-icon  :size="45">
                             <IconBiPlusSquare />
                           </el-icon>
                         </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="licensePhotoUrl">
+                              <el-image :src="licensePhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(licensePhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
                       </el-form-item>
 
                     </el-col>
@@ -287,11 +316,26 @@
                             :http-request="logoPhotoHttpRequest"
                             :before-upload="beforeLogoPhotoUpload"
                         >
-                          <el-image v-if="logoPhotoUrl" :src="logoPhotoUrl" class="upload-photo-img"></el-image>
-                          <el-icon v-else :size="45">
+                          <el-icon :size="45">
                             <IconBiPlusSquare />
                           </el-icon>
                         </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="logoPhotoUrl">
+                              <el-image :src="logoPhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(logoPhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
                       </el-form-item>
 
                     </el-col>
@@ -305,11 +349,25 @@
                             :http-request="videoHttpRequest"
                             :before-upload="beforeIntroVideoUpload"
                         >
-                          <video v-if="introVideoUrl" :src="introVideoUrl" controls class="upload-photo-img-1"/>
-                          <el-icon v-else :size="45">
+                          <el-icon :size="45">
                             <IconBiPlusSquare />
                           </el-icon>
                         </el-upload>
+
+                        <div class="account-xll-images">
+                          <div class="account-xll-image">
+                            <div v-if="introVideoUrl">
+                              <video style="width: 100%;" :src="introVideoUrl" controls/>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleVideoPreview(introVideoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in/>
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </el-form-item>
 
                     </el-col>
@@ -323,11 +381,25 @@
                             :http-request="backgroundHttpRequest"
                             :before-upload="beforeBackgroundPhotoUpload"
                         >
-                          <el-image v-if="backgroundPhotoUrl" :src="backgroundPhotoUrl" class="upload-photo-img-1"></el-image>
-                          <el-icon v-else :size="45">
+                          <el-icon :size="45">
                             <IconBiPlusSquare />
                           </el-icon>
                         </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="backgroundPhotoUrl">
+                              <el-image :src="backgroundPhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(backgroundPhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </el-form-item>
 
                     </el-col>
@@ -341,15 +413,81 @@
                             :http-request="profilePhotoHttpRequest"
                             :before-upload="beforeProfilePhotoUpload"
                         >
-                          <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="upload-photo-img"></el-image>
-                          <el-icon v-else :size="45">
+                          <el-icon :size="45">
                             <IconBiPlusSquare />
                           </el-icon>
                         </el-upload>
+
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div  v-if="profilePhotoUrl">
+                              <el-image :src="profilePhotoUrl" style="width:100%;"></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(profilePhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
                       </el-form-item>
 
                     </el-col>
                   </el-row>
+
+                  <el-row :gutter="50">
+
+                    <el-col :span="6">
+                      <el-form-item label="Additional images(up to 20mb/image)" prop="images">
+                        <el-upload
+                            style="width: 90%;"
+                            ref="accountImagesUpload"
+                            action="#"
+                            :headers="uploadHeaders"
+                            :data="uploadData"
+                            :auto-upload="false"
+                            name="file[]"
+                            :show-file-list="false"
+                            :limit="6"
+                            :multiple="true"
+                            :before-upload="beforeAccountImageUpload"
+                            :file-list="accountImageFileList"
+                            :on-change="handleAccountImageChange"
+                        >
+                          <el-icon :size="45">
+                            <IconBiPlusSquare/>
+                          </el-icon>
+
+                        </el-upload>
+
+                        <div class="account-xll-images">
+                          <div class="account-xll-image"
+                               v-for="(item,i) in accountImageFileList" :key="i">
+                            <el-image :src="item.url"></el-image>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleAccountImagePreview(item)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in/>
+                                </el-icon>
+                              </span>
+                              <span @click="handleAccountImageRemove(item,i)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <Delete/>
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+
 
                 </div>
               </div>
@@ -362,6 +500,19 @@
 <!--      <profileTitle :i="i" :action="action"></profileTitle>-->
 
     </div>
+
+    <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
+      <el-image :src="dialogSingleImageUrl"></el-image>
+    </el-dialog>
+
+    <el-dialog width="50%" v-model="dialogVideoVisible" center>
+      <video :src="dialogVideoUrl" controls></video>
+    </el-dialog>
+
+    <el-dialog width="50%" v-model="dialogAccountImageVisible" center>
+      <el-image :src="dialogAccountImageUrl"></el-image>
+    </el-dialog>
+
     <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()" ></xllLoading>
   </div>
 </template>
@@ -382,7 +533,7 @@ import {
   UPLOAD_BY_ALI_OSS,
   UPLOAD_BY_SERVICE,
   USER_SUB_IDENTITY_V2,
-  USER_MENU_LIST
+  USER_MENU_LIST, UPLOAD_IMG, ADD_USER_IMG_V2
 } from '@/api/api'
 import {phoneCodeData} from "@/utils/phoneCode";
 import mapboxgl from "mapbox-gl";
@@ -411,6 +562,10 @@ export default {
   },
   data() {
     return {
+      dialogAccountImageUrl: '',
+      dialogAccountImageVisible: false,
+      accountImageFileList: [],
+
       companyInfo:{},
       countryInfo:'',
       haveLocationStatus:false,
@@ -505,7 +660,12 @@ export default {
       i:0,
       id:0,
       cid:0,
-      action:''
+      action:'',
+
+      dialogVideoVisible:false,
+      dialogVideoUrl:'',
+      dialogSingleImageVisible:false,
+      dialogSingleImageUrl:'',
 
     }
   },
@@ -1034,7 +1194,7 @@ export default {
           localStorage.setItem('company_id',companyId)
           self.$store.commit('identity',5)
           this.$store.commit('allIdentityChanged',true )
-          this.$router.push('/vendor/profile')
+          this.$router.push('/account/home')
 
         }
       }).catch(err=>{
@@ -1093,9 +1253,16 @@ export default {
 
 
               if(action == 'edit'){
-                this.$router.push('/vendor/profile')
+                if (this.accountImageFileList.length > 0) {
+                  this.uploadAccountImages(this.cid)
+                }
+
+                this.$router.push('/account/home')
               }else{
 
+                if (this.accountImageFileList.length > 0) {
+                  this.uploadAccountImages(res.message.vendor_company_id)
+                }
                 localStorage.setItem('company_id', res.message.vendor_company_id)
 
                 this.$store.commit('allIdentityChanged',true )
@@ -1386,6 +1553,7 @@ export default {
           // let userContact = res.message.user_contact;
 
           let companyInfo = res.message.user_contact.company;
+          this.companyInfo = companyInfo;
 
           if (companyInfo.company_name) {
             this.basicForm.company_name = companyInfo.company_name;
@@ -1395,6 +1563,14 @@ export default {
           }
           if (companyInfo.work_phone) {
             this.basicForm.work_phone = companyInfo.work_phone;
+          }
+
+          if (companyInfo.display_name) {
+            this.basicForm.display_name = companyInfo.display_name;
+          }
+
+          if (companyInfo.job_title) {
+            this.basicForm.job_title = companyInfo.job_title;
           }
 
           if (companyInfo.technology_available) {
@@ -1429,11 +1605,19 @@ export default {
             this.basicForm.logo = companyInfo.logo;
           }
 
+          if (companyInfo.background_image && companyInfo.background_image != '0') {
+            this.backgroundPhotoUrl = companyInfo.background_image;
+            this.basicForm.background_image = companyInfo.background_image;
+          }
+
           if (companyInfo.business_reg_img) {
             this.businessRegPhotoUrl = companyInfo.business_reg_img;
             this.basicForm.business_reg_img = companyInfo.business_reg_img;
           }
-
+          if (companyInfo.profile_photo) {
+            this.profilePhotoUrl = companyInfo.profile_photo;
+            this.basicForm.profile_photo = companyInfo.profile_photo;
+          }
           if (companyInfo.license) {
             this.licensePhotoUrl = companyInfo.license;
             this.basicForm.license = companyInfo.license;
@@ -1486,6 +1670,25 @@ export default {
           }
 
           this.selectBusinessTypeList.push(typeObj)
+
+          if (companyInfo.images) {
+
+            let userImages = companyInfo.images
+            if (userImages.length > 0) {
+              let userImagesArr = []
+              userImages.forEach(item => {
+                let userImageObj = {
+                  name: '',
+                  url: item.url
+                }
+                userImagesArr.push(userImageObj)
+              })
+              this.accountImageFileList = []
+              this.accountImageFileList = userImagesArr
+            }
+
+          }
+
 
         }
       }).catch(err => {
@@ -1570,7 +1773,89 @@ export default {
         console.log(err)
       })
 
-    }
+    },
+    handleAccountImagePreview(file) {
+      // console.log(file)
+      this.dialogAccountImageUrl = file.url
+      this.dialogAccountImageVisible = true
+
+    },
+    handleVideoPreview(file) {
+      // console.log(file)
+      this.dialogVideoUrl = file;
+      this.dialogVideoVisible = true
+
+    },
+    handleSingleImagePreview(file){
+      this.dialogSingleImageUrl = file
+      this.dialogSingleImageVisible = true;
+    },
+    beforeAccountImageUpload(file) {
+      const isJpeg = file.type === 'image/png' || file.type === 'image/jpg'
+      if (!isJpeg) {
+        return this.$message.error('Please select the correct file format to upload')
+      }
+      return isJpeg
+    },
+    handleAccountImageChange(file, fileList) {
+      console.log(file)
+      console.log(fileList)
+      let imgParams = new FormData();
+      let token = localStorage.getItem('token')
+      imgParams.append('token', token)
+      imgParams.append('platform', 4)
+      imgParams.append('file[]', file.raw)
+
+      UPLOAD_IMG(imgParams).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          let imgData = res.data;
+          // let imgArr = [];
+          imgData.forEach(item => {
+            let obj = {
+              name: item.file_name,
+              url: item.file_url
+            }
+            this.accountImageFileList.push(obj)
+          })
+        }
+
+      }).catch(err => {
+        this.$loading().close()
+        console.log(err.code)
+      })
+
+    },
+    uploadAccountImages(companyId) {
+      let oldData = []
+      this.accountImageFileList.forEach(file => {
+        oldData.push(file.url)
+      })
+
+      let params = {
+        token: localStorage.getItem('token'),
+        identity: 5,
+        company_id: companyId,
+        img: oldData
+      }
+
+      ADD_USER_IMG_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          console.log('account images ----')
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+
+    accountImagePreview(url) {
+      this.dialogAccountImageVisible = true;
+      this.dialogAccountImageUrl = url;
+    },
+
 
 
   }
@@ -1610,7 +1895,7 @@ export default {
 }
 
 .account-profile-t-l{
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:30px;
   color:#262626;
 
@@ -1671,7 +1956,7 @@ export default {
   border-radius: 6px;
   font-size: 20px;
   cursor: pointer;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .tag-active {
@@ -1706,63 +1991,6 @@ export default {
   text-align: center;
   padding:8px;
   border-radius:10px;
-}
-
-.business-reg-uploader:hover {
-  border-color: #0AA0A8;
-}
-
-/deep/ .profile-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-/deep/ .profile-uploader .el-upload:hover {
-  border-color: #0AA0A8;
-}
-
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-
-.profile-avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-.intro-video-uploader {
-  border: 1px dashed #d9d9d9;
-  padding:8px;
-  text-align: center;
-  border-radius:10px;
-}
-
-.intro-video-uploader:hover {
-  border-color: #0AA0A8;
-}
-
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-
-.intro-video-avatar {
-  width: 378px;
-  height: 178px;
-  display: block;
 }
 
 .contact-phone-container{
@@ -1826,7 +2054,7 @@ export default {
 }
 
 .account-profile-item-label{
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:26px;
   color:#262626;
 }
@@ -1886,6 +2114,43 @@ export default {
   width:200px;
 }
 
+
+.account-xll-images {
+  width: 90%;
+}
+
+.account-xll-image {
+  position: relative;
+  margin-top: 10px;
+
+}
+
+.account-xll-image-mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  display: none;
+
+}
+
+.account-xll-image:hover .account-xll-image-mask {
+  /*display: inline;*/
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-xll-image-mask span {
+  margin-right: 15px;
+  cursor: pointer;
+}
 
 
 @media screen and (min-width:1200px) {

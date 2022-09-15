@@ -562,7 +562,7 @@ export default {
 .chat-side-t-label{
   color: #262626;
   font-size:30px;
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   margin-top: 24px;
 }
 
@@ -622,7 +622,7 @@ export default {
   text-overflow: ellipsis;
 
   font-size: 26px;
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
   font-weight: bold;
   white-space: nowrap;
@@ -761,7 +761,7 @@ export default {
   text-overflow:ellipsis;
   white-space: nowrap;
   font-size: 18px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color:#262626;
 }
 

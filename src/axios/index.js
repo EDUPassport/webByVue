@@ -43,7 +43,9 @@ axios.interceptors.response.use(response => {
     if(response && response.data){
         return Promise.resolve(response.data)
     }else{
-        location.reload()
+        console.log('--------------------- 响应拦截response-------------------- ')
+        // location.reload()
+        return Promise.reject();
     }
 
 }, error => {
@@ -75,8 +77,9 @@ axios.interceptors.response.use(response => {
 
     // 对响应错误做点什么
     if (!errResponse) {
-        location.reload()
-        // return Promise.reject(error);
+        console.log('--------------------- 响应错误response-------------------- ')
+        // location.reload()
+        return Promise.reject();
     }
 })
 

@@ -1276,12 +1276,12 @@ export default {
 }
 
 .login-l-edu{
-  font-family: BCExtraBold , serif;
+  font-family: BCExtraBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:40px;
 }
 
 .login-l-passport{
-  font-family: BCSemiBold, serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:17px;
 }
 
@@ -1349,7 +1349,7 @@ export default {
 .forgot-password-btn {
   font-size: 18px;
   color:#262626;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   cursor: pointer;
 }
 
@@ -1360,7 +1360,7 @@ export default {
 
 
 .login-option-btn {
-  font-family: BCM,serif;
+  font-family: BCM,"Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   width: 100%;
   font-size: 20px;
   margin-top:50px;
@@ -1372,7 +1372,7 @@ export default {
 }
 
 .submit-btn {
-  font-family: BCM,serif;
+  font-family: BCM,"Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   width: 90px;
   height: 40px;
   margin: 50px auto 0;

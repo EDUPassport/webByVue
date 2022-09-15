@@ -4,7 +4,8 @@
       <div class="ja-l-container">
         <meSideMenu></meSideMenu>
       </div>
-      <div class="ja-r-container">
+
+      <el-scrollbar class="ja-r-container">
         <div class="ja-r-container-bg">
 
           <div class="da-container">
@@ -13,96 +14,305 @@
               <div class="da-t">
                 <div class="da-t-l">
                   <div class="da-label">
-                    Jobs
+                    <template v-if="filterByJobStatus">
+                      Jobs
+                    </template>
+                    <template v-if="filterByApplicantStatus">
+                      Applications
+                    </template>
                   </div>
-                  <div class="da-filter">
-                    VIEW BY: JOBS
-                  </div>
+                  <template v-if="filterByJobStatus">
+                    <div class="da-filter" @click="filterByApplicants()">
+                      VIEW BY: JOBS
+                    </div>
+                  </template>
+
+                  <template v-if="filterByApplicantStatus">
+                    <div class="da-filter" @click="filterByJobs()">
+                      VIEW BY: APPLICATIONS
+                    </div>
+                  </template>
+
                 </div>
-                <div class="da-t-r">
-                  <el-button class="da-t-r-btn"
-                             @click="postJob()"
-                             type="primary" round>
-                    POST A JOB
-                  </el-button>
+                <div class="da-t-r" v-if="filterByJobStatus">
+                  <template v-if="identity == 1 || identity == 5">
+                    <el-button class="da-t-r-btn"
+                               disabled
+                               type="primary" round>
+                      POST A JOB
+                    </el-button>
+                  </template>
+                  <template v-else>
+                    <el-button class="da-t-r-btn"
+                               @click="postJob()"
+                               type="primary" round>
+                      POST A JOB
+                    </el-button>
+                  </template>
+
                 </div>
               </div>
 
               <div class="da-item-container">
 
-                <el-row :gutter="50">
+                <el-row :gutter="50" v-if="filterByJobStatus">
                   <el-col :span="6" class="da-item-t-item">Job title</el-col>
                   <el-col :span="6" class="da-item-t-item">Total applicants</el-col>
                   <el-col :span="6" class="da-item-t-item">Posted/Deadline</el-col>
                   <el-col :span="6" class="da-item-t-item">Action</el-col>
                 </el-row>
 
-                <div class="da-item-container-height">
-                  <div  v-for="(item,i) in myJobsData" :key="i">
+                <el-row :gutter="50" v-if="filterByApplicantStatus">
+                  <el-col :span="6" class="da-item-t-item">Applicant</el-col>
+                  <el-col :span="6" class="da-item-t-item">Position applied for</el-col>
+                  <el-col :span="6" class="da-item-t-item">Status</el-col>
+                  <el-col :span="6" class="da-item-t-item">Action</el-col>
+                </el-row>
 
-                    <el-row :gutter="50" class="da-da-item" >
+                <template v-if="filterByJobStatus">
+                  <div class="da-item-container-height">
+                    <div  v-for="(item,i) in myJobsData" :key="i">
 
-                      <el-col :span="6" class="da-job-title">
-                        {{item.job_title}}
-                      </el-col>
-                      <el-col :span="3" class="da-total-applicants">
-                        .{{item.resume_count}}
-                      </el-col>
-                      <el-col :span="3" class="da-total-applicants">
-                        <el-tag type="info" disable-transitions
-                                v-if="item.status == 0">
-                          Pending
-                        </el-tag>
-                        <el-tag type="success" disable-transitions
-                                v-if="item.status == 1">
-                          Active
-                        </el-tag>
-                        <el-tag type="danger" disable-transitions
-                                v-if="item.status == 2">
-                          Rejected
-                        </el-tag>
-                      </el-col>
-                      <el-col :span="6" class="da-posted-deadline">
-                        {{ $filters.howLongFormat(item.refresh_time) }} / {{ $filters.ymdFormatEvent(item.job_due_time)}}
-                      </el-col>
-                      <el-col :span="6">
-                        <el-button class="da-action-btn"
-                                   @click="viewAllApplicants(1)"
-                                   plain round>
-                          VIEW APPLICANTS
-                        </el-button>
-                      </el-col>
+                      <el-row :gutter="50" class="da-da-item" >
 
-                    </el-row>
-
-                    <div v-if="selectedApplicantsData.indexOf(1) !== -1">
-                      <div class="da-item">
-                        <div class="da-item-basic">
-                          <div class="da-item-basic-l">
-                            <el-avatar class="da-item-avatar-img" :src="defaultAvatar"></el-avatar>
-                          </div>
-                          <div class="da-item-basic-r">
-                            <div class="da-item-name">Andrew Christian</div>
-                            <div class="da-item-n">
-                              <div class="da-item-n-1">Classroom Teacher</div>
-                              <div class="da-item-n-1">Spain</div>
-                              <div class="da-item-n-1">12 years</div>
-                            </div>
-                          </div>
-
-                        </div>
-
-                        <div class="da-item-basic"></div>
-                        <div class="da-item-basic"></div>
-
-                        <div class="dashboard-view-application">
-                          <el-button class="dashboard-view-application-btn" plain round @click="viewApplicationEvent()">
-                            VIEW
+                        <el-col :span="6" class="da-job-title">
+                          {{item.job_title}}
+                        </el-col>
+                        <el-col :span="3" class="da-total-applicants">
+                          <div class="da-total-applicants-l-circle" v-if="item.unread_status"></div>
+                          <span>{{item.resume_count}}</span>
+                        </el-col>
+                        <el-col :span="3" class="da-total-applicants">
+                          <el-tag type="info" disable-transitions
+                                  v-if="item.status == 0">
+                            Pending
+                          </el-tag>
+                          <el-tag type="success" disable-transitions
+                                  v-if="item.status == 1">
+                            Active
+                          </el-tag>
+                          <el-tag type="danger" disable-transitions
+                                  v-if="item.status == 2">
+                            Rejected
+                          </el-tag>
+                        </el-col>
+                        <el-col :span="6" class="da-posted-deadline">
+                          {{ $filters.howLongFormat(item.refresh_time) }} / {{ $filters.ymdFormatEvent(item.job_due_time)}}
+                        </el-col>
+                        <el-col :span="6">
+                          <el-button class="da-action-btn"
+                                     @click="viewAllApplicants(item.id,item.unread_id)"
+                                     plain round>
+                            VIEW APPLICANTS
                           </el-button>
-                        </div>
+                        </el-col>
+
+                      </el-row>
+
+                      <div v-if="item.id == selectedJobId && selectedApplicantStatus">
+
+                        <template v-for="(item,i) in sApplicantsData" :key="i">
+
+                          <el-row :gutter="50"  class="da-item" >
+                            <el-col :span="18">
+                              <div class="da-item-basic">
+                                <div class="da-item-basic-l">
+                                  <el-avatar class="da-item-avatar-img"
+                                             :src="item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
+                                  </el-avatar>
+                                </div>
+                                <div class="da-item-basic-r">
+                                  <div class="da-item-name">{{ item.user_contact.educator_contact.name }}</div>
+                                  <div class="da-item-n">
+                                    <div class="da-item-n-1">{{item.user_contact.educator_contact.job_title}}</div>
+                                    <div class="da-item-n-1">{{item.user_contact.educator_contact.nationality}}</div>
+                                    <div class="da-item-n-1" v-if="item.user_contact.educator_contact.Teaching_experience">
+                                      <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience" :key="i">
+                                        {{exp.object_en}}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </el-col>
+                            <el-col :span="6">
+                              <div class="dashboard-view-application">
+                                <el-button class="dashboard-view-application-btn"
+                                           plain round
+                                           @click="viewApplicationEvent(item.id)">
+                                  VIEW
+                                </el-button>
+                              </div>
+                            </el-col>
+
+                          </el-row>
+
+                          <div class="da-item-expand" v-if="item.id == selectedApplicationId && expandStatus">
+                            <div class="dashboard-work-exp">
+                              <div class="dashboard-work-exp-label">
+                                <span>Working experience</span>
+                                <el-button class="dashboard-view-detail-btn" link>
+                                  VIEW DETAILS
+                                </el-button>
+                              </div>
+                              <div class="dashboard-work-exp-c">
+
+                                <template  v-for="(work,i) in item.user_contact.educator_contact.work_info"
+                                           :key="i">
+                                  <div class="dashboard-work-exp-c-item"
+                                      v-if="i<=2"
+                                  >
+                                    <div class="dashboard-work-exp-c-item-label">
+                                      {{work.title}}
+                                    </div>
+                                    <div class="dashboard-work-exp-c-item-text">
+                                      {{work.company_name}}, {{work.location}}
+                                    </div>
+                                    <div class="dashboard-work-exp-c-item-text">
+                                      {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
+                                        $filters.ymdFormatTimestamp(work.work_time_to)
+                                      }}
+                                    </div>
+                                  </div>
+                                </template>
+
+                                <div class="dashboard-work-exp-c-item">
+                                  <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>
+                                </div>
+
+
+                              </div>
+                            </div>
+
+                            <div class="dashboard-education-cer">
+                              <div class="dashboard-education-cer-label">
+                                Education & Certifications
+                              </div>
+                              <div class="dashboard-education-cer-c">
+                                <template v-for="(education,i) in item.user_contact.educator_contact.education_info"
+                                          :key="i"
+                                >
+                                  <div class="dashboard-education-cer-c-item">
+                                    <div class="dashboard-education-cer-c-label">
+                                      {{education.school_name}}
+                                    </div>
+                                    <div class="dashboard-education-cer-c-text">
+                                      {{education.degree}}
+                                    </div>
+                                    <div class="dashboard-education-cer-c-text">
+                                      {{
+                                        $filters.ymdFormatTimestamp(education.start_time)
+                                      }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
+                                    </div>
+                                  </div>
+                                </template>
+
+                                <div class="dashboard-education-cer-c-item">
+                                  <div class="dashboard-education-cer-c-label">
+                                    Certificates and Diplomas
+                                  </div>
+                                  <div class="dashboard-education-cer-c-text">
+                                    TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3
+                                  </div>
+                                </div>
+
+                                <div class="dashboard-education-cer-c-item">
+                                  <div class="dashboard-education-cer-c-label">
+                                    Languages
+                                  </div>
+                                  <div class="dashboard-education-cer-c-text">
+                                    English(native)
+                                  </div>
+                                  <div class="dashboard-education-cer-c-text">
+                                    Korean(fluent)
+                                  </div>
+                                  <div class="dashboard-education-cer-c-text">
+                                    Turkish(beginner)
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+
+                            <div class="da-item-b">
+                              <div class="da-item-b-l">
+
+                              </div>
+                              <div class="da-item-b-r">
+                                <el-button class="da-item-b-l-btn-1" link round>
+                                  REJECT
+                                </el-button>
+                                <el-button class="da-item-b-l-btn-1" round>
+                                  ARCHIVE
+                                </el-button>
+                                <el-button class="da-item-b-l-btn-2" type="primary" round>
+                                  INTERESTED
+                                </el-button>
+                              </div>
+                            </div>
+
+                          </div>
+
+                        </template>
+
+
                       </div>
 
-                      <div class="da-item-expand" v-if="expandStatus">
+
+                    </div>
+
+                  </div>
+
+                </template>
+
+                <template v-if="filterByApplicantStatus">
+                  <div class="da-item-container-height">
+
+                    <div  v-for="(item,i) in myApplicationsData" :key="i">
+                      <el-row class="da-item" :gutter="50" >
+
+                        <el-col :span="6">
+                          <div class="da-item-basic">
+                            <div class="da-item-basic-l-a">
+                              <el-avatar class="da-item-avatar-img"
+                                         :src="item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
+                              </el-avatar>
+                            </div>
+                            <div class="da-item-basic-r">
+                              <div class="da-item-name">{{ item.user_contact.educator_contact.name }}</div>
+                              <div class="da-item-n">
+                                <div class="da-item-n-1">{{item.user_contact.educator_contact.nationality}}</div>
+                                <div class="da-item-n-1"
+                                     v-if="item.user_contact.educator_contact.Teaching_experience">
+                                  <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience"
+                                        :key="i"
+                                  >{{exp.object_en}}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <span class="da-item-a-job-title">{{item.job.job_title}}</span>
+                        </el-col>
+                        <el-col :span="6">
+
+                        </el-col>
+                        <el-col :span="6">
+                          <div class="dashboard-view-application">
+                            <el-button class="dashboard-view-application-btn"
+                                       plain round
+                                       @click="viewApplicationIdWithCompany(item.id)">
+                              VIEW APPLICATION
+                            </el-button>
+                          </div>
+                        </el-col>
+
+                      </el-row>
+
+                      <div class="da-item-expand" v-if="item.id == selectedApplicationIdWithCompany">
                         <div class="dashboard-work-exp">
                           <div class="dashboard-work-exp-label">
                             <span>Working experience</span>
@@ -111,35 +321,24 @@
                             </el-button>
                           </div>
                           <div class="dashboard-work-exp-c">
-                            <div class="dashboard-work-exp-c-item">
-                              <div class="dashboard-work-exp-c-item-label">ESL Teacher</div>
-                              <div class="dashboard-work-exp-c-item-text">
-                                EF English First, Singapore
-                              </div>
-                              <div class="dashboard-work-exp-c-item-text">
-                                2010-now(12 years)
-                              </div>
-                            </div>
 
-                            <div class="dashboard-work-exp-c-item">
-                              <div class="dashboard-work-exp-c-item-label">Kindergarten Teacher</div>
-                              <div class="dashboard-work-exp-c-item-text">
-                                Kindergarten for dogs, Philladelphia,PA
+                            <template v-for="(work,i) in item.user_contact.educator_contact.work_info" :key="i">
+                              <div class="dashboard-work-exp-c-item"
+                                   v-if="i<=2"
+                              >
+                                <div class="dashboard-work-exp-c-item-label">
+                                  {{work.title}}
+                                </div>
+                                <div class="dashboard-work-exp-c-item-text">
+                                  {{work.company_name}}, {{work.location}}
+                                </div>
+                                <div class="dashboard-work-exp-c-item-text">
+                                  {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
+                                    $filters.ymdFormatTimestamp(work.work_time_to)
+                                  }}
+                                </div>
                               </div>
-                              <div class="dashboard-work-exp-c-item-text">
-                                2008-2010(2 years)
-                              </div>
-                            </div>
-
-                            <div class="dashboard-work-exp-c-item">
-                              <div class="dashboard-work-exp-c-item-label">Tutor</div>
-                              <div class="dashboard-work-exp-c-item-text">
-                                Self, Springfield, il
-                              </div>
-                              <div class="dashboard-work-exp-c-item-text">
-                                2000-2008(8 years)
-                              </div>
-                            </div>
+                            </template>
 
                             <div class="dashboard-work-exp-c-item">
                               <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>
@@ -154,30 +353,24 @@
                             Education & Certifications
                           </div>
                           <div class="dashboard-education-cer-c">
-                            <div class="dashboard-education-cer-c-item">
-                              <div class="dashboard-education-cer-c-label">
-                                University of California,Los Angeles
-                              </div>
-                              <div class="dashboard-education-cer-c-text">
-                                Master's degree,Applied Linguistics
-                              </div>
-                              <div class="dashboard-education-cer-c-text">
-                                Sep 2011 - Sep 2013
-                              </div>
-                            </div>
 
-                            <div class="dashboard-education-cer-c-item">
-                              <div class="dashboard-education-cer-c-label">
-                                San Diego State University
+                            <template v-for="(education,i) in item.user_contact.educator_contact.education_info"
+                                      :key="i"
+                            >
+                              <div class="dashboard-education-cer-c-item">
+                                <div class="dashboard-education-cer-c-label">
+                                  {{education.school_name}}
+                                </div>
+                                <div class="dashboard-education-cer-c-text">
+                                  {{education.degree}}
+                                </div>
+                                <div class="dashboard-education-cer-c-text">
+                                  {{
+                                    $filters.ymdFormatTimestamp(education.start_time)
+                                  }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
+                                </div>
                               </div>
-                              <div class="dashboard-education-cer-c-text">
-                                Bachelor's degree,Linguistics
-                              </div>
-                              <div class="dashboard-education-cer-c-text">
-                                Sep 2008 - May 2011
-                              </div>
-                            </div>
-
+                            </template>
 
                             <div class="dashboard-education-cer-c-item">
                               <div class="dashboard-education-cer-c-label">
@@ -208,19 +401,17 @@
 
                         <div class="da-item-b">
                           <div class="da-item-b-l">
-                            <el-button class="da-item-b-l-btn-1" plain round>
-                              VIEW PROFILE
-                            </el-button>
-                            <el-button class="da-item-b-l-btn-1" plain round>
-                              RESUME
-                            </el-button>
+
                           </div>
                           <div class="da-item-b-r">
                             <el-button class="da-item-b-l-btn-1" link round>
-                              NOT INTERESTED
+                              REJECT
+                            </el-button>
+                            <el-button class="da-item-b-l-btn-1" round>
+                              ARCHIVE
                             </el-button>
                             <el-button class="da-item-b-l-btn-2" type="primary" round>
-                              SHORTLIST IT
+                              INTERESTED
                             </el-button>
                           </div>
                         </div>
@@ -229,10 +420,9 @@
 
                     </div>
 
-
                   </div>
 
-                </div>
+                </template>
 
 
               </div>
@@ -243,7 +433,7 @@
 
         </div>
 
-      </div>
+      </el-scrollbar>
 
     </div>
   </div>
@@ -253,17 +443,16 @@
 import defaultAvatar from '@/assets/default/avatar.png'
 import meSideMenu from "@/components/meSideMenu";
 import {
-  ADS_LIST, ALL_ASSIGN_USERS,
-  EDUCATOR_PERCENTAGE_V2, MY_JOBS, OTHER_PERCENTAGE_V2,
-  RECRUITER_PERCENTAGE_V2,
-  SCHOOL_PERCENTAGE_V2, USER_INFO_BY_TOKEN_V2,
-  USER_INFO_VISITOR_V2, USER_MENU_COMPANY, VENDOR_PERCENTAGE_V2
+  ALL_JOB_RESUME,
+  JOBS_APPLICATIONS,
+  MY_JOBS, SET_READ,
+  USER_UNREAD
 } from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
 import {onBeforeRouteUpdate} from "vue-router";
 import {computed, ref} from "vue";
-import {encode} from "js-base64";
+// import {encode} from "js-base64";
 import {randomString} from "@/utils";
 
 export default {
@@ -283,15 +472,6 @@ export default {
       identity1
     }
 
-  },
-  watch: {
-    allIdentityChanged(newValue) {
-      // console.log(newValue)
-      if (newValue) {
-        this.getAllAssignUsers()
-        this.getBasicInfo(this.identity)
-      }
-    }
   },
   computed: {
     isThirdCompanyStatus: {
@@ -319,356 +499,64 @@ export default {
 
       companyInfo: {},
 
-      identity: this.$route.query.identity,
-      adsDataBottom: [],
-      profilePercentage: 0,
-      accountInfoLevel: 1,
-      accountInfoVipDueTime: '',
-      accountInfoCategoryStr: '',
-
-      assignUserData: [],
-      dialogUserMenuCompanyVisible: false,
-      userMenuCompanyData: [],
+      identity: localStorage.getItem('identity'),
 
       anotherUserId: 0,
       selectedApplicantsData:[],
       versionTime:randomString(),
+      selectedJobId:0,
+      selectedApplicationId:0,
+      selectedApplicantStatus:false,
+      sApplicantsData:[],
+
+      filterByJobStatus:true,
+      filterByApplicantStatus:false,
 
       myJobsData:[],
       myJobPage:1,
-      myJObLimit:5
+      myJObLimit:5,
 
+      myApplicationsData:[],
+      myApplicationsPage:1,
+      myApplicationsLimit:5,
+      selectedApplicationIdWithCompany:0
 
     }
+
+
   },
   mounted() {
     // let uid = localStorage.getItem('uid')
 
     onBeforeRouteUpdate(to => {
-      // console.log(to)
-      this.identity = to.query.identity
-      this.getBasicInfo(to.query.identity)
-      this.getPercentage(this.identity)
-
+      console.log(to)
     })
 
-    this.getBasicInfo(this.identity)
-    this.getAdsList()
+    if(this.filterByJobStatus){
+      this.getMyJobs(this.myJobPage, this.myJObLimit)
+    }
 
-    this.getPercentage(this.identity)
-    this.getAllAssignUsers()
-
-    this.getMyJobs(this.myJobPage, this.myJObLimit)
+    if(this.filterByApplicantStatus){
+      this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
+    }
 
   },
   methods: {
-    viewApplicationEvent(){
-      this.expandStatus = !this.expandStatus
+    viewApplicationIdWithCompany(id){
+      this.selectedApplicationIdWithCompany = id
     },
-    selectCompanyToUpdate(userId, companyId) {
-      this.$router.push({
-        path: '/profile/admin/add',
-        query: {action: 'edit', uid: this.anotherUserId, cuid: userId, cId: companyId}
-      })
-    },
-    showMyCompany(userId) {
-      this.anotherUserId = userId
-      let params = {
-        user_id: userId
-      }
-      USER_MENU_COMPANY(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.dialogUserMenuCompanyVisible = true;
-          this.userMenuCompanyData = res.message;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getAllAssignUsers() {
-      let params = {}
-      ALL_ASSIGN_USERS(params).then(res => {
-        console.log(res)
-        if (res.code === 200) {
-          this.assignUserData = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    addAdmin() {
-      this.$router.push({path: '/profile/admin/add', query: {}})
-    },
-    getPercentage(identity) {
-      if (identity == 1) {
-        this.getEducatorPercentage()
-      }
-      if (identity == 2) {
-        this.getRecruiterPercentage()
-      }
-      if (identity == 3) {
-        this.getSchoolPercentage()
-      }
-      if (identity == 4) {
-        this.getOtherPercentage()
-      }
-      if (identity == 5) {
-        this.getVendorPercentage()
-      }
-    },
-    getEducatorPercentage() {
-      let params = {}
-      EDUCATOR_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_educator;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getRecruiterPercentage() {
-      let params = {}
-      RECRUITER_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_recruiting;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getSchoolPercentage() {
-      let params = {}
-      SCHOOL_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_school;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getOtherPercentage() {
-      let params = {}
-      OTHER_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_other;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getVendorPercentage() {
-      let params = {}
-      VENDOR_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_vendor;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    turnBanner(link) {
-      // console.log(link)
-      if (link != '') {
-        window.location.href = link
-      } else {
-        let token = localStorage.getItem('token')
-        if (!token) {
-          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
-
-          return;
-        }
-        this.$router.push('/me/ads/platform')
-      }
-    },
-    getAdsList() {
-      let ads_data = {
-        page: 1,
-        limit: 10000
-      }
-      ADS_LIST(ads_data).then(res => {
-        if (res.code == 200) {
-          // console.log(rs.message)
-          let adsDataBottom = [];
-          let identity = localStorage.getItem('identity');
-
-          if (!identity) {
-            adsDataBottom = res.message.filter(item => item.name == 'guest_m1');
-          }
-          if (identity == 1) {
-
-            adsDataBottom = res.message.filter(item => item.name == 'educator_m1');
-          }
-          if (identity == 2) {
-            adsDataBottom = res.message.filter(item => item.name == 'business_m1');
-          }
-          if (identity == 3) {
-            adsDataBottom = res.message.filter(item => item.name == 'vendor_m1');
-          }
-
-          if (adsDataBottom.length > 0) {
-            this.adsDataBottom = adsDataBottom[0].data;
-          }
-
-        }
-
-      }).catch(err => {
-        this.$message.error(err.msg)
-      })
-    },
-    applicationsHref() {
-      this.$router.push({path: '/me/applications'})
-    },
-    jobPostsHref() {
-      this.$router.push({path: '/jobs'})
-    },
-    myEventsHref() {
-      this.$router.push({path: '/events/myEvents'})
-    },
-    myDealsHref() {
-      this.$router.push({path: '/deals/myDeals'})
-    },
-    myFavoritesHref() {
-      this.$router.push({path: '/favorites'})
-    },
-    getBasicInfo(identity) {
-
-      let params = {
-        identity: identity
-      }
-
-      USER_INFO_BY_TOKEN_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          let userContact = res.message.user_contact;
-
-          let company = {};
-          let educatorContact = {};
-
-          if (userContact) {
-            this.userContact = userContact
-          }
-
-          if (identity == 1) {
-
-            educatorContact = res.message.user_contact.educator_contact;
-
-            if (educatorContact) {
-              this.educatorContact = educatorContact
-              this.accountInfoLevel = educatorContact.vip_level
-              this.accountInfoVipDueTime = educatorContact.vip_due_time
-              this.accountInfoCategoryStr = educatorContact.sub_identity_name_en
-
-            }
-          }
-
-          if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
-
-            company = res.message.user_contact.company;
-
-            if (company) {
-              this.companyInfo = company
-              this.accountInfoLevel = company.vip_level
-              this.accountInfoVipDueTime = company.vip_due_time
-              this.accountInfoCategoryStr = company.category_name_en
-            }
-
-          }
-
-
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    getVisitorInfo(uid, identity) {
-
-      let params = {
-        user_id: uid,
-        identity: identity
-      }
-
-      USER_INFO_VISITOR_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          let userContact = res.message.user_contact;
-          let company = {};
-          let educatorContact = {};
-
-          if (userContact) {
-            this.userContact = userContact
-          }
-
-          if (identity == 1) {
-
-            educatorContact = res.message.user_contact.educator_contact;
-
-            if (educatorContact) {
-              this.educatorContact = educatorContact
-            }
-          }
-
-          if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
-
-            company = res.message.user_contact.company;
-
-            if (company) {
-              this.companyInfo = company
-            }
-
-          }
-
-
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    editBasicInfo() {
-      let strObj = {
-        i: this.identity,
-        action: 'edit'
-      }
-      let str = encode(JSON.stringify(strObj))
-
-      this.$router.push({path: '/profile/contact/user', query: {s: str}})
-    },
-    viewAllApplicants(i){
-      let index = this.selectedApplicantsData.indexOf(i)
-      if(index == -1){
-        this.selectedApplicantsData.push(i)
-      }else{
-        this.selectedApplicantsData.splice(index,1)
-      }
-    },
-    postJob(){
-
-      this.$router.push({path:'/jobs/post',query:{version_time:this.versionTime}})
-
-    },
-    getMyJobs(page,limit){
+    getAllJobResumeList(page, limit) {
       let params = {
         token: localStorage.getItem('token'),
         page: page,
         limit: limit
       }
-      MY_JOBS(params).then(res=>{
+      ALL_JOB_RESUME(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let resData = res.message.data
-          this.myJobsData =  resData.concat(resData).concat(resData).concat(resData)
+          this.myApplicationsData = res.message.data
           // console.log(res.message.data)
-        } else {
-          console.log(res.msg)
+          // this.totalNum = res.message.total
         }
       }).catch(err=>{
         console.log(err)
@@ -680,7 +568,118 @@ export default {
         }
       })
 
+    },
+    viewApplicationEvent(applicationId){
+      this.expandStatus = !this.expandStatus
+      this.selectedApplicationId = applicationId
+    },
+    viewAllApplicants(jobId,unreadId){
+      this.selectedApplicantStatus = !this.selectedApplicantStatus;
+      this.selectedJobId = jobId;
+
+      if(this.selectedApplicantStatus){
+        let data = {
+          id:unreadId,
+          identity:localStorage.getItem('identity'),
+          status:1
+        }
+
+        SET_READ(data).then(res=>{
+          console.log(res)
+          if(res.code == 200){
+            console.log('--------- set unread ----------- ')
+          }else{
+            console.log('set read:'+res.msg)
+          }
+        }).catch(err=>{
+          console.log(err)
+        })
+
+        this.getJobResumes(jobId,1,100)
+      }
+
+    },
+    postJob(){
+      this.$router.push({path:'/jobs/post',query:{version_time:this.versionTime}})
+    },
+    getMyJobs(page,limit){
+      let params = {
+        token: localStorage.getItem('token'),
+        page: page,
+        limit: limit
+      }
+      MY_JOBS(params).then(res=>{
+        console.log(res)
+        if (res.code == 200) {
+          let jobData =  res.message.data
+
+          this.jobTotalNum = res.message.total
+
+          let unread_data = {
+            identity: localStorage.getItem('identity'),
+            token: localStorage.getItem('token')
+          }
+
+          USER_UNREAD(unread_data).then(res=>{
+            if(res.code == 200){
+              let unreadListData = res.message.list;
+              jobData.forEach(item=>{
+                // console.log(item)
+                let a = unreadListData.filter(function(element){
+                  return element.type == 1 && element.type_id == item.id
+                })
+                if(a.length>0){
+                  item.unread_status = true;
+                  item.unread_id = a[0].id;
+                }else{
+                  item.unread_status = false;
+                }
+
+              })
+              this.myJobsData = jobData
+              console.log(jobData)
+            }else{
+              console.log('unread:' + res.msg)
+            }
+
+          })
+
+        }
+
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    getJobResumes(jobId,page,limit){
+      let params = {
+        page: page,
+        limit: limit,
+        job_id: jobId
+      }
+      JOBS_APPLICATIONS(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.sApplicantsData = res.message.data
+          // console.log(res.message.data)
+          // this.totalNum = res.message.total
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    filterByApplicants(){
+      this.filterByJobStatus = false;
+      this.filterByApplicantStatus = true;
+      this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
+    },
+    filterByJobs(){
+      this.filterByJobStatus = true;
+      this.filterByApplicantStatus = false;
+      this.getMyJobs(this.myJobPage, this.myJObLimit)
     }
+
 
   }
 }
@@ -704,6 +703,7 @@ export default {
 
 .ja-r-container{
   width:calc(100% - 160px);
+  height: calc(100vh - 140px);
 }
 
 .ja-r-container-bg{
@@ -905,7 +905,7 @@ export default {
 
 .dashboard-1-label {
   font-size: 30px;
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #262626;
 
@@ -923,14 +923,14 @@ export default {
 .dashboard-1-number {
   font-weight: bold;
   font-size: 60px;
-  font-family: BCBold, serif;
+  font-family: BCBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #6650B3;
 
 }
 
 .dashboard-1-tips {
   font-size: 23px;
-  font-family: Assistant-SemiBold, serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 
 }
@@ -965,15 +965,20 @@ export default {
 
 .da-label {
   font-size: 30px;
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #262626;
 }
 
 .da-filter{
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 20px;
   margin-left: 50px;
+  cursor: pointer;
+}
+
+.da-filter:hover{
+  border-bottom: 1px solid #262626;
 }
 
 .da-t-r-btn{
@@ -982,7 +987,7 @@ export default {
 
 .da-all-btn {
   font-size: 20px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #6650B3;
   margin-left: 10px;
 }
@@ -1012,7 +1017,7 @@ export default {
 }
 
 .da-item-t-item{
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #262626;
 
@@ -1024,22 +1029,37 @@ export default {
 }
 
 .da-job-title{
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 25px;
 }
 
 .da-total-applicants{
-  font-family: Assistant-SemiBold, serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.da-total-applicants span{
+  margin-left: 4px;
 }
 
+.da-total-applicants-l-circle{
+  width:10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #6648FF;
+}
+
+
 .da-posted-deadline{
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
 }
 
 .da-action-btn{
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 20px;
   color: #262626;
 }
@@ -1071,6 +1091,10 @@ export default {
   padding-left: 20px;
 }
 
+.da-item-basic-l-a{
+
+}
+
 .da-item-avatar-img {
   width: 70px;
   height: 70px;
@@ -1084,7 +1108,7 @@ export default {
 
 .da-item-name {
   font-size: 26px;
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -1098,11 +1122,16 @@ export default {
 
 .da-item-n-1 {
   font-size: 18px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
   margin-right: 10px;
 }
 
+.da-item-a-job-title{
+  font-size: 26px;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
 
 .dashboard-view-application {
   flex: 1;
@@ -1110,7 +1139,7 @@ export default {
 
 .dashboard-view-application-btn {
   font-size: 20px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -1181,12 +1210,15 @@ export default {
 .dashboard-education-cer-c {
   display: flex;
   flex-direction: row;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: flex-start;
+  flex-wrap: wrap;
+
 }
 
 .dashboard-education-cer-c-item {
-  flex: 1;
+  /*flex: 1;*/
+  margin-top: 25px;
   padding-right: 40px;
 }
 

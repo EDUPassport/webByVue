@@ -48,11 +48,11 @@
                         <el-input v-model="basicForm.address" placeholder="Street name,building,apartment"></el-input>
                       </el-form-item>
                     </el-col>
-<!--                    <el-col :span="6">-->
-<!--                      <el-form-item label="Website">-->
-<!--                        <el-input v-model="basicForm.website" placeholder="https://"></el-input>-->
-<!--                      </el-form-item>-->
-<!--                    </el-col>-->
+                    <!--                    <el-col :span="6">-->
+                    <!--                      <el-form-item label="Website">-->
+                    <!--                        <el-input v-model="basicForm.website" placeholder="https://"></el-input>-->
+                    <!--                      </el-form-item>-->
+                    <!--                    </el-col>-->
 
                     <el-col :span="6">
                       <el-form-item label="Location">
@@ -98,7 +98,7 @@
                             </template>
                           </div>
 
-                          <div class="xll-location-r" >
+                          <div class="xll-location-r">
                             <el-button plain round v-if="haveLocationStatus"
                                        @click="changeEditLocation()">
                               Edit
@@ -128,7 +128,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item  label="Profile Photo" prop="profile_photo">
+                      <el-form-item label="Profile Photo" prop="profile_photo">
                         <el-upload
                             class="profile-uploader"
                             action=""
@@ -138,19 +138,19 @@
                             :before-upload="beforeProfilePhotoUpload"
                         >
                           <el-icon :size="45">
-                            <IconBiPlusSquare />
+                            <IconBiPlusSquare/>
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
-                            <div  v-if="profilePhotoUrl">
+                            <div v-if="profilePhotoUrl">
                               <el-image :src="profilePhotoUrl" style="width:100%;"></el-image>
                             </div>
                             <div class="account-xll-image-mask">
                               <span @click="handleSingleImagePreview(profilePhotoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                             </div>
@@ -174,7 +174,8 @@
                   <el-row :gutter="50">
                     <el-col :span="6">
                       <el-form-item label="Displayed name" prop="display_name">
-                        <el-input v-model="basicForm.display_name" placeholder="Name that will be visible to others"></el-input>
+                        <el-input v-model="basicForm.display_name"
+                                  placeholder="Name that will be visible to others"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -188,11 +189,11 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="Phone number" prop="phone" >
+                      <el-form-item label="Phone number" prop="phone">
                         <div class="contact-phone-container">
                           <div class="contact-phone-l">
                             <!--                    @onChange="onDefaultChange"-->
-                            <el-select v-model="basicForm.country_code" filterable class="m-2" placeholder="Select" >
+                            <el-select v-model="basicForm.country_code" filterable class="m-2" placeholder="Select">
                               <el-option
                                   v-for="item in phoneCodeData"
                                   :key="item.phone_code"
@@ -246,43 +247,40 @@
                       </el-form-item>
 
                     </el-col>
-<!--                    <el-col :span="6">-->
-<!--                      <el-form-item-->
-<!--                          label="Business registration certificate" prop="business_reg_img">-->
-<!--                        <el-upload-->
-<!--                            class="profile-uploader"-->
-<!--                            action=""-->
-<!--                            :headers="uploadHeaders"-->
-<!--                            :show-file-list="false"-->
-<!--                            :http-request="businessRegPhotoHttpRequest"-->
-<!--                            :before-upload="beforeBusinessRegPhotoUpload"-->
-<!--                        >-->
-<!--                          <el-icon :size="45">-->
-<!--                            <IconBiPlusSquare />-->
-<!--                          </el-icon>-->
-<!--                        </el-upload>-->
+                    <!--                    <el-col :span="6">-->
+                    <!--                      <el-form-item-->
+                    <!--                          label="Business registration certificate" prop="business_reg_img">-->
+                    <!--                        <el-upload-->
+                    <!--                            class="profile-uploader"-->
+                    <!--                            action=""-->
+                    <!--                            :headers="uploadHeaders"-->
+                    <!--                            :show-file-list="false"-->
+                    <!--                            :http-request="businessRegPhotoHttpRequest"-->
+                    <!--                            :before-upload="beforeBusinessRegPhotoUpload"-->
+                    <!--                        >-->
+                    <!--                          <el-icon :size="45">-->
+                    <!--                            <IconBiPlusSquare />-->
+                    <!--                          </el-icon>-->
+                    <!--                        </el-upload>-->
 
-<!--                        <div class="account-xll-images" >-->
-<!--                          <div class="account-xll-image">-->
-<!--                            <div  v-if="businessRegPhotoUrl">-->
-<!--                              <el-image :src="businessRegPhotoUrl" style="width:100%;"></el-image>-->
-<!--                            </div>-->
-<!--                            <div class="account-xll-image-mask">-->
-<!--                              <span @click="handleSingleImagePreview(businessRegPhotoUrl)">-->
-<!--                                <el-icon color="#ffffff" :size="45">-->
-<!--                                  <zoom-in />-->
-<!--                                </el-icon>-->
-<!--                              </span>-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>-->
-<!--                          <el-image :src="dialogSingleImageUrl"></el-image>-->
-<!--                        </el-dialog>-->
+                    <!--                        <div class="account-xll-images" >-->
+                    <!--                          <div class="account-xll-image">-->
+                    <!--                            <div  v-if="businessRegPhotoUrl">-->
+                    <!--                              <el-image :src="businessRegPhotoUrl" style="width:100%;"></el-image>-->
+                    <!--                            </div>-->
+                    <!--                            <div class="account-xll-image-mask">-->
+                    <!--                              <span @click="handleSingleImagePreview(businessRegPhotoUrl)">-->
+                    <!--                                <el-icon color="#ffffff" :size="45">-->
+                    <!--                                  <zoom-in />-->
+                    <!--                                </el-icon>-->
+                    <!--                              </span>-->
+                    <!--                            </div>-->
+                    <!--                          </div>-->
+                    <!--                        </div>-->
 
-<!--                      </el-form-item>-->
+                    <!--                      </el-form-item>-->
 
-<!--                    </el-col>-->
+                    <!--                    </el-col>-->
                     <el-col :span="6">
                       <el-form-item label="License" prop="license">
                         <el-upload
@@ -294,19 +292,19 @@
                             :before-upload="beforeLicensePhotoUpload"
                         >
                           <el-icon :size="45">
-                            <IconBiPlusSquare />
+                            <IconBiPlusSquare/>
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
-                            <div  v-if="licensePhotoUrl">
+                            <div v-if="licensePhotoUrl">
                               <el-image :src="licensePhotoUrl" style="width:100%;"></el-image>
                             </div>
                             <div class="account-xll-image-mask">
                               <span @click="handleSingleImagePreview(licensePhotoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                             </div>
@@ -317,7 +315,7 @@
 
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item  label="Year of establishment">
+                      <el-form-item label="Year of establishment">
                         <el-date-picker
                             v-model="basicForm.year_founded"
                             type="year"
@@ -362,19 +360,19 @@
                             :before-upload="beforeLogoPhotoUpload"
                         >
                           <el-icon :size="45">
-                            <IconBiPlusSquare />
+                            <IconBiPlusSquare/>
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
-                            <div  v-if="logoPhotoUrl">
+                            <div v-if="logoPhotoUrl">
                               <el-image :src="logoPhotoUrl" style="width:100%;"></el-image>
                             </div>
                             <div class="account-xll-image-mask">
                               <span @click="handleSingleImagePreview(logoPhotoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                             </div>
@@ -396,19 +394,19 @@
                             :before-upload="beforeIntroVideoUpload"
                         >
                           <el-icon :size="45">
-                            <IconBiPlusSquare />
+                            <IconBiPlusSquare/>
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
                             <div v-if="introVideoUrl">
-                              <video  style="width: 100%;" :src="introVideoUrl" controls  />
+                              <video style="width: 100%;" :src="introVideoUrl" controls/>
                             </div>
                             <div class="account-xll-image-mask">
                               <span @click="handleVideoPreview(introVideoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                               <!--                              <span @click="handleVideoRemove(introVideoUrl)">-->
@@ -419,9 +417,7 @@
                             </div>
                           </div>
                         </div>
-                        <el-dialog width="50%" v-model="dialogVideoVisible" center>
-                          <video :src="dialogVideoUrl" controls></video>
-                        </el-dialog>
+
 
                       </el-form-item>
 
@@ -437,19 +433,19 @@
                             :before-upload="beforeBackgroundPhotoUpload"
                         >
                           <el-icon :size="45">
-                            <IconBiPlusSquare />
+                            <IconBiPlusSquare/>
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
-                            <div  v-if="backgroundPhotoUrl">
+                            <div v-if="backgroundPhotoUrl">
                               <el-image :src="backgroundPhotoUrl" style="width:100%;"></el-image>
                             </div>
                             <div class="account-xll-image-mask">
                               <span @click="handleSingleImagePreview(backgroundPhotoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                             </div>
@@ -483,28 +479,25 @@
 
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image"
                                v-for="(item,i) in accountImageFileList" :key="i">
                             <el-image :src="item.url"></el-image>
                             <div class="account-xll-image-mask">
                               <span @click="handleAccountImagePreview(item)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                               <span @click="handleAccountImageRemove(item,i)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <Delete />
+                                  <Delete/>
                                 </el-icon>
                               </span>
                             </div>
                           </div>
                         </div>
 
-                        <el-dialog width="50%" v-model="dialogAccountImageVisible" center>
-                          <el-image :src="dialogAccountImageUrl"></el-image>
-                        </el-dialog>
 
                       </el-form-item>
                     </el-col>
@@ -524,7 +517,20 @@
 
     </div>
 
-    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()" ></xllLoading>
+    <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
+      <el-image :src="dialogSingleImageUrl"></el-image>
+    </el-dialog>
+
+    <el-dialog width="50%" v-model="dialogVideoVisible" center>
+      <video :src="dialogVideoUrl" controls></video>
+    </el-dialog>
+
+    <el-dialog width="50%" v-model="dialogAccountImageVisible" center>
+      <el-image :src="dialogAccountImageUrl"></el-image>
+    </el-dialog>
+
+
+    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()"></xllLoading>
 
   </div>
 </template>
@@ -556,8 +562,8 @@ export default {
     meSideMenu,
     xllLoading
   },
-  setup(){
-    const birthdayDisabledDate = (date)=>{
+  setup() {
+    const birthdayDisabledDate = (date) => {
       let myDate = new Date();
       return date.getTime() >= myDate.getTime();
     }
@@ -570,14 +576,14 @@ export default {
       dialogAccountImageUrl: '',
       dialogAccountImageVisible: false,
       accountImageFileList: [],
-      companyInfo:{},
-      countryInfo:'',
-      haveLocationStatus:false,
-      showLocationCancelStatus:false,
-      uploadLoadingStatus:false,
-      sideMenuStatus:true,
-      submitLoadingValue:false,
-      phoneCodeData:phoneCodeData,
+      companyInfo: {},
+      countryInfo: '',
+      haveLocationStatus: false,
+      showLocationCancelStatus: false,
+      uploadLoadingStatus: false,
+      sideMenuStatus: true,
+      submitLoadingValue: false,
+      phoneCodeData: phoneCodeData,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
       uploadHeaders: {
         platform: 4
@@ -585,43 +591,43 @@ export default {
       uploadData: {
         token: localStorage.getItem('token')
       },
-      profilePhotoUrl:'',
-      logoPhotoUrl:'',
-      licensePhotoUrl:'',
-      introVideoUrl:'',
-      backgroundPhotoUrl:'',
-      businessRegPhotoUrl:'',
-      dialogSingleImageVisible:false,
-      dialogSingleImageUrl:'',
-      dialogVideoUrl:'',
-      dialogVideoVisible:false,
+      profilePhotoUrl: '',
+      logoPhotoUrl: '',
+      licensePhotoUrl: '',
+      introVideoUrl: '',
+      backgroundPhotoUrl: '',
+      businessRegPhotoUrl: '',
+      dialogSingleImageVisible: false,
+      dialogSingleImageUrl: '',
+      dialogVideoUrl: '',
+      dialogVideoVisible: false,
 
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       basicForm: {
-        company_contact_id:'',
-        company_name:'',
-        license:'',
-        logo:'',
-        category_id:'',
-        desc:'',
-        pid:'',
-        work_phone:'',
-        country_info:'',
+        company_contact_id: '',
+        company_name: '',
+        license: '',
+        logo: '',
+        category_id: '',
+        desc: '',
+        pid: '',
+        work_phone: '',
+        country_info: '',
         country_id: '',
         state_id: '',
         town_id: '',
-        address:'',
-        lat:'',
-        lng:'',
-        country_code:'+86',
-        video_url:'',
-        year_founded:'',
-        work_email:'',
-        category_name_en:'',
-        category_name_cn:'',
-        profile_photo:'',
-        business_reg_img:''
+        address: '',
+        lat: '',
+        lng: '',
+        country_code: '+86',
+        video_url: '',
+        year_founded: '',
+        work_email: '',
+        category_name_en: '',
+        category_name_cn: '',
+        profile_photo: '',
+        business_reg_img: ''
 
       },
       basicRules: {
@@ -650,20 +656,20 @@ export default {
 
       },
       nationalityOptions: countriesData,
-      countryObj:{},
-      provinceObj:{},
-      cityObj:{},
-      districtObj:{},
-      countryName:'',
-      countryNameCn:'',
-      provinceName:'',
-      provinceNameCn:'',
-      cityName:'',
-      cityNameCn:'',
-      districtName:'',
-      districtNameCn:'',
+      countryObj: {},
+      provinceObj: {},
+      cityObj: {},
+      districtObj: {},
+      countryName: '',
+      countryNameCn: '',
+      provinceName: '',
+      provinceNameCn: '',
+      cityName: '',
+      cityNameCn: '',
+      districtName: '',
+      districtNameCn: '',
 
-      countryOptions:[],
+      countryOptions: [],
       provinceOptions: [],
       cityOptions: [],
       districtOptions: [],
@@ -671,12 +677,12 @@ export default {
       selectBusinessTypeList: [],
       selectEducatorTypeList: [],
       businessInfo: {},
-      sLocationType:1, //1 国外 2国内
+      sLocationType: 1, //1 国外 2国内
 
-      i:0,
-      id:0,
-      cid:0,
-      action:''
+      i: 0,
+      id: 0,
+      cid: 0,
+      action: ''
     }
   },
   async mounted() {
@@ -687,7 +693,7 @@ export default {
     this.initMap()
     let str = this.$route.query.s;
 
-    if(str){
+    if (str) {
       let strObj = JSON.parse(decode(str))
 
       this.i = strObj.i;
@@ -695,12 +701,12 @@ export default {
       this.cid = strObj.cid;
       this.action = strObj.action;
 
-      if(strObj.action == 'add'){
+      if (strObj.action == 'add') {
         this.sideMenuStatus = false;
         this.getBasicInfo(strObj.i)
       }
 
-      if(strObj.action == 'edit'){
+      if (strObj.action == 'edit') {
         this.getBasicInfo(strObj.i)
       }
 
@@ -714,16 +720,16 @@ export default {
       this.dialogVideoVisible = true
 
     },
-    handleSingleImagePreview(file){
+    handleSingleImagePreview(file) {
       this.dialogSingleImageUrl = file
       this.dialogSingleImageVisible = true;
     },
-    changeEditLocation(){
+    changeEditLocation() {
       this.haveLocationStatus = false;
       this.showLocationCancelStatus = true;
 
       this.countryName = '';
-      this.countryNameCn  = '';
+      this.countryNameCn = '';
 
       this.provinceName = '';
       this.provinceNameCn = '';
@@ -733,16 +739,16 @@ export default {
 
 
     },
-    changeCancelLocation(){
+    changeCancelLocation() {
       this.haveLocationStatus = true;
       this.showLocationCancelStatus = false;
 
       let companyInfo = this.companyInfo;
 
-      if(companyInfo.country_info){
+      if (companyInfo.country_info) {
         let countryInfoArr = JSON.parse(companyInfo.country_info)
         this.countryName = countryInfoArr.country_name_en;
-        this.countryNameCn  = countryInfoArr.country_name_cn;
+        this.countryNameCn = countryInfoArr.country_name_cn;
         this.provinceName = countryInfoArr.province_name_en;
         this.provinceNameCn = countryInfoArr.province_name_cn;
         this.cityName = countryInfoArr.city_name_en;
@@ -753,7 +759,7 @@ export default {
       }
 
     },
-    async getSubIdentityList(){
+    async getSubIdentityList() {
       let params = {
         pid: 2,
         tree: 1
@@ -764,67 +770,67 @@ export default {
         if (res.code == 200) {
           this.subCateOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
 
       })
     },
-    cancelUploadProfile(){
+    cancelUploadProfile() {
       this.uploadLoadingStatus = false;
     },
-    businessRegPhotoHttpRequest(options){
+    businessRegPhotoHttpRequest(options) {
       let self = this;
       // console.log(options)
-      new ImageCompressor(options.file,{
-        quality:0.6,
+      new ImageCompressor(options.file, {
+        quality: 0.6,
         success(file) {
           // console.log(file)
           const formData = new FormData();
 
-          formData.append('token',localStorage.getItem('token'))
+          formData.append('token', localStorage.getItem('token'))
           // console.log(file)
           let isInChina = process.env.VUE_APP_CHINA
-          if(isInChina === 'yes'){
-            formData.append('file[]',file,file.name)
-            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+          if (isInChina === 'yes') {
+            formData.append('file[]', file, file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.data[0]['file_url'];
                 self.uploadLoadingStatus = false;
                 self.businessRegPhotoUrl = myFileUrl
                 self.basicForm.business_reg_img = myFileUrl
 
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
-          if(isInChina === 'no'){
-            formData.append('file',file,file.name)
-            UPLOAD_BY_SERVICE(formData).then(res=>{
+          if (isInChina === 'no') {
+            formData.append('file', file, file.name)
+            UPLOAD_BY_SERVICE(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.message.file_path;
                 self.uploadLoadingStatus = false;
                 self.businessRegPhotoUrl = myFileUrl
                 self.basicForm.business_reg_img = myFileUrl
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
         },
-        error(err){
+        error(err) {
           console.log(err.message)
         }
 
@@ -841,52 +847,52 @@ export default {
       }
       return isLt2M
     },
-    licenseHttpRequest(options){
+    licenseHttpRequest(options) {
       let self = this;
       // console.log(options)
-      new ImageCompressor(options.file,{
-        quality:0.6,
+      new ImageCompressor(options.file, {
+        quality: 0.6,
         success(file) {
           // console.log(file)
           const formData = new FormData();
 
-          formData.append('token',localStorage.getItem('token'))
+          formData.append('token', localStorage.getItem('token'))
           // console.log(file)
           let isInChina = process.env.VUE_APP_CHINA
-          if(isInChina === 'yes'){
-            formData.append('file[]',file,file.name)
-            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+          if (isInChina === 'yes') {
+            formData.append('file[]', file, file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.data[0]['file_url'];
                 self.uploadLoadingStatus = false;
                 self.licensePhotoUrl = myFileUrl
                 self.basicForm.license = myFileUrl
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
-          if(isInChina === 'no'){
-            formData.append('file',file,file.name)
-            UPLOAD_BY_SERVICE(formData).then(res=>{
+          if (isInChina === 'no') {
+            formData.append('file', file, file.name)
+            UPLOAD_BY_SERVICE(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.message.file_path;
                 self.uploadLoadingStatus = false;
                 self.licensePhotoUrl = myFileUrl
                 self.basicForm.license = myFileUrl
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
         },
-        error(err){
+        error(err) {
           console.log(err.message)
         }
 
@@ -903,52 +909,52 @@ export default {
       }
       return isLt2M
     },
-    backgroundHttpRequest(options){
+    backgroundHttpRequest(options) {
       let self = this;
       // console.log(options)
-      new ImageCompressor(options.file,{
-        quality:0.6,
+      new ImageCompressor(options.file, {
+        quality: 0.6,
         success(file) {
           // console.log(file)
           const formData = new FormData();
 
-          formData.append('token',localStorage.getItem('token'))
+          formData.append('token', localStorage.getItem('token'))
           // console.log(file)
           let isInChina = process.env.VUE_APP_CHINA
-          if(isInChina === 'yes'){
-            formData.append('file[]',file,file.name)
-            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+          if (isInChina === 'yes') {
+            formData.append('file[]', file, file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.data[0]['file_url'];
                 self.uploadLoadingStatus = false;
                 self.backgroundPhotoUrl = myFileUrl
                 self.basicForm.background_image = myFileUrl
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
-          if(isInChina === 'no'){
-            formData.append('file',file,file.name)
-            UPLOAD_BY_SERVICE(formData).then(res=>{
+          if (isInChina === 'no') {
+            formData.append('file', file, file.name)
+            UPLOAD_BY_SERVICE(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.message.file_path;
                 self.uploadLoadingStatus = false;
                 self.backgroundPhotoUrl = myFileUrl
                 self.basicForm.background_image = myFileUrl
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
         },
-        error(err){
+        error(err) {
           console.log(err.message)
         }
 
@@ -965,53 +971,53 @@ export default {
       }
       return isLt2M
     },
-    profilePhotoHttpRequest(options){
+    profilePhotoHttpRequest(options) {
       let self = this;
       // console.log(options)
-      new ImageCompressor(options.file,{
-        quality:0.6,
+      new ImageCompressor(options.file, {
+        quality: 0.6,
         success(file) {
           // console.log(file)
           const formData = new FormData();
 
-          formData.append('token',localStorage.getItem('token'))
+          formData.append('token', localStorage.getItem('token'))
           // console.log(file)
           let isInChina = process.env.VUE_APP_CHINA
-          if(isInChina === 'yes'){
-            formData.append('file[]',file,file.name)
-            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+          if (isInChina === 'yes') {
+            formData.append('file[]', file, file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.data[0]['file_url'];
                 self.uploadLoadingStatus = false;
                 self.profilePhotoUrl = myFileUrl
                 self.basicForm.profile_photo = myFileUrl
 
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
-          if(isInChina === 'no'){
-            formData.append('file',file,file.name)
-            UPLOAD_BY_SERVICE(formData).then(res=>{
+          if (isInChina === 'no') {
+            formData.append('file', file, file.name)
+            UPLOAD_BY_SERVICE(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.message.file_path;
                 self.uploadLoadingStatus = false;
                 self.profilePhotoUrl = myFileUrl
                 self.basicForm.profile_photo = myFileUrl
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
         },
-        error(err){
+        error(err) {
           console.log(err.message)
         }
 
@@ -1028,52 +1034,52 @@ export default {
       }
       return isLt2M
     },
-    logoPhotoHttpRequest(options){
+    logoPhotoHttpRequest(options) {
       let self = this;
       // console.log(options)
-      new ImageCompressor(options.file,{
-        quality:0.6,
+      new ImageCompressor(options.file, {
+        quality: 0.6,
         success(file) {
           // console.log(file)
           const formData = new FormData();
 
-          formData.append('token',localStorage.getItem('token'))
+          formData.append('token', localStorage.getItem('token'))
           // console.log(file)
           let isInChina = process.env.VUE_APP_CHINA
-          if(isInChina === 'yes'){
-            formData.append('file[]',file,file.name)
-            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+          if (isInChina === 'yes') {
+            formData.append('file[]', file, file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.data[0]['file_url'];
                 self.uploadLoadingStatus = false;
                 self.logoPhotoUrl = myFileUrl
                 self.basicForm.logo = myFileUrl
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
-          if(isInChina === 'no'){
-            formData.append('file',file,file.name)
-            UPLOAD_BY_SERVICE(formData).then(res=>{
+          if (isInChina === 'no') {
+            formData.append('file', file, file.name)
+            UPLOAD_BY_SERVICE(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.message.file_path;
                 self.uploadLoadingStatus = false;
                 self.logoPhotoUrl = myFileUrl
                 self.basicForm.logo = myFileUrl
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
         },
-        error(err){
+        error(err) {
           console.log(err.message)
         }
 
@@ -1091,42 +1097,42 @@ export default {
       }
       return isLt2M
     },
-    videoHttpRequest(options){
+    videoHttpRequest(options) {
       let self = this;
 
       const formData = new FormData();
       let file = options.file;
 
-      formData.append('token',localStorage.getItem('token'))
+      formData.append('token', localStorage.getItem('token'))
       // console.log(file)
       let isInChina = process.env.VUE_APP_CHINA
-      if(isInChina === 'yes'){
-        formData.append('file[]',file,file.name)
-        UPLOAD_BY_ALI_OSS(formData).then(res=>{
+      if (isInChina === 'yes') {
+        formData.append('file[]', file, file.name)
+        UPLOAD_BY_ALI_OSS(formData).then(res => {
           // console.log(res)
-          if(res.code == 200){
+          if (res.code == 200) {
             let myFileUrl = res.data[0]['file_url'];
             self.uploadLoadingStatus = false;
             self.introVideoUrl = myFileUrl
             self.basicForm.video_url = myFileUrl
           }
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err)
         })
 
       }
 
-      if(isInChina === 'no'){
-        formData.append('file',file,file.name)
-        UPLOAD_BY_SERVICE(formData).then(res=>{
+      if (isInChina === 'no') {
+        formData.append('file', file, file.name)
+        UPLOAD_BY_SERVICE(formData).then(res => {
           // console.log(res)
-          if(res.code == 200){
+          if (res.code == 200) {
             let myFileUrl = res.message.file_path;
             self.uploadLoadingStatus = false;
             self.introVideoUrl = myFileUrl
             self.basicForm.video_url = myFileUrl
           }
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err)
         })
 
@@ -1188,7 +1194,7 @@ export default {
       })
       geocoder.on('clear', (e) => {
         console.log(e)
-        this.basicForm.address =''
+        this.basicForm.address = ''
         this.basicForm.lng = ''
         this.basicForm.lat = ''
       })
@@ -1197,22 +1203,22 @@ export default {
     setPlace(e) {
       console.log(e)
     },
-    changeIdentity(companyId,language){
+    changeIdentity(companyId, language) {
       let params = {
-        identity:2,
-        company_id:companyId,
-        language:language
+        identity: 2,
+        company_id: companyId,
+        language: language
       }
-      SWITCH_IDENTITY_V2(params).then(res=>{
+      SWITCH_IDENTITY_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
-          localStorage.setItem('identity',2)
-          localStorage.setItem('company_id',companyId)
-          this.$store.commit('identity',2)
+        if (res.code == 200) {
+          localStorage.setItem('identity', 2)
+          localStorage.setItem('company_id', companyId)
+          this.$store.commit('identity', 2)
 
-          this.$router.push('/business/profile')
+          this.$router.push('/account/home')
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
@@ -1234,12 +1240,12 @@ export default {
       this.basicForm.category_name_cn = businessTypeNameCn;
 
       let countryObj = {
-        country_name_en:this.countryName,
-        country_name_cn:this.countryNameCn,
-        province_name_en:this.provinceName,
-        province_name_cn:this.provinceNameCn,
-        city_name_en:this.cityName,
-        city_name_cn:this.cityNameCn
+        country_name_en: this.countryName,
+        country_name_cn: this.countryNameCn,
+        province_name_en: this.provinceName,
+        province_name_cn: this.provinceNameCn,
+        city_name_en: this.cityName,
+        city_name_cn: this.cityNameCn
       }
 
       this.basicForm.country_info = JSON.stringify(countryObj)
@@ -1248,37 +1254,42 @@ export default {
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if(action == 'edit'){
+          if (action == 'edit') {
             this.basicForm.id = this.cid;
           }
-          if(action == 'add'){
+          if (action == 'add') {
             this.basicForm.id = this.cid;
           }
           let params = Object.assign({}, this.basicForm);
           RECRUITER_COMPANY_EDIT_V2(params).then(res => {
             console.log(res)
             if (res.code == 200) {
-              if(this.accountImageFileList.length > 0){
-                this.uploadAccountImages()
-              }
 
               this.submitLoadingValue = false;
-              this.$store.commit('username',this.basicForm.company_name)
-              this.$store.commit('userAvatar',this.basicForm.logo)
+              this.$store.commit('username', this.basicForm.company_name)
+              this.$store.commit('userAvatar', this.basicForm.logo)
 
-              if(action == 'edit'){
-                this.$router.push('/business/profile')
-              }else{
+              if (action == 'edit') {
+                if (this.accountImageFileList.length > 0) {
+                  this.uploadAccountImages(this.cid)
+                }
+
+                this.$router.push('/account/home')
+              } else {
+
+                if (this.accountImageFileList.length > 0) {
+                  this.uploadAccountImages(res.message.recruiting_company_id)
+                }
 
                 localStorage.setItem('company_id', res.message.recruiting_company_id)
 
-                this.$store.commit('allIdentityChanged',true )
+                this.$store.commit('allIdentityChanged', true)
 
                 let uid = localStorage.getItem('uid')
 
-                this.getUserMenuList(uid,2, res.message.recruiting_company_id, uid)
+                this.getUserMenuList(uid, 2, res.message.recruiting_company_id, uid)
 
-                this.changeIdentity(res.message.recruiting_company_id,2)
+                this.changeIdentity(res.message.recruiting_company_id, 2)
               }
               // this.submitEduBusinessCompanyForm()
 
@@ -1297,30 +1308,30 @@ export default {
       })
 
     },
-    getUserMenuList(uid,identity,companyId,createUid){
+    getUserMenuList(uid, identity, companyId, createUid) {
 
       let params = {
         user_id: uid,
         identity: identity,
         company_id: companyId,
         create_user_id: createUid,
-        page:1,
-        limit:1000
+        page: 1,
+        limit: 1000
       }
 
-      USER_MENU_LIST(params).then(res=>{
+      USER_MENU_LIST(params).then(res => {
         // console.log(res)
-        if(res.code === 200){
+        if (res.code === 200) {
           let pcAllData = res.message.pc;
-          if(pcAllData){
-            let sData = pcAllData.filter(item=>item.identity == identity)
+          if (pcAllData) {
+            let sData = pcAllData.filter(item => item.identity == identity)
             this.$store.commit('menuData', sData)
-            localStorage.setItem('menuData',JSON.stringify(sData))
+            localStorage.setItem('menuData', JSON.stringify(sData))
           }
 
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
@@ -1330,48 +1341,47 @@ export default {
     handleChange(e) {
       console.log(e)
     },
-    getAllCountry(){
-      let params = {
-      }
-      GET_COUNTRY_LIST(params).then(res=>{
+    getAllCountry() {
+      let params = {}
+      GET_COUNTRY_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.countryOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    getAllProvinces(countryId){
+    getAllProvinces(countryId) {
       let params = {
-        country_id:countryId
+        country_id: countryId
       }
-      GET_COUNTRY_LIST(params).then(res=>{
+      GET_COUNTRY_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.provinceOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    getAllCitys(countryId,stateId){
+    getAllCitys(countryId, stateId) {
       let params = {
-        country_id:countryId,
-        state_id:stateId
+        country_id: countryId,
+        state_id: stateId
       }
-      GET_COUNTRY_LIST(params).then(res=>{
+      GET_COUNTRY_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.cityOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    countryChange(e){
+    countryChange(e) {
       console.log(e)
-      this.basicForm.state_id=undefined
+      this.basicForm.state_id = undefined
       this.basicForm.town_id = undefined
 
       this.provinceOptions = []
@@ -1392,7 +1402,7 @@ export default {
       this.provinceName = e.name
       this.provinceNameCn = e.name
 
-      this.getAllCitys(this.basicForm.country_id,e.id)
+      this.getAllCitys(this.basicForm.country_id, e.id)
     },
     cityChange(e) {
       console.log(e)
@@ -1410,7 +1420,7 @@ export default {
         if (res.code == 200) {
           this.subCateOptions = res.message
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
@@ -1431,7 +1441,7 @@ export default {
     getBasicInfo() {
 
       let params = {
-        identity:2
+        identity: 2
       }
       USER_INFO_BY_TOKEN_V2(params).then(res => {
         // console.log(res)
@@ -1505,13 +1515,13 @@ export default {
             this.basicForm.year_founded = recruiterInfo.year_founded.toString();
           }
 
-          if(recruiterInfo.country_info){
+          if (recruiterInfo.country_info) {
             this.basicForm.country_info = recruiterInfo.country_info;
 
             let countryInfoArr = JSON.parse(recruiterInfo.country_info)
 
             this.countryName = countryInfoArr.country_name_en;
-            this.countryNameCn  = countryInfoArr.country_name_cn;
+            this.countryNameCn = countryInfoArr.country_name_cn;
             this.provinceName = countryInfoArr.province_name_en;
             this.provinceNameCn = countryInfoArr.province_name_cn;
             this.cityName = countryInfoArr.city_name_en;
@@ -1523,13 +1533,13 @@ export default {
             this.haveLocationStatus = true;
           }
 
-          if(recruiterInfo.country_id){
+          if (recruiterInfo.country_id) {
             this.basicForm.country_id = recruiterInfo.country_id;
           }
-          if(recruiterInfo.state_id){
+          if (recruiterInfo.state_id) {
             this.basicForm.state_id = recruiterInfo.state_id;
           }
-          if(recruiterInfo.town_id){
+          if (recruiterInfo.town_id) {
             this.basicForm.town_id = recruiterInfo.town_id;
           }
 
@@ -1538,9 +1548,9 @@ export default {
           let typeName = recruiterInfo.category_name_cn
 
           let typeObj = {
-            id:typeId,
-            identity_name:typeNameEn,
-            identity_name_cn:typeName
+            id: typeId,
+            identity_name: typeNameEn,
+            identity_name_cn: typeName
           }
 
           this.selectBusinessTypeList.push(typeObj)
@@ -1575,7 +1585,7 @@ export default {
     },
     handleAccountImageRemove(file, i) {
       console.log(file, i)
-      this.accountImageFileList.splice(i,1)
+      this.accountImageFileList.splice(i, 1)
 
     },
     handleAccountImagePreview(file) {
@@ -1591,7 +1601,7 @@ export default {
       }
       return isJpeg
     },
-    handleAccountImageChange(file,fileList) {
+    handleAccountImageChange(file, fileList) {
       console.log(file)
       console.log(fileList)
       let imgParams = new FormData();
@@ -1607,8 +1617,8 @@ export default {
           // let imgArr = [];
           imgData.forEach(item => {
             let obj = {
-              name:item.file_name,
-              url:item.file_url
+              name: item.file_name,
+              url: item.file_url
             }
             this.accountImageFileList.push(obj)
           })
@@ -1620,7 +1630,7 @@ export default {
       })
 
     },
-    uploadAccountImages() {
+    uploadAccountImages(companyId) {
       let oldData = []
       this.accountImageFileList.forEach(file => {
         oldData.push(file.url)
@@ -1629,7 +1639,7 @@ export default {
       let params = {
         token: localStorage.getItem('token'),
         identity: 2,
-        company_id: this.companyInfo.id,
+        company_id: companyId,
         img: oldData
       }
 
@@ -1658,59 +1668,86 @@ export default {
         {'zf_referrer_name': ''},
         {'zf_redirect_url': ''},
         {'zc_gad': ''},
-        {'SingleLine': params.company_name  // Education Business Name
+        {
+          'SingleLine': params.company_name  // Education Business Name
         },
-        {'Dropdown2': params.category_name_en  //Education Business Category
+        {
+          'Dropdown2': params.category_name_en  //Education Business Category
         },
-        {'Dropdown': 'Education Business'  //Company Type
+        {
+          'Dropdown': 'Education Business'  //Company Type
         },
-        {'Website': params.website  //Education Business Website
+        {
+          'Website': params.website  //Education Business Website
         },
-        {'SingleLine1': params.last_name  // Education Business Contact
+        {
+          'SingleLine1': params.last_name  // Education Business Contact
         },
-        {'Number2': ''  //  Company Number
+        {
+          'Number2': ''  //  Company Number
         },
-        {'SingleLine5': userId  //UserID
+        {
+          'SingleLine5': userId  //UserID
         },
-        {'PhoneNumber_countrycode': params.work_phone  //Education Business Phone
+        {
+          'PhoneNumber_countrycode': params.work_phone  //Education Business Phone
         },
-        {'Email': ''  // Education Business Email
+        {
+          'Email': ''  // Education Business Email
         },
-        {'Number': ''   //Number of Employees
+        {
+          'Number': ''   //Number of Employees
         },
-        {'Number1': ''   //Membership Duration
+        {
+          'Number1': ''   //Membership Duration
         },
-        {'Dropdown1': ''   //Membership Type
+        {
+          'Dropdown1': ''   //Membership Type
         },
-        {'Address_AddressLine1': ''   //Street Address
+        {
+          'Address_AddressLine1': ''   //Street Address
         },
-        {'Address_City': ''   //City
+        {
+          'Address_City': ''   //City
         },
-        {'Address_Region': ''   //State/Region/Province
+        {
+          'Address_Region': ''   //State/Region/Province
         },
-        {'Address_Country': ''   //Country
+        {
+          'Address_Country': ''   //Country
         },
-        {'SingleLine4': ''   //   Business Registration No.
+        {
+          'SingleLine4': ''   //   Business Registration No.
         },
-        {'MultiLine': ''   //Company Intro
+        {
+          'MultiLine': ''   //Company Intro
         },
-        {'SingleLine3': ''   //WeChat ID
+        {
+          'SingleLine3': ''   //WeChat ID
         },
-        {'Number3': ''  //  Number of Branches
+        {
+          'Number3': ''  //  Number of Branches
         },
-        {'Number4': ''  //    Number of Students
+        {
+          'Number4': ''  //    Number of Students
         },
-        {'MultipleChoice': ''  //    Students Ages
+        {
+          'MultipleChoice': ''  //    Students Ages
         },
-        {'MultiLine1': ''  //     Curriculum Subjects
+        {
+          'MultiLine1': ''  //     Curriculum Subjects
         },
-        {'MultiLine2': ''  //     School Facilities
+        {
+          'MultiLine2': ''  //     School Facilities
         },
-        {'Website1': ''  // Business License Link
+        {
+          'Website1': ''  // Business License Link
         },
-        {'Website2': ''   //Company Logo Link
+        {
+          'Website2': ''   //Company Logo Link
         },
-        {'Website3': ''   //Header Image Link
+        {
+          'Website3': ''   //Header Image Link
         }
 
       ]
@@ -1744,44 +1781,45 @@ export default {
   align-items: flex-start;
   justify-content: flex-start;
 }
-.basic-l-container{
+
+.basic-l-container {
 
 }
 
 .basic-r-container {
-  width:calc(100% - 160px);
+  width: calc(100% - 160px);
 }
 
-.basic-r-container-bg{
-  padding:30px 50px 50px 50px;
+.basic-r-container-bg {
+  padding: 30px 50px 50px 50px;
 }
 
 
-.account-profile-t{
-  display:flex;
+.account-profile-t {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: 20px 0 40px 0;
 }
 
-.account-profile-t-l{
-  font-family: BSemiBold, serif;
-  font-size:30px;
-  color:#262626;
+.account-profile-t-l {
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  color: #262626;
 
 }
 
-.account-profile-t-r{
+.account-profile-t-r {
 
 }
 
-.account-profile-cancel-btn{
-  font-size:20px;
+.account-profile-cancel-btn {
+  font-size: 20px;
 }
 
-.account-profile-save-btn{
-  font-size:20px;
+.account-profile-save-btn {
+  font-size: 20px;
 }
 
 
@@ -1826,7 +1864,7 @@ export default {
   border-radius: 6px;
   font-size: 20px;
   cursor: pointer;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .tag-active {
@@ -1838,68 +1876,68 @@ export default {
   padding: 10px;
 }
 
-.map-container{
+.map-container {
   margin-top: 10px;
   width: 100%;
   height: 300px;
   text-align: center;
 }
 
-.basemap{
+.basemap {
   width: 100%;
   height: 100%;
 
 }
-.license-uploader{
-  padding:10px;
+
+.license-uploader {
+  padding: 10px;
   border: 1px dashed #d9d9d9;
-  border-radius:10px;
-  text-align:center;
+  border-radius: 10px;
+  text-align: center;
 }
 
-.contact-phone-container{
+.contact-phone-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-.contact-phone-l{
-  width:28%;
+.contact-phone-l {
+  width: 28%;
 }
 
-.contact-phone-r{
-  width:70%;
+.contact-phone-r {
+  width: 70%;
 }
 
-.submit-btn-container{
+.submit-btn-container {
   text-align: center;
-  margin-top:40px;
+  margin-top: 40px;
 }
 
-.submit-btn{
-  width:40%;
+.submit-btn {
+  width: 40%;
 }
 
-.xll-location-container{
-  display:flex;
-  flex-direction:row;
-  align-items:center;
+.xll-location-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   justify-content: flex-start;
 
 }
-.xll-location-l{
+
+.xll-location-l {
 
 }
 
-.xll-location-r{
-  margin-left:20px;
+.xll-location-r {
+  margin-left: 20px;
 }
 
 
-
-
-.account-profile-item-container{
+.account-profile-item-container {
   padding: 50px;
   border-radius: 38px;
   background-color: #ffffff;
@@ -1907,26 +1945,26 @@ export default {
 
 }
 
-.account-profile-item-label{
-  font-family: BarlowM, serif;
-  font-size:26px;
-  color:#262626;
+.account-profile-item-label {
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color: #262626;
 }
 
-.account-profile-item-c{
+.account-profile-item-c {
   margin-top: 15px;
 }
 
-.account-profile-item-c-item{
-  width:100%;
+.account-profile-item-c-item {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
 }
 
-.account-profile-item-c-item-1{
-  width:100%;
+.account-profile-item-c-item-1 {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -1934,69 +1972,70 @@ export default {
 }
 
 
-.account-profile-category{
-  width:100%;
+.account-profile-category {
+  width: 100%;
 }
 
-.account-profile-form-item{
+.account-profile-form-item {
   width: 350px;
   margin-right: 50px;
 }
 
-.account-profile-item-textarea{
-  width:100%;
+.account-profile-item-textarea {
+  width: 100%;
 }
 
 
-.account-profile-item-location{
-  width:60%;
+.account-profile-item-location {
+  width: 60%;
 }
 
-.account-profile-item-map{
-  width:40%;
+.account-profile-item-map {
+  width: 40%;
 }
 
-/deep/ .el-input--default .el-input__wrapper{
+/deep/ .el-input--default .el-input__wrapper {
   /*min-width: 350px;*/
 }
 
-.upload-photo-img{
-  width:70px;
+.upload-photo-img {
+  width: 70px;
 }
 
-.upload-photo-img-1{
+.upload-photo-img-1 {
   width: 100%;
 }
-.account-location-select{
-  margin-top:15px;
+
+.account-location-select {
+  margin-top: 15px;
 }
 
 
-.account-xll-images{
-  width:90%;
+.account-xll-images {
+  width: 90%;
 }
 
-.account-xll-image{
+.account-xll-image {
   position: relative;
   margin-top: 10px;
 
 }
 
-.account-xll-image-mask{
+.account-xll-image-mask {
   position: absolute;
-  width:100%;
+  width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  margin:auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   display: none;
 
 }
 
-.account-xll-image:hover .account-xll-image-mask{
+.account-xll-image:hover .account-xll-image-mask {
   /*display: inline;*/
   display: flex;
   flex-direction: row;
@@ -2004,20 +2043,20 @@ export default {
   justify-content: center;
 }
 
-.account-xll-image-mask span{
+.account-xll-image-mask span {
   margin-right: 15px;
   cursor: pointer;
 }
 
-.account-xll-image-mask:hover{
+.account-xll-image-mask:hover {
 
 }
 
-@media screen and (min-width: 1200px){
+@media screen and (min-width: 1200px) {
 
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
 
 }
 

@@ -2532,7 +2532,7 @@ export default {
 }
 
 .account-profile-t-l{
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:30px;
   color:#262626;
 
@@ -3594,7 +3594,7 @@ export default {
 
 .basic-info-six-pic-2{
   font-size: 16px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
   cursor:pointer;
 }
@@ -3627,20 +3627,20 @@ export default {
 
 
 .basic-info-c-name{
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 35px;
   color: #262626;
 
 }
 
 .basic-info-c-title{
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 26px;
   color: #262626;
 }
 
 .basic-info-c-nationality{
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color: #262626;
 }
@@ -3660,7 +3660,7 @@ export default {
 
 .basic-info-c-r p{
   font-size: 23px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 
   overflow:hidden;
@@ -3673,7 +3673,7 @@ export default {
 .basic-info-c-r span{
   color:#6650B3;
   font-size:20px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .basic-info-c-r-b{
@@ -3688,7 +3688,7 @@ export default {
 .basic-info-c-location{
   margin-right:15px;
   font-size: 23px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color:#262626;
 }
 
@@ -3702,7 +3702,7 @@ export default {
 .basic-info-c-hobby{
   margin-right: 15px;
   font-size: 23px;
-  font-family: Assistant-SemiBold, serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color:#262626;
 }
 
@@ -3718,14 +3718,14 @@ export default {
 }
 
 .exp-label{
-  font-family:BSemiBold, serif;
+  font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:30px;
   color: #262626;
 
 }
 
 .exp-years{
-  font-family:BarlowM, serif;
+  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:20px;
   color: #262626;
 }
@@ -3754,30 +3754,30 @@ export default {
   padding-left: 25px;
 }
 .exp-c-item-1{
-  font-family:Assistant-SemiBold, serif;
+  font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
 .exp-c-item-2{
-  font-family:AssiRegular, serif;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
 .exp-c-item-3{
-  font-family:AssiRegular, serif;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
 
 .exp-c-item-4{
   margin-top: 25px;
-  font-family:AssiRegular, serif;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
 
 .exp-c-item-readmore{
-  font-family:BCM, serif;
+  font-family:BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:20px;
   color: #6650B3;
 }
@@ -3794,7 +3794,7 @@ export default {
 }
 
 .education-label{
-  font-family:BSemiBold, serif;
+  font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:30px;
   color: #262626;
 
@@ -3833,26 +3833,26 @@ export default {
 }
 
 .education-c-item-r-1{
-  font-family:Assistant-SemiBold, serif;
+  font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
 
 .education-c-item-r-2{
-  font-family:AssiRegular, serif;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
 
 .education-c-item-r-3{
-  font-family:AssiRegular, serif;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
 
 .education-c-item-r-4{
   margin-top: 25px;
-  font-family:AssiRegular, serif;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
@@ -3869,7 +3869,7 @@ export default {
 }
 
 .languages-label{
-  font-family:BSemiBold, serif;
+  font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:30px;
   color: #262626;
 
@@ -3894,14 +3894,14 @@ export default {
 }
 
 .languages-c-item-l{
-  font-family:Assistant-SemiBold, serif;
+  font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
 
 .languages-c-item-r{
   padding-left: 25px;
-  font-family:AssiRegular, serif;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
@@ -3919,7 +3919,7 @@ export default {
 }
 
 .preferences-label{
-  font-family:BSemiBold, serif;
+  font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:30px;
   color: #262626;
 
@@ -3940,7 +3940,7 @@ export default {
 }
 
 .preferences-c-item-label{
-  font-family:Assistant-SemiBold, serif;
+  font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:23px;
   color: #262626;
 }
@@ -3961,7 +3961,7 @@ export default {
   border-radius: 6px;
   font-size: 20px;
   cursor: pointer;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 

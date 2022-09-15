@@ -1067,12 +1067,12 @@ export default {
 }
 
 .login-l-edu{
-  font-family: BCExtraBold , serif;
+  font-family: BCExtraBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:40px;
 }
 
 .login-l-passport{
-  font-family: BCSemiBold, serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:17px;
 }
 
@@ -1160,12 +1160,12 @@ export default {
   border-radius: 40px;
   line-height: 40px;
   background-color: #B3B3B3;
-  font-family: BCSemiBold, serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 
 }
 
 .register-step-tips{
-  font-family: BCRegular, serif;
+  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   margin-top: 15px;
   color:#262626;
@@ -1176,7 +1176,7 @@ export default {
 }
 
 .register-step-tips-active{
-  font-family: BCSemiBold, serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .xll-register-form-container {
@@ -1190,7 +1190,7 @@ export default {
 
 .identity-tips{
   text-align: center;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:18px;
   color:#262626;
   margin-top:15px;
@@ -1207,7 +1207,7 @@ export default {
 
 .identity-business-tips{
   font-size:26px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   text-align: center;
 
 }
@@ -1228,7 +1228,7 @@ export default {
 .identity-label {
   font-size: 26px;
   text-align: center;
-  font-family: BCM, Arial, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   margin-top:10px;
 }
 
@@ -1250,7 +1250,7 @@ export default {
   border: 2px solid rgba(38, 38, 38, 1);
   padding:20px 30px;
   cursor: pointer;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 20px;
 
 }
@@ -1278,7 +1278,7 @@ export default {
   margin:auto;
   padding: 10px;
   font-size: 24px;
-  font-family: BCSemiBold, serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   z-index:100;
   cursor:pointer;
 }
@@ -1286,7 +1286,7 @@ export default {
 .xll-change-phone{
   font-size: 20px;
   color:#262626;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   text-indent: 20px;
   padding-bottom:20px;
   cursor:pointer;
@@ -1306,7 +1306,7 @@ export default {
    height: 70px;
   font-size: 24px;
   border-radius: 70px;
-  font-family: BCSemiBold, serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .complete-btn-container{
@@ -1319,14 +1319,14 @@ export default {
 
 .complete-btn{
   font-size: 24px;
-  font-family: BCSemiBold, serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   height: 70px;
   border-radius: 70px;
 }
 
 .complete-back-btn{
   font-size: 24px;
-  font-family: BCSemiBold, serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   height: 70px;
   border-radius: 70px;
   color:#262626;

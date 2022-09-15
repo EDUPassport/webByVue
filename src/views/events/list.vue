@@ -1,176 +1,229 @@
 <template>
   <div class="events-bg">
-    <el-row class="banner-row" :gutter="0" align="middle" justify="center">
-      <el-col class="banner-bg" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-image :src="bannerImg" fit="cover"></el-image>
-      </el-col>
-    </el-row>
-    <el-row class="content-row" :gutter="0" align="middle" justify="center">
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
 
-        <div class="events-top-container">
-          <div class="events-filter-container">
-            <el-select v-model="categoryId"
-                       clearable
-                       @change="getEventsList(eventPage,eventLimit)"
-                       placeholder="Category" size="large">
-              <el-option
-                  v-for="item in categoryOptions"
-                  :key="item.id"
-                  :label="item.name_en"
-                  :value="item.id"
-              />
-            </el-select>
-          </div>
+    <el-row class="content-row" :gutter="0" align="top" justify="center">
+
+      <el-col class="filter-col" :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+
+        <div class="filter-bg-container">
 
           <div class="post-event-btn-container">
             <el-button type="primary" round @click="postEvent()">Post an Event</el-button>
           </div>
+          <div class="deals-events-filter-container">
 
-        </div>
-
-        <div class="events-list-container">
-
-          <div class="events-item"
-               v-for="(item,i) in eventsList" :key="i"
-          >
-            <div class="events-item-l">
-              <el-image class="events-item-banner"
-                        :src="item.file !='' ? item.file : 'https://cdn.jsdelivr.net/gh/unilei/images@master/20220324/xxx.2ntb45gjv1g0.webp' "
+            <div class="deals-events-filter-item">
+              <div class="deals-events-filter-label">Location</div>
+              <el-select class="deals-events-filter-select"
+                         v-model="locationValue" clearable
+                         placeholder="Filter by location"
+                         size="default"
+                         @change="locationChange"
               >
+                <el-option
+                    v-for="item in locationOptions"
+                    :key="item.id"
+                    :label="item.Pinyin"
+                    :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </div>
 
-              </el-image>
-              <el-tag class="events-item-l-tag"
-                      :hit="true"
-                      effect="dark"
-                      color="#00b3d2"
-              >FEATURED</el-tag>
+            <div class="deals-events-filter-item">
+              <div class="qx-checked-container">
+                <div class="qx-checked-item"
+                     @click="selectIsOnline()"
+                >
+                  <div class="qx-checked-square"
+                       :class="filterIsOnlineValue ? 'qx-checked-square-active' : '' "
+                  ></div>
+                  <div class="qx-checked-label">Online</div>
+                </div>
+              </div>
 
-              <div class="vendor-company-1-open"
-                   v-if="showVendorCompanyData.indexOf(i) != -1"
-                   @click="closeVendorCompany(i)"
+            </div>
+
+            <div class="deals-events-filter-item">
+              <div class="deals-events-filter-label">Tags</div>
+              <el-select class="deals-events-filter-select"
+                         v-model="tagValue"
+                         clearable multiple
+                         placeholder="Filter by tag"
+                         size="default"
+                         @change="tagChange"
               >
-                ^
-              </div>
-              <!--              vendor company info-->
-              <div class="vendor-company-info"
-                   v-if="showVendorCompanyData.indexOf(i) == -1">
-                <div class="vendor-company-1">
+                <el-option
+                    v-for="item in tagsData"
+                    :key="item.id"
+                    :label="item.name_en"
+                    :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </div>
 
-                  <div class="vendor-company-1-close"
-                      @click="closeVendorCompany(i)"
-                  >
-                    -
-                  </div>
-                  <div class="vendor-company-1-category">
-                    <el-tag
-                            style="border: 1px solid #b1c452"
-                            :hit="true"
-                              effect="dark"
-                             color="#b1c452"
-                    >
-                      <template v-if="item.company_category_name">
-                        {{ item.company_category_name }}
-                      </template>
-                    </el-tag>
-                  </div>
-                </div>
+            <div class="deals-events-filter-item">
+              <div class="deals-events-filter-label">Event type</div>
 
-                <div class="vendor-company-2">
-
-                  <div class="vendor-company-2-l">
-                    <el-avatar class="vendor-company-logo"
-                               :src="item.third_company_logo ? item.third_company_logo : item.company_logo "
-                    ></el-avatar>
-                  </div>
-                  <div class="vendor-company-2-r">
-                    <div class="vendor-company-2-name">
-                      <template v-if="item.company_category_name">
-                        {{ item.company_category_name }}
-                      </template>
-                    </div>
-<!--                    <div class="vendor-company-2-title">-->
-<!--                      <template v-if="item.identity == 3 && item.user_info">-->
-<!--                        {{ item.user_info.job_title }}-->
-<!--                      </template>-->
-<!--                      <template v-if="item.identity == 2 && item.business_info">-->
-<!--                        {{ item.business_info.job_title }}-->
-<!--                      </template>-->
-<!--                    </div>-->
-                    <div class="vendor-company-2-event-name">
-                      {{item.name}}
-                    </div>
-                  </div>
-                </div>
-
-                <div class="vendor-company-3">
-                  <template v-if="item.is_online == 2 || item.is_online == 3">
-                    {{item.location}}
-                  </template>
-
-                </div>
-
-              </div>
-
-              <div class="events-item-r">
-                <div class="events-item-r-content">
-                  <h3 class="event-r-title" v-if="item.name">{{item.name}}</h3>
-                  <div class="event-r-title-underline"></div>
-                  <div  class="event-r-desc-tag" >
-                    <p class="event-r-desc" v-if="item.desc">
-                      {{item.desc}}
-                    </p>
-                    <div class="event-r-tags">
-                      <div class="event-r-tag" v-if="item.is_online == 1">Online</div>
-                      <div class="event-r-tag" v-if="item.is_online == 2">Offline</div>
-                      <div class="event-r-tag" v-if="item.is_online == 3">Both</div>
-
-                      <div class="event-r-tag" v-if="item.is_all == 1">Social</div>
-                      <div class="event-r-tag" v-if="item.is_all == 2">Professional</div>
-                    </div>
-                  </div>
-                  <div class="event-r-category">
-                    <template v-if="item.company_category_name">
-                      Category: {{ item.company_category_name }}
-                    </template>
-                  </div>
-                  <div class="event-r-location">
-                    <template v-if="item.is_online == 2 || item.is_online == 3">
-                      Location: {{item.location}}
-                    </template>
-                  </div>
-                  <div class="event-r-date">
-                    Date: {{ $filters.ymdFormatEvent(item.date)  }}
-                  </div>
-                  <div class="event-r-time">
-                    Time: {{$filters.timeFormatEvent(item.start_time,item.end_time)}}
-                  </div>
-                  <div class="event-r-btn">
-                    <el-button class="event-r-btn-btn1" type="primary" round
-                               @click="turnDetail(item.id,2)"
-                    >Event Details</el-button>
-                    <el-button class="event-r-btn-btn" type="default" round
-                               @click="turnDetail(item.id,1)"
-                    >RSVP</el-button>
-                  </div>
+              <div class="qx-checked-container">
+                <div class="qx-checked-item" v-for="(item,i) in categoryOptions" :key="i"
+                     @click="getEventsList(eventPage,eventLimit)"
+                >
+                  <div class="qx-checked-square"
+                       :class="categoryId == item.id ? 'qx-checked-square-active' : '' "
+                  ></div>
+                  <div class="qx-checked-label">{{ item.name_en }}</div>
                 </div>
               </div>
+
             </div>
 
           </div>
+
+          <div class="filter-search-btn-container">
+            <el-button type="primary" round >
+              SEARCH
+            </el-button>
+          </div>
+
+          <div class="filter-contact-us-container">
+            <el-icon :size="45" color="#6648FF">
+              <IconIcBaselineLiveHelp />
+            </el-icon>
+            <span>Contact Us</span>
+          </div>
+
         </div>
 
-        <div class="events-pagination">
-          <el-pagination layout="prev, pager, next" :default-current-page="1"
-                         @size-change="eventPageSizeChange"
-                         @current-change="eventPageChange"
-                         :current-page="eventPage" :page-size="eventLimit"
-                         :total="eventTotalNum"></el-pagination>
-        </div>
+      </el-col>
+
+      <el-col class="events-list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+
+        <el-scrollbar class="events-list-bg-container">
+          <div class="events-list-container">
+
+            <div class="events-item-bg"
+                 v-for="(item,i) in eventsList" :key="i">
+
+              <div class="events-item">
+                <div class="events-item-t">
+                  <el-image class="events-item-banner"
+                            :src="item.file !='' ? item.file : '' "
+                  >
+                  </el-image>
+                </div>
+                <div class="events-item-b">
+                  <div class="events-item-item">
+                    <el-space :size="5" wrap spacer="·">
+                      <span>{{ $filters.ymdFormatEvent(item.date)  }}</span>
+                      <span>
+                    {{$filters.timeFormatEvent(item.start_time,item.end_time)}}
+                  </span>
+
+                      <span v-if="item.is_all == 1">Social</span>
+                      <span v-if="item.is_all == 2">Professional</span>
+                    </el-space>
+                  </div>
+                  <div class="events-item-location">
+                  <span v-if="item.is_online == 2 || item.is_online == 3">
+                    {{item.location}}
+                  </span>
+                    <span v-else>online</span>
+                  </div>
+                  <div class="events-item-name" @click="showEventDialog(item)">
+                    {{item.name}}
+                  </div>
+                  <div class="events-item-desc">
+                    {{item.desc}}
+                  </div>
+
+                  <div class="events-item-action-container">
+                    <div class="events-item-action-l">
+                      <el-button link>ADD TO CALENDAR</el-button>
+                    </div>
+                    <div class="events-item-action-r">
+                      <el-button link>FAVORITE</el-button>
+                    </div>
+
+                  </div>
+                </div>
+
+
+
+              </div>
+
+            </div>
+
+          </div>
+          <div class="events-pagination">
+            <el-pagination layout="prev, pager, next"
+                           :default-current-page="1"
+                           @size-change="eventPageSizeChange"
+                           @current-change="eventPageChange"
+                           :current-page="eventPage" :page-size="eventLimit"
+                           :total="eventTotalNum"></el-pagination>
+          </div>
+
+        </el-scrollbar>
 
       </el-col>
     </el-row>
 
+    <el-dialog class="event-detail-dialog" v-model="eventDialogVisible">
+      <div class="event-dialog-container">
+        <div class="event-dialog-l">
+          <el-image  :src="eventDetailData.file !='' ? eventDetailData.file : '' "></el-image>
+        </div>
+        <div class="event-dialog-r">
+          <div class="event-dialog-r-1">
+            {{eventDetailData.company_name}}
+          </div>
+          <div class="event-dialog-r-2">
+            {{eventDetailData.location}}
+          </div>
+          <div class="event-dialog-r-3">
+              {{ $filters.ymdFormatEvent(eventDetailData.date)  }}, {{$filters.timeFormatEvent(eventDetailData.start_time,eventDetailData.end_time)}}
+          </div>
+          <div class="event-dialog-r-4">
+            {{eventDetailData.name}}
+          </div>
+          <div class="event-dialog-r-5">
+            {{eventDetailData.desc}}
+          </div>
+          <div class="event-dialog-r-6">
+
+          </div>
+          <div class="event-dialog-r-price">
+            <div class="event-dialog-r-price-label">Price</div>
+            <div class="event-dialog-r-price-content">
+              {{eventDetailData.currency}} {{eventDetailData.pay_money}}
+            </div>
+          </div>
+
+          <div class="event-dialog-r-btn-1-container">
+            <el-button class="event-dialog-r-btn" link>
+              ADD TO CALENDAR
+            </el-button>
+          </div>
+          <div class="event-dialog-r-btn-container">
+            <el-button class="event-dialog-r-btn" link>
+              RSVP
+            </el-button>
+          </div>
+
+          <div class="event-dialog-r-b">
+            <div class="event-dialog-r-b-l">
+
+            </div>
+            <div class="event-dialog-r-b-r">
+              Posted by: <span>{{eventDetailData.company_name}}</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -191,7 +244,14 @@ export default {
       eventsList:[],
       showVendorCompanyData:[],
       categoryOptions:[],
-      categoryId:undefined
+      categoryId:undefined,
+      locationValue: '',
+      locationOptions: [],
+      tagValue: [],
+      tagsData: [],
+      filterIsOnlineValue: false,
+      eventDialogVisible:false,
+      eventDetailData:{}
 
     }
   },
@@ -200,6 +260,33 @@ export default {
     this.getEventsList(this.eventPage,this.eventLimit)
   },
   methods:{
+    showEventDialog(item){
+      this.eventDialogVisible = true;
+      this.eventDetailData  = item;
+    },
+    selectIsOnline(){
+      this.filterIsOnlineValue = !this.filterIsOnlineValue
+
+      this.eventsList = []
+      this.showLoadingStatus = true
+
+      this.getEventsList(this.dealPage, this.dealLimit)
+
+    },
+    locationChange(e) {
+      // console.log(e)
+      this.eventsList = []
+      this.showLoadingStatus = true
+      this.locationValue = e
+      this.getEventsList(this.dealPage, this.dealLimit)
+    },
+    tagChange(e) {
+      // console.log(e)
+      this.eventsList = []
+      this.showLoadingStatus = true
+      this.tagValue = e
+      this.getEventsList(this.dealPage, this.dealLimit)
+    },
     postEvent(){
       let token = localStorage.getItem('token')
       let identity = localStorage.getItem('identity')
@@ -255,7 +342,7 @@ export default {
       EVENTS_LIST(params).then(res=>{
         console.log(res)
         if(res.code == 200){
-          this.eventsList = res.message.data;
+          this.eventsList = this.eventsList.concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data) ;
           this.eventTotalNum = res.message.total;
           this.showLoadingStatus=false
 
@@ -274,311 +361,302 @@ export default {
 
 <style scoped>
 .events-bg{
-  background-color: #ececec;
+  background-color: #FFFFFF;
 }
 
-.banner-bg{
-  background-color:#ffffff;
+.filter-col{
+  padding-right: 13px;
 }
 
-.content-row{
-  /*width: 1100px;*/
-  margin: 0 auto;
+.filter-bg-container{
+  background-color: #F0F2F5;
+  height: calc(100vh - 200px);
+  padding: 30px;
+  position: relative;
 }
 
 
-.events-top-container{
-  margin-top: 40px;
+.deals-events-filter-container {
+  margin-top: 20px;
+}
+
+.deals-events-filter-label {
+  text-align: left;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+  margin-bottom:10px;
+}
+
+.deals-events-filter-select {
+  width: 100%;
+}
+
+.deals-events-filter-item {
+  margin-top: 25px;
+}
+
+.filter-search-btn-container{
+  margin-top: 50px;
+  text-align: center;
+}
+
+.filter-contact-us-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  bottom:30px;
+  left:0;
+  right:0;
+  margin:auto;
+  cursor:pointer;
+
+}
+
+.filter-contact-us-container span{
+  font-family: BCRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size:25px;
+  color:#262626;
+}
+
+
+.qx-checked-container {
+
+}
+
+.qx-checked-item {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-
+  justify-content: flex-start;
+  margin-top: 10px;
 }
 
-.events-filter-container{
-
-
+.qx-checked-square {
+  border: 1px solid #808080;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  cursor: pointer;
 }
 
-.events-filter-container /deep/ input::placeholder {
-  color: #004956;
+.qx-checked-label{
+  text-align: left;
+  margin-left: 10px;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color:#262626;
 }
+
+.qx-done-btn-container {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.qx-checked-square-active {
+  background-color: #6650B3;
+}
+
+.events-list-col{
+  padding-left: 12px;
+}
+
+.events-list-bg-container{
+  background-color: #F0F2F5;
+  height: calc(100vh - 170px);
+  padding: 0 30px 30px 30px;
+}
+
 
 .events-list-container{
   display:flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap:wrap;
-  margin-top:20px;
+}
+
+.events-item-bg{
+  width:31%;
+  padding: 1%;
 }
 
 .events-item{
-  width:48%;
-  border-radius:10px;
+
+  box-shadow: 0px 3px 10px #0000001A;
+  background:#FFFFFF;
 
   overflow: hidden;
+  border-radius:40px;
 
-  display:flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  margin-top:20px;
-
-}
-
-.events-item-l{
-  width:100%;
-  position: relative;
-}
-
-.events-item-r{
-  position: absolute;
-  width:40%;
-  padding-right:2%;
-  background-color:#FFFFFF;
-  height: 100%;
-  right: 0;
-  top:0;
-  border-radius: 20px;
-  border:1px solid #ffffff;
-  box-shadow: 0 0 8px 0 rgba(100,100,100,0.1);
-}
-.events-item-r-content{
-  padding-left:20px;
 }
 
 .events-item-banner{
-  width:60%;
-  min-height:440px;
-  max-height:440px;
+  width: 100%;
   border:1px solid #ffffff;
   border-radius:20px;
-  z-index:100;
+
   background-color: #ececec;
   box-shadow: 0 0 8px 0 rgba(100,100,100,0.1);
 }
-
-.events-item-l-tag{
-  position: absolute;
-  top:20px;
-  left:20px;
-  z-index:110;
+.events-item-b{
+  padding: 25px;
 }
-
-
-.vendor-company-1-open{
-  width:40px;
-  position:absolute;
-  bottom:20px;
-  left:20px;
-  margin: auto;
-  z-index:200;
-
-  background-color: rgba(0,0,0,0.8);
-  text-align: center;
-  color:#FFFFFF;
-  border-radius: 4px;
-  cursor:pointer;
+.events-item-item{
 
 }
+.events-item-item span{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #262626;
 
-
-.vendor-company-info{
-  background-color: #FFFFFF;
-  box-shadow: 0 0 10px 0 rgba(0,0,0,0.4);
-  padding:10px;
-  position:absolute;
-
-  width:50%;
-  border-radius: 10px;
-
-  bottom:20px;
-  left:0;
-  right:40%;
-  margin: auto;
-  z-index:200;
 }
+.events-item-desc{
+  margin-top: 25px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
 
-.vendor-company-1{
-  display:flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 
 }
 
-.vendor-company-1-close{
-  padding: 2px 10px;
-  background-color: #ececec;
-  text-align: center;
-  color:#808080;
-  border-radius: 4px;
-  cursor:pointer;
+.events-item-location{
+  margin-top: 25px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #262626;
 }
 
-.vendor-company-2{
+.events-item-name{
+  margin-top: 25px;
+  font-family: BCM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  color: #262626;
+  cursor: pointer;
+}
+
+.events-item-name:hover{
+  color: #000000;
+}
+
+.events-item-action-container{
+  margin-top: 25px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding:10px 0;
-}
-.vendor-company-2-l{
-  width:30%;
-}
-
-.vendor-company-2-r{
-  width:68%;
-}
-
-.vendor-company-logo{
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 1px solid #eaeaea;
-}
-.vendor-company-2-name{
-  color:#808080;
-  font-weight: bold;
-  font-size: 14px;
-}
-.vendor-company-2-title{
-  color: #B1C452;
-  font-size: 12px;
-}
-.vendor-company-2-event-name{
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.vendor-company-3{
-  font-size: 12px;
-  color:#808080;
-  text-align: center;
-}
-.event-r-title{
-
-  padding: 20px 0 0 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.event-r-title-underline{
-  margin-top:4px;
-  height: 3px;
-  background-color:#B1C452;
-  width:100%;
-}
-
-.event-r-desc{
-  font-size: 12px;
-  padding:0 10px;
-  margin-top: 20px;
-  line-height: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 6;
-  -webkit-box-orient: vertical;
-}
-.event-r-tags{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-.event-r-desc-tag{
-  padding-bottom: 20px;
-  border-bottom:1px solid #ececec;
-}
-.event-r-tag{
-  background-color: #ececec;
-  color:#808080;
-  margin: 10px;
-  font-size: 12px;
-  border-radius:4px;
-  padding:4px 8px;
-}
-
-.event-r-category{
-  font-size: 12px;
-  padding: 4px 0 0 10px;
-
-}
-.event-r-location{
-  font-size: 12px;
-  padding: 4px 0 0 10px;
-}
-.event-r-date{
-  font-size: 12px;
-  padding: 4px 0 0 10px;
 
 }
 
-.event-r-time{
-  font-size: 12px;
-  padding: 4px 0 0 10px;
-
-}
-
-.event-r-btn{
-  position: absolute;
-  left:-50px;
-  bottom:10px;
-
-}
-
-.event-r-btn-btn1{
-  padding:0 70px 0 100px;
-  color:#ffffff;
-  font-weight: bold;
-}
-
-.event-r-btn-btn{
-  background-color: #B1C452;
-  padding:0 100px;
-  color:#ffffff;
-  font-weight: bold;
-  margin-top:4px;
-}
 
 .events-pagination{
-  text-align: center;
   padding:40px;
+  display:flex;
+  justify-content: center;
 }
+
+.event-dialog-container{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+
+}
+
+.event-dialog-l{}
+.event-dialog-r{
+  padding-left: 25px;
+}
+
+.event-dialog-r-1{
+  font-family:BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+}
+.event-dialog-r-2{
+  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+}
+
+.event-dialog-r-3{
+  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+}
+
+.event-dialog-r-4{
+  font-family:BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  color: #262626;
+  margin-top: 50px;
+}
+.event-dialog-r-5{
+  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+}
+
+.event-dialog-r-price{
+  margin-top: 20px;
+}
+
+.event-dialog-r-price-label{
+  font-family:BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+}
+.event-dialog-r-price-content{
+  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+}
+.event-dialog-r-btn-1-container{
+  margin-top: 25px;
+}
+.event-dialog-r-btn-container{
+
+}
+
+.event-dialog-r-btn{
+  font-size: 20px;
+}
+
+.event-dialog-r-b{
+  margin-top: 50px;
+  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 17px;
+  color: #262626;
+}
+
+.event-dialog-r-b-l{
+
+}
+.event-dialog-r-b-r{
+
+}
+.event-dialog-r-b-r span{
+  font-family:BCM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+}
+
 
 
 @media screen and (min-width: 1200px){
-  .content-row{
-    width: 1100px;
-  }
 
 
 }
 
 @media screen and (max-width: 768px){
-  .events-top-container{
-    margin-top:20px;
-    padding: 0 20px;
-  }
-
-  .events-list-container{
-    padding: 0 20px;
-    flex-direction: column;
-
-  }
-
-  .events-item{
-    width:100%;
-  }
-  .events-pagination{
-    padding:20px 8px;
-  }
 
 }
 

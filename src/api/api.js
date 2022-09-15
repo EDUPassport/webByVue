@@ -23,7 +23,8 @@ export const EMAIL_LOGIN = (params) => post('email/login', params)
 export const DEALS_LIST = (params) => get('deals/dealsList', params)
 
 // 获取广告列表
-export const ADS_LIST = (params) => get('ad/list', params)
+// export const ADS_LIST = (params) => get('ad/list', params)
+export const ADS_LIST = (params) => get('chrome/list', params)
 
 // 获取 user objectlist
 export const USER_OBJECT_LIST = (params) => get('user/userObjectList', params)
@@ -204,11 +205,14 @@ export const GET_COUNTRY_LIST = (params) => get('getCountry', params)
 
 export const GET_ADS_CATEGORY_LIST = (params) => get('home/adCategoryList', params)
 
-export const GET_ADS_CATEGORY_INFO = (params) => get('ad/categoryInfo', params)
+// export const GET_ADS_CATEGORY_INFO = (params) => get('ad/categoryInfo', params)
+export const GET_ADS_CATEGORY_INFO = (params) => get('chrome/categoryInfo', params)
 
-export const GET_MY_ADS = (params) => get('ad/myAds', params)
+// export const GET_MY_ADS = (params) => get('ad/myAds', params)
+export const GET_MY_ADS = (params) => get('chrome/myAds', params)
 
-export const SET_USER_ADS = (params) => post('ad/setUserAds', params)
+// export const SET_USER_ADS = (params) => post('ad/setUserAds', params)
+export const SET_USER_ADS = (params) => post('chrome/setUserAds', params)
 
 // version 2
 //邮箱 + 验证码  + 密码 注册
@@ -350,3 +354,9 @@ export const EVENT_APPLICATIONS = (params) => get('/home/getEventApplicants',par
 
 // 获取报名【event】人员
 export const USER_ALL_INFO = (params) => get('/home/user/all/info',params)
+
+//获取用户发布的【所有的】【职位下】的用户
+export const ALL_JOB_RESUME = (params) => get('/job/getAllJobResume',params)
+
+//获取用户发布的【所有的】【职位下】的用户
+export const ALL_LANGUAGE_PROFICIENCY = (params) => get('/home/language/proficiency',params)

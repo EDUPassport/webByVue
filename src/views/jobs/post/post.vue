@@ -27,7 +27,7 @@
 
           </div>
 
-          <div class="job-form-container">
+          <el-scrollbar class="job-form-container">
             <el-form
                 ref="jobForms"
                 :model="jobForm"
@@ -234,23 +234,38 @@
 
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="Employment Type" required>
+                      <el-form-item label="Employment Type">
 
-                        <div class="xll-tags-container">
-                          <div class="xll-tags">
-                            <div class="xll-tags-item"
-                                 :class="selectEmploymentTypeList.findIndex((element)=>element===item) == -1 ? '' : 'xll-tags-active' "
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectEmploymentTypeList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
                                  v-for="(item,index) in employmentTypeList" :key="index"
                                  @click="selectEmploymentType(item)">
                               {{ item.object_en }}
                             </div>
                           </div>
+
                         </div>
                       </el-form-item>
-                      <div class="xll-checkbox-container">
-                        <el-checkbox v-model="jobForm.is_online" label="THIS IS AN ONLINE JOB" size="large"></el-checkbox>
-                        <!--                          <el-checkbox label="NON-STANDARD WORKING HOURS" size="large"></el-checkbox>-->
-                      </div>
+
+<!--                      <el-form-item label="Employment Type" required>-->
+
+<!--                        <div class="xll-tags-container">-->
+<!--                          <div class="xll-tags">-->
+<!--                            <div class="xll-tags-item"-->
+<!--                                 :class="selectEmploymentTypeList.findIndex((element)=>element===item) == -1 ? '' : 'xll-tags-active' "-->
+<!--                                 v-for="(item,index) in employmentTypeList" :key="index"-->
+<!--                                 @click="selectEmploymentType(item)">-->
+<!--                              {{ item.object_en }}-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </el-form-item>-->
+<!--                      <div class="xll-checkbox-container">-->
+<!--                        <el-checkbox v-model="jobForm.is_online" label="THIS IS AN ONLINE JOB" size="large"></el-checkbox>-->
+<!--                        &lt;!&ndash;                          <el-checkbox label="NON-STANDARD WORKING HOURS" size="large"></el-checkbox>&ndash;&gt;-->
+<!--                      </div>-->
 
                     </el-col>
                   </el-row>
@@ -675,7 +690,7 @@
               </div>
 
             </el-form>
-          </div>
+          </el-scrollbar>
 
         </div>
 
@@ -813,19 +828,7 @@ export default {
       isInternationalName: 'first',
 
       paymentPeriodList: [],
-      employmentTypeList: [{
-        id: 1,
-        object_cn: "全职",
-        object_en: "Full-time"
-      }, {
-        id: 2,
-        object_cn: "兼职",
-        object_en: "Part-time"
-      }, {
-        id: 3,
-        object_cn: "季节性",
-        object_en: "Seasonal"
-      }],
+      employmentTypeList: [],
       selectEmploymentTypeList: [],
 
       jobTitleList: [],
@@ -940,8 +943,13 @@ export default {
         },
         {
           value: 3,
-          object_en: 'No Gender Requirements',
-          object_cn: '无性别要求'
+          object_en: 'Non-binary',
+          object_cn:'非二元人'
+        },
+        {
+          value: 4,
+          object_en: 'Undisclosed',
+          object_cn: '未公开'
         }
       ],
       teachingExpList: [],
@@ -1486,15 +1494,16 @@ export default {
       let index = this.selectEmploymentTypeList.findIndex(element => element == value)
 
       if (index == -1) {
-        let len = this.selectEmploymentTypeList.length;
-
-        if (len > 0) {
-          this.selectEmploymentTypeList.splice(len - 1, 1);
-        }
+        // let len = this.selectEmploymentTypeList.length;
+        //
+        // if (len > 0) {
+        //   this.selectEmploymentTypeList.splice(len - 1, 1);
+        // }
         this.selectEmploymentTypeList.push(value);
       } else {
         this.selectEmploymentTypeList.splice(index, 1);
       }
+
     },
     addOwnJobTitle() {
       this.addJobTitleStatus = false;
@@ -1942,12 +1951,10 @@ export default {
         if (res.code == 200) {
           this.benefitsList = res.message.filter(item => item.pid === 6); //benefits
           this.ageToTeachList = res.message.filter(item => item.pid === 4); //age to teach
-          // this.employmentTypeList = res.message.filter(item => item.pid === 3); //employment type
-          this.paymentPeriodList = res.message.filter(item => item.pid ===
-              111); // payment period
+          this.employmentTypeList = res.message.filter(item => item.pid === 3); //employment type
+          this.paymentPeriodList = res.message.filter(item => item.pid === 111); // payment period
           this.currencyList = res.message.filter(item => item.pid === 117); // currency
-          this.teachingCertificateList = res.message.filter(item => item.pid ===
-              7); //teaching certificate ...
+          this.teachingCertificateList = res.message.filter(item => item.pid === 7); //teaching certificate ...
           this.teachingExpList = res.message.filter(item => item.pid === 120); //teaching exp
           this.educationList = res.message.filter(item => item.pid === 125); // education
           this.languagesList = res.message.filter(item => item.pid === 2); // language ..
@@ -2080,8 +2087,11 @@ export default {
               if (this.selectAgeToTeachList.length > 0) {
                 that.submitAgeToTeach(jobId);
               }
-              if (this.subjectList.length > 0) {
+              if (this.selectSubjectList.length > 0) {
                 that.submitSubject(jobId);
+              }
+              if(this.selectEmploymentTypeList.length>0){
+                that.submitEmploymentType(jobId)
               }
               if (this.selectTeachingCertificateList.length > 0) {
                 that.submitTeachingCertificate(jobId);
@@ -2257,7 +2267,7 @@ export default {
 }
 
 .post-r-container-bg{
-  padding:30px 50px 50px 50px;
+  padding:30px 50px 0 50px;
 }
 
 
@@ -2266,11 +2276,11 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0 40px 0;
+  height: 110px;
 }
 
 .account-profile-t-l{
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:30px;
   color:#262626;
 
@@ -2397,7 +2407,7 @@ export default {
   border-radius: 6px;
   margin: 10px;
   font-size: 20px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   cursor: pointer;
 }
 
@@ -2554,8 +2564,7 @@ export default {
 }
 
 .job-form-container{
-  height: 800px;
-  overflow: auto;
+  height: calc(100vh - 280px);
 }
 
 .account-profile-item-container{
@@ -2568,7 +2577,7 @@ export default {
 
 
 .account-profile-item-label{
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:26px;
   color:#262626;
 }
@@ -2578,7 +2587,7 @@ export default {
 }
 .job-company-name{
   font-size: 23px;
-  font-family:AssiRegular, serif;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color:#262626;
 }
 .account-profile-item-c-item{
@@ -2654,7 +2663,7 @@ export default {
   line-height: 40px;
   padding: 0 10px;
   font-size: 20px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   cursor: pointer;
 }
 

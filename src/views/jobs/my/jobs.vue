@@ -17,7 +17,9 @@
             <div class="jobs-list-content">
               <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
                 <div class="jobs-list-item-l">
-                  <el-image class="jobs-item-logo" :src="item.third_company_logo ? item.third_company_logo : item.company_logo" fit="contain"></el-image>
+                  <el-image class="jobs-item-logo"
+                            :src="item.third_company_logo ? item.third_company_logo : item.company_logo" fit="contain">
+                  </el-image>
                 </div>
                 <div class="jobs-list-item-r">
                   <div class="jobs-list-item-title">
@@ -112,7 +114,7 @@
 <script>
 import {randomString} from "@/utils";
 import meSideMenu from "@/components/meSideMenu";
-import {MY_JOBS,SET_READ} from '@/api/api';
+import {MY_JOBS,SET_READ,USER_UNREAD} from '@/api/api';
 
 export default {
   name: "jobs",
@@ -156,20 +158,44 @@ export default {
       MY_JOBS(params).then(res=>{
         console.log(res)
         if (res.code == 200) {
-          this.jobListData = res.message.data
-          // console.log(res.message.data)
+          let jobData =  res.message.data
+
           this.jobTotalNum = res.message.total
-        } else {
-          console.log(res.msg)
+
+          let unread_data = {
+            identity: localStorage.getItem('identity'),
+            token: localStorage.getItem('token')
+          }
+
+          USER_UNREAD(unread_data).then(res=>{
+            if(res.code == 200){
+              let unreadListData = res.message.list;
+              jobData.forEach(item=>{
+                // console.log(item)
+                let a = unreadListData.filter(function(element){
+                  return element.type == 1 && element.type_id == item.id
+                })
+                if(a.length>0){
+                  item.unread_status = true;
+                  item.unread_id = a[0].id;
+                }else{
+                  item.unread_status = false;
+                }
+
+              })
+              this.jobListData = jobData
+              console.log(jobData)
+            }else{
+              console.log('unread:' + res.msg)
+            }
+
+          })
+
         }
+
       }).catch(err=>{
         console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        this.$message.error(err.msg)
       })
 
     },
@@ -215,6 +241,9 @@ export default {
 .jobs-r-container{
   padding: 0 20px;
 }
+
+
+
 .jobs-list-container {
   padding: 20px;
   border-radius:10px;

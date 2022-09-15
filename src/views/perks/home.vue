@@ -4,358 +4,356 @@
       <div class="perks-l-container">
         <meSideMenu></meSideMenu>
       </div>
-      <div class="perks-r-container">
+      <el-scrollbar class="perks-r-container">
 
-        <div class="custom-divider-container">
-          <div class="custom-divider-l"></div>
-          <div class="custom-divider-m">
-            Make the most out of your plan
+        <div class="perks-r-bg-container">
+          <div class="custom-divider-container">
+            <div class="custom-divider-l"></div>
+            <div class="custom-divider-m">
+              Make the most out of your plan
+            </div>
+            <div class="custom-divider-r"></div>
           </div>
-          <div class="custom-divider-r"></div>
+          <div class="plain-container">
+            <!--          <div class="plain-mask-container"></div>-->
+            <div class="plain-item-container">
+              <div class="plain-item-label">
+                Complete your profile
+              </div>
+              <div class="plain-item-percentage">
+                <el-progress color="#f9b019" :stroke-width="10" :percentage="40"/>
+              </div>
+              <div class="plain-item-tips">
+                Increase your chances of finding the right candidate by completing your profile.
+              </div>
+              <div class="plain-item-btn-container">
+                <el-button class="plain-item-btn" link>
+                  DONE
+                </el-button>
+                <el-button class="plain-item-btn" type="primary" link>
+                  GOT TO MY PROFILE
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-container">
+              <div class="plain-item-label">
+                In-app messages
+              </div>
+              <div class="plain-item-image-container">
+                <el-image class="plain-item-msg-img" :src="plainImgTwo"></el-image>
+              </div>
+              <div class="plain-item-tips">
+                Chat with your candidates directly and get a new hire faster.
+              </div>
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn" type="primary" link>
+                  GO TO MESSAGES
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-container">
+              <div class="plain-item-label">
+                Unlimited job posts
+              </div>
+              <div class="plain-item-image-container">
+                <el-image class="plain-item-job-img" :src="plainImgOne"></el-image>
+              </div>
+              <div class="plain-item-tips">
+                With unlimited job posts, you will never be understaffed!
+              </div>
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn" type="primary" link>
+                  POST A JOB
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-container">
+              <div class="plain-item-label">
+                Job deadline notice
+              </div>
+              <div class="plain-item-image-container">
+                <el-image class="plain-item-notice-img" :src="plainImgThree"></el-image>
+              </div>
+              <div class="plain-item-tips">
+                Whether you need some more time or you simply forgot to
+                take the job post down, we'll remind you when you're approaching
+                the application deadline.
+              </div>
+
+            </div>
+
+            <div class="plain-item-container">
+              <div class="plain-item-label">
+                1 Deal card
+              </div>
+              <div class="plain-item-image-container">
+                <el-image></el-image>
+              </div>
+              <div class="plain-item-tips">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.
+              </div>
+              <div class="plain-item-btn-container-1">
+                <el-button class="plain-item-btn" type="primary" link>
+                  REDEEM
+                </el-button>
+              </div>
+
+            </div>
+
+
+          </div>
+          <!--        22222222222           -->
+          <div class="custom-divider-container custom-divider-margin">
+            <div class="custom-divider-l-disabled"></div>
+            <div class="custom-divider-m-disabled">
+              Pro Plan Perks
+            </div>
+            <div class="custom-divider-r-disabled"></div>
+          </div>
+          <div class="plain-container">
+            <div class="plain-mask-container"></div>
+            <div class="plain-item-2-container">
+              <div class="plain-item-label">
+                10 days of ads
+              </div>
+              <div class="plain-item-tips">
+                Get a dedicated spot on our website to promote your school or a position.
+              </div>
+              <div class="plain-item-btn-container-1">
+                <el-button class="plain-item-btn" type="primary" link>
+                  MANAGE MY ADS
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-2-container">
+              <div class="plain-item-label">
+                Personal success manager
+              </div>
+
+              <div class="plain-item-tips">
+                Our team is here to help you maximize our tools and perks so that you can achieve your goals quickly.
+              </div>
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn" type="primary" link>
+                  CONTACT US
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-2-container">
+              <div class="plain-item-label">
+                Top 6 ranking for 5 days
+              </div>
+
+              <div class="plain-item-tips">
+                Get your job post on top of the search results for 5 days.
+              </div>
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn" type="primary" link>
+                  REDEEM
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-2-container">
+              <div class="plain-item-label">
+                5 Social media blasts
+              </div>
+
+              <div class="plain-item-tips">
+                Use the power of social media to spread the work about your job post on EduPassport
+              </div>
+
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn" type="primary" link>
+                  LET'S DO IT!
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-2-container">
+              <div class="plain-item-label">
+                New member article
+              </div>
+
+              <div class="plain-item-tips">
+                Let everyone get to know you more personally in our article about all new members.
+              </div>
+              <div class="plain-item-btn-container-1">
+                <el-button class="plain-item-btn" type="primary" link>
+                  CONTACT US
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-2-container">
+              <div class="plain-item-label">
+                5 deal cards
+              </div>
+
+              <div class="plain-item-tips">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et.
+              </div>
+              <div class="plain-item-btn-container-1">
+                <el-button class="plain-item-btn" type="primary" link>
+                  REDEEM
+                </el-button>
+              </div>
+
+            </div>
+
+          </div>
+          <!--        3333333333 -->
+          <div class="custom-divider-container custom-divider-margin">
+            <div class="custom-divider-l-disabled"></div>
+            <div class="custom-divider-m-disabled">
+              Plus Plan Perks
+            </div>
+            <div class="custom-divider-r-disabled"></div>
+          </div>
+          <div class="plain-container">
+            <div class="plain-mask-container"></div>
+            <div class="plain-item-3-container">
+              <div class="plain-item-label">
+                25% off + 15 days of ads
+              </div>
+              <div class="plain-item-tips">
+                Get a dedicated spot on our website to promote your school or a position.
+              </div>
+              <div class="plain-item-btn-container-1">
+                <el-button class="plain-item-btn" type="primary" link>
+                  MANAGE MY ADS
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-3-container">
+              <div class="plain-item-label">
+                Access to all educators
+              </div>
+
+              <div class="plain-item-tips">
+                Don't wait for candidates to apply-reach out to them first.
+              </div>
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn" type="primary" link>
+                  CONTACT US
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-3-container">
+              <div class="plain-item-label">
+                Top 6 ranking for 10 days
+              </div>
+
+              <div class="plain-item-tips">
+                Get your job post on top of the search results for 10 days.
+              </div>
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn" type="primary" link>
+                  REDEEM
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-3-container">
+              <div class="plain-item-label">
+                10 Social media blasts
+              </div>
+
+              <div class="plain-item-tips">
+                Use the power of social media to spread the work about your job post on EduPassport
+              </div>
+
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn" type="primary" link>
+                  LET'S DO IT!
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-3-container">
+              <div class="plain-item-label">
+                Dedicated article
+              </div>
+
+              <div class="plain-item-tips">
+                Let everyone get to know you more personally in our article about you and only you.
+              </div>
+              <div class="plain-item-btn-container-1">
+                <el-button class="plain-item-btn" type="primary" link>
+                  CONTACT US
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-3-container">
+              <div class="plain-item-label">
+                10 deal cards
+              </div>
+
+              <div class="plain-item-tips">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et.
+              </div>
+              <div class="plain-item-btn-container-1">
+                <el-button class="plain-item-btn" type="primary" link>
+                  REDEEM
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-3-container">
+              <div class="plain-item-label">
+                Job post translating
+              </div>
+
+              <div class="plain-item-tips">
+                When you go international, make sure that noting is lost in translation.
+              </div>
+              <div class="plain-item-btn-container-1">
+                <el-button class="plain-item-btn" type="primary" link>
+                  CONTACT US
+                </el-button>
+              </div>
+
+            </div>
+
+
+          </div>
+
+
         </div>
 
-        <div class="plain-container">
-<!--          <div class="plain-mask-container"></div>-->
-          <div class="plain-item-container">
-            <div class="plain-item-label">
-              Complete your profile
-            </div>
-            <div class="plain-item-percentage">
-              <el-progress color="#f9b019" :stroke-width="10" :percentage="40"/>
-            </div>
-            <div class="plain-item-tips">
-              Increase your chances of finding the right candidate by completing your profile.
-            </div>
-            <div class="plain-item-btn-container">
-              <el-button class="plain-item-btn" link>
-                DONE
-              </el-button>
-              <el-button class="plain-item-btn" type="primary" link>
-                GOT TO MY PROFILE
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-container">
-            <div class="plain-item-label">
-              In-app messages
-            </div>
-            <div class="plain-item-image-container">
-              <el-image class="plain-item-msg-img" :src="plainImgTwo"></el-image>
-            </div>
-            <div class="plain-item-tips">
-              Chat with your candidates directly and get a new hire faster.
-            </div>
-            <div class="plain-item-btn-container-1">
-
-              <el-button class="plain-item-btn" type="primary" link>
-                GO TO MESSAGES
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-container">
-            <div class="plain-item-label">
-              Unlimited job posts
-            </div>
-            <div class="plain-item-image-container">
-              <el-image class="plain-item-job-img" :src="plainImgOne"></el-image>
-            </div>
-            <div class="plain-item-tips">
-              With unlimited job posts, you will never be understaffed!
-            </div>
-            <div class="plain-item-btn-container-1">
-
-              <el-button class="plain-item-btn" type="primary" link>
-                POST A JOB
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-container">
-            <div class="plain-item-label">
-              Job deadline notice
-            </div>
-            <div class="plain-item-image-container">
-              <el-image class="plain-item-notice-img" :src="plainImgThree"></el-image>
-            </div>
-            <div class="plain-item-tips">
-              Whether you need some more time or you simply forgot to
-              take the job post down, we'll remind you when you're approaching
-              the application deadline.
-            </div>
-
-          </div>
-
-          <div class="plain-item-container">
-            <div class="plain-item-label">
-              1 Deal card
-            </div>
-            <div class="plain-item-image-container">
-              <el-image></el-image>
-            </div>
-            <div class="plain-item-tips">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.
-            </div>
-            <div class="plain-item-btn-container-1">
-              <el-button class="plain-item-btn" type="primary" link>
-                REDEEM
-              </el-button>
-            </div>
-
-          </div>
-
-
-        </div>
-
-        <!--        22222222222           -->
-        <div class="custom-divider-container custom-divider-margin">
-          <div class="custom-divider-l-disabled"></div>
-          <div class="custom-divider-m-disabled">
-            Pro Plan Perks
-          </div>
-          <div class="custom-divider-r-disabled"></div>
-        </div>
-
-        <div class="plain-container">
-          <div class="plain-mask-container"></div>
-          <div class="plain-item-2-container">
-            <div class="plain-item-label">
-              10 days of ads
-            </div>
-            <div class="plain-item-tips">
-              Get a dedicated spot on our website to promote your school or a position.
-            </div>
-            <div class="plain-item-btn-container-1">
-              <el-button class="plain-item-btn" type="primary" link>
-                MANAGE MY ADS
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-2-container">
-            <div class="plain-item-label">
-              Personal success manager
-            </div>
-
-            <div class="plain-item-tips">
-              Our team is here to help you maximize our tools and perks so that you can achieve your goals quickly.
-            </div>
-            <div class="plain-item-btn-container-1">
-
-              <el-button class="plain-item-btn" type="primary" link>
-                CONTACT US
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-2-container">
-            <div class="plain-item-label">
-              Top 6 ranking for 5 days
-            </div>
-
-            <div class="plain-item-tips">
-              Get your job post on top of the search results for 5 days.
-            </div>
-            <div class="plain-item-btn-container-1">
-
-              <el-button class="plain-item-btn" type="primary" link>
-                REDEEM
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-2-container">
-            <div class="plain-item-label">
-              5 Social media blasts
-            </div>
-
-            <div class="plain-item-tips">
-              Use the power of social media to spread the work about your job post on EduPassport
-            </div>
-
-            <div class="plain-item-btn-container-1">
-
-              <el-button class="plain-item-btn" type="primary" link>
-                LET'S DO IT!
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-2-container">
-            <div class="plain-item-label">
-              New member article
-            </div>
-
-            <div class="plain-item-tips">
-              Let everyone get to know you more personally in our article about all new members.
-            </div>
-            <div class="plain-item-btn-container-1">
-              <el-button class="plain-item-btn" type="primary" link>
-                CONTACT US
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-2-container">
-            <div class="plain-item-label">
-              5 deal cards
-            </div>
-
-            <div class="plain-item-tips">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-              tempor invidunt ut labore et.
-            </div>
-            <div class="plain-item-btn-container-1">
-              <el-button class="plain-item-btn" type="primary" link>
-                REDEEM
-              </el-button>
-            </div>
-
-          </div>
-
-        </div>
-
-        <!--        3333333333 -->
-        <div class="custom-divider-container custom-divider-margin">
-          <div class="custom-divider-l-disabled"></div>
-          <div class="custom-divider-m-disabled">
-            Plus Plan Perks
-          </div>
-          <div class="custom-divider-r-disabled"></div>
-        </div>
-
-        <div class="plain-container">
-          <div class="plain-mask-container"></div>
-          <div class="plain-item-3-container">
-            <div class="plain-item-label">
-              25% off + 15 days of ads
-            </div>
-            <div class="plain-item-tips">
-              Get a dedicated spot on our website to promote your school or a position.
-            </div>
-            <div class="plain-item-btn-container-1">
-              <el-button class="plain-item-btn" type="primary" link>
-                MANAGE MY ADS
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-3-container">
-            <div class="plain-item-label">
-              Access to all educators
-            </div>
-
-            <div class="plain-item-tips">
-               Don't wait for candidates to apply-reach out to them first.
-            </div>
-            <div class="plain-item-btn-container-1">
-
-              <el-button class="plain-item-btn" type="primary" link>
-                CONTACT US
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-3-container">
-            <div class="plain-item-label">
-              Top 6 ranking for 10 days
-            </div>
-
-            <div class="plain-item-tips">
-              Get your job post on top of the search results for 10 days.
-            </div>
-            <div class="plain-item-btn-container-1">
-
-              <el-button class="plain-item-btn" type="primary" link>
-                REDEEM
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-3-container">
-            <div class="plain-item-label">
-              10 Social media blasts
-            </div>
-
-            <div class="plain-item-tips">
-              Use the power of social media to spread the work about your job post on EduPassport
-            </div>
-
-            <div class="plain-item-btn-container-1">
-
-              <el-button class="plain-item-btn" type="primary" link>
-                LET'S DO IT!
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-3-container">
-            <div class="plain-item-label">
-              Dedicated article
-            </div>
-
-            <div class="plain-item-tips">
-              Let everyone get to know you more personally in our article about you and only you.
-            </div>
-            <div class="plain-item-btn-container-1">
-              <el-button class="plain-item-btn" type="primary" link>
-                CONTACT US
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-3-container">
-            <div class="plain-item-label">
-              10 deal cards
-            </div>
-
-            <div class="plain-item-tips">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-              tempor invidunt ut labore et.
-            </div>
-            <div class="plain-item-btn-container-1">
-              <el-button class="plain-item-btn" type="primary" link>
-                REDEEM
-              </el-button>
-            </div>
-
-          </div>
-
-          <div class="plain-item-3-container">
-            <div class="plain-item-label">
-              Job post translating
-            </div>
-
-            <div class="plain-item-tips">
-              When you go international, make sure that noting is lost in translation.
-            </div>
-            <div class="plain-item-btn-container-1">
-              <el-button class="plain-item-btn" type="primary" link>
-                CONTACT US
-              </el-button>
-            </div>
-
-          </div>
-
-
-        </div>
-
-      </div>
-
+      </el-scrollbar>
 
     </div>
   </div>
@@ -422,13 +420,16 @@ export default {
 }
 
 .perks-l-container {
-  flex: 0 0 auto;
+
 }
 
 .perks-r-container {
-  flex: 1 1 auto;
-  padding: 50px;
+  width: calc(100% - 160px);
+  height: calc(100vh - 140px);
+}
 
+.perks-r-bg-container{
+  padding: 50px;
 }
 
 .custom-divider-container {
@@ -519,9 +520,9 @@ export default {
 
 }
 
-.plain-item-container:nth-child( 4n ){
-  margin-right: 0;
-}
+/*.plain-item-container:nth-child( 4n ){*/
+/*  margin-right: 0;*/
+/*}*/
 
 
 .plain-item-container:hover {
@@ -541,9 +542,9 @@ export default {
 
 }
 
-.plain-item-2-container:nth-child( 5n ){
-  margin-right: 0;
-}
+/*.plain-item-2-container:nth-child( 5n ){*/
+/*  margin-right: 0;*/
+/*}*/
 
 
 .plain-item-2-container:hover {
@@ -564,9 +565,9 @@ export default {
 
 }
 
-.plain-item-3-container:nth-child( 5n ){
-  margin-right: 0;
-}
+/*.plain-item-3-container:nth-child( 5n ){*/
+/*  margin-right: 0;*/
+/*}*/
 
 
 .plain-item-3-container:hover {

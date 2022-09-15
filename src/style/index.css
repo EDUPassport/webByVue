@@ -37,7 +37,7 @@
 }
 
 .el-input--default .el-input__wrapper{
-    height: 50px;
+    min-height: 50px;
 }
 
 .el-input--default .el-input__inner{
@@ -67,4 +67,18 @@
 
 .el-select__caret{
     color:#49397f !important;
+}
+
+.el-pagination{
+    --el-pagination-hover-color:#9173ff;
+}
+
+.el-select__tags-text{
+    font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color:#FFFFFF;
+    font-size: 18px;
+}
+
+.el-select .el-select__tags .el-tag--info{
+    background-color: #6650B3;
 }

@@ -4,7 +4,7 @@
       <div class="overview-l-container">
         <meSideMenu></meSideMenu>
       </div>
-      <div class="overview-r-container">
+      <el-scrollbar class="overview-r-container">
         <div class="overview-r-container-bg">
           <div class="dashboard-container">
             <div class="dashboard-1-container">
@@ -72,7 +72,7 @@
                   ALL APPLICATIONS
                 </el-button>
               </div>
-              <div class="dashboard-application-container">
+              <el-scrollbar class="dashboard-application-container">
                 <div class="dashboard-application">
 
                   <div class="dashboard-application-basic">
@@ -234,67 +234,30 @@
 
                 </div>
 
-              </div>
+              </el-scrollbar>
 
             </div>
-            <div class="admin-container" v-if="isThirdCompanyStatus != 1 && identity != 1">
-              <h3>Account Administrators</h3>
-              <div class="admin-content-container">
-                <h4>Contributors</h4>
-                <div class="admin-content-underline"></div>
-                <div class="admin-list-container">
-                  <template v-if="assignUserData.length>0">
-                    <div class="admin-item-container"
-                         v-for="(item,i) in assignUserData" :key="i"
-                         @click="showMyCompany(item.id)"
-                    >
-                      <div class="admin-item-img-container">
-                        <el-image class="admin-item-img"
-                                  :src="item.headimgurl ? item.headimgurl : defaultAvatar ">
 
-                        </el-image>
-                      </div>
-                      <div class="admin-item-name">{{ item.first_name }} {{ item.last_name }}</div>
-                      <div class="admin-item-role">
-                        <template v-if="item.identity === 1">Educator</template>
-                        <template v-if="item.identity === 2">Recruiter</template>
-                        <template v-if="item.identity === 3">School</template>
-                        <template v-if="item.identity === 4">Other</template>
-                        <template v-if="item.identity === 5">Vendor</template>
-                      </div>
-                    </div>
+<!--            <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataBottom.length>0">-->
+<!--              <el-carousel height="220px" indicator-position="none">-->
+<!--                <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataBottom" :key="i">-->
+<!--                  <div class="xll-ads-l">-->
+<!--                    <el-image class="xll-ads-l-img"-->
+<!--                              :src="item.user_url !='' ? item.user_url : item.url"></el-image>-->
+<!--                  </div>-->
+<!--                  <div class="xll-ads-r">-->
+<!--                    <h4>Advertise with Us</h4>-->
+<!--                    <h5>Description:</h5>-->
+<!--                    <div class="xll-ads-r-desc">-->
+<!--                      Your Adverts and their description will be displayed here.-->
+<!--                      Just click on the banner-->
+<!--                    </div>-->
 
-                  </template>
+<!--                  </div>-->
+<!--                </el-carousel-item>-->
+<!--              </el-carousel>-->
 
-                </div>
-
-                <div class="add-admin">
-                  <el-button type="primary" @click="addAdmin()">Add an Admin</el-button>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataBottom.length>0">
-              <el-carousel height="220px" indicator-position="none">
-                <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataBottom" :key="i">
-                  <div class="xll-ads-l">
-                    <el-image class="xll-ads-l-img"
-                              :src="item.user_url !='' ? item.user_url : item.url"></el-image>
-                  </div>
-                  <div class="xll-ads-r">
-                    <h4>Advertise with Us</h4>
-                    <h5>Description:</h5>
-                    <div class="xll-ads-r-desc">
-                      Your Adverts and their description will be displayed here.
-                      Just click on the banner
-                    </div>
-
-                  </div>
-                </el-carousel-item>
-              </el-carousel>
-
-            </div>
+<!--            </div>-->
 
           </div>
           <el-dialog
@@ -329,7 +292,7 @@
         </div>
 
 
-      </div>
+      </el-scrollbar>
 
     </div>
   </div>
@@ -740,6 +703,7 @@ export default {
 
 .overview-r-container{
   width:calc(100% - 160px);
+  height: calc(100vh - 140px);
 }
 
 .overview-r-container-bg{
@@ -941,7 +905,7 @@ export default {
 
 .dashboard-1-label {
   font-size: 30px;
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #262626;
 
@@ -959,7 +923,7 @@ export default {
 .dashboard-1-number {
   font-weight: bold;
   font-size: 60px;
-  font-family: BCBold, serif;
+  font-family: BCBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #6650B3;
   display: flex;
   align-items: center;
@@ -967,7 +931,7 @@ export default {
 
 .dashboard-1-tips {
   font-size: 23px;
-  font-family: Assistant-SemiBold, serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -986,14 +950,14 @@ export default {
 
 .dashboard-applications-label {
   font-size: 30px;
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #262626;
 }
 
 .dashboard-applications-all-btn {
   font-size: 20px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #6650B3;
   margin-left: 10px;
 }
@@ -1001,7 +965,7 @@ export default {
 .dashboard-application-container {
   margin-top: 20px;
   height: 588px;
-  overflow-y: scroll;
+  /*overflow-y: scroll;*/
 }
 
 .dashboard-application {
@@ -1039,7 +1003,7 @@ export default {
 
 .dashboard-application-name {
   font-size: 26px;
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -1053,14 +1017,14 @@ export default {
 
 .dashboard-application-n-1 {
   font-size: 18px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
 .dashboard-application-n-2 {
   margin-left: 10px;
   font-size: 18px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -1070,14 +1034,14 @@ export default {
 
 .dashboard-application-job-1 {
   font-size: 26px;
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
 .dashboard-application-job-2 {
   margin-top: 15px;
   font-size: 18px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -1087,14 +1051,14 @@ export default {
 
 .dashboard-application-match-1 {
   font-size: 26px;
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
 .dashboard-application-match-2 {
   margin-top: 15px;
   font-size: 18px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -1104,7 +1068,7 @@ export default {
 
 .dashboard-view-application-btn {
   font-size: 20px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -1123,7 +1087,7 @@ export default {
 
 .dashboard-work-exp-label span{
   font-size: 26px;
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 500;
   color: #262626;
 }
@@ -1149,14 +1113,14 @@ export default {
 
 .dashboard-work-exp-c-item-label {
   font-size: 23px;
-  font-family: Assistant-SemiBold, serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #262626;
 }
 
 .dashboard-work-exp-c-item-text {
   font-size: 23px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 400;
   color: #262626;
 }
@@ -1167,7 +1131,7 @@ export default {
 
 .dashboard-education-cer-label {
   font-size: 26px;
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 500;
   color: #262626;
 }
@@ -1186,14 +1150,14 @@ export default {
 
 .dashboard-education-cer-c-label {
   font-size: 23px;
-  font-family: Assistant-SemiBold, serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #262626;
 }
 
 .dashboard-education-cer-c-text {
   font-size: 23px;
-  font-family: AssiRegular, serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 400;
   color: #262626;
 }

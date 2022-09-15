@@ -5,7 +5,9 @@
       <div class="basic-l-container">
         <meSideMenu></meSideMenu>
       </div>
-      <div class="basic-r-container">
+
+      <el-scrollbar class="basic-r-container">
+
         <div class="basic-r-container-bg">
 
           <div class="account-profile-t">
@@ -22,7 +24,7 @@
             </div>
           </div>
 
-          <div class="basic-form">
+          <el-scrollbar class="basic-form">
             <el-form
                 ref="basicForm"
                 :model="basicForm"
@@ -31,7 +33,6 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-
               <div class="account-profile-item-container">
                 <div class="account-profile-item-label">
                   1.Basic information
@@ -56,14 +57,21 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="Profile visibility">
-                        <el-checkbox size="large" v-model="basicForm.is_seeking"
-                                     label="Profile is public"></el-checkbox>
-                        <el-checkbox size="large" v-model="basicForm.is_public"
-                                     label="Show a job-seeker badge"></el-checkbox>
+                        <el-radio-group v-model="selectedProfileStatusValue">
+                          <template v-for="(item,i) in profileStatusData" :key="i">
+                            <el-radio :label="item.id" >{{item.object_en}}</el-radio>
+                          </template>
+                        </el-radio-group>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-
+                      <el-form-item label="Job seeking status">
+                        <el-radio-group v-model="selectedJobSeekingValue">
+                          <template v-for="(item,i) in jobSeekingData" :key="i">
+                            <el-radio :label="item.id" >{{item.object_en}}</el-radio>
+                          </template>
+                        </el-radio-group>
+                      </el-form-item>
                     </el-col>
                   </el-row>
 
@@ -101,7 +109,7 @@
 
               <div class="account-profile-item-container">
                 <div class="account-profile-item-label">
-                  2.About yourself
+                  3.About yourself
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
@@ -145,6 +153,7 @@
                             <div class="object-tags-item-btn-container">
                               <el-button class="object-tags-item-btn"
                                          link
+                                         :disabled="!ownHobbyInfoValue"
                                          type="primary"
                                          @click="addOwnHobby()">
                                 ADD
@@ -183,6 +192,61 @@
                                   placeholder="A short bio">
                         </el-input>
                       </el-form-item>
+                    </el-col>
+
+                  </el-row>
+
+                  <el-row :gutter="50">
+                    <el-col :span="6">
+                      <el-form-item label="Minimum expected salary (Monthly)" prop="min_monthly_salary">
+                        <el-input type="number" v-model="basicForm.min_monthly_salary" placeholder="minimum expected salary">
+                          <template #prepend>
+                            <el-icon :size="20">
+                              <IconIonLogoUsd />
+                            </el-icon>
+                          </template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Minimum expected salary (Hourly)" prop="min_monthly_salary">
+                        <el-input type="number" v-model="basicForm.min_hourly_salary" placeholder="minimum expected salary">
+                          <template #prepend>
+                            <el-icon :size="20">
+                              <IconIonLogoUsd />
+                            </el-icon>
+                          </template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12">
+                      <el-form-item label="Languages & Proficiency" >
+                        <el-checkbox-group  v-model="selectedLanguageList">
+                          <template v-for="(item,i) in languageOptionsData" :key="i">
+
+                            <div class="language-checkbox-item">
+                              <div class="language-checkbox-item-l">
+                                <el-checkbox  :label="item">
+                                  {{item.object_en}}
+                                </el-checkbox>
+                              </div>
+                              <div class="language-checkbox-item-r">
+                                <el-select
+                                    v-model="item.level"
+                                >
+                                  <el-option
+                                      v-for="(level,ii) in languageLevelOptionsData" :key="ii"
+                                      :label="level.label" :value="level.value" value-key="value">
+                                  </el-option>
+                                </el-select>
+                              </div>
+                            </div>
+
+                          </template>
+                        </el-checkbox-group>
+                      </el-form-item>
+
                     </el-col>
 
                   </el-row>
@@ -394,6 +458,7 @@
                               <el-button class="object-tags-item-btn"
                                          type="primary"
                                          link
+                                         :disabled="!ownCountriesTraveledValue"
                                          @click="addOwnCountriesTraveled()">
                                 ADD
                               </el-button>
@@ -436,6 +501,7 @@
                               <el-button class="object-tags-item-btn"
                                          type="primary"
                                          link
+                                         :disabled="!ownCountriesLivedValue"
                                          @click="addOwnCountriesLived">
                                 ADD
                               </el-button>
@@ -541,7 +607,13 @@
                           <el-input v-model="educationForm.school_name" placeholder="University"></el-input>
                         </el-form-item>
                         <el-form-item label="Degree" prop="degree">
-                          <el-input v-model="educationForm.degree" placeholder="Doctorate, Master's, Bachelor's, etc..."></el-input>
+                          <el-select  v-model="educationForm.degree_id" placeholder="Doctorate, Master's, Bachelor's, etc...">
+                            <el-option v-for="(degree,i) in degreeOptionsData" :key="i"
+                                       :value-key="degree.id"
+                                       :label="degree.object_en"
+                                       :value="degree.id"
+                            ></el-option>
+                          </el-select>
                         </el-form-item>
                         <el-form-item label="Field of Study" >
                           <el-input v-model="educationForm.field_of_study" type="textarea"
@@ -589,18 +661,23 @@
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
                     <el-col :span="6">
-                      <el-form-item label="Subject(s) to teach">
+
+                      <el-form-item label="Work destination">
 
                         <div class="object-tags-add">
                           <div class="object-tags-item-add">
-                            <el-input type="text" v-model="ownSubjectValue"
-                                      placeholder="Add subject"></el-input>
+                            <el-input type="text"
+                                      v-model="ownWorkDestinationValue"
+                                      placeholder="Add work destination">
+                            </el-input>
                             <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn" link type="primary"
-                                         @click="addOwnSubject">
+                              <el-button class="object-tags-item-btn"
+                                         :disabled="!ownWorkDestinationValue"
+                                         type="primary"
+                                         link
+                                         @click="addOwnLocation">
                                 ADD
                               </el-button>
-
                             </div>
                           </div>
                         </div>
@@ -608,17 +685,17 @@
                         <div class="object-tags-container">
                           <div class="object-tags">
                             <div class="object-tags-item"
-                                 :class=" selectSubjectList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editSubjectList" :key="index"
-                                 @click="selectSubject(item,1)">
+                                 :class=" selectWorkDestinationList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in editWorkDestinationList" :key="index"
+                                 @click="selectWorkDestination(item,1)">
                               {{ item.object_en }}
                             </div>
                           </div>
                           <div class="object-tags">
                             <div class="object-tags-item"
-                                 :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownSubjectList" :key="index"
-                                 @click="selectSubject(item,2)">
+                                 :class=" selectWorkDestinationList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ownWorkDestinationList" :key="index"
+                                 @click="selectWorkDestination(item,2)">
                               {{ item.object_name }}
                             </div>
                           </div>
@@ -627,6 +704,7 @@
 
                       </el-form-item>
                     </el-col>
+
                     <el-col :span="6">
                       <el-form-item label="Job type">
 
@@ -637,7 +715,9 @@
                                       placeholder="Add job type">
                             </el-input>
                             <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn" type="primary"
+                              <el-button class="object-tags-item-btn"
+                                         :disabled="!ownJobTypeValue"
+                                         type="primary"
                                          link
                                          @click="addOwnJobType">
                                 ADD
@@ -678,7 +758,9 @@
                                       placeholder="Add location">
                             </el-input>
                             <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn" type="primary"
+                              <el-button class="object-tags-item-btn"
+                                         :disabled="!ownLocationValue"
+                                         type="primary"
                                          link
                                          @click="addOwnLocation">
                                 ADD
@@ -709,20 +791,22 @@
 
                       </el-form-item>
                     </el-col>
+
                     <el-col :span="6">
-                      <el-form-item label="Benefits">
+                      <el-form-item label="Work schedule type">
 
                         <div class="object-tags-add">
                           <div class="object-tags-item-add">
                             <el-input type="text"
-                                      v-model="ownBenefitsValue"
-                                      placeholder="Add benefits">
+                                      v-model="ownWorkScheduleTypeValue"
+                                      placeholder="Add work schedule type">
                             </el-input>
                             <div class="object-tags-item-btn-container">
                               <el-button class="object-tags-item-btn"
-                                         link
+                                         :disabled="!ownWorkScheduleTypeValue"
                                          type="primary"
-                                         @click="addOwnBenefits">
+                                         link
+                                         @click="addOwnWorkScheduleType">
                                 ADD
                               </el-button>
                             </div>
@@ -732,17 +816,17 @@
                         <div class="object-tags-container">
                           <div class="object-tags">
                             <div class="object-tags-item"
-                                 :class=" selectBenefitsList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editBenefitsList" :key="index"
-                                 @click="selectBenefits(item,1)">
+                                 :class=" selectWorkScheduleTypeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in editWorkScheduleTypeList" :key="index"
+                                 @click="selectWorkScheduleType(item,1)">
                               {{ item.object_en }}
                             </div>
                           </div>
                           <div class="object-tags">
                             <div class="object-tags-item"
-                                 :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownBenefitsList" :key="index"
-                                 @click="selectBenefits(item,2)">
+                                 :class=" selectWorkScheduleTypeList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ownWorkScheduleTypeList" :key="index"
+                                 @click="selectWorkScheduleType(item,2)">
                               {{ item.object_name }}
                             </div>
                           </div>
@@ -751,14 +835,54 @@
 
                       </el-form-item>
                     </el-col>
+
+
                   </el-row>
 
                   <el-row :gutter="50">
-                    <!--                    <el-col :span="6">-->
-                    <!--                      <el-form-item label="Student's age(s)">-->
 
-                    <!--                      </el-form-item>-->
-                    <!--                    </el-col>-->
+                    <el-col :span="6">
+                      <el-form-item label="Subject(s) to teach">
+
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add">
+                            <el-input type="text" v-model="ownSubjectValue"
+                                      placeholder="Add subject"></el-input>
+                            <div class="object-tags-item-btn-container">
+                              <el-button class="object-tags-item-btn"
+                                         link
+                                         :disabled="!ownSubjectValue"
+                                         type="primary"
+                                         @click="addOwnSubject">
+                                ADD
+                              </el-button>
+
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectSubjectList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in editSubjectList" :key="index"
+                                 @click="selectSubject(item,1)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ownSubjectList" :key="index"
+                                 @click="selectSubject(item,2)">
+                              {{ item.object_name }}
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </el-form-item>
+                    </el-col>
 
                     <el-col :span="6">
                       <el-form-item label=" Preferred Age To Teach">
@@ -770,6 +894,7 @@
                             </el-input>
                             <div class="object-tags-item-btn-container">
                               <el-button class="object-tags-item-btn"
+                                         :disabled="!ownAgeToTeachValue"
                                          type="primary"
                                          link
                                          @click="addOwnAgeToTeach">
@@ -813,6 +938,7 @@
                             </el-input>
                             <div class="object-tags-item-btn-container">
                               <el-button class="object-tags-item-btn"
+                                         :disabled="!ownCertificationsValue"
                                          link
                                          type="primary"
                                          @click="addOwnCertifications">
@@ -843,6 +969,53 @@
 
                       </el-form-item>
                     </el-col>
+
+                    <el-col :span="6">
+                      <el-form-item label="Benefits">
+
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add">
+                            <el-input type="text"
+                                      v-model="ownBenefitsValue"
+                                      placeholder="Add benefits">
+                            </el-input>
+                            <div class="object-tags-item-btn-container">
+                              <el-button class="object-tags-item-btn"
+                                         :disabled="!ownBenefitsValue"
+                                         link
+                                         type="primary"
+                                         @click="addOwnBenefits">
+                                ADD
+                              </el-button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectBenefitsList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in editBenefitsList" :key="index"
+                                 @click="selectBenefits(item,1)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
+                                 v-for="(item,index) in ownBenefitsList" :key="index"
+                                 @click="selectBenefits(item,2)">
+                              {{ item.object_name }}
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </el-form-item>
+                    </el-col>
+
+
+
 
                   </el-row>
 
@@ -1042,10 +1215,10 @@
 
             </el-form>
 
-          </div>
+          </el-scrollbar>
 
         </div>
-      </div>
+      </el-scrollbar>
 
     </div>
 
@@ -1072,7 +1245,8 @@ import {
   ADD_PROFILE_V2,
   UPLOAD_IMG,
   ADD_USER_IMG_V2,
-  USER_OBJECT_LIST, ADD_USER_WORK_V2, ADD_USER_EDUCATION_V2
+  ALL_LANGUAGE_PROFICIENCY,
+  USER_OBJECT_LIST, ADD_USER_WORK_V2, ADD_USER_EDUCATION_V2, ADD_LANGUAGE_SCORE_V2
 } from '@/api/api'
 import {countriesData} from "@/utils/data";
 import {decode} from "js-base64";
@@ -1130,6 +1304,8 @@ export default {
         background_image: '',
         profile_photo: '',
         logo: '',
+        min_monthly_salary:'',
+        min_hourly_salary:''
 
       },
       basicRules: {
@@ -1211,6 +1387,7 @@ export default {
       countriesTraveledList: [],
       languagesList: [],
       locationList: [],
+      workDestinationList:[],
       jobTypeList: [],
       ageToTeachList: [],
       regionList: [],
@@ -1239,9 +1416,7 @@ export default {
       workExpNum: 1,
       showMoreWorkExpStatus: true,
 
-      canEditHobby: false,
       editHobbyInfoList: ['Fitness', 'Photography', 'Travel'],
-      addHobbyInfoStatus: false,
       ownHobbyInfoValue: '',
       ownHobbyInfoList: [],
       selectHobbyInfoList: [],
@@ -1257,49 +1432,47 @@ export default {
       dialogSingleImageVisible:false,
       dialogSingleImageUrl:'',
 
-      canEditSubject: false,
       editSubjectList: [],
-      addSubjectStatus: false,
       ownSubjectValue: '',
       ownSubjectList: [],
       selectSubjectList: [],
       selectSubjectArr: [],
 
-      canEditLocation: false,
       editLocationList: [],
-      addLocationStatus: false,
       ownLocationValue: '',
       ownLocationList: [],
       selectLocationList: [],
-      selectLocationArr: [],
 
-      canEditJobType: false,
+      editWorkScheduleTypeList: [],
+      ownWorkScheduleTypeValue: '',
+      ownWorkScheduleTypeList: [],
+      selectWorkScheduleTypeList: [],
+
+      editWorkDestinationList: [],
+      ownWorkDestinationValue: '',
+      ownWorkDestinationList: [],
+      selectWorkDestinationList: [],
+      selectWorkDestinationArr: [],
+
       editJobTypeList: [],
-      addJobTypeStatus: false,
       ownJobTypeValue: '',
       ownJobTypeList: [],
       selectJobTypeList: [],
       selectJobTypeArr: [],
 
-      canEditAgeToTeach: false,
       editAgeToTeachList: [],
-      addAgeToTeachStatus: false,
       ownAgeToTeachValue: '',
       ownAgeToTeachList: [],
       selectAgeToTeachList: [],
       selectAgeToTeachArr: [],
 
-      canEditRegion: false,
       editRegionList: [],
-      addRegionStatus: false,
       ownRegionValue: '',
       ownRegionList: [],
       selectRegionList: [],
       selectRegionArr: [],
 
-      canEditBenefits: false,
       editBenefitsList: [],
-      addBenefitsStatus: false,
       ownBenefitsValue: '',
       ownBenefitsList: [],
       selectBenefitsList: [],
@@ -1353,6 +1526,7 @@ export default {
       educationForm: {
         school_name: '',
         degree: '',
+        degree_id:'',
         field_of_study: '',
         start_time: '',
         end_time: '',
@@ -1367,7 +1541,7 @@ export default {
             trigger: 'blur',
           }
         ],
-        degree: [
+        degree_id: [
           {
             required: true,
             message: "Doctorate, Master's, Bachelor's, etc...",
@@ -1388,6 +1562,18 @@ export default {
       editEducationIndex: -1,
       editExistEducationStatus:false,
 
+      profileStatusData:[],
+      selectedProfileStatusValue:'',
+      jobSeekingData:[],
+      selectedJobSeekingValue:'',
+
+      degreeOptionsData:[],
+      languageOptionsData:[],
+      selectedLanguageList:[],
+      languageLevelOptionsData:[],
+      languageLevelValue:'',
+      selectedLanguageLevelData:[]
+
 
     }
   },
@@ -1395,18 +1581,18 @@ export default {
 
     await this.getSubIdentityList()
     await this.getUserObjectList()
+    await this.getAllLanguageProficiencyList()
+    await this.getUserObjectListtest()
 
     let str = this.$route.query.s;
 
     if (str) {
       let strObj = JSON.parse(decode(str))
 
-      // console.log(str)
       this.i = strObj.i;
       this.action = strObj.action;
 
       if (strObj.action == 'add') {
-        this.sideMenuStatus = false;
         await this.getBasicInfo(strObj.i)
       }
 
@@ -1419,6 +1605,36 @@ export default {
 
   },
   methods: {
+    languageConfirm(){
+      let sLanguageData = this.selectedLanguageList
+      let sData = []
+      sLanguageData.forEach(item=>{
+        let obj = {
+
+          object_id: item.id,
+          score: item.level ? item.level : 0,
+          object_name: item.object_en,
+          object_pid: item.pid
+        }
+        sData.push(obj)
+      })
+      console.log(sData)
+      let params = {
+        company_id:this.educatorContact.id,
+        object_arr: sData,
+        token: localStorage.getItem('token')
+      }
+      ADD_LANGUAGE_SCORE_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          console.log('language confirm -------------')
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
     submitForm(formName) {
       this.submitLoadingValue = true;
       this.$refs[formName].validate((valid) => {
@@ -1457,12 +1673,24 @@ export default {
             console.log(res)
             if (res.code == 200) {
 
+              if(this.selectedProfileStatusValue){
+                this.profileStatusConfirm()
+              }
+
+              if(this.selectedJobSeekingValue){
+                this.jobSeekingConfirm()
+              }
+
               if (this.selectHobbyInfoList.length > 0) {
                 this.hobbyConfirm()
               }
 
               if(this.selectCertificationsList.length > 0){
                 this.certificationsConfirm()
+              }
+
+              if(this.selectedLanguageList.length > 0){
+                this.languageConfirm()
               }
 
               if(this.selectTeachExpList.length>0){
@@ -1485,6 +1713,14 @@ export default {
                 this.locationConfirm()
               }
 
+              if(this.selectWorkDestinationList.length > 0){
+                this.workDestinationConfirm()
+              }
+
+              if(this.selectWorkScheduleTypeList.length > 0){
+                this.workScheduleTypeConfirm()
+              }
+
               if(this.selectJobTypeList.length > 0){
                 this.jobTypeConfirm()
               }
@@ -1500,17 +1736,23 @@ export default {
                 this.benefitsConfirm()
               }
 
-              if(this.accountImageFileList.length > 0){
-                this.uploadAccountImages()
-              }
 
               this.submitLoadingValue = false;
 
               if (action == 'edit') {
                 // this.$router.go(-1)
+                if(this.accountImageFileList.length > 0){
+                  this.uploadAccountImages(this.cid)
+                }
+
                 this.$store.commit('username', this.basicForm.name)
-                this.$router.push('/educator/profile')
+                this.$router.push('/account/home')
               } else {
+
+                if(this.accountImageFileList.length > 0){
+                  this.uploadAccountImages(res.message.educator_id)
+                }
+
                 localStorage.setItem('company_id', res.message.educator_id)
 
                 this.$store.commit('allIdentityChanged', true)
@@ -1669,6 +1911,14 @@ export default {
             this.basicForm.resume_pdf = educatorContact.resume_pdf
           }
 
+          if (educatorContact.min_monthly_salary) {
+            this.basicForm.min_monthly_salary = educatorContact.min_monthly_salary
+          }
+
+          if (educatorContact.min_hourly_salary) {
+            this.basicForm.min_hourly_salary = educatorContact.min_hourly_salary
+          }
+
           if (educatorContact.background_image) {
             this.backgroundPhotoUrl = educatorContact.background_image
             this.basicForm.background_image = educatorContact.background_image
@@ -1779,6 +2029,20 @@ export default {
             this.educationData = educatorContact.education_info;
           }
 
+          if (educatorContact.Job_Seeking_Status) {
+            let objArr = educatorContact.Job_Seeking_Status;
+            objArr.forEach((item) => {
+              this.selectedJobSeekingValue = item.object_id;
+            })
+          }
+
+          if (educatorContact.Profile_Status) {
+            let objArr = educatorContact.Profile_Status;
+            objArr.forEach((item) => {
+              this.selectedProfileStatusValue = item.object_id;
+            })
+          }
+
           if (educatorContact.places_lived) {
 
             let livedArr = educatorContact.places_lived;
@@ -1835,7 +2099,22 @@ export default {
           }
 
           if (educatorContact.languages) {
-            this.languagesList = educatorContact.languages;
+            let languagesArr = educatorContact.languages
+            let languagesOptionsData = this.languageOptionsData
+            let a = []
+            languagesArr.forEach(item=>{
+              let b = languagesOptionsData.filter(option=>item.object_id == option.id )
+
+              if(item.object_score){
+                b[0]['level'] = item.object_score;
+              }
+
+              a = a.concat(b)
+
+            })
+
+            this.selectedLanguageList = a
+
           }
 
           if (educatorContact.Location) {
@@ -1861,6 +2140,62 @@ export default {
               }
 
               this.selectLocationList.push(obj)
+
+            })
+
+          }
+
+          if (educatorContact.Prefered_Work_Destination) {
+            let objArr = educatorContact.Prefered_Work_Destination;
+            let obj = {}
+
+            objArr.forEach((item) => {
+
+              if (item.object_id == 0) {
+                obj = {
+                  id: item.object_id,
+                  object_pid: item.object_pid,
+                  object_name: item.object_en
+                }
+                this.ownWorkDestinationList.push(obj);
+              } else {
+                obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+              }
+
+              this.selectWorkDestinationList.push(obj)
+
+            })
+
+          }
+
+          if (educatorContact.Prefered_Work_Schedule_Type) {
+            let objArr = educatorContact.Prefered_Work_Schedule_Type;
+            let obj = {}
+
+            objArr.forEach((item) => {
+
+              if (item.object_id == 0) {
+                obj = {
+                  id: item.object_id,
+                  object_pid: item.object_pid,
+                  object_name: item.object_en
+                }
+                this.ownWorkScheduleTypeList.push(obj);
+              } else {
+                obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+              }
+
+              this.selectWorkScheduleTypeList.push(obj)
 
             })
 
@@ -2068,6 +2403,19 @@ export default {
       })
 
     },
+    async getUserObjectListtest() {
+      let data = {
+        pid:0
+      }
+
+      await USER_OBJECT_LIST(data).then(res => {
+        console.log(res)
+
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
     async getUserObjectList() {
       let data = {}
 
@@ -2076,7 +2424,8 @@ export default {
         if (res.code == 200) {
           this.editTeachExpList = res.message.filter(item => item.pid === 120)
           this.editSubjectList = res.message.filter(item => item.pid === 1)
-          this.editLocationList = res.message.filter(item => item.pid === 71)
+          this.editLocationList = res.message.filter(item => item.pid === 71)  // 71 155
+          this.editWorkDestinationList = res.message.filter(item => item.pid === 155)  // 71 155
           this.editJobTypeList = res.message.filter(item => item.pid === 3);
           this.editAgeToTeachList = res.message.filter(item => item.pid === 4);
           this.editRegionList = res.message.filter(item => item.pid === 5);
@@ -2085,7 +2434,26 @@ export default {
           this.editCountriesTraveledList = res.message.filter(item => item.pid === 8);
           this.editCountriesLivedList = res.message.filter(item => item.pid === 9);
           this.editCountriesTraveledList = res.message.filter(item => item.pid === 8);
+          this.editWorkScheduleTypeList = res.message.filter(item => item.pid === 184);
 
+          this.profileStatusData =  res.message.filter(item => item.pid === 195);
+          this.jobSeekingData =  res.message.filter(item => item.pid === 199);
+          this.degreeOptionsData =  res.message.filter(item => item.pid === 125);
+          this.languageOptionsData =  res.message.filter(item => item.pid === 2);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    async getAllLanguageProficiencyList() {
+      let data = {}
+
+      await ALL_LANGUAGE_PROFICIENCY(data).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.languageLevelOptionsData = res.message
         }
 
       }).catch(err => {
@@ -2465,7 +2833,7 @@ export default {
 
     },
     addOwnCertifications() {
-      this.addCertificationsStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownCertificationsValue,
@@ -2483,7 +2851,7 @@ export default {
       } else {
         this.selectCertificationsList.splice(index, 1);
       }
-      console.log(this.selectCertificationsList);
+
     },
     selectCertifications(value, type) {
       let index;
@@ -2503,14 +2871,14 @@ export default {
       } else {
         this.selectCertificationsList.splice(index, 1);
       }
-      console.log(this.selectCertificationsList)
+
     },
     certificationsConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectCertificationsList.forEach(item => {
-        console.log(item);
+
         if (item.id === 0) {
           expand.push(item.object_name);
         } else {
@@ -2538,6 +2906,54 @@ export default {
 
 
     },
+    profileStatusConfirm() {
+
+      let profileStatusValue = this.selectedProfileStatusValue
+      let objectArr = [profileStatusValue];
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 195,
+        object_id: objectArr,
+        company_id: this.educatorContact.id
+      }
+
+      ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+          console.log('profile status --submit--' + res.data);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+
+    },
+    jobSeekingConfirm() {
+
+      let jobSeekingValue = this.selectedJobSeekingValue
+      let objectArr = [jobSeekingValue];
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 199,
+        object_id: objectArr,
+        company_id: this.educatorContact.id
+      }
+
+      ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+          console.log('job seeking --submit--' + res.data);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+
+    },
     addUserEducation() {
       this.$router.push('/educator/edit/education')
     },
@@ -2549,7 +2965,7 @@ export default {
       this.$router.push({path: '/educator/edit/education', query: {educationId: education.id, type: 2}})
     },
     addOwnTeachExp() {
-      this.addTeachExpStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownTeachExpValue,
@@ -2586,7 +3002,6 @@ export default {
 
       this.selectTeachExpList.splice(index, 1, value);
 
-      console.log(this.selectTeachExpList)
     },
     teachExpConfirm() {
 
@@ -2621,7 +3036,7 @@ export default {
 
     },
     addOwnCountriesTraveled() {
-      this.addCountriesTraveledStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownCountriesTraveledValue,
@@ -2658,14 +3073,14 @@ export default {
       } else {
         this.selectCountriesTraveledList.splice(index, 1);
       }
-      console.log(this.selectCountriesTraveledList)
+
     },
     countriesTraveledConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectCountriesTraveledList.forEach(item => {
-        console.log(item);
+
         if (item.id === 0) {
           expand.push(item.object_name);
         } else {
@@ -2694,7 +3109,7 @@ export default {
 
     },
     addOwnCountriesLived() {
-      this.addCountriesLivedStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownCountriesLivedValue,
@@ -2731,14 +3146,14 @@ export default {
       } else {
         this.selectCountriesLivedList.splice(index, 1);
       }
-      console.log(this.selectCountriesLivedList)
+
     },
     countriesLivedConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectCountriesLivedList.forEach(item => {
-        console.log(item);
+
         if (item.id === 0) {
           expand.push(item.object_name);
         } else {
@@ -2776,7 +3191,7 @@ export default {
       this.$router.push({path: '/educator/edit/work', query: {workId: work.id, type: 2}})
     },
     addOwnHobby() {
-      this.addHobbyInfoStatus = false;
+
       let obj = this.ownHobbyInfoValue;
       let index = this.selectHobbyInfoList.findIndex((element) => element === obj);
       if (index == -1) {
@@ -2789,9 +3204,9 @@ export default {
 
     },
     selectHobby(value) {
-      console.log(value)
+
       let index = this.selectHobbyInfoList.indexOf(value);
-      console.log(index)
+
       if (index == -1) {
         this.selectHobbyInfoList.push(value);
 
@@ -2808,7 +3223,6 @@ export default {
       EDUCATOR_CONTACT_EDIT_V2(data).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.canEditHobby = false;
           this.hobbiesList = this.selectHobbyInfoList;
         }
       }).catch(err => {
@@ -2881,7 +3295,7 @@ export default {
       })
 
     },
-    uploadAccountImages() {
+    uploadAccountImages(companyId) {
 
       let oldData = []
 
@@ -2892,7 +3306,7 @@ export default {
       let params = {
         token: localStorage.getItem('token'),
         identity: 1,
-        company_id: this.educatorContact.id,
+        company_id: companyId,
         img: oldData
       }
 
@@ -2986,7 +3400,7 @@ export default {
       // })
     },
     addOwnSubject() {
-      this.addSubjectStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownSubjectValue,
@@ -3024,7 +3438,7 @@ export default {
       let expand = [];
       let objectArr = [];
       this.selectSubjectList.forEach(item => {
-        console.log(item);
+
         if (item.id === 0) {
           expand.push(item.object_name);
         } else {
@@ -3052,7 +3466,7 @@ export default {
 
     },
     addOwnLocation() {
-      this.addLocationStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownLocationValue,
@@ -3110,7 +3524,138 @@ export default {
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('location--submit--' + res.data);
-          this.canEditLocation = false;
+        }
+
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    addOwnWorkScheduleType() {
+
+      let obj = {
+        id: 0,
+        object_name: this.ownWorkScheduleTypeValue,
+        object_pid: 71
+      }
+      let index = this.selectWorkScheduleTypeList.findIndex((element) => element === obj)
+      if (index == -1) {
+        this.selectWorkScheduleTypeList.push(obj);
+        this.ownWorkScheduleTypeList.push(obj);
+        this.ownWorkScheduleTypeValue = '';
+
+      } else {
+        this.selectWorkScheduleTypeList.splice(index, 1);
+      }
+
+    },
+    selectWorkScheduleType(value, type) {
+      let index;
+      if (type == 1) {
+        index = this.selectWorkScheduleTypeList.findIndex((element) => element.id === value.id);
+      }
+      if (type == 2) {
+        index = this.selectWorkScheduleTypeList.findIndex((element) => element === value);
+      }
+
+      if (index == -1) {
+        this.selectWorkScheduleTypeList.push(value);
+
+      } else {
+        this.selectWorkScheduleTypeList.splice(index, 1);
+      }
+      // console.log(this.selectLocationList)
+    },
+    workScheduleTypeConfirm() {
+
+      let expand = [];
+      let objectArr = [];
+      this.selectWorkScheduleTypeList.forEach(item => {
+
+        if (item.id === 0) {
+          expand.push(item.object_name);
+        } else {
+          objectArr.push(item.id);
+        }
+      })
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 184,
+        object_id: objectArr,
+        expand: expand,
+        company_id: this.educatorContact.id
+      }
+
+      ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+          console.log('WorkScheduleType--submit--' + res.data);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    addOwnWorkDestination() {
+
+      let obj = {
+        id: 0,
+        object_name: this.ownWorkDestinationValue,
+        object_pid: 155
+      }
+      let index = this.selectWorkDestinationList.findIndex((element) => element === obj)
+      if (index == -1) {
+        this.selectWorkDestinationList.push(obj);
+        this.ownWorkDestinationList.push(obj);
+        this.ownWorkDestinationValue = '';
+
+      } else {
+        this.selectWorkDestinationList.splice(index, 1);
+      }
+
+    },
+    selectWorkDestination(value, type) {
+      let index;
+      if (type == 1) {
+        index = this.selectWorkDestinationList.findIndex((element) => element.id === value.id);
+      }
+      if (type == 2) {
+        index = this.selectWorkDestinationList.findIndex((element) => element === value);
+      }
+
+      if (index == -1) {
+        this.selectWorkDestinationList.push(value);
+
+      } else {
+        this.selectWorkDestinationList.splice(index, 1);
+      }
+      // console.log(this.selectLocationList)
+    },
+    workDestinationConfirm() {
+
+      let expand = [];
+      let objectArr = [];
+      this.selectWorkDestinationList.forEach(item => {
+        console.log(item);
+        if (item.id === 0) {
+          expand.push(item.object_name);
+        } else {
+          objectArr.push(item.id);
+        }
+      })
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 155,
+        object_id: objectArr,
+        expand: expand,
+        company_id: this.educatorContact.id
+      }
+
+      ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+          console.log('work destination--submit--' + res.data);
         }
 
       }).catch(err => {
@@ -3119,7 +3664,7 @@ export default {
       })
     },
     addOwnJobType() {
-      this.addJobTypeStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownJobTypeValue,
@@ -3157,7 +3702,7 @@ export default {
       let expand = [];
       let objectArr = [];
       this.selectJobTypeList.forEach(item => {
-        console.log(item);
+
         if (item.id === 0) {
           expand.push(item.object_name);
         } else {
@@ -3184,7 +3729,7 @@ export default {
       })
     },
     addOwnAgeToTeach() {
-      this.addAgeToTeachStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownAgeToTeachValue,
@@ -3222,7 +3767,7 @@ export default {
       let expand = [];
       let objectArr = [];
       this.selectAgeToTeachList.forEach(item => {
-        console.log(item);
+
         if (item.id === 0) {
           expand.push(item.object_name);
         } else {
@@ -3249,7 +3794,7 @@ export default {
       })
     },
     addOwnRegion() {
-      this.addRegionStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownRegionValue,
@@ -3287,7 +3832,7 @@ export default {
       let expand = [];
       let objectArr = [];
       this.selectRegionList.forEach(item => {
-        console.log(item);
+
         if (item.id === 0) {
           expand.push(item.object_name);
         } else {
@@ -3314,7 +3859,7 @@ export default {
       })
     },
     addOwnBenefits() {
-      this.addBenefitsStatus = false;
+
       let obj = {
         id: 0,
         object_name: this.ownBenefitsValue,
@@ -3352,7 +3897,7 @@ export default {
       let expand = [];
       let objectArr = [];
       this.selectBenefitsList.forEach(item => {
-        console.log(item);
+
         if (item.id === 0) {
           expand.push(item.object_name);
         } else {
@@ -3586,10 +4131,12 @@ export default {
 
 .basic-r-container {
   width: calc(100% - 160px);
+  height: calc(100vh - 140px);
 }
 
 .basic-r-container-bg {
-  padding: 30px 50px 50px 50px;
+  padding: 30px 50px 0 50px;
+
 }
 
 
@@ -3598,7 +4145,8 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0 40px 0;
+  height: 110px;
+
 }
 
 .account-profile-t-l {
@@ -3622,9 +4170,7 @@ export default {
 
 
 .basic-form {
-  padding-bottom: 50px;
-  /*height: 800px;*/
-  overflow-y: scroll;
+  height: calc(100vh - 280px);
 }
 
 
@@ -3689,7 +4235,7 @@ export default {
   padding: 50px;
   border-radius: 38px;
   background-color: #ffffff;
-  margin-top: 50px;
+  margin-bottom: 50px;
 
 }
 
@@ -3897,6 +4443,18 @@ export default {
 
 .account-xll-image-mask:hover{
 
+}
+
+.language-checkbox-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.language-checkbox-item-l{
+}
+.language-checkbox-item-r{
+  padding-left: 15px;
 }
 
 @media screen and (min-width: 1200px) {

@@ -278,10 +278,6 @@
                           </div>
                         </div>
 
-                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
-                          <el-image :src="dialogSingleImageUrl"></el-image>
-                        </el-dialog>
-
                       </el-form-item>
                     </el-col>
 
@@ -489,11 +485,31 @@
                             :http-request="videoHttpRequest"
                             :before-upload="beforeIntroVideoUpload"
                         >
-                          <video v-if="introVideoUrl" :src="introVideoUrl" controls class="upload-photo-img-1"/>
-                          <el-icon v-else :size="45">
+                          <el-icon :size="45">
                             <IconBiPlusSquare />
                           </el-icon>
                         </el-upload>
+
+                        <div class="account-xll-images">
+                          <div class="account-xll-image">
+                            <div v-if="introVideoUrl">
+                              <video style="width: 100%;" :src="introVideoUrl" controls/>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleVideoPreview(introVideoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in/>
+                                </el-icon>
+                              </span>
+                              <!--                              <span @click="handleVideoRemove(introVideoUrl)">-->
+                              <!--                                <el-icon color="#ffffff" :size="45">-->
+                              <!--                                  <Delete />-->
+                              <!--                                </el-icon>-->
+                              <!--                              </span>-->
+                            </div>
+                          </div>
+                        </div>
+
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -564,6 +580,56 @@
                     </el-col>
 
                   </el-row>
+
+                  <el-row :gutter="50" >
+                    <el-col :span="6">
+
+                      <el-form-item label="Additional images(up to 20mb/image)" prop="images">
+                        <el-upload
+                            style="width: 90%;"
+                            ref="accountImagesUpload"
+                            action="#"
+                            :headers="uploadHeaders"
+                            :data="uploadData"
+                            :auto-upload="false"
+                            name="file[]"
+                            :show-file-list="false"
+                            :limit="6"
+                            :multiple="true"
+                            :before-upload="beforeAccountImageUpload"
+                            :file-list="accountImageFileList"
+                            :on-change="handleAccountImageChange"
+                        >
+                          <el-icon :size="45">
+                            <IconBiPlusSquare/>
+                          </el-icon>
+
+                        </el-upload>
+
+                        <div class="account-xll-images">
+                          <div class="account-xll-image"
+                               v-for="(item,i) in accountImageFileList" :key="i">
+                            <el-image :src="item.url"></el-image>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleAccountImagePreview(item)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in/>
+                                </el-icon>
+                              </span>
+                              <span @click="handleAccountImageRemove(item,i)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <Delete/>
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
                 </div>
               </div>
 
@@ -576,6 +642,18 @@
       </div>
 
     </div>
+
+    <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
+      <el-image :src="dialogSingleImageUrl"></el-image>
+    </el-dialog>
+
+    <el-dialog width="50%" v-model="dialogVideoVisible" center>
+      <video :src="dialogVideoUrl" controls></video>
+    </el-dialog>
+
+    <el-dialog width="50%" v-model="dialogAccountImageVisible" center>
+      <el-image :src="dialogAccountImageUrl"></el-image>
+    </el-dialog>
 
     <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()" ></xllLoading>
 
@@ -594,8 +672,8 @@ import {
   GET_COUNTRY_LIST,
   SUB_CATE_LIST,
   USER_INFO_BY_TOKEN_V2,
-  SCHOOL_COMPANY_EDIT_V2, ADD_PROFILE_V2,USER_SUB_IDENTITY_V2,
-  UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, USER_MENU_LIST
+  SCHOOL_COMPANY_EDIT_V2, ADD_PROFILE_V2, USER_SUB_IDENTITY_V2,
+  UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, USER_MENU_LIST, UPLOAD_IMG, ADD_USER_IMG_V2
 } from '@/api/api'
 import {phoneCodeData} from "@/utils/phoneCode";
 import mapboxgl from "mapbox-gl";
@@ -623,6 +701,10 @@ export default {
   },
   data() {
     return {
+      dialogAccountImageUrl: '',
+      dialogAccountImageVisible: false,
+      accountImageFileList: [],
+
       companyInfo:{},
       countryInfo:'',
       haveLocationStatus:false,
@@ -785,12 +867,11 @@ export default {
       this.action = strObj.action;
 
       if(strObj.action == 'add'){
-        // this.sideMenuStatus = false;
-        this.getBasicInfo(strObj.i)
+        this.getBasicInfo()
       }
 
       if(strObj.action == 'edit'){
-        this.getBasicInfo(strObj.i)
+        this.getBasicInfo()
       }
 
     }
@@ -1293,7 +1374,7 @@ export default {
           localStorage.setItem('company_id',companyId)
           this.$store.commit('identity',3)
           this.$store.commit('allIdentityChanged',true )
-          this.$router.push('/business/profile')
+          this.$router.push('/account/home')
         }
       }).catch(err=>{
         console.log(err)
@@ -1337,12 +1418,14 @@ export default {
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
+
           if(action == 'edit'){
             this.basicForm.id = this.cid;
           }
           if(action == 'add'){
             this.basicForm.id = this.cid;
           }
+
           let params = Object.assign({}, this.basicForm);
           SCHOOL_COMPANY_EDIT_V2(params).then(res => {
             console.log(res)
@@ -1366,8 +1449,16 @@ export default {
               this.submitLoadingValue = false;
 
               if(action == 'edit'){
-                this.$router.push('/business/profile')
+                if (this.accountImageFileList.length > 0) {
+                  this.uploadAccountImages(this.cid)
+                }
+
+                this.$router.push('/account/home')
               }else{
+
+                if (this.accountImageFileList.length > 0) {
+                  this.uploadAccountImages(res.message.school_company_id)
+                }
 
                 localStorage.setItem('company_id', res.message.school_company_id)
 
@@ -1377,6 +1468,7 @@ export default {
                 this.getUserMenuList(uid,3, res.message.school_company_id, uid)
 
                 this.changeIdentity(res.message.school_company_id,2)
+
               }
 
             }
@@ -1548,6 +1640,13 @@ export default {
           if (schoolInfo.work_phone) {
             this.basicForm.work_phone = schoolInfo.work_phone;
           }
+          if (schoolInfo.display_name) {
+            this.basicForm.display_name = schoolInfo.display_name;
+          }
+
+          if (schoolInfo.job_title) {
+            this.basicForm.job_title = schoolInfo.job_title;
+          }
 
           if (schoolInfo.technology_available) {
             this.basicForm.technology_available = schoolInfo.technology_available;
@@ -1586,6 +1685,11 @@ export default {
           if (schoolInfo.logo) {
             this.logoPhotoUrl = schoolInfo.logo;
             this.basicForm.logo = schoolInfo.logo;
+          }
+
+          if (schoolInfo.profile_photo) {
+            this.profilePhotoUrl = schoolInfo.profile_photo;
+            this.basicForm.profile_photo = schoolInfo.profile_photo;
           }
 
           if (schoolInfo.background_image && schoolInfo.background_image != '0') {
@@ -1684,6 +1788,25 @@ export default {
             this.selectSchoolFacilitesList = facArr;
 
           }
+
+          if (schoolInfo.images) {
+
+            let userImages = schoolInfo.images
+            if (userImages.length > 0) {
+              let userImagesArr = []
+              userImages.forEach(item => {
+                let userImageObj = {
+                  name: '',
+                  url: item.url
+                }
+                userImagesArr.push(userImageObj)
+              })
+              this.accountImageFileList = []
+              this.accountImageFileList = userImagesArr
+            }
+
+          }
+
 
         }
       }).catch(err => {
@@ -2018,6 +2141,71 @@ export default {
       this.dialogSingleImageUrl = file
       this.dialogSingleImageVisible = true;
     },
+    beforeAccountImageUpload(file) {
+      const isJpeg = file.type === 'image/png' || file.type === 'image/jpg'
+      if (!isJpeg) {
+        return this.$message.error('Please select the correct file format to upload')
+      }
+      return isJpeg
+    },
+    handleAccountImageChange(file, fileList) {
+      console.log(file)
+      console.log(fileList)
+      let imgParams = new FormData();
+      let token = localStorage.getItem('token')
+      imgParams.append('token', token)
+      imgParams.append('platform', 4)
+      imgParams.append('file[]', file.raw)
+
+      UPLOAD_IMG(imgParams).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          let imgData = res.data;
+          // let imgArr = [];
+          imgData.forEach(item => {
+            let obj = {
+              name: item.file_name,
+              url: item.file_url
+            }
+            this.accountImageFileList.push(obj)
+          })
+        }
+
+      }).catch(err => {
+        this.$loading().close()
+        console.log(err.code)
+      })
+
+    },
+    uploadAccountImages(companyId) {
+      let oldData = []
+      this.accountImageFileList.forEach(file => {
+        oldData.push(file.url)
+      })
+
+      let params = {
+        token: localStorage.getItem('token'),
+        identity: 3,
+        company_id: companyId,
+        img: oldData
+      }
+
+      ADD_USER_IMG_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          console.log('account images ----')
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+
+    accountImagePreview(url) {
+      this.dialogAccountImageVisible = true;
+      this.dialogAccountImageUrl = url;
+    },
 
 
   }
@@ -2058,7 +2246,7 @@ export default {
 }
 
 .account-profile-t-l{
-  font-family: BSemiBold, serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:30px;
   color:#262626;
 
@@ -2118,7 +2306,7 @@ export default {
   border-radius: 6px;
   font-size: 20px;
   cursor: pointer;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .tag-active {
@@ -2167,7 +2355,7 @@ export default {
   border-radius: 6px;
   margin: 10px;
   font-size: 20px;
-  font-family: BCM, serif;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   cursor: pointer;
 }
 
@@ -2296,7 +2484,7 @@ export default {
 }
 
 .account-profile-item-label{
-  font-family: BarlowM, serif;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size:26px;
   color:#262626;
 }
@@ -2355,6 +2543,45 @@ export default {
 .upload-photo-img-1{
   width: 100%;
 }
+
+
+.account-xll-images {
+  width: 90%;
+}
+
+.account-xll-image {
+  position: relative;
+  margin-top: 10px;
+
+}
+
+.account-xll-image-mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  display: none;
+
+}
+
+.account-xll-image:hover .account-xll-image-mask {
+  /*display: inline;*/
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-xll-image-mask span {
+  margin-right: 15px;
+  cursor: pointer;
+}
+
 
 @media screen and (min-width: 1200px){
   .basic-container{
