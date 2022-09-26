@@ -3,99 +3,14 @@
 
     <el-row class="content-row" :gutter="0" align="top" justify="center">
 
-      <el-col class="filter-col" :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-
-        <div class="filter-bg-container">
-
-          <div class="post-event-btn-container">
-            <el-button type="primary" round @click="postEvent()">Post an Event</el-button>
-          </div>
-          <div class="deals-events-filter-container">
-
-            <div class="deals-events-filter-item">
-              <div class="deals-events-filter-label">Location</div>
-              <el-select class="deals-events-filter-select"
-                         v-model="locationValue" clearable
-                         placeholder="Filter by location"
-                         size="default"
-                         @change="locationChange"
-              >
-                <el-option
-                    v-for="item in locationOptions"
-                    :key="item.id"
-                    :label="item.Pinyin"
-                    :value="item.id"
-                >
-                </el-option>
-              </el-select>
-            </div>
-
-            <div class="deals-events-filter-item">
-              <div class="qx-checked-container">
-                <div class="qx-checked-item"
-                     @click="selectIsOnline()"
-                >
-                  <div class="qx-checked-square"
-                       :class="filterIsOnlineValue ? 'qx-checked-square-active' : '' "
-                  ></div>
-                  <div class="qx-checked-label">Online</div>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="deals-events-filter-item">
-              <div class="deals-events-filter-label">Tags</div>
-              <el-select class="deals-events-filter-select"
-                         v-model="tagValue"
-                         clearable multiple
-                         placeholder="Filter by tag"
-                         size="default"
-                         @change="tagChange"
-              >
-                <el-option
-                    v-for="item in tagsData"
-                    :key="item.id"
-                    :label="item.name_en"
-                    :value="item.id"
-                >
-                </el-option>
-              </el-select>
-            </div>
-
-            <div class="deals-events-filter-item">
-              <div class="deals-events-filter-label">Event type</div>
-
-              <div class="qx-checked-container">
-                <div class="qx-checked-item" v-for="(item,i) in categoryOptions" :key="i"
-                     @click="getEventsList(eventPage,eventLimit)"
-                >
-                  <div class="qx-checked-square"
-                       :class="categoryId == item.id ? 'qx-checked-square-active' : '' "
-                  ></div>
-                  <div class="qx-checked-label">{{ item.name_en }}</div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-          <div class="filter-search-btn-container">
-            <el-button type="primary" round >
-              SEARCH
-            </el-button>
-          </div>
-
-          <div class="filter-contact-us-container">
-            <el-icon :size="45" color="#6648FF">
-              <IconIcBaselineLiveHelp />
-            </el-icon>
-            <span>Contact Us</span>
-          </div>
-
-        </div>
-
+      <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+        <eventFilterComponent
+            :locationData="locationOptions"
+            :tagsData = "tagsData"
+            :categoryData="categoryOptions"
+            @search="confirmFilterSearch"
+        >
+        </eventFilterComponent>
       </el-col>
 
       <el-col class="events-list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
@@ -170,70 +85,42 @@
       </el-col>
     </el-row>
 
-    <el-dialog class="event-detail-dialog" v-model="eventDialogVisible">
-      <div class="event-dialog-container">
-        <div class="event-dialog-l">
-          <el-image  :src="eventDetailData.file !='' ? eventDetailData.file : '' "></el-image>
-        </div>
-        <div class="event-dialog-r">
-          <div class="event-dialog-r-1">
-            {{eventDetailData.company_name}}
-          </div>
-          <div class="event-dialog-r-2">
-            {{eventDetailData.location}}
-          </div>
-          <div class="event-dialog-r-3">
-              {{ $filters.ymdFormatEvent(eventDetailData.date)  }}, {{$filters.timeFormatEvent(eventDetailData.start_time,eventDetailData.end_time)}}
-          </div>
-          <div class="event-dialog-r-4">
-            {{eventDetailData.name}}
-          </div>
-          <div class="event-dialog-r-5">
-            {{eventDetailData.desc}}
-          </div>
-          <div class="event-dialog-r-6">
+    <eventDetailCard :info="eventDetailData"
+                     :visible="eventDialogVisible"
+                     @rsvp="showBookEvent()"
+                     @close="eventDialogVisible=false">
+    </eventDetailCard>
+    <bookEventForm :visible="bookEventDialogVisible"
+                   :info="eventDetailData"
+                   @close="bookEventDialogVisible=false">
+    </bookEventForm>
 
-          </div>
-          <div class="event-dialog-r-price">
-            <div class="event-dialog-r-price-label">Price</div>
-            <div class="event-dialog-r-price-content">
-              {{eventDetailData.currency}} {{eventDetailData.pay_money}}
-            </div>
-          </div>
+    <BookEventList :visible="bookListDialogVisible"
+                   :info="bookedListData"
+                   @close="bookListDialogVisible=false"
+    >
+    </BookEventList>
 
-          <div class="event-dialog-r-btn-1-container">
-            <el-button class="event-dialog-r-btn" link>
-              ADD TO CALENDAR
-            </el-button>
-          </div>
-          <div class="event-dialog-r-btn-container">
-            <el-button class="event-dialog-r-btn" link>
-              RSVP
-            </el-button>
-          </div>
-
-          <div class="event-dialog-r-b">
-            <div class="event-dialog-r-b-l">
-
-            </div>
-            <div class="event-dialog-r-b-r">
-              Posted by: <span>{{eventDetailData.company_name}}</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </el-dialog>
 
   </div>
 </template>
 
 <script>
+import eventFilterComponent from "@/components/eventFilterComponent";
 import bannerImg from '../../assets/events/banner.png'
-import {EVENTS_CATEGORY, EVENTS_LIST} from "@/api/api";
+import {EVENT_APPLICATIONS, EVENTS_CATEGORY, EVENTS_LIST} from "@/api/api";
+import eventDetailCard from "@/components/eventDetailCard";
+import bookEventForm from "@/components/bookEventForm";
+import BookEventList from "@/components/bookEventList";
 
 export default {
   name: "list",
+  component:{
+    eventFilterComponent,
+    eventDetailCard,
+    bookEventForm,
+    BookEventList
+  },
   data(){
     return {
       bannerImg,
@@ -251,7 +138,11 @@ export default {
       tagsData: [],
       filterIsOnlineValue: false,
       eventDialogVisible:false,
-      eventDetailData:{}
+      eventDetailData:{},
+      filterResultData:{},
+      bookEventDialogVisible:false,
+      bookListDialogVisible:false,
+      bookedListData:[]
 
     }
   },
@@ -260,6 +151,29 @@ export default {
     this.getEventsList(this.eventPage,this.eventLimit)
   },
   methods:{
+    showBookEvent(){
+      this.bookEventDialogVisible = true;
+      // this.eventDialogVisible = false;
+    },
+    showBookList(item){
+      this.bookListDialogVisible = true;
+      let params = {
+        event_id:item.id
+      }
+      EVENT_APPLICATIONS(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.bookedListData = res.message.data;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    confirmFilterSearch(e){
+      console.log(e)
+      this.filterResultData = e;
+      this.getEventsList(this.eventPage,this.eventLimit)
+    },
     showEventDialog(item){
       this.eventDialogVisible = true;
       this.eventDetailData  = item;
@@ -286,19 +200,6 @@ export default {
       this.showLoadingStatus = true
       this.tagValue = e
       this.getEventsList(this.dealPage, this.dealLimit)
-    },
-    postEvent(){
-      let token = localStorage.getItem('token')
-      let identity = localStorage.getItem('identity')
-      if(token){
-        if(identity != 1){
-          this.$router.push('/events/post')
-        }else{
-          window.open('https://zfrmz.com/5A8Bl4Gg8unV4HVE0lX4','_blank')
-        }
-      }else{
-        window.open('https://zfrmz.com/5A8Bl4Gg8unV4HVE0lX4','_blank')
-      }
     },
     getEventCategories(){
       let params = {
@@ -331,18 +232,20 @@ export default {
       this.getEventsList(e, this.eventLimit)
     },
     getEventsList(page,limit){
-      let params = {
+
+      let filterResult = this.filterResultData;
+
+      let paramsA = {
         page: page,
         limit: limit
       }
-      if(this.categoryId){
-        params.category_id = this.categoryId
-      }
+
+      let params = Object.assign(paramsA,filterResult)
 
       EVENTS_LIST(params).then(res=>{
         console.log(res)
         if(res.code == 200){
-          this.eventsList = this.eventsList.concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data).concat(res.message.data) ;
+          this.eventsList = res.message.data;
           this.eventTotalNum = res.message.total;
           this.showLoadingStatus=false
 
@@ -362,102 +265,6 @@ export default {
 <style scoped>
 .events-bg{
   background-color: #FFFFFF;
-}
-
-.filter-col{
-  padding-right: 13px;
-}
-
-.filter-bg-container{
-  background-color: #F0F2F5;
-  height: calc(100vh - 200px);
-  padding: 30px;
-  position: relative;
-}
-
-
-.deals-events-filter-container {
-  margin-top: 20px;
-}
-
-.deals-events-filter-label {
-  text-align: left;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #262626;
-  margin-bottom:10px;
-}
-
-.deals-events-filter-select {
-  width: 100%;
-}
-
-.deals-events-filter-item {
-  margin-top: 25px;
-}
-
-.filter-search-btn-container{
-  margin-top: 50px;
-  text-align: center;
-}
-
-.filter-contact-us-container{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  position: absolute;
-  bottom:30px;
-  left:0;
-  right:0;
-  margin:auto;
-  cursor:pointer;
-
-}
-
-.filter-contact-us-container span{
-  font-family: BCRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size:25px;
-  color:#262626;
-}
-
-
-.qx-checked-container {
-
-}
-
-.qx-checked-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 10px;
-}
-
-.qx-checked-square {
-  border: 1px solid #808080;
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-  cursor: pointer;
-}
-
-.qx-checked-label{
-  text-align: left;
-  margin-left: 10px;
-  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color:#262626;
-}
-
-.qx-done-btn-container {
-  text-align: right;
-  margin-top: 20px;
-}
-
-.qx-checked-square-active {
-  background-color: #6650B3;
 }
 
 .events-list-col{
@@ -640,6 +447,7 @@ export default {
 .event-dialog-r-b-l{
 
 }
+
 .event-dialog-r-b-r{
 
 }

@@ -3,7 +3,7 @@
 
     <el-row justify="center" align="top" class="login-container">
       <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
-        <div class="login-l">
+        <div class="login-l" @click="turnHome()">
           <div class="login-l-edu">EDU</div>
           <div class="login-l-passport">PASSPORT</div>
         </div>
@@ -37,9 +37,9 @@
                     <el-checkbox size="large" v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
                   </div>
                   <div class="forgot-password-container">
-                    <div class="forgot-password-btn"  @click="forgotPassword()">
+                    <el-button link class="forgot-password-btn"  @click="forgotPassword()">
                       Forgot password?
-                    </div>
+                    </el-button>
                   </div>
                 </div>
 
@@ -110,7 +110,7 @@
                       <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
                     </div>
                     <div class="forgot-password-container">
-                      <el-button link  size="large" class="forgot-password-btn" @click="forgotPassword()">Forgot password?
+                      <el-button link class="forgot-password-btn" @click="forgotPassword()">Forgot password?
                       </el-button>
                     </div>
                   </div>
@@ -170,7 +170,8 @@
                       <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
                     </div>
                     <div class="forgot-password-container">
-                      <el-button link  size="large" class="forgot-password-btn" @click="forgotPassword()">Forgot password?
+                      <el-button link class="forgot-password-btn" @click="forgotPassword()">
+                        Forgot password?
                       </el-button>
                     </div>
                   </div>
@@ -198,11 +199,12 @@
                          @click="loginWithPhone()"
                          class="login-option-btn" link round>
                 <template #icon>
-                  <el-icon>
-                    <IconEduPhoneIcon />
+                  <el-icon >
+                    <IconBytesizeMobile />
                   </el-icon>
                 </template>
-                 SIGN IN WITH PHONE NUMBER
+
+                SIGN IN WITH PHONE NUMBER
               </el-button>
               <el-button v-if="!loginEmailStatus"
                          @click="loginWithPhone()"
@@ -256,12 +258,26 @@
       </el-col>
       <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
         <div class="login-r">
-          <div class="sign-up">
-            <el-button class="sign-up-btn" size="large" plain round @click="signUp()">SIGN UP</el-button>
-          </div>
+
           <div class="login-close">
-            <el-button class="login-close-btn" size="large" link @click="goHome()" >CLOSE</el-button>
+            <el-button class="login-close-btn"
+                       link
+                       @click="goHome()"
+            >
+              CLOSE
+            </el-button>
           </div>
+
+          <div class="sign-up">
+            <el-button class="sign-up-btn"
+                       plain
+                       round
+                       @click="signUp()"
+            >
+              SIGN UP
+            </el-button>
+          </div>
+
         </div>
       </el-col>
 
@@ -283,7 +299,7 @@ import {
   SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
   ZOHO_SYNC,
-  LOGIN_EMAIL_PWD_V2, PHONE_REGISTER_V2, LOGIN_PHONE_SMS_V2, LOGIN_PHONE_PWD_V2
+  LOGIN_EMAIL_PWD_V2, PHONE_REGISTER_V2, LOGIN_PHONE_SMS_V2, LOGIN_PHONE_PWD_V2, USER_MENU_LIST
 } from "@/api/api";
 //LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
@@ -437,7 +453,8 @@ export default {
           return router.push({path: b.path, query: b.query})
         }
       }
-      return router.push({path: '/home'})
+
+      return router.push({path: '/overview'})
     }
 
     let value = route.query.type;
@@ -510,6 +527,9 @@ export default {
     this.showValue = this.showType
   },
   methods: {
+    turnHome(){
+      this.$router.push('/')
+    },
     changeType(e){
       e.target.type = 'password'
     },
@@ -561,7 +581,7 @@ export default {
       this.$router.push('/edupassport/signup')
     },
     goHome() {
-      this.$router.push('/home')
+      this.$router.push('/')
     },
     remeberChange(e) {
       console.log(e)
@@ -705,11 +725,13 @@ export default {
                 //
                 this.setCurrentUser(currentUser)
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
+                this.getUserMenuList(resMessage.id,identity, resMessage.company_id, resMessage.id)
 
                 setTimeout(function () {
                   self.skipHomePage()
                   self.submitLoginLoadingStatus = false
                 }, 1500)
+
               }
             }).catch(err => {
               console.log(err)
@@ -798,6 +820,7 @@ export default {
 
                 this.setCurrentUser(currentUser)
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
+                this.getUserMenuList(resMessage.id,identity, resMessage.company_id, resMessage.id)
 
                 setTimeout(function () {
                   self.skipHomePage()
@@ -888,6 +911,7 @@ export default {
 
                 this.setCurrentUser(currentUser)
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
+                this.getUserMenuList(resMessage.id,identity, resMessage.company_id, resMessage.id)
 
                 setTimeout(function () {
                   self.skipHomePage()
@@ -911,8 +935,7 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
-                      self.showValue = 'sign-up'
+                      self.$router.push({path: '/edupassport', query: {}})
                     }
                   }
 
@@ -932,6 +955,29 @@ export default {
         })
 
       }
+    },
+    getUserMenuList(uid,identity,companyId,cId){
+
+      let params = {
+        user_id:uid,
+        identity:identity,
+        company_id:companyId,
+        create_user_id:cId,
+        page:1,
+        limit:1000
+      }
+
+      USER_MENU_LIST(params).then(res=>{
+        // console.log(res)
+        if(res.code === 200){
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData',str)
+          this.$store.commit('menuData', res.message)
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
     },
     async submitEducatorContactForm(userId){
 
@@ -1267,12 +1313,12 @@ export default {
 }
 
 .login-container{
-  max-width:1920px;
-  padding-top: 52px;
+  padding-top: 50px;
 }
 
 .login-l{
   padding-left: 50px;
+  cursor: pointer;
 }
 
 .login-l-edu{
@@ -1326,7 +1372,7 @@ export default {
 }
 
 .login-close{
-  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .login-close-btn{
@@ -1347,23 +1393,19 @@ export default {
 }
 
 .forgot-password-btn {
-  font-size: 18px;
-  color:#262626;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  cursor: pointer;
+
 }
 
-.forgot-password-btn:hover{
-  color:#000000;
-  font-weight: bold;
+/deep/ .el-checkbox__label{
+  font-family: BCM,"Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+  font-size: 20px;
 }
-
 
 .login-option-btn {
   font-family: BCM,"Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   width: 100%;
   font-size: 20px;
-  margin-top:50px;
+  margin-top: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1372,12 +1414,8 @@ export default {
 }
 
 .submit-btn {
-  font-family: BCM,"Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  width: 90px;
   height: 40px;
   margin: 50px auto 0;
-  font-size: 20px;
-  background-color:#6650B3;
 }
 
 .remeber-forgot-container{
@@ -1428,6 +1466,11 @@ export default {
 .xll-input-btn {
   width: 26%;
 }
+
+/deep/ .el-divider__text{
+  background-color: #F0F2F5;
+}
+
 
 @media screen and (min-width: 1200px) {
 

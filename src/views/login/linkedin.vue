@@ -92,7 +92,7 @@ export default {
 
           this.setCurrentUser(currentUser)
 
-          this.$router.push('/home')
+          this.$router.push('/')
 
         }
 

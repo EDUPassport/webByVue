@@ -1,188 +1,251 @@
 <template>
   <div class="bg">
     <div class="profile-container">
-      <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <meSideMenu></meSideMenu>
-        </el-col>
-        <el-col class="jobs-r-container" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+
+      <div class="profile-l-container">
+        <meSideMenu></meSideMenu>
+      </div>
+      <div class="profile-r-container">
+
+        <el-scrollbar class="profile-r-bg-container">
+
+          <div class="new-deal-t">
+            <div class="new-deal-t-l">New deal</div>
+            <div class="new-deal-t-r">
+
+              <el-button class="new-deal-btn" link round>
+                DISCARD
+              </el-button>
+              <el-button class="new-deal-btn" plain round>
+                SAVE AS DRAFT
+              </el-button>
+              <el-button class="new-deal-btn" type="primary" round
+                         :loading="submitLoadingValue"
+                         @click="submitForm('basicForm')">
+                SUBMIT
+              </el-button>
+            </div>
+          </div>
 
           <div class="basic-form">
+            <div class="basic-form-label">
+              Deal information
+            </div>
             <el-form
                 ref="basicForm"
                 :model="basicForm"
                 :rules="basicRules"
                 label-width="120px"
                 label-position="top"
-                class="demo-ruleForm"
+                class="deals-form"
             >
-              <el-form-item label="Deal Name" prop="title">
-                <el-input v-model="basicForm.title" placeholder="Example:50% off all pizzas.."></el-input>
-              </el-form-item>
-              <el-form-item label="Deal Description" prop="desc">
-                <el-input v-model="basicForm.desc" type="textarea" placeholder="Deal Details"></el-input>
-              </el-form-item>
-              <el-form-item label="Tags" >
-                <div class="tags-tips">
-                  Tags help people search for and discover you more easily. Add tags to improve your chances of discovery.
-                </div>
-                <div class="object-tags-container" >
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectTagsList.indexOf(item.id) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in tagsData" :key="index"
-                         @click="selectTagA(item)">
-                      {{ item.name_en }}
-                    </div>
-                  </div>
-                  <div class="object-tags">
-                    <div class="object-tags-item"
-                         :class=" selectTagsList.indexOf(item) == -1 ? '' : 'tags-active' "
-                         v-for="(item,index) in ownTagsList" :key="index" @click="selectTag(item)">
-                      {{ item }}
-                    </div>
-                  </div>
-                  <div class="object-tags">
-                    <div class="object-tags-item" v-if="addTagsStatus==false"
-                         @click="addTagsStatus=true">Add+
-                    </div>
-                  </div>
+              <el-row :gutter="50">
+                <el-col :span="6">
+                  <el-form-item label="Deal Name" prop="title">
+                    <el-input v-model="basicForm.title" placeholder="eg. 10% off your first class."></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="18">
+                  <el-form-item label="Deal Description" prop="desc">
+                    <el-input v-model="basicForm.desc" type="textarea"
+                              :rows="4"
+                              placeholder="Provide a paragraph or two about the deal and how to redeem it.">
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
-                  <div class="object-tags-add">
-                    <div class="object-tags-item-add" v-if="addTagsStatus">
-                      <el-input type="text" v-model="ownTagsValue"
-                                placeholder="Add tag"></el-input>
-                      <div class="object-tags-item-btn-container">
-                        <el-button class="object-tags-item-btn" type="primary"
-                                   v-if="ownTagsValue.length>0"
-                                   @click="addOwnTag">Confirm
-                        </el-button>
-                        <el-button class="object-tags-item-btn" type="primary"
-                                   v-if="ownTagsValue.length==0"
-                                   @click="addTagsStatus=false">Cancel
-                        </el-button>
+              <el-row :gutter="50">
+
+                <el-col :span="6">
+                  <el-form-item label="Tags" >
+                    <div class="tags-tips">
+                      Tags will help find your deal easier
+                    </div>
+
+                    <div class="object-tags-add">
+                      <div class="object-tags-item-add">
+                        <el-input type="text"
+                                  v-model="ownTagsValue"
+                                  placeholder='Click "add" after each entry '>
+                        </el-input>
+                        <div class="object-tags-item-btn-container">
+                          <el-button class="object-tags-item-btn"
+                                     type="primary"
+                                     link
+                                     :disabled="!ownTagsValue"
+                                     @click="addOwnTag">
+                            ADD
+                          </el-button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </el-form-item>
-              <el-form-item label="Deal Location">
 
-                <el-tabs class="deals-tabs-container" type="border-card"
-                         @tab-click="dealLocationTypeChange"
-                         v-model="dealLocationTypeValue">
-                  <el-tab-pane label="Online" name="1">
-                    <div class="deals-tips">
-                      This deal is only available online
+                    <div class="object-tags-container">
+
+                      <div class="object-tags">
+                        <div class="object-tags-item"
+                             :class=" selectTagsList.indexOf(item.id) == -1 ? '' : 'tags-active' "
+                             v-for="(item,index) in tagsData" :key="index"
+                             @click="selectTagA(item)">
+                          {{ item.name_en }}
+                        </div>
+                      </div>
+                      <div class="object-tags">
+                        <div class="object-tags-item"
+                             :class=" selectTagsList.indexOf(item) == -1 ? '' : 'tags-active' "
+                             v-for="(item,index) in ownTagsList" :key="index"
+                             @click="selectTagA(item)">
+                          {{ item }}
+                        </div>
+                      </div>
+
                     </div>
-                  </el-tab-pane>
-                  <el-tab-pane label="Offline" name="2">
-                    <div class="deals-location-select-container">
 
-                      <el-select v-model="countryObj"
-                                 @change="countryChange"
-                                 value-key="id"
-                                 filterable
-                                 placeholder="Select Country">
-                        <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                                   :value="item"></el-option>
-                      </el-select>
+                  </el-form-item>
 
-                      <template v-if="provinceOptions.length>0">
-                        <el-select v-model="provinceObj"
-                                   value-key="id"
-                                   filterable
-                                   @change="provinceChange"
-                                   placeholder="Select Province">
-                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                                     :value="item"></el-option>
-                        </el-select>
+                </el-col>
+
+                <el-col :span="18">
+
+                  <el-form-item  label="Deal Location">
+
+                    <div class="deals-location-bg">
+                      <div class="deals-tabs-container">
+                        <div class="deals-tabs-l"
+                             :class="dealLocationType === 1 ? 'tags-active' : '' "
+                             @click="changeDealLocationType(1)">
+                          ONLINE
+                        </div>
+                        <div class="deals-tabs-m"
+                             :class="dealLocationType === 2 ? 'tags-active' : '' "
+                             @click="changeDealLocationType(2)">
+                          OFFLINE
+                        </div>
+                        <div class="deals-tabs-r"
+                             :class="dealLocationType === 3 ? 'tags-active' : '' "
+                             @click="changeDealLocationType(3)">
+                          BOTH
+                        </div>
+                      </div>
+
+                      <template v-if="dealLocationType === 1">
+
+                        <div class="deals-location-container">
+                          <div class="deals-tips">
+                            This deal is only available online
+                          </div>
+                        </div>
+
                       </template>
-                      <template v-if="cityOptions.length>0">
-                        <el-select v-model="cityObj"
-                                   value-key="id"
-                                   filterable
-                                   @change="cityChange"
-                                   placeholder="Select City">
-                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                                     :value="item"></el-option>
-                        </el-select>
+                      <template v-if="dealLocationType === 2">
+
+                        <div class="deals-location-container">
+                          <div class="deals-location-select-container">
+
+                            <el-select v-model="countryObj"
+                                       @change="countryChange"
+                                       value-key="id"
+                                       filterable
+                                       placeholder="Select Country">
+                              <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                         :value="item"></el-option>
+                            </el-select>
+
+                            <template v-if="provinceOptions.length>0">
+                              <el-select v-model="provinceObj"
+                                         value-key="id"
+                                         filterable
+                                         @change="provinceChange"
+                                         placeholder="Select Province">
+                                <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
+                            </template>
+                            <template v-if="cityOptions.length>0">
+                              <el-select v-model="cityObj"
+                                         value-key="id"
+                                         filterable
+                                         @change="cityChange"
+                                         placeholder="Select City">
+                                <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
+                            </template>
+
+                          </div>
+
+                          <div class="map-container"
+                               v-loading="mapLoading">
+                            <div id="mapContainer" class="basemap"></div>
+                          </div>
+
+                        </div>
+                      </template>
+
+                      <template v-if="dealLocationType === 3">
+
+                        <div class="deals-location-container">
+                          <div class="deals-tips">
+                            This deal is available online and at the location below
+                          </div>
+                          <div class="deals-location-select-container">
+                            <el-select v-model="countryObj"
+                                       @change="countryChange"
+                                       value-key="id"
+                                       filterable
+                                       placeholder="Select Country">
+                              <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                         :value="item"></el-option>
+                            </el-select>
+
+                            <template v-if="provinceOptions.length>0">
+                              <el-select v-model="provinceObj"
+                                         value-key="id"
+                                         filterable
+                                         @change="provinceChange"
+                                         placeholder="Select Province">
+                                <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
+                            </template>
+                            <template v-if="cityOptions.length>0">
+                              <el-select v-model="cityObj"
+                                         value-key="id"
+                                         filterable
+                                         @change="cityChange"
+                                         placeholder="Select City">
+                                <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
+                            </template>
+                          </div>
+                          <div class="map-container"
+                               v-loading="map1Loading">
+                            <div id="mapContainer1" class="basemap"></div>
+                          </div>
+
+                        </div>
                       </template>
 
                     </div>
 
-                    <div class="map-container"
-                         v-loading="mapLoading"
-                         v-if="dealLocationTypeValue == 2">
-                      <div id="mapContainer" class="basemap"></div>
-                    </div>
 
-                  </el-tab-pane>
-                  <el-tab-pane label="Both" name="3">
-                    <div class="deals-tips">
-                      This deal is available online and at the location below
-                    </div>
-                    <div class="deals-location-select-container">
-                      <el-select v-model="countryObj"
-                                 @change="countryChange"
-                                 value-key="id"
-                                 filterable
-                                 placeholder="Select Country">
-                        <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                                   :value="item"></el-option>
-                      </el-select>
 
-                      <template v-if="provinceOptions.length>0">
-                        <el-select v-model="provinceObj"
-                                   value-key="id"
-                                   filterable
-                                   @change="provinceChange"
-                                   placeholder="Select Province">
-                          <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                                     :value="item"></el-option>
-                        </el-select>
-                      </template>
-                      <template v-if="cityOptions.length>0">
-                        <el-select v-model="cityObj"
-                                   value-key="id"
-                                   filterable
-                                   @change="cityChange"
-                                   placeholder="Select City">
-                          <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                                     :value="item"></el-option>
-                        </el-select>
-                      </template>
-                    </div>
-                    <div class="map-container"
-                         v-loading="map1Loading"
-                         v-if="dealLocationTypeValue == 3">
-                      <div id="mapContainer1" class="basemap"></div>
-                    </div>
-                  </el-tab-pane>
-                </el-tabs>
+                  </el-form-item>
 
-              </el-form-item>
-
-              <el-form-item label="Deal Agreement">
-                <div class="deal-agreement">
-                  I understand this deal will need EDU Passport's approval.
-                </div>
-              </el-form-item>
+                </el-col>
+              </el-row>
 
 
             </el-form>
 
-            <div class="xll-submit-container">
-              <el-button type="primary" @click="submitForm('basicForm')">
-                Submit
-              </el-button>
-              <el-button @click="resetForm('basicForm')">Reset</el-button>
-            </div>
-
           </div>
 
-        </el-col>
-      </el-row>
+        </el-scrollbar>
+
+      </div>
+
     </div>
   </div>
 </template>
@@ -203,6 +266,7 @@ export default {
   },
   data() {
     return {
+      submitLoadingValue:false,
       mapLoading:false,
       map1Loading:false,
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
@@ -265,7 +329,10 @@ export default {
           },
         ]
 
-      }
+      },
+
+      dealLocationType: 1,
+
 
     }
   },
@@ -274,10 +341,11 @@ export default {
     this.getAllCountry()
   },
   methods: {
-    dealLocationTypeChange(e){
-      console.log(e.paneName)
+    changeDealLocationType(value){
+      this.dealLocationType = value
       let self =this
-      if(e.paneName == 2){
+
+      if(value == 2){
         this.mapLoading=true
         setTimeout(function () {
           self.initMap()
@@ -285,7 +353,7 @@ export default {
         },1000)
       }
 
-      if(e.paneName== 3){
+      if(value == 3){
         this.map1Loading=true
         setTimeout(function () {
           self.initMap1()
@@ -341,6 +409,7 @@ export default {
         this.basicForm.lat = e.result.center[1]
 
       })
+
       geocoder.on('clear', (e) => {
         console.log(e)
         this.basicForm.location =''
@@ -586,19 +655,67 @@ export default {
 }
 
 .profile-container {
-
-  margin: 0 auto;
-  padding: 20px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.jobs-r-container{
-  padding: 0 20px;
+.profile-l-container {
+
 }
+
+.profile-r-container {
+  padding: 0 50px 50px 50px;
+  width: calc(100% - 260px);
+  height: calc(100vh - 190px);
+}
+
+.profile-r-bg-container{
+  width: 100%;
+  height: calc(100vh - 240px);
+
+}
+
+.new-deal-t {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 0 30px 0;
+}
+
+.new-deal-t-l {
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  color: #262626;
+
+}
+
+.new-deal-t-r {
+
+}
+
+.new-deal-btn {
+  font-size: 20px;
+}
+
 
 .basic-form{
   background-color: #FFFFFF;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 50px;
+  box-shadow: 0 3px 23px #00000012;
+  border-radius: 38px;
+}
+
+.basic-form-label{
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color: #262626;
+}
+
+.deals-form{
+  margin-top: 25px;
 }
 
 .object-tags-container {
@@ -619,11 +736,13 @@ export default {
 }
 
 .object-tags-item {
-  background-color: rgba(0, 179, 210, 0.1);
+  background-color: #F0F2F5;
+  border: 1px solid #262626;
   padding: 4px 10px;
   border-radius: 6px;
   margin: 10px;
-  font-size: 14px;
+  font-size: 20px;
+  font-family: BCM, serif;
   cursor: pointer;
 }
 
@@ -634,26 +753,89 @@ export default {
 
 .object-tags-item-add {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  position: relative;
+}
+
+.object-tags-item-btn-container {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+}
+
+.object-tags-item-btn {
+  color: #262626;
+  font-size: 20px;
 }
 
 
 .tags-active {
-  background-color: #00CE47;
-  color: #FFFFFF;
+  background-color: #6650B3;
+  color: #FFFFFF !important;
 }
+
+.deals-location-bg{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
 .deals-tabs-container{
-  border-radius: 10px;
-  overflow:hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
+
+.deals-tabs-l{
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+  border: 2px solid #262626;
+  height: 44px;
+  line-height: 44px;
+  padding: 0 20px;
+  border-top-left-radius: 44px;
+  border-bottom-left-radius: 44px;
+  cursor: pointer;
+}
+.deals-tabs-m{
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+  border-top: 2px solid #262626 ;
+  border-bottom: 2px solid #262626 ;
+  height: 44px;
+  line-height: 44px;
+  padding: 0 20px;
+  cursor: pointer;
+}
+
+.deals-tabs-r{
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+  border: 2px solid #262626;
+  height: 44px;
+  line-height: 44px;
+  padding: 0 20px;
+  border-top-right-radius: 44px;
+  border-bottom-right-radius: 44px;
+  cursor: pointer;
+}
+.deals-location-container{
+  margin-top: 25px;
+}
+
 .deals-location-select-container{
   text-align: left;
 }
+
 .map-container{
-  margin-top: 10px;
+  margin-top: 25px;
+  min-width: 700px;
   width: 100%;
   height: 300px;
   text-align: center;
@@ -676,20 +858,8 @@ export default {
   color: #808080;
 }
 
-.deal-agreement{
-  text-align: left;
-  font-size: 12px;
-  color: #00b3d2;
-}
-
-.xll-submit-container{
-  text-align: center;
-}
-
 @media screen and (min-width: 1200px){
-  .profile-container{
-    width: 1100px;
-  }
+
 }
 
 @media screen and (max-width: 768px){

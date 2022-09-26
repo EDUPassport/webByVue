@@ -6,8 +6,10 @@
         <meSideMenu></meSideMenu>
       </div>
 
-      <div class="basic-r-container">
+      <el-scrollbar class="basic-r-container">
+
         <div class="basic-r-container-bg">
+
           <div class="account-profile-t">
             <div class="account-profile-t-l">Your profile</div>
             <div class="account-profile-t-r">
@@ -22,7 +24,7 @@
             </div>
           </div>
 
-          <div class="basic-form">
+          <el-scrollbar class="basic-form">
             <el-form
                 ref="basicForm"
                 :model="basicForm"
@@ -169,7 +171,7 @@
                                   :value="item.phone_code"
                               >
                                 <span style="float: left">{{ item.en }}</span>
-                                <span style=" float: right;color: var(--el-text-color-secondary);font-size: 13px;">
+                                <span style=" float: right;font-size: 13px;">
                                     {{ item.phone_code }}
                                 </span>
                               </el-option>
@@ -309,58 +311,50 @@
                     <el-col :span="6">
                       <el-form-item label="Subjects we teach">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownSubjectValue"
-                                      placeholder='Click "add" after each entry '>
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         link
-                                         type="primary"
-                                         @click="addOwnSubject">
-                                 ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
+                        <el-select
+                            v-model="selectSubjectList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select subjects we teach"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editSubjectList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectSubjectList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editSubjectList" :key="index"
-                                 @click="selectSubject(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectSubjectList.findIndex((element)=>element==item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownSubjectList" :key="index"
-                                 @click="selectSubject(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
+                        </el-select>
 
                       </el-form-item>
 
                     </el-col>
                     <el-col :span="6">
                       <el-form-item  label="Student's age">
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectStudentAgeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editStudentAgeList" :key="index"
-                                 @click="selectStudentAge(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                        </div>
+
+                        <el-select
+                            v-model="selectStudentAgeList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select student's age"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editStudentAgeList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
                       </el-form-item>
 
                     </el-col>
@@ -393,16 +387,25 @@
 
                     <el-col :span="6">
                       <el-form-item  label="Facilities">
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectSchoolFacilitesList.findIndex((element)=>element.id==item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editSchoolFacilitesList" :key="index"
-                                 @click="selectSchoolFacilites(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                        </div>
+                        <el-select
+                            v-model="selectSchoolFacilitesList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select facilities"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editSchoolFacilitesList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
                       </el-form-item>
                     </el-col>
 
@@ -635,11 +638,11 @@
 
             </el-form>
 
-          </div>
+          </el-scrollbar>
 
         </div>
 
-      </div>
+      </el-scrollbar>
 
     </div>
 
@@ -808,25 +811,14 @@ export default {
       studentAgeList: [],
 
       editStudentAgeList: [],
-      addStudentAgeStatus: false,
-      ownStudentAgeValue: '',
-      ownStudentAgeList: [],
       selectStudentAgeList: [],
-      selectStudentAgeArr: [],
 
       editSubjectList: [],
-      addSubjectStatus: false,
-      ownSubjectValue: '',
-      ownSubjectList: [],
       selectSubjectList: [],
-      selectSubjectArr: [],
 
       editSchoolFacilitesList: [],
-      addSchoolFacilitesStatus: false,
-      ownSchoolFacilitesValue: '',
-      ownSchoolFacilitesList: [],
       selectSchoolFacilitesList: [],
-      selectSchoolFacilitesArr: [],
+
       businessInfo: {},
       currencyList:[],
 
@@ -850,9 +842,6 @@ export default {
 
     this.initMap()
 
-    // this.turnSearchTags(73);
-    // this.turnSearchTags(1);
-    // this.turnSearchTags(147);
     this.getUserObjectList()
 
     let str = this.$route.query.s;
@@ -1368,12 +1357,17 @@ export default {
         language:language
       }
       SWITCH_IDENTITY_V2(params).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.code == 200){
           localStorage.setItem('identity',3)
           localStorage.setItem('company_id',companyId)
           this.$store.commit('identity',3)
           this.$store.commit('allIdentityChanged',true )
+
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData',str)
+          this.$store.commit('menuData', res.message)
+
           this.$router.push('/account/home')
         }
       }).catch(err=>{
@@ -1446,7 +1440,6 @@ export default {
               this.$store.commit('username',this.basicForm.company_name)
               this.$store.commit('userAvatar',this.basicForm.logo)
 
-              this.submitLoadingValue = false;
 
               if(action == 'edit'){
                 if (this.accountImageFileList.length > 0) {
@@ -1463,13 +1456,15 @@ export default {
                 localStorage.setItem('company_id', res.message.school_company_id)
 
                 this.$store.commit('allIdentityChanged',true )
-                let uid = localStorage.getItem('uid')
+                // let uid = localStorage.getItem('uid')
 
-                this.getUserMenuList(uid,3, res.message.school_company_id, uid)
+                // this.getUserMenuList(uid,3, res.message.school_company_id, uid)
 
                 this.changeIdentity(res.message.school_company_id,2)
 
               }
+              // this.changeIdentity(res.message.school_company_id,2)
+              this.submitLoadingValue = false;
 
             }
           }).catch(err => {
@@ -1560,7 +1555,7 @@ export default {
       })
     },
     countryChange(e){
-      console.log(e)
+      // console.log(e)
       this.basicForm.state_id=undefined
       this.basicForm.town_id = undefined
 
@@ -1763,29 +1758,73 @@ export default {
 
           if (schoolInfo.Student_Age) {
             let studentAgeArr = schoolInfo.Student_Age
-            studentAgeArr.forEach((item,i)=>{
-              studentAgeArr[i].id = item.object_id
-              studentAgeArr[i].pid = item.object_pid
+
+            studentAgeArr.forEach((item)=>{
+
+              if (item.object_id == 0) {
+
+                this.selectStudentAgeList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+
+                this.selectStudentAgeList.push(obj)
+
+              }
             })
-            this.selectStudentAgeList = studentAgeArr;
+
           }
 
           if (schoolInfo.subject) {
             let subjectArr = schoolInfo.subject;
-            subjectArr.forEach((item,i)=>{
-              subjectArr[i].id = item.object_id
-              subjectArr[i].pid = item.object_pid
+            subjectArr.forEach((item)=>{
+
+              if (item.object_id == 0) {
+
+                this.selectSubjectList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+
+                this.selectSubjectList.push(obj)
+
+              }
             })
-            this.selectSubjectList = subjectArr;
+
           }
 
           if (schoolInfo.facilities) {
             let facArr = schoolInfo.facilities
-            facArr.forEach((item,i)=>{
-              facArr[i].id = item.object_id
-              facArr[i].pid = item.object_pid
+            facArr.forEach((item)=>{
+              if (item.object_id == 0) {
+
+                this.selectSchoolFacilitesList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+
+                this.selectSchoolFacilitesList.push(obj)
+
+              }
             })
-            this.selectSchoolFacilitesList = facArr;
 
           }
 
@@ -1827,21 +1866,6 @@ export default {
           this.editSchoolFacilitesList = res.message.filter(item => item.pid === 147)
           this.currencyList = res.message.filter(item => item.pid === 117); // currency
 
-          // this.benefitsList = res.message.filter(item => item.pid === 6); //benefits
-          // this.ageToTeachList = res.message.filter(item => item.pid === 4); //age to teach
-          // // this.employmentTypeList = res.message.filter(item => item.pid === 3); //employment type
-          // this.paymentPeriodList = res.message.filter(item => item.pid ===
-          //     111); // payment period
-          //
-          // this.teachingCertificateList = res.message.filter(item => item.pid ===
-          //     7); //teaching certificate ...
-          // this.teachingExpList = res.message.filter(item => item.pid === 120); //teaching exp
-          // this.educationList = res.message.filter(item => item.pid === 125); // education
-          // this.languagesList = res.message.filter(item => item.pid === 2); // language ..
-          // this.jobTitleList = res.message.filter(item => item.pid === 103); //job title
-          // this.startDateList = res.message.filter(item => item.pid === 108); // start date
-          // this.subjectList = res.message.filter(item => item.pid === 1); //subject
-          // this.ageList = res.message.filter(item => item.pid === 131); //age list
         }
       }).catch(err => {
         console.log(err)
@@ -1853,65 +1877,18 @@ export default {
         }
       })
     },
-    async turnSearchTags(type) {
-      // student age
-      let data = {
-        token: localStorage.getItem('token'),
-        pid: type
-      }
-      this.selectStudentAgeList = [];
-      this.ownStudentAgeList = [];
-
-      await USER_OBJECT_LIST(data).then(res => {
-        if (type == 73) {
-          this.editStudentAgeList = res.message;
-        }
-
-        if (type == 1) {
-          this.editSubjectList = res.message;
-        }
-
-        if (type == 147) {
-          this.editSchoolFacilitesList = res.message;
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    selectStudentAge(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectStudentAgeList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectStudentAgeList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        // if (this.selectStudentAgeList.length > 4) {
-        // 	return false;
-        // }
-        this.selectStudentAgeList.push(value);
-
-      } else {
-        this.selectStudentAgeList.splice(index, 1);
-      }
-      // console.log(this.selectStudentAgeList)
-    },
     studentAgeConfirm(companyId) {
 
       let expand = [];
       let objectArr = [];
       this.selectStudentAgeList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -1923,7 +1900,7 @@ export default {
 
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
-          console.log('StudentAge--submit--' + res.data);
+          console.log('Student Age--submit--' + res.data);
           this.canEditStudentAge = false;
           // this.getBasicInfo();
         }
@@ -1933,56 +1910,15 @@ export default {
       })
 
     },
-    addOwnSubject() {
-      this.addSubjectStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownSubjectValue,
-        object_pid: 1
-      }
-      let index = this.selectSubjectList.findIndex((element) => element === obj);
-      if (index == -1) {
-        // if (this.selectSubjectList.length > 4) {
-        // 	return false;
-        // }
-        this.selectSubjectList.push(obj);
-        this.ownSubjectList.push(obj);
-        this.ownSubjectValue = '';
-
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-
-    },
-    selectSubject(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectSubjectList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectSubjectList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        // if (this.selectSubjectList.length > 4) {
-        // 	return false;
-        // }
-        this.selectSubjectList.push(value);
-
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-      console.log(this.selectSubjectList)
-    },
     subjectConfirm(companyId) {
 
       let expand = [];
       let objectArr = [];
       this.selectSubjectList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
       })
@@ -2005,27 +1941,14 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    selectSchoolFacilites(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectSchoolFacilitesList.findIndex((element) => element.id === value.id);
-      }
-
-      if (index == -1) {
-        this.selectSchoolFacilitesList.push(value);
-      } else {
-        this.selectSchoolFacilitesList.splice(index, 1);
-      }
-
-    },
     schoolFacilitesConfirm(companyId) {
       let expand = [];
       let objectArr = [];
       this.selectSchoolFacilitesList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
       })
@@ -2039,8 +1962,7 @@ export default {
 
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
-          console.log('SchoolFacilites--submit--' + res.data);
-          // this.getBasicInfo();
+          console.log('School Facilites --submit--' + res.data);
         }
 
       }).catch(err => {
@@ -2201,7 +2123,6 @@ export default {
       })
 
     },
-
     accountImagePreview(url) {
       this.dialogAccountImageVisible = true;
       this.dialogAccountImageUrl = url;
@@ -2231,10 +2152,11 @@ export default {
 
 .basic-r-container{
   width:calc(100% - 160px);
+  height: calc(100vh - 140px);
 }
 
 .basic-r-container-bg{
-  padding:30px 50px 50px 50px;
+  padding: 25px 50px 50px 50px;
 }
 
 .account-profile-t{
@@ -2242,7 +2164,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0 40px 0;
+  padding-bottom: 25px;
 }
 
 .account-profile-t-l{
@@ -2265,9 +2187,7 @@ export default {
 }
 
 .basic-form {
-  padding-bottom: 50px;
-  /*height: 800px;*/
-  overflow-y: scroll;
+  height: calc(100vh - 285px);
 }
 
 
@@ -2404,33 +2324,6 @@ export default {
 
 }
 
-.business-reg-uploader{
-
-  text-align: center;
-  padding:8px;
-  border-radius:10px;
-}
-
-.business-reg-uploader:hover {
-  border-color: #0AA0A8;
-}
-
-.intro-video-uploader {
-  padding:8px;
-  text-align: center;
-  border-radius:10px;
-}
-
-.intro-video-uploader:hover {
-  border-color: #0AA0A8;
-}
-
-.intro-video-avatar {
-  width: 378px;
-  height: 178px;
-  display: block;
-}
-
 .contact-phone-container{
   display: flex;
   flex-direction: row;
@@ -2445,16 +2338,6 @@ export default {
 .contact-phone-r{
   width:70%;
 }
-
-.submit-btn-container{
-  text-align: center;
-  margin-top:40px;
-}
-
-.submit-btn{
-  width:40%;
-}
-
 
 .xll-location-container{
   display:flex;

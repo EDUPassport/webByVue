@@ -1,12 +1,12 @@
 <template>
   <div class="bg">
     <div class="favorites-container">
-      <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <meSideMenu></meSideMenu>
-        </el-col>
-        <el-col class="list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
-          <div class="list-container" >
+      <div class="favorites-l">
+        <meSideMenu></meSideMenu>
+      </div>
+      <div class="favorites-r">
+        <div class="favorites-r-bg">
+          <div class="list-container">
             <template v-if="favoriteData.length>0">
               <div class="list-item" v-for="(item,i) in favoriteData" :key="i">
                 <div class="list-item-l">
@@ -14,8 +14,12 @@
                 </div>
                 <div class="list-item-r">
                   <div class="list-item-r-t">
-                    <router-link v-if="item.type==1" :to="{path:'/jobs/detail',query:{id:item.type_id}}"> {{item.type_title}}</router-link>
-                    <router-link v-if="item.type==2" :to="{path:'/deals/detail',query:{id:item.type_id}}"> {{item.type_title}}</router-link>
+                    <router-link v-if="item.type==1" :to="{path:'/jobs/detail',query:{id:item.type_id}}">
+                      {{ item.type_title }}
+                    </router-link>
+                    <router-link v-if="item.type==2" :to="{path:'/deals/detail',query:{id:item.type_id}}">
+                      {{ item.type_title }}
+                    </router-link>
                   </div>
                 </div>
                 <div class="list-item-type">
@@ -35,6 +39,7 @@
               </div>
             </template>
           </div>
+
           <div class="list-pagination" v-if="favoriteData.length>0">
             <el-pagination layout="prev, pager, next" :default-current-page="1"
                            @size-change="pageSizeChange"
@@ -42,16 +47,16 @@
                            :current-page="page" :page-size="limit"
                            :total="totalNum"></el-pagination>
           </div>
-<!--          <div class="ads-container">-->
-<!--            <el-image :src="dashboardAdsImg"></el-image>-->
-<!--          </div>-->
+          <!--          <div class="ads-container">-->
+          <!--            <el-image :src="dashboardAdsImg"></el-image>-->
+          <!--          </div>-->
 
           <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataTop.length>0">
-            <el-carousel height="220px" indicator-position="none" >
+            <el-carousel height="220px" indicator-position="none">
               <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataTop" :key="i">
                 <div class="xll-ads-l">
                   <el-avatar class="xll-ads-l-img"
-                            :src="item.user_url !='' ? item.user_url : item.url"></el-avatar>
+                             :src="item.user_url !='' ? item.user_url : item.url"></el-avatar>
                 </div>
                 <div class="xll-ads-r">
                   <h4>Advertise with Us</h4>
@@ -66,9 +71,9 @@
             </el-carousel>
           </div>
 
+        </div>
+      </div>
 
-        </el-col>
-      </el-row>
     </div>
   </div>
 </template>
@@ -90,34 +95,34 @@ export default {
       page: 1,
       limit: 8,
       totalNum: 0,
-      adsDataTop:[]
+      adsDataTop: []
     }
   },
   mounted() {
-    this.getFavoriteList(this.page,this.limit)
+    this.getFavoriteList(this.page, this.limit)
     this.getAdsList()
   },
   methods: {
-    turnBanner(link){
+    turnBanner(link) {
       console.log(link)
       if (link != '') {
-        window.location.href =  link
+        window.location.href = link
       } else {
         let token = localStorage.getItem('token')
-        if(!token){
-          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4','_blank')
+        if (!token) {
+          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
 
           return;
         }
         this.$router.push('/me/ads/platform')
       }
     },
-    getAdsList(){
+    getAdsList() {
       let ads_data = {
         page: 1,
         limit: 10000
       }
-      ADS_LIST(ads_data).then(res=>{
+      ADS_LIST(ads_data).then(res => {
         if (res.code == 200) {
           // console.log(rs.message)
           let adsDataTop = [];
@@ -137,40 +142,40 @@ export default {
             adsDataTop = res.message.filter(item => item.name == 'vendor_h1');
           }
 
-          if(adsDataTop.length>0){
+          if (adsDataTop.length > 0) {
             this.adsDataTop = adsDataTop[0].data;
           }
 
         }
 
-      }).catch(err=>{
-        if(err.msg){
+      }).catch(err => {
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
     },
-    getFavoriteList(page,limit){
+    getFavoriteList(page, limit) {
       let params = {
         token: localStorage.getItem('token'),
         page: page,
         limit: limit
       }
-      GET_FAVORITE_LIST(params).then(res=>{
+      GET_FAVORITE_LIST(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.favoriteData = res.message.data
           // console.log(res.message.data)
           this.totalNum = res.message.total
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -184,26 +189,26 @@ export default {
       this.getFavoriteList(e, this.limit)
       console.log(e)
     },
-    cancelFavorite(type,typeId){
-       let params = {
-         token:localStorage.getItem('token'),
-         type:type,
-         type_id:typeId
-       }
-       CANCEL_FAVORITE(params).then(res=>{
-         console.log(res)
-         if(res.code == 200){
-           this.getFavoriteList()
-         }
-       }).catch(err=>{
-         console.log(err)
-         if(err.msg){
-           this.$message.error(err.msg)
-         }
-         if(err.message){
-           this.$message.error(err.message)
-         }
-       })
+    cancelFavorite(type, typeId) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.getFavoriteList()
+        }
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
     }
 
   }
@@ -216,20 +221,33 @@ export default {
 }
 
 .favorites-container {
-  margin: 0 auto;
-  padding: 20px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.list-col{
-  padding: 0 20px;
+.favorites-l{
+
 }
-.list-container{
+
+.favorites-r{
+  width: calc(100% - 160px);
+  height: calc(100vh - 140px);
+}
+
+.favorites-r-bg{
+  padding: 50px;
+}
+
+
+.list-container {
   background-color: #FFFFFF;
   padding: 20px;
   border-radius: 10px;
 }
 
-.list-item{
+.list-item {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -241,30 +259,32 @@ export default {
   position: relative;
 }
 
-.list-item:hover{
+.list-item:hover {
   background-color: #EEEEEE;
 }
 
-.list-item-l{
+.list-item-l {
   width: 20%;
   text-align: center;
 }
 
-.list-item-l-img{
+.list-item-l-img {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   border: 1px solid #EEEEEE;
 }
 
-.list-item-r{
+.list-item-r {
   width: 80%;
 
 }
-.list-item-r-t{
+
+.list-item-r-t {
   text-align: left;
 }
-.list-item-r-t a{
+
+.list-item-r-t a {
   font-size: 16px;
   font-weight: bold;
   color: #000000;
@@ -272,7 +292,7 @@ export default {
 }
 
 
-.list-item-type{
+.list-item-type {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -283,18 +303,19 @@ export default {
   border-radius: 4px;
 }
 
-.list-item-favorite-icon-container{
+.list-item-favorite-icon-container {
   position: absolute;
   bottom: 10px;
   right: 10px;
 }
-.list-item-favorite-icon{
+
+.list-item-favorite-icon {
   font-size: 24px;
   cursor: pointer;
 
 }
 
-.list-pagination{
+.list-pagination {
   margin-top: 20px;
   text-align: center;
 }
@@ -304,7 +325,7 @@ export default {
   text-align: center;
 }
 
-.empty-tips{
+.empty-tips {
   font-size: 24px;
   font-weight: bold;
   color: #000000;
@@ -312,18 +333,17 @@ export default {
 }
 
 
-
-.xll-ads-container{
+.xll-ads-container {
   padding: 20px 20px 0 20px;
 }
 
-.xll-ads-container-margin{
+.xll-ads-container-margin {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.xll-ads-swiper-item{
-  cursor:pointer;
+.xll-ads-swiper-item {
+  cursor: pointer;
   border-radius: 10px;
   height: 100%;
   background-color: #FFFFFF;
@@ -333,34 +353,35 @@ export default {
   justify-content: space-between;
 }
 
-.xll-ads-l{
-  width:60%;
+.xll-ads-l {
+  width: 60%;
   height: 100%;
 }
 
-.xll-ads-l-img{
-  width:100%;
+.xll-ads-l-img {
+  width: 100%;
   height: 100%;
-  border-radius:10px;
-  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
-.xll-ads-r{
-  width:36%;
+.xll-ads-r {
+  width: 36%;
 }
 
-.xll-ads-r{
+.xll-ads-r {
   padding-right: 4%;
 }
-.xll-ads-r h4{
-  color:#004956;
+
+.xll-ads-r h4 {
+  color: #004956;
 }
 
-.xll-ads-r h5{
-  margin-top:20px;
+.xll-ads-r h5 {
+  margin-top: 20px;
 }
 
-.xll-ads-r-desc{
+.xll-ads-r-desc {
   font-size: 14px;
   margin-top: 10px;
   overflow: hidden;
@@ -370,21 +391,13 @@ export default {
   -webkit-box-orient: vertical;
 }
 
-@media screen and (min-width:1200px) {
-  .favorites-container{
-    width:1100px;
-  }
+@media screen and (min-width: 1200px) {
+
 
 }
 
 @media screen and (max-width: 768px) {
-  .list-item{
-    height: 100px;
-  }
-  .list-item-l-img{
-    width:50px;
-    height: 50px;
-  }
+
 }
 
 

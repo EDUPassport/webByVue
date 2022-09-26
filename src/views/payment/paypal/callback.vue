@@ -37,7 +37,7 @@ export default {
 
     const router = useRouter()
     const goHome = ()=>{
-      router.push('/home')
+      router.push('/')
     }
     const goBack = ()=>{
       router.push('/services/price')

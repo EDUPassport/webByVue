@@ -4,246 +4,29 @@
 
       <el-row :gutter="0" align="top" justify="center">
 
-        <el-col class="filter-deal-col" :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <div class="filter-bg-container">
-            <div class="offer-deal">
-              <el-button class="offer-deal-btn" type="primary" @click="offerDeal()" round>
-                Offer a Deal
-              </el-button>
-            </div>
-            <div class="deals-events-filter-container">
-
-              <div class="deals-events-filter-item">
-                <div class="deals-events-filter-label">Location</div>
-                <el-select class="deals-events-filter-select"
-                           v-model="locationValue" clearable
-                           placeholder="Location"
-                           size="default"
-                           @change="locationChange"
-                >
-                  <el-option
-                      v-for="item in locationOptions"
-                      :key="item.id"
-                      :label="item.Pinyin"
-                      :value="item.id"
-                  >
-                  </el-option>
-                </el-select>
-              </div>
-
-              <div class="deals-events-filter-item">
-                <div class="qx-checked-container">
-                  <div class="qx-checked-item"
-                       @click="selectIsOnline()"
-                  >
-                    <div class="qx-checked-square"
-                         :class="filterIsOnlineValue ? 'qx-checked-square-active' : '' "
-                    ></div>
-                    <div class="qx-checked-label">Online</div>
-                  </div>
-                </div>
-
-              </div>
-
-              <div class="deals-events-filter-item">
-                <div class="deals-events-filter-label">Tags</div>
-                <el-select class="deals-events-filter-select"
-                           v-model="tagValue"
-                           clearable multiple
-                           placeholder="Tags"
-                           size="default"
-                           @change="tagChange"
-                >
-                  <el-option
-                      v-for="item in tagsData"
-                      :key="item.id"
-                      :label="item.name_en"
-                      :value="item.id"
-                  >
-                  </el-option>
-                </el-select>
-              </div>
-
-              <div class="deals-events-filter-item">
-                <div class="deals-events-filter-label">Deal type</div>
-
-                <div class="qx-checked-container">
-                  <div class="qx-checked-item" v-for="(item,i) in subCateData" :key="i"
-                       @click="selectSubCate(item.id)"
-                  >
-                    <div class="qx-checked-square"
-                         :class="sCateId == item.id ? 'qx-checked-square-active' : '' "
-                    ></div>
-                    <div class="qx-checked-label">{{ item.identity_name }}</div>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="filter-search-btn-container">
-              <el-button type="primary" round>
-                SEARCH
-              </el-button>
-            </div>
-
-            <div class="filter-contact-us-container">
-              <el-icon :size="45" color="#6648FF">
-                <IconIcBaselineLiveHelp/>
-              </el-icon>
-              <span>Contact Us</span>
-            </div>
-
-          </div>
-
-
+        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+          <dealFilterComponent
+              :locationData="locationOptions"
+              :tagsData = "tagsData"
+              :subCateData="subCateData"
+              @search="confirmFilterSearch"
+          ></dealFilterComponent>
         </el-col>
 
         <template v-if="showDealDetailStatus">
-          <el-col class="deals-from-col" :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
 
-            <el-scrollbar class="deals-from-bg-container">
-              <div class="deals-from-t">
-                <div class="deals-from-back">
-                  <el-button class="deals-from-back-btn"
-                             @click="backToSearchResults()"
-                             link>
-                    BACK TO SEARCH RESULTS
-                  </el-button>
-                </div>
-                <div class="deals-from-label">
-                  Deals from Jonas Email Coffee Roasters
-                </div>
-              </div>
-              <div class="deals-from-b">
-                <div class="deals-from-item" v-for="(item,index) in dealsListData" :key="index">
-                  <div class="deals-item-bg">
-                    <el-image
-                        class="deals-item-background-img"
-                        :src="item.company_info.background_image ? item.company_info.background_image : ''"
-                        fit="cover"
-                    ></el-image>
-
-                    <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                         @click="cancelFavorite(2,item.id,index)">
-                      <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-                    </div>
-                    <div class="deals-item-favorite" v-else
-                         @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
-                      <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-                    </div>
-
-                  </div>
-                  <div class="deals-item-c">
-                    <div class="deals-item-c-l">
-                      <el-avatar class="deals-logo" :src="item.company_logo"></el-avatar>
-                    </div>
-                    <div class="deals-item-c-r">
-                      <div class="deals-item-c-r-1">
-                        {{ item.company_name }}
-                      </div>
-                      <div class="deals-item-c-r-2" @click="dealDetailForQrcode(item)">
-                        {{ item.title }}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="deals-item-b">
-                    <div class="deals-item-b-l">
-
-                      <template v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
-                        {{ item.company_info.category_name_en }}
-                      </template>
-                      <template v-else>
-                        unknown
-                      </template>
-
-                    </div>
-                    <div class="deals-item-b-r">
-                      <el-button link @click="turnDealDetail(item.id)">
-                        DETAILS
-                      </el-button>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </el-scrollbar>
-
+          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+            <dealByListComponent :listData="dealsListData"
+                                 @back="backToSearchResults"
+                                 @detail="showDealDetailDialog"
+                                 :info="companyInfo">
+            </dealByListComponent>
           </el-col>
-          <el-col class="deal-detail-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-
-            <el-scrollbar class="deal-detail-bg-container">
-              <div class="deal-detail-background">
-                <el-image
-                    class="deal-detail-background-img"
-                    fit="cover"
-                    v-if="detailData.company"
-                    :src="detailData.company.background_image ? detailData.company.background_image : '' "
-                ></el-image>
-              </div>
-              <div class="deal-detail-c">
-                <div class="deal-detail-c-l">
-                  <el-avatar class="deal-detail-c-l-logo"
-                             :src="detailData.company_logo"></el-avatar>
-                </div>
-                <div class="deal-detail-c-r">
-
-                  <div class="deal-detail-c-r-1">
-                    {{detailData.title}}
-                  </div>
-
-                  <div class="deal-detail-tags" v-if="detailData.company">
-                    <el-tag>{{detailData.company.category_name_en}}</el-tag>
-                  </div>
-
-                  <div class="deal-detail-item-container">
-
-                    <div class="deal-detail-item">
-                      <div class="deal-detail-item-l">Website:</div>
-                      <div class="deal-detail-item-r">www.baidu.com</div>
-                    </div>
-
-                    <div class="deal-detail-item">
-                      <div class="deal-detail-item-l">Do we have events?</div>
-                      <div class="deal-detail-item-r">No</div>
-                    </div>
-
-                    <div class="deal-detail-item">
-                      <div class="deal-detail-item-l">Address:</div>
-                      <div class="deal-detail-item-r">www.baidu.com</div>
-                    </div>
-
-                    <div class="deal-detail-item">
-                      <div class="deal-detail-item-l">Are we dog friendly?</div>
-                      <div class="deal-detail-item-r">Yes</div>
-                    </div>
-
-                    <div class="deal-detail-item">
-                      <div class="deal-detail-item-l">Phone number:</div>
-                      <div class="deal-detail-item-r">www.baidu.com</div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="deal-detail-desc">
-                <p>
-                  {{ detailData.desc }}
-                </p>
-              </div>
-
-              <div class="map-container">
-                <div id="mapContainer" class="basemap"></div>
-              </div>
-
-
-            </el-scrollbar>
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <businessProfile :info="companyInfo" :identity="5">
+              </businessProfile>
           </el-col>
+
         </template>
 
         <!--        deal list-->
@@ -325,7 +108,7 @@
                       <div class="deals-item-c-r-1">
                         {{ item.company_name }}
                       </div>
-                      <div class="deals-item-c-r-2" @click="dealDetailForQrcode(item)">
+                      <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
                         {{ item.title }}
                       </div>
                     </div>
@@ -343,7 +126,7 @@
 
                     </div>
                     <div class="deals-item-b-r">
-                      <el-button link @click="turnDealDetail(item.id)">
+                      <el-button link @click="showDealDetailDialog(item)">
                         DETAILS
                       </el-button>
                     </div>
@@ -362,38 +145,6 @@
 
             </el-scrollbar>
 
-            <el-dialog v-model="dealDialogVisible">
-
-              <div class="dialog-deal-container" v-if="qrcodeDealDetailData">
-                <div class="dialog-deal-l">
-                  <vue-qrcode :value="qrcodeDealValue" :options="{width:200}"></vue-qrcode>
-                </div>
-                <div class="dialog-deal-r">
-                  <div class="dialog-deal-r-1">
-                    <el-avatar :src="qrcodeDealDetailData.company_logo"></el-avatar>
-                  </div>
-                  <div class="dialog-deal-r-2">
-                    {{ qrcodeDealDetailData.company_name }}
-                  </div>
-                  <div class="dialog-deal-r-3">
-                    {{ qrcodeDealDetailData.company_info.desc }}
-                  </div>
-                  <div class="dialog-deal-r-4" @click="readMoreDeal(qrcodeDealDetailData.id)">
-                    READ MORE
-                  </div>
-                  <div class="dialog-deal-r-5">
-                    {{ qrcodeDealDetailData.title }}
-                  </div>
-                  <div class="dialog-deal-r-6">
-                    {{ qrcodeDealDetailData.desc }}
-                  </div>
-                  <div class="dialog-deal-r-7">
-                    {{ qrcodeDealDetailData.company_info.category_name_en }}
-                  </div>
-                </div>
-              </div>
-
-            </el-dialog>
 
           </el-col>
 
@@ -401,6 +152,23 @@
 
       </el-row>
 
+      <dealDetailCard :info="dealDetailData"
+                      :qrcodeValue="qrcodeValue"
+                      @close="dealDetailDialogVisible=false"
+                      @share="shareDeal"
+                      @viewProfile="viewProfile"
+                      :visible="dealDetailDialogVisible">
+      </dealDetailCard>
+
+      <shareCard :visible="shareDialogVisible"
+                 :title="shareInfo.title"
+                 :description ="shareInfo.desc"
+                 :quote = "shareInfo.desc"
+                 :url="locationUrl+'?id='+shareInfo.id"
+                 @close="shareDialogVisible=false"
+      >
+      </shareCard>
+      
     </div>
   </div>
 
@@ -423,13 +191,34 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
+import dealDetailCard from "@/components/dealDetailCard";
+import shareCard from "@/components/shareCard";
+import dealFilterComponent from "@/components/dealFilterComponent";
+import businessProfile from "@/components/businessProfile";
+import dealByListComponent from "@/components/dealByListComponent";
 
 export default {
   name: "index",
-  components: {},
+  components: {
+    dealDetailCard,
+    shareCard,
+    dealFilterComponent,
+    businessProfile,
+    dealByListComponent
+
+  },
+  setup(){
+
+    const locationUrl  = window.location.href ;
+
+    return {
+      locationUrl
+    }
+
+  },
   data() {
     return {
-      dealDialogVisible: false,
+
       subCateData: [],
       locationValue: '',
       locationOptions: [],
@@ -444,8 +233,10 @@ export default {
       adsDataMid: [],
       adsDataBottom: [],
       featuredDealsData: [],
-      qrcodeDealDetailData: {},
-      qrcodeDealValue: '',
+
+      dealDetailDialogVisible:false,
+      dealDetailData: {},
+      qrcodeValue: '',
       webDomain: process.env.VUE_APP_DOMAIN,
       showDealDetailStatus: false,
       filterIsOnlineValue: false,
@@ -453,6 +244,11 @@ export default {
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
 
+      shareDialogVisible:false,
+      shareInfo:{},
+
+      filterResultData:{},
+      companyInfo:{}
 
     }
   },
@@ -465,7 +261,7 @@ export default {
       this.showDealDetailStatus = true
     }else{
 
-      this.getDealsList(this.dealPage, this.dealLimit, this.sCateId)
+      this.getDealsList(this.dealPage, this.dealLimit)
       this.getFeaturedDealsList()
       this.showDealDetailStatus = false;
     }
@@ -480,7 +276,7 @@ export default {
 
     }else{
       this.showDealDetailStatus = false;
-      this.getDealsList(this.dealPage, this.dealLimit, this.sCateId)
+      this.getDealsList(this.dealPage, this.dealLimit)
       this.getFeaturedDealsList()
     }
 
@@ -491,21 +287,37 @@ export default {
 
   },
   methods: {
+    confirmFilterSearch(e){
+      console.log(e)
+      this.filterResultData = e;
+      this.getDealsList(this.dealPage,this.dealLimit)
+    },
     backToSearchResults(){
       this.showDealDetailStatus = false;
-      this.getDealsList(this.dealPage, this.dealLimit, this.sCateId)
+      this.getDealsList(this.dealPage, this.dealLimit)
       this.getFeaturedDealsList()
     },
     readMoreDeal(id) {
       this.showDealDetailStatus = true;
-      this.dealDialogVisible = false;
+      this.dealDetailDialogVisible = false;
       this.$router.push({path: '/deals', query: {id: id}})
     },
-    dealDetailForQrcode(item) {
-      this.qrcodeDealDetailData = item;
-      this.qrcodeDealValue = this.webDomain + '?id=' + item.id;
+    showDealDetailDialog(item) {
+      
+      this.dealDetailData = item;
+      this.dealDetailDialogVisible = true;
+      this.qrcodeValue = this.webDomain + '?id=' + item.id;
 
-      this.dealDialogVisible = true;
+    },
+    shareDeal(e){
+      // console.log(e)
+      this.shareDialogVisible = true;
+      this.shareInfo = e;
+    },
+    viewProfile(e){
+      this.companyInfo = e;
+      this.showDealDetailStatus = true;
+      this.dealDetailDialogVisible = false;
     },
     turnBanner(link) {
       console.log(link)
@@ -572,42 +384,6 @@ export default {
       this.showDealDetailStatus = true;
       this.$router.push({path: '/deals', query: {id: id}})
     },
-    selectSubCate(cateId) {
-      // console.log(cateId)
-      this.dealsListData = []
-      this.showLoadingStatus = true
-
-      if (this.sCateId == cateId) {
-        this.sCateId = 0
-      } else {
-        this.sCateId = cateId
-      }
-      this.getDealsList(this.dealPage, this.dealLimit, this.sCateId)
-
-    },
-    selectIsOnline() {
-      this.filterIsOnlineValue = !this.filterIsOnlineValue
-
-      this.dealsListData = []
-      this.showLoadingStatus = true
-
-      this.getDealsList(this.dealPage, this.dealLimit, this.sCateId)
-
-    },
-    locationChange(e) {
-      // console.log(e)
-      this.dealsListData = []
-      this.showLoadingStatus = true
-      this.locationValue = e
-      this.getDealsList(this.dealPage, this.dealLimit, this.sCateId)
-    },
-    tagChange(e) {
-      // console.log(e)
-      this.dealsListData = []
-      this.showLoadingStatus = true
-      this.tagValue = e
-      this.getDealsList(this.dealPage, this.dealLimit, this.sCateId)
-    },
     getSubIdentityList() {
       let params = {
         pid: 5,
@@ -645,31 +421,16 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    getDealsList(page, limit, sCateId) {
-      let params = {
+    getDealsList(page, limit) {
+
+      let filterResult = this.filterResultData;
+
+      let paramsA = {
         page: page,
         limit: limit
       }
-      if (sCateId != 0) {
-        params.company_category_id = sCateId
-      }
-      if (this.locationValue != '') {
-        params.city = this.locationValue
-      }
 
-      let tagValue = this.tagValue
-
-      if (tagValue.length > 0) {
-        params.tag_name = this.tagValue
-      }
-
-      let isOnline = this.filterIsOnlineValue
-
-      if (isOnline) {
-        params.is_online = 1
-      } else {
-        params.is_online = 0
-      }
+      let params = Object.assign(paramsA,filterResult)
 
       DEALS_LIST(params).then(res => {
         console.log(res)
@@ -700,7 +461,7 @@ export default {
     dealPageChange(e) {
       this.showLoadingStatus = true
       this.dealPage = e
-      this.getDealsList(e, this.dealLimit, this.sCateId)
+      this.getDealsList(e, this.dealLimit)
 
       document.documentElement.scrollTop = 200
     },
@@ -1107,69 +868,6 @@ export default {
   padding-left: 12px;
 }
 
-.filter-bg-container {
-  background-color: #F0F2F5;
-  height: calc(100vh - 200px);
-  padding: 30px;
-  position: relative;
-}
-
-.offer-deal {
-  width: 100%;
-  text-align: center;
-  padding-top: 20px;
-}
-
-.offer-deal-btn {
-  width: 98%;
-  font-size: 14px;
-}
-
-.deals-events-filter-container {
-  margin-top: 20px;
-}
-
-.deals-events-filter-label {
-  text-align: left;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #262626;
-  margin-bottom: 10px;
-}
-
-.deals-events-filter-select {
-  width: 100%;
-}
-
-.deals-events-filter-item {
-  margin-top: 25px;
-}
-
-.filter-search-btn-container {
-  margin-top: 50px;
-  text-align: center;
-}
-
-.filter-contact-us-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  position: absolute;
-  bottom: 30px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  cursor: pointer;
-
-}
-
-.filter-contact-us-container span {
-  font-family: BCRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 25px;
-  color: #262626;
-}
 
 .deals-bg-container {
   background-color: #F0F2F5;
@@ -1201,36 +899,6 @@ export default {
   padding-left: 12px;
 }
 
-.deals-from-bg-container {
-  background-color: #F0F2F5;
-  height: calc(100vh - 170px);
-  padding: 0 30px 30px 30px;
-}
-
-.deals-from-back {
-  padding-top: 25px;
-}
-
-.deals-from-back-btn {
-  font-size: 20px;
-}
-
-.deals-from-label {
-  margin-top: 25px;
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 30px;
-  color: #262626;
-}
-
-.deals-from-item {
-  width: 100%;
-  margin-top: 20px;
-  border-radius: 40px;
-  overflow: hidden;
-
-  background-color: #ffffff;
-  box-shadow: 0px 0px 10px #0000001A;
-}
 
 .deals-item-bg {
   height: 240px;
@@ -1390,99 +1058,6 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
-}
-
-.dialog-deal-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.dialog-deal-l {
-
-}
-
-.dialog-deal-r {
-
-}
-
-.dialog-deal-r-2 {
-  margin-top: 25px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #262626;
-}
-
-.dialog-deal-r-3 {
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-
-.dialog-deal-r-4 {
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #6650B3;
-  cursor: pointer;
-}
-
-.dialog-deal-r-5 {
-  margin-top: 25px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 26px;
-  color: #262626;
-}
-
-.dialog-deal-r-6 {
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-
-.dialog-deal-r-7 {
-  margin-top: 50px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-
-
-.qx-checked-container {
-
-}
-
-.qx-checked-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 10px;
-}
-
-.qx-checked-square {
-  border: 1px solid #808080;
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-  cursor: pointer;
-}
-
-.qx-checked-label {
-  text-align: left;
-  margin-left: 10px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-
-.qx-done-btn-container {
-  text-align: right;
-  margin-top: 20px;
-}
-
-.qx-checked-square-active {
-  background-color: #6650B3;
 }
 
 .image-ads-slot {

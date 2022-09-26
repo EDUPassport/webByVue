@@ -4,7 +4,9 @@
       <div class="basic-l-container">
         <meSideMenu></meSideMenu>
       </div>
-      <div class="basic-r-container">
+
+      <el-scrollbar class="basic-r-container">
+
         <div class="basic-r-container-bg">
 
           <div class="account-profile-t">
@@ -21,7 +23,7 @@
             </div>
           </div>
 
-          <div class="basic-form">
+          <el-scrollbar class="basic-form">
             <el-form
                 ref="basicForm"
                 :model="basicForm"
@@ -201,7 +203,7 @@
                                   :value="item.phone_code"
                               >
                                 <span style="float: left">{{ item.en }}</span>
-                                <span style=" float: right;color: var(--el-text-color-secondary);font-size: 13px;">
+                                <span style=" float: right;font-size: 13px;">
                                     {{ item.phone_code }}
                               </span>
                               </el-option>
@@ -510,10 +512,10 @@
 
             </el-form>
 
-          </div>
+          </el-scrollbar>
 
         </div>
-      </div>
+      </el-scrollbar>
 
     </div>
 
@@ -1215,8 +1217,14 @@ export default {
           localStorage.setItem('identity', 2)
           localStorage.setItem('company_id', companyId)
           this.$store.commit('identity', 2)
+          this.$store.commit('allIdentityChanged',true )
+
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData',str)
+          this.$store.commit('menuData', res.message)
 
           this.$router.push('/account/home')
+
         }
       }).catch(err => {
         console.log(err)
@@ -1265,7 +1273,6 @@ export default {
             console.log(res)
             if (res.code == 200) {
 
-              this.submitLoadingValue = false;
               this.$store.commit('username', this.basicForm.company_name)
               this.$store.commit('userAvatar', this.basicForm.logo)
 
@@ -1275,6 +1282,7 @@ export default {
                 }
 
                 this.$router.push('/account/home')
+
               } else {
 
                 if (this.accountImageFileList.length > 0) {
@@ -1285,14 +1293,14 @@ export default {
 
                 this.$store.commit('allIdentityChanged', true)
 
-                let uid = localStorage.getItem('uid')
+                // let uid = localStorage.getItem('uid')
 
-                this.getUserMenuList(uid, 2, res.message.recruiting_company_id, uid)
+                // this.getUserMenuList(uid, 2, res.message.recruiting_company_id, uid)
 
                 this.changeIdentity(res.message.recruiting_company_id, 2)
               }
               // this.submitEduBusinessCompanyForm()
-
+              this.submitLoadingValue = false;
             }
           }).catch(err => {
             console.log(err)
@@ -1788,10 +1796,11 @@ export default {
 
 .basic-r-container {
   width: calc(100% - 160px);
+  height: calc(100vh - 140px);
 }
 
 .basic-r-container-bg {
-  padding: 30px 50px 50px 50px;
+  padding: 25px 50px 50px 50px;
 }
 
 
@@ -1800,7 +1809,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0 40px 0;
+  padding-bottom: 25px;
 }
 
 .account-profile-t-l {
@@ -1824,9 +1833,7 @@ export default {
 
 
 .basic-form {
-  padding-bottom: 50px;
-  /*height: 800px;*/
-  overflow-y: scroll;
+  height: calc(100vh - 285px);
 }
 
 .demo-ruleForm {

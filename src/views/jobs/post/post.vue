@@ -39,15 +39,30 @@
 
               <div class="account-profile-item-container">
                 <div class="account-profile-item-label">
-                  1.School information
+                  1. <span v-if="identity==2">Recruiter</span><span v-if="identity==3">School</span><span v-if="identity==4">Other</span> information
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
                     <el-col :span="6">
-                      <el-form-item label="School name" >
-                        <div class="job-company-name">{{jobForm.company_name}}</div>
-                      </el-form-item>
+
+                      <template v-if="identity == 2">
+                        <el-form-item label="Recruiter name" >
+                          <div class="job-company-name">{{jobForm.company_name}}</div>
+                        </el-form-item>
+                      </template>
+                      <template v-if="identity == 3">
+                        <el-form-item label="School name" >
+                          <div class="job-company-name">{{jobForm.company_name}}</div>
+                        </el-form-item>
+                      </template>
+                      <template v-if="identity == 4">
+                        <el-form-item label="Other name" >
+                          <div class="job-company-name">{{jobForm.company_name}}</div>
+                        </el-form-item>
+                      </template>
+
                     </el-col>
+
                     <el-col :span="6">
                       <el-tabs
                           class="is-international-container"
@@ -236,36 +251,22 @@
                     <el-col :span="6">
                       <el-form-item label="Employment Type">
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectEmploymentTypeList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in employmentTypeList" :key="index"
-                                 @click="selectEmploymentType(item)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
+                        <el-select
+                            v-model="jobForm.employment_type"
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select employment type"
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,i) in employmentTypeList"
+                              :key="i"
+                              :label="item.object_en"
+                              :value="item.id"
+                          />
+                        </el-select>
 
-                        </div>
                       </el-form-item>
-
-<!--                      <el-form-item label="Employment Type" required>-->
-
-<!--                        <div class="xll-tags-container">-->
-<!--                          <div class="xll-tags">-->
-<!--                            <div class="xll-tags-item"-->
-<!--                                 :class="selectEmploymentTypeList.findIndex((element)=>element===item) == -1 ? '' : 'xll-tags-active' "-->
-<!--                                 v-for="(item,index) in employmentTypeList" :key="index"-->
-<!--                                 @click="selectEmploymentType(item)">-->
-<!--                              {{ item.object_en }}-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </el-form-item>-->
-<!--                      <div class="xll-checkbox-container">-->
-<!--                        <el-checkbox v-model="jobForm.is_online" label="THIS IS AN ONLINE JOB" size="large"></el-checkbox>-->
-<!--                        &lt;!&ndash;                          <el-checkbox label="NON-STANDARD WORKING HOURS" size="large"></el-checkbox>&ndash;&gt;-->
-<!--                      </div>-->
 
                     </el-col>
                   </el-row>
@@ -277,6 +278,7 @@
                                   :rows="4"
                                   placeholder="Be as detailed as possible about responsibilities."></el-input>
                       </el-form-item>
+                    
                     </el-col>
                   </el-row>
 
@@ -290,7 +292,7 @@
                 <div class="account-profile-item-c">
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :span="12">
                       <el-form-item label="Salary" >
 
                         <div class="xll-salary-container">
@@ -323,44 +325,25 @@
                     <el-col :span="6">
                       <el-form-item label="Benefits">
 
+                        <el-select
+                            v-model="selectBenefitsList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select benefits"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in benefitsList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownBenefitsValue"
-                                      placeholder='Click "add" after each entry '
-                            >
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         type="primary"
-                                         link
-                                         @click="addOwnBenefits">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
+                        </el-select>
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in benefitsList" :key="index"
-                                 @click="selectBenefits(item)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownBenefitsList" :key="index"
-                                 @click="selectBenefits(item)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
                       </el-form-item>
                     </el-col>
 
@@ -385,44 +368,24 @@
                     <el-col :span="6">
                       <el-form-item label="Subjects">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownSubjectValue"
-                                      placeholder='Click "add" after each entry '
-                            >
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         link
-                                         type="primary"
-                                         @click="addOwnSubject">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
+                        <el-select
+                            v-model="selectSubjectList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select subjects"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in subjectList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in subjectList" :key="index"
-                                 @click="selectSubject(item)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownSubjectList" :key="index"
-                                 @click="selectSubject(item)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
-
+                        </el-select>
 
                       </el-form-item>
 
@@ -436,16 +399,24 @@
                     <el-col :span="6">
                       <el-form-item label="Student Ages">
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectAgeToTeachList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ageToTeachList" :key="index"
-                                 @click="selectAgeToTeach(item)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                        </div>
+                        <el-select
+                            v-model="selectAgeToTeachList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select student ages"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in ageToTeachList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
 
                       </el-form-item>
 
@@ -463,97 +434,107 @@
                 <div class="account-profile-item-c">
 
                   <el-row :gutter="50">
+
                     <el-col :span="6">
-                      <el-form-item label="Languages">
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text" v-model="ownLanguagesValue"
-                                      placeholder='Click "add" after each entry '>
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         link
-                                         type="primary"
-                                         @click="addOwnLanguages">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectLanguagesList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in languagesList" :key="index"
-                                 @click="selectLanguages(item)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectLanguagesList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownLanguagesList" :key="index"
-                                 @click="selectLanguages(item)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
+                      <div class="nationality-container">
+                        <div>
+                          <el-form-item label="Preferences nationality">
+
+                            <el-select
+                                v-model="selectPnationalityList"
+                                multiple
+                                collapse-tags
+                                collapse-tags-tooltip
+                                placeholder="Select"
+                                filterable
+                                allow-create
+                                value-key="id"
+                            >
+                              <el-option
+                                  v-for="(item,index) in pNationalityList"
+                                  :key="index"
+                                  :label="item.object_en"
+                                  :value="item"
+                              />
+
+                            </el-select>
+
+                          </el-form-item>
 
                         </div>
+                        <div>
+                          <el-form-item label="Acceptable nationality">
 
-                      </el-form-item>
+                            <el-select
+                                v-model="selectAnationalityList"
+                                multiple
+                                collapse-tags
+                                collapse-tags-tooltip
+                                placeholder="Select"
+                                filterable
+                                allow-create
+                                value-key="id"
+                            >
+                              <el-option
+                                  v-for="(item,index) in aNationalityList"
+                                  :key="index"
+                                  :label="item.object_en"
+                                  :value="item"
+                              />
+
+                            </el-select>
+
+                          </el-form-item>
+
+                        </div>
+
+
+
+                      </div>
+
 
                     </el-col>
+
 
                     <el-col :span="6">
                       <el-form-item label="Teaching license and certificates">
                         <el-checkbox v-model="jobForm.is_teaching_license"
+                                     :true-label="1"
+                                     :false-label="0"
                                      label="TEACHING LICENSE REQUIRED">
                         </el-checkbox>
                         <el-checkbox v-model="jobForm.is_teaching_exp"
+                                     :true-label="1"
+                                     :false-label="0"
                                      label="TEACHING CERTIFICATE(S) REQUIRED">
                         </el-checkbox>
-                        <div class="object-tags-container">
 
-                          <div class="object-tags-add">
-                            <div class="object-tags-item-add" >
-                              <el-input type="text" v-model="ownTeachingCertificateValue"
-                                        placeholder='Click "add" after each entry'>
-                              </el-input>
-                              <div class="object-tags-item-btn-container">
-                                <el-button class="object-tags-item-btn"
-                                           link
-                                           type="primary"
-                                           @click="addOwnTeachingCertificate">
-                                  ADD
-                                </el-button>
-                              </div>
-                            </div>
-                          </div>
+                        <el-select
+                            style="margin-top: 15px;"
+                            v-model="selectTeachingCertificateList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select certificate"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in teachingCertificateList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectTeachingCertificateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in teachingCertificateList" :key="index"
-                                 @click="selectTeachingCertificate(item)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectTeachingCertificateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownTeachingCertificateList" :key="index"
-                                 @click="selectTeachingCertificate(item)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
+                        </el-select>
 
                       </el-form-item>
 
                     </el-col>
                     <el-col :span="6">
+
                       <el-form-item label="Minimum degree and experience">
                         <el-select v-model="jobForm.education" placeholder="Minimum degree">
                           <el-option v-for="(item,i) in educationList" :key="i" :label="item.object_en"
@@ -561,20 +542,49 @@
                         </el-select>
                       </el-form-item>
 
-                      <el-form-item label="" v-if="jobForm.is_teaching_exp">
+                      <el-form-item label="" >
                         <el-select v-model="jobForm.teaching_times" placeholder="Minimum years of experience">
                           <el-option v-for="(item,i) in teachingExpList" :key="i" :label="item.object_en"
                                      :value="item.id"></el-option>
                         </el-select>
                       </el-form-item>
+
                     </el-col>
+
                     <el-col :span="6">
+                      <el-form-item label="Languages">
 
-                      <el-form-item label="Native Speaker">
-                        <el-switch v-model="jobForm.is_mom_language"></el-switch>
+                        <el-select
+                            v-model="selectLanguagesList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select languages"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in languagesList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
+
                       </el-form-item>
+                      <div>
+                        <el-checkbox v-model="jobForm.is_mom_language"
+                                     :true-label="1"
+                                     :false-label="0"
+                                     label="Native Speaker">
+                        </el-checkbox>
+                      </div>
 
                     </el-col>
+
                   </el-row>
 
                 </div>
@@ -592,11 +602,15 @@
                       <el-form-item label="Additional certification">
                         <el-checkbox
                             v-model="jobForm.is_cpr"
+                            :true-label="1"
+                            :false-label="0"
                             label="CPR CERTIFICATE"
                         >
                         </el-checkbox>
                         <el-checkbox
                             v-model="jobForm.is_first_aide"
+                            :true-label="1"
+                            :false-label="0"
                             label="FIRST AID CERTIFICATE"
                         >
                         </el-checkbox>
@@ -614,22 +628,57 @@
                         </el-select>
                       </el-form-item>
                     </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="Work type">
+
+                        <el-select
+                            v-model="selectWorkTypeList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select work type"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in workTypeList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
+                      </el-form-item>
+
+                    </el-col>
+
+
+                  </el-row>
+
+                  <el-row :gutter="50">
+
                     <el-col :span="12">
                       <el-form-item label="Applicant's age">
                         <el-slider v-model="ageValue" range show-stops :max="100"></el-slider>
                       </el-form-item>
                     </el-col>
+
+                    <el-col :span="12">
+                      <el-form-item label="Years of Experience Required">
+                        <el-slider v-model="yearOfExpValue" range show-stops :max="100"></el-slider>
+                      </el-form-item>
+                    </el-col>
+
+
                   </el-row>
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
-                      <el-form-item label="Will you accept applicant of different skin colors?(Equal Opportunity)">
-                        <el-switch v-model="jobForm.is_equal"></el-switch>
-                      </el-form-item>
 
-                    </el-col>
 
-                    <el-col :span="18">
+
+                    <el-col :span="12">
                       <el-form-item label="Working Hours">
                         <div class="working-hours-show-container" v-if="workingHoursData.length>0">
 
@@ -684,6 +733,17 @@
                     </el-col>
 
 
+                    <el-col :span="12">
+                      <el-checkbox
+                          v-model="jobForm.is_equal"
+                          :true-label="1"
+                          :false-label="0"
+                          label="Will you accept applicant of different skin colors?(Equal Opportunity)"
+                      >
+                      </el-checkbox>
+                    </el-col>
+
+
                   </el-row>
 
                 </div>
@@ -691,7 +751,7 @@
 
             </el-form>
           </el-scrollbar>
-
+          
         </div>
 
       </div>
@@ -767,7 +827,7 @@ export default {
           company_id: '',
           company_name: '',
           identity: '',
-          currency: '',
+          currency:  119,
           is_mom_language: 0,
           employment_type: '',
           class_size: '',
@@ -780,6 +840,8 @@ export default {
           lng: '',
           international: 0,
           nation_address: '',
+          working_nums_start:'',
+          working_nums_end:'',
           token: localStorage.getItem('token')
         }
     )
@@ -839,11 +901,7 @@ export default {
       selectJobTitleArr: [],
 
       benefitsList: [],
-      addBenefitsStatus: false,
-      ownBenefitsValue: '',
-      ownBenefitsList: [],
       selectBenefitsList: [],
-      selectBenefitsArr: [],
 
       startDateList: [],
       addStartDateStatus: false,
@@ -853,19 +911,10 @@ export default {
       selectStartDateArr: [],
 
       ageToTeachList: [],
-      addAgeToTeachStatus: false,
-      ownAgeToTeachValue: '',
-      ownAgeToTeachList: [],
       selectAgeToTeachList: [],
-      selectAgeToTeachArr: [],
 
       subjectList: [],
-      addSubjectStatus: false,
-      ownSubjectValue: '',
-      ownSubjectList: [],
       selectSubjectList: [],
-      selectSubjectArr: [],
-
 
       currencyList: [],
       addCurrencyStatus: false,
@@ -882,11 +931,16 @@ export default {
       selectTeachingCertificateArr: [],
 
       languagesList: [],
-      addLanguagesStatus: false,
-      ownLanguagesValue: '',
-      ownLanguagesList: [],
       selectLanguagesList: [],
-      selectLanguagesArr: [],
+
+      workTypeList: [],
+      selectWorkTypeList: [],
+
+      pNationalityList: [],
+      selectPnationalityList: [],
+
+      aNationalityList: [],
+      selectAnationalityList: [],
 
       weekList: [{
         id: 1,
@@ -955,6 +1009,7 @@ export default {
       teachingExpList: [],
       educationList: [],
       ageValue: [18, 60],
+      yearOfExpValue:[20, 60],
 
       sLocationType: 1,
       countryObj: {},
@@ -970,6 +1025,8 @@ export default {
       countryOptions: [],
       provinceOptions: [],
       cityOptions: [],
+
+      checkedEmploymentTypeValue:undefined
 
     }
   },
@@ -1064,6 +1121,10 @@ export default {
           let ageMax = jobMessage.age_max
           this.ageValue = [ageMin, ageMax]
 
+          let yearMin = jobMessage.working_nums_start
+          let yearMax = jobMessage.working_nums_end
+          this.yearOfExpValue = [yearMin, yearMax]
+
           // job title
           if (jobMessage.job_title) {
             this.jobForm.job_title = jobMessage.job_title;
@@ -1119,123 +1180,216 @@ export default {
           }
 
           if (jobMessage.benefits) {
-            let c = [];
-            let a = jobMessage.benefits;
-            a.forEach(benefit => {
-              if (benefit.object_id !== 0) {
-                let b = this.benefitsList.filter(item => item.id === benefit.object_id)
-                c.push(b[0])
+
+            let benefitsArr = jobMessage.benefits;
+
+            benefitsArr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectBenefitsList.push(item.object_en)
+
               } else {
+
                 let obj = {
-                  id: 0,
-                  object_name: benefit.object_en,
-                  object_pid: benefit.object_pid
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
                 }
-                this.ownBenefitsList.push(obj);
-                c.push(obj);
+                this.selectBenefitsList.push(obj)
+
               }
 
             })
 
-            this.selectBenefitsList = c;
+          }
+
+          if (jobMessage.Acceptable) {
+
+            let arr = jobMessage.Acceptable;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectAnationalityList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectAnationalityList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.Prefered_Work_Schedule_Type) {
+
+            let arr = jobMessage.Prefered_Work_Schedule_Type;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectWorkTypeList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectWorkTypeList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.Nationality) {
+
+            let arr = jobMessage.Nationality;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectPnationalityList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectPnationalityList.push(obj)
+
+              }
+
+            })
+
           }
 
           if (jobMessage.age_to_teach) {
-            let c = [];
-            let a = jobMessage.age_to_teach;
-            // console.log(a)
-            a.forEach(ageToTeach => {
-              if (ageToTeach.object_id !== 0) {
-                // console.log(that.ageToTeachList)
-                let b = that.ageToTeachList.filter(item => item.id === ageToTeach.object_id)
-                // console.log(b)
-                c.push(b[0])
+
+            let arr = jobMessage.age_to_teach;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectAgeToTeachList.push(item.object_en)
+
               } else {
+
                 let obj = {
-                  id: 0,
-                  object_name: ageToTeach.object_en,
-                  object_pid: ageToTeach.object_pid
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
                 }
-                that.ownAgeToTeachList.push(obj);
-                c.push(obj);
+                this.selectAgeToTeachList.push(obj)
+
               }
 
             })
-            that.selectAgeToTeachList = c;
 
           }
 
           if (jobMessage.subject) {
-            let c = [];
-            let a = jobMessage.subject;
-            a.forEach(subject => {
-              if (subject.object_id !== 0) {
-                let b = this.subjectList.filter(item => item.id === subject.object_id)
-                c.push(b[0])
+
+            let arr = jobMessage.subject;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectSubjectList.push(item.object_en)
+
               } else {
+
                 let obj = {
-                  id: 0,
-                  object_name: subject.object_en,
-                  object_pid: subject.object_pid
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
                 }
-                this.ownSubjectList.push(obj);
-                c.push(obj);
+                this.selectSubjectList.push(obj)
+
               }
 
             })
-            this.selectSubjectList = c;
 
           }
 
           if (jobMessage.Teaching_certificate) {
-            let c = [];
-            let a = jobMessage.Teaching_certificate;
-            a.forEach(teachCer => {
-              if (teachCer.object_id !== 0) {
-                let b = this.teachingCertificateList.filter(item => item.id === teachCer.object_id)
-                c.push(b[0])
+            let arr = jobMessage.Teaching_certificate;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectTeachingCertificateList.push(item.object_en)
+
               } else {
+
                 let obj = {
-                  id: 0,
-                  object_name: teachCer.object_en,
-                  object_pid: teachCer.object_pid
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
                 }
-                this.ownTeachingCertificateList.push(obj);
-                c.push(obj);
+                this.selectTeachingCertificateList.push(obj)
+
               }
 
             })
-            this.selectTeachingCertificateList = c;
+
           }
 
           if (jobMessage.languages) {
-            let c = [];
-            let a = jobMessage.languages;
-            a.forEach(language => {
-              if (language.object_id !== 0) {
-                let b = this.languagesList.filter(item => item.id === language.object_id)
-                c.push(b[0])
+
+            let arr = jobMessage.languages;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectLanguagesList.push(item.object_en)
+
               } else {
+
                 let obj = {
-                  id: 0,
-                  object_name: language.object_en,
-                  object_pid: language.object_pid
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
                 }
-                this.ownLanguagesList.push(obj);
-                c.push(obj);
+                this.selectLanguagesList.push(obj)
+
               }
 
             })
-            this.selectLanguagesList = c;
-          }
 
-          if (jobMessage.employment_type != '') {
-            this.selectEmploymentTypeList = this.employmentTypeList.filter(item => item.id == jobMessage.employment_type)
           }
 
           if (jobMessage.apply_due_date != '' && jobMessage.apply_due_date != '0000-00-00') {
             that.jobForm.apply_due_date = jobMessage.apply_due_date;
           }
+
           if (jobMessage.payment_period) {
             that.jobForm.payment_period = jobMessage.payment_period;
             that.jobForm.jobForm = jobMessage.payment_period_en;
@@ -1267,8 +1421,6 @@ export default {
             that.jobForm.education = jobMessage.education;
             that.jobForm.education_str = jobMessage.education_en;
           }
-
-
 
         }
       }).catch(err=>{
@@ -1489,41 +1641,6 @@ export default {
 
 
     },
-    selectEmploymentType(value) {
-
-      let index = this.selectEmploymentTypeList.findIndex(element => element == value)
-
-      if (index == -1) {
-        // let len = this.selectEmploymentTypeList.length;
-        //
-        // if (len > 0) {
-        //   this.selectEmploymentTypeList.splice(len - 1, 1);
-        // }
-        this.selectEmploymentTypeList.push(value);
-      } else {
-        this.selectEmploymentTypeList.splice(index, 1);
-      }
-
-    },
-    addOwnJobTitle() {
-      this.addJobTitleStatus = false;
-      let obj = {
-        id: 0,
-        object_en: this.ownJobTitleValue,
-        object_pid: 6
-      }
-      this.ownJobTitleList.push(obj);
-      this.ownJobTitleValue = '';
-      let index = this.selectJobTitleList.findIndex((element) => element === obj);
-
-      if (index == -1) {
-        this.selectJobTitleList.splice(index, 1, obj);
-
-      } else {
-        this.selectJobTitleList.splice(index, 1);
-      }
-      // console.log(this.selectJobTitleList)
-    },
     selectJobTitle(value) {
       // console.log(value)
       this.jobForm.job_title = value.object_en;
@@ -1534,198 +1651,13 @@ export default {
       this.jobForm.entry_date = value.object_en;
 
     },
-    addOwnAgeToTeach() {
-      this.addAgeToTeachStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownAgeToTeachValue,
-        object_pid: 4
-      }
-      this.ownAgeToTeachList.push(obj);
-      this.ownAgeToTeachValue = '';
-      let index = this.selectAgeToTeachList.findIndex((element) => element === obj);
-      if (index == -1) {
-        if (this.selectAgeToTeachList.length > 3) {
-          return false;
-        }
-        this.selectAgeToTeachList.push(obj);
-      } else {
-        this.selectAgeToTeachList.splice(index, 1);
-      }
-    },
-    selectAgeToTeach(value) {
-      let index = this.selectAgeToTeachList.findIndex((element) => element === value);
-      if (index == -1) {
-        if (this.selectAgeToTeachList.length > 3) {
-          return false;
-        }
-        this.selectAgeToTeachList.push(value);
-      } else {
-        this.selectAgeToTeachList.splice(index, 1);
-      }
-    },
-    addOwnSubject() {
-      this.addSubjectStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownSubjectValue,
-        object_pid: 6
-      }
-      this.ownSubjectList.push(obj);
-      this.ownSubjectValue = '';
-      let index = this.selectSubjectList.findIndex((element) => element === obj);
-
-      if (index == -1) {
-        if (this.selectSubjectList.length > 4) {
-          return false;
-        }
-        this.selectSubjectList.push(obj);
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-    },
-    selectSubject(value) {
-      let index = this.selectSubjectList.findIndex((element) => element === value);
-
-      if (index == -1) {
-        if (this.selectSubjectList.length > 4) {
-          return false;
-        }
-        this.selectSubjectList.push(value);
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-      // console.log(this.selectSubjectList)
-    },
-    addOwnCurrency() {
-      this.addCurrencyStatus = false;
-      let obj = {
-        id: 0,
-        object_en: this.ownCurrencyValue,
-        object_pid: 117,
-      }
-      this.ownCurrencyList.push(obj);
-      this.ownCurrencyValue = '';
-      let index = this.selectCurrencyList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectCurrencyList.splice(index, 1, obj)
-      } else {
-        this.selectCurrencyList.splice(index, 1);
-      }
-    },
-    selectCurrency(value) {
-      let index = this.selectCurrencyList.findIndex((element) => element === value);
-      if (index == -1) {
-        this.selectCurrencyList.splice(index, 1, value)
-      } else {
-        this.selectCurrencyList.splice(index, 1);
-      }
-      // console.log(this.selectCurrencyList);
-    },
-    addOwnTeachingCertificate() {
-      this.addTeachingCertificateStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownTeachingCertificateValue,
-        object_pid: 7,
-
-      }
-      this.ownTeachingCertificateList.push(obj);
-      this.ownTeachingCertificateValue = '';
-      let index = this.selectTeachingCertificateList.findIndex((element) => element === obj);
-      if (index == -1) {
-        if (this.selectTeachingCertificateList.length > 3) {
-          return false;
-        }
-        this.selectTeachingCertificateList.push(obj);
-      } else {
-        this.selectTeachingCertificateList.splice(index, 1);
-      }
-    },
-    selectTeachingCertificate(value) {
-      let index = this.selectTeachingCertificateList.findIndex((element) => element === value);
-      if (index == -1) {
-        if (this.selectTeachingCertificateList.length > 3) {
-          return false;
-        }
-        this.selectTeachingCertificateList.push(value);
-      } else {
-        this.selectTeachingCertificateList.splice(index, 1);
-      }
-    },
-    addOwnLanguages() {
-      this.addLanguagesStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownLanguagesValue,
-        object_pid: 2
-      }
-      this.ownLanguagesList.push(obj);
-      this.ownLanguagesValue = '';
-      let index = this.selectLanguagesList.findIndex((element) => element === obj);
-      if (index == -1) {
-        if (this.selectLanguagesList.length > 3) {
-          return false;
-        }
-        this.selectLanguagesList.push(obj);
-
-      } else {
-        this.selectLanguagesList.splice(index, 1);
-      }
-    },
-    selectLanguages(value) {
-      let index = this.selectLanguagesList.findIndex((element) => element === value);
-      if (index == -1) {
-        if (this.selectLanguagesList.length > 3) {
-          return false
-        }
-        this.selectLanguagesList.push(value);
-
-      } else {
-        this.selectLanguagesList.splice(index, 1);
-      }
-    },
-    addOwnBenefits() {
-      this.addBenefitsStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownBenefitsValue,
-        object_pid: 6
-      }
-      this.ownBenefitsList.push(obj);
-      this.ownBenefitsValue = '';
-      let index = this.selectBenefitsList.findIndex((element) => element === obj);
-
-      if (index == -1) {
-        if (this.selectBenefitsList.length >= 5) {
-          return false
-        }
-        this.selectBenefitsList.push(obj);
-      } else {
-        this.selectBenefitsList.splice(index, 1);
-      }
-    },
-    selectBenefits(value) {
-      let index = this.selectBenefitsList.findIndex((element) => element === value);
-
-      if (index == -1) {
-        if (this.selectBenefitsList.length >= 5) {
-          return false
-        }
-        this.selectBenefitsList.push(value);
-      } else {
-        this.selectBenefitsList.splice(index, 1);
-      }
-      // console.log(this.selectBenefitsList)
-    },
     submitBenefits(jobId) {
       let expand = [];
       let objectArr = [];
       this.selectBenefitsList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
       })
@@ -1757,11 +1689,12 @@ export default {
       let objectArr = [];
       this.selectAgeToTeachList.forEach(item => {
         console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -1774,9 +1707,9 @@ export default {
 
       JOB_ADD_PROFILE(data).then(res => {
         if (res.code == 200) {
-          console.log('agetoteach--submit--' + res.data);
+          console.log('age to teach--submit--' + res.data);
         } else {
-          console.log('agetoTeach--submit--error');
+          console.log('age to Teach--submit--error');
           console.log(res.msg);
         }
 
@@ -1795,12 +1728,13 @@ export default {
       let objectArr = [];
 
       this.selectSubjectList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -1830,16 +1764,9 @@ export default {
       })
     },
     submitEmploymentType(jobId) {
+
       let expand = [];
-      let objectArr = [];
-      this.selectEmploymentTypeList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
+      let objectArr = [this.checkedEmploymentTypeValue];
 
       let data = {
         token: localStorage.getItem('token'),
@@ -1872,8 +1799,8 @@ export default {
       let objectArr = [];
       this.selectTeachingCertificateList.forEach(item => {
         console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
+        if (typeof item === 'string') {
+          expand.push(item);
         } else {
           objectArr.push(item.id);
         }
@@ -1910,11 +1837,12 @@ export default {
       let objectArr = [];
       this.selectLanguagesList.forEach(item => {
         console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -1943,6 +1871,126 @@ export default {
         }
       })
     },
+    submitWorkType(jobId) {
+      let expand = [];
+      let objectArr = [];
+      this.selectWorkTypeList.forEach(item => {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
+          objectArr.push(item.id);
+        }
+
+      })
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 184,
+        object_id: objectArr,
+        expand: expand,
+        job_id: jobId
+      }
+
+      JOB_ADD_PROFILE(data).then(res => {
+        if (res.code == 200) {
+          console.log('work type--submit--' + res.data);
+        } else {
+          console.log('work type --submit--error');
+          console.log(res.msg);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
+    submitPnationality(jobId) {
+
+      let expand = [];
+      let objectArr = this.selectPnationalityList;
+
+      this.selectPnationalityList.forEach(item => {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
+          objectArr.push(item.id);
+        }
+
+      })
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 203,
+        object_id: objectArr,
+        expand: expand,
+        job_id: jobId
+      }
+
+      JOB_ADD_PROFILE(data).then(res => {
+        if (res.code == 200) {
+          console.log('p nationality--submit--' + res.data);
+        } else {
+          console.log('p nationality --submit--error');
+          console.log(res.msg);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
+    submitAnationality(jobId) {
+      let expand = [];
+      let objectArr = this.selectAnationalityList;
+
+      this.selectAnationalityList.forEach(item => {
+
+        if (typeof item === 'string') {
+          expand.push(item);
+        } else {
+          objectArr.push(item.id);
+        }
+
+      })
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 239,
+        object_id: objectArr,
+        expand: expand,
+        job_id: jobId
+      }
+
+      JOB_ADD_PROFILE(data).then(res => {
+        if (res.code == 200) {
+          console.log('a nationality--submit--' + res.data);
+        } else {
+          console.log('a nationality --submit--error');
+          console.log(res.msg);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
     getUserObjectList() {
       let data = {
         token: localStorage.getItem('token')
@@ -1954,6 +2002,7 @@ export default {
           this.employmentTypeList = res.message.filter(item => item.pid === 3); //employment type
           this.paymentPeriodList = res.message.filter(item => item.pid === 111); // payment period
           this.currencyList = res.message.filter(item => item.pid === 117); // currency
+          // console.log(this.currencyList)
           this.teachingCertificateList = res.message.filter(item => item.pid === 7); //teaching certificate ...
           this.teachingExpList = res.message.filter(item => item.pid === 120); //teaching exp
           this.educationList = res.message.filter(item => item.pid === 125); // education
@@ -1961,7 +2010,10 @@ export default {
           this.jobTitleList = res.message.filter(item => item.pid === 103); //job title
           this.startDateList = res.message.filter(item => item.pid === 108); // start date
           this.subjectList = res.message.filter(item => item.pid === 1); //subject
-          this.ageList = res.message.filter(item => item.pid === 131); //age list
+          this.workTypeList = res.message.filter(item => item.pid === 184); //subject
+          this.pNationalityList = res.message.filter(item => item.pid === 203); //subject
+          this.aNationalityList = res.message.filter(item => item.pid === 239); //subject
+          // this.ageList = res.message.filter(item => item.pid === 131); //age list
         }
       }).catch(err => {
         console.log(err)
@@ -2013,16 +2065,11 @@ export default {
     submitJob(formName, submitType) {
       let that = this;
 
-      if (this.selectEmploymentTypeList.length <= 0) {
-        return this.$message.warning('Employment Type')
-      }
-
       let jobLocationValue = ''
       let countryName = this.countryName
       let provinceName = this.provinceName
       let cityName = this.cityName
       let districtName = this.districtName
-
 
       if (countryName) {
         jobLocationValue = countryName
@@ -2041,10 +2088,6 @@ export default {
 
       this.jobForm.job_location = jobLocationValue
 
-      if (this.selectEmploymentTypeList.length > 0) {
-        let employmentTypeList = this.selectEmploymentTypeList;
-        this.jobForm.employment_type = employmentTypeList[0].id;
-      }
       if (this.selectCurrencyList.length > 0) {
         let currency = this.selectCurrencyList;
         that.jobForm.currency = currency[0].object_en;
@@ -2054,6 +2097,9 @@ export default {
 
       that.jobForm.age_min = this.ageValue[0];
       that.jobForm.age_max = this.ageValue[1];
+
+      that.jobForm.working_nums_start = this.yearOfExpValue[0];
+      that.jobForm.working_nums_end = this.yearOfExpValue[1];
 
       that.jobForm.version_time = this.$route.query.version_time;
       that.jobForm.identity = this.identity;
@@ -2090,21 +2136,36 @@ export default {
               if (this.selectSubjectList.length > 0) {
                 that.submitSubject(jobId);
               }
-              if(this.selectEmploymentTypeList.length>0){
+
+              if(this.checkedEmploymentTypeValue){
                 that.submitEmploymentType(jobId)
               }
+
               if (this.selectTeachingCertificateList.length > 0) {
                 that.submitTeachingCertificate(jobId);
               }
+
               if (this.selectLanguagesList.length > 0) {
                 that.submitLanguages(jobId);
+              }
+
+              if(this.selectWorkTypeList.length > 0){
+                that.submitWorkType(jobId)
+              }
+
+              if(this.selectPnationalityList.length > 0){
+                that.submitPnationality(jobId)
+              }
+
+              if(this.selectAnationalityList.length > 0){
+                that.submitAnationality(jobId)
               }
 
               if (submitType == 3) {
                 // this.$router.push('/')
               }
               this.$loading().close()
-              this.$router.push('/jobs/myJobs')
+              this.$router.push('/jobs/home')
 
             }
           }).catch(err => {
@@ -2589,108 +2650,6 @@ export default {
   font-size: 23px;
   font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color:#262626;
-}
-.account-profile-item-c-item{
-  width:100%;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.account-profile-item-c-item-1{
-  width:100%;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-
-.account-profile-category{
-  width:30%;
-}
-
-.account-profile-form-item{
-
-}
-
-.account-profile-form-item-map{
-
-}
-
-.account-profile-item-textarea{
-  width:100%;
-}
-
-
-.account-profile-item-location{
-  width:60%;
-}
-
-.account-profile-item-map{
-  width:40%;
-}
-
-/deep/ .el-input--default .el-input__wrapper{
-  /*min-width: 350px;*/
-}
-
-.upload-photo-img{
-  width:70px;
-}
-
-.upload-photo-img-1{
-  width:200px;
-}
-
-.xll-tags-container{
-
-
-}
-
-.xll-tags{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.xll-tags-item{
-  background-color: #F0F2F5;
-  /*border:1px solid #262626;*/
-  height: 40px;
-  line-height: 40px;
-  padding: 0 10px;
-  font-size: 20px;
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  cursor: pointer;
-}
-
-.xll-tags-item:nth-child(1){
-  border-top-left-radius: 40px;
-  border-bottom-left-radius: 40px;
-  border: 1px solid #262626;
-}
-
-.xll-tags-item:nth-child(2){
-
-  border-top: 1px solid #262626;
-  border-bottom: 1px solid #262626;
-}
-
-.xll-tags-item:nth-child(3){
-  border-top-right-radius: 40px;
-  border-bottom-right-radius: 40px;
-  border: 1px solid #262626;
-}
-.xll-tags-active{
-  background-color: #6650B3;
-  color: #FFFFFF;
-}
-
-.xll-checkbox-container{
-  /*margin-top: 10px;*/
 }
 
 .xll-salary-container{

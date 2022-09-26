@@ -6,293 +6,153 @@
       </div>
       <el-scrollbar class="overview-r-container">
         <div class="overview-r-container-bg">
+
           <div class="dashboard-container">
-            <div class="dashboard-1-container">
-              <div class="dashboard-1">
-                <div class="dashboard-1-label">New applications</div>
-                <div class="dashboard-1-number">
-                  +7
-                </div>
-                <div class="dashboard-1-tips">
-                  total:21 applications
-                </div>
-              </div>
 
-              <div class="dashboard-1">
-                <div class="dashboard-1-label">Views this month</div>
-                <div class="dashboard-1-number">
-                  +18
-                </div>
-                <div class="dashboard-1-tips">
-                  total:156 views
-                </div>
-              </div>
+            <template v-if="identity == 1">
 
-              <div class="dashboard-1">
-                <div class="dashboard-1-label">New educators</div>
-                <div class="dashboard-1-number">
-                  +48
-                </div>
-                <div class="dashboard-1-tips">
-                  total:892 educators
-                </div>
-              </div>
-
-              <div class="dashboard-1">
-                <div class="dashboard-1-label">Jobs posted</div>
-                <div class="dashboard-1-number">
-                  3/ <el-icon> <IconIcOutlineAllInclusive /> </el-icon>
-                </div>
-                <div class="dashboard-1-tips">
-                  <span>this month</span>
-                  <el-button class="dashboard-post-a-job-btn"
-                             type="primary" round>
-                    POST A JOB
-                  </el-button>
-                </div>
-              </div>
-
-              <div class="dashboard-1  dashboard-1-bg-1">
-                <div class="dashboard-1-label">Quick actions</div>
-                <div class="dashboard-1-actions">
-                  <el-button class="dashboard-1-action-btn" plain round>
-                    UPGRADE
-                  </el-button>
-                  <el-button class="dashboard-1-action-btn" plain round>
-                    ADVERTISE
-                  </el-button>
-                </div>
-              </div>
-
-            </div>
-            <div class="dashboard-applications">
-              <div class="dashboard-applications-label">
-                <span>New applicants(7)</span>
-                <el-button class="dashboard-applications-all-btn" link>
-                  ALL APPLICATIONS
-                </el-button>
-              </div>
-              <el-scrollbar class="dashboard-application-container">
-                <div class="dashboard-application">
-
-                  <div class="dashboard-application-basic">
-                    <div class="dashboard-application-basic-l">
-                      <el-avatar class="dashboard-application-avatar-img" :src="defaultAvatar"></el-avatar>
-                    </div>
-                    <div class="dashboard-application-basic-r">
-                      <div class="dashboard-application-name">Andrew Christian</div>
-                      <div class="dashboard-application-n">
-                        <div class="dashboard-application-n-1">Spain</div>
-                        <div class="dashboard-application-n-2">12 years</div>
-                      </div>
-                    </div>
-
+              <div class="dashboard-1-container">
+                <div class="dashboard-1">
+                  <div class="dashboard-1-label">You were viewed</div>
+                  <div class="dashboard-1-number-1">
+                    18 <span>times this week</span>
                   </div>
+                </div>
 
-                  <div class="dashboard-application-job">
-                    <div class="dashboard-application-job-1">Classroom Teacher</div>
-                    <div class="dashboard-application-job-2">
-                      position applied for
-                    </div>
+              </div>
+
+              <div class="container-2">
+                <div class="container-2-l">
+                  <dailyJobMatch></dailyJobMatch>
+                </div>
+                <div class="container-2-r">
+                  <applicationsUpdates></applicationsUpdates>
+                </div>
+              </div>
+
+              <div class="container-3">
+                <div class="container-3-l">
+                  <favoritedJobsDashboard></favoritedJobsDashboard>
+                </div>
+
+              </div>
+
+            </template>
+
+            <template v-if="identity == 2 || identity == 3 || identity == 4">
+              <div class="dashboard-1-container">
+                <div class="dashboard-1">
+                  <div class="dashboard-1-label">New applications</div>
+                  <div class="dashboard-1-number">
+                    +7
                   </div>
-
-                  <div class="dashboard-application-match">
-                    <div class="dashboard-application-match-1">89%</div>
-                    <div class="dashboard-application-match-2">match meter</div>
+                  <div class="dashboard-1-tips">
+                    total:21 applications
                   </div>
+                </div>
 
-                  <div class="dashboard-view-application">
-                    <el-button class="dashboard-view-application-btn" plain round @click="viewApplicationEvent()">
-                      VIEW APPLICATION
+                <div class="dashboard-1">
+                  <div class="dashboard-1-label">Views this month</div>
+                  <div class="dashboard-1-number">
+                    +18
+                  </div>
+                  <div class="dashboard-1-tips">
+                    total:156 views
+                  </div>
+                </div>
+
+                <div class="dashboard-1">
+                  <div class="dashboard-1-label">New educators</div>
+                  <div class="dashboard-1-number">
+                    +48
+                  </div>
+                  <div class="dashboard-1-tips">
+                    total:892 educators
+                  </div>
+                </div>
+
+                <div class="dashboard-1">
+                  <div class="dashboard-1-label">Jobs posted</div>
+                  <div class="dashboard-1-number">
+                    3/ <el-icon> <IconIcOutlineAllInclusive /> </el-icon>
+                  </div>
+                  <div class="dashboard-1-tips">
+                    <span>this month</span>
+                    <el-button class="dashboard-post-a-job-btn"
+                               type="primary" round>
+                      POST A JOB
                     </el-button>
                   </div>
-
                 </div>
 
-                <div class="dashboard-application-expand" v-if="expandStatus">
-                  <div class="dashboard-work-exp">
-                    <div class="dashboard-work-exp-label">
-                      <span>Working experience</span>
-                      <el-button class="dashboard-view-detail-btn" link>
-                        VIEW DETAILS
-                      </el-button>
-                    </div>
-                    <div class="dashboard-work-exp-c">
-                      <div class="dashboard-work-exp-c-item">
-                        <div class="dashboard-work-exp-c-item-label">ESL Teacher</div>
-                        <div class="dashboard-work-exp-c-item-text">
-                          EF English First, Singapore
-                        </div>
-                        <div class="dashboard-work-exp-c-item-text">
-                          2010-now(12 years)
-                        </div>
-                      </div>
-
-                      <div class="dashboard-work-exp-c-item">
-                        <div class="dashboard-work-exp-c-item-label">Kindergarten Teacher</div>
-                        <div class="dashboard-work-exp-c-item-text">
-                          Kindergarten for dogs, Philladelphia,PA
-                        </div>
-                        <div class="dashboard-work-exp-c-item-text">
-                          2008-2010(2 years)
-                        </div>
-                      </div>
-
-                      <div class="dashboard-work-exp-c-item">
-                        <div class="dashboard-work-exp-c-item-label">Tutor</div>
-                        <div class="dashboard-work-exp-c-item-text">
-                          Self, Springfield, il
-                        </div>
-                        <div class="dashboard-work-exp-c-item-text">
-                          2000-2008(8 years)
-                        </div>
-                      </div>
-
-                      <div class="dashboard-work-exp-c-item">
-                        <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>
-                      </div>
-
-
-                    </div>
+                <div class="dashboard-1  dashboard-1-bg-1">
+                  <div class="dashboard-1-label">Quick actions</div>
+                  <div class="dashboard-1-actions">
+                    <el-button class="dashboard-1-action-btn" plain round>
+                      UPGRADE
+                    </el-button>
+                    <el-button class="dashboard-1-action-btn" plain round>
+                      ADVERTISE
+                    </el-button>
                   </div>
-
-                  <div class="dashboard-education-cer">
-                    <div class="dashboard-education-cer-label">
-                      Education & Certifications
-                    </div>
-                    <div class="dashboard-education-cer-c">
-                      <div class="dashboard-education-cer-c-item">
-                        <div class="dashboard-education-cer-c-label">
-                          University of California,Los Angeles
-                        </div>
-                        <div class="dashboard-education-cer-c-text">
-                          Master's degree,Applied Linguistics
-                        </div>
-                        <div class="dashboard-education-cer-c-text">
-                          Sep 2011 - Sep 2013
-                        </div>
-                      </div>
-
-                      <div class="dashboard-education-cer-c-item">
-                        <div class="dashboard-education-cer-c-label">
-                          San Diego State University
-                        </div>
-                        <div class="dashboard-education-cer-c-text">
-                          Bachelor's degree,Linguistics
-                        </div>
-                        <div class="dashboard-education-cer-c-text">
-                          Sep 2008 - May 2011
-                        </div>
-                      </div>
-
-
-                      <div class="dashboard-education-cer-c-item">
-                        <div class="dashboard-education-cer-c-label">
-                          Certificates and Diplomas
-                        </div>
-                        <div class="dashboard-education-cer-c-text">
-                          TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3
-                        </div>
-                      </div>
-
-                      <div class="dashboard-education-cer-c-item">
-                        <div class="dashboard-education-cer-c-label">
-                          Languages
-                        </div>
-                        <div class="dashboard-education-cer-c-text">
-                          English(native)
-                        </div>
-                        <div class="dashboard-education-cer-c-text">
-                          Korean(fluent)
-                        </div>
-                        <div class="dashboard-education-cer-c-text">
-                          Turkish(beginner)
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="dashboard-application-b">
-                    <div class="dashboard-application-b-l">
-                      <el-button class="dashboard-application-b-l-btn-1" plain round>
-                        VIEW PROFILE
-                      </el-button>
-                      <el-button class="dashboard-application-b-l-btn-1" plain round>
-                        RESUME
-                      </el-button>
-                    </div>
-                    <div class="dashboard-application-b-r">
-                      <el-button class="dashboard-application-b-l-btn-1" link round>
-                        NOT INTERESTED
-                      </el-button>
-                      <el-button class="dashboard-application-b-l-btn-2" type="primary" round>
-                        SHORTLIST IT
-                      </el-button>
-                    </div>
-                  </div>
-
                 </div>
-
-              </el-scrollbar>
-
-            </div>
-
-<!--            <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataBottom.length>0">-->
-<!--              <el-carousel height="220px" indicator-position="none">-->
-<!--                <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataBottom" :key="i">-->
-<!--                  <div class="xll-ads-l">-->
-<!--                    <el-image class="xll-ads-l-img"-->
-<!--                              :src="item.user_url !='' ? item.user_url : item.url"></el-image>-->
-<!--                  </div>-->
-<!--                  <div class="xll-ads-r">-->
-<!--                    <h4>Advertise with Us</h4>-->
-<!--                    <h5>Description:</h5>-->
-<!--                    <div class="xll-ads-r-desc">-->
-<!--                      Your Adverts and their description will be displayed here.-->
-<!--                      Just click on the banner-->
-<!--                    </div>-->
-
-<!--                  </div>-->
-<!--                </el-carousel-item>-->
-<!--              </el-carousel>-->
-
-<!--            </div>-->
-
-          </div>
-          <el-dialog
-              v-model="dialogUserMenuCompanyVisible"
-              title="Choose a Company"
-              width="30%"
-              center
-          >
-            <div class="switch-account-tips">
-              Hello! Select a company to update！
-            </div>
-            <div class="switch-account-container">
-              <div class="switch-account-item"
-                   v-for="(item,i) in userMenuCompanyData"
-                   :key="i"
-                   @click="selectCompanyToUpdate(item.user_id,item.id)">
-                <template v-if="item">
-                  <template v-if="identity == 1 ">
-                    {{ item.name }}
-                  </template>
-                  <template v-if="identity != 1 && item.company_name">
-                    {{ item.company_name }}
-                  </template>
-                </template>
-
 
               </div>
 
-            </div>
-          </el-dialog>
+              <NewApplications :data="myApplicationsData"></NewApplications>
+
+            </template>
+
+            <template v-if="identity == 5">
+
+              <div class="dashboard-1-container">
+                <div class="dashboard-1">
+                  <div class="dashboard-1-label">You posted</div>
+                  <div class="dashboard-1-number-1">
+                    18 <span>deals</span>
+                    2 <span>events</span>
+                  </div>
+                </div>
+                <div class="dashboard-1">
+                  <div class="dashboard-1-label">Deals performance</div>
+                  <div class="dashboard-1-number-1">
+                    52 <span>favorited</span>
+                    1 <span>redeemed</span>
+                  </div>
+                </div>
+                <div class="dashboard-1">
+                  <div class="dashboard-1-label">Events performance</div>
+                  <div class="dashboard-1-number-1">
+                    0 <span>favorited</span>
+                    0 <span>redeemed</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="container-4">
+                <div class="container-4-l">
+                  <activeDealsDashboard
+                      :listData="dealsListData"
+                  ></activeDealsDashboard>
+                </div>
+                <div class="container-4-r">
+                  <activeEventsDashboard
+                      :list-data="eventsListData"
+                  ></activeEventsDashboard>
+                </div>
+              </div>
+
+
+            </template>
+
+
+          </div>
 
         </div>
 
-
       </el-scrollbar>
+
 
     </div>
   </div>
@@ -302,34 +162,39 @@
 import defaultAvatar from '@/assets/default/avatar.png'
 import meSideMenu from "@/components/meSideMenu";
 import {
-  ADS_LIST, ALL_ASSIGN_USERS,
-  EDUCATOR_PERCENTAGE_V2, OTHER_PERCENTAGE_V2,
-  RECRUITER_PERCENTAGE_V2,
-  SCHOOL_PERCENTAGE_V2, USER_INFO_BY_TOKEN_V2,
-  USER_INFO_VISITOR_V2, USER_MENU_COMPANY, VENDOR_PERCENTAGE_V2
+  ADS_LIST, ALL_ASSIGN_USERS, ALL_JOB_RESUME, DEALS_LIST, EVENTS_LIST, USER_INFO_BY_TOKEN_V2,
+  USER_INFO_VISITOR_V2, USER_MENU_COMPANY
 } from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
-import {onBeforeRouteUpdate} from "vue-router";
-import {computed, ref} from "vue";
-import {encode} from "js-base64";
+// import {onBeforeRouteUpdate} from "vue-router";
+// import {ref} from "vue";
+
+import NewApplications from "@/components/business/newApplications";
+import dailyJobMatch from "@/components/educator/dailyJobMatch";
+import applicationsUpdates from "@/components/educator/applicationsUpdates";
+import favoritedJobsDashboard from "@/components/educator/favoritedJobsDashboard";
+import activeDealsDashboard from "@/components/vendor/activeDealsDashboard";
+import activeEventsDashboard from "@/components/vendor/activeEventsDashboard";
 
 export default {
   name: "index",
   components: {
-    meSideMenu
+    meSideMenu,
+    NewApplications,
+    dailyJobMatch,
+    applicationsUpdates,
+    favoritedJobsDashboard,
+    activeDealsDashboard,
+    activeEventsDashboard
   },
   setup() {
 
-    const i = ref(localStorage.getItem('identity'))
-
-    const identity1 = computed(() => {
-      return i.value
-    })
-
-    return {
-      identity1
-    }
+    // const identity = ref(localStorage.getItem('identity'))
+    //
+    // return {
+    //   identity
+    // }
 
   },
   watch: {
@@ -339,7 +204,11 @@ export default {
         this.getAllAssignUsers()
         this.getBasicInfo(this.identity)
       }
+    },
+    identity(newValue){
+      console.log('identity' + newValue)
     }
+
   },
   computed: {
     isThirdCompanyStatus: {
@@ -350,6 +219,11 @@ export default {
     allIdentityChanged: {
       get() {
         return this.$store.state.allIdentityChanged
+      }
+    },
+    identity:{
+      get(){
+        return this.$store.state.identity
       }
     }
 
@@ -367,7 +241,6 @@ export default {
 
       companyInfo: {},
 
-      identity: this.$route.query.identity,
       adsDataBottom: [],
       profilePercentage: 0,
       accountInfoLevel: 1,
@@ -378,26 +251,36 @@ export default {
       dialogUserMenuCompanyVisible: false,
       userMenuCompanyData: [],
 
-      anotherUserId: 0
+      anotherUserId: 0,
+
+      dealsListData:[],
+      eventsListData:[],
+
+      myApplicationsData:[],
+
 
     }
   },
   mounted() {
-    // let uid = localStorage.getItem('uid')
 
-    onBeforeRouteUpdate(to => {
-      // console.log(to)
-      this.identity = to.query.identity
-      this.getBasicInfo(to.query.identity)
-      this.getPercentage(this.identity)
+    // onBeforeRouteUpdate(to => {
+    //   // console.log(to)
+    //   this.identity = to.query.identity
+    //   this.getBasicInfo(to.query.identity)
+    //   this.getPercentage(this.identity)
+    //
+    // })
 
-    })
+    // this.getBasicInfo(this.identity)
+    // this.getAdsList()
 
-    this.getBasicInfo(this.identity)
-    this.getAdsList()
+    // this.getPercentage(this.identity)
+    // this.getAllAssignUsers()
+    this.getDealsList(1,10000)
+    this.getEventsList(1,10000)
 
-    this.getPercentage(this.identity)
-    this.getAllAssignUsers()
+    this.getAllJobResumeList(1,10000)
+
   },
   methods: {
     viewApplicationEvent(){
@@ -430,81 +313,6 @@ export default {
         console.log(res)
         if (res.code === 200) {
           this.assignUserData = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    addAdmin() {
-      this.$router.push({path: '/profile/admin/add', query: {}})
-    },
-    getPercentage(identity) {
-      if (identity == 1) {
-        this.getEducatorPercentage()
-      }
-      if (identity == 2) {
-        this.getRecruiterPercentage()
-      }
-      if (identity == 3) {
-        this.getSchoolPercentage()
-      }
-      if (identity == 4) {
-        this.getOtherPercentage()
-      }
-      if (identity == 5) {
-        this.getVendorPercentage()
-      }
-    },
-    getEducatorPercentage() {
-      let params = {}
-      EDUCATOR_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_educator;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getRecruiterPercentage() {
-      let params = {}
-      RECRUITER_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_recruiting;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getSchoolPercentage() {
-      let params = {}
-      SCHOOL_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_school;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getOtherPercentage() {
-      let params = {}
-      OTHER_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_other;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getVendorPercentage() {
-      let params = {}
-      VENDOR_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.profilePercentage = res.message.is_vendor;
         }
       }).catch(err => {
         console.log(err)
@@ -558,21 +366,6 @@ export default {
       }).catch(err => {
         this.$message.error(err.msg)
       })
-    },
-    applicationsHref() {
-      this.$router.push({path: '/me/applications'})
-    },
-    jobPostsHref() {
-      this.$router.push({path: '/jobs'})
-    },
-    myEventsHref() {
-      this.$router.push({path: '/events/myEvents'})
-    },
-    myDealsHref() {
-      this.$router.push({path: '/deals/myDeals'})
-    },
-    myFavoritesHref() {
-      this.$router.push({path: '/favorites'})
     },
     getBasicInfo(identity) {
 
@@ -671,15 +464,78 @@ export default {
       })
 
     },
-    editBasicInfo() {
-      let strObj = {
-        i: this.identity,
-        action: 'edit'
-      }
-      let str = encode(JSON.stringify(strObj))
+    getDealsList(page, limit) {
 
-      this.$router.push({path: '/profile/contact/user', query: {s: str}})
+      let filterResult = this.filterResultData;
+
+      let paramsA = {
+        page: page,
+        limit: limit
+      }
+
+      let params = Object.assign(paramsA,filterResult)
+
+      DEALS_LIST(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.dealsListData = res.message.data;
+          this.dealTotalNum = res.message.total
+          this.showLoadingStatus = false
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    getEventsList(page,limit){
+
+      let filterResult = this.filterResultData;
+
+      let paramsA = {
+        page: page,
+        limit: limit
+      }
+
+      let params = Object.assign(paramsA,filterResult)
+
+      EVENTS_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.eventsListData = res.message.data;
+          this.eventTotalNum = res.message.total;
+          this.showLoadingStatus=false
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
+    getAllJobResumeList(page, limit) {
+      let params = {
+        token: localStorage.getItem('token'),
+        page: page,
+        limit: limit
+      }
+      ALL_JOB_RESUME(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.myApplicationsData = res.message.data
+          // console.log(res.message.data)
+          // this.totalNum = res.message.total
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+      })
+
     }
+
 
   }
 }
@@ -707,7 +563,7 @@ export default {
 }
 
 .overview-r-container-bg{
-  padding:30px 50px 50px 50px;
+  padding:50px;
 }
 
 .dashboard-container {
@@ -718,165 +574,6 @@ export default {
   text-decoration: none;
   color: #FFFFFF;
 }
-
-
-.xll-ads-container {
-  padding: 20px 20px 0 20px;
-}
-
-.xll-ads-container-margin {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.xll-ads-swiper-item {
-  cursor: pointer;
-  border-radius: 10px;
-  height: 100%;
-  background-color: #FFFFFF;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.xll-ads-l {
-  width: 60%;
-  height: 100%;
-}
-
-.xll-ads-l-img {
-
-  height: 100%;
-  border-radius: 10px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-}
-
-.xll-ads-r {
-  width: 36%;
-}
-
-.xll-ads-r {
-  padding-right: 4%;
-}
-
-.xll-ads-r h4 {
-  color: #004956;
-}
-
-.xll-ads-r h5 {
-  margin-top: 20px;
-}
-
-.xll-ads-r-desc {
-  font-size: 14px;
-  margin-top: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-}
-
-
-.admin-container {
-  padding: 20px;
-
-}
-
-.admin-container h3 {
-
-}
-
-.admin-content-container {
-  background-color: #ffffff;
-  padding: 20px 0;
-  margin-top: 20px;
-  border-radius: 20px;
-  position: relative;
-}
-
-.admin-content-container h4 {
-  margin-left: 20px;
-}
-
-.admin-content-underline {
-  width: 60px;
-  height: 4px;
-  background-color: #DD4A68;
-  margin-left: 20px;
-}
-
-.admin-list-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  padding: 20px 0;
-}
-
-.admin-item-container {
-  margin-left: 20px;
-  margin-top: 20px;
-  cursor: pointer;
-}
-
-.admin-item-img-container {
-  width: 80px;
-  height: 80px;
-  border: 4px solid #004956;
-  border-radius: 80px;
-  overflow: hidden;
-}
-
-.admin-item-img {
-  width: 100%;
-}
-
-.admin-item-name {
-  text-align: center;
-  font-weight: bold;
-  line-height: 24px;
-}
-
-.admin-item-role {
-  color: #00b3d2;
-  line-height: 24px;
-  text-align: center;
-}
-
-.add-admin {
-  position: absolute;
-  right: 40px;
-  top: 20px;
-
-}
-
-.switch-account-tips {
-  font-size: 16px;
-  text-align: center;
-}
-
-.switch-account-container {
-  padding: 10px;
-}
-
-.switch-account-item {
-  font-size: 14px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-  text-align: center;
-}
-
-.switch-account-item:hover {
-  background-color: #0AA0A8;
-  color: #FFFFFF;
-}
-
 
 .dashboard-1-container {
   display: flex;
@@ -892,8 +589,9 @@ export default {
   padding: 20px;
   box-shadow: 0px 3px 23px 1px rgba(0, 0, 0, 0.07);
   border-radius: 18px;
-  margin-right: 20px;
-  margin-top: 20px;
+
+  margin-right: 50px;
+  margin-bottom: 50px;
 }
 
 
@@ -905,8 +603,8 @@ export default {
 
 .dashboard-1-label {
   font-size: 30px;
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 600;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-weight: 400;
   color: #262626;
 
 }
@@ -928,6 +626,24 @@ export default {
   display: flex;
   align-items: center;
 }
+.dashboard-1-number span{
+  font-size: 23px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
+
+.dashboard-1-number-1 {
+  font-weight: bold;
+  font-size: 60px;
+  font-family: BCBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #6650B3;
+}
+
+.dashboard-1-number-1 span{
+  font-size: 23px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
 
 .dashboard-1-tips {
   font-size: 23px;
@@ -939,256 +655,51 @@ export default {
   margin-left: 15px;
 }
 
-
-.dashboard-applications {
-  background-color: #FFFFFF;
-  padding: 20px;
-  border-radius: 15px;
-  margin-top: 20px;
-
-}
-
-.dashboard-applications-label {
-  font-size: 30px;
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 600;
-  color: #262626;
-}
-
-.dashboard-applications-all-btn {
-  font-size: 20px;
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #6650B3;
-  margin-left: 10px;
-}
-
-.dashboard-application-container {
-  margin-top: 20px;
-  height: 588px;
-  /*overflow-y: scroll;*/
-}
-
-.dashboard-application {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
-  border-bottom: 2px solid #f0f2f5;
-}
-
-
-.dashboard-application-basic {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-
-.dashboard-application-basic-l {
-
-}
-
-.dashboard-application-avatar-img {
-  width: 70px;
-  height: 70px;
-  border-radius: 70px;
-}
-
-
-.dashboard-application-basic-r {
-  margin-left: 10px;
-}
-
-.dashboard-application-name {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-n {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 15px;
-}
-
-.dashboard-application-n-1 {
-  font-size: 18px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-n-2 {
-  margin-left: 10px;
-  font-size: 18px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-job {
-  flex: 1;
-}
-
-.dashboard-application-job-1 {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-job-2 {
-  margin-top: 15px;
-  font-size: 18px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-match {
-  flex: 1;
-}
-
-.dashboard-application-match-1 {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-match-2 {
-  margin-top: 15px;
-  font-size: 18px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-view-application {
-  flex: 1;
-}
-
-.dashboard-view-application-btn {
-  font-size: 20px;
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-expand {
-  padding: 20px;
-
-}
-
-.dashboard-work-exp {
-
-}
-
-.dashboard-work-exp-label {
-  border-bottom: 2px solid #B3B3B3;
-}
-
-.dashboard-work-exp-label span{
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 500;
-  color: #262626;
-}
-.dashboard-view-detail-btn{
-  font-size: 20px;
-  font-weight: 500;
-  color: #6650B3;
-  margin-left: 10px;
-}
-
-.dashboard-work-exp-c {
+.container-2 {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  justify-content: flex-start;
-  margin-top:15px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  /*margin-top: 50px;*/
 }
 
-.dashboard-work-exp-c-item {
-  flex: 1;
-  padding-right: 40px;
+.container-2-l{
+  width: calc(50% - 40px);
 }
 
-.dashboard-work-exp-c-item-label {
-  font-size: 23px;
-  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 600;
-  color: #262626;
+.container-2-r{
+  width: calc(50% - 40px);
 }
 
-.dashboard-work-exp-c-item-text {
-  font-size: 23px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 400;
-  color: #262626;
-}
-
-.dashboard-education-cer {
+.container-3{
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
   margin-top: 50px;
 }
 
-.dashboard-education-cer-label {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 500;
-  color: #262626;
+.container-3-l{
+  width: calc(50% - 40px);
 }
 
-.dashboard-education-cer-c {
+
+.container-4 {
   display: flex;
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
-.dashboard-education-cer-c-item {
-  flex: 1;
-  padding-right: 40px;
-}
+.container-4-l{
+  /*width: 580px;*/
+ }
 
-.dashboard-education-cer-c-label {
-  font-size: 23px;
-  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 600;
-  color: #262626;
-}
-
-.dashboard-education-cer-c-text {
-  font-size: 23px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 400;
-  color: #262626;
-}
-
-.dashboard-application-b {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-top:50px;
-
-}
-
-.dashboard-application-b-l {
-
-}
-
-.dashboard-application-b-l-btn-1{
-  font-size: 20px;
-  font-weight: 500;
-  color: #262626;
-}
-
-.dashboard-application-b-l-btn-2{
-  font-size: 20px;
-  font-weight: 500;
-  color: #FFFFFF;
-}
-
-.dashboard-application-b-r {
-
+.container-4-r{
+  margin-left: 50px;
 }
 
 

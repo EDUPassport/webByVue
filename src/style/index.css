@@ -1,8 +1,14 @@
 @charset "UTF-8";
 
 :root {
+    --el-color-info-light-9: #6650B3;
     --el-color-primary-light-5:#9173ff;
     --el-color-primary: #49397f;
+    --el-bg-color:#ffffff;
+    --el-color-danger: #BA8213;
+    --el-text-color-regular:#262626;
+    /*--el-color-primary-light-9:#9173ff;*/
+
     --el-font-family:BCM,AssiRegular,BCRegular,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif
 }
 
@@ -10,16 +16,47 @@
     --el-button-border-color: #000000;
 }
 
+.el-button.is-link{
+    --el-button-text-color:#262626;
+}
+
+.el-button.is-plain{
+    --el-button-text-color:#262626;
+    --el-button-border-color: #262626;
+
+    --el-button-hover-bg-color: #E7DEFF;
+    --el-button-hover-text-color: #49397F;
+    --el-button-hover-border-color: #6650B3;
+
+}
+
+.el-button--default{
+    --el-button-border-color:transparent;
+    --el-button-text-color:#9173ff;
+    --el-button-font-size: 20px;
+    --el-button-hover-bg-color: #9173ff;
+    --el-button-hover-text-color: #ffffff;
+}
+
 .el-button--primary {
+    --el-button-hover-text-color: #ffffff;
+    --el-button-font-size: 20px;
+    --el-button-text-color:#ffffff;
     --el-button-font-color: #ffffff;
+    --el-button-bg-color: #6650B3;
     --el-button-background-color: #49397f;
     --el-button-border-color: #9173ff;
+
     --el-button-hover-color: #cdbff;
     --el-button-active-font-color: #e6e6e6;
     --el-button-active-background-color: #9173ff;
     --el-button-active-border-color: #cdbff;
+    --el-button-active-bg-color:#988CF5;
+
     --el-button-disabled-bg-color: rgba(102, 80, 179, .5);
     --el-button-disabled-border-color: rgba(102, 80, 179, .5);
+    --el-button-hover-bg-color: #9173ff;
+    --el-button-hover-border-color:#9173ff;
 }
 
 .el-input--large{
@@ -81,4 +118,16 @@
 
 .el-select .el-select__tags .el-tag--info{
     background-color: #6650B3;
+}
+
+
+.el-message-box__title{
+    font-size: 35px;
+    font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+
+.el-message-box__message p{
+    font-size: 22px;
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }

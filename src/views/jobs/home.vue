@@ -23,13 +23,26 @@
                   </div>
                   <template v-if="filterByJobStatus">
                     <div class="da-filter" @click="filterByApplicants()">
-                      VIEW BY: JOBS
+                      <el-icon>
+                        <IconEpMenu />
+                      </el-icon>
+                      <span>VIEW BY: JOBS</span>
+                      <el-icon>
+                        <ArrowDownBold />
+                      </el-icon>
                     </div>
                   </template>
 
                   <template v-if="filterByApplicantStatus">
                     <div class="da-filter" @click="filterByJobs()">
-                      VIEW BY: APPLICATIONS
+                      <el-icon>
+                        <IconEpMenu />
+                      </el-icon>
+                      <span>VIEW BY: APPLICATIONS</span>
+
+                      <el-icon>
+                        <ArrowDownBold />
+                      </el-icon>
                     </div>
                   </template>
 
@@ -55,14 +68,14 @@
 
               <div class="da-item-container">
 
-                <el-row :gutter="50" v-if="filterByJobStatus">
+                <el-row :gutter="0" v-if="filterByJobStatus">
                   <el-col :span="6" class="da-item-t-item">Job title</el-col>
                   <el-col :span="6" class="da-item-t-item">Total applicants</el-col>
                   <el-col :span="6" class="da-item-t-item">Posted/Deadline</el-col>
                   <el-col :span="6" class="da-item-t-item">Action</el-col>
                 </el-row>
 
-                <el-row :gutter="50" v-if="filterByApplicantStatus">
+                <el-row :gutter="0" v-if="filterByApplicantStatus">
                   <el-col :span="6" class="da-item-t-item">Applicant</el-col>
                   <el-col :span="6" class="da-item-t-item">Position applied for</el-col>
                   <el-col :span="6" class="da-item-t-item">Status</el-col>
@@ -73,29 +86,59 @@
                   <div class="da-item-container-height">
                     <div  v-for="(item,i) in myJobsData" :key="i">
 
-                      <el-row :gutter="50" class="da-da-item" >
+                      <el-row :gutter="0" class="da-da-item" >
 
                         <el-col :span="6" class="da-job-title">
-                          {{item.job_title}}
+
+                          <div class="da-job-title-l">
+                            <el-popover
+                                v-if="item.status == 0"
+                                placement="top-start"
+                                title="Pending"
+                                :width="300"
+                                trigger="hover"
+                                content="Your job post is pending approval. Please give us 2-3 business days to review."
+                            >
+                              <template #reference>
+                                <el-icon :size="20" color="#F9B019">
+                                  <IconIcBaselinePendingActions />
+                                </el-icon>
+                              </template>
+                            </el-popover>
+
+                            <el-popover
+                                v-if="item.status == 2"
+                                placement="top-start"
+                                title="Rejected"
+                                :width="300"
+                                trigger="hover"
+                                content="Please contact us for more information"
+                            >
+                              <template #reference>
+                                <el-icon :size="20" color="#FF4D4D">
+                                  <IconCiError />
+                                </el-icon>
+                              </template>
+                            </el-popover>
+                          </div>
+
+                         <div class="da-job-title-r">
+                           <el-tooltip
+                               class="box-item"
+                               effect="dark"
+                               :content="item.job_title"
+                               placement="top"
+                           >
+                             {{item.job_title}}
+                           </el-tooltip>
+                         </div>
                         </el-col>
-                        <el-col :span="3" class="da-total-applicants">
+
+                        <el-col :span="6" class="da-total-applicants">
                           <div class="da-total-applicants-l-circle" v-if="item.unread_status"></div>
                           <span>{{item.resume_count}}</span>
                         </el-col>
-                        <el-col :span="3" class="da-total-applicants">
-                          <el-tag type="info" disable-transitions
-                                  v-if="item.status == 0">
-                            Pending
-                          </el-tag>
-                          <el-tag type="success" disable-transitions
-                                  v-if="item.status == 1">
-                            Active
-                          </el-tag>
-                          <el-tag type="danger" disable-transitions
-                                  v-if="item.status == 2">
-                            Rejected
-                          </el-tag>
-                        </el-col>
+
                         <el-col :span="6" class="da-posted-deadline">
                           {{ $filters.howLongFormat(item.refresh_time) }} / {{ $filters.ymdFormatEvent(item.job_due_time)}}
                         </el-col>
@@ -104,6 +147,9 @@
                                      @click="viewAllApplicants(item.id,item.unread_id)"
                                      plain round>
                             VIEW APPLICANTS
+                          </el-button>
+                          <el-button plain round @click="editJob(item.id)">
+                            EDIT
                           </el-button>
                         </el-col>
 
@@ -270,7 +316,7 @@
                   <div class="da-item-container-height">
 
                     <div  v-for="(item,i) in myApplicationsData" :key="i">
-                      <el-row class="da-item" :gutter="50" >
+                      <el-row class="da-item"  >
 
                         <el-col :span="6">
                           <div class="da-item-basic">
@@ -298,7 +344,11 @@
                             <span class="da-item-a-job-title">{{item.job.job_title}}</span>
                         </el-col>
                         <el-col :span="6">
+                          <div style="width: 100px;">
+                            <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF" />
+                          </div>
 
+<!--                          {{item.match_meter}}-->
                         </el-col>
                         <el-col :span="6">
                           <div class="dashboard-view-application">
@@ -372,29 +422,29 @@
                               </div>
                             </template>
 
-                            <div class="dashboard-education-cer-c-item">
-                              <div class="dashboard-education-cer-c-label">
-                                Certificates and Diplomas
-                              </div>
-                              <div class="dashboard-education-cer-c-text">
-                                TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3
-                              </div>
-                            </div>
+<!--                            <div class="dashboard-education-cer-c-item">-->
+<!--                              <div class="dashboard-education-cer-c-label">-->
+<!--                                Certificates and Diplomas-->
+<!--                              </div>-->
+<!--                              <div class="dashboard-education-cer-c-text">-->
+<!--                                TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3-->
+<!--                              </div>-->
+<!--                            </div>-->
 
-                            <div class="dashboard-education-cer-c-item">
-                              <div class="dashboard-education-cer-c-label">
-                                Languages
-                              </div>
-                              <div class="dashboard-education-cer-c-text">
-                                English(native)
-                              </div>
-                              <div class="dashboard-education-cer-c-text">
-                                Korean(fluent)
-                              </div>
-                              <div class="dashboard-education-cer-c-text">
-                                Turkish(beginner)
-                              </div>
-                            </div>
+<!--                            <div class="dashboard-education-cer-c-item">-->
+<!--                              <div class="dashboard-education-cer-c-label">-->
+<!--                                Languages-->
+<!--                              </div>-->
+<!--                              <div class="dashboard-education-cer-c-text">-->
+<!--                                English(native)-->
+<!--                              </div>-->
+<!--                              <div class="dashboard-education-cer-c-text">-->
+<!--                                Korean(fluent)-->
+<!--                              </div>-->
+<!--                              <div class="dashboard-education-cer-c-text">-->
+<!--                                Turkish(beginner)-->
+<!--                              </div>-->
+<!--                            </div>-->
 
                           </div>
                         </div>
@@ -572,6 +622,9 @@ export default {
     viewApplicationEvent(applicationId){
       this.expandStatus = !this.expandStatus
       this.selectedApplicationId = applicationId
+    },
+    editJob(jobId){
+      this.$router.push({path:'/jobs/post',query:{job_id:jobId}})
     },
     viewAllApplicants(jobId,unreadId){
       this.selectedApplicantStatus = !this.selectedApplicantStatus;
@@ -975,6 +1028,12 @@ export default {
   font-size: 20px;
   margin-left: 50px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.da-filter span{
+  margin: 0 10px 0 10px;
 }
 
 .da-filter:hover{
@@ -1026,11 +1085,36 @@ export default {
 .da-da-item{
   padding: 20px 0;
   border-bottom:  2px solid #f0f2f5 ;
+  position: relative;
+}
+
+.da-da-item-status-container{
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .da-job-title{
+
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.da-job-title-l{
+  display: flex;
+  align-items: center;
+}
+
+.da-job-title-r{
   font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 25px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .da-total-applicants{

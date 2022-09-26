@@ -2,9 +2,11 @@ import {createStore} from "vuex";
 
 const store = createStore({
     state() {
+
         let currentUserStr = localStorage.getItem('currentUser')
         let menuDataStr = localStorage.getItem('menuData')
         let isThirdCompanyValue = localStorage.getItem('is_third_company')
+
         return {
             username: localStorage.getItem('name'),
             userAvatar: localStorage.getItem('avatar'),
@@ -16,7 +18,8 @@ const store = createStore({
             allIdentityChanged:false,
             menuData:menuDataStr ? JSON.parse(menuDataStr) : [],
             menuDataStatus:false,
-            isThirdCompanyStatus: isThirdCompanyValue ? isThirdCompanyValue : 0
+            isThirdCompanyStatus: isThirdCompanyValue ? isThirdCompanyValue : 0,
+
         }
     },
     mutations: {
@@ -53,7 +56,8 @@ const store = createStore({
         },
         changeThirdCompanyStatus(state, data){
             state.isThirdCompanyStatus = data
-        }
+        },
+
     },
     actions:{
 

@@ -683,7 +683,7 @@ export default {
           return router.push({path: b.path, query: b.query})
         }
       }
-      return router.push({path: '/home'})
+      return router.push({path: '/'})
     }
 
     let value = route.query.type;
@@ -804,7 +804,7 @@ export default {
 
     },
     goHome() {
-      this.$router.push('/home')
+      this.$router.push('/')
     },
     remeberChange(e) {
       console.log(e)

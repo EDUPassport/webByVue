@@ -4,7 +4,7 @@
       <div class="basic-l-container">
         <meSideMenu></meSideMenu>
       </div>
-      <div class="basic-r-container">
+      <el-scrollbar class="basic-r-container">
         <div class="basic-r-container-bg">
           <div class="account-profile-t">
             <div class="account-profile-t-l">Your profile</div>
@@ -20,7 +20,7 @@
             </div>
           </div>
 
-          <div class="basic-form">
+          <el-scrollbar class="basic-form">
             <el-form
                 ref="basicForm"
                 :model="basicForm"
@@ -160,7 +160,7 @@
                                   :value="item.phone_code"
                               >
                                 <span style="float: left">{{ item.en }}</span>
-                                <span style=" float: right;color: var(--el-text-color-secondary);font-size: 13px;">
+                                <span style=" float: right;font-size: 13px;">
                           {{ item.phone_code }}
                         </span>
                               </el-option>
@@ -492,10 +492,10 @@
                 </div>
               </div>
             </el-form>
-          </div>
+          </el-scrollbar>
 
         </div>
-      </div>
+      </el-scrollbar>
 
 <!--      <profileTitle :i="i" :action="action"></profileTitle>-->
 
@@ -1194,6 +1194,11 @@ export default {
           localStorage.setItem('company_id',companyId)
           self.$store.commit('identity',5)
           this.$store.commit('allIdentityChanged',true )
+
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData',str)
+          this.$store.commit('menuData', res.message)
+
           this.$router.push('/account/home')
 
         }
@@ -1249,9 +1254,6 @@ export default {
               this.$store.commit('username',this.basicForm.company_name)
               this.$store.commit('userAvatar',this.basicForm.logo)
 
-              this.submitLoadingValue = false;
-
-
               if(action == 'edit'){
                 if (this.accountImageFileList.length > 0) {
                   this.uploadAccountImages(this.cid)
@@ -1266,12 +1268,13 @@ export default {
                 localStorage.setItem('company_id', res.message.vendor_company_id)
 
                 this.$store.commit('allIdentityChanged',true )
-                let uid = localStorage.getItem('uid')
-
-                this.getUserMenuList(uid,5, res.message.vendor_company_id, uid)
+                // let uid = localStorage.getItem('uid')
+                //
+                // this.getUserMenuList(uid,5, res.message.vendor_company_id, uid)
                 this.changeIdentity(res.message.vendor_company_id,2)
               }
               // this.submitEduBusinessCompanyForm()
+              this.submitLoadingValue = false;
 
             }
           }).catch(err => {
@@ -1879,10 +1882,11 @@ export default {
 
 .basic-r-container {
   width:calc(100% - 160px);
+  height: calc(100vh - 140px);
 }
 
 .basic-r-container-bg{
-  padding:30px 50px 50px 50px;
+  padding: 25px 50px 50px 50px;
 }
 
 
@@ -1891,7 +1895,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0 40px 0;
+  padding-bottom: 25px;
 }
 
 .account-profile-t-l{
@@ -1915,9 +1919,7 @@ export default {
 
 
 .basic-form {
-  padding-bottom: 50px;
-  /*height: 800px;*/
-  /*overflow-y: scroll;*/
+  height: calc(100vh - 285px);
 }
 
 

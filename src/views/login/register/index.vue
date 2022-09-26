@@ -3,7 +3,7 @@
 
     <el-row justify="center" align="top" class="login-container">
       <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
-        <div class="login-l">
+        <div class="login-l" @click="turnHome()">
           <div class="login-l-edu">EDU</div>
           <div class="login-l-passport">PASSPORT</div>
         </div>
@@ -54,12 +54,14 @@
                   <el-form-item  prop="first_name" required>
                     <el-input size="large" placeholder="First Name"
                               @change="inputChange"
+                              @input="inputChange"
                               v-model="registerForm.first_name">
                     </el-input>
                   </el-form-item>
                   <el-form-item  prop="last_name" required>
                     <el-input size="large" placeholder="Last Name"
                               @change="inputChange"
+                              @input="inputChange"
                               v-model="registerForm.last_name">
                     </el-input>
                   </el-form-item>
@@ -69,6 +71,7 @@
                     <div class="xll-email-input">
                       <el-input size="large" placeholder="Email address"
                                 @change="inputChange"
+                                @input="inputChange"
                                 v-model="registerForm.email">
                       </el-input>
                       <div class="send-code-btn" @click="sendEmailCode()">
@@ -83,6 +86,7 @@
                     <div class="xll-email-input">
                       <el-input size="large" placeholder="Phone number"
                                 @change="inputChange"
+                                @input="inputChange"
                                 v-model="registerForm.phone">
                       </el-input>
                       <div class="send-code-btn" @click="getCheckCodeForRegister()">
@@ -106,6 +110,7 @@
                   <el-form-item  prop="code" required>
                     <el-input size="large" placeholder="Activation code"
                               @change="inputChange"
+                              @input="inputChange"
                               v-model="registerForm.code"></el-input>
                   </el-form-item>
 
@@ -114,6 +119,7 @@
                               show-password
                               type="password"
                               @change="inputChange"
+                              @input="inputChange"
                               v-model="registerForm.password"
                     ></el-input>
                   </el-form-item>
@@ -121,14 +127,16 @@
                     <el-input size="large" type="password" placeholder="Confirm password"
                               show-password
                               @change="inputChange"
+                              @input="inputChange"
                               v-model="registerForm.c_password"
                     ></el-input>
                   </el-form-item>
 
                   <div class="xll-create-account">
-                    <el-button class="xll-create-account-btn" :disabled="createAccountDisabledStatus"
-                               size="large"
+                    <el-button class="xll-create-account-btn"
+                               :disabled="createAccountDisabledStatus"
                                type="primary"
+                               round
                                @click="createAccount('registerForms')"
                     >
                       CREATE AN ACCOUNT
@@ -140,21 +148,24 @@
                 <template v-if="stepValue === 2">
                   <div class="identity-container">
                     <div class="identity-label">
-                       Choose your profile (you can change it later)
+                       Choose your profile <br>
+                      <span>(you can change it later)</span>
                     </div>
-                    <div class="identity-content">
 
-                      <div class="identity-btn"
-                           :class="identityValue == 1 ? 'identity-btn-active' : '' "
-                           @click="selectedIdentity(1)">Educator
+                    <div class="identity-tabs identity-tabs-margin">
+
+                      <div class="identity-tab identity-tab-l"
+                           :class="identityValue == 1 ? 'identity-tab-active' : '' "
+                           @click="selectedIdentity(1)">
+                        Educator
                       </div>
-                      <div class="identity-btn identity-btn-margin"
-                           :class="businessDialogStatus ? 'identity-btn-active' : '' "
+                      <div class="identity-tab identity-tab-m"
+                           :class="businessDialogStatus ? 'identity-tab-active' : '' "
                            @click="selectedBusinessAll()">
                         Educational business
                       </div>
-                      <div class="identity-btn identity-btn-margin"
-                           :class="identityValue == 5 ? 'identity-btn-active' : '' "
+                      <div class="identity-tab identity-tab-r"
+                           :class="identityValue == 5 ? 'identity-tab-active' : '' "
                            @click="selectedIdentity(5)">Vendor
                       </div>
 
@@ -162,47 +173,52 @@
 
                     <div class="identity-tips">
                       <template v-if="identityValue == 1">
-                        You are a teacher,tutor,principal,etc.
+                        You are a teacher, tutor, mentor working with students directly.
                       </template>
                       <template v-if="businessDialogStatus">
-                        You work at or for a school,university,etc.as a hiring person.
+                        You are working at a school, university, education center as a hiring person or a recruiter.
                       </template>
                       <template v-if="identityValue == 5">
-                        You are a vendor.
+                        You have your own business and would like to promote it and support educators.
                       </template>
 
                     </div>
 
                     <div class="business-dialog-container" v-if="businessDialogStatus">
 
-                      <div class="identity-business-tips">
-                        Please choose the one that fits you best
-                      </div>
-                      <div class="identity-content identity-content-margin">
-                        <div class="identity-btn"
-                             @click="selectedIdentityBusiness(2)"
-                             :class="identityValue == 2 ? 'identity-btn-active' : '' "
-                        >Recruiter</div>
-                        <div class="identity-btn identity-btn-margin"
+<!--                      <div class="identity-business-tips">-->
+<!--                        Please choose the one that fits you best-->
+<!--                      </div>-->
+
+                      <div class="identity-tabs">
+
+                        <div class="identity-tab identity-tab-l"
                              @click="selectedIdentityBusiness(3)"
-                             :class="identityValue == 3 ? 'identity-btn-active' : '' "
+                             :class="identityValue == 3 ? 'identity-tab-active' : '' "
                         >School</div>
-                        <div class="identity-btn identity-btn-margin"
+
+                        <div class="identity-tab identity-tab-m"
+                             @click="selectedIdentityBusiness(2)"
+                             :class="identityValue == 2 ? 'identity-tab-active' : '' "
+                        >Recruiter</div>
+
+                        <div class="identity-tab identity-tab-r"
                              @click="selectedIdentityBusiness(4)"
-                             :class="identityValue == 4 ? 'identity-btn-active' : '' "
+                             :class="identityValue == 4 ? 'identity-tab-active' : '' "
                         >Other</div>
                       </div>
 
                       <div class="identity-tips">
 
                         <template v-if="identityValue == 2">
-                          You are a recruiter working for one or serveral schools,universities,etc.
+                          You are a recruiter or a head hunter working for one or more companies.
                         </template>
                         <template v-if="identityValue == 3">
-                          You work at or for a school,university,etc.as a hiring person.
+                          You are a hiring person working at a school, university, etc.
                         </template>
                         <template v-if="identityValue == 4">
-                          You are a other working for one or serveral schools,universities,etc.
+                          Choose this if you don’t fit into other categories.
+                          You can <el-button link type="primary">CONTACT US</el-button> if you have doubts.
                         </template>
 
                       </div>
@@ -212,26 +228,23 @@
                       <el-form-item  prop="company_name">
                         <el-input
                             v-if="identityValue == 2"
-                            size="large" placeholder="Recruiter name"
+                            size="large" placeholder="Displayed name"
                             @change="companyInputChange"
+                            @input="companyInputChange"
                             v-model="companyName">
                         </el-input>
                         <el-input
                             v-if="identityValue == 3"
                             size="large" placeholder="School name"
                             @change="companyInputChange"
+                            @input="companyInputChange"
                             v-model="companyName">
                         </el-input>
                         <el-input
                             v-if="identityValue == 4"
-                            size="large" placeholder="Other name"
+                            size="large" placeholder="School name"
                             @change="companyInputChange"
-                            v-model="companyName">
-                        </el-input>
-                        <el-input
-                            v-if="identityValue == 5"
-                            size="large" placeholder="Vendor name"
-                            @change="companyInputChange"
+                            @input="companyInputChange"
                             v-model="companyName">
                         </el-input>
 
@@ -242,8 +255,9 @@
                     <div class="margin-aaa"></div>
                     <el-form-item  prop="company_name"   v-if="identityValue == 5">
                       <el-input
-                          size="large" placeholder="Vendor name"
+                          size="large" placeholder="Name of your store/restaurant/company"
                           @change="companyInputChange"
+                          @input="companyInputChange"
                           v-model="companyName">
                       </el-input>
                     </el-form-item>
@@ -252,7 +266,6 @@
 
                   <div class="complete-btn-container">
                     <el-button class="complete-btn"
-                               size="large"
                                type="primary"
                                :disabled="completeBtnDisabledStatus"
                                round
@@ -268,25 +281,26 @@
 
                 </template>
 
-
               </el-form>
 
             </div>
           </div>
 
-
-
         </div>
 
       </el-col>
       <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
+
         <div class="login-r">
-          <div class="sign-up">
-            <el-button class="sign-up-btn" size="large" plain round @click="turnToLogin()">LOG IN</el-button>
-          </div>
+
           <div class="login-close">
-            <el-button class="login-close-btn" size="large" link @click="goHome()" >CLOSE</el-button>
+            <el-button class="login-close-btn"  link @click="goHome()" >CLOSE</el-button>
           </div>
+
+          <div class="sign-up">
+            <el-button class="sign-up-btn" plain round @click="turnToLogin()">LOG IN</el-button>
+          </div>
+
         </div>
       </el-col>
 
@@ -360,7 +374,7 @@ export default {
           return router.push({path: b.path, query: b.query})
         }
       }
-      return router.push({path: '/home'})
+      return router.push({path: '/'})
     }
 
     let value = route.query.type;
@@ -508,6 +522,27 @@ export default {
 
   },
   methods: {
+    test(){
+      this.$msgbox({
+        title:"All Set",
+        message:"Let's get you logged in!",
+        dangerouslyUseHTMLString:false,
+        type:"success",
+        center:true,
+        confirmButtonText:"OK",
+        "round-button":true,
+        callback(action){
+          console.log(action)
+          if(action==='confirm'){
+            self.$router.push({path: '/edupassport', query: { phone:self.registerForm.phone}})
+          }
+        }
+
+      })
+    },
+    turnHome(){
+      this.$router.push('/')
+    },
     companyInputChange(e){
       console.log(e)
       this.completeBtnDisabledStatus = e.length <= 0;
@@ -562,7 +597,7 @@ export default {
       this.$router.push('/edupassport')
     },
     goHome() {
-      this.$router.push('/home')
+      this.$router.push('/')
     },
     remeberChange(e) {
       console.log(e)
@@ -1058,12 +1093,13 @@ export default {
 }
 
 .login-container{
-  max-width:1920px;
-  padding-top: 52px;
+  /*max-width:1920px;*/
+  padding-top: 50px;
 }
 
 .login-l{
   padding-left: 50px;
+  cursor: pointer;
 }
 
 .login-l-edu{
@@ -1089,6 +1125,7 @@ export default {
 
 
 .login-r{
+
   padding-right: 50px;
   display: flex;
   flex-direction: row;
@@ -1107,7 +1144,7 @@ export default {
 }
 
 .login-close{
-  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .login-close-btn{
@@ -1165,18 +1202,19 @@ export default {
 }
 
 .register-step-tips{
-  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   margin-top: 15px;
   color:#262626;
 }
 
 .register-step-circle-active{
+  font-family: Assistant-SemiBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   background-color: #59EDF7;
 }
 
 .register-step-tips-active{
-  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: Assistant-SemiBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .xll-register-form-container {
@@ -1201,7 +1239,7 @@ export default {
 
   width:100%;
   text-align: center;
-  margin-top:50px;
+  margin-top:25px;
 
 }
 
@@ -1226,42 +1264,63 @@ export default {
 }
 
 .identity-label {
-  font-size: 26px;
+  font-size: 30px;
   text-align: center;
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   margin-top:10px;
 }
 
-.identity-content {
-  margin-top:50px;
+.identity-label span{
+  font-size: 23px;
+  text-align: center;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.identity-tabs{
+
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
 }
 
-.identity-content-margin{
-  margin-top:25px;
+.identity-tabs-margin{
+  margin-top: 50px;
 }
 
-.identity-btn {
-
-  border-radius: 60px;
-  border: 2px solid rgba(38, 38, 38, 1);
-  padding:20px 30px;
-  cursor: pointer;
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+.identity-tab{
+  padding: 10px 25px;
   font-size: 20px;
+  text-align: center;
+  color: #262626;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  cursor:pointer;
 
 }
 
-.identity-btn-active{
-  background-color: rgba(231, 222, 255, 1);
-  border: 2px solid rgba(231, 222, 255, 1);
+.identity-tab:hover{
+  background-color: #988CF5;
+  color: #FFFFFF;
 }
 
-.identity-btn-margin {
-  margin-left: 50px;
+.identity-tab-l{
+  border: 2px solid #262626;
+  border-radius: 22px 0px 0px 22px;;
+}
+.identity-tab-m{
+  border-top: 2px solid #262626;
+  border-bottom: 2px solid #262626;
+}
+
+.identity-tab-r{
+  border: 2px solid #262626;
+  border-radius: 0px 22px 22px 0px;
+}
+
+.identity-tab-active{
+  background-color: #988CF5;
+  color: #FFFFFF;
 }
 
 
@@ -1273,14 +1332,22 @@ export default {
 .send-code-btn {
   position: absolute;
   right: 20px;
-  top: 13px;
+  top: 0px;
   bottom:0;
   margin:auto;
-  padding: 10px;
+
   font-size: 24px;
   font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   z-index:100;
   cursor:pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-code-btn:hover{
+  text-decoration: underline;
 }
 
 .xll-change-phone{
@@ -1295,6 +1362,7 @@ export default {
 .xll-change-phone:hover{
   font-weight: bold;
   color:#000000;
+  text-decoration: underline;
 }
 
 .xll-create-account{
@@ -1303,10 +1371,7 @@ export default {
 }
 
 .xll-create-account-btn{
-   height: 70px;
-  font-size: 24px;
-  border-radius: 70px;
-  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
 }
 
 .complete-btn-container{
@@ -1318,17 +1383,12 @@ export default {
 }
 
 .complete-btn{
-  font-size: 24px;
-  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  height: 70px;
-  border-radius: 70px;
+  font-size: 20px;
 }
 
 .complete-back-btn{
+  margin-top: 25px;
   font-size: 24px;
-  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  height: 70px;
-  border-radius: 70px;
   color:#262626;
 }
 

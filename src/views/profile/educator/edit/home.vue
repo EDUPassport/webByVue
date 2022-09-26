@@ -13,7 +13,7 @@
           <div class="account-profile-t">
             <div class="account-profile-t-l">Your profile</div>
             <div class="account-profile-t-r">
-              <el-button class="account-profile-cancel-btn" plain round>
+              <el-button class="account-profile-cancel-btn" plain round @click="cancel()">
                 CANCEL
               </el-button>
               <el-button class="account-profile-save-btn" type="primary" round
@@ -100,9 +100,11 @@
                         <el-input v-model="basicForm.address" placeholder="Current Address"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
 
-                    </el-col>
+<!--                    <el-col :span="6">-->
+
+<!--                    </el-col>-->
+
                   </el-row>
                 </div>
               </div>
@@ -113,9 +115,9 @@
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
-                    <el-col :span="6">
-                      <el-form-item
-                          label="Education Type(Up to 3)">
+                    <el-col :span="12">
+                      <el-form-item label="Education Type(Up to 3)">
+
                         <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
                           <div v-if="item['children'].length>0" class="category-parent">
                           </div>
@@ -144,78 +146,38 @@
                     <el-col :span="6">
                       <el-form-item label="Interests">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownHobbyInfoValue"
-                                      placeholder='Click "add" after each entry '>
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         link
-                                         :disabled="!ownHobbyInfoValue"
-                                         type="primary"
-                                         @click="addOwnHobby()">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
+                        <el-select
+                            v-model="selectHobbyInfoList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select interests"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editHobbyInfoList"
+                              :key="index"
+                              :label="item"
+                              :value="item"
+                          />
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class="selectHobbyInfoList.indexOf(item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editHobbyInfoList" :key="index"
-                                 @click="selectHobby(item,1)">
-                              {{ item }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectHobbyInfoList.indexOf(item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownHobbyInfoList" :key="index"
-                                 @click="selectHobby(item,2)">
-                              {{ item }}
-                            </div>
-                          </div>
+                        </el-select>
 
-                        </div>
                       </el-form-item>
 
-                    </el-col>
-
-                    <el-col :span="6">
-                      <el-form-item label="About yourself" prop="bio">
-                        <el-input type="textarea" v-model="basicForm.bio"
-                                  :rows="6"
-                                  placeholder="A short bio">
-                        </el-input>
-                      </el-form-item>
                     </el-col>
 
                   </el-row>
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
-                      <el-form-item label="Minimum expected salary (Monthly)" prop="min_monthly_salary">
-                        <el-input type="number" v-model="basicForm.min_monthly_salary" placeholder="minimum expected salary">
-                          <template #prepend>
-                            <el-icon :size="20">
-                              <IconIonLogoUsd />
-                            </el-icon>
-                          </template>
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="Minimum expected salary (Hourly)" prop="min_monthly_salary">
-                        <el-input type="number" v-model="basicForm.min_hourly_salary" placeholder="minimum expected salary">
-                          <template #prepend>
-                            <el-icon :size="20">
-                              <IconIonLogoUsd />
-                            </el-icon>
-                          </template>
+
+                    <el-col :span="12">
+                      <el-form-item label="About yourself" prop="bio">
+                        <el-input type="textarea" v-model="basicForm.bio"
+                                  :rows="6"
+                                  placeholder="A short bio">
                         </el-input>
                       </el-form-item>
                     </el-col>
@@ -249,6 +211,30 @@
 
                     </el-col>
 
+<!--                    <el-col :span="6">-->
+<!--                      <el-form-item label="Minimum expected salary (Monthly)" prop="min_monthly_salary">-->
+<!--                        <el-input type="number" v-model="basicForm.min_monthly_salary" placeholder="minimum expected salary">-->
+<!--                          <template #prepend>-->
+<!--                            <el-icon :size="20">-->
+<!--                              <IconIonLogoUsd />-->
+<!--                            </el-icon>-->
+<!--                          </template>-->
+<!--                        </el-input>-->
+<!--                      </el-form-item>-->
+<!--                    </el-col>-->
+<!--                    <el-col :span="6">-->
+<!--                      <el-form-item label="Minimum expected salary (Hourly)" prop="min_monthly_salary">-->
+<!--                        <el-input type="number" v-model="basicForm.min_hourly_salary" placeholder="minimum expected salary">-->
+<!--                          <template #prepend>-->
+<!--                            <el-icon :size="20">-->
+<!--                              <IconIonLogoUsd />-->
+<!--                            </el-icon>-->
+<!--                          </template>-->
+<!--                        </el-input>-->
+<!--                      </el-form-item>-->
+<!--                    </el-col>-->
+
+
                   </el-row>
 
                 </div>
@@ -263,24 +249,17 @@
                     <el-col :span="6">
                       <el-form-item label="Years of experience">
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class="selectTeachExpList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editTeachExpList" :key="index"
-                                 @click="selectTeachExp(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class="selectTeachExpList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownTeachExpList" :key="index"
-                                 @click="selectTeachExp(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-                        </div>
+                        <el-select v-model="checkedYearExpValue"
+                                   filterable
+                                   placeholder="Years of experience"
+                                   value-key="id"
+                        >
+                          <el-option v-for="(item,i) in editTeachExpList"
+                                     :key="i"
+                                     :label="item.object_en"
+                                     :value="item.id">
+                          </el-option>
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
@@ -448,86 +427,46 @@
                   <el-row :gutter="50">
                     <el-col :span="6">
                       <el-form-item label="Places Traveled">
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownCountriesTraveledValue"
-                                      placeholder="Add certifications">
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         type="primary"
-                                         link
-                                         :disabled="!ownCountriesTraveledValue"
-                                         @click="addOwnCountriesTraveled()">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectCountriesTraveledList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editCountriesTraveledList" :key="index"
-                                 @click="selectCountriesTraveled(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectCountriesTraveledList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownCountriesTraveledList" :key="index"
-                                 @click="selectCountriesTraveled(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
+                        <el-select
+                            filterable
+                            v-model="selectCountriesTraveledList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select places traveled"
+                            value-key="id"
 
-                        </div>
+                        >
+                          <el-option
+                              v-for="(item,i) in editCountriesTraveledList"
+                              :key="i"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="Places Lived">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownCountriesLivedValue"
-                                      placeholder="Add certifications">
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         type="primary"
-                                         link
-                                         :disabled="!ownCountriesLivedValue"
-                                         @click="addOwnCountriesLived">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectCountriesLivedList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editCountriesLivedList" :key="index"
-                                 @click="selectCountriesLived(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectCountriesLivedList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownCountriesLivedList" :key="index"
-                                 @click="selectCountriesLived(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
+                        <el-select
+                            filterable
+                            v-model="selectCountriesLivedList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select places lived"
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,i) in editCountriesLivedList"
+                              :key="i"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+                        </el-select>
 
                       </el-form-item>
 
@@ -664,43 +603,23 @@
 
                       <el-form-item label="Work destination">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownWorkDestinationValue"
-                                      placeholder="Add work destination">
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         :disabled="!ownWorkDestinationValue"
-                                         type="primary"
-                                         link
-                                         @click="addOwnLocation">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
+                        <el-select
+                            filterable
+                            v-model="selectWorkDestinationList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select work destination"
+                            value-key="id"
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectWorkDestinationList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editWorkDestinationList" :key="index"
-                                 @click="selectWorkDestination(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectWorkDestinationList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownWorkDestinationList" :key="index"
-                                 @click="selectWorkDestination(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
+                        >
+                          <el-option
+                              v-for="(item,i) in editWorkDestinationList"
+                              :key="i"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
@@ -708,86 +627,44 @@
                     <el-col :span="6">
                       <el-form-item label="Job type">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownJobTypeValue"
-                                      placeholder="Add job type">
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         :disabled="!ownJobTypeValue"
-                                         type="primary"
-                                         link
-                                         @click="addOwnJobType">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectJobTypeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editJobTypeList" :key="index"
-                                 @click="selectJobType(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectJobTypeList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownJobTypeList" :key="index"
-                                 @click="selectJobType(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
+                        <el-select
+                            v-model="checkedJobTypeValue"
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select job type"
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,i) in editJobTypeList"
+                              :key="i"
+                              :label="item.object_en"
+                              :value="item.id"
+                          />
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="Location">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownLocationValue"
-                                      placeholder="Add location">
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         :disabled="!ownLocationValue"
-                                         type="primary"
-                                         link
-                                         @click="addOwnLocation">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
+                        <el-select
+                            v-model="selectLocationList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select location"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editLocationList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectLocationList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editLocationList" :key="index"
-                                 @click="selectLocation(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectLocationList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownLocationList" :key="index"
-                                 @click="selectLocation(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
@@ -795,43 +672,18 @@
                     <el-col :span="6">
                       <el-form-item label="Work schedule type">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownWorkScheduleTypeValue"
-                                      placeholder="Add work schedule type">
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         :disabled="!ownWorkScheduleTypeValue"
-                                         type="primary"
-                                         link
-                                         @click="addOwnWorkScheduleType">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectWorkScheduleTypeList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editWorkScheduleTypeList" :key="index"
-                                 @click="selectWorkScheduleType(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectWorkScheduleTypeList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownWorkScheduleTypeList" :key="index"
-                                 @click="selectWorkScheduleType(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
+                        <el-select v-model="checkedWorkScheduleTypeValue"
+                                   filterable
+                                   collapse-tags
+                                   placeholder="Select work schedule type"
+                                   value-key="id"
+                        >
+                          <el-option v-for="(item,i) in editWorkScheduleTypeList"
+                                     :key="i"
+                                     :label="item.object_en"
+                                     :value="item.id">
+                          </el-option>
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
@@ -844,85 +696,49 @@
                     <el-col :span="6">
                       <el-form-item label="Subject(s) to teach">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text" v-model="ownSubjectValue"
-                                      placeholder="Add subject"></el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         link
-                                         :disabled="!ownSubjectValue"
-                                         type="primary"
-                                         @click="addOwnSubject">
-                                ADD
-                              </el-button>
+                        <el-select
+                            v-model="selectSubjectList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select subject(s)"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editSubjectList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectSubjectList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editSubjectList" :key="index"
-                                 @click="selectSubject(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownSubjectList" :key="index"
-                                 @click="selectSubject(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
 
                     <el-col :span="6">
                       <el-form-item label=" Preferred Age To Teach">
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownAgeToTeachValue"
-                                      placeholder="Add  age to teach">
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         :disabled="!ownAgeToTeachValue"
-                                         type="primary"
-                                         link
-                                         @click="addOwnAgeToTeach">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectAgeToTeachList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editAgeToTeachList" :key="index"
-                                 @click="selectAgeToTeach(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectAgeToTeachList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownAgeToTeachList" :key="index"
-                                 @click="selectAgeToTeach(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
+                        <el-select
+                            v-model="selectAgeToTeachList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select preferred age to teach"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editAgeToTeachList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                        </div>
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
@@ -930,42 +746,24 @@
                     <el-col :span="6">
                       <el-form-item label="Certifications">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownCertificationsValue"
-                                      placeholder="Add certifications">
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         :disabled="!ownCertificationsValue"
-                                         link
-                                         type="primary"
-                                         @click="addOwnCertifications">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
+                        <el-select
+                            v-model="selectCertificationsList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select certifications"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editCertificationsList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectCertificationsList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editCertificationsList" :key="index"
-                                 @click="selectCertifications(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectCertificationsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownCertificationsList" :key="index"
-                                 @click="selectCertifications(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-                        </div>
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
@@ -973,49 +771,27 @@
                     <el-col :span="6">
                       <el-form-item label="Benefits">
 
-                        <div class="object-tags-add">
-                          <div class="object-tags-item-add">
-                            <el-input type="text"
-                                      v-model="ownBenefitsValue"
-                                      placeholder="Add benefits">
-                            </el-input>
-                            <div class="object-tags-item-btn-container">
-                              <el-button class="object-tags-item-btn"
-                                         :disabled="!ownBenefitsValue"
-                                         link
-                                         type="primary"
-                                         @click="addOwnBenefits">
-                                ADD
-                              </el-button>
-                            </div>
-                          </div>
-                        </div>
+                        <el-select
+                            v-model="selectBenefitsList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select benefits"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editBenefitsList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                        <div class="object-tags-container">
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectBenefitsList.findIndex((element)=>element.id===item.id) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in editBenefitsList" :key="index"
-                                 @click="selectBenefits(item,1)">
-                              {{ item.object_en }}
-                            </div>
-                          </div>
-                          <div class="object-tags">
-                            <div class="object-tags-item"
-                                 :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                                 v-for="(item,index) in ownBenefitsList" :key="index"
-                                 @click="selectBenefits(item,2)">
-                              {{ item.object_name }}
-                            </div>
-                          </div>
-
-                        </div>
+                        </el-select>
 
                       </el-form-item>
                     </el-col>
-
-
-
 
                   </el-row>
 
@@ -1362,65 +1138,28 @@ export default {
       i: 0,
       action: '',
 
-      certificationsList: [],
-      canEditCertifications: false,
       editCertificationsList: [],
-      addCertificationsStatus: false,
-      ownCertificationsValue: '',
-      ownCertificationsList: [],
       selectCertificationsList: [],
-      selectCertificationsArr: [],
+
       educationInfo: [],
       educationNum: 1,
       showMoreEducationStatus: true,
 
-      teachExpList: [],
-      canEditTeachExp: false,
       editTeachExpList: [],
-      addTeachExpStatus: false,
-      ownTeachExpValue: '',
-      ownTeachExpList: [],
-      selectTeachExpList: [],
-      selectTeachExpArr: [],
 
-      countriesLivedList: [],
-      countriesTraveledList: [],
-      languagesList: [],
-      locationList: [],
-      workDestinationList:[],
-      jobTypeList: [],
-      ageToTeachList: [],
-      regionList: [],
-      benefitsList: [],
-      subjectList: [],
-      userImagesList: [],
       workInfo: [],
-      hobbiesList: [],
 
-      canEditCountriesTraveled: false,
       editCountriesTraveledList: [],
-      addCountriesTraveledStatus: false,
-      ownCountriesTraveledValue: '',
-      ownCountriesTraveledList: [],
       selectCountriesTraveledList: [],
-      selectCountriesTraveledArr: [],
 
-      canEditCountriesLived: false,
       editCountriesLivedList: [],
-      addCountriesLivedStatus: false,
-      ownCountriesLivedValue: '',
-      ownCountriesLivedList: [],
       selectCountriesLivedList: [],
-      selectCountriesLivedArr: [],
 
       workExpNum: 1,
       showMoreWorkExpStatus: true,
 
       editHobbyInfoList: ['Fitness', 'Photography', 'Travel'],
-      ownHobbyInfoValue: '',
-      ownHobbyInfoList: [],
       selectHobbyInfoList: [],
-      selectHobbyInfoArr: [],
 
       backgroundUrl: '',
       dialogAccountImageUrl: '',
@@ -1433,38 +1172,20 @@ export default {
       dialogSingleImageUrl:'',
 
       editSubjectList: [],
-      ownSubjectValue: '',
-      ownSubjectList: [],
       selectSubjectList: [],
-      selectSubjectArr: [],
 
       editLocationList: [],
-      ownLocationValue: '',
-      ownLocationList: [],
       selectLocationList: [],
 
       editWorkScheduleTypeList: [],
-      ownWorkScheduleTypeValue: '',
-      ownWorkScheduleTypeList: [],
-      selectWorkScheduleTypeList: [],
 
       editWorkDestinationList: [],
-      ownWorkDestinationValue: '',
-      ownWorkDestinationList: [],
       selectWorkDestinationList: [],
-      selectWorkDestinationArr: [],
 
       editJobTypeList: [],
-      ownJobTypeValue: '',
-      ownJobTypeList: [],
-      selectJobTypeList: [],
-      selectJobTypeArr: [],
 
       editAgeToTeachList: [],
-      ownAgeToTeachValue: '',
-      ownAgeToTeachList: [],
       selectAgeToTeachList: [],
-      selectAgeToTeachArr: [],
 
       editRegionList: [],
       ownRegionValue: '',
@@ -1473,10 +1194,7 @@ export default {
       selectRegionArr: [],
 
       editBenefitsList: [],
-      ownBenefitsValue: '',
-      ownBenefitsList: [],
       selectBenefitsList: [],
-      selectBenefitsArr: [],
 
       workExpDialogVisible:false,
       submitWorkExpLoadingValue:false,
@@ -1572,8 +1290,11 @@ export default {
       selectedLanguageList:[],
       languageLevelOptionsData:[],
       languageLevelValue:'',
-      selectedLanguageLevelData:[]
+      selectedLanguageLevelData:[],
 
+      checkedYearExpValue: undefined,
+      checkedJobTypeValue: undefined,
+      checkedWorkScheduleTypeValue:undefined,
 
     }
   },
@@ -1582,7 +1303,7 @@ export default {
     await this.getSubIdentityList()
     await this.getUserObjectList()
     await this.getAllLanguageProficiencyList()
-    await this.getUserObjectListtest()
+    // await this.getUserObjectListtest()
 
     let str = this.$route.query.s;
 
@@ -1635,6 +1356,9 @@ export default {
       })
 
     },
+    cancel(){
+      console.log(this.selectHobbyInfoList)
+    },
     submitForm(formName) {
       this.submitLoadingValue = true;
       this.$refs[formName].validate((valid) => {
@@ -1668,10 +1392,28 @@ export default {
             this.basicForm.is_seeking = 0
           }
 
+          if(this.selectHobbyInfoList.length>0){
+            this.basicForm.hobbies = this.selectHobbyInfoList.join(',');
+          }
+
           let params = Object.assign({}, this.basicForm);
           EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
-            console.log(res)
+            // console.log(res)
             if (res.code == 200) {
+
+              // years of experience single
+              if(this.checkedYearExpValue){
+                this.yearOfExpConfirm()
+              }
+              // job type
+              if(this.checkedJobTypeValue){
+                this.jobTypeConfirm()
+              }
+              // work schedule type
+              if(this.checkedWorkScheduleTypeValue){
+                this.workScheduleTypeConfirm()
+              }
+
 
               if(this.selectedProfileStatusValue){
                 this.profileStatusConfirm()
@@ -1681,20 +1423,12 @@ export default {
                 this.jobSeekingConfirm()
               }
 
-              if (this.selectHobbyInfoList.length > 0) {
-                this.hobbyConfirm()
-              }
-
               if(this.selectCertificationsList.length > 0){
                 this.certificationsConfirm()
               }
 
               if(this.selectedLanguageList.length > 0){
                 this.languageConfirm()
-              }
-
-              if(this.selectTeachExpList.length>0){
-                this.teachExpConfirm()
               }
 
               if(this.selectCountriesTraveledList.length > 0){
@@ -1717,27 +1451,16 @@ export default {
                 this.workDestinationConfirm()
               }
 
-              if(this.selectWorkScheduleTypeList.length > 0){
-                this.workScheduleTypeConfirm()
-              }
-
-              if(this.selectJobTypeList.length > 0){
-                this.jobTypeConfirm()
-              }
-
-              if(this.ageToTeachList.length > 0){
+              if(this.selectAgeToTeachList.length > 0){
                 this.ageToTeachConfirm()
               }
 
-              if(this.regionList.length > 0){
+              if(this.selectRegionList.length > 0){
                 this.regionConfirm()
               }
-              if(this.benefitsList.length > 0){
+              if(this.selectBenefitsList.length > 0){
                 this.benefitsConfirm()
               }
-
-
-              this.submitLoadingValue = false;
 
               if (action == 'edit') {
                 // this.$router.go(-1)
@@ -1764,6 +1487,9 @@ export default {
                 this.changeIdentity(res.message.educator_id, res.message.user_id)
 
               }
+
+
+              this.submitLoadingValue = false;
 
             }
           }).catch(err => {
@@ -1865,7 +1591,7 @@ export default {
 
     },
     changeIdentity(companyId, companyContactId, language) {
-      let self = this;
+
       let params = {
         identity: 1,
         company_id: companyId,
@@ -1876,11 +1602,17 @@ export default {
         console.log(res)
         if (res.code == 200) {
           localStorage.setItem('identity', 1)
-          self.$store.commit('identity', 1)
           this.$store.commit('username', this.basicForm.name)
           this.$store.commit('allIdentityChanged', true)
 
-          this.$router.push({path: '/overview', query: {identity: 1}})
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData',str)
+
+          this.$store.commit('identity', 1)
+          this.$store.commit('menuData', res.message)
+
+          this.$router.push({path: '/account/home', query: {}})
+
         }
       }).catch(err => {
         console.log(err)
@@ -1911,13 +1643,6 @@ export default {
             this.basicForm.resume_pdf = educatorContact.resume_pdf
           }
 
-          if (educatorContact.min_monthly_salary) {
-            this.basicForm.min_monthly_salary = educatorContact.min_monthly_salary
-          }
-
-          if (educatorContact.min_hourly_salary) {
-            this.basicForm.min_hourly_salary = educatorContact.min_hourly_salary
-          }
 
           if (educatorContact.background_image) {
             this.backgroundPhotoUrl = educatorContact.background_image
@@ -1999,27 +1724,25 @@ export default {
           if (educatorContact.Teaching_certificate) {
 
             let certificationArr = educatorContact.Teaching_certificate;
-            let obj = {}
 
             certificationArr.forEach((item) => {
 
               if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownCertificationsList.push(obj);
+
+                this.selectCertificationsList.push(item.object_en)
+
               } else {
-                obj = {
+
+                let obj = {
                   id: item.object_id,
                   pid: item.object_pid,
                   object_en: item.object_en,
                   object_cn: item.object_cn
                 }
-              }
 
-              this.selectCertificationsList.push(obj)
+                this.selectCertificationsList.push(obj)
+
+              }
 
             })
 
@@ -2050,20 +1773,11 @@ export default {
 
             livedArr.forEach((item) => {
 
-              if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownCountriesLivedList.push(obj);
-              } else {
-                obj = {
-                  id: item.object_id,
-                  pid: item.object_pid,
-                  object_en: item.object_en,
-                  object_cn: item.object_cn
-                }
+              obj = {
+                id: item.object_id,
+                pid: item.object_pid,
+                object_en: item.object_en,
+                object_cn: item.object_cn
               }
 
               this.selectCountriesLivedList.push(obj)
@@ -2077,20 +1791,11 @@ export default {
 
             travelArr.forEach((item) => {
 
-              if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownCountriesTraveledList.push(obj);
-              } else {
-                obj = {
-                  id: item.object_id,
-                  pid: item.object_pid,
-                  object_en: item.object_en,
-                  object_cn: item.object_cn
-                }
+              obj = {
+                id: item.object_id,
+                pid: item.object_pid,
+                object_en: item.object_en,
+                object_cn: item.object_cn
               }
 
               this.selectCountriesTraveledList.push(obj)
@@ -2119,27 +1824,23 @@ export default {
 
           if (educatorContact.Location) {
             let locationArr = educatorContact.Location;
-            let obj = {}
 
             locationArr.forEach((item) => {
 
               if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownLocationList.push(obj);
+
+                this.selectLocationList.push(item.object_en)
+
               } else {
-                obj = {
+                let obj = {
                   id: item.object_id,
                   pid: item.object_pid,
                   object_en: item.object_en,
                   object_cn: item.object_cn
                 }
-              }
+                this.selectLocationList.push(obj)
 
-              this.selectLocationList.push(obj)
+              }
 
             })
 
@@ -2151,20 +1852,11 @@ export default {
 
             objArr.forEach((item) => {
 
-              if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownWorkDestinationList.push(obj);
-              } else {
-                obj = {
-                  id: item.object_id,
-                  pid: item.object_pid,
-                  object_en: item.object_en,
-                  object_cn: item.object_cn
-                }
+              obj = {
+                id: item.object_id,
+                pid: item.object_pid,
+                object_en: item.object_en,
+                object_cn: item.object_cn
               }
 
               this.selectWorkDestinationList.push(obj)
@@ -2175,28 +1867,8 @@ export default {
 
           if (educatorContact.Prefered_Work_Schedule_Type) {
             let objArr = educatorContact.Prefered_Work_Schedule_Type;
-            let obj = {}
-
             objArr.forEach((item) => {
-
-              if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownWorkScheduleTypeList.push(obj);
-              } else {
-                obj = {
-                  id: item.object_id,
-                  pid: item.object_pid,
-                  object_en: item.object_en,
-                  object_cn: item.object_cn
-                }
-              }
-
-              this.selectWorkScheduleTypeList.push(obj)
-
+              this.checkedWorkScheduleTypeValue = item.object_id
             })
 
           }
@@ -2204,27 +1876,9 @@ export default {
           if (educatorContact.job_type) {
 
             let jobTypeArr = educatorContact.job_type;
-            let obj = {}
 
             jobTypeArr.forEach((item) => {
-
-              if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownJobTypeList.push(obj);
-              } else {
-                obj = {
-                  id: item.object_id,
-                  pid: item.object_pid,
-                  object_en: item.object_en,
-                  object_cn: item.object_cn
-                }
-              }
-
-              this.selectJobTypeList.push(obj)
+              this.checkedJobTypeValue = item.object_id;
 
             })
 
@@ -2232,27 +1886,25 @@ export default {
 
           if (educatorContact.age_to_teach) {
             let ageToTeachArr = educatorContact.age_to_teach;
-            let obj = {}
 
             ageToTeachArr.forEach((item) => {
 
               if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownAgeToTeachList.push(obj);
+
+                this.selectAgeToTeachList.push(item.object_en)
+
               } else {
-                obj = {
+
+                let obj = {
                   id: item.object_id,
                   pid: item.object_pid,
                   object_en: item.object_en,
                   object_cn: item.object_cn
                 }
-              }
 
-              this.selectAgeToTeachList.push(obj)
+                this.selectAgeToTeachList.push(obj)
+
+              }
 
             })
 
@@ -2260,27 +1912,20 @@ export default {
           if (educatorContact.region) {
 
             let regionArr = educatorContact.region;
-            let obj = {}
 
             regionArr.forEach((item) => {
 
               if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownRegionList.push(obj);
+                this.selectRegionList.push(item.object_en)
               } else {
-                obj = {
+                let obj = {
                   id: item.object_id,
                   pid: item.object_pid,
                   object_en: item.object_en,
                   object_cn: item.object_cn
                 }
+                this.selectRegionList.push(obj)
               }
-
-              this.selectRegionList.push(obj)
 
             })
           }
@@ -2288,27 +1933,24 @@ export default {
           if (educatorContact.benefits) {
 
             let benefitsArr = educatorContact.benefits;
-            let obj = {}
 
             benefitsArr.forEach((item) => {
 
               if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownBenefitsList.push(obj);
+
+                this.selectBenefitsList.push(item.object_en)
+
               } else {
-                obj = {
+
+                let obj = {
                   id: item.object_id,
                   pid: item.object_pid,
                   object_en: item.object_en,
                   object_cn: item.object_cn
                 }
-              }
+                this.selectBenefitsList.push(obj)
 
-              this.selectBenefitsList.push(obj)
+              }
 
             })
 
@@ -2321,12 +1963,9 @@ export default {
             subjectArr.forEach((item) => {
 
               if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownSubjectList.push(obj);
+
+                this.selectSubjectList.push(item.object_en)
+
               } else {
                 obj = {
                   id: item.object_id,
@@ -2370,27 +2009,9 @@ export default {
           if (educatorContact.Teaching_experience) {
 
             let expArr = educatorContact.Teaching_experience
-            let obj = {}
+
             expArr.forEach((item) => {
-
-              if (item.object_id == 0) {
-                obj = {
-                  id: item.object_id,
-                  object_pid: item.object_pid,
-                  object_name: item.object_en
-                }
-                this.ownTeachExpList.push(obj);
-              } else {
-                obj = {
-                  id: item.object_id,
-                  pid: item.object_pid,
-                  object_en: item.object_en,
-                  object_cn: item.object_cn
-                }
-              }
-
-              this.selectTeachExpList.push(obj)
-
+              this.checkedYearExpValue = item.object_id;
             })
 
           }
@@ -2832,58 +2453,19 @@ export default {
       })
 
     },
-    addOwnCertifications() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownCertificationsValue,
-        object_pid: 7
-      }
-
-      let index = this.selectCertificationsList.findIndex((element) => element === obj);
-      if (index == -1) {
-        // if (this.selectCertificationsList.length > 4) {
-        // 	return false;
-        // }
-        this.ownCertificationsList.push(obj);
-        this.selectCertificationsList.push(obj);
-        this.ownCertificationsValue = '';
-      } else {
-        this.selectCertificationsList.splice(index, 1);
-      }
-
-    },
-    selectCertifications(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectCertificationsList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectCertificationsList.findIndex((element) => element === value);
-      }
-      // console.log(index);
-      if (index == -1) {
-        // if (this.selectCertificationsList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCertificationsList.push(value);
-
-      } else {
-        this.selectCertificationsList.splice(index, 1);
-      }
-
-    },
     certificationsConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectCertificationsList.forEach(item => {
 
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item)
+        }else{
+
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -2964,56 +2546,10 @@ export default {
     turnEditEducation(education) {
       this.$router.push({path: '/educator/edit/education', query: {educationId: education.id, type: 2}})
     },
-    addOwnTeachExp() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownTeachExpValue,
-        object_pid: 120
-      }
-      let index = this.selectTeachExpList.findIndex((element) => element === obj);
-      // if (index == -1) {
-      // 	this.selectTeachExpList.push(obj);
-      // 	this.ownTeachExpList.push(obj);
-      // 	this.ownTeachExpValue = '';
-      // } else {
-      // 	this.selectTeachExpList.splice(index, 1);
-      // }
-
-      this.selectTeachExpList.splice(index, 1, obj);
-      this.ownTeachExpList.push(obj);
-      this.ownTeachExpValue = '';
-    },
-    selectTeachExp(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectTeachExpList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectTeachExpList.findIndex((element) => element === value);
-      }
-
-      // if (index == -1) {
-      // 	this.selectTeachExpList.push(value);
-
-      // } else {
-      // 	this.selectTeachExpList.splice(index, 1);
-      // }
-
-      this.selectTeachExpList.splice(index, 1, value);
-
-    },
-    teachExpConfirm() {
+    yearOfExpConfirm() {
 
       let expand = [];
-      let objectArr = [];
-      this.selectTeachExpList.forEach(item => {
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
+      let objectArr = [this.checkedYearExpValue];
 
       let data = {
         token: localStorage.getItem('token'),
@@ -3025,7 +2561,7 @@ export default {
 
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
-          console.log('teach exp -------')
+          console.log('years of experience success -------')
         }
 
       }).catch(err => {
@@ -3035,57 +2571,12 @@ export default {
 
 
     },
-    addOwnCountriesTraveled() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownCountriesTraveledValue,
-        object_pid: 8
-      }
-      let index = this.selectCountriesTraveledList.findIndex((element) => element === obj);
-      if (index == -1) {
-        // if (this.selectCountriesTraveledList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCountriesTraveledList.push(obj);
-        this.ownCountriesTraveledList.push(obj);
-        this.ownCountriesTraveledValue = '';
-      } else {
-        this.selectCountriesTraveledList.splice(index, 1);
-      }
-
-    },
-    selectCountriesTraveled(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectCountriesTraveledList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectCountriesTraveledList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        // if (this.selectCountriesTraveledList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCountriesTraveledList.push(value);
-
-      } else {
-        this.selectCountriesTraveledList.splice(index, 1);
-      }
-
-    },
     countriesTraveledConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectCountriesTraveledList.forEach(item => {
-
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
+        objectArr.push(item.id);
       })
 
       let data = {
@@ -3098,7 +2589,7 @@ export default {
 
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
-          console.log('travel--submit--' + res.data);
+          console.log('place traveled --submit--' + res.data);
         }
 
       }).catch(err => {
@@ -3108,57 +2599,12 @@ export default {
 
 
     },
-    addOwnCountriesLived() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownCountriesLivedValue,
-        object_pid: 9
-      }
-      let index = this.selectCountriesLivedList.findIndex((element) => element === obj);
-      if (index == -1) {
-        // if (this.selectCountriesLivedList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCountriesLivedList.push(obj);
-        this.ownCountriesLivedList.push(obj);
-        this.ownCountriesLivedValue = '';
-      } else {
-        this.selectCountriesLivedList.splice(index, 1);
-      }
-
-    },
-    selectCountriesLived(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectCountriesLivedList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectCountriesLivedList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        // if (this.selectCountriesLivedList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCountriesLivedList.push(value);
-
-      } else {
-        this.selectCountriesLivedList.splice(index, 1);
-      }
-
-    },
     countriesLivedConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectCountriesLivedList.forEach(item => {
-
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
+        objectArr.push(item.id);
       })
 
       let data = {
@@ -3171,7 +2617,7 @@ export default {
 
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
-          console.log('lived--submit--' + res.data);
+          console.log('place lived --submit--' + res.data);
         }
 
       }).catch(err => {
@@ -3189,47 +2635,6 @@ export default {
     },
     turnEditWorkExperience(work) {
       this.$router.push({path: '/educator/edit/work', query: {workId: work.id, type: 2}})
-    },
-    addOwnHobby() {
-
-      let obj = this.ownHobbyInfoValue;
-      let index = this.selectHobbyInfoList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectHobbyInfoList.push(obj);
-        this.ownHobbyInfoList.push(obj);
-        this.ownHobbyInfoValue = '';
-      } else {
-        this.selectHobbyInfoList.splice(index, 1);
-      }
-
-    },
-    selectHobby(value) {
-
-      let index = this.selectHobbyInfoList.indexOf(value);
-
-      if (index == -1) {
-        this.selectHobbyInfoList.push(value);
-
-      } else {
-        this.selectHobbyInfoList.splice(index, 1);
-      }
-    },
-    hobbyConfirm() {
-
-      let hobbiesStr = this.selectHobbyInfoList.join(',');
-      let data = {
-        hobbies: hobbiesStr
-      }
-      EDUCATOR_CONTACT_EDIT_V2(data).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.hobbiesList = this.selectHobbyInfoList;
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
     },
     cancelUpload() {
       this.uploadLoadingStatus = false;
@@ -3399,49 +2804,15 @@ export default {
       //   text:'Uploading...'
       // })
     },
-    addOwnSubject() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownSubjectValue,
-        object_pid: 1
-      }
-      let index = this.selectSubjectList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectSubjectList.push(obj);
-        this.ownSubjectList.push(obj);
-        this.ownSubjectValue = '';
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-
-    },
-    selectSubject(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectSubjectList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectSubjectList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectSubjectList.push(value);
-
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-      // console.log(this.selectSubjectList)
-    },
     subjectConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectSubjectList.forEach(item => {
 
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item)
+        }else{
           objectArr.push(item.id);
         }
       })
@@ -3465,52 +2836,19 @@ export default {
       })
 
     },
-    addOwnLocation() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownLocationValue,
-        object_pid: 71
-      }
-      let index = this.selectLocationList.findIndex((element) => element === obj)
-      if (index == -1) {
-        this.selectLocationList.push(obj);
-        this.ownLocationList.push(obj);
-        this.ownLocationValue = '';
-
-      } else {
-        this.selectLocationList.splice(index, 1);
-      }
-
-    },
-    selectLocation(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectLocationList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectLocationList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectLocationList.push(value);
-
-      } else {
-        this.selectLocationList.splice(index, 1);
-      }
-      // console.log(this.selectLocationList)
-    },
     locationConfirm() {
 
       let expand = [];
       let objectArr = [];
+
       this.selectLocationList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
+
+        if(typeof item === 'string'){
+          expand.push(item)
+        }else{
+          objectArr.push(item.id)
         }
+
       })
 
       let data = {
@@ -3531,53 +2869,10 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    addOwnWorkScheduleType() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownWorkScheduleTypeValue,
-        object_pid: 71
-      }
-      let index = this.selectWorkScheduleTypeList.findIndex((element) => element === obj)
-      if (index == -1) {
-        this.selectWorkScheduleTypeList.push(obj);
-        this.ownWorkScheduleTypeList.push(obj);
-        this.ownWorkScheduleTypeValue = '';
-
-      } else {
-        this.selectWorkScheduleTypeList.splice(index, 1);
-      }
-
-    },
-    selectWorkScheduleType(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectWorkScheduleTypeList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectWorkScheduleTypeList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectWorkScheduleTypeList.push(value);
-
-      } else {
-        this.selectWorkScheduleTypeList.splice(index, 1);
-      }
-      // console.log(this.selectLocationList)
-    },
     workScheduleTypeConfirm() {
 
       let expand = [];
-      let objectArr = [];
-      this.selectWorkScheduleTypeList.forEach(item => {
-
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
+      let objectArr = [this.checkedWorkScheduleTypeValue];
 
       let data = {
         token: localStorage.getItem('token'),
@@ -3589,7 +2884,7 @@ export default {
 
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
-          console.log('WorkScheduleType--submit--' + res.data);
+          console.log('Work Schedule Type--submit--' + res.data);
         }
 
       }).catch(err => {
@@ -3597,52 +2892,13 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    addOwnWorkDestination() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownWorkDestinationValue,
-        object_pid: 155
-      }
-      let index = this.selectWorkDestinationList.findIndex((element) => element === obj)
-      if (index == -1) {
-        this.selectWorkDestinationList.push(obj);
-        this.ownWorkDestinationList.push(obj);
-        this.ownWorkDestinationValue = '';
-
-      } else {
-        this.selectWorkDestinationList.splice(index, 1);
-      }
-
-    },
-    selectWorkDestination(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectWorkDestinationList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectWorkDestinationList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectWorkDestinationList.push(value);
-
-      } else {
-        this.selectWorkDestinationList.splice(index, 1);
-      }
-      // console.log(this.selectLocationList)
-    },
     workDestinationConfirm() {
 
       let expand = [];
       let objectArr = [];
+
       this.selectWorkDestinationList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
+        objectArr.push(item.id);
       })
 
       let data = {
@@ -3663,52 +2919,10 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    addOwnJobType() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownJobTypeValue,
-        object_pid: 3
-      }
-      let index = this.selectJobTypeList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectJobTypeList.push(obj);
-        this.ownJobTypeList.push(obj);
-        this.ownJobTypeValue = '';
-      } else {
-        this.selectJobTypeList.splice(index, 1);
-      }
-
-    },
-    selectJobType(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectJobTypeList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectJobTypeList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectJobTypeList.push(value);
-
-      } else {
-        this.selectJobTypeList.splice(index, 1);
-      }
-      // console.log(this.selectJobTypeList)
-    },
     jobTypeConfirm() {
 
       let expand = [];
-      let objectArr = [];
-      this.selectJobTypeList.forEach(item => {
-
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
+      let objectArr = [this.checkedJobTypeValue];
 
       let data = {
         token: localStorage.getItem('token'),
@@ -3720,7 +2934,7 @@ export default {
 
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
-          console.log('jobtype--submit--' + res.data);
+          console.log('job type--submit--' + res.data);
         }
 
       }).catch(err => {
@@ -3728,51 +2942,18 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    addOwnAgeToTeach() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownAgeToTeachValue,
-        object_pid: 4
-      }
-      let index = this.selectAgeToTeachList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectAgeToTeachList.push(obj);
-        this.ownAgeToTeachList.push(obj);
-        this.ownAgeToTeachValue = '';
-      } else {
-        this.selectAgeToTeachList.splice(index, 1);
-      }
-
-    },
-    selectAgeToTeach(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectAgeToTeachList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectAgeToTeachList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectAgeToTeachList.push(value);
-
-      } else {
-        this.selectAgeToTeachList.splice(index, 1);
-      }
-      // console.log(this.selectAgeToTeachList)
-    },
     ageToTeachConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectAgeToTeachList.forEach(item => {
 
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item)
+        }else{
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -3785,7 +2966,7 @@ export default {
 
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
-          console.log('agetoteach--submit--' + res.data);
+          console.log('age to teach--submit--' + res.data);
         }
 
       }).catch(err => {
@@ -3793,49 +2974,15 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    addOwnRegion() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownRegionValue,
-        object_pid: 5
-      }
-      let index = this.selectRegionList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectRegionList.push(obj);
-        this.ownRegionList.push(obj);
-        this.ownRegionValue = '';
-      } else {
-        this.selectRegionList.splice(index, 1);
-      }
-
-    },
-    selectRegion(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectRegionList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectRegionList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectRegionList.push(value);
-
-      } else {
-        this.selectRegionList.splice(index, 1);
-      }
-      // console.log(this.selectRegionList)
-    },
     regionConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectRegionList.forEach(item => {
 
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
       })
@@ -3858,51 +3005,18 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    addOwnBenefits() {
-
-      let obj = {
-        id: 0,
-        object_name: this.ownBenefitsValue,
-        object_pid: 6
-      }
-      let index = this.selectBenefitsList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectBenefitsList.push(obj);
-        this.ownBenefitsList.push(obj);
-        this.ownBenefitsValue = '';
-      } else {
-        this.selectBenefitsList.splice(index, 1);
-      }
-
-    },
-    selectBenefits(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectBenefitsList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectBenefitsList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectBenefitsList.push(value);
-
-      } else {
-        this.selectBenefitsList.splice(index, 1);
-      }
-      // console.log(this.selectBenefitsList)
-    },
     benefitsConfirm() {
 
       let expand = [];
       let objectArr = [];
       this.selectBenefitsList.forEach(item => {
 
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -4135,7 +3249,7 @@ export default {
 }
 
 .basic-r-container-bg {
-  padding: 30px 50px 0 50px;
+  padding: 25px 50px 50px 50px;
 
 }
 
@@ -4145,8 +3259,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 110px;
-
+  padding-bottom: 25px;
 }
 
 .account-profile-t-l {
@@ -4170,7 +3283,7 @@ export default {
 
 
 .basic-form {
-  height: calc(100vh - 280px);
+  height: calc(100vh - 285px);
 }
 
 

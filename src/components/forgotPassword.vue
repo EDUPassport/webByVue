@@ -31,14 +31,14 @@
             class="demo-ruleForm"
         >
           <el-form-item label="Email" prop="email" required>
-            <el-input size="medium" placeholder="Email" v-model="forgotForm1.email"></el-input>
+            <el-input  placeholder="Email" v-model="forgotForm1.email"></el-input>
           </el-form-item>
 
           <el-form-item  label="6 Digit Code" prop="email_code" required>
 
             <div class="xll-input-container">
               <div class="xll-input-input">
-                <el-input size="medium" placeholder="Code"
+                <el-input  placeholder="Code"
                           v-model="forgotForm1.email_code">
                 </el-input>
               </div>
@@ -51,12 +51,12 @@
           </el-form-item>
 
           <el-form-item label="New Password" prop="password" required>
-            <el-input size="medium" placeholder="New Password" type="password"
+            <el-input  placeholder="New Password" type="password"
                       v-model="forgotForm1.password"></el-input>
           </el-form-item>
 
           <el-form-item label="Confirm Password" prop="confirm_password" required>
-            <el-input size="medium" placeholder="Confirm Your New Password"
+            <el-input  placeholder="Confirm Your New Password"
                       type="password"
                       v-model="forgotForm1.confirm_password"></el-input>
           </el-form-item>
@@ -84,14 +84,14 @@
             class="demo-ruleForm"
         >
           <el-form-item label="Phone #" prop="phone" required>
-            <el-input size="medium" placeholder="Phone #" v-model="forgotForm2.phone"></el-input>
+            <el-input  placeholder="Phone #" v-model="forgotForm2.phone"></el-input>
           </el-form-item>
 
           <el-form-item  label="6 Digit Code" prop="phone_code" required>
 
             <div class="xll-input-container">
               <div class="xll-input-input">
-                <el-input size="medium" placeholder="Code"
+                <el-input  placeholder="Code"
                           v-model="forgotForm2.phone_code">
                 </el-input>
               </div>
@@ -104,13 +104,13 @@
           </el-form-item>
 
           <el-form-item label="New Password" prop="password" required>
-            <el-input size="medium" placeholder="New Password"
+            <el-input  placeholder="New Password"
                       type="password"
                       v-model="forgotForm2.password"></el-input>
           </el-form-item>
 
           <el-form-item label="Confirm Password" prop="confirm_password" required>
-            <el-input size="medium" placeholder="Confirm Your New Password"
+            <el-input  placeholder="Confirm Your New Password"
                       type="password"
                       v-model="forgotForm2.confirm_password"></el-input>
           </el-form-item>
@@ -420,12 +420,12 @@ export default {
 }
 
 .switch-item:hover{
-  background-color: rgba(10, 160, 168, 0.3);
-  color:#888888;
+  background-color: #9173ff;
+  color:#FFFFFF;
 }
 
 .switch-item-active{
-  background-color: #0AA0A8;
+  background-color: #49397f;
   color:#FFFFFF;
 }
 

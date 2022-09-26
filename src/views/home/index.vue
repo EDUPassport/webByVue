@@ -1,1075 +1,420 @@
 <template>
-  <div class="home-bg">
-
-    <el-row class="xll-slider-row" :gutter="0" align="middle" justify="center">
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="xll-slider-col">
-        <swiper
-            :pagination='{"clickable": true,"dynamicBullets": true}'
-            :autoplay='{"delay": 13500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
-            class="xllSwiper">
-          <!--          :style="'background-image:url('+item.url+')'"  class="xll-swiper-slider"-->
-          <swiper-slide v-for="(item,index) in xllSliderData" :key="index" class="xll-swiper-slider">
-            <div class="xll-swiper-image-container">
-              <el-image class="xll-swiper-image" :src="item.url" fit="cover"></el-image>
-            </div>
-            <div class="xll-swiper-1"></div>
-          </swiper-slide>
-        </swiper>
-
-        <div class="xll-search-container">
-          <div class="xll-find-best-row">
-            <h2>Find new Education</h2>
-            <v-typical
-                class="blink"
-                :steps="['Jobs', 2000, 'Deals', 2000,'Opportunities',2000,'News',2000,'Tools',2000,'Business',2000]"
-                :loop="Infinity"
-                :wrapper="'h1'"
-            ></v-typical>
+  <div class="bg">
+    <el-row class="t-container" :gutter="0" align="middle" justify="center">
+      <el-col :span="8"></el-col>
+      <el-col :span="8">
+        <div class="logo-container">
+          <div class="logo-logo" @click="turnHome()">
+            <div class="logo-edu">EDU</div>
+            <div class="logo-passport">PASSPORT</div>
           </div>
-          <!--                <div class="xll-search-btn-row">-->
-          <!--                  <div class="xll-search-jobs-btn-container">-->
-          <!--                    <div class="xll-search-jobs-btn"-->
-          <!--                         :class="searchCategoryValue == 1 ? 'xll-search-jobs-btn-active' : ''"-->
-          <!--                         @click="chooseSearchCategory(1)">-->
-          <!--                      Jobs-->
-          <!--                    </div>-->
-          <!--                    <div class="xll-search-btn-sj"-->
-          <!--                         :class="searchCategoryValue == 1 ? 'xll-search-btn-sj-active' : ''"></div>-->
-          <!--                  </div>-->
-          <!--                  <div class="xll-search-deals-btn-container">-->
-          <!--                    <div class="xll-search-deals-btn"-->
-          <!--                         :class="searchCategoryValue == 2 ? 'xll-search-deals-btn-active' : ''"-->
-          <!--                         @click="chooseSearchCategory(2)">-->
-          <!--                      Deals-->
-          <!--                    </div>-->
-          <!--                    <div class="xll-search-btn-sj"-->
-          <!--                         :class="searchCategoryValue == 2 ? 'xll-search-btn-sj-active' : ''"></div>-->
-          <!--                  </div>-->
-          <!--                </div>-->
-          <div class="search-container-bg">
-            <div class="search-container">
-              <div class="search-keywords">
-                <!--                @change="searchNow()"-->
-                <el-input class="search-keywords-input" placeholder="Enter Keyword..."
-                          size="default"
-                          v-model="searchKeywordsValue">
-                </el-input>
-              </div>
-              <div class="search-btn-container">
-                <el-button class="search-btn" type="primary" @click="searchNow()">Search Now</el-button>
-              </div>
-            </div>
-          </div>
+          <div class="logo-beta">Beta</div>
         </div>
+
+      </el-col>
+
+      <el-col class="t-btn-container" :span="8">
+
+        <el-button link @click="login()">
+          LOGIN
+        </el-button>
+        <el-button type="primary" round @click="signUp()">
+          SIGN UP
+        </el-button>
 
       </el-col>
     </el-row>
 
-    <!--  featured jobs -->
-    <div class="featured-jobs-bg" v-loading="jobFeaturedListData.length<=0" v-if="jobFeaturedShowStatus">
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <div class="featured-jobs-label">Featured Jobs</div>
-        </el-col>
-      </el-row>
+    <el-row class="a-row-container" :gutter="0" justify="center" align="middle">
+      <el-col :span="10">
+        an <span>all-in-one</span> education hub
+      </el-col>
+    </el-row>
 
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <div class="featured-jobs-tips">
-            These are jobs we think are worth seeing.
+    <el-row class="b-row-container" :gutter="0" justify="center" align="middle">
+      <el-col :span="6">
+        Educators can search and quickly apply for jobs, track their application status, connect with recruiters, and
+        manage their resume all in one place without switching between tabs.
+      </el-col>
+    </el-row>
+
+    <el-row class="c-row-container" :gutter="0" justify="center" align="middle">
+      <el-col :span="24" class="c-col-container">
+        <div class="c-container">
+          <el-image :src="dashboardDemoImg"></el-image>
+        </div>
+
+<!--        <div class="c-tips">-->
+<!--          For a demonstration purpose only. Includes features and designs that may be in development. Actual dashboard-->
+<!--          may look differently.-->
+<!--        </div>-->
+
+      </el-col>
+    </el-row>
+
+
+    <el-row class="d-row-container" :gutter="0" justify="center">
+      <el-col class="d-col-container" :span="24">
+        <div class="d-container">
+          <div class="d-label">
+            a <span>transparent</span> hiring process
           </div>
-        </el-col>
-      </el-row>
-
-      <el-row class="featured-jobs-row" :gutter="0" justify="center" align="middle">
-
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <div class="featured-jobs-slider">
-            <swiper :slidesPerView="featuredJobSliderNum" :spaceBetween="10"
-                    :pagination='{"clickable": true}'
-                    :autoplay='{"delay": 2500,"disableOnInteraction": false,"pauseOnMouseEnter":true}'
-                    :navigation="false"
-                    class="mySwiper">
-              <swiper-slide v-for="(item,index) in jobFeaturedListData" :key="index">
-                <!--                animate__animated  animate__backInUp-->
-                <div class="featured-jobs-card ">
-                  <div class="featured-jobs-card-images"
-                       :style="item.logo !='' ? 'background-image:url('+ item.logo + ')' : ''">
-                    <div class="featured-jobs-card-image">
-                    </div>
-                    <div class="featured-jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                         @click="cancelJobFavorite(1,item.id,index)">
-                      <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-                    </div>
-                    <div class="featured-jobs-favorite" v-else
-                         @click="addJobFavorite(item.id,1,item.job_title,item.logo,index)">
-                      <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-                    </div>
-                  </div>
-                  <div class="featured-jobs-title">
-                    <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}"> {{ item.job_title }}</router-link>
-                  </div>
-                  <div class="featured-business-name">{{ item.company_name }}</div>
-                  <div class="featured-jobs-location">
-                    <el-icon>
-                      <LocationFilled></LocationFilled>
-                    </el-icon>
-                    {{ item.address }}
-                  </div>
-                  <div class="featured-jobs-tags">
-                    <view class="featured-jobs-tags-l">
-                      <view class="featured-jobs-work-type">
-                        <i class="iconfont el-icon-alishijian"></i>
-                        <span v-if="item.employment_type==1">FT</span>
-                        <span v-if="item.employment_type==2">PT</span>
-                        <span v-if="item.employment_type==3">S</span>
-                      </view>
-                      <view class="featured-jobs-gender" v-if="item.sex == 1 || item.sex == 2">
-                        <i class="iconfont el-icon-alimale-female"></i>
-                        <span v-if="item.sex == 1">Male</span>
-                        <span v-if="item.sex == 2">Female</span>
-                      </view>
-                      <!--                      <view class="featured-jobs-work-exp">-->
-                      <!--                        <i class="iconfont el-icon-aligongzuojingyan"></i>-->
-                      <!--                        1-2 yrs-->
-                      <!--                      </view>-->
-                    </view>
-                    <view class="featured-jobs-salary">
-                      {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
-                    </view>
-
-                  </div>
-                  <div class="featured-jobs-b">
-                    <div class="featured-jobs-b-l">
-                      <el-button class="featured-jobs-apply-btn" type="default" round
-                                 @click="applyJobs(item.id)"
-                      >Quick Apply
-                      </el-button>
-                    </div>
-                    <div class="featured-jobs-b-r">
-                      <el-icon>
-                        <Calendar/>
-                      </el-icon>
-                      {{ $filters.howLongFormat(item.refresh_time) }}
-                    </div>
-
-                  </div>
-                </div>
-              </swiper-slide>
-            </swiper>
+          <div class="d-tips">
+            No more guessing whether your application has been received, viewed, thrown away.
+          </div>
+          <div class="d-c-bg">
 
           </div>
-        </el-col>
+        </div>
+      </el-col>
+    </el-row>
 
-      </el-row>
+    <el-row :gutter="0" justify="center" align="middle">
 
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
-          <div class="featured-jobs-more">
-            <el-button class="featured-jobs-more-btn" type="primary" round @click="turnJobsList()">
-              View All
-              <el-icon>
-                <ArrowRightBold/>
-              </el-icon>
-            </el-button>
+      <el-col class="f-col-container" :span="24">
+
+        <div class="f-label">
+          EDU Passport is so <span>much more</span>
+        </div>
+
+        <div class="f-tabs">
+          <div class="f-tab"
+               @click="checkedIdentityType(1)"
+               :class="selectIdentityType === 1 ? 'f-tab-active' : '' "
+          >
+            EDUCATORS
           </div>
-        </el-col>
-      </el-row>
-
-    </div>
-
-    <!--    Education Business   -->
-    <!--    <div class="featured-schools-container">-->
-    <!--      <el-row :gutter="0" justify="center" align="middle">-->
-    <!--        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
-    <!--          <div class="featured-schools-label">Education Businesses</div>-->
-    <!--        </el-col>-->
-    <!--      </el-row>-->
-
-    <!--      <el-row :gutter="0" justify="center" align="middle">-->
-    <!--        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
-    <!--          <div class="featured-schools-tips">-->
-    <!--            These are schools we think you would like.-->
-    <!--          </div>-->
-    <!--        </el-col>-->
-    <!--      </el-row>-->
-
-    <!--      <el-row class="featured-schools-content-container" :gutter="0" justify="center" align="middle">-->
-    <!--        <el-col :xs="24" :sm="24" :md="11" :lg="11" :xl="11">-->
-    <!--          <template v-if="businessListData[0]">-->
-    <!--            <div class="featured-schools-plus-container "-->
-    <!--                 :style="'background-image:url('+businessListData[0]['header_photo'] +')'">-->
-    <!--              <div class="featured-schools-plus-content">-->
-    <!--                <div class="featured-schools-plus-content-l">-->
-    <!--                  <div class="featured-schools-plus-address" v-if="businessListData[0].provinces">-->
-    <!--                    {{ businessListData[0].provinces.Pinyin }} {{ businessListData[0].citys.Pinyin }}-->
-    <!--                    {{ businessListData[0].districts.Pinyin }}-->
-    <!--                  </div>-->
-    <!--                  <div class="featured-schools-plus-type">-->
-    <!--                    {{ businessListData[0].business_type_name }}-->
-    <!--                  </div>-->
-    <!--                  <div class="featured-schools-plus-business-name">-->
-    <!--                    {{ businessListData[0].business_name }}-->
-    <!--                  </div>-->
-    <!--                </div>-->
-
-    <!--              </div>-->
-    <!--            </div>-->
-    <!--          </template>-->
-    <!--        </el-col>-->
-
-    <!--        <el-col :xs="24" :sm="24" :md="1" :lg="1" :xl="1"></el-col>-->
-
-    <!--        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">-->
-    <!--          <template v-if="businessListData[1]">-->
-    <!--            <div class="featured-schools-pro-container">-->
-    <!--              <div class="featured-schools-pro-l"-->
-    <!--                   :style="'background-image:url('+businessListData[1]['logo'] +')'"-->
-    <!--              >-->
-    <!--              </div>-->
-    <!--              <div class="featured-schools-pro-r">-->
-    <!--                <div class="featured-schools-pro-r-l">-->
-    <!--                  <div class="featured-schools-pro-address" v-if="businessListData[0].provinces">-->
-    <!--                    {{ businessListData[1].provinces.Pinyin }} {{ businessListData[1].citys.Pinyin }}-->
-    <!--                    {{ businessListData[1].districts.Pinyin }}-->
-    <!--                  </div>-->
-    <!--                  <div class="featured-schools-pro-type">-->
-    <!--                    {{ businessListData[1].business_type_name }}-->
-    <!--                  </div>-->
-    <!--                  <div class="featured-schools-pro-business-name">-->
-    <!--                    {{ businessListData[1].business_name }}-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--              </div>-->
-    <!--            </div>-->
-    <!--          </template>-->
-
-    <!--          <template v-if="businessListData[2]">-->
-    <!--            <div class="featured-schools-pro-container featured-schools-pro-margin">-->
-    <!--              <div class="featured-schools-pro-l"-->
-    <!--                   :style="'background-image:url('+businessListData[2]['logo'] +')'"-->
-    <!--              ></div>-->
-    <!--              <div class="featured-schools-pro-r">-->
-    <!--                <div class="featured-schools-pro-r-l">-->
-    <!--                  <div class="featured-schools-pro-address" v-if="businessListData[0].provinces">-->
-    <!--                    {{ businessListData[2].provinces.Pinyin }} {{ businessListData[2].citys.Pinyin }}-->
-    <!--                    {{ businessListData[2].districts.Pinyin }}-->
-    <!--                  </div>-->
-    <!--                  <div class="featured-schools-pro-type">-->
-    <!--                    {{ businessListData[2].business_type_name }}-->
-    <!--                  </div>-->
-    <!--                  <div class="featured-schools-pro-business-name">-->
-    <!--                    {{ businessListData[2].business_name }}-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--              </div>-->
-    <!--            </div>-->
-    <!--          </template>-->
-    <!--        </el-col>-->
-    <!--      </el-row>-->
-
-    <!--      <el-row class="featured-schools-more-container" :gutter="0" align="middle" justify="center">-->
-    <!--        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">-->
-    <!--          <div class="featured-schools-more">-->
-    <!--            <el-button class="featured-schools-more-btn" type="primary">-->
-    <!--              View All-->
-    <!--              <el-icon>-->
-    <!--                <ArrowRightBold/>-->
-    <!--              </el-icon>-->
-    <!--            </el-button>-->
-    <!--          </div>-->
-    <!--        </el-col>-->
-    <!--      </el-row>-->
-    <!--    </div>-->
-
-    <!--  featured deals -->
-    <div class="featured-deals-bg" v-loading="featuredDealsList.length<=0" v-if="dealFeaturedShowStatus">
-
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <div class="featured-deals-label">Featured Deals</div>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <div class="featured-deals-tips">
-            These are deals we think you would like
+          <div class="f-tab"
+               @click="checkedIdentityType(2)"
+               :class="selectIdentityType === 2 ? 'f-tab-active' : '' "
+          >
+            EDUCATIONAL BUSINESSES
           </div>
-        </el-col>
-      </el-row>
+          <div class="f-tab"
+               @click="checkedIdentityType(3)"
+               :class="selectIdentityType === 3 ? 'f-tab-active' : '' "
+          >
+            VENDORS
+          </div>
+        </div>
 
-      <el-row class="featured-deals-row" :gutter="0" justify="center" align="middle">
-
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <div class="hot-deals-container">
-            <div class="hot-deals-item" v-for="(item,index) in featuredDealsList" :key="index">
-
-              <div class="hot-deals-item-bg"
-                   :style="item.user_info.header_photo !='' ? 'background-image:url('+ item.user_info.header_photo + ')' : ''">
-                <div class="hot-deals-item-t">
-                  <div class="hot-deals-item-t-l">
-                    <template v-if="item.user_info">
-                      <el-avatar class="hot-deals-logo" :src="item.user_info.logo"></el-avatar>
-                    </template>
-                  </div>
-                  <div class="hot-deals-item-t-r" v-if="item.is_favorite && item.is_favorite==1"
-                       @click="cancelDealFavorite(2,item.id,index)">
-                    <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-                  </div>
-                  <div class="hot-deals-item-t-r" v-else
-                       @click="addDealFavorite(item.id,2,item.title,item.user_info.logo,index)">
-                    <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-                  </div>
-                </div>
-                <!--                <div class="hot-deals-item-tag-container">-->
-                <!--                  <div class="hot-deals-item-tag">Deal</div>-->
-                <!--                </div>-->
-
-                <div class="hot-deals-item-name-container">
-                  <div class="hot-deals-item-title">
-                    <router-link :to="{path:'/deals/detail',query:{id:item.id}}">
-                      {{ item.title }}
-                    </router-link>
-                  </div>
-                  <div class="hot-deals-item-name">
-                    {{ item.desc }}
-                  </div>
-                </div>
+        <div class="f-c">
+          <div class="f-c-l">
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(1)">
+              <div class="f-c-l-item-label">
+                <template v-if="selectIdentityType === 1">
+                  easy way to connect with fellow educators
+                </template>
+                <template v-if="selectIdentityType === 2">
+                  tracking all applications with ease
+                </template>
+                <template v-if="selectIdentityType === 3">
+                  join our mission to support educators
+                </template>
               </div>
+              <p>
+                <template v-if="selectIdentityType === 1">
+                  We partner up with local vendors to support educators, promote educator-centric events, and offer
+                  exclusive deals to our EDU Passport members.
+                </template>
+                <template v-if="selectIdentityType === 2">
+                  Whether you have 2 applicants or a 102, you will never get confused who is applying for which job, and
+                  who you’re going to interview.
+                </template>
+                <template v-if="selectIdentityType === 3">
+                  Our mission is to make access to a better education easier by helping educators work and live abroad.
+                  We believe having safe spaces where educators can meet their peers is crucial for building
+                  connections.
+                </template>
+              </p>
+            </div>
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(2)">
+              <div class="f-c-l-item-label">
 
-              <div class="hot-deals-item-b">
-                <div class="hot-deals-item-b-l">
-                  <template v-if="item.company_category_logo">
-                    <el-avatar class="hot-deal-type-icon" :src="item.company_category_logo"></el-avatar>
-                  </template>
-                  <!--                  {{ item.vendor_type_name }}-->
-                </div>
-                <div class="hot-deals-item-b-r">
-                  <!--                  {{ item.location }}-->
-                  <template v-if="item.company_name">
-                    {{ item.user_info.company_name }}
-                  </template>
-                </div>
+                <template v-if="selectIdentityType === 1">
+                  matchmaking for you and your ideal job
+                </template>
+                <template v-if="selectIdentityType === 2">
+                  matchmaking for you and your next hire
+                </template>
+                <template v-if="selectIdentityType === 3">
+                  promote your business
+                </template>
               </div>
+              <p>
+                <template v-if="selectIdentityType === 1">
+                  Being educator-centric allows us to suggest the jobs that match educators’ specific requirements and
+                  experience.
+                </template>
+                <template v-if="selectIdentityType === 2">
+                  Being educator-centric allows us to suggest the right candidates matching your job requirements.
+                </template>
+                <template v-if="selectIdentityType === 3">
+                  Let our team of marketing wizards help you connect with your audience and grow your business.
+                </template>
 
+              </p>
             </div>
 
-            <div class="hot-deals-item-more">
-              <div class="hot-deals-item-more-logo-container" v-if="featuredDealsLogoData.length>0">
-                <div class="hot-deals-item-more-logo-item" v-for="(item,i) in featuredDealsLogoData" :key="i">
-                  <el-avatar class="hot-deals-item-more-logo" :src="item.logo_url" fit="fill"></el-avatar>
-                </div>
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 3 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(3)"
+                 v-if="selectIdentityType !== 3">
+              <div class="f-c-l-item-label">
+                <template v-if="selectIdentityType === 1">
+                  having a personal legal support
+                </template>
+                <template v-if="selectIdentityType === 2">
+                  a direct line to your candidates
+                </template>
               </div>
-              <div class="hot-deals-item-more-tips">
-                1000+ Deals in multiple locations
-                <br>
-                <span>Enjoy great discounts and deals where ver you go</span>
-              </div>
-              <div class="featured-deals-more">
-                <el-button class="featured-deals-more-btn" type="primary" round @click="turnDealsPage()">View More
-                </el-button>
-              </div>
+              <p>
+                <template v-if="selectIdentityType === 1">
+                  Living abroad often means facing challenges alone, but it doesn’t have to be that way. Your dedicated
+                  account manager is only a click or tap away from providing you legal and visa support.
+                </template>
+                <template v-if="selectIdentityType === 2">
+                  Hire high-quality candidates faster by contacting them directly to get important questions answered
+                  quickly.
+                </template>
+              </p>
             </div>
+
+            <div class="f-c-btn-container">
+              <el-button type="primary" round @click="signUp()">SIGN UP</el-button>
+            </div>
+
           </div>
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- popular work destinations  -->
-    <div class="popular-work-container" v-loading="popularCityData.length<=0" v-if="popularWorkShowStatus">
-      <el-row :gutter="0" align="middle" justify="center">
-        <el-col class="popular-work-title" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          Popular Work Destinations
-        </el-col>
-      </el-row>
-      <el-row :gutter="0" align="middle" justify="center">
-        <el-col class="popular-work-tips" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          These are places you should definitely consider working at.
-        </el-col>
-      </el-row>
-
-      <el-row class="popular-work-row" :gutter="0" align="middle" justify="center">
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-
-          <swiper :slidesPerView="popularWorkSliderNum" :spaceBetween="30"
-                  :pagination='{"clickable": true}'
-                  :autoplay='{"delay": 2500,"disableOnInteraction": false}'
-                  :navigation="false"
-                  class="myWorkSwiper">
-            <swiper-slide class="popular-work-card" v-for="(item,i) in popularCityData" :key="i">
-              <div class="popular-work-card-bg">
-                <div class="popular-work-card-name">
-                  <router-link :to="{path:'/jobs',query:{city:item.id}}">{{ item.CityPinyin }}-China</router-link>
-                </div>
-              </div>
-            </swiper-slide>
-
-          </swiper>
-
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- articles industry news   -->
-    <div class="industry-news-container" v-loading="articleListData.length<=0" v-if="industryShowStatus">
-      <el-row class="industry-news-row" :gutter="0" align="middle" justify="center">
-
-        <el-col :xs="20" :sm="20" :md="7" :lg="7" :xl="8" class="industry-news-margin">
-          <div class="industry-articles-label">Articles</div>
-          <div class="industry-news-label">Industry News</div>
-          <div class="industry-news-link-container">
-            <template v-for="(item,index) in articleListData" :key="index">
-              <el-link class="industry-news-link"
-                       :href="item.link" target="_blank" :underline="false">{{ item.title }}
-              </el-link>
+          <div class="f-c-r">
+            <template v-if="selectIdentityType === 1 && selectItemValue === 1">
+              <el-image class="f-c-r-img" fit="cover" :src="dealsDemoImg"></el-image>
             </template>
-          </div>
-          <!--          <div class="industry-news-readmore">-->
-          <!--            <el-button type="primary">Read More ></el-button>-->
-          <!--          </div>-->
-        </el-col>
-
-        <el-col :xs="22" :sm="20" :md="{span:7,offset:1}" :lg="{span:7,offset:1}"
-                :xl="{span:7,offset:1}"
-                v-for="(item,index) in articleListLimitData" :key="index"
-                class="industry-news-margin"
-        >
-          <div class="industry-item" v-if="index<2">
-            <div class="industry-item-t">
-              <el-image class="industry-item-t-img"
-                        @click="turnArticleLink(item.link)"
-                        :src="item.user_url !='' ? item.user_url : item.url"
-                        fit="cover">
-              </el-image>
-              <div class="industry-item-article-tag">ARTICLE</div>
-            </div>
-            <!--            <div class="industry-item-m">-->
-            <!--              <div class="industry-item-author">By Sara</div>-->
-            <!--              <div class="industry-item-tag">Policy</div>-->
-            <!--            </div>-->
-            <div class="industry-item-title">
-              <el-link class="industry-item-title-link"
-                       :href="item.link" target="_blank" :underline="false">
-                {{ item.title }}
-              </el-link>
-            </div>
-            <div class="industry-item-intro">
-              {{ item.desc }}
-            </div>
-
-            <div class="industry-item-b">
-              <div class="industry-item-date">
-                {{ $filters.newsDateFormat(item.u_time) }}
-              </div>
-              <div class="industry-item-b-r">
-                <!--                <div class="industry-item-comment">评论：20</div>-->
-                <!--                <div class="industry-item-like">点赞：20</div>-->
-                <!--                <div class="industry-item-share">分享：20</div>-->
-              </div>
-            </div>
+            <template v-if="selectIdentityType === 1 && selectItemValue === 2">
+              <el-image class="f-c-r-img" fit="cover" :src="jobMatchDemoImg"></el-image>
+            </template>
+            <template v-if="selectIdentityType === 1 && selectItemValue === 3">
+              <el-image class="f-c-r-img" fit="cover" :src="chatDemoImg"></el-image>
+            </template>
+            <template v-if="selectIdentityType === 2 && selectItemValue === 1">
+              <el-image class="f-c-r-img" fit="cover" :src="applicationsDemoImg"></el-image>
+            </template>
+            <template v-if="selectIdentityType === 2 && selectItemValue === 2">
+              <el-image class="f-c-r-img" fit="cover" :src="applicantMatchDemoImg"></el-image>
+            </template>
+            <template v-if="selectIdentityType === 2 && selectItemValue === 3">
+              <el-image class="f-c-r-img" fit="cover" :src="chatEducatorDemoImg"></el-image>
+            </template>
+            <template v-if="selectIdentityType === 3 && selectItemValue === 1">
+              <el-image class="f-c-r-img" fit="cover" :src="supportImg"></el-image>
+            </template>
+            <template v-if="selectIdentityType === 3 && selectItemValue === 2">
+              <el-image class="f-c-r-img" fit="cover" :src="promotionImg"></el-image>
+            </template>
 
           </div>
-
-        </el-col>
-
-      </el-row>
-    </div>
+        </div>
 
 
-    <!-- meet the team   -->
-    <!--    <TeamComponent></TeamComponent>-->
+      </el-col>
+    </el-row>
 
-    <!-- vendor six logos    -->
-    <div class="vendor-logos-container">
-      <el-row :gutter="0" justify="center" align="middle">
-        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-          <el-image class="vendor-logo" :src="teamImgOne"></el-image>
-        </el-col>
-        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-          <el-image class="vendor-logo" :src="teamImgTwo"></el-image>
-        </el-col>
-        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-          <el-image class="vendor-logo" :src="teamImgThree"></el-image>
-        </el-col>
-        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-          <el-image class="vendor-logo" :src="teamImgFour"></el-image>
-        </el-col>
-        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-          <el-image class="vendor-logo" :src="teamImgFive"></el-image>
-        </el-col>
-        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-          <el-image class="vendor-logo" :src="teamImgSix"></el-image>
-        </el-col>
+    <el-row :gutter="0" justify="center" align="middle">
+      <el-col class="s-col-container" :span="24">
+        <div class="s-container">
+          <div class="s-label">
+            subscribe and join <span>our journey</span>
+          </div>
+          <div class="s-tips">
+            As we are growing rapidly, we work hard adding new features. You will only receive the news and updates for
+            EDU Passport and we will never share your address with anyone else.
+          </div>
 
-      </el-row>
-    </div>
+          <div class="s-input-container">
+            <div class="s-input-l">
+              <el-input placeholder="Your email address" v-model="subscribeEmailValue"></el-input>
+            </div>
+            <div class="s-input-r">
+              <el-button link @click="subscribe()">
+                SUBSCRIBE
+              </el-button>
+            </div>
+          </div>
 
-    <div class="get-started-container">
-      <h3>Get started with Education Hub</h3>
-      <div class="get-started-tips">
-        Your Adverts and their description will be displayed here. yourself for free
-        we look forward to seeing you succeed!
-      </div>
-      <div class="get-started-btn-container">
-        <el-button class="get-started-btn" type="primary" @click="signUp()">Sign Up</el-button>
+        </div>
+      </el-col>
+    </el-row>
+
+    <div class="footer-bg-container">
+      <div class="footer-container">
+        <div class="footer-t">
+          <div class="footer-logo">
+            <div class="footer-logo-edu">EDU</div>
+            <div class="footer-logo-passport">PASSPORT</div>
+          </div>
+          <div class="footer-menu">
+            <div class="footer-menu-item" @click="turnAboutUs()">
+              ABOUT US
+            </div>
+            <div class="footer-menu-item" @click="turnFeatures()">
+              FEATURES
+            </div>
+            <div class="footer-menu-item" @click="turnPricing()">
+              PRICING
+            </div>
+            <div class="footer-menu-item" @click="turnContactUs()">
+              CONTACT US
+            </div>
+          </div>
+        </div>
+        <div class="footer-m">
+          Make sure to check back soon as we add more information.
+        </div>
+        <div class="footer-b">
+          © 2022 EDU Passport
+        </div>
       </div>
     </div>
 
-    <!-- subscribe container   -->
-    <SubscribeComponent></SubscribeComponent>
+    <initLoadingComponent :loadingStatus="initLoadingStatus" ></initLoadingComponent>
+
+    <homeDonghua></homeDonghua>
 
   </div>
 </template>
 
 <script>
-// import TeamComponent from '@/layout/components/Team'
-import SubscribeComponent from "../../layout/components/Subscribe";
+
 import imgLogo from '@/assets/logo.png'
-import teamImgOne from '@/assets/team/1.jpg'
-import teamImgTwo from '@/assets/team/2.jpg'
-import teamImgThree from '@/assets/team/3.jpg'
-import teamImgFour from '@/assets/team/4.jpg'
-import teamImgFive from '@/assets/team/5.jpg'
-import teamImgSix from '@/assets/team/6.jpg'
-
-import {
-  JOB_FEATURED_LIST, JOB_LIST, BUSINESS_LIST, DEALS_LIST, ADS_LIST, APPLY_JOBS,
-  FEATURED_DEALS_LIST, GET_SYSTEM_INFO, ADD_FAVORITE, SIX_LOGO_LIST, JOBS_AREA_LIST, CANCEL_FAVORITE
-} from "@/api/api";
-// Import Swiper Vue.js components
-import {Swiper, SwiperSlide} from 'swiper/vue';
-// Import Swiper styles
-import 'swiper/css';
-import "swiper/css/zoom"
-import "swiper/css/pagination"
-import "swiper/css/navigation"
-
-import SwiperCore, {
-  Pagination, Autoplay, Navigation, Zoom
-} from 'swiper';
-
-SwiperCore.use([Pagination, Autoplay, Navigation, Zoom]);
-import VTypical from 'vue-typical';
-import {useRouter} from "vue-router";
-
-import bgBeijingImg from '@/assets/bg/bg-beijing-1.jpg'
-import bgShanghaiImg from '@/assets/bg/bg-shanghai-1.jpg'
-import bgNanjingImg from '@/assets/bg/bg-nanjing-1.jpg'
+import imgOne from '@/assets/newHome/Landing_application-process.png'
+// import {ref, onMounted} from 'vue'
+// import DevicePixelRatio from '@/assets/devicePixelRatio'
+import dashboardDemoImg from '@/assets/newHome/dashboard-demo.png'
+import dealsDemoImg from '@/assets/newHome/deals-demo.png'
+import applicantMatchDemoImg from '@/assets/newHome/landing_applicant-match-demo.png'
+import applicationsDemoImg from '@/assets/newHome/landing_applications-demo.png'
+import chatDemoImg from '@/assets/newHome/landing_chat-demo.png'
+import chatEducatorDemoImg from '@/assets/newHome/landing_chat-educator-demo.png'
+import jobMatchDemoImg from '@/assets/newHome/landing_job-match-demo.png'
+import promotionImg from '@/assets/newHome/landing_promotion.png'
+import supportImg from '@/assets/newHome/landing_support.png'
+import {ADD_SUBSCRIBE_EMAIL} from "@/api/api";
+import initLoadingComponent from "@/components/initLoadingComponent";
+import homeDonghua from "@/components/homeDonghua";
 
 export default {
   name: "index",
   components: {
-    Swiper,
-    SwiperSlide,
-    VTypical,
-    SubscribeComponent
+    initLoadingComponent,
+    homeDonghua
   },
   data() {
     return {
-      teamImgOne,
-      teamImgTwo,
-      teamImgThree,
-      teamImgFour,
-      teamImgFive,
-      teamImgSix,
-
       imgLogo,
-      featuredJobSliderNum: 4,
-      popularWorkSliderNum: 3,
-      xllSliderData: [
-        {
-          name: 'beijing',
-          url: bgBeijingImg
-        },
-        {
-          name: 'nanjing',
-          url: bgNanjingImg
-        },
-        {
-          name: 'shanghai',
-          url: bgShanghaiImg
-        }
-      ],
-      searchCategoryValue: 1,
-      searchKeywordsValue: '',
-      serviceCategoryValue: '',
-      categoryOptions: [
-        {
-          value: '选项1',
-          label: '黄金糕',
-        }
-      ],
-      searchTagsValue: '',
-      tagsOptions: [
-        {
-          value: '选项1',
-          label: '黄金糕',
-        }
-      ],
-      jobFeaturedListData: [],
-      businessListData: [],
-      dealsListData: [],
-      featuredDealsList: [],
-      articleListData: [],
-      articleListLimitData: [],
-      featuredDealsLogoData: [],
-      popularCityData: [],
+      imgOne,
+      dealsDemoImg,
+      applicantMatchDemoImg,
+      applicationsDemoImg,
+      chatDemoImg,
+      chatEducatorDemoImg,
+      jobMatchDemoImg,
+      promotionImg,
+      supportImg,
+      dashboardDemoImg,
 
-      jobFeaturedShowStatus: true,
-      dealFeaturedShowStatus: true,
-      popularWorkShowStatus: true,
-      industryShowStatus: true
+      selectIdentityType: 1,
+      selectItemValue: 1,
+      subscribeEmailValue: '',
+      initLoadingStatus: false
 
     }
   },
   setup() {
-    let router = useRouter()
-    // let route = useRoute()
 
-    const onSwiper = (swiper) => {
-      console.log(swiper);
-    };
-    const onSlideChange = () => {
-      console.log('slide change');
-    };
-    // const getParams = () =>{
-    //   console.log(route.params)
+    // const styleValue = ref('')
+    //
+    // const bodyScale = () => {
+    //   let devicewidth = document.documentElement.clientWidth;//获取当前分辨率下的可是区域宽度
+    //   document.body.style.zoom =  devicewidth / 1920; //放大缩小相应倍数
     // }
-    const skipJobsList = (query) => {
-      router.push({
-        path: '/jobs',
-        query: query
-      })
-    }
-    return {
-      onSwiper,
-      onSlideChange,
-      skipJobsList
-    };
-  },
-  created() {
-    this.getJobFeaturedList()
-    // this.getBusinessList()
-    // this.getDealsList()
-    this.getAdsList()
-
-    this.getFeaturedDealsList()
-    // this.getSystemInfo()
-    this.getSixLogos()
-    this.getJobsAreaList()
-
+    //
+    // onMounted(()=>{
+    //   new DevicePixelRatio().init()
+    //
+    //   window.onresize = ()=>{
+    //     console.log('resize app')
+    //     setTimeout(function () {
+    //       bodyScale();
+    //     },1000)
+    //
+    //   }
+    //   bodyScale();
+    // })
+    //
+    // return {
+    //   styleValue
+    // }
   },
   mounted() {
-    let screenWidth = document.body.clientWidth
+    let self = this;
+    this.initLoadingStatus = false;
+    setTimeout(function () {
+      self.initLoadingStatus = false;
+    }, 3000)
 
-    if (Math.floor(screenWidth) < 768) {
-      this.featuredJobSliderNum = 2
-      this.popularWorkSliderNum = 1
-    }
-    if (Math.floor(screenWidth) >= 768 && Math.floor(screenWidth) < 992) {
-      this.featuredJobSliderNum = 2
-      this.popularWorkSliderNum = 2
-    }
-    if (Math.floor(screenWidth) >= 992 && Math.floor(screenWidth) < 1200) {
-      this.featuredJobSliderNum = 3
-      this.popularWorkSliderNum = 3
-    }
-    if (Math.floor(screenWidth) >= 1200) {
-      this.featuredJobSliderNum = 4
-      this.popularWorkSliderNum = 3
-    }
-
-    window.onresize = () => {
-      let screenWidth2 = document.body.clientWidth
-      if (Math.floor(screenWidth2) < 768) {
-        this.featuredJobSliderNum = 2
-        this.popularWorkSliderNum = 1
-      }
-      if (Math.floor(screenWidth2) >= 768 && Math.floor(screenWidth2) < 992) {
-        this.featuredJobSliderNum = 2
-        this.popularWorkSliderNum = 2
-      }
-      if (Math.floor(screenWidth2) >= 992 && Math.floor(screenWidth2) < 1200) {
-        this.featuredJobSliderNum = 3
-        this.popularWorkSliderNum = 3
-      }
-      if (Math.floor(screenWidth2) >= 1200) {
-        this.featuredJobSliderNum = 4
-        this.popularWorkSliderNum = 3
-      }
-
-      // console.log(document.body.clientWidth)
-    }
   },
   unmounted() {
     window.onresize = null
   },
   methods: {
-
-    getJobsAreaList() {
-      let params = {}
-      JOBS_AREA_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.popularCityData = res.message;
-          let message = res.message;
-          if (message.length <= 0) {
-            this.popularWorkShowStatus = false
-          }
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-    },
-    getSixLogos() {
-      let params = {}
-      SIX_LOGO_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.featuredDealsLogoData = res.message;
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-    },
-    chooseSearchCategory(value) {
-      this.searchCategoryValue = value
-    },
-    getSystemInfo() {
+    subscribe() {
       let params = {
-        page: 1,
-        limit: 10000,
-        cate: 1
+        email: this.subscribeEmailValue
       }
-
-      GET_SYSTEM_INFO(params).then(res => {
+      ADD_SUBSCRIBE_EMAIL(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let imgData = res.message.data;
-          this.featuredDealsLogoData = imgData.filter(item => item.sys_key == '16')
+          this.$message.success('Subscribe Success')
+          this.subscribeEmailValue = ''
         }
       }).catch(err => {
         console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
+        this.$message.error(err.msg)
       })
     },
-    getJobFeaturedList() {
-      let params = {
-        ad_type: 1
-      }
-
-      JOB_FEATURED_LIST(params).then(res => {
-        console.log(res)
-        if (res.code === 200) {
-          let message = res.message;
-          this.jobFeaturedListData = res.message;
-
-          if (message.length <= 0) {
-            this.jobFeaturedShowStatus = false
-          }
-        }
-
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-
+    turnAboutUs() {
+      this.$router.push('/about/us')
     },
-    getJobList() {
-      let params = {
-        page: 1,
-        limit: 5
-      }
-      JOB_LIST(params).then(res => {
-        // console.log(res)
-        if (res.code == 200) {
-          this.jobListData = res.message.data;
-          // console.log(res.message.data)
-        } else {
-          console.log(res.msg)
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-
+    turnFeatures() {
+      this.$router.push('/edupassport')
     },
-    getBusinessList() {
-      let params = {
-        page: 1,
-        limit: 3
-      }
-      BUSINESS_LIST(params).then(res => {
-        console.log(res)
-        this.businessListData = res.message.data;
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
+    turnPricing() {
+      this.$router.push('/services/price')
     },
-    getDealsList() {
-      let params = {
-        page: 1,
-        limit: 5
-      }
-      DEALS_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.dealsListData = res.message.data;
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
+    turnContactUs() {
+      this.$router.push('/contact/us')
     },
-    getFeaturedDealsList() {
-      let params = {}
-      FEATURED_DEALS_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.featuredDealsList = res.message;
-          let message = res.message;
-          if (message.length <= 0) {
-            this.dealFeaturedShowStatus = false
-          }
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-    },
-    getAdsList() {
-      let identity = localStorage.getItem('identity')
-
-      let params = {
-        page: 1,
-        limit: 10000
-      }
-      ADS_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          let adsData = res.message;
-          // console.log(adsData);
-
-          let adsDataNews = [];
-
-          if (identity == 0 || !identity) {
-            adsDataNews = adsData.filter(item => item.name == 'guest_industry_news');
-          }
-          if (identity == 1) {
-            adsDataNews = adsData.filter(item => item.name == 'educator_industry_news');
-          }
-          if (identity == 2) {
-            adsDataNews = adsData.filter(item => item.name == 'business_industry_news');
-          }
-          if (identity == 3) {
-            adsDataNews = adsData.filter(item => item.name == 'vendor_industry_news');
-          }
-          let articleListData = [];
-          if (adsDataNews[0]) {
-            articleListData = adsDataNews[0].data
-          }
-          if (articleListData.length <= 0) {
-            this.industryShowStatus = false;
-          }
-          this.articleListData = articleListData;
-          this.articleListLimitData = articleListData.slice(0, 2)
-
-
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-
-    turnJobsList() {
-      this.skipJobsList()
-    },
-    turnDealsPage() {
-      this.$router.push({path: '/deals'})
-    },
-    applyJobs(id) {
-
-      let identity = localStorage.getItem('identity')
-      let token = localStorage.getItem('token')
-      if (identity == 1) {
-        let params = {
-          job_id: id,
-          token: token
-        }
-        APPLY_JOBS(params).then(res => {
-          if (res.code == 200) {
-            this.$message.success('Apply Success')
-          }
-        }).catch(err => {
-          console.log(err)
-          if (err.code === 400) {
-            this.$message.error('Please complete your profile in order to apply')
-          } else {
-            if (err.msg) {
-              this.$message.error(err.msg)
-            }
-            if (err.message) {
-              this.$message.error(err.message)
-            }
-          }
-
-        })
-
-      } else {
-        this.$message.warning('Please switch to an educator profile to be able to apply')
-      }
-
-
-    },
-    addJobFavorite(id, type, title, url, index) {
-      let params = {
-        token: localStorage.getItem('token'),
-        type: type,
-        type_id: id,
-        type_title: title,
-        type_url: url
-      }
-      ADD_FAVORITE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.jobFeaturedListData[index]['is_favorite'] = 1
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-    cancelJobFavorite(type, typeId, index) {
-      let params = {
-        token: localStorage.getItem('token'),
-        type: type,
-        type_id: typeId
-      }
-      CANCEL_FAVORITE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.jobFeaturedListData[index]['is_favorite'] = 0
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-    },
-    addDealFavorite(id, type, title, url, index) {
-      let params = {
-        token: localStorage.getItem('token'),
-        type: type,
-        type_id: id,
-        type_title: title,
-        type_url: url
-      }
-      ADD_FAVORITE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.featuredDealsList[index]['is_favorite'] = 1
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-    cancelDealFavorite(type, typeId, index) {
-      let params = {
-        token: localStorage.getItem('token'),
-        type: type,
-        type_id: typeId
-      }
-      CANCEL_FAVORITE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.featuredDealsList[index]['is_favorite'] = 0
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-    },
-
-    searchNow() {
-      this.$router.push({path: '/search/result', query: {keyword: this.searchKeywordsValue}})
+    login() {
+      this.$router.push('/edupassport')
     },
     signUp() {
-      this.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
+      this.$router.push({path: '/edupassport/signup', query: {}})
+    },
+    checkedIdentityType(value) {
+      this.selectIdentityType = value
+      this.selectItemValue = 1
+    },
+    checkedItem(value) {
+      this.selectItemValue = value;
+    },
+    turnHome() {
+      this.$router.push('/')
+    },
+    searchNow() {
+      this.$router.push({path: '/search/result', query: {keyword: this.searchKeywordsValue}})
     },
     turnArticleLink(link) {
       window.open(link, '_blank')
@@ -1081,1144 +426,376 @@ export default {
 </script>
 
 <style scoped>
-/deep/ .swiper-pagination-bullet-active {
-  background-color: #0AA0A8;
+.bg {
+  min-height: 100vh;
 }
 
-.home-bg {
-  background-position: center;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+.t-container {
+  margin-top: 25px;
 }
 
-.xll-search-container {
-  background-color: rgba(0, 0, 0, 0.2);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
+.logo-edu {
+  font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 40px;
 }
 
-.xll-find-best-row {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-
+.logo-passport {
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 17px;
 }
 
-.xll-find-best-row h2 {
-  color: #ffffff;
-  font-size: 36px;
-}
-
-.xll-find-best-row h1 {
-  color: #ffffff;
-  margin-left: 10px;
-  text-decoration: underline;
-  font-size: 36px;
-}
-
-.xll-search-btn-row {
-  margin-top: 100px;
-}
-
-.xll-search-jobs-btn-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.xll-search-deals-btn-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.xll-search-jobs-btn {
-  background-color: #ffffff;
-  font-size: 16px;
-  padding: 14px 40px;
-  cursor: pointer;
-  border-radius: 6px;
-
-}
-
-.xll-search-jobs-btn-active {
-  background-color: #0AA0A8;
-  color: #ffffff;
-}
-
-.xll-search-deals-btn {
-  background-color: #ffffff;
-  font-size: 16px;
-  padding: 14px 40px;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-.xll-search-deals-btn-active {
-  background-color: #0AA0A8;
-  color: #ffffff;
-}
-
-.xll-search-btn-sj {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 10px 10px 0 10px;
-  border-color: transparent transparent transparent transparent;
-}
-
-.xll-search-btn-sj-active {
-  border-color: #0AA0A8 transparent transparent transparent;
-}
-
-
-.search-container-bg {
-  margin-top: 20px;
-  background-color: rgba(255, 255, 255, 0.3);
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.search-container {
-  background-color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row;
-  border-radius: 10px;
-  padding: 20px;
-}
-
-.search-keywords {
-  width: 80%;
-}
-
-.search-keywords-input {
-
-}
-
-.service-category {
-
-}
-
-.search-tags {
-
-}
-
-.search-btn {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.featured-jobs-bg {
-  padding: 20px;
-  background-color: #f5f6f7;
-}
-
-
-.featured-jobs-label {
-  font-size: 34px;
-  font-weight: bold;
-  line-height: 40px;
-  text-align: center;
-}
-
-.featured-jobs-more {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.featured-jobs-more-btn {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.featured-jobs-row {
-  /*width: 1200px;*/
+.logo-container {
   margin: 0 auto;
-}
 
-.featured-jobs-tips {
-  text-align: center;
-  color: #808080;
-  padding-bottom: 10px;
-}
-
-.featured-jobs-slider {
-  margin-top: 20px;
-}
-
-.mySwiper {
-  height: 480px;
-}
-
-.featured-jobs-card {
-  width: 98%;
-  margin: 0 auto;
-  background-color: #ffffff;
-  border-radius: 20px;
-  /*cursor: pointer;*/
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  border: 1px solid #eeeeee;
-}
-
-.featured-jobs-card:hover {
-
-}
-
-.featured-jobs-card-images {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
+  text-align: left;
   position: relative;
-  background-color: #FFFFFF;
-  /*filter: blur(1px);*/
-  /*transform: scale(1);*/
-  background-position: center;
-  background-size: auto;
-  background-repeat: repeat;
-}
-
-.featured-jobs-favorite {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  cursor: pointer;
-}
-
-.featured-jobs-card-image {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-.featured-jobs-title {
-  text-align: left;
-  padding: 0 20px;
-  margin-top: 10px;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-}
-
-.featured-jobs-title a {
-  font-size: 16px;
-  color: #000000;
-  font-weight: bold;
-  text-decoration: none;
-
-
-}
-
-.featured-jobs-title a:hover {
-  text-decoration: underline;
-}
-
-
-.featured-business-name {
-  text-align: left;
-  font-weight: bold;
-  font-size: 14px;
-  color: #808080;
-  padding: 0 20px;
-  margin-top: 10px;
-}
-
-.featured-jobs-location {
-  text-align: left;
-  font-size: 14px;
-  color: #808080;
-  padding: 0 20px;
-  margin-top: 10px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.featured-jobs-tags {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  margin-top: 10px;
-}
-
-.featured-jobs-tags-l {
-
-}
-
-.featured-jobs-work-type {
-  font-size: 14px;
-  color: #808080;
-}
-
-.featured-jobs-work-type span {
-  margin-left: 4px;
-}
-
-.featured-jobs-gender {
-  font-size: 14px;
-  color: #808080;
-  margin-left: 4px;
-}
-
-.featured-jobs-work-exp {
-  font-size: 14px;
-  color: #808080;
-  margin-left: 4px;
-}
-
-.featured-jobs-salary {
-  color: #00b3d2;
-}
-
-.featured-jobs-b {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  border-top: 1px solid #eeeeee;
-
-}
-
-.featured-jobs-b-l {
-
-}
-
-.featured-jobs-apply-btn {
-  background-color: #20AEC6;
-  color: #ffffff;
-  font-size: 14px;
-}
-
-.featured-jobs-b-r {
-  font-size: 14px;
-  color: #808080;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.featured-schools-container {
-  background-color: #f5f6f7;
-  padding: 20px 0;
-}
-
-.featured-schools-label {
-  font-size: 34px;
-  font-weight: bold;
-  line-height: 40px;
-}
-
-.featured-schools-more-container {
-  padding: 20px;
-}
-
-.featured-schools-more {
-
-}
-
-.featured-schools-more-btn {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.featured-schools-tips {
-  color: #808080;
-  padding: 20px 0;
-}
-
-
-.featured-schools-content-container {
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.featured-schools-plus-container {
-  height: 500px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
-}
-
-.featured-schools-plus-container:hover {
-  border: 1px solid #eeeeee;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
-}
-
-.featured-schools-plus-content {
-  background-color: #ffffff;
-  padding: 10px;
-  width: 80%;
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 10px;
-}
-
-.featured-schools-plus-content-l {
-  text-align: left;
-  width: 50%;
-}
-
-.featured-schools-plus-address {
-  font-size: 14px;
-  color: #808080;
-  line-height: 40px;
-}
-
-.featured-schools-plus-type {
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 40px;
-}
-
-.featured-schools-plus-business-name {
-  font-size: 18px;
-  color: #808080;
-  line-height: 40px;
-}
-
-.featured-schools-pro-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 10px;
-  background-color: #ffffff;
-  border: 1px solid #eeeeee;
-  box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);
-}
-
-.featured-schools-pro-margin {
-  margin-top: 20px;
-}
-
-.featured-schools-pro-container:hover {
-  border: 1px solid #eeeeee;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
-}
-
-.featured-schools-pro-l {
-  width: 35%;
-  height: 200px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  border-radius: 4px;
-  border: 1px solid #eeeeee;
-}
-
-.featured-schools-pro-r {
-  width: 60%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.featured-schools-pro-r-l {
-  padding: 10px;
-  text-align: left;
-}
-
-.featured-schools-pro-address {
-  font-size: 14px;
-  color: #808080;
-  line-height: 40px;
-}
-
-.featured-schools-pro-type {
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 40px;
-}
-
-.featured-schools-pro-business-name {
-  font-size: 18px;
-  color: #808080;
-  line-height: 40px;
-}
-
-/deep/ .swiper-button-next, /deep/ .swiper-button-prev {
-  color: #0AA0A8 !important;
-}
-
-.featured-deals-bg {
-  padding: 20px 0;
-  background-color: #ffffff;
-}
-
-.featured-deals-label {
-  font-size: 34px;
-  font-weight: bold;
-  line-height: 40px;
-  text-align: center;
-}
-
-.featured-deals-more {
-  width: 90%;
-  margin-top: 10px;
-  text-align: right;
-}
-
-.featured-deals-more-btn {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.featured-deals-tips {
-  color: #808080;
-  padding-bottom: 10px;
-  text-align: center;
-}
-
-
-.featured-deals-row {
-  margin: 0 auto;
-}
-
-.hot-deals-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.hot-deals-item {
-  width: 32%;
-  margin-top: 20px;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid #EEEEEE;
-  box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.47);
-}
-
-.hot-deals-item-bg {
-  background-color: #faf7f7;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-}
-
-.hot-deals-item:hover {
-  /*border: 1px solid #eeeeee;*/
-  /*box-shadow: 0px 5px 4px 0px rgba(50, 50, 50, 0.47);*/
-}
-
-.hot-deals-item-t {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 10px 10px 40px 10px;
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-.hot-deals-item-t-l {
-  text-align: left;
-}
-
-.hot-deals-logo {
   width: 60px;
   height: 60px;
-  border-radius: 50%;
-  border: 2px solid #EEEEEE;
-}
-
-.hot-deals-item-t-r {
-  color: #ffffff;
-}
-
-.xll-heart-icon {
-  font-size: 30px !important;
-}
-
-.hot-deals-item-tag-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 10px 20px;
-}
-
-.hot-deals-item-tag {
-  background-color: #0AA0A8;
-  color: #ffffff;
-  padding: 4px 14px;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.hot-deals-item-name-container {
-  padding: 10px 20px;
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-.hot-deals-item-title {
-  text-align: left;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: #FFFFFF;
-  padding: 4px 0;
-}
-
-.hot-deals-item-title a {
-  width: 100%;
-  color: #ffffff;
-  font-size: 16px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.hot-deals-item-title a:hover {
-  text-decoration: underline;
-}
-
-.hot-deals-item-name {
-  width: 100%;
-  color: #ffffff;
-  font-size: 14px;
-  text-align: left;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.hot-deals-item-b {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 0;
-}
-
-.hot-deals-item-b-l {
-  color: #00b3d2;
-  font-size: 12px;
-  width: 20%;
-}
-
-.hot-deal-type-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.hot-deals-item-b-r {
-  width: 79%;
-  font-size: 12px;
-  color: #808080;
-  padding-right: 20px;
-  text-align: right;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.hot-deals-item-more {
-  background-color: #faf7f7;
-  width: 32%;
-  height: 230px;
-  margin-top: 20px;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid #EEEEEE;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.47);
-}
-
-.hot-deals-item-more-logo-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.hot-deals-item-more-logo-item {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-left: 2px;
-  overflow: hidden;
-  border: 1px solid #EEEEEE;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hot-deals-item-more-logo {
-  /*width: 100%;*/
-}
-
-.hot-deals-item-more-tips {
-  text-align: left;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 0 20px;
-}
-
-.hot-deals-item-more-tips span {
-  font-size: 12px;
-  color: #00b3d2;
-}
-
-
-.popular-work-container {
-  background-color: #f5f6f7;
-  padding: 20px 0;
-}
-
-.popular-work-title {
-  font-size: 34px;
-  font-weight: bold;
-  line-height: 40px;
-  text-align: center;
-}
-
-.popular-work-tips {
-  color: #808080;
-  padding-bottom: 10px;
-  text-align: center;
-}
-
-
-.popular-work-row {
-  margin: 0 auto;
-}
-
-.myWorkSwiper {
-  height: 260px;
-  padding: 20px 20px 40px 20px;
-}
-
-.popular-work-card {
-  border: 1px solid #eeeeee;
-  background-image: url("../../assets/bg/bg-h-1.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.popular-work-card:first-child {
-  background-image: url("../../assets/popular/beijing.jpg");
-}
-
-.popular-work-card:nth-child(2) {
-  background-image: url("../../assets/popular/shanghai.jpg");
-}
-
-.popular-work-card:nth-child(3) {
-  background-image: url("../../assets/popular/nanjing.jpg");
-}
-
-.popular-work-card-bg {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-}
-
-.popular-work-card-name {
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  padding: 20px 0;
-  text-align: center;
-}
-
-.popular-work-card-name a {
-  text-decoration: none;
-  font-size: 34px;
-  font-weight: bold;
-  color: #ffffff;
-
-}
-
-.industry-news-container {
-  background-color: #ffffff;
-  padding: 20px 0;
-}
-
-.industry-news-row {
-  margin: 0 auto;
-}
-
-.industry-articles-label {
-  color: #00b3d2;
-  font-size: 20px;
-  text-align: left;
-}
-
-.industry-news-label {
-  font-weight: bold;
-  font-size: 34px;
-  line-height: 40px;
-  text-align: left;
-  color: #0AA0A8;
-}
-
-.industry-news-link-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.industry-news-link {
-  margin-top: 10px;
-  text-align: left;
-}
-
-.industry-item {
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid #eeeeee;
-  background-color: #f5f6f7;
-}
-
-.industry-item-t {
-  height: 200px;
-  overflow: hidden;
-  position: relative;
-}
-
-.industry-item-t-img {
-  width: 100%;
-  height: 100%;
   cursor: pointer;
 }
 
-.industry-item-article-tag {
+.logo-beta {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: #00b3d2;
-  color: #ffffff;
-  padding: 4px 10px;
-  border-radius: 4px;
   font-size: 12px;
+  top: 0;
+  right: -32px;
+  background-color: #49397f;
+  padding: 2px 10px;
+  border-radius: 10px;
+  color: #EEEEEE;
 }
 
-.industry-item-m {
+
+.t-btn-container {
+  text-align: right;
+  padding-right: 100px;
+}
+
+.a-row-container {
+  text-align: center;
+  margin-top: 120px;
+  font-size: 45px;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.a-row-container span {
+  color: #6648FF;
+}
+
+
+.b-row-container {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 23px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.c-row-container {
+  margin-top: 50px;
+}
+
+.c-col-container {
+  padding: 0 100px 50px 100px;
+}
+
+.c-container {
+  max-width: 1720px;
+  margin: 0 auto;
+
+  /*border-radius: 16px 0px 0px 16px;*/
+  /*box-shadow: 0px 0px 20px #00000033;*/
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+
+}
+
+.c-tips {
+  width: 1720px;
+  margin: 0 auto;
+  padding: 25px 0 50px 0;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #262626;
+}
+
+
+.d-row-container {
+
+}
+
+.d-col-container {
+  background-color: #FFFFFF;
+  padding: 50px;
+}
+
+.d-container {
+  max-width: 1347px;
+  margin: 0 auto;
+  text-align: center;
+
+}
+
+.d-label {
+  text-align: center;
+  font-size: 45px;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.d-label span {
+  color: #6648FF;
+}
+
+.d-tips {
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+  margin-top: 25px;
+}
+
+.d-c-bg {
+  height: 1133px;
+  background-image: url("@/assets/newHome/Landing_application-process.png");
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.f-col-container {
+  padding: 50px 0;
+}
+
+.f-label {
+  text-align: center;
+  font-size: 45px;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.f-label span {
+  color: #6648FF;
+}
+
+.f-tabs {
+  margin: 50px auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.f-tab {
+  color: #262626;
+  font-size: 30px;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 40px;
+  padding: 0 25px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.f-tab-active {
+  background-color: #9173FF;
+  color: #FFFFFF;
+}
+
+.f-tab:hover {
+  background-color: #9173FF;
+  color: #FFFFFF;
+}
+
+.f-c {
+  max-width: 1830px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 90px;
+}
+
+.f-c-l {
+  max-width: 600px;
+
+}
+
+.f-c-r {
+  max-width: calc(100% - 700px);
+  height: 872px;
+
+}
+
+.f-c-r-img {
+  height: 100%;
+
+}
+
+/deep/ .f-c-r-img .el-image__inner {
+  object-position: left;
+}
+
+.f-c-l-item {
+  margin-bottom: 50px;
+  cursor: pointer;
+  padding-left: 10px;
+
+}
+
+.f-c-l-item:hover {
+  border-left: 7px solid #6650B3;
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+
+.f-c-l-item-active {
+  border-left: 7px solid #6650B3;
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+
+.f-c-l-item-label {
+  color: #262626;
+  font-size: 30px;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.f-c-l-item p {
+  margin-top: 15px;
+  color: #262626;
+  font-size: 23px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.s-col-container {
+  padding: 50px 0;
+  background-color: #FFFFFF;
+}
+
+.s-container {
+  width: 610px;
+  padding: 25px 50px;
+  background-color: #F0F2F5;
+  box-shadow: 0px 3px 23px #00000012;
+  border-radius: 18px;
+  margin: 0 auto;
+}
+
+.s-label {
+  text-align: center;
+  font-size: 45px;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.s-label span {
+  color: #6648FF;
+}
+
+.s-tips {
+  margin-top: 15px;
+  color: #262626;
+  font-size: 23px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.s-input-container {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.s-input-l {
+  width: 80%;
+}
+
+.s-input-r {
+  width: 20%;
+  text-align: right;
+}
+
+
+.footer-bg-container {
+  background-color: #6648FF;
+  padding: 50px 100px;
+}
+
+.footer-container {
+
+}
+
+.footer-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  padding: 10px 20px;
 }
 
-.industry-item-author {
+.footer-logo {
 
-}
-
-.industry-item-tag {
-  margin-left: 10px;
-}
-
-.industry-item-title {
-  padding: 10px 20px;
   text-align: left;
-}
-
-.industry-item-title-link {
-  font-size: 16px;
-  font-weight: bold;
-  /*text-align: left;*/
-}
-
-.industry-item-intro {
-  font-size: 14px;
-  color: #808080;
-  text-align: left;
-  padding: 10px 20px 0 20px;
-
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-}
-
-.industry-news-readmore {
-  text-align: left;
-  padding: 20px 0;
-}
-
-.industry-item-b {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-}
-
-.industry-item-date {
-  font-size: 12px;
-  color: #808080;
-}
-
-.industry-item-b-r {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-}
-
-.industry-item-comment {
-  font-size: 12px;
-  color: #808080;
-}
-
-.industry-item-like {
-  font-size: 12px;
-  color: #808080;
-}
-
-.industry-item-share {
-  font-size: 12px;
-  color: #808080;
-}
-
-.vendor-logos-container {
-  background-color: #ffffff;
-  border-top: 1px solid #efefef;
-  padding: 20px;
-}
-
-.vendor-logo {
-  width: 80px;
-}
-
-
-.xll-slider-row {
-
-}
-
-.xll-slider-col {
   position: relative;
+
+  cursor: pointer;
 }
 
-.xllSwiper {
-  width: 100%;
-  height: 600px;
+.footer-logo-edu {
+  color: #FFFFFF;
+  font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 62px;
 }
 
-.xll-swiper-image-container {
-  width: 100%;
-  overflow: hidden;
+.footer-logo-passport {
+  color: #FFFFFF;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
 }
 
-.xll-swiper-image {
-  width: 100%;
-  -webkit-animation: scaleDraw 13.5s ease-in-out infinite;
-
-}
-
-@keyframes scaleDraw {
-  0% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(1.01);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  75% {
-    transform: scale(1.06);
-  }
-}
-
-.xll-swiper-slider {
-  height: 100%;
-  position: relative;
-}
-
-.xll-swiper-1 {
+.footer-logo-beta {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+  font-size: 12px;
   top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  right: -32px;
+  background-color: #49397f;
+  padding: 2px 10px;
+  border-radius: 10px;
+  color: #EEEEEE;
 }
 
-.get-started-container {
-  border-top: 1px solid #EEEEEE;
-  padding: 80px 20px;
-  text-align: center;
+.footer-menu {
+  margin-left: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.get-started-container h3 {
-  color: #217CA3;
+.footer-menu-item {
+  cursor: pointer;
+  color: #FFFFFF;
+  font-size: 25px;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  margin-right: 50px;
 }
 
-.get-started-tips {
-  color: #7F7F7F;
-  font-size: 14px;
+.footer-menu-item:hover {
+  text-decoration: underline;
 }
 
-.get-started-btn-container {
+.footer-m {
   margin-top: 40px;
+  color: #FFFFFF;
+  font-size: 23px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.get-started-btn {
-  padding: 0 40px;
-  line-height: 40px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-@media screen and (max-width: 768px) {
-  .featured-jobs-label {
-    font-size: 14px;
-  }
-
-  .xllSwiper {
-    height: 190px;
-  }
-
-  .xll-find-best-row h2 {
-    font-size: 14px;
-  }
-
-  .xll-find-best-row h1 {
-    font-size: 16px;
-  }
-
-  .hot-deals-item {
-    width: 48%;
-  }
-
-  .hot-deals-item-more {
-    width: 48%;
-  }
-
-  .industry-news-margin {
-    margin-top: 20px;
-  }
-
-  .popular-work-container {
-    padding: 20px;
-
-  }
-
-  .popular-work-title {
-    font-size: 24px;
-  }
-
-  .hot-deals-container {
-    padding: 0 20px;
-  }
-
-  .hot-deals-item {
-    width: 100%;
-  }
-
-  .hot-deals-item-more {
-    width: 100%;
-  }
-
-}
-
-@media screen and (min-width: 769px) and (max-width: 992px) {
-  .xllSwiper {
-    height: 300px;
-  }
-
-  .hot-deals-item {
-    width: 48%;
-  }
-
-  .hot-deals-item-more {
-    width: 48%;
-  }
-
-}
-
-@media screen and (min-width: 993px) and (max-width: 1200px) {
-  .xllSwiper {
-    height: 340px;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-
-  .search-container-bg {
-    width: 1100px;
-  }
-
-  .featured-jobs-row {
-    width: 1200px;
-  }
-
-  .featured-schools-content-container {
-    width: 1100px;
-  }
-
-  .featured-deals-row {
-    width: 1100px;
-  }
-
-  .popular-work-row {
-    width: 1100px;
-  }
-
-  .industry-news-row {
-    width: 1100px;
-  }
-
-  .xll-search-btn-row {
-    width: 1100px;
-  }
-
-
+.footer-b {
+  margin-top: 10px;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 </style>

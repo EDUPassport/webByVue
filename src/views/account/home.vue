@@ -205,32 +205,21 @@
                         <el-button
                             v-if="item.identity == 1"
                             class="account-profile-c-item-r-2-btn"
+                            @click="searchJobs()"
                             type="primary" round>
                           SEARCH JOBS
                         </el-button>
                         <el-button
-                            v-if="item.identity == 2"
+                            v-if="item.identity == 2 || item.identity == 3 || item.identity == 4"
                             class="account-profile-c-item-r-2-btn"
+                            @click="postJob()"
                             type="primary" round>
                           POST A JOB
                         </el-button>
-                        <el-button
-                            v-if="item.identity == 3"
-                            class="account-profile-c-item-r-2-btn"
-                            type="primary" round>
-                          POST A JOB
-                        </el-button>
-
-                        <el-button
-                            v-if="item.identity == 4"
-                            class="account-profile-c-item-r-2-btn"
-                            type="primary" round>
-                          POST A JOB
-                        </el-button>
-
                         <el-button
                             v-if="item.identity == 5"
                             class="account-profile-c-item-r-2-btn"
+                            @click="postDeal()"
                             type="primary" round>
                           POST A Deal
                         </el-button>
@@ -256,9 +245,14 @@
                         </template>
 
                       </div>
-                      <div class="account-profile-c-item-r-4">
+                      <div class="account-profile-c-item-r-4" v-if="item.id == currentCompanyId">
                         <el-dropdown>
-                          <span class="account-profile-c-item-r-4-btn">MORE<el-icon class="el-icon--right"><arrow-down /></el-icon></span>
+                          <span class="account-profile-c-item-r-4-btn">
+                            MORE
+                            <el-icon class="el-icon--right">
+                              <arrow-down />
+                            </el-icon>
+                          </span>
                           <template #dropdown>
                             <el-dropdown-menu>
                               <el-dropdown-item @click="viewUserProfile(item.id,item.user_id,item.identity)">
@@ -494,6 +488,7 @@ import {useStore} from "vuex";
 import {ref,reactive} from "vue";
 import ImageCompressor from "compressorjs";
 import {encode} from "js-base64";
+import {randomString} from "@/utils";
 
 export default {
   name: "accountHome",
@@ -667,6 +662,7 @@ export default {
 
       contributorUpdateDialogVisible:false,
       contributorUpdateItemData:{},
+      versionTime:randomString(),
 
 
     }
@@ -678,7 +674,15 @@ export default {
     this.getAllAssignUsers()
   },
   methods: {
-
+    searchJobs(){
+      this.$router.push('/jobs')
+    },
+    postJob(){
+      this.$router.push({path:'/jobs/post',query:{version_time:this.versionTime}})
+    },
+    postDeal(){
+      this.$router.push({path:'/deals/offer',query:{}})
+    },
     getAllAssignUsers() {
       let params = {}
       ALL_ASSIGN_USERS(params).then(res => {

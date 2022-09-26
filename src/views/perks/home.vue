@@ -7,7 +7,90 @@
       <el-scrollbar class="perks-r-container">
 
         <div class="perks-r-bg-container">
+
           <div class="custom-divider-container">
+            <div class="custom-divider-l"></div>
+            <div class="custom-divider-m">
+              Manage your perks
+            </div>
+            <div class="custom-divider-r"></div>
+          </div>
+
+          <div class="plain-container">
+            <!--          <div class="plain-mask-container"></div>-->
+            <div class="plain-item-container">
+              <div class="plain-item-label">
+                Ads
+              </div>
+              <div class="plain-item-tips">
+                Promote your business with ad banners on our website.
+              </div>
+              <div class="plain-item-btn-container-1">
+                <el-button class="plain-item-btn" type="primary" link>
+                  MY ADS
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-container">
+              <div class="plain-item-label">
+                Job posts
+              </div>
+              <div class="plain-item-tips">
+                Add, edit, remove your job posts.
+              </div>
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn" type="primary" link>
+                  MY JOB POSTS
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-container">
+              <div class="plain-item-label">
+                Deals
+              </div>
+              <div class="plain-item-tips">
+                Post, edit, remove, track engagement of your deals.
+              </div>
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn"
+                           type="primary"
+                           @click="turnMyDeals()"
+                           link>
+                  MY DEALS
+                </el-button>
+              </div>
+
+            </div>
+
+            <div class="plain-item-container">
+              <div class="plain-item-label">
+                Events
+              </div>
+
+              <div class="plain-item-tips">
+                Post, edit, remove, track engagement of your events.
+              </div>
+
+              <div class="plain-item-btn-container-1">
+
+                <el-button class="plain-item-btn"
+                           type="primary"
+                           @click="turnMyEvents()"
+                           link>
+                  MY EVENTS
+                </el-button>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="custom-divider-container custom-divider-margin">
             <div class="custom-divider-l"></div>
             <div class="custom-divider-m">
               Make the most out of your plan
@@ -401,7 +484,15 @@ export default {
 
 
   },
-  methods: {}
+  methods: {
+    turnMyDeals(){
+        this.$router.push({path:'/deals/myDeals',query:{}})
+    },
+    turnMyEvents(){
+      this.$router.push({path:'/events/myEvents',query:{}})
+    }
+
+  }
 
 
 }

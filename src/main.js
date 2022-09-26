@@ -22,7 +22,7 @@ import store from "./store";
 import VueSocialSharing from 'vue-social-sharing'
 
 // import gAuthPlugin from 'vue3-google-oauth2'
-
+// import 'amfe-flexible';
 import GoEasy from "goeasy";
 import IMService from "./assets/lib/imservice"
 
@@ -32,6 +32,8 @@ import Vue3CountryIntl from 'vue3-country-intl';
 import 'vue3-country-intl/lib/vue3-country-intl.css'
 
 import VueQrcode from '@chenfengyuan/vue-qrcode';
+
+import VueClipboard from 'vue-clipboard2'
 
 const messages = {
     en: {
@@ -74,6 +76,10 @@ app.use(VTypical, {
     /* options */
 })
 app.use(VueSocialSharing)
+
+VueClipboard.config.autoSetContainer = true // add this line
+
+app.use(VueClipboard)
 
 // let gAuthClientId = '898474067102-m3svsfqjshsqcuv2dde0sbmlb1rsq0ca.apps.googleusercontent.com'
 // const gAuthOptions = {clientId:gAuthClientId,scope:'email',prompt:'consent',fetch_basic_profile:false}
@@ -155,14 +161,15 @@ app.config.globalProperties.$filters = {
         // console.log(value)
         if(value){
             let valueParse = JSON.parse(value)
+            console.log(valueParse)
             let str = ''
-            let countryNameEn = valueParse.country_name_en
+            let countryNameEn = valueParse.country_name_en ? valueParse.country_name_en : ''
             // let countryNameCn = valueParse.country_name_cn
-            let provinceNameEn = valueParse.province_name_en
+            let provinceNameEn = valueParse.province_name_en ? valueParse.province_name_en : ''
             // let provinceNameCn  = valueParse.province_name_cn
-            let cityNameEn = valueParse.city_name_en
+            let cityNameEn = valueParse.city_name_en ? valueParse.city_name_en : ''
             // let cityNameCn = valueParse.city_name_cn
-            let districtNameEn = valueParse.district_name_en
+            let districtNameEn = valueParse.district_name_en ? valueParse.district_name_en : ''
             // let districtNameCn = valueParse.district_name_cn
 
             if(countryNameEn){

@@ -47,6 +47,12 @@
 }
 
 @font-face {
+    font-family: 'BExtraBold';
+    src: url("Barlow/Barlow-ExtraBold.ttf");
+}
+
+
+@font-face {
     font-family: 'BCBold';
     src: url("BarlowCondensed/BarlowCondensed-Bold.ttf");
 }
@@ -70,4 +76,9 @@
 @font-face {
     font-family: 'Assistant-SemiBold';
     src: url("Assistant/static/Assistant-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: 'Assistant-Medium';
+    src: url("Assistant/static/Assistant-Medium.ttf");
 }

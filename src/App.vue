@@ -1,7 +1,5 @@
 <template>
-<!--  <div :style="styleValue">-->
-<!--    <router-view></router-view>-->
-<!--  </div>-->
+
   <div style="max-width:1920px;margin:0 auto;">
     <router-view></router-view>
   </div>
@@ -11,20 +9,22 @@
 <script>
 // import DevicePixelRatio from '@/assets/devicePixelRatio'
 // onMounted
-import {ref  } from 'vue'
+// import {ref  } from 'vue'
+
 export default {
   name: 'App',
   components: {
 
   },
   setup(){
-    const envName = process.env.VUE_APP_ENV_NAME
 
-    const styleValue = ref('')
-
-    if(envName === 'development' || envName === 'developmentCN' || envName === 'productionCN'){
-       styleValue.value = 'max-width:1920px;margin:0 auto;'
-    }
+    // const envName = process.env.VUE_APP_ENV_NAME
+    //
+    // const styleValue = ref('')
+    //
+    // if(envName === 'development' || envName === 'developmentCN' || envName === 'productionCN'){
+    //    styleValue.value = 'max-width:1920px;margin:0 auto;'
+    // }
 
     // const bodyScale = () => {
     //   let devicewidth = document.documentElement.clientWidth;//获取当前分辨率下的可是区域宽度
@@ -43,10 +43,10 @@ export default {
     //   // }
     //   bodyScale();
     // })
-
-    return {
-      styleValue
-    }
+    //
+    // return {
+    //   styleValue
+    // }
 
   },
   data(){
@@ -69,17 +69,17 @@ html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, l
 
 h1{
   font-size: 45px;
-  font-family: BCSemiBold,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
+  font-family: BSemiBold,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
 }
 
 h2{
   font-size: 35px;
-  font-family: BCSemiBold, 'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
+  font-family: BSemiBold, 'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
 }
 
 h3{
   font-size: 30px;
-  font-family: BCSemiBold,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
+  font-family: BSemiBold,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
 }
 h4{
   font-size: 24px;

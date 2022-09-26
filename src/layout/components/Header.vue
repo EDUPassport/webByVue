@@ -18,14 +18,14 @@
 
           <el-col :xs="0" :sm="0" :md="0" :lg="14" :xl="14">
             <div class="nav-link-container">
-              <router-link to="/home" exact>Home</router-link>
+
               <router-link to="/jobs" exact>Jobs</router-link>
               <router-link to="/deals" exact> EDU Deals</router-link>
               <router-link to="/events/list" exact> Events</router-link>
-              <span class="zoho-blog-menu" @click="turnZohoBlog()">Blog</span>
-              <router-link to="/contact/us" exact> Contact</router-link>
-              <router-link to="/about/us" exact> About</router-link>
-              <router-link to="/services/price" exact> Pricing</router-link>
+<!--              <span class="zoho-blog-menu" @click="turnZohoBlog()">Blog</span>-->
+<!--              <router-link to="/contact/us" exact> Contact</router-link>-->
+<!--              <router-link to="/about/us" exact> About</router-link>-->
+<!--              <router-link to="/services/price" exact> Pricing</router-link>-->
               <template v-if="envName === 'development' || envName === 'production'">
               <span v-if="!identity || identity == 1"
                     class="nav-china-jobs" @click="turnEnvJobs()">China Jobs</span>
@@ -334,9 +334,7 @@
                 size="60%"
 
             >
-              <div class="nav-link-item">
-                <router-link to="/home" exact>Home</router-link>
-              </div>
+
               <div class="nav-link-item">
                 <router-link to="/jobs" exact>Jobs</router-link>
               </div>
@@ -349,18 +347,18 @@
               <!--              <div class="nav-link-item">-->
               <!--                <router-link to="/industry/news" exact>News</router-link>-->
               <!--              </div>-->
-              <div class="nav-link-item">
-                <span class="zoho-blog-menu-2" @click="turnZohoBlog()">Blog</span>
-              </div>
-              <div class="nav-link-item">
-                <router-link to="/contact/us" exact> Contact</router-link>
-              </div>
-              <div class="nav-link-item">
-                <router-link to="/about/us" exact> About</router-link>
-              </div>
-              <div class="nav-link-item">
-                <router-link to="/services/price" exact> Pricing</router-link>
-              </div>
+<!--              <div class="nav-link-item">-->
+<!--                <span class="zoho-blog-menu-2" @click="turnZohoBlog()">Blog</span>-->
+<!--              </div>-->
+<!--              <div class="nav-link-item">-->
+<!--                <router-link to="/contact/us" exact> Contact</router-link>-->
+<!--              </div>-->
+<!--              <div class="nav-link-item">-->
+<!--                <router-link to="/about/us" exact> About</router-link>-->
+<!--              </div>-->
+<!--              <div class="nav-link-item">-->
+<!--                <router-link to="/services/price" exact> Pricing</router-link>-->
+<!--              </div>-->
 
               <div class="nav-link-item">
                 <template v-if="envName === 'development' || envName === 'production'">
@@ -459,7 +457,7 @@ export default {
   },
   watch:{
     allIdentityChanged(newValue){
-      console.log(newValue)
+      console.log('header all ' + newValue)
       if(newValue){
         this.getAllIdentity()
         this.getBasicInfo(this.identity)
@@ -497,7 +495,7 @@ export default {
 
   },
   mounted() {
-    // console.log(this.allIdentityChanged)
+
     let identity = localStorage.getItem('identity')
     let token = localStorage.getItem('token')
     this.token = token;
@@ -675,6 +673,7 @@ export default {
           let companyIdValue = res.message.return_company_id
           this.$store.commit('identity', identityValue)
           this.$store.commit('allIdentityChanged',true )
+
           localStorage.setItem('identity',identityValue)
           localStorage.setItem('company_id',companyIdValue)
 
@@ -683,7 +682,7 @@ export default {
           this.getUserMenuList(uid,identityValue,companyIdValue,uid)
 
           setTimeout(function () {
-            self.$router.push({path:'/overview',query:{identity:identityValue}})
+            self.$router.push({path:'/overview',query:{}})
             self.$loading().close()
           },1200)
           // window.location.reload()
@@ -727,7 +726,7 @@ export default {
       // console.log(companyId)
       if(companyId && companyId != '0' ){
         this.changeIdentity(companyId,identity,2)
-        this.$router.push({path: '/overview', query: {identity: identity}})
+        this.$router.push({path: '/overview', query: {}})
 
         this.$loading().close()
 
@@ -923,7 +922,7 @@ export default {
           if (isEducator > 10) {
             educatorContact =  res.message.user_contact.educator_contact;
             this.changeIdentity(educatorContact.id,1,2)
-            this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$router.push({path: '/overview', query: {}})
             this.$loading().close()
           } else {
             this.$loading().close()
@@ -941,16 +940,14 @@ export default {
 
             companyInfo = res.message.user_contact.company;
             this.changeIdentity(companyInfo.id,2,2)
-            this.$router.push({path: '/overview', query: {identity: identity}})
-            // this.$router.push({path: '/profile/contact/user', query: {i: 2}})
+            this.$router.push({path: '/overview',query:{}})
             this.$loading().close()
+
           } else {
             this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            // this.$router.push({path: '/profile/contact/user', query: {i: 2}})
             this.$router.push({path: '/business/edit/recruiter', query: {i: 2}})
-
             this.dialogBusinessAccountVisible = false
+
           }
         }
 
@@ -960,7 +957,7 @@ export default {
 
             companyInfo = res.message.user_contact.company;
             this.changeIdentity(companyInfo.id,3,2)
-            this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$router.push({path: '/overview', query: {}})
             // this.$router.push({path: '/profile/contact/user', query: {i: 3}})
             this.$loading().close()
           } else {
@@ -980,7 +977,7 @@ export default {
             companyInfo = res.message.user_contact.company;
 
             this.changeIdentity(companyInfo.id,4,2)
-            this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$router.push({path: '/overview', query: {}})
             this.$loading().close()
           } else {
             this.$loading().close()
@@ -999,7 +996,7 @@ export default {
 
             companyInfo = res.message.user_contact.company;
             this.changeIdentity(companyInfo.id,5,2)
-            this.$router.push({path: '/overview', query: {identity: 5}})
+            this.$router.push({path: '/overview', query: {}})
             this.$loading().close()
           } else {
             this.$loading().close()
@@ -1040,8 +1037,9 @@ export default {
           this.$store.commit('menuData', res.message)
 
           this.getBasicInfo(identity)
+
           this.$router.push({
-            path: '/overview', query: {identity: identity}
+            path: '/overview', query: {}
           })
 
           this.$loading().close()
@@ -1054,7 +1052,7 @@ export default {
 
     },
     getUserMenuList(uid,identity,companyId,cId){
-      let self = this;
+
       let params = {
         user_id:uid,
         identity:identity,
@@ -1066,10 +1064,10 @@ export default {
       USER_MENU_LIST(params).then(res=>{
         // console.log(res)
         if(res.code === 200){
-          let pcAllData = res.message.pc;
-          let sData = pcAllData.filter(item=>item.identity == self.identity)
-          this.$store.commit('menuData', sData)
-          // localStorage.setItem('menuData',res.message.pc)
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData',str)
+
+          this.$store.commit('menuData', res.message)
         }
       }).catch(err=>{
         console.log(err)
@@ -1128,6 +1126,7 @@ export default {
   position: relative;
   width: 60px;
   height: 60px;
+  cursor: pointer;
 }
 
 
@@ -1246,7 +1245,7 @@ export default {
 }
 
 .router-link-exact-active {
-  background-color: #00b3d2;
+  background-color: #6650B3;
   color: #ffffff !important;
   padding: 10px 20px;
   border-radius: 4px;
@@ -1285,7 +1284,7 @@ export default {
 }
 
 .xll-more-company-dropdown-r {
-  //padding-right: 10px;
+
 }
 
 .xll-dropdown-item {
@@ -1360,19 +1359,16 @@ export default {
 .login-btn {
   font-size: 14px;
   text-decoration: none;
-  color: #00b3d2;
+
   font-weight: bold;
   padding: 0 10px;
   display: none;
 }
 
 .sign-up-btn {
-  background-color: #B1C452;
   color: #FFFFFF;
   font-weight: bold;
   font-size: 14px;
-  display: none;
-  border: 1px solid #B1C452;
 }
 
 .nav-link-item {
