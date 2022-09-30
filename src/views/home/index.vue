@@ -1,56 +1,357 @@
 <template>
   <div class="bg">
     <el-row class="t-container" :gutter="0" align="middle" justify="center">
-      <el-col :span="8"></el-col>
+      <el-col :span="7">
+        <div class="nav-link-container">
+
+          <router-link to="/jobs" exact>Jobs</router-link>
+          <router-link to="/deals" exact> EDU Deals</router-link>
+          <router-link to="/events/list" exact> Events</router-link>
+
+<!--          <template v-if="envName === 'development' || envName === 'production'">-->
+<!--              <span v-if="!identity || identity == 1"-->
+<!--                    class="nav-china-jobs" @click="turnEnvJobs()">China Jobs</span>-->
+<!--          </template>-->
+<!--          <template v-if="envName === 'developmentCN' || envName === 'productionCN'">-->
+<!--              <span v-if="!identity || identity == 1"-->
+<!--                    class="nav-china-jobs" @click="turnEnvJobs()">International Jobs</span>-->
+<!--          </template>-->
+
+        </div>
+
+      </el-col>
       <el-col :span="8">
-        <div class="logo-container">
-          <div class="logo-logo" @click="turnHome()">
-            <div class="logo-edu">EDU</div>
-            <div class="logo-passport">PASSPORT</div>
-          </div>
-          <div class="logo-beta">Beta</div>
-        </div>
-
-      </el-col>
-
-      <el-col class="t-btn-container" :span="8">
-
-        <el-button link @click="login()">
-          LOGIN
-        </el-button>
-        <el-button type="primary" round @click="signUp()">
-          SIGN UP
-        </el-button>
-
-      </el-col>
-    </el-row>
-
-    <el-row class="a-row-container" :gutter="0" justify="center" align="middle">
-      <el-col :span="10">
-        an <span>all-in-one</span> education hub
-      </el-col>
-    </el-row>
-
-    <el-row class="b-row-container" :gutter="0" justify="center" align="middle">
-      <el-col :span="6">
-        Educators can search and quickly apply for jobs, track their application status, connect with recruiters, and
-        manage their resume all in one place without switching between tabs.
-      </el-col>
-    </el-row>
-
-    <el-row class="c-row-container" :gutter="0" justify="center" align="middle">
-      <el-col :span="24" class="c-col-container">
-        <div class="c-container">
-          <el-image :src="dashboardDemoImg"></el-image>
-        </div>
-
-<!--        <div class="c-tips">-->
-<!--          For a demonstration purpose only. Includes features and designs that may be in development. Actual dashboard-->
-<!--          may look differently.-->
+<!--        <div class="logo-container">-->
+<!--          <div class="logo-logo" @click="turnHome()">-->
+<!--            <div class="logo-edu">EDU</div>-->
+<!--            <div class="logo-passport">PASSPORT</div>-->
+<!--          </div>-->
+<!--          <div class="logo-beta">Beta</div>-->
 <!--        </div>-->
 
+        <div class="logo-new-container">
+          <div class="logo-new">
+            <el-image class="logo-new-logo-img" :src="logoImgLight"></el-image>
+          </div>
+        </div>
+
+      </el-col>
+
+      <el-col class="t-btn-container" :span="7">
+
+        <template v-if="token">
+          <el-button class="home-profile-btn" type="primary" link @click="turnDashboard()">
+            PROFILE
+            <el-icon>
+              <arrowRight></arrowRight>
+            </el-icon>
+          </el-button>
+        </template>
+        <template v-else>
+          <el-button link @click="login()">
+            LOGIN
+          </el-button>
+          <el-button type="primary" round @click="signUp()">
+            SIGN UP
+          </el-button>
+        </template>
+
+
       </el-col>
     </el-row>
+
+    <el-row :gutter="0" justify="center" align="middle">
+
+      <el-col class="f-col-container" :span="24">
+
+        <div class="f-label">
+          an <span>all-in-one</span> hub for
+        </div>
+
+        <div class="f-tabs">
+
+          <div class="f-tab f-tab-e"
+               @click="checkedIdentityType(1)"
+               :class="selectIdentityType === 1 ? 'f-tab-active' : '' "
+          >
+            EDUCATORS
+          </div>
+          <div class="f-tab f-tab-b"
+               @click="checkedIdentityType(2)"
+               :class="selectIdentityType === 2 ? 'f-tab-active' : '' "
+          >
+            EDUCATIONAL BUSINESSES
+          </div>
+          <div class="f-tab f-tab-v"
+               @click="checkedIdentityType(3)"
+               :class="selectIdentityType === 3 ? 'f-tab-active' : '' "
+          >
+            VENDORS
+          </div>
+
+          <div v-show="selectIdentityType === 1" class="f-tab-bg f-tab-bg-t-1"></div>
+          <div v-show="selectIdentityType === 2" class="f-tab-bg f-tab-bg-t-2"></div>
+          <div v-show="selectIdentityType === 3" class="f-tab-bg f-tab-bg-t-3"></div>
+
+        </div>
+
+<!--        educator    -->
+        <div class="f-c"
+             :class="selectIdentityType === 1 ? 'f-c-active' : ''"
+             v-if="selectIdentityType ===  1">
+          <div class="f-c-l">
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(1)">
+              <div class="f-c-l-item-l">
+                <div class="f-c-l-item-label">
+                  easy way to connect with fellow educators
+                </div>
+                <p>
+                  We partner up with local vendors to support educators, promote educator-centric events, and offer
+                  exclusive deals to our EDU Passport members.
+                </p>
+
+              </div>
+              <div class="f-c-l-item-r" v-if="selectItemValue === 1">
+                <el-icon :size="80" color="#9173ff" >
+                  <IconBiChevronCompactRight />
+                </el-icon>
+              </div>
+
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 1"></div>
+            </div>
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(2)">
+              <div class="f-c-l-item-l">
+                <div class="f-c-l-item-label">
+                  matchmaking for you and your ideal job
+                </div>
+                <p>
+                  Being educator-centric allows us to suggest the jobs that match educators’ specific requirements and
+                  experience.
+
+                </p>
+
+              </div>
+              <div class="f-c-l-item-r" v-if="selectItemValue === 2">
+                <el-icon :size="80" color="#9173ff" >
+                  <IconBiChevronCompactRight />
+                </el-icon>
+              </div>
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 2"></div>
+
+            </div>
+
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 3 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(3)">
+              <div class="f-c-l-item-l">
+                <div class="f-c-l-item-label">
+                  having a personal legal support
+                </div>
+                <p>
+                  Living abroad often means facing challenges alone, but it doesn’t have to be that way. Your dedicated
+                  account manager is only a click or tap away from providing you legal and visa support.
+                </p>
+
+              </div>
+              <div class="f-c-l-item-r" v-if="selectItemValue === 3">
+                <el-icon :size="80" color="#9173ff" >
+                  <IconBiChevronCompactRight />
+                </el-icon>
+              </div>
+
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 3"></div>
+
+            </div>
+
+            <div class="f-c-btn-container">
+              <el-button type="primary" round @click="signUp()">SIGN UP</el-button>
+            </div>
+
+          </div>
+
+          <div class="f-c-r">
+            <template v-if="selectItemValue === 1">
+              <el-image class="f-c-r-img-edu" fit="cover" :src="dealsDemoImg"></el-image>
+            </template>
+            <template v-if="selectItemValue === 2">
+              <el-image class="f-c-r-img" fit="contain" :src="jobMatchDemoImg"></el-image>
+            </template>
+            <template v-if="selectItemValue === 3">
+              <el-image class="f-c-r-img" fit="contain" :src="chatDemoImg"></el-image>
+            </template>
+
+          </div>
+        </div>
+
+
+        <div class="f-c"
+             :class="selectIdentityType === 2 ? 'f-c-active' : ''"
+             v-if="selectIdentityType === 2">
+          <div class="f-c-l">
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(1)">
+              <div class="f-c-l-item-l">
+                <div class="f-c-l-item-label">
+                  tracking all applications with ease
+                </div>
+                <p>
+                  Whether you have 2 applicants or a 102, you will never get confused who is applying for which job, and
+                  who you’re going to interview.
+                </p>
+
+              </div>
+              <div class="f-c-l-item-r" v-if="selectItemValue === 1">
+                <el-icon :size="80" color="#9173ff" >
+                  <IconBiChevronCompactRight />
+                </el-icon>
+              </div>
+
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 1"></div>
+            </div>
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(2)">
+              <div class="f-c-l-item-l">
+                <div class="f-c-l-item-label">
+                  matchmaking for you and your next hire
+                </div>
+                <p>
+                  Being educator-centric allows us to suggest the right candidates matching your job requirements.
+
+                </p>
+
+              </div>
+              <div class="f-c-l-item-r" v-if="selectItemValue === 2">
+                <el-icon :size="80" color="#9173ff" >
+                  <IconBiChevronCompactRight />
+                </el-icon>
+              </div>
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 2"></div>
+
+            </div>
+
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 3 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(3)"
+                 v-if="selectIdentityType !== 3">
+              <div class="f-c-l-item-l">
+                <div class="f-c-l-item-label">
+                  a direct line to your candidates
+                </div>
+                <p>
+                  Hire high-quality candidates faster by contacting them directly to get important questions answered
+                  quickly.
+                </p>
+
+              </div>
+              <div class="f-c-l-item-r" v-if="selectItemValue === 3">
+                <el-icon :size="80" color="#9173ff" >
+                  <IconBiChevronCompactRight />
+                </el-icon>
+              </div>
+
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 3"></div>
+
+            </div>
+
+            <div class="f-c-btn-container">
+              <el-button type="primary" round @click="signUp()">SIGN UP</el-button>
+            </div>
+
+          </div>
+
+          <div class="f-c-r">
+
+            <template v-if="selectItemValue === 1">
+              <el-image class="f-c-r-img" fit="contain" :src="applicationsDemoImg"></el-image>
+            </template>
+            <template v-if="selectItemValue === 2">
+              <el-image class="f-c-r-img" fit="contain" :src="applicantMatchDemoImg"></el-image>
+            </template>
+            <template v-if="selectItemValue === 3">
+              <el-image class="f-c-r-img" fit="contain" :src="chatEducatorDemoImg"></el-image>
+            </template>
+
+          </div>
+        </div>
+
+        <div class="f-c"
+             :class="selectIdentityType === 3 ? 'f-c-active' : ''"
+             v-if="selectIdentityType === 3">
+
+          <div class="f-c-l">
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(1)">
+              <div class="f-c-l-item-l">
+                <div class="f-c-l-item-label">
+                  join our mission to support educators
+                </div>
+                <p>
+                  Our mission is to make access to a better education easier by helping educators work and live abroad.
+                  We believe having safe spaces where educators can meet their peers is crucial for building
+                  connections.
+                </p>
+
+              </div>
+              <div class="f-c-l-item-r" v-if="selectItemValue === 1">
+                <el-icon :size="80" color="#9173ff" >
+                  <IconBiChevronCompactRight />
+                </el-icon>
+              </div>
+
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 1"></div>
+            </div>
+            <div class="f-c-l-item"
+                 :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''"
+                 @click="checkedItem(2)">
+              <div class="f-c-l-item-l">
+                <div class="f-c-l-item-label">
+
+                  promote your business
+                </div>
+                <p>
+                  Let our team of marketing wizards help you connect with your audience and grow your business.
+
+                </p>
+
+              </div>
+              <div class="f-c-l-item-r" v-if="selectItemValue === 2">
+                <el-icon :size="80" color="#9173ff" >
+                  <IconBiChevronCompactRight />
+                </el-icon>
+              </div>
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 2"></div>
+
+            </div>
+
+            <div class="f-c-btn-container">
+              <el-button type="primary" round @click="signUp()">SIGN UP</el-button>
+            </div>
+
+          </div>
+
+          <div class="f-c-r">
+
+            <template v-if="selectItemValue === 1">
+              <el-image class="f-c-r-img" fit="contain" :src="supportImg"></el-image>
+            </template>
+            <template v-if="selectItemValue === 2">
+              <el-image class="f-c-r-img" fit="contain" :src="promotionImg"></el-image>
+            </template>
+
+          </div>
+        </div>
+
+
+      </el-col>
+    </el-row>
+
 
 
     <el-row class="d-row-container" :gutter="0" justify="center">
@@ -65,162 +366,56 @@
           <div class="d-c-bg">
 
           </div>
+          <div>
+            <el-button type="primary" round @click="searchJobs()">
+              SEARCH JOBS
+            </el-button>
+          </div>
         </div>
       </el-col>
     </el-row>
 
-    <el-row :gutter="0" justify="center" align="middle">
+    <el-row class="a-row-container" :gutter="0" justify="center" align="middle">
+      <el-col :span="10">
+        and so <span>much more</span>
+      </el-col>
+    </el-row>
 
-      <el-col class="f-col-container" :span="24">
-
-        <div class="f-label">
-          EDU Passport is so <span>much more</span>
+    <el-row class="b-row-container" :gutter="0" justify="center" align="middle">
+      <el-col :span="6">
+        <div class="s-tips" v-if="selectIdentityType === 1">
+          Search and quickly apply for jobs Receive jobs that match your profile Track your application updates.
         </div>
-
-        <div class="f-tabs">
-          <div class="f-tab"
-               @click="checkedIdentityType(1)"
-               :class="selectIdentityType === 1 ? 'f-tab-active' : '' "
-          >
-            EDUCATORS
-          </div>
-          <div class="f-tab"
-               @click="checkedIdentityType(2)"
-               :class="selectIdentityType === 2 ? 'f-tab-active' : '' "
-          >
-            EDUCATIONAL BUSINESSES
-          </div>
-          <div class="f-tab"
-               @click="checkedIdentityType(3)"
-               :class="selectIdentityType === 3 ? 'f-tab-active' : '' "
-          >
-            VENDORS
-          </div>
+        <div class="s-tips" v-if="selectIdentityType === 2">
+          A birds-eye view of all applicants and job posts Contact candidates directly in dashboard Recommended applicants that match your job descriptions
         </div>
-
-        <div class="f-c">
-          <div class="f-c-l">
-            <div class="f-c-l-item"
-                 :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''"
-                 @click="checkedItem(1)">
-              <div class="f-c-l-item-label">
-                <template v-if="selectIdentityType === 1">
-                  easy way to connect with fellow educators
-                </template>
-                <template v-if="selectIdentityType === 2">
-                  tracking all applications with ease
-                </template>
-                <template v-if="selectIdentityType === 3">
-                  join our mission to support educators
-                </template>
-              </div>
-              <p>
-                <template v-if="selectIdentityType === 1">
-                  We partner up with local vendors to support educators, promote educator-centric events, and offer
-                  exclusive deals to our EDU Passport members.
-                </template>
-                <template v-if="selectIdentityType === 2">
-                  Whether you have 2 applicants or a 102, you will never get confused who is applying for which job, and
-                  who you’re going to interview.
-                </template>
-                <template v-if="selectIdentityType === 3">
-                  Our mission is to make access to a better education easier by helping educators work and live abroad.
-                  We believe having safe spaces where educators can meet their peers is crucial for building
-                  connections.
-                </template>
-              </p>
-            </div>
-            <div class="f-c-l-item"
-                 :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''"
-                 @click="checkedItem(2)">
-              <div class="f-c-l-item-label">
-
-                <template v-if="selectIdentityType === 1">
-                  matchmaking for you and your ideal job
-                </template>
-                <template v-if="selectIdentityType === 2">
-                  matchmaking for you and your next hire
-                </template>
-                <template v-if="selectIdentityType === 3">
-                  promote your business
-                </template>
-              </div>
-              <p>
-                <template v-if="selectIdentityType === 1">
-                  Being educator-centric allows us to suggest the jobs that match educators’ specific requirements and
-                  experience.
-                </template>
-                <template v-if="selectIdentityType === 2">
-                  Being educator-centric allows us to suggest the right candidates matching your job requirements.
-                </template>
-                <template v-if="selectIdentityType === 3">
-                  Let our team of marketing wizards help you connect with your audience and grow your business.
-                </template>
-
-              </p>
-            </div>
-
-            <div class="f-c-l-item"
-                 :class="selectItemValue === 3 ? 'f-c-l-item-active' : ''"
-                 @click="checkedItem(3)"
-                 v-if="selectIdentityType !== 3">
-              <div class="f-c-l-item-label">
-                <template v-if="selectIdentityType === 1">
-                  having a personal legal support
-                </template>
-                <template v-if="selectIdentityType === 2">
-                  a direct line to your candidates
-                </template>
-              </div>
-              <p>
-                <template v-if="selectIdentityType === 1">
-                  Living abroad often means facing challenges alone, but it doesn’t have to be that way. Your dedicated
-                  account manager is only a click or tap away from providing you legal and visa support.
-                </template>
-                <template v-if="selectIdentityType === 2">
-                  Hire high-quality candidates faster by contacting them directly to get important questions answered
-                  quickly.
-                </template>
-              </p>
-            </div>
-
-            <div class="f-c-btn-container">
-              <el-button type="primary" round @click="signUp()">SIGN UP</el-button>
-            </div>
-
-          </div>
-          <div class="f-c-r">
-            <template v-if="selectIdentityType === 1 && selectItemValue === 1">
-              <el-image class="f-c-r-img" fit="cover" :src="dealsDemoImg"></el-image>
-            </template>
-            <template v-if="selectIdentityType === 1 && selectItemValue === 2">
-              <el-image class="f-c-r-img" fit="cover" :src="jobMatchDemoImg"></el-image>
-            </template>
-            <template v-if="selectIdentityType === 1 && selectItemValue === 3">
-              <el-image class="f-c-r-img" fit="cover" :src="chatDemoImg"></el-image>
-            </template>
-            <template v-if="selectIdentityType === 2 && selectItemValue === 1">
-              <el-image class="f-c-r-img" fit="cover" :src="applicationsDemoImg"></el-image>
-            </template>
-            <template v-if="selectIdentityType === 2 && selectItemValue === 2">
-              <el-image class="f-c-r-img" fit="cover" :src="applicantMatchDemoImg"></el-image>
-            </template>
-            <template v-if="selectIdentityType === 2 && selectItemValue === 3">
-              <el-image class="f-c-r-img" fit="cover" :src="chatEducatorDemoImg"></el-image>
-            </template>
-            <template v-if="selectIdentityType === 3 && selectItemValue === 1">
-              <el-image class="f-c-r-img" fit="cover" :src="supportImg"></el-image>
-            </template>
-            <template v-if="selectIdentityType === 3 && selectItemValue === 2">
-              <el-image class="f-c-r-img" fit="cover" :src="promotionImg"></el-image>
-            </template>
-
-          </div>
+        <div class="s-tips" v-if="selectIdentityType === 3">
+          Promote your business and support educators Review performance metrics of your events and deals
         </div>
-
 
       </el-col>
     </el-row>
+
+    <el-row class="c-row-container" :gutter="0" justify="center" align="middle">
+      <el-col :span="24" class="c-col-container">
+        <div class="c-container" v-if="selectIdentityType === 1">
+          <el-image :src="dashboardDemoImg"></el-image>
+        </div>
+        <div class="c-container" v-if="selectIdentityType === 2">
+          <el-image :src="dashboardBDemoImg"></el-image>
+        </div>
+        <div class="c-container" v-if="selectIdentityType === 3">
+          <el-image :src="dashboardVDemoImg"></el-image>
+        </div>
+
+        <!--        <div class="c-tips">-->
+        <!--          For a demonstration purpose only. Includes features and designs that may be in development. Actual dashboard-->
+        <!--          may look differently.-->
+        <!--        </div>-->
+
+      </el-col>
+    </el-row>
+
 
     <el-row :gutter="0" justify="center" align="middle">
       <el-col class="s-col-container" :span="24">
@@ -290,9 +485,11 @@
 
 import imgLogo from '@/assets/logo.png'
 import imgOne from '@/assets/newHome/Landing_application-process.png'
-// import {ref, onMounted} from 'vue'
+import {ref, onMounted} from 'vue'
 // import DevicePixelRatio from '@/assets/devicePixelRatio'
 import dashboardDemoImg from '@/assets/newHome/dashboard-demo.png'
+import dashboardBDemoImg from '@/assets/newHome/dashboard-b-demo.png'
+import dashboardVDemoImg from '@/assets/newHome/dashboard-v-demo.png'
 import dealsDemoImg from '@/assets/newHome/deals-demo.png'
 import applicantMatchDemoImg from '@/assets/newHome/landing_applicant-match-demo.png'
 import applicationsDemoImg from '@/assets/newHome/landing_applications-demo.png'
@@ -304,6 +501,8 @@ import supportImg from '@/assets/newHome/landing_support.png'
 import {ADD_SUBSCRIBE_EMAIL} from "@/api/api";
 import initLoadingComponent from "@/components/initLoadingComponent";
 import homeDonghua from "@/components/homeDonghua";
+import logoImg from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.png"
+import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
 
 export default {
   name: "index",
@@ -313,6 +512,8 @@ export default {
   },
   data() {
     return {
+      logoImg,
+      logoImgLight,
       imgLogo,
       imgOne,
       dealsDemoImg,
@@ -324,39 +525,49 @@ export default {
       promotionImg,
       supportImg,
       dashboardDemoImg,
+      dashboardBDemoImg,
+      dashboardVDemoImg,
 
-      selectIdentityType: 1,
-      selectItemValue: 1,
       subscribeEmailValue: '',
-      initLoadingStatus: false
+      initLoadingStatus: false,
+      token: localStorage.getItem('token')
 
     }
   },
   setup() {
+    const selectIdentityType = ref(1)
+    const selectItemValue = ref(1)
 
-    // const styleValue = ref('')
-    //
-    // const bodyScale = () => {
-    //   let devicewidth = document.documentElement.clientWidth;//获取当前分辨率下的可是区域宽度
-    //   document.body.style.zoom =  devicewidth / 1920; //放大缩小相应倍数
-    // }
-    //
-    // onMounted(()=>{
-    //   new DevicePixelRatio().init()
-    //
-    //   window.onresize = ()=>{
-    //     console.log('resize app')
-    //     setTimeout(function () {
-    //       bodyScale();
-    //     },1000)
-    //
-    //   }
-    //   bodyScale();
-    // })
-    //
-    // return {
-    //   styleValue
-    // }
+    let a = setInterval(function (){
+
+      setTimeout(function () {
+        selectIdentityType.value = 2
+      },1000)
+
+      setTimeout(function () {
+        selectIdentityType.value  = 3
+      },3000)
+
+      setTimeout(function () {
+        selectIdentityType.value  = 1
+      },5000)
+
+    }, 7000 )
+
+    const clearTimer = ()=>{
+      window.clearInterval(a)
+    }
+
+    onMounted(()=>{
+      a
+    })
+
+    return {
+      selectIdentityType,
+      selectItemValue,
+      clearTimer
+    }
+
   },
   mounted() {
     let self = this;
@@ -397,6 +608,9 @@ export default {
     turnContactUs() {
       this.$router.push('/contact/us')
     },
+    turnDashboard(){
+      this.$router.push('/overview')
+    },
     login() {
       this.$router.push('/edupassport')
     },
@@ -406,9 +620,11 @@ export default {
     checkedIdentityType(value) {
       this.selectIdentityType = value
       this.selectItemValue = 1
+      this.clearTimer()
     },
     checkedItem(value) {
       this.selectItemValue = value;
+      this.clearTimer()
     },
     turnHome() {
       this.$router.push('/')
@@ -418,6 +634,9 @@ export default {
     },
     turnArticleLink(link) {
       window.open(link, '_blank')
+    },
+    searchJobs(){
+      this.$router.push('/jobs')
     }
 
   }
@@ -433,7 +652,19 @@ export default {
 .t-container {
   margin-top: 25px;
 }
+.logo-new-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.logo-new{
+
+}
+
+.logo-new-logo-img{
+  width: 150px;
+}
 .logo-edu {
   font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 40px;
@@ -468,12 +699,17 @@ export default {
 
 .t-btn-container {
   text-align: right;
-  padding-right: 100px;
+}
+
+.home-profile-btn{
+  color: #6648FF;
+  font-size: 28px;
 }
 
 .a-row-container {
+  background-color: #F0F2F5;
   text-align: center;
-  margin-top: 120px;
+  padding-top: 120px;
   font-size: 45px;
   font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
@@ -484,14 +720,16 @@ export default {
 
 
 .b-row-container {
+  background-color: #F0F2F5;
   text-align: center;
-  margin-top: 25px;
+  padding-top: 25px;
   font-size: 23px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .c-row-container {
-  margin-top: 50px;
+  padding-top: 50px;
+  background-color: #F0F2F5;
 }
 
 .c-col-container {
@@ -577,33 +815,96 @@ export default {
 }
 
 .f-tabs {
+
+  width: 667px;
   margin: 50px auto;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
+  z-index: 2;
+  position: relative;
+
+
 }
 
 .f-tab {
+
   color: #262626;
   font-size: 30px;
+
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   height: 40px;
   line-height: 40px;
   border-radius: 40px;
   padding: 0 25px;
-  margin-right: 10px;
+
   cursor: pointer;
+  transition: 0.15s ease-in-out;
+  z-index: 2;
 }
 
-.f-tab-active {
+.f-tab-e{
+  width: 167px;
+}
+
+.f-tab-b{
+  width: 340px;
+}
+.f-tab-v{
+  width: 130px;
+}
+
+.f-tab-bg{
+  position: absolute;
+
+  /*width: 280px;*/
+  height: 40px;
+  border-radius: 40px;
+  left: 0;
+  top: 0;
   background-color: #9173FF;
   color: #FFFFFF;
+  z-index: 1;
+  transition: all .8s;
+
+}
+
+.f-tab-bg-t-1{
+  width: 167px;
+  animation-name: slide-in-left-e;
+
+  animation-duration: .8s;
+  transform: translateX(0);
+}
+
+.f-tab-bg-t-2{
+  width: 340px;
+  transform: translateX(177px);
+  animation-name: slide-in-left-b;
+  animation-duration: .8s;
+}
+
+.f-tab-bg-t-3{
+  width: 130px;
+  transform: translateX(517px);
+  animation-name: slide-in-left-v;
+  animation-duration: .8s;
+ }
+
+
+.f-tab-active {
+  /*background-color: #9173FF;*/
+  color: #FFFFFF;
+  /*transition: all 2.3s;*/
+  /*animation-name: slide-in-left;*/
+  /*animation-duration: 2s;*/
 }
 
 .f-tab:hover {
-  background-color: #9173FF;
-  color: #FFFFFF;
+  /*background-color: #9173FF;*/
+  /*color: #FFFFFF;*/
 }
 
 .f-c {
@@ -614,6 +915,13 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding-left: 90px;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.f-c-active{
+  opacity: 1;
+
 }
 
 .f-c-l {
@@ -623,13 +931,21 @@ export default {
 
 .f-c-r {
   max-width: calc(100% - 700px);
-  height: 872px;
+  /*height: 870px;*/
 
+}
+
+.f-c-r-img-edu{
+  height: 870px;
 }
 
 .f-c-r-img {
   height: 100%;
 
+}
+
+/deep/ .f-c-r-img-edu .el-image__inner {
+  object-position: left;
 }
 
 /deep/ .f-c-r-img .el-image__inner {
@@ -641,18 +957,42 @@ export default {
   cursor: pointer;
   padding-left: 10px;
 
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  position: relative;
+
 }
 
 .f-c-l-item:hover {
-  border-left: 7px solid #6650B3;
-  border-top-left-radius: 7px;
-  border-bottom-left-radius: 7px;
+  /*border-left: 7px solid #6650B3;*/
+  /*border-top-left-radius: 7px;*/
+  /*border-bottom-left-radius: 7px;*/
+}
+
+.f-c-l-item-l{
+
+}
+.f-c-l-item-r{
+
+}
+
+.f-c-l-item-mask{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(255,255,255,.3);
 }
 
 .f-c-l-item-active {
-  border-left: 7px solid #6650B3;
-  border-top-left-radius: 7px;
-  border-bottom-left-radius: 7px;
+  /*opacity: 1;*/
+  /*border-left: 7px solid #6650B3;*/
+  /*border-top-left-radius: 7px;*/
+  /*border-bottom-left-radius: 7px;*/
 }
 
 .f-c-l-item-label {
@@ -797,5 +1137,60 @@ export default {
   font-size: 16px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
+
+
+
+.nav-link-container {
+  text-align: left;
+}
+
+.nav-link-container a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #262626;
+
+  font-size: 24px;
+  line-height: 30px;
+  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.nav-link-container a:hover {
+  color: #000000;
+}
+
+@keyframes slide-in-left-e {
+  0% {
+    transform: translateX(-167px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left-b {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  100% {
+    /*transform: translateX(167px);*/
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left-v {
+
+  0% {
+    transform: translateX(340px);
+    opacity: 0;
+  }
+  100% {
+    /*transform: translateX(340px);*/
+    opacity: 1;
+  }
+}
+
 
 </style>

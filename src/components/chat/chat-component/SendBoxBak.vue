@@ -1,26 +1,49 @@
 <template>
   <div class="send-box">
-
-    <div class="send-box-l">
+    <div class="send-box-top">
+<!--      <div class="send-box-item" >-->
+<!--        <GoEasyRecorder @onComplete="onRecordComplete" />-->
+<!--      </div>-->
+      <div class="send-box-item" @click="showEmoji">
+        <i class="iconfont el-icon-alismile emoji-icon"></i>
+      </div>
+      <div class="send-box-item" @change="chooseImage">
+        <el-icon><Picture /></el-icon>
+        <input type="file" @change="chooseImage" class="img-input" ref="imgInput">
+      </div>
+      <div class="send-box-item" @change="chooseVideo">
+        <el-icon><VideoCamera /></el-icon>
+        <input type="file" @change="chooseVideo" class="img-input" ref="videoInput">
+      </div>
       <div class="send-box-item" @change="chooseFile">
         <el-icon><Folder /></el-icon>
         <input type="file" @change="chooseFile" class="img-input" ref="fileInput">
       </div>
-    </div>
-    <div class="send-box-m">
-      <el-input class="message-input"
-                type="textarea"
-                :rows="1"
-                placeholder="Type your message here"
-                @focus="messageInputFocusin"
-                v-model="content">
-      </el-input>
-    </div>
 
-    <div class="send-box-r">
+    </div>
+    <div class="send-box-textarea">
+      <el-input class="message-input" type="textarea" maxlength="700" placeholder="Send Message"
+                @focus="messageInputFocusin"
+                v-model="content"></el-input>
+    </div>
+    <div class="action-icon-container">
       <el-button class="send-btn" link round  @click="sendTextMessage">Send</el-button>
     </div>
 
+    <div class="send-box-bottom" v-if="emoji.show || more.show">
+      <div class="emoji-container" v-if="emoji.show">
+        <el-image class="emoji-item"
+                  v-for="(emojiItem, emojiKey, index) in emoji.map"
+                  :key="index"
+                  :src="emoji.url + emojiItem"
+                  @click="selectEmoji(emojiKey)"/>
+      </div>
+      <!--      <div class="more-container" v-if="more.show">-->
+      <!--        <div class="more-item" @click="showCustomMessageForm">-->
+      <!--          <span>自定义消息</span>-->
+      <!--        </div>-->
+      <!--      </div>-->
+    </div>
   </div>
 </template>
 
@@ -162,13 +185,13 @@ export default {
         });
 
         this.sendMessage(textMessage);
-
+        this.$emit('onSent');
         this.content = ''
 
       }
     },
     sendMessage(message) {
-      let self = this;
+
       let toId = this.to.uuid;
 
       let localHistory = this.type === 'private' ? this.service.getPrivateMessages(toId) : this.service.getGroupMessages(toId);
@@ -179,7 +202,6 @@ export default {
         message: message,
         onSuccess: function (message) {
           console.log("发送成功.", message);
-          self.$emit('onSent',localHistory);
         },
         onFailed: function (error) {
           console.log("发送失败:", error);
@@ -215,52 +237,5 @@ export default {
 </script>
 
 <style scoped>
-/*@import "./sendBox.css";*/
-.send-box{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
-  background-color: #F0F2F5;
-
-}
-
-.send-box-l{
-  width: 130px;
-  text-align: center;
-}
-
-.send-box-m{
-  width: calc(100% - 290px);
-
-}
-.send-box-r{
-  width: 160px;
-  text-align: center;
-}
-
-.send-btn{
-  font-size: 30px;
-}
-
-
-.img-input{
-  position: absolute;
-  width: 130px;
-  height: 100%;
-  top:0;
-  left:0;
-  opacity: 0;
-}
-
-/deep/ .el-textarea__inner{
-  height: 50px;
-}
-
+@import "./sendBox.css";
 </style>

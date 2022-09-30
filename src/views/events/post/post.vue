@@ -12,12 +12,12 @@
             <div class="new-deal-t-l">New event</div>
             <div class="new-deal-t-r">
 
-              <el-button class="new-deal-btn" link round>
+              <el-button class="new-deal-btn" link round @click="discard()">
                 DISCARD
               </el-button>
-              <el-button class="new-deal-btn" plain round>
-                SAVE AS DRAFT
-              </el-button>
+<!--              <el-button class="new-deal-btn" plain round>-->
+<!--                SAVE AS DRAFT-->
+<!--              </el-button>-->
               <el-button class="new-deal-btn"
                          type="primary"
                          round
@@ -403,6 +403,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import ImageCompressor from 'compressorjs'
+import {decode} from 'js-base64'
 
 export default {
   name: "post",
@@ -580,10 +581,23 @@ export default {
     }
   },
   mounted() {
+
+    let str = this.$route.query.str;
+    if(str){
+      let editStr = JSON.parse(decode(str) )
+      console.log(editStr)
+      this.basicForm = Object.assign({},editStr)
+      this.basicForm.event_id = editStr.id;
+      this.flyerPhotoUrl = editStr.file;
+      this.companyLogoPhotoUrl = editStr.third_company_logo;
+
+    }
+
     this.getAllCountry()
     this.getUserObjectList()
     this.getEventCategories()
     this.getEventsTags()
+
   },
   methods: {
 
@@ -976,6 +990,9 @@ export default {
           this.$message.error(err.message)
         }
       })
+    },
+    discard(){
+      this.$router.go(-1)
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

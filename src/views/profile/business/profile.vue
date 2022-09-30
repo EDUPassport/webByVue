@@ -1,39 +1,70 @@
 <template>
-  <div class="bg">
-    <div class="educator-container">
 
-      <div class="educator-l-container">
-        <meSideMenu></meSideMenu>
-      </div>
-      <div class="educator-r-container">
+  <div class="business-profile-container">
 
-        <div class="educator-r-container-bg">
-          <businessProfile :canEdit="true" :info="companyInfo" :identity="identity"></businessProfile>
-        </div>
-
-      </div>
+    <div class="business-profile-l">
+      <meSideMenu></meSideMenu>
     </div>
 
+    <div class="business-profile-r">
+
+      <el-row :gutter="0" align="top" justify="space-between">
+
+        <el-col :xs="22" :sm="22" :md="8" :lg="9" :xl="8">
+
+          <div class="business-jobs">
+            <jobsListComponent
+                :job-list-data="otherJobsData"
+                :company-info="companyInfo"
+                :jobLimit="otherJobLimit"
+                :jobTotalNum="otherJobTotalNum"
+                :jobPage="otherJobPage"
+                :from-business-profile="true"
+                @jobDetailEvent="turnJobDetail"
+                @backToResults="backToResults"
+                @jobPageChange="otherJobPageChange"
+                @addFavorite = "addFavorite"
+                @cancelFavorite="cancelFavorite"
+            >
+            </jobsListComponent>
+          </div>
+
+        </el-col>
+
+        <el-col  :xs="22" :sm="22" :md="16" :lg="15" :xl="16">
+
+          <div class="business-profile">
+            <businessProfile :canEdit="true" :info="companyInfo" :identity="identity"></businessProfile>
+          </div>
+
+        </el-col>
+
+      </el-row>
+
+    </div>
   </div>
+
 </template>
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
 import businessProfile from "@/components/businessProfile";
+import jobsListComponent from "@/components/jobsListComponent";
 
 import {
   ZOHO_SYNC,
   USER_INFO_BY_TOKEN_V2,
   RECRUITER_PERCENTAGE_V2,
-  OTHER_PERCENTAGE_V2, SCHOOL_PERCENTAGE_V2
+  OTHER_PERCENTAGE_V2, SCHOOL_PERCENTAGE_V2, COMPANY_JOB_LIST, ADD_FAVORITE, CANCEL_FAVORITE
 } from '@/api/api'
-import {encode} from 'js-base64'
+import {decode} from 'js-base64'
 
 export default {
   name: "profile",
   components: {
     meSideMenu,
-    businessProfile
+    businessProfile,
+    jobsListComponent
 
   },
   computed:{
@@ -51,11 +82,22 @@ export default {
       companyContact:{},
       companyInfo:{},
 
+      otherJobsData:[],
+      otherJobTotalNum:0,
+      otherJobLimit:10000,
+      otherJobPage:1
+
     }
   },
   mounted() {
+    let s = this.$route.query.str;
+    if(s){
+      console.log(decode(s))
+    }
+
     this.getUserInfo()
     this.updateBusinessProfile()
+    this.getCompanyJobList(1,10000)
   },
   methods: {
     updateBusinessProfile() {
@@ -91,32 +133,6 @@ export default {
       }
 
     },
-    editBasicInfo() {
-
-      let identity = Number(localStorage.getItem('identity'))
-
-      let strObj = {
-        i:identity,
-        action:'edit'
-      }
-
-      let str = encode(JSON.stringify(strObj))
-
-      this.$router.push({path:'/profile/contact/user',query:{s:str}})
-
-    },
-    editCompanyContactInfo(){
-      let identity = Number(localStorage.getItem('identity'))
-
-      let strObj = {
-        i:identity,
-        action:'edit'
-      }
-      let str = encode(JSON.stringify(strObj))
-
-      this.$router.push({path:'/profile/contact/company',query:{s:str}})
-    },
-
     getUserInfo() {
 
       let identity = localStorage.getItem('identity')
@@ -179,7 +195,108 @@ export default {
       })
 
     },
+    getCompanyJobList(page,limit){
 
+      let userId = localStorage.getItem('uid')
+
+      let params = {
+        user_id: userId,
+        is_open: 1,
+        status:1,
+        page: page,
+        limit: limit
+      }
+
+      COMPANY_JOB_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.otherJobsData = res.message.data;
+          this.otherJobTotalNum = res.message.total;
+        }
+
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+      })
+
+    },
+    turnJobDetail(id,page,isOther){
+
+      this.showCompanyStatus = false;
+      if(isOther){
+        this.$router.push({path:'/jobs',query:{id:id,page:page,from:1}})
+
+      }else{
+        this.$router.push({path:'/jobs',query:{id:id,page:page}})
+
+      }
+
+    },
+    otherJobPageChange(e) {
+      console.log(e)
+      // this.showLoadingStatus = true;
+      this.otherJobPage = e
+      this.getCompanyJobList(this.companyInfo.user_id,e, this.otherJobLimit)
+
+    },
+    backToResults(){
+      this.showCompanyStatus = false;
+      this.isOther = false;
+      this.$router.push({path:'/jobs',query:{id:this.selectedJobId,page:this.jobPage}})
+
+    },
+    addFavorite(id, type, title, url, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      // console.log(params)
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.jobListData[index]['is_favorite'] = 1
+        }
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+
+    },
+    cancelFavorite(type, typeId, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.jobListData[index]['is_favorite'] = 0
+        }
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
 
     async submitEduBusinessCompanyForm() {
 
@@ -264,28 +381,36 @@ export default {
 </script>
 
 <style scoped>
-.bg {
-  background-color: #f5f6f7;
-}
 
-.educator-container {
+.business-profile-container {
+  background-color: #F0F2F5;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
+
 }
 
-.educator-r-container {
-  width:calc(100% - 160px);
-  height: calc(100vh - 220px);
+.business-profile-r {
+  width:calc(100% - 210px);
+  height: calc(100vh - 140px);
+  padding: 0 0 0 50px;
+
 }
 
-.educator-r-container-bg{
-  padding: 30px 50px 50px 50px;
+.business-jobs{
+
 }
 
+.business-profile{
+  margin: 25px 0 0 100px;
+}
 
-@media screen and (min-width: 1200px){
+@media screen and (min-width: 1200px) and (max-width: 1919px){
+  .business-profile{
+    margin-left: 20px;
+  }
+
 
 }
 

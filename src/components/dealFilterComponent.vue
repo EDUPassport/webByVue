@@ -1,80 +1,82 @@
 <template>
 <div class="container">
   <div class="filter-bg-container">
-    <div class="offer-deal">
-      <el-button class="offer-deal-btn" type="primary" @click="offerDeal()" round>
-        Offer a Deal
-      </el-button>
-    </div>
-    <div class="filter-container">
+<!--    <div class="offer-deal">-->
+<!--      <el-button class="offer-deal-btn" type="primary" @click="offerDeal()" round>-->
+<!--        Offer a Deal-->
+<!--      </el-button>-->
+<!--    </div>-->
+    <el-scrollbar class="filter-bg">
+      <div class="filter-container">
 
-      <div class="filter-item">
-        <div class="filter-label">Location</div>
-        <el-select class="filter-select"
-                   v-model="locationValue" clearable
-                   placeholder="Location"
-                   size="default"
-                   @change="locationChange"
-        >
-          <el-option
-              v-for="item in locationData"
-              :key="item.id"
-              :label="item.Pinyin"
-              :value="item.id"
+        <div class="filter-item">
+          <div class="filter-label">Location</div>
+          <el-select class="filter-select"
+                     v-model="locationValue" clearable
+                     placeholder="Location"
+                     size="default"
+                     @change="locationChange"
           >
-          </el-option>
-        </el-select>
-      </div>
-
-      <div class="filter-item">
-        <el-checkbox @change="selectIsOnline" v-model="filterIsOnlineValue" label="Online" />
-      </div>
-
-      <div class="filter-item">
-        <div class="filter-label">Tags</div>
-        <el-select class="filter-select"
-                   v-model="tagValue"
-                   clearable multiple
-                   placeholder="Tags"
-                   size="default"
-                   @change="tagChange"
-        >
-          <el-option
-              v-for="item in tagsData"
-              :key="item.id"
-              :label="item.name_en"
-              :value="item.id"
-          >
-          </el-option>
-        </el-select>
-      </div>
-
-      <div class="filter-item">
-        <div class="filter-label">Deal type</div>
-        
-        <div class="filter-checkbox-container">
-
-          <el-checkbox-group v-model="checkedCateData"  :max="1">
-
-            <el-checkbox v-for="(item,i) in subCateData" :key="i"
-                         :label="item.id"
+            <el-option
+                v-for="item in locationData"
+                :key="item.id"
+                :label="item.Pinyin"
+                :value="item.id"
             >
-              {{item.identity_name}}
-            </el-checkbox>
+            </el-option>
+          </el-select>
+        </div>
 
-          </el-checkbox-group>
+        <div class="filter-item">
+          <el-checkbox @change="selectIsOnline" v-model="filterIsOnlineValue" label="Online" />
+        </div>
+
+        <div class="filter-item">
+          <div class="filter-label">Tags</div>
+          <el-select class="filter-select"
+                     v-model="tagValue"
+                     clearable multiple
+                     placeholder="Tags"
+                     size="default"
+                     @change="tagChange"
+          >
+            <el-option
+                v-for="item in tagsData"
+                :key="item.id"
+                :label="item.name_en"
+                :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </div>
+
+        <div class="filter-item">
+          <div class="filter-label">Deal type</div>
+
+          <div class="filter-checkbox-container">
+
+            <el-checkbox-group v-model="checkedCateData"  :max="1">
+
+              <el-checkbox v-for="(item,i) in subCateData" :key="i"
+                           :label="item.id"
+              >
+                {{item.identity_name}}
+              </el-checkbox>
+
+            </el-checkbox-group>
+
+          </div>
 
         </div>
 
       </div>
+      <div class="filter-search-btn-container">
+        <el-button type="primary" round @click="search()">
+          SEARCH
+        </el-button>
+      </div>
 
-    </div>
-
-    <div class="filter-search-btn-container">
-      <el-button type="primary" round @click="search()">
-        SEARCH
-      </el-button>
-    </div>
+    </el-scrollbar>
 
     <div class="filter-contact-us-container">
       <el-icon :size="45" color="#6648FF">
@@ -84,6 +86,8 @@
     </div>
 
   </div>
+
+
 
 </div>
 </template>
@@ -200,6 +204,7 @@ export default {
 
 .container{
   padding-right: 12px;
+
 }
 
 .filter-bg-container {
@@ -207,6 +212,10 @@ export default {
   height: calc(100vh - 200px);
   padding: 30px;
   position: relative;
+}
+
+.filter-bg{
+  height: calc(100% - 80px);
 }
 
 .offer-deal {
@@ -257,6 +266,7 @@ export default {
   right: 0;
   margin: auto;
   cursor: pointer;
+  background-color: #F0F2F5;
 
 }
 
@@ -277,5 +287,10 @@ export default {
   font-family: AssiRegular,"Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
+
+/deep/ .el-select{
+  display: block;
+}
+
 
 </style>

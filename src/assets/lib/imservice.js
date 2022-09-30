@@ -1,17 +1,17 @@
 import restApi from './restapi';
 
-function Friend(uuid, name, avatar,identity) {
+function Friend(uuid, name, avatar, identity) {
     this.uuid = uuid;
     this.name = name;
     this.avatar = avatar;
     this.identity = identity;
 }
 
-function Group(uuid, name, avatar,identity) {
+function Group(uuid, name, avatar, identity) {
     this.uuid = uuid;
     this.name = name;
     this.avatar = avatar;
-    this.identity = identity;
+    this.identity = identity
 }
 
 function IMService(goEasy,GoEasy) {
@@ -45,7 +45,7 @@ function IMService(goEasy,GoEasy) {
     };
     //收到一条群聊消息
     this.onNewGroupMessageReceive = function (groupId, message) {
-        console.log(groupId,message)
+        console.log(groupId, message)
     };
 
 }
@@ -65,7 +65,7 @@ IMService.prototype.findGroupById = function (groupId) {
     return new Group(group.uuid, group.name, group.avatar);
 };
 
-IMService.prototype.findFriendById =async function (userId,identity) {
+IMService.prototype.findFriendById = async function (userId,identity) {
     let user = await restApi.findUserById(userId,identity);
     return new Friend(user.uuid, user.name, user.avatar,user.identity);
 };
@@ -94,6 +94,7 @@ IMService.prototype.connect = function (currentUser) {
     }
     //初始化相关的监听器
     this.initialListeners();
+    console.log('初始化监听器')
     this.goEasy.connect({
         id: this.currentUser.uuid,
         data: userData,
@@ -133,7 +134,6 @@ IMService.prototype.subscribeGroupMessage = function () {
 IMService.prototype.initialListeners = function () {
     //监听私聊消息
     this.goEasy.im.on(this.GoEasy.IM_EVENT.PRIVATE_MESSAGE_RECEIVED, (message) => {
-        console.log('监听私聊消息')
         //更新私聊消息记录
         let friendId;
         if (this.currentUser.uuid === message.senderId) {

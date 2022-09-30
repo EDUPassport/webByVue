@@ -1,34 +1,63 @@
 <template>
-  <div class="bg">
-    <div class="educator-container">
-      <div class="educator-l-container">
-        <meSideMenu></meSideMenu>
-      </div>
-      <div class="educator-r-container">
 
-        <div class="educator-r-container-bg">
-          <businessProfile :canEdit="true" :info="companyInfo" :identity="identity"></businessProfile>
-        </div>
-      </div>
+  <div class="business-profile-container">
 
+    <div class="business-profile-l">
+      <meSideMenu></meSideMenu>
     </div>
 
+    <div class="business-profile-r">
+
+      <el-row :gutter="0" align="top" justify="space-between">
+
+        <el-col :xs="22" :sm="22" :md="8" :lg="9" :xl="8">
+
+          <div class="business-deals">
+            <dealByListComponent
+                :listData="dealsListData"
+                :from-vendor-profile="true"
+                @back="backToSearchResults"
+                @detail="showDealDetailDialog"
+                :info="companyInfo"
+            ></dealByListComponent>
+          </div>
+
+        </el-col>
+
+        <el-col  :xs="22" :sm="22" :md="16" :lg="15" :xl="16">
+
+          <div class="business-profile">
+            <businessProfile :canEdit="true" :info="companyInfo" :identity="identity"></businessProfile>
+          </div>
+
+        </el-col>
+
+      </el-row>
+
+    </div>
   </div>
+
 </template>
 
 <script>
 import meSideMenu from "@/components/meSideMenu";
 import businessProfile from "@/components/businessProfile";
+import dealByListComponent from "@/components/dealByListComponent";
+
 import {
-  USER_INFO_BY_TOKEN_V2,VENDOR_PERCENTAGE_V2
+  ZOHO_SYNC,
+  USER_INFO_BY_TOKEN_V2,
+  RECRUITER_PERCENTAGE_V2,
+  OTHER_PERCENTAGE_V2, SCHOOL_PERCENTAGE_V2, ADD_FAVORITE, CANCEL_FAVORITE, MY_DEALS
 } from '@/api/api'
-import {encode} from 'js-base64'
+import {decode} from 'js-base64'
 
 export default {
   name: "profile",
   components: {
     meSideMenu,
-    businessProfile
+    businessProfile,
+    dealByListComponent
   },
   computed:{
     identity:{
@@ -42,67 +71,84 @@ export default {
     return {
       profilePercentage:0,
       userContact:{},
+      companyContact:{},
       companyInfo:{},
+      dealsListData:[]
+
+
     }
   },
   mounted() {
+    let s = this.$route.query.str;
+    if(s){
+      console.log(decode(s))
+    }
+
     this.getUserInfo()
     this.updateBusinessProfile()
+    this.getDealsList(1, 1000)
   },
   methods: {
-    cancelUploadProfile(){
-      this.uploadLoadingStatus = false;
+    getDealsList(page, limit) {
+
+      let filterResult = this.filterResultData;
+
+      let paramsA = {
+        page: page,
+        limit: limit
+      }
+
+      let params = Object.assign(paramsA,filterResult)
+
+      MY_DEALS(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.dealsListData = res.message.data;
+          this.dealTotalNum = res.message.total
+          this.showLoadingStatus = false
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    backToSearchResults(){
+      this.$router.push('/account/home')
+    },
+    showDealDetailDialog(){
+
     },
     updateBusinessProfile() {
       let params = {
         token: localStorage.getItem('token')
       }
-      VENDOR_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
 
-    },
-    editBasicInfo() {
-      let strObj = {
-        i:5,
-        action:'edit'
-      }
-      let str = encode(JSON.stringify(strObj))
-
-      this.$router.push({path:'/profile/contact/user',query:{s:str}})
-
-    },
-    editCompanyContactInfo(){
-      let strObj = {
-        i:5,
-        action:'edit'
-      }
-      let str = encode(JSON.stringify(strObj))
-
-      this.$router.push({path:'/profile/contact/company',query:{s:str}})
-    },
-    editCompanyInfo(){
-      if(this.companyInfo.id){
-        let strObj = {
-          cid:this.companyInfo.id,
-          action:'edit'
-        }
-        let str = encode(JSON.stringify(strObj))
-
-        this.$router.push({path:'/vendor/edit/vendor',query:{s:str}})
-      }else{
-        let strObj = {
-          i:5,
-          action:'add'
-        }
-        let str = encode(JSON.stringify(strObj))
-
-        this.$router.push({path:'/vendor/edit/vendor',query:{s:str}})
+      if(this.identity == 2){
+        RECRUITER_PERCENTAGE_V2(params).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+          this.$message.error(err.msg)
+        })
       }
 
+      if(this.identity == 3){
+        SCHOOL_PERCENTAGE_V2(params).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+          this.$message.error(err.msg)
+        })
+      }
+
+      if(this.identity == 4){
+        OTHER_PERCENTAGE_V2(params).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+          this.$message.error(err.msg)
+        })
+      }
 
     },
     getUserInfo() {
@@ -119,6 +165,16 @@ export default {
           let userContact = res.message.user_contact;
 
           let companyInfo = res.message.user_contact.company;
+
+          if(identity == 2){
+            this.profilePercentage = userContact.is_recruiting
+          }
+          if(identity == 3){
+            this.profilePercentage = userContact.is_school
+          }
+          if(identity == 4){
+            this.profilePercentage = userContact.is_other
+          }
 
           if(companyInfo){
             this.companyInfo = companyInfo;
@@ -138,21 +194,147 @@ export default {
             this.userContact = userContact;
           }
 
-            let userImages = companyInfo.images
-            this.accountImageFileList = []
-            if (userImages) {
-              userImages.forEach(item => {
-                let userImageObj = {
-                  name: '',
-                  url: item.url
-                }
-                this.accountImageFileList.push(userImageObj)
-              })
-            }
+
+          let userImages = companyInfo.images
+          this.accountImageFileList = []
+          if (userImages) {
+            userImages.forEach(item => {
+              let userImageObj = {
+                name: '',
+                url: item.url
+              }
+              this.accountImageFileList.push(userImageObj)
+            })
+          }
         }
       }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
+      })
+
+    },
+    addFavorite(id, type, title, url, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      // console.log(params)
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.jobListData[index]['is_favorite'] = 1
+        }
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+
+    },
+    cancelFavorite(type, typeId, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.jobListData[index]['is_favorite'] = 0
+        }
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
+
+    async submitEduBusinessCompanyForm() {
+
+      let userId = localStorage.getItem('uid')
+
+      let zohoData = [
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {'SingleLine': this.companyInfo.company_name  // Education Business Name
+        },
+        {'Dropdown2': ''  //Education Business Category
+        },
+        {'Dropdown': 'Education Business'  //Company Type
+        },
+        {'Website': ''  //Education Business Website
+        },
+        {'SingleLine1': ''  // Education Business Contact
+        },
+        {'Number2': ''  //  Company Number
+        },
+        {'SingleLine5': userId  //UserID
+        },
+        {'PhoneNumber_countrycode': ''  //Education Business Phone
+        },
+        {'Email': ''  // Education Business Email
+        },
+        {'Number': ''   //Number of Employees
+        },
+        {'Number1': ''   //Membership Duration
+        },
+        {'Dropdown1': ''   //Membership Type
+        },
+        {'Address_AddressLine1': ''   //Street Address
+        },
+        {'Address_City': ''   //City
+        },
+        {'Address_Region': ''   //State/Region/Province
+        },
+        {'Address_Country': ''   //Country
+        },
+        {'SingleLine4': ''   //   Business Registration No.
+        },
+        {'MultiLine': ''   //Company Intro
+        },
+        {'SingleLine3': ''   //WeChat ID
+        },
+        {'Number3': ''  //  Number of Branches
+        },
+        {'Number4': ''  //    Number of Students
+        },
+        {'MultipleChoice': ''  //    Students Ages
+        },
+        {'MultiLine1': ''  //     Curriculum Subjects
+        },
+        {'MultiLine2': ''  //     School Facilities
+        },
+        {'Website1': ''  // Business License Link
+        },
+        {'Website2': this.companyInfo.logo   //Company Logo Link
+        },
+        {'Website3': this.companyInfo.background_image   //Header Image Link
+        }
+
+      ]
+
+      let zohoParams = {
+        zoho_data: zohoData,
+        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit'
+      }
+
+      await ZOHO_SYNC(zohoParams).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
       })
 
     }
@@ -162,32 +344,41 @@ export default {
 </script>
 
 <style scoped>
-.bg {
-  background-color: #f5f6f7;
-}
 
-.educator-container {
+.business-profile-container {
+  background-color: #F0F2F5;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-}
-
-.educator-r-container {
-  width:calc(100% - 160px);
-  height: calc(100vh - 220px);
-}
-
-.educator-r-container-bg{
-  padding: 30px 50px 50px 50px;
-}
-
-@media screen and (min-width:1200px) {
-
 
 }
 
-@media screen and (max-width: 768px) {
+.business-profile-r {
+  width:calc(100% - 210px);
+  height: calc(100vh - 140px);
+  padding: 0 0 0 50px;
+
+}
+
+.business-deals{
+
+}
+
+.business-profile{
+  margin: 25px 0 0 100px;
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1919px){
+  .business-profile{
+    margin-left: 20px;
+  }
+
+
+}
+
+
+@media screen and (max-width: 768px){
 
 }
 

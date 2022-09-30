@@ -698,6 +698,7 @@ export default {
                 localStorage.setItem('language', resMessage.language)
                 localStorage.setItem('email', resMessage.email)
                 localStorage.setItem('company_id', resMessage.company_id)
+                this.$store.commit('currentCompanyId', resMessage.company_id)
 
                 if(resMessage.third_company_id){
                   localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
@@ -793,6 +794,8 @@ export default {
                 localStorage.setItem('language', resMessage.language)
                 localStorage.setItem('phone', resMessage.phone)
                 localStorage.setItem('company_id', resMessage.company_id)
+                this.$store.commit('currentCompanyId', resMessage.company_id)
+
                 if(resMessage.third_company_id){
                   localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
                   this.$store.commit('thirdCompanyId',resMessage.third_company_id)
@@ -885,6 +888,8 @@ export default {
                 localStorage.setItem('language', resMessage.language)
                 localStorage.setItem('phone', resMessage.phone)
                 localStorage.setItem('company_id', resMessage.company_id)
+                this.$store.commit('currentCompanyId', resMessage.company_id)
+
                 if(resMessage.third_company_id){
                   localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
                   this.$store.commit('thirdCompanyId',resMessage.third_company_id)

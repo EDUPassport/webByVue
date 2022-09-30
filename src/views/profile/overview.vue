@@ -13,12 +13,14 @@
 
               <div class="dashboard-1-container">
                 <div class="dashboard-1">
-                  <div class="dashboard-1-label">You were viewed</div>
-                  <div class="dashboard-1-number-1">
-                    18 <span>times this week</span>
-                  </div>
+                  <h5>You were viewed</h5>
+                  <h1>18 <span>times this week</span></h1>
                 </div>
-
+                <div class="dashboard-1">
+                  <h1> <span>
+                    More awesome widgets are coming soon...
+                  </span></h1>
+                </div>
               </div>
 
               <div class="container-2">
@@ -42,51 +44,51 @@
             <template v-if="identity == 2 || identity == 3 || identity == 4">
               <div class="dashboard-1-container">
                 <div class="dashboard-1">
-                  <div class="dashboard-1-label">New applications</div>
-                  <div class="dashboard-1-number">
-                    +7
-                  </div>
+                  <h5>New applications</h5>
+                  <h1>+7</h1>
                   <div class="dashboard-1-tips">
                     total:21 applications
                   </div>
                 </div>
 
                 <div class="dashboard-1">
-                  <div class="dashboard-1-label">Views this month</div>
-                  <div class="dashboard-1-number">
+                  <h5>Views this month</h5>
+                  <h1>
                     +18
-                  </div>
+                  </h1>
                   <div class="dashboard-1-tips">
                     total:156 views
                   </div>
                 </div>
 
                 <div class="dashboard-1">
-                  <div class="dashboard-1-label">New educators</div>
-                  <div class="dashboard-1-number">
+                  <h5>New educators</h5>
+                  <h1>
                     +48
-                  </div>
+                  </h1>
                   <div class="dashboard-1-tips">
                     total:892 educators
                   </div>
                 </div>
 
                 <div class="dashboard-1">
-                  <div class="dashboard-1-label">Jobs posted</div>
-                  <div class="dashboard-1-number">
+                  <h5 >Jobs posted</h5>
+                  <h1>
                     3/ <el-icon> <IconIcOutlineAllInclusive /> </el-icon>
-                  </div>
+                  </h1>
                   <div class="dashboard-1-tips">
                     <span>this month</span>
                     <el-button class="dashboard-post-a-job-btn"
+                               @click="postJob()"
                                type="primary" round>
                       POST A JOB
                     </el-button>
                   </div>
+
                 </div>
 
                 <div class="dashboard-1  dashboard-1-bg-1">
-                  <div class="dashboard-1-label">Quick actions</div>
+                  <h5>Quick actions</h5>
                   <div class="dashboard-1-actions">
                     <el-button class="dashboard-1-action-btn" plain round>
                       UPGRADE
@@ -107,25 +109,40 @@
 
               <div class="dashboard-1-container">
                 <div class="dashboard-1">
-                  <div class="dashboard-1-label">You posted</div>
-                  <div class="dashboard-1-number-1">
-                    18 <span>deals</span>
-                    2 <span>events</span>
+                  <h5>You posted</h5>
+                  <div class="dashboard-1-h">
+                    <h1>
+                      18 <span>deals</span>
+                    </h1>
+                    <h1>
+                      2 <span>events</span>
+                    </h1>
                   </div>
+
                 </div>
                 <div class="dashboard-1">
-                  <div class="dashboard-1-label">Deals performance</div>
-                  <div class="dashboard-1-number-1">
-                    52 <span>favorited</span>
-                    1 <span>redeemed</span>
+                  <h5 >Deals performance</h5>
+                  <div  class="dashboard-1-h">
+                    <h1>
+                      52 <span>favorited</span>
+                    </h1>
+                    <h1>
+                      1 <span>redeemed</span>
+                    </h1>
                   </div>
+
                 </div>
                 <div class="dashboard-1">
-                  <div class="dashboard-1-label">Events performance</div>
-                  <div class="dashboard-1-number-1">
-                    0 <span>favorited</span>
-                    0 <span>redeemed</span>
+                  <h5>Events performance</h5>
+                  <div  class="dashboard-1-h">
+                    <h1>
+                      0 <span>favorited</span>
+                    </h1>
+                    <h1>
+                      0 <span>redeemed</span>
+                    </h1>
                   </div>
+
                 </div>
 
               </div>
@@ -169,6 +186,8 @@ import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
 // import {onBeforeRouteUpdate} from "vue-router";
 // import {ref} from "vue";
+import {computed} from "vue";
+import {useStore} from 'vuex'
 
 import NewApplications from "@/components/business/newApplications";
 import dailyJobMatch from "@/components/educator/dailyJobMatch";
@@ -176,6 +195,7 @@ import applicationsUpdates from "@/components/educator/applicationsUpdates";
 import favoritedJobsDashboard from "@/components/educator/favoritedJobsDashboard";
 import activeDealsDashboard from "@/components/vendor/activeDealsDashboard";
 import activeEventsDashboard from "@/components/vendor/activeEventsDashboard";
+import {randomString} from "@/utils";
 
 export default {
   name: "index",
@@ -189,12 +209,13 @@ export default {
     activeEventsDashboard
   },
   setup() {
-
+    const store = useStore()
+    const currentUser = computed(() => store.state.currentUser)
     // const identity = ref(localStorage.getItem('identity'))
     //
-    // return {
-    //   identity
-    // }
+    return {
+      currentUser
+    }
 
   },
   watch: {
@@ -257,9 +278,20 @@ export default {
       eventsListData:[],
 
       myApplicationsData:[],
+      versionTime:randomString(),
 
 
     }
+  },
+  beforeMount() {
+
+    let user = this.currentUser
+
+    if (this.goEasy.getConnectionStatus() === 'disconnected') {
+      this.service.connect(user);
+
+    }
+
   },
   mounted() {
 
@@ -283,6 +315,9 @@ export default {
 
   },
   methods: {
+    postJob(){
+      this.$router.push({path:'/jobs/post',query:{version_time:this.versionTime}})
+    },
     viewApplicationEvent(){
       this.expandStatus = !this.expandStatus
     },
@@ -594,19 +629,38 @@ export default {
   margin-bottom: 50px;
 }
 
+.dashboard-1 h5{
+  font-weight: 400;
+}
 
+.dashboard-1 h1{
+  color: #6650B3;
+  display: flex;
+  align-items: flex-end;
+}
+
+.dashboard-1 h1 span{
+  margin-left: 15px;
+  font-size: 20px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
+
+.dashboard-1-h{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 30px;
+}
+
+.dashboard-1-h h1:nth-child(1){
+  margin-right: 15px;
+}
 
 .dashboard-1-bg-1 {
   box-shadow: 0px 3px 23px 1px rgba(102, 80, 179, 0.29);
   background: #E7DEFF;
-}
-
-.dashboard-1-label {
-  font-size: 30px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 400;
-  color: #262626;
-
 }
 
 .dashboard-1-actions {
@@ -618,38 +672,12 @@ export default {
 
 }
 
-.dashboard-1-number {
-  font-weight: bold;
-  font-size: 60px;
-  font-family: BCBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #6650B3;
-  display: flex;
-  align-items: center;
-}
-.dashboard-1-number span{
-  font-size: 23px;
-  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-1-number-1 {
-  font-weight: bold;
-  font-size: 60px;
-  font-family: BCBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #6650B3;
-}
-
-.dashboard-1-number-1 span{
-  font-size: 23px;
-  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
 .dashboard-1-tips {
-  font-size: 23px;
+  font-size: 20px;
   font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
+
 
 .dashboard-post-a-job-btn {
   margin-left: 15px;

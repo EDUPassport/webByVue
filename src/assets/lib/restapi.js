@@ -3,7 +3,7 @@ import {USER_INFO_VISITOR_V2} from '@/api/api'
 //用户数据示例
 let users = [
     {
-        "uuid": "459",
+        "uuid": "08c0a6ec-a42b-47b2-bb1e-15e0f5f9a19a",
         "name": "Mattie",
         "password": "123",
         "avatar": '/static/images/Avatar-1.png'
@@ -33,19 +33,19 @@ let groups = [
     {
         "uuid": "group-a42b-47b2-bb1e-15e0f5f9a19a",
         "name": "小程序交流群",
-        "avatar" : '/static/images/wx.png',
+        "avatar": '/static/images/wx.png',
         "userList": ['08c0a6ec-a42b-47b2-bb1e-15e0f5f9a19a', '3bb179af-bcc5-4fe0-9dac-c05688484649', 'fdee46b0-4b01-4590-bdba-6586d7617f95', '33c3693b-dbb0-4bc9-99c6-fa77b9eb763f']
     },
     {
         "uuid": "group-4b01-4590-bdba-6586d7617f95",
         "name": "UniApp交流群",
-        "avatar" : '/static/images/uniapp.png',
+        "avatar": '/static/images/uniapp.png',
         "userList": ['08c0a6ec-a42b-47b2-bb1e-15e0f5f9a19a', 'fdee46b0-4b01-4590-bdba-6586d7617f95', '33c3693b-dbb0-4bc9-99c6-fa77b9eb763f']
     },
     {
         "uuid": "group-dbb0-4bc9-99c6-fa77b9eb763f",
         "name": "GoEasy交流群",
-        "avatar" : '/static/images/goeasy.jpeg',
+        "avatar": '/static/images/goeasy.jpeg',
         "userList": ['08c0a6ec-a42b-47b2-bb1e-15e0f5f9a19a', '3bb179af-bcc5-4fe0-9dac-c05688484649']
     }
 ];
@@ -68,9 +68,9 @@ RestApi.prototype.findGroups = function (user) {
 RestApi.prototype.findUser = function (username, password) {
     let user = users.find(user => (user.name == username && user.password == password))
     return {
-        uuid : user.uuid,
-        avatar : user.avatar,
-        name : user.name
+        uuid: user.uuid,
+        avatar: user.avatar,
+        name: user.name
     };
 }
 
@@ -80,7 +80,7 @@ RestApi.prototype.findGroupById = function (groupId) {
 };
 
 
-RestApi.prototype.findUserById =async function (userId,identity) {
+RestApi.prototype.findUserById = async function (userId, identity) {
     // var user = users.find(user => (user.uuid == userId))
     // return user;
 
@@ -89,38 +89,36 @@ RestApi.prototype.findUserById =async function (userId,identity) {
         identity: identity
     }
     let user = {};
-    let res = await  USER_INFO_VISITOR_V2(data)
+    let res = await USER_INFO_VISITOR_V2(data)
     // console.log(res)
-
     if (res.code == 200) {
-
-        let userContact = res.message.user_contact;
 
         let name = '';
         let avatar = 'https://oss.esl-passport.cn/educator.png';
 
-
         if (identity == 1) {
 
-            let educatorInfo = res.message.user_contact;
-            if (educatorInfo) {
-                name = educatorInfo.first_name + '' + educatorInfo.last_name;
+            let info1 = res.message.user_contact;
+
+            if (info1) {
+                name = info1.first_name + '' + info1.last_name;
+                if(info1.headimgurl){
+                    avatar = info1.headimgurl;
+                }
             }
-            if (educatorInfo && educatorInfo.headimgurl) {
-                avatar = educatorInfo.headimgurl;
-            }
+
         }
 
         if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
 
-            let businessInfo = res.message.user_contact.company;
+            let info2 = res.message.user_contact.company;
 
-            if (userContact) {
-                name = userContact.first_name + '' + userContact.last_name;
+            if (info2) {
+                name = info2.display_name
             }
 
-            if (businessInfo && businessInfo.logo) {
-                avatar = businessInfo.logo;
+            if (info2 && info2.logo) {
+                avatar = info2.logo;
             }
 
         }
@@ -131,14 +129,15 @@ RestApi.prototype.findUserById =async function (userId,identity) {
             avatar: avatar,
             identity: identity
         }
-        console.log(user)
+        // console.log(user)
+        // console.log('from rest api js')
     } else {
         console.log('获取用户信息失败')
     }
 
     return user;
-};
 
+};
 
 
 RestApi.prototype.findGroupMembers = function (groupId) {

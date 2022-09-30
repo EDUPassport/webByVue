@@ -6,7 +6,11 @@
 		<div class="chat-message">
 			<div class="pending" v-if="messageStatus == 'sending'"></div>
 			<div class="send-fail" v-if="messageStatus == 'fail'"></div>
-			<div class="text-content" v-if="message.type =='text'" v-html="decoder.decode(message.payload.text)"></div>
+			<div class="text-content"
+           :class="message.senderId == currentUser.uuid ? '' : 'text-content-1'"
+           v-if="message.type =='text'"
+           v-html="decoder.decode(message.payload.text)">
+      </div>
 			<div class="image-content"  v-if="message.type == 'image'">
         <el-image :src="message.payload.url" @click="showImageFullScreen" ></el-image>
 			</div>

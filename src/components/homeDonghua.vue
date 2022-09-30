@@ -4,8 +4,14 @@
 
     <div class="donghua-bg">
       <div class="top-container">
-        <div class="edu-text">EDU</div>
-        <div class="passport-text">passport</div>
+
+        <div class="logo-new-container">
+          <div class="logo-new"  @click="turnHome()">
+            <el-image class="logo-new-logo-img" :src="logoImgLight"></el-image>
+          </div>
+          <div class="logo-new-beta">Beta</div>
+        </div>
+
       </div>
 
       <div class="content-container">
@@ -52,6 +58,8 @@
 
 <script>
 import {ref, onMounted} from 'vue'
+import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
+
 
 export default {
   name: "homeDonghua",
@@ -138,14 +146,14 @@ export default {
       setTimeout(function () {
         cl.value = true
         cr.value = true
-      }, 11000)
+      }, 13000)
 
       setTimeout(function () {
         visible.value = false
         body.style.position = "static";
         body.style.top = "auto";
         document.scrollingElement.scrollTop = documentTop;
-      }, 12000)
+      }, 14000)
 
     })
 
@@ -166,6 +174,16 @@ export default {
 
     }
 
+  },
+  data(){
+    return {
+      logoImgLight
+    }
+  },
+  methods:{
+    turnHome(){
+      this.$router.push('/')
+    }
   }
 
 }
@@ -184,6 +202,7 @@ export default {
   right: 0;
   bottom: 0;
   margin: auto;
+  /*background-color: #F0F2F5;*/
   background-color: #6650B3;
 
 }
@@ -410,5 +429,37 @@ export default {
   margin: auto;
   text-align: center;
 }
+
+
+
+
+.logo-new-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  float: left;
+}
+
+.logo-new{
+  cursor: pointer;
+}
+
+.logo-new-logo-img{
+  width: 100px;
+}
+
+.logo-new-beta{
+  position: absolute;
+  top: 0;
+  right: -25px;
+  background-color:#49397f;
+  padding:2px 10px;
+  border-radius:10px;
+  color:#EEEEEE;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 12px;
+}
+
 
 </style>

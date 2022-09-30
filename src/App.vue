@@ -69,7 +69,7 @@ html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, l
 
 h1{
   font-size: 45px;
-  font-family: BSemiBold,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 h2{
@@ -87,8 +87,10 @@ h4{
 }
 
 h5{
-  font-size: 20px;
-  font-family: BCM, 'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
+  font-size: 22px;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+
+  color: #262626;
 }
 
 button{

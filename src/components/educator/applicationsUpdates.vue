@@ -6,85 +6,216 @@
       Your applications updates
       <el-button link primary>SEE ALL UPDATES</el-button>
     </div>
-    <div class="e-a-c">
-      <div class="e-a-item-bg">
+    <el-scrollbar max-height="320px" class="e-a-c">
+      <div class="e-a-item-bg"
+            v-for="(item,i) in myApplyJobData" :key="i"
+      >
         <div class="e-a-item">
           <div class="e-a-item-l">
             <el-avatar class="e-a-item-avatar"></el-avatar>
           </div>
           <div class="e-a-item-m">
-            <div class="e-a-item-m-1">Federal University</div>
+            <div class="e-a-item-m-1">{{item.job.company_name}}</div>
             <div class="e-a-item-m-2">
-              Director
+              {{item.job_title}}
             </div>
             <div class="e-a-item-m-3">
-              Salary: $240,000-280,000
+              {{ item.job.currency }} {{ item.job.salary_min }} - {{ item.job.salary_max }}
+              <span v-if="item.job.payment_period == 112">hourly</span>
+              <span v-if="item.job.payment_period == 113">daily</span>
+              <span v-if="item.job.payment_period == 114">weekly</span>
+              <span v-if="item.job.payment_period == 115">monthly</span>
+              <span v-if="item.job.payment_period == 116">annually</span>
             </div>
             <div class="e-a-item-m-3">
-              Dubai, UAE
+              {{item.job.job_location}}
             </div>
             <div class="e-a-item-m-3">
-              Full time
+              <span v-if="item.employment_type==1">Full time</span>
+              <span v-if="item.employment_type==2">Part time</span>
+              <span v-if="item.employment_type==3">Seasonal</span>
             </div>
           </div>
           <div class="e-a-item-r">
+<!--             . Interested -->
             <div class="e-a-item-r-1">
-              . Interested
+
             </div>
             <div class="e-a-item-r-2">
-              <el-button plain round>
+              <el-button plain round @click="chat(item.job.user_id,item.job.company_name, item.job.logo, item.job.identity)">
                 SEND A MESSAGE
               </el-button>
             </div>
             <div class="e-a-item-r-3">
-              Updated: June 23, 2022
+              {{ $filters.howLongFormat(item.job.refresh_time) }}
+<!--              Updated: June 23, 2022-->
             </div>
           </div>
         </div>
 
       </div>
-      <div class="e-a-item-bg">
-        <div class="e-a-item">
-          <div class="e-a-item-l">
-            <el-avatar class="e-a-item-avatar"></el-avatar>
-          </div>
-          <div class="e-a-item-m">
-            <div class="e-a-item-m-1">Columbia University</div>
-            <div class="e-a-item-m-2">
-              Art History Teacher
-            </div>
-            <div class="e-a-item-m-3">
-              Salary: $90,000-120,000
-            </div>
-            <div class="e-a-item-m-3">
-              Paris, France
-            </div>
-            <div class="e-a-item-m-3">
-              Seasonal
-            </div>
-          </div>
-          <div class="e-a-item-r">
-            <div class="e-a-item-r-1">
-              Position closed
-            </div>
-            <div class="e-a-item-r-3">
-              Updated: June 19, 2022
-            </div>
-          </div>
-        </div>
+<!--      <div class="e-a-item-bg">-->
+<!--        <div class="e-a-item">-->
+<!--          <div class="e-a-item-l">-->
+<!--            <el-avatar class="e-a-item-avatar"></el-avatar>-->
+<!--          </div>-->
+<!--          <div class="e-a-item-m">-->
+<!--            <div class="e-a-item-m-1">Columbia University</div>-->
+<!--            <div class="e-a-item-m-2">-->
+<!--              Art History Teacher-->
+<!--            </div>-->
+<!--            <div class="e-a-item-m-3">-->
+<!--              Salary: $90,000-120,000-->
+<!--            </div>-->
+<!--            <div class="e-a-item-m-3">-->
+<!--              Paris, France-->
+<!--            </div>-->
+<!--            <div class="e-a-item-m-3">-->
+<!--              Seasonal-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="e-a-item-r">-->
+<!--            <div class="e-a-item-r-1">-->
+<!--              Position closed-->
+<!--            </div>-->
+<!--            <div class="e-a-item-r-3">-->
+<!--              Updated: June 19, 2022-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-      </div>
+<!--      </div>-->
 
 
-    </div>
+    </el-scrollbar>
   </div>
 
 </div>
 </template>
 
 <script>
+import {computed} from 'vue'
+import {useStore} from 'vuex'
+import { useRouter } from 'vue-router'
+import {MY_APPLY_JOBS} from "@/api/api";
+
 export default {
-  name: "applicationsUpdates"
+  name: "applicationsUpdates",
+  setup() {
+
+    const store = useStore()
+    const router = useRouter()
+
+    const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
+
+    const setShowChatStatus = () => store.commit('showChatStatus', true)
+
+    function turnChatPage(){
+      router.push({path:'/chat/messages'})
+    }
+
+    const currentUser = computed(()=>store.state.currentUser)
+
+    return {
+      setNowChatUserInfo,
+      setShowChatStatus,
+      currentUser,
+      turnChatPage
+
+    }
+
+
+  },
+  data(){
+    return {
+      myApplyJobData:[],
+      page:1,
+      limit:1000
+    }
+  },
+  mounted(){
+    this.getMyApplyJobs(this.page,this.limit)
+  },
+  methods:{
+    getMyApplyJobs(page,limit){
+      let params = {
+        page:page,
+        limit:limit
+      }
+      MY_APPLY_JOBS(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.myApplyJobData = res.message.data;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    chat(userId, name, avatar, identity){
+
+      let user = this.currentUser
+
+      if (this.goEasy.getConnectionStatus() === 'disconnected') {
+        this.service.connect(user);
+      }
+
+      console.log(userId)
+      let token = localStorage.getItem('token')
+      if(!token || token === ''){
+        return this.$router.push('/edupassport')
+      }
+
+      let type = this.GoEasy.IM_SCENE.PRIVATE;
+      if(!avatar){
+        avatar = 'https://oss.esl-passport.cn/educator.png'
+      }
+
+      let nowUserInfo = {
+        uuid:userId,
+        name:name,
+        avatar:avatar,
+        identity: identity
+      }
+
+      let textMessage = this.goEasy.im.createTextMessage({
+        text: 'Hello',
+        to: {
+          id: userId,
+          type: type,
+          data: {
+            name: name,
+            avatar: avatar,
+            identity:this.identity
+          }
+        }
+      });
+
+      let localHistory;
+      if (type === this.GoEasy.IM_SCENE.PRIVATE) {
+        localHistory = this.service.getPrivateMessages(userId);
+      } else {
+        localHistory = this.service.getGroupMessages(userId);
+      }
+      // console.log(localHistory)
+      localHistory.push(textMessage)
+
+      this.goEasy.im.sendMessage({
+        message: textMessage,
+        onSuccess: function (message) {
+          console.log("发送成功.", message);
+        },
+        onFailed: function (error) {
+          console.log("发送失败:", error);
+        }
+      })
+
+      this.setNowChatUserInfo(nowUserInfo)
+      // this.setShowChatStatus()
+      this.turnChatPage()
+
+    }
+
+  }
 }
 </script>
 

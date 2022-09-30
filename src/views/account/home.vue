@@ -21,9 +21,16 @@
 
               >
                 <div class="account-basic-info-c-l">
-                  <el-avatar class="account-basic-info-c-avatar"
-                             :src="headImgUrl ? headImgUrl : '' "
-                  ></el-avatar>
+                  <template v-if="identity == 1">
+                    <el-avatar class="account-basic-info-c-avatar"
+                               :src="headImgUrl ? headImgUrl : defaultAvatar "
+                    ></el-avatar>
+                  </template>
+                  <template v-else>
+                    <el-avatar class="account-basic-info-c-avatar"
+                               :src="headImgUrl ? headImgUrl : '' "
+                    ></el-avatar>
+                  </template>
 
                   <el-upload
                       v-if="editAccountStatus"
@@ -70,6 +77,7 @@
                       </div>
 
                       <el-form-item label="E-mail address" prop="email">
+                        <div class="xll-form-email-tips">(Editing this will change your login email)</div>
                         <el-input v-model="basicForm.email" placeholder="E-mail address"></el-input>
                       </el-form-item>
 
@@ -88,8 +96,10 @@
 
                       <el-form-item label="Gender" prop="sex">
                         <el-select v-model="basicForm.sex" placeholder="Select one">
-                          <el-option v-for="(item,i) in sexOptions" :key="i" :label="item.object_en"
-                                     :value="item.value"></el-option>
+                          <el-option v-for="(item,i) in sexOptions" :key="i"
+                                     :label="item.object_en"
+                                     :value="item.value">
+                          </el-option>
                         </el-select>
                       </el-form-item>
 
@@ -125,24 +135,24 @@
 
             </div>
 
-            <div class="account-refer-container">
-              <div class="account-refer-label">
-                Refer someone you know & earn credits
-              </div>
-              <div class="account-refer-c">
-                <div class="account-refer-c-l">
-                  <el-input class="account-refer-c-l-input" size="default"
-                            placeholder="Email address of someone you know"></el-input>
-                </div>
-                <div class="account-refer-c-r">
-                  <el-button class="account-refer-send-btn" link>
-                    SEND
-                  </el-button>
-                </div>
+<!--            <div class="account-refer-container">-->
+<!--              <div class="account-refer-label">-->
+<!--                Refer someone you know & earn credits-->
+<!--              </div>-->
+<!--              <div class="account-refer-c">-->
+<!--                <div class="account-refer-c-l">-->
+<!--                  <el-input class="account-refer-c-l-input" size="default"-->
+<!--                            placeholder="Email address of someone you know"></el-input>-->
+<!--                </div>-->
+<!--                <div class="account-refer-c-r">-->
+<!--                  <el-button class="account-refer-send-btn" link>-->
+<!--                    SEND-->
+<!--                  </el-button>-->
+<!--                </div>-->
 
-              </div>
+<!--              </div>-->
 
-            </div>
+<!--            </div>-->
 
             <div class="account-perks-container">
               <div class="account-perks-label">
@@ -152,7 +162,9 @@
                 Check our plans to save more
               </div>
               <div class="account-perks-btn-container">
-                <el-button class="account-perks-upgrade-btn" type="primary" round>
+                <el-button class="account-perks-upgrade-btn"
+                           @click="upgrade()"
+                           type="primary" round>
                   UPGRADE
                 </el-button>
               </div>
@@ -165,7 +177,7 @@
                 Your profiles
               </div>
 
-              <el-scrollbar class="account-profile-c">
+              <el-scrollbar class="account-profile-c" max-height="400px">
                 <div class="account-profile-c-item"
                      v-for="(item,i) in companyData" :key="i"
                 >
@@ -206,12 +218,14 @@
                             v-if="item.identity == 1"
                             class="account-profile-c-item-r-2-btn"
                             @click="searchJobs()"
+                            :disabled="item.id != currentCompanyId"
                             type="primary" round>
                           SEARCH JOBS
                         </el-button>
                         <el-button
-                            v-if="item.identity == 2 || item.identity == 3 || item.identity == 4"
+                            v-if="item.identity == 2  || item.identity == 3 || item.identity == 4"
                             class="account-profile-c-item-r-2-btn"
+                            :disabled="item.id != currentCompanyId"
                             @click="postJob()"
                             type="primary" round>
                           POST A JOB
@@ -219,6 +233,7 @@
                         <el-button
                             v-if="item.identity == 5"
                             class="account-profile-c-item-r-2-btn"
+                            :disabled="item.id != currentCompanyId"
                             @click="postDeal()"
                             type="primary" round>
                           POST A Deal
@@ -258,8 +273,11 @@
                               <el-dropdown-item @click="viewUserProfile(item.id,item.user_id,item.identity)">
                                 <span class="account-profile-c-item-r-4-btn"> VIEW PROFILE</span>
                               </el-dropdown-item>
-                              <el-dropdown-item @click="showContributorDialog(item.id,item.user_id,item.identity)">
-                                <span class="account-profile-c-item-r-4-btn">ADD A CONTRIBUTOR</span>
+                              <el-dropdown-item v-if="item.identity != 1"
+                                                @click="showContributorDialog(item.id,item.user_id,item.identity)">
+                                <span class="account-profile-c-item-r-4-btn">
+                                  ADD A CONTRIBUTOR
+                                </span>
                               </el-dropdown-item>
                               <el-dropdown-item >
                                 <span class="account-profile-c-item-r-4-btn">REMOVE</span>
@@ -468,7 +486,6 @@ import meSideMenu from "@/components/meSideMenu";
 
 import {
   USER_INFO_BY_TOKEN_V2,
-  EDUCATOR_PERCENTAGE_V2,
   USER_CONTACT_EDIT_V2,
   UPLOAD_BY_ALI_OSS,
   UPLOAD_BY_SERVICE,
@@ -513,7 +530,7 @@ export default {
       first_name: "",
       last_name:'',
       identity:localStorage.getItem('identity'),
-      sex:'',
+      sex: '',
       phone:'',
       email:'',
       state_id:'',
@@ -564,9 +581,9 @@ export default {
       return date.getTime() >= myDate.getTime();
     }
 
-    const currentCompanyId = ref( localStorage.getItem('company_id'))
+    // const currentCompanyId = ref( localStorage.getItem('company_id'))
 
-    const identity = ref(localStorage.getItem('identity'))
+    // const identity = ref(localStorage.getItem('identity'))
 
     const contributorForms = ref(null)
 
@@ -585,8 +602,7 @@ export default {
     })
 
     return {
-      identity,
-      currentCompanyId,
+      // identity,
       setIdentity,
       submitLoadingValue,
       basicForm,
@@ -598,6 +614,30 @@ export default {
       contributorForm,
       contributorRules
 
+    }
+
+  },
+  watch:{
+    currentCompanyId(newValue){
+      console.log(newValue)
+      if(newValue){
+        this.getUserAllInfo()
+      }
+    },
+    identity(newValue){
+      console.log(newValue)
+    }
+  },
+  computed:{
+    currentCompanyId:{
+      get(){
+        return this.$store.state.currentCompanyId
+      }
+    },
+    identity:{
+      get(){
+        return this.$store.state.identity
+      }
     }
 
   },
@@ -669,11 +709,13 @@ export default {
   },
   async mounted() {
     this.getUserInfo()
-    // this.updateEducatorProfile()
     this.getUserAllInfo()
     this.getAllAssignUsers()
   },
   methods: {
+    upgrade(){
+      this.$router.push('/perks/home')
+    },
     searchJobs(){
       this.$router.push('/jobs')
     },
@@ -701,7 +743,9 @@ export default {
       this.basicForm.last_name = userContact.last_name;
       this.basicForm.email = userContact.email;
       this.basicForm.birthday = userContact.birthday;
-      this.basicForm.sex = userContact.sex;
+      if(userContact.sex){
+        this.basicForm.sex = userContact.sex;
+      }
 
     },
     discardAccount(){
@@ -733,17 +777,6 @@ export default {
         }
       })
 
-    },
-    updateEducatorProfile() {
-      let params = {
-        token: localStorage.getItem('token')
-      }
-      EDUCATOR_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
     },
     getUserInfo() {
       let identity = localStorage.getItem('identity')
@@ -1057,6 +1090,7 @@ export default {
 
           this.currentCompanyId = companyId;
 
+          this.$store.commit('currentCompanyId',companyId )
           this.$store.commit('allIdentityChanged',true )
 
           localStorage.setItem('company_id',companyId)
@@ -1588,7 +1622,6 @@ export default {
 .account-container-2 {
   margin-top: 50px;
   position: relative;
-
 }
 
 .account-profile-container {
@@ -1607,8 +1640,9 @@ export default {
 
 .account-profile-c {
   margin-top: 15px;
-  height: 800px;
-  overflow: auto;
+
+  /*height: 800px;*/
+  /*overflow: auto;*/
 }
 
 .account-profile-c-item {
@@ -1849,6 +1883,11 @@ export default {
 
 .xll-contributor-c-form{
   padding:0 20px;
+}
+
+.xll-form-email-tips{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
 }
 
 @media screen and (min-width: 1200px) {

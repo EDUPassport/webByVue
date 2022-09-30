@@ -161,7 +161,8 @@
                @click="cancelFavorite(1,detailData.id)">
             <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
           </div>
-          <div class="jobs-favorite" v-else @click="addFavorite(detailData.id,1,detailData.job_title,detailData.company_logo)">
+          <div class="jobs-favorite" v-else
+               @click="addFavorite(detailData.id,1,detailData.job_title,detailData.company_logo)">
             <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
           </div>
 

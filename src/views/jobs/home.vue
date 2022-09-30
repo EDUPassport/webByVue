@@ -500,7 +500,7 @@ import {
 } from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
-import {onBeforeRouteUpdate} from "vue-router";
+// import {onBeforeRouteUpdate} from "vue-router";
 import {computed, ref} from "vue";
 // import {encode} from "js-base64";
 import {randomString} from "@/utils";
@@ -578,9 +578,10 @@ export default {
   mounted() {
     // let uid = localStorage.getItem('uid')
 
-    onBeforeRouteUpdate(to => {
-      console.log(to)
-    })
+    if(this.identity == 1){
+      this.filterByApplicantStatus = true;
+      this.filterByJobStatus = false;
+    }
 
     if(this.filterByJobStatus){
       this.getMyJobs(this.myJobPage, this.myJObLimit)

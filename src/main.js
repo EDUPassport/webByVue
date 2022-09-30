@@ -59,6 +59,7 @@ const goEasy = GoEasy.getInstance({
     modules:["im"]
 });
 
+
 const app = createApp(App)
 
 for(const [key,component] of Object.entries(ElementPlusIconsVue)){

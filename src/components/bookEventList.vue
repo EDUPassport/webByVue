@@ -32,7 +32,7 @@
         </div>
 
         <div class="close-container">
-          <el-button link @click="beforeClose">
+          <el-button link @click="close()">
             CLOSE
           </el-button>
         </div>
@@ -54,6 +54,9 @@ export default {
     }
   },
   methods: {
+    close(){
+      this.$emit('close')
+    },
     beforeClose(done) {
       this.$emit('close')
       done()
@@ -74,7 +77,7 @@ export default {
   border-radius: 40px;
 
   width: 580px;
-  height: 700px;
+  max-height: 700px;
   margin: 0 auto;
   position: relative;
 
@@ -105,7 +108,8 @@ export default {
 }
 
 .dialog-c{
-  height: 400px;
+  min-height: 100px;
+  max-height: 400px;
 }
 
 .dialog-c-item{

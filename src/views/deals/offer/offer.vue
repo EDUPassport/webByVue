@@ -7,25 +7,25 @@
       </div>
       <div class="profile-r-container">
 
-        <el-scrollbar class="profile-r-bg-container">
+        <div class="new-deal-t">
+          <div class="new-deal-t-l">New deal</div>
+          <div class="new-deal-t-r">
 
-          <div class="new-deal-t">
-            <div class="new-deal-t-l">New deal</div>
-            <div class="new-deal-t-r">
-
-              <el-button class="new-deal-btn" link round>
-                DISCARD
-              </el-button>
-              <el-button class="new-deal-btn" plain round>
-                SAVE AS DRAFT
-              </el-button>
-              <el-button class="new-deal-btn" type="primary" round
-                         :loading="submitLoadingValue"
-                         @click="submitForm('basicForm')">
-                SUBMIT
-              </el-button>
-            </div>
+            <el-button class="new-deal-btn" link round @click="discard()">
+              DISCARD
+            </el-button>
+            <!--              <el-button class="new-deal-btn" plain round>-->
+            <!--                SAVE AS DRAFT-->
+            <!--              </el-button>-->
+            <el-button class="new-deal-btn" type="primary" round
+                       :loading="submitLoadingValue"
+                       @click="submitForm('basicForm')">
+              SUBMIT
+            </el-button>
           </div>
+        </div>
+
+        <el-scrollbar class="profile-r-bg-container">
 
           <div class="basic-form">
             <div class="basic-form-label">
@@ -645,6 +645,9 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
+    discard(){
+      this.$router.go(-1)
+    }
   }
 }
 </script>
@@ -666,13 +669,11 @@ export default {
 }
 
 .profile-r-container {
-  padding: 0 50px 50px 50px;
-  width: calc(100% - 260px);
-  height: calc(100vh - 190px);
+  width: calc(100% - 160px);
+  height: calc(100vh - 140px);
 }
 
 .profile-r-bg-container{
-  width: 100%;
   height: calc(100vh - 240px);
 
 }
@@ -682,7 +683,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 30px 0 30px 0;
+  padding: 30px 50px;
 }
 
 .new-deal-t-l {
@@ -702,10 +703,12 @@ export default {
 
 
 .basic-form{
+
   background-color: #FFFFFF;
   padding: 50px;
-  box-shadow: 0 3px 23px #00000012;
+  box-shadow: 0 3px 0 #00000012;
   border-radius: 38px;
+  margin: 0 50px;
 }
 
 .basic-form-label{

@@ -10,7 +10,10 @@
 
           <div class="account-profile-t">
             <div class="account-profile-t-l">
-              <el-button  class="account-profile-back-btn" type="primary" link >
+              <el-button  class="account-profile-back-btn" type="primary" link @click="backToAccountHome()" >
+                <el-icon>
+                  <ArrowLeft />
+                </el-icon>
                 Back
               </el-button>
             </div>
@@ -66,16 +69,16 @@
                       <div class="basic-info-c-nationality">
                         {{ educatorContact.nationality }}
                       </div>
-                      <div class="basic-c-tags">
-                        <el-tag class="basic-c-tag">Biology</el-tag>
-                        <el-tag class="basic-c-tag">Esl English</el-tag>
-                        <el-tag class="basic-c-tag">Drama</el-tag>
-                      </div>
+<!--                      <div class="basic-c-tags">-->
+<!--                        <el-tag class="basic-c-tag">Biology</el-tag>-->
+<!--                        <el-tag class="basic-c-tag">Esl English</el-tag>-->
+<!--                        <el-tag class="basic-c-tag">Drama</el-tag>-->
+<!--                      </div>-->
                     </div>
                     <div class="basic-info-c-r">
                       <p>
                         {{educatorContact.bio}}
-                        <span>READ MORE</span>
+<!--                        <span>READ MORE</span>-->
                       </p>
                       <div class="basic-info-c-r-b">
                         <div class="basic-info-c-hobbies">
@@ -141,7 +144,7 @@
                     <div class="exp-c-item-4">
                       {{ work.teaching_experience }}
                     </div>
-                    <div class="exp-c-item-readmore">READ MORE</div>
+<!--                    <div class="exp-c-item-readmore">READ MORE</div>-->
                   </div>
                 </div>
 
@@ -194,12 +197,7 @@
                 <div class="languages-c-item" v-for="(item,i) in educatorContact.languages" :key="i">
                   <div class="languages-c-item-l">{{ item.object_en }}</div>
                   <div class="languages-c-item-r">
-                    <el-rate
-                        v-model="item.object_score"
-                        disabled
-                        :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                    >
-                    </el-rate>
+
                   </div>
                 </div>
               </div>
@@ -226,15 +224,6 @@
                   <div class="preferences-c-item-label">Subject to Teach</div>
                   <div class="object-show-container">
                     <div class="object-show-item" v-for="(cer,i) in subjectList" :key="i">
-                      {{ cer.object_en }}
-                    </div>
-                  </div>
-                </div>
-
-                <div class="preferences-c-item">
-                  <div class="preferences-c-item-label">Location</div>
-                  <div class="object-show-container">
-                    <div class="object-show-item" v-for="(cer,i) in locationList" :key="i">
                       {{ cer.object_en }}
                     </div>
                   </div>
@@ -272,32 +261,32 @@
 
           </div>
 
-          <div class="credentials-container">
-            <div class="credentials-label">Credentials</div>
-            <div class="credentials-content">
-              <div class="languages-container">
-                <div class="languages-t">
-                  <div class="languages-label">Languages</div>
-                  <div class="languages-edit" @click="editLanguages()">Edit</div>
-                </div>
-                <div class="languages-content" v-if="educatorContact.languages">
-                  <div class="languages-item" v-for="(item,i) in educatorContact.languages" :key="i">
-                    <div class="languages-item-l">{{ item.object_en }}</div>
-                    <div class="languages-item-r">
-                      <el-rate
-                          v-model="item.object_score"
-                          disabled
-                          :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                      >
-                      </el-rate>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<!--          <div class="credentials-container">-->
+<!--            <div class="credentials-label">Credentials</div>-->
+<!--            <div class="credentials-content">-->
+<!--              <div class="languages-container">-->
+<!--                <div class="languages-t">-->
+<!--                  <div class="languages-label">Languages</div>-->
+<!--                  <div class="languages-edit" @click="editLanguages()">Edit</div>-->
+<!--                </div>-->
+<!--                <div class="languages-content" v-if="educatorContact.languages">-->
+<!--                  <div class="languages-item" v-for="(item,i) in educatorContact.languages" :key="i">-->
+<!--                    <div class="languages-item-l">{{ item.object_en }}</div>-->
+<!--                    <div class="languages-item-r">-->
+<!--                      <el-rate-->
+<!--                          v-model="item.object_score"-->
+<!--                          disabled-->
+<!--                          :colors="['#99A9BF', '#F7BA2A', '#FF9900']"-->
+<!--                      >-->
+<!--                      </el-rate>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="media-container">
+<!--          <div class="media-container">-->
             <!--              <div class="profile-photo-container">-->
             <!--                <div class="profile-photo-t">-->
             <!--                  <div class="profile-photo-t-label">Profile Photo</div>-->
@@ -318,153 +307,153 @@
             <!--                  </el-upload>-->
             <!--                </div>-->
             <!--              </div>-->
-            <div class="background-banner-container">
-              <div class="background-banner-t">
-                <div class="background-banner-t-label">Background Banner</div>
-              </div>
-              <div class="background-banner-content">
-                <el-upload
-                    class="background-uploader"
-                    :action="uploadActionUrl"
-                    :headers="uploadHeaders"
-                    :data="uploadData"
-                    :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleBackgroundSuccess"
-                    :before-upload="beforeBackgroundUpload"
-                >
-                  <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar"></el-image>
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
+<!--            <div class="background-banner-container">-->
+<!--              <div class="background-banner-t">-->
+<!--                <div class="background-banner-t-label">Background Banner</div>-->
+<!--              </div>-->
+<!--              <div class="background-banner-content">-->
+<!--                <el-upload-->
+<!--                    class="background-uploader"-->
+<!--                    :action="uploadActionUrl"-->
+<!--                    :headers="uploadHeaders"-->
+<!--                    :data="uploadData"-->
+<!--                    :show-file-list="false"-->
+<!--                    name="file[]"-->
+<!--                    :on-success="handleBackgroundSuccess"-->
+<!--                    :before-upload="beforeBackgroundUpload"-->
+<!--                >-->
+<!--                  <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar"></el-image>-->
+<!--                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                </el-upload>-->
 
-              </div>
-            </div>
-            <div class="account-images-container">
-              <div class="account-images-t">
-                <div class="account-images-t-label">Account Images(6 max)</div>
-                <div class="account-images-t-edit"
-                     v-if="!editAccountImageStatus"
-                     @click="editAccountImageStatus=true">
-                  Edit
-                </div>
-                <div class="account-images-t-edit"
-                     v-if="editAccountImageStatus"
-                     @click="uploadAccountImages()">
-                  Save
-                </div>
-              </div>
-              <div class="account-images-content">
-                <div class="account-images-item-container" v-if="!editAccountImageStatus">
-                  <div class="account-images-item" v-for="(item,i) in accountImageFileList" :key="i" >
-                    <el-image class="account-images-img" :src="item.url" fit="contain"
-                              @click="accountImagePreview(item.url)"
-                    ></el-image>
-                  </div>
-                </div>
-                <template v-if="editAccountImageStatus">
-                  <el-upload
-                      ref="accountImagesUpload"
-                      action="#"
-                      :headers="uploadHeaders"
-                      :data="uploadData"
-                      :auto-upload="false"
-                      name="file[]"
-                      list-type="picture-card"
-                      :limit="6"
-                      :multiple="true"
-                      :before-upload="beforeAccountImageUpload"
-                      :file-list="accountImageFileList"
-                      :on-change="handleAccountImageChange"
-                      :on-preview="handleAccountImagePreview"
-                      :on-remove="handleAccountImageRemove"
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="account-images-container">-->
+<!--              <div class="account-images-t">-->
+<!--                <div class="account-images-t-label">Account Images(6 max)</div>-->
+<!--                <div class="account-images-t-edit"-->
+<!--                     v-if="!editAccountImageStatus"-->
+<!--                     @click="editAccountImageStatus=true">-->
+<!--                  Edit-->
+<!--                </div>-->
+<!--                <div class="account-images-t-edit"-->
+<!--                     v-if="editAccountImageStatus"-->
+<!--                     @click="uploadAccountImages()">-->
+<!--                  Save-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="account-images-content">-->
+<!--                <div class="account-images-item-container" v-if="!editAccountImageStatus">-->
+<!--                  <div class="account-images-item" v-for="(item,i) in accountImageFileList" :key="i" >-->
+<!--                    <el-image class="account-images-img" :src="item.url" fit="contain"-->
+<!--                              @click="accountImagePreview(item.url)"-->
+<!--                    ></el-image>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <template v-if="editAccountImageStatus">-->
+<!--                  <el-upload-->
+<!--                      ref="accountImagesUpload"-->
+<!--                      action="#"-->
+<!--                      :headers="uploadHeaders"-->
+<!--                      :data="uploadData"-->
+<!--                      :auto-upload="false"-->
+<!--                      name="file[]"-->
+<!--                      list-type="picture-card"-->
+<!--                      :limit="6"-->
+<!--                      :multiple="true"-->
+<!--                      :before-upload="beforeAccountImageUpload"-->
+<!--                      :file-list="accountImageFileList"-->
+<!--                      :on-change="handleAccountImageChange"-->
+<!--                      :on-preview="handleAccountImagePreview"-->
+<!--                      :on-remove="handleAccountImageRemove"-->
 
-                  >
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
+<!--                  >-->
+<!--                    <i class="el-icon-plus"></i>-->
+<!--                  </el-upload>-->
 
-                </template>
-                <el-dialog width="50%" v-model="dialogAccountImageVisible" center>
-                  <el-image :src="dialogAccountImageUrl"></el-image>
-                </el-dialog>
+<!--                </template>-->
+<!--                <el-dialog width="50%" v-model="dialogAccountImageVisible" center>-->
+<!--                  <el-image :src="dialogAccountImageUrl"></el-image>-->
+<!--                </el-dialog>-->
 
-              </div>
-            </div>
-            <div class="intro-video-container">
-              <div class="intro-video-t">
-                <div class="intro-video-t-label">Intro Video</div>
-                <template v-if="introVideoUrl">
-                  <div class="intro-video-t-edit"
-                       v-if="editVideoStatus"
-                       @click="editVideoStatus=false">Edit</div>
-                  <div class="intro-video-t-edit"
-                       v-else
-                       @click="editVideoStatus=true">Cancel</div>
-                </template>
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="intro-video-container">-->
+<!--              <div class="intro-video-t">-->
+<!--                <div class="intro-video-t-label">Intro Video</div>-->
+<!--                <template v-if="introVideoUrl">-->
+<!--                  <div class="intro-video-t-edit"-->
+<!--                       v-if="editVideoStatus"-->
+<!--                       @click="editVideoStatus=false">Edit</div>-->
+<!--                  <div class="intro-video-t-edit"-->
+<!--                       v-else-->
+<!--                       @click="editVideoStatus=true">Cancel</div>-->
+<!--                </template>-->
 
-              </div>
-              <div class="intro-video-content">
+<!--              </div>-->
+<!--              <div class="intro-video-content">-->
 
-                <el-upload
-                    v-if="!editVideoStatus || !introVideoUrl"
-                    class="intro-video-uploader"
-                    :action="uploadActionUrl"
-                    :headers="uploadHeaders"
-                    :data="uploadData"
-                    :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleIntroVideoSuccess"
-                    :before-upload="beforeIntroVideoUpload"
-                >
-                  <i class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-                <video v-else :src="introVideoUrl" controls class="intro-video-avatar"/>
-              </div>
-            </div>
-            <div class="my-resume-container">
-              <div class="my-resume-t">
-                <div class="my-resume-t-label">Your Resume [PDF]</div>
-                <template v-if="resumeUrl">
-                  <div class="my-resume-t-edit"
-                       v-if="editResumeStatus"
-                       @click="editResumeStatus=false">Edit</div>
-                  <div class="my-resume-t-edit"
-                       v-else
-                       @click="editResumeStatus=true">Cancel</div>
-                </template>
-              </div>
-              <div class="my-resume-content">
+<!--                <el-upload-->
+<!--                    v-if="!editVideoStatus || !introVideoUrl"-->
+<!--                    class="intro-video-uploader"-->
+<!--                    :action="uploadActionUrl"-->
+<!--                    :headers="uploadHeaders"-->
+<!--                    :data="uploadData"-->
+<!--                    :show-file-list="false"-->
+<!--                    name="file[]"-->
+<!--                    :on-success="handleIntroVideoSuccess"-->
+<!--                    :before-upload="beforeIntroVideoUpload"-->
+<!--                >-->
+<!--                  <i class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                </el-upload>-->
+<!--                <video v-else :src="introVideoUrl" controls class="intro-video-avatar"/>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="my-resume-container">-->
+<!--              <div class="my-resume-t">-->
+<!--                <div class="my-resume-t-label">Your Resume [PDF]</div>-->
+<!--                <template v-if="resumeUrl">-->
+<!--                  <div class="my-resume-t-edit"-->
+<!--                       v-if="editResumeStatus"-->
+<!--                       @click="editResumeStatus=false">Edit</div>-->
+<!--                  <div class="my-resume-t-edit"-->
+<!--                       v-else-->
+<!--                       @click="editResumeStatus=true">Cancel</div>-->
+<!--                </template>-->
+<!--              </div>-->
+<!--              <div class="my-resume-content">-->
 
-                <el-upload
-                    v-if="!editResumeStatus || !resumeUrl"
-                    drag
-                    class="resume-uploader"
-                    :action="uploadActionUrl"
-                    :headers="uploadHeaders"
-                    :data="uploadData"
-                    :show-file-list="false"
-                    name="file[]"
-                    :on-success="handleResumeSuccess"
-                    :before-upload="beforeResumeUpload"
-                >
-                  <el-icon class="el-icon--upload" :size="80">
-                    <upload-filled/>
-                  </el-icon>
-                  <div class="el-upload__text">
-                    Drop file here or <em>click to upload</em>
-                  </div>
-                  <template #tip>
-                    <div class="el-upload__tip">
+<!--                <el-upload-->
+<!--                    v-if="!editResumeStatus || !resumeUrl"-->
+<!--                    drag-->
+<!--                    class="resume-uploader"-->
+<!--                    :action="uploadActionUrl"-->
+<!--                    :headers="uploadHeaders"-->
+<!--                    :data="uploadData"-->
+<!--                    :show-file-list="false"-->
+<!--                    name="file[]"-->
+<!--                    :on-success="handleResumeSuccess"-->
+<!--                    :before-upload="beforeResumeUpload"-->
+<!--                >-->
+<!--                  <el-icon class="el-icon&#45;&#45;upload" :size="80">-->
+<!--                    <upload-filled/>-->
+<!--                  </el-icon>-->
+<!--                  <div class="el-upload__text">-->
+<!--                    Drop file here or <em>click to upload</em>-->
+<!--                  </div>-->
+<!--                  <template #tip>-->
+<!--                    <div class="el-upload__tip">-->
 
-                    </div>
-                  </template>
-                  <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-                </el-upload>
-                <a v-else :href="resumeUrl" target="_blank" class="resume-avatar">
-                  [PDF] Click to Preview
-                </a>
-              </div>
-            </div>
-          </div>
+<!--                    </div>-->
+<!--                  </template>-->
+<!--                  &lt;!&ndash;                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>&ndash;&gt;-->
+<!--                </el-upload>-->
+<!--                <a v-else :href="resumeUrl" target="_blank" class="resume-avatar">-->
+<!--                  [PDF] Click to Preview-->
+<!--                </a>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
 
         </div>
 
@@ -827,6 +816,9 @@ export default {
     this.updateEducatorProfile()
   },
   methods: {
+    backToAccountHome(){
+      this.$router.push('/account/home')
+    },
     updateEducatorProfile() {
       let params = {
         token: localStorage.getItem('token')

@@ -12,7 +12,7 @@
   </div>
 
   <div class="cancel-btn-container">
-    <el-button type="danger" @click="cancel()">Cancel</el-button>
+    <el-button type="primary" @click="cancel()">Cancel</el-button>
   </div>
 </div>
 </template>

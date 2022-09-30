@@ -3,7 +3,7 @@
     <el-scrollbar class="container">
       <div class="container-label">
         Active events
-        <el-button link type="primary">
+        <el-button link type="primary" @click="viewAllEvents()">
           VIEW ALL
         </el-button>
       </div>
@@ -76,6 +76,9 @@ export default {
   methods:{
     showEventDialog(){
 
+    },
+    viewAllEvents(){
+      this.$router.push('/events/myEvents')
     }
 
   }

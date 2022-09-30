@@ -34,113 +34,121 @@
 
           <el-col class="deals-list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
 
-            <div class="xll-ads-container">
-              <el-carousel style="width:797px;margin:0 auto;overflow:hidden;" height="20vh" indicator-position="none">
-                <el-carousel-item class="xll-ads-swiper-item"
-                                  v-for="(item,i) in featuredDealsData" :key="i"
-                                  @click="turnBanner(item.link)"
-                >
-                  <div class="xll-ads-l">
-                    <el-image class="xll-ads-l-img"
-                              :src="item.user_url !='' ? item.user_url : item.url">
-                      <template #error>
-                        <div class="image-ads-slot">
-                          <el-icon :size="80" color="#808080">
-                            <Picture/>
-                          </el-icon>
-                        </div>
-                      </template>
-                    </el-image>
-                  </div>
-                  <div class="xll-ads-r">
-                    <el-avatar class="deals-logo" :src="item.company_logo"></el-avatar>
-                    <div class="deals-item-c-r-1" @click="turnDealDetail(item.id)">
-                      {{ item.company_name }}
-                    </div>
-                    <div class="deals-item-c-r-2">
-                      <!--                      {{item.desc}}-->
-                      {{ item.title }}
-                    </div>
+            <el-scrollbar class="deals-list-scroll">
 
-                    <div class="deals-item-b-1">
-                      <div class="deals-item-b-l">
-                        Discount . F&B
-                        <template v-if="item.company_category_logo">
-                          <el-image class="hot-deal-type-icon" :src="item.company_category_logo"></el-image>
+              <div class="xll-ads-container">
+                <el-carousel style="width:797px;margin:0 auto;overflow:hidden;" height="20vh" indicator-position="none">
+                  <el-carousel-item class="xll-ads-swiper-item"
+                                    v-for="(item,i) in featuredDealsData" :key="i"
+                                    @click="turnBanner(item.link)"
+                  >
+                    <div class="xll-ads-l">
+                      <el-image class="xll-ads-l-img"
+                                :src="item.user_url !='' ? item.user_url : item.url">
+                        <template #error>
+                          <div class="image-ads-slot">
+                            <el-icon :size="80" color="#808080">
+                              <Picture/>
+                            </el-icon>
+                          </div>
                         </template>
-                      </div>
-                      <div class="deals-item-b-r">
-                        <el-button link>DETAILS</el-button>
-                      </div>
+                      </el-image>
                     </div>
-
-                  </div>
-                </el-carousel-item>
-              </el-carousel>
-
-            </div>
-            <el-scrollbar class="deals-bg-container">
-
-              <div class="deals-container">
-                <div class="deals-item" v-for="(item,index) in dealsListData" :key="index">
-                  <div class="deals-item-bg">
-                    <el-image
-                        class="deals-item-background-img"
-                        :src="item.company_info.background_image ? item.company_info.background_image : ''"
-                        fit="cover"
-                    ></el-image>
-
-                    <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                         @click="cancelFavorite(2,item.id,index)">
-                      <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-                    </div>
-                    <div class="deals-item-favorite" v-else
-                         @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
-                      <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-                    </div>
-
-                  </div>
-                  <div class="deals-item-c">
-                    <div class="deals-item-c-l">
+                    <div class="xll-ads-r">
                       <el-avatar class="deals-logo" :src="item.company_logo"></el-avatar>
-                    </div>
-                    <div class="deals-item-c-r">
-                      <div class="deals-item-c-r-1">
+                      <div class="deals-item-c-r-1" @click="turnDealDetail(item.id)">
                         {{ item.company_name }}
                       </div>
-                      <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
+                      <div class="deals-item-c-r-2">
+                        <!--                      {{item.desc}}-->
                         {{ item.title }}
                       </div>
-                    </div>
-                  </div>
 
-                  <div class="deals-item-b">
-                    <div class="deals-item-b-l">
-
-                      <template v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
-                        {{ item.company_info.category_name_en }}
-                      </template>
-                      <template v-else>
-                        unknown
-                      </template>
+                      <div class="deals-item-b-1">
+                        <div class="deals-item-b-l">
+                          Discount . F&B
+                          <template v-if="item.company_category_logo">
+                            <el-image class="hot-deal-type-icon" :src="item.company_category_logo"></el-image>
+                          </template>
+                        </div>
+                        <div class="deals-item-b-r">
+                          <el-button link>DETAILS</el-button>
+                        </div>
+                      </div>
 
                     </div>
-                    <div class="deals-item-b-r">
-                      <el-button link @click="showDealDetailDialog(item)">
-                        DETAILS
-                      </el-button>
+                  </el-carousel-item>
+                </el-carousel>
+
+              </div>
+              <div class="deals-bg-container">
+
+                <div class="deals-container">
+                  <div class="deals-item" v-for="(item,index) in dealsListData" :key="index">
+                    <div class="deals-item-bg">
+                      <el-image
+                          class="deals-item-background-img"
+                          :src="item.company_info.background_image ? item.company_info.background_image : ''"
+                          fit="cover"
+                      ></el-image>
+
+                      <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                           @click="cancelFavorite(2,item.id,index)">
+                        <el-icon color="#6650B3" :size="25">
+                          <IconFontistoFavorite />
+                        </el-icon>
+                      </div>
+                      <div class="deals-item-favorite" v-else
+                           @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
+                        <el-icon :size="25">
+                          <CollectionTag />
+                        </el-icon>
+                      </div>
+
                     </div>
+                    <div class="deals-item-c">
+                      <div class="deals-item-c-l">
+                        <el-avatar class="deals-logo" :src="item.company_logo"></el-avatar>
+                      </div>
+                      <div class="deals-item-c-r">
+                        <div class="deals-item-c-r-1">
+                          {{ item.company_name }}
+                        </div>
+                        <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
+                          {{ item.title }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="deals-item-b">
+                      <div class="deals-item-b-l">
+
+                        <template v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
+                          {{ item.company_info.category_name_en }}
+                        </template>
+                        <template v-else>
+                          unknown
+                        </template>
+
+                      </div>
+                      <div class="deals-item-b-r">
+                        <el-button link @click="showDealDetailDialog(item)">
+                          DETAILS
+                        </el-button>
+                      </div>
+                    </div>
+
                   </div>
 
                 </div>
+                <div class="deals-pagination">
+                  <el-pagination layout="prev, pager, next" :default-current-page="1"
+                                 @size-change="dealPageSizeChange"
+                                 @current-change="dealPageChange"
+                                 :current-page="dealPage" :page-size="dealLimit"
+                                 :total="dealTotalNum"></el-pagination>
+                </div>
 
-              </div>
-              <div class="deals-pagination">
-                <el-pagination layout="prev, pager, next" :default-current-page="1"
-                               @size-change="dealPageSizeChange"
-                               @current-change="dealPageChange"
-                               :current-page="dealPage" :page-size="dealLimit"
-                               :total="dealTotalNum"></el-pagination>
               </div>
 
             </el-scrollbar>
@@ -868,11 +876,14 @@ export default {
   padding-left: 12px;
 }
 
+.deals-list-scroll{
+  background-color: #F0F2F5;
+  height: calc(100vh - 140px);
+}
 
 .deals-bg-container {
-  background-color: #F0F2F5;
-  height: calc(100vh - 170px - 20vh - 100px);
-  padding: 0 30px 30px 30px;
+
+  padding: 0 30px 0 30px;
 }
 
 .deals-container {
@@ -1000,6 +1011,7 @@ export default {
 
 .deals-pagination {
   margin-top: 25px;
+  margin-bottom: 25px;
   display: flex;
   justify-content: center;
 }

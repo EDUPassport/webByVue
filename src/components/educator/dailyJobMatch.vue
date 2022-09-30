@@ -2,82 +2,93 @@
 <div>
   <div class="e-j">
     <div class="e-j-label">
-      Daily 5 job matches
+      Our picks for you
     </div>
-    <div class="e-j-c">
+    <el-scrollbar max-height="320px" class="e-j-c">
 
-      <div class="e-j-item-bg">
+      <div class="e-j-item-bg" v-for="(item,i) in jobFeaturedData" :key="i">
         <div class="e-j-item">
           <div class="e-j-item-l">
-            <el-avatar class="e-j-c-item-avatar"></el-avatar>
+            <el-avatar class="e-j-c-item-avatar"
+                       :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+            ></el-avatar>
           </div>
           <div class="e-j-item-m">
-            <div class="e-j-item-m-1">University</div>
-            <div class="e-j-item-m-2">
-              CLASSROOM TEACHER
+            <div class="e-j-item-m-1"> {{ item.company_name }}</div>
+            <div class="e-j-item-m-2" @click="turnJobDetail(item.id)">
+              {{ item.job_title }}
             </div>
             <div class="e-j-item-m-3">
-              Salary: $100,000-120,000/year
+              {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
+              <span v-if="item.payment_period == 112">hourly</span>
+              <span v-if="item.payment_period == 113">daily</span>
+              <span v-if="item.payment_period == 114">weekly</span>
+              <span v-if="item.payment_period == 115">monthly</span>
+              <span v-if="item.payment_period == 116">annually</span>
             </div>
+<!--            <div class="e-j-item-m-3">-->
+<!--              Multiple-->
+<!--            </div>-->
             <div class="e-j-item-m-3">
-              Multiple
-            </div>
-            <div class="e-j-item-m-3">
-              Full time
+              <span v-if="item.employment_type==1">Full time</span>
+              <span v-if="item.employment_type==2">Part time</span>
+              <span v-if="item.employment_type==3">Seasonal</span>
             </div>
 
           </div>
-          <div class="e-j-item-r">
-            <div class="e-j-item-r-1">90% match</div>
-            <div class="e-j-item-r-2">
-              <el-avatar class="e-j-c-item-avatar"></el-avatar>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="e-j-item-bg">
-        <div class="e-j-item">
-          <div class="e-j-item-l">
-            <el-avatar class="e-j-c-item-avatar"></el-avatar>
-          </div>
-          <div class="e-j-item-m">
-            <div class="e-j-item-m-1">State College</div>
-            <div class="e-j-item-m-2">
-              DIRECTOR OF FACULTY
-            </div>
-            <div class="e-j-item-m-3">
-              Salary: $150,000-200,000/year
-            </div>
-            <div class="e-j-item-m-3">
-              London, UK
-            </div>
-            <div class="e-j-item-m-3">
-              Full time
-            </div>
-
-          </div>
-          <div class="e-j-item-r">
-            <div class="e-j-item-r-1">77% match</div>
-            <div class="e-j-item-r-2">
-              <el-avatar class="e-j-c-item-avatar"></el-avatar>
-            </div>
-          </div>
+<!--          <div class="e-j-item-r">-->
+<!--            <div class="e-j-item-r-1">90% match</div>-->
+<!--            <div class="e-j-item-r-2">-->
+<!--              <el-avatar class="e-j-c-item-avatar"></el-avatar>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
 
       </div>
 
 
-    </div>
+
+    </el-scrollbar>
   </div>
 
 </div>
 </template>
 
 <script>
+import {JOB_FEATURED_LIST} from "@/api/api";
+
 export default {
-  name: "dailyJobMatch"
+  name: "dailyJobMatch",
+  data(){
+    return {
+      jobFeaturedData:[]
+    }
+  },
+  mounted(){
+    this.getJobFeaturedList()
+  },
+  methods:{
+    turnJobDetail(id){
+      this.$router.push({path:'/jobs',query:{id:id}})
+    },
+    getJobFeaturedList() {
+      let params = {
+        ad_type: 2
+      }
+
+      JOB_FEATURED_LIST(params).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.jobFeaturedData = res.message;
+        } else {
+          console.log(res.msg)
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
+  }
 }
 </script>
 
@@ -100,11 +111,12 @@ export default {
 
 .e-j-c {
   margin-top: 25px;
+
 }
 
 .e-j-item-bg {
   border-bottom: 1px solid #F0F2F5;
-  padding: 25px 0;
+  padding: 25px 15px;
 }
 
 .e-j-item {
@@ -147,6 +159,7 @@ export default {
   font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 25px;
   color: #262626;
+  cursor: pointer;
 }
 
 .e-j-item-m-3 {

@@ -5,13 +5,19 @@
         <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
           <el-col :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
 
-            <div  class="logo-container">
-              <div class="logo-logo"  @click="turnHome()">
-                <div class="logo-edu">EDU</div>
-                <div class="logo-passport">PASSPORT</div>
+<!--            <div  class="logo-container">-->
+<!--              <div class="logo-logo"  @click="turnHome()">-->
+<!--                <div class="logo-edu">EDU</div>-->
+<!--                <div class="logo-passport">PASSPORT</div>-->
+<!--              </div>-->
+<!--              <div class="logo-beta">Beta</div>-->
+<!--            </div>-->
+
+            <div class="logo-new-container">
+              <div class="logo-new"  @click="turnHome()">
+                <el-image class="logo-new-logo-img" :src="logoImgLight"></el-image>
               </div>
-<!--              <el-image class="logo-img" :src="logoImg" fit="fill" @click="turnHome()"></el-image>-->
-              <div class="logo-beta">Beta</div>
+              <div class="logo-new-beta">Beta</div>
             </div>
 
           </el-col>
@@ -64,8 +70,10 @@
                             </el-icon>
                           </div>
 
-                          <el-dropdown size="large" trigger="click" :hide-on-click="false"
-                                       popper-class="xll-dropdown">
+                          <el-dropdown size="large" trigger="click"
+                                       :hide-on-click="false"
+                                       popper-class="xll-dropdown"
+                          >
 
                           <span class="el-dropdown-link">
 
@@ -78,206 +86,213 @@
                             <el-icon :size="24" style="margin-left: 5px;">
                               <IconIcBaselineExpandMore />
                             </el-icon>
+
                           </span>
 
                             <template #dropdown >
                               <el-dropdown-menu >
-                                <div class="xll-more-company-dropdown" >
-                                  <div class="xll-more-company-dropdown-l">
-                                    <el-dropdown-item class="xll-dropdown-item">
-                                      <el-dropdown size="large" placement="left-start" :max-height="400">
-                                  <span class="el-dropdown-link-business">
-                                     <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
-                                     Educator
-                                  </span>
-                                        <template #dropdown>
-                                          <el-dropdown-menu >
-                                            <div class="xll-sub-dropdown"  v-if="educatorContactData.length>0">
-                                              <el-dropdown-item
-                                                  class="xll-dropdown-item"
-                                                  v-for="(item,i) in educatorContactData"
-                                                  :key="i"
-                                                  @click="changeIdentity(item.id,1,2)">
 
-                                                <template v-if="item.name">
-                                                  {{item.name}}
-                                                </template>
-                                                <template v-else>
-                                                  <!--                                                Default ID : {{item.id}}-->
-                                                  Click to Update Profile
-                                                </template>
-                                              </el-dropdown-item>
-                                            </div>
+                                <el-dropdown-item
+                                    @click="turnOverview()"
+                                >
+                                  <el-icon>
+                                    <IconMaterialSymbolsDashboardOutlineRounded />
+                                  </el-icon>
 
-                                            <div class="xll-sub-dropdown" v-else>
-                                              <el-dropdown-item class="xll-dropdown-item" @click="createRole(1)">
-                                                <div class="xll-add-icon-container" >
-                                                  <span>Add</span>
-                                                  <el-icon class="xll-icon-circle-plus-1" :size="14">
-                                                    <CirclePlus/>
-                                                  </el-icon>
-                                                </div>
-                                              </el-dropdown-item>
-                                            </div>
+                                  <span class="el-dropdown-link-1">DASHBOARD</span>
 
-                                          </el-dropdown-menu>
+                                </el-dropdown-item>
+                                <el-dropdown-item  @click="turnEditProfile()">
+                                  <el-icon>
+                                    <IconIconoirProfileCircled />
+                                  </el-icon>
 
-                                        </template>
-                                      </el-dropdown>
+                                  <span class="el-dropdown-link-1"> MY PROFILE</span>
+                                </el-dropdown-item>
 
-                                    </el-dropdown-item>
+                                <div class="el-dropdown-tips">switch profile</div>
+                                <el-dropdown-item  class="xll-dropdown-item">
 
-                                  </div>
-                                  <div class="xll-more-company-dropdown-r">
-                                    <!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
-                                    <!--                                         @click="createRole(1)"-->
-                                    <!--                                >-->
-                                    <!--                                  <CirclePlus/>-->
-                                    <!--                                </el-icon>-->
-                                  </div>
+                                  <el-dropdown size="large"
+                                               placement="left-start"
+                                               :max-height="400">
+                                          <span class="el-dropdown-link-sp">
+                                              Educator
+                                          </span>
+                                    <template #dropdown>
+                                      <el-dropdown-menu >
+                                        <div class="xll-sub-dropdown"  v-if="educatorContactData.length>0">
+                                          <el-dropdown-item
+                                              class="xll-dropdown-item"
+                                              v-for="(item,i) in educatorContactData"
+                                              :key="i"
+                                              @click="changeIdentity(item.id,1,2)">
 
-                                </div>
+                                            <template v-if="item.name">
 
-                                <div class="xll-more-company-dropdown">
-                                  <div class="xll-more-company-dropdown-l">
-
-                                    <el-dropdown-item class="xll-dropdown-item">
-                                      <el-dropdown size="large" placement="left-start" :max-height="400">
-                                  <span class="el-dropdown-link-business">
-                                     <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
-                                    Edu-Business
-                                  </span>
-                                        <template #dropdown>
-                                          <el-dropdown-menu>
-                                            <div class="xll-sub-dropdown"  v-if="recruiterCompanyData.length>0">
-                                              <el-dropdown-item
-                                                  class="xll-dropdown-item"
-                                                  v-for="(item,i) in recruiterCompanyData"
-                                                  :key="i"
-                                                  @click="changeIdentity(item.id,2,2)">
-
-                                                <template v-if="item.company_name">
-                                                  {{item.company_name}}
-                                                </template>
-                                                <template v-else>
-                                                  <!--                                                Default ID: {{item.id}}-->
-                                                  Click to Update Profile
-                                                </template>
-                                              </el-dropdown-item>
-                                            </div>
-
-                                            <div class="xll-sub-dropdown" v-if="schoolCompanyData.length>0">
-                                              <el-dropdown-item
-                                                  class="xll-dropdown-item"
-                                                  v-for="(item,i) in schoolCompanyData"
-                                                  :key="i"
-                                                  @click="changeIdentity(item.id,3,2)">
-                                                <template v-if="item.company_name">
-                                                  {{item.company_name}}
-                                                </template>
-                                                <template v-else>
-                                                  <!--                                                Company ID: {{item.id}}-->
-                                                  Click to Update Profile
-                                                </template>
-                                              </el-dropdown-item>
-                                            </div>
-                                            <div class="xll-sub-dropdown" v-if="otherCompanyData.length>0">
-                                              <el-dropdown-item
-                                                  v-for="(item,i) in otherCompanyData"
-                                                  :key="i"
-                                                  class="xll-dropdown-item"
-                                                  @click="changeIdentity(item.id,4,2)">
-                                                <template v-if="item.company_name">
-                                                  {{item.company_name}}
-                                                </template>
-                                                <template v-else>
-                                                  <!--                                                Default ID: {{item.id}}-->
-                                                  Click to Update Profile
-                                                </template>
-                                              </el-dropdown-item>
-                                            </div>
-
-                                            <div class="xll-sub-dropdown">
-                                              <el-dropdown-item class="xll-dropdown-item" @click="selectBusinessRole()">
-                                                <div class="xll-add-icon-container" >
-                                                  <span>Add</span>
-                                                  <el-icon class="xll-icon-circle-plus-1" :size="14">
-                                                    <CirclePlus/>
-                                                  </el-icon>
-                                                </div>
-                                              </el-dropdown-item>
-                                            </div>
-
-                                          </el-dropdown-menu>
-                                        </template>
-                                      </el-dropdown>
-
-                                    </el-dropdown-item>
-
-                                  </div>
-                                  <div class="xll-more-company-dropdown-r">
-                                    <!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
-                                    <!--                                         @click="selectBusinessRole()"-->
-                                    <!--                                >-->
-                                    <!--                                  <CirclePlus/>-->
-                                    <!--                                </el-icon>-->
-                                  </div>
-
-                                </div>
-
-                                <div class="xll-more-company-dropdown" >
-                                  <div class="xll-more-company-dropdown-l">
-                                    <el-dropdown-item class="xll-dropdown-item">
-                                      <el-dropdown size="large" placement="left-start" :max-height="400">
-                                  <span class="el-dropdown-link-business">
-                                     <i class="el-icon-arrow-left xll-icon-arrow-left"></i>
-                                     Vendor
-                                  </span>
-                                        <template #dropdown>
-                                          <el-dropdown-menu >
-                                            <template v-if="vendorCompanyData.length>0">
-
-                                              <el-dropdown-item
-                                                  class="xll-dropdown-item"
-                                                  v-for="(item,i) in vendorCompanyData"
-                                                  :key="i"
-                                                  @click="changeIdentity(item.id,5,2)">
-                                                <template v-if="item.company_name">
-                                                  {{item.company_name}}
-                                                </template>
-                                                <template v-else>
-                                                  <!--                                                Default ID: {{item.id}}-->
-                                                  Click to Update Profile
-                                                </template>
-                                              </el-dropdown-item>
+                                              <span class="el-dropdown-link">{{item.name}}</span>
+                                            </template>
+                                            <template v-else>
+                                              <span class="el-dropdown-link">Click to Update Profile</span>
                                             </template>
 
-                                            <el-dropdown-item class="xll-dropdown-item" @click="createRole(5)">
-                                              <div class="xll-add-icon-container" >
-                                                <span>Add</span>
-                                                <el-icon class="xll-icon-circle-plus-1" :size="14">
-                                                  <CirclePlus/>
-                                                </el-icon>
-                                              </div>
-                                            </el-dropdown-item>
+                                          </el-dropdown-item>
+                                        </div>
 
-                                          </el-dropdown-menu>
+                                        <div class="xll-sub-dropdown" v-else>
+                                          <el-dropdown-item class="xll-dropdown-item" @click="createRole(1)">
+                                            <div class="xll-add-icon-container" >
+                                              <span>Add</span>
+                                              <el-icon class="xll-icon-circle-plus-1" :size="14">
+                                                <CirclePlus/>
+                                              </el-icon>
+                                            </div>
+                                          </el-dropdown-item>
+                                        </div>
 
+                                      </el-dropdown-menu>
+
+                                    </template>
+                                  </el-dropdown>
+
+                                </el-dropdown-item>
+
+
+                                <el-dropdown-item class="xll-dropdown-item">
+                                  <el-dropdown size="large" placement="left-start" :max-height="400">
+                                  <span class="el-dropdown-link-sp">
+
+                                    Edu-Business
+                                  </span>
+                                    <template #dropdown>
+                                      <el-dropdown-menu>
+                                        <div class="xll-sub-dropdown"  v-if="recruiterCompanyData.length>0">
+                                          <el-dropdown-item
+                                              class="xll-dropdown-item"
+                                              v-for="(item,i) in recruiterCompanyData"
+                                              :key="i"
+                                              @click="changeIdentity(item.id,2,2)">
+
+                                            <template v-if="item.company_name">
+                                              <span class="el-dropdown-link">{{item.company_name}}</span>
+                                            </template>
+                                            <template v-else>
+                                              <span class="el-dropdown-link">Click to Update Profile</span>
+                                            </template>
+                                          </el-dropdown-item>
+                                        </div>
+
+                                        <div class="xll-sub-dropdown" v-if="schoolCompanyData.length>0">
+                                          <el-dropdown-item
+                                              class="xll-dropdown-item"
+                                              v-for="(item,i) in schoolCompanyData"
+                                              :key="i"
+                                              @click="changeIdentity(item.id,3,2)">
+                                            <template v-if="item.company_name">
+
+                                              <span class="el-dropdown-link">{{item.company_name}}</span>
+                                            </template>
+                                            <template v-else>
+                                              <span class="el-dropdown-link">Click to Update Profile</span>
+                                            </template>
+                                          </el-dropdown-item>
+                                        </div>
+                                        <div class="xll-sub-dropdown" v-if="otherCompanyData.length>0">
+                                          <el-dropdown-item
+                                              v-for="(item,i) in otherCompanyData"
+                                              :key="i"
+                                              class="xll-dropdown-item"
+                                              @click="changeIdentity(item.id,4,2)">
+                                            <template v-if="item.company_name">
+
+                                              <span class="el-dropdown-link">{{item.company_name}}</span>
+                                            </template>
+                                            <template v-else>
+                                              <span class="el-dropdown-link">Click to Update Profile</span>
+                                            </template>
+                                          </el-dropdown-item>
+                                        </div>
+
+                                        <div class="xll-sub-dropdown">
+                                          <el-dropdown-item class="xll-dropdown-item" @click="selectBusinessRole()">
+                                            <div class="xll-add-icon-container" >
+                                              <span>Add</span>
+                                              <el-icon class="xll-icon-circle-plus-1" :size="14">
+                                                <CirclePlus/>
+                                              </el-icon>
+                                            </div>
+                                          </el-dropdown-item>
+                                        </div>
+
+                                      </el-dropdown-menu>
+                                    </template>
+                                  </el-dropdown>
+
+                                </el-dropdown-item>
+
+
+                                <el-dropdown-item class="xll-dropdown-item">
+                                  <el-dropdown size="large" placement="left-start" :max-height="400">
+                                  <span class="el-dropdown-link-sp">
+                                     Vendor
+                                  </span>
+                                    <template #dropdown>
+                                      <el-dropdown-menu >
+                                        <template v-if="vendorCompanyData.length>0">
+
+                                          <el-dropdown-item
+                                              class="xll-dropdown-item"
+                                              v-for="(item,i) in vendorCompanyData"
+                                              :key="i"
+                                              @click="changeIdentity(item.id,5,2)">
+                                            <template v-if="item.company_name">
+                                              <span class="el-dropdown-link">{{item.company_name}}</span>
+                                            </template>
+                                            <template v-else>
+                                              <span class="el-dropdown-link">Click to Update Profile</span>
+                                            </template>
+                                          </el-dropdown-item>
                                         </template>
-                                      </el-dropdown>
 
-                                    </el-dropdown-item>
+                                        <el-dropdown-item class="xll-dropdown-item" @click="createRole(5)">
+                                          <div class="xll-add-icon-container" >
+                                            <span>Add</span>
+                                            <el-icon class="xll-icon-circle-plus-1" :size="14">
+                                              <CirclePlus/>
+                                            </el-icon>
+                                          </div>
+                                        </el-dropdown-item>
 
-                                  </div>
-                                  <div class="xll-more-company-dropdown-r">
-                                    <!--                                <el-icon class="xll-icon-circle-plus" :size="20"-->
-                                    <!--                                         @click="createRole(5)"-->
-                                    <!--                                >-->
-                                    <!--                                  <CirclePlus/>-->
-                                    <!--                                </el-icon>-->
-                                  </div>
+                                      </el-dropdown-menu>
 
-                                </div>
+                                    </template>
+                                  </el-dropdown>
+
+                                </el-dropdown-item>
+
+
+                                <!--                                <el-dropdown-item @click="dialogDiscountCardVisible=true">-->
+                                <!--                                  My Discount Card-->
+                                <!--                                </el-dropdown-item>-->
+
+<!--                                v-if="isThirdCompanyStatus == 1"-->
+                                <el-dropdown-item v-if="isThirdCompanyStatus == 1"  @click="returnMySelf()" >
+                                  <el-icon>
+                                    <IconAkarIconsArrowBackThick />
+                                  </el-icon>
+                                  <span class="el-dropdown-link-1"> RETURN TO MY ACCOUNT</span>
+
+                                </el-dropdown-item>
+
+                                <el-dropdown-item  @click="loginOut()">
+                                  <el-icon>
+                                    <IconIcBaselineLogout />
+                                  </el-icon>
+                                  <span class="el-dropdown-link-1">  LOG OUT</span>
+
+                                </el-dropdown-item>
+
+
                               </el-dropdown-menu>
                             </template>
 
@@ -286,40 +301,43 @@
 
                         </div>
 
-
-
                       </template>
 
                     </div>
                   </div>
 
                   <div class="user-avatar">
-
-                    <el-dropdown>
-                      <el-avatar class="user-avatar-img" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
-
-                      <template #dropdown>
-                        <el-dropdown-menu>
-                          <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>
-                          <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>
-                          <!--                    <el-dropdown-item>Change Password</el-dropdown-item>-->
-                          <!--                    <el-dropdown-item >Change Language</el-dropdown-item>-->
-                          <el-dropdown-item divided @click="returnMySelf()" v-if="isThirdCompanyStatus == 1">
-                            Return to My Account
-                          </el-dropdown-item>
-                          <el-dropdown-item divided @click="loginOut()">Log Out</el-dropdown-item>
-                        </el-dropdown-menu>
-                      </template>
-                    </el-dropdown>
+                    <el-avatar class="user-avatar-img" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
+<!--                    <el-dropdown>-->
+<!--                      -->
+<!--                      <template #dropdown>-->
+<!--                        <el-dropdown-menu>-->
+<!--                          <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>-->
+<!--                          <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>-->
+<!--                          &lt;!&ndash;                    <el-dropdown-item>Change Password</el-dropdown-item>&ndash;&gt;-->
+<!--                          &lt;!&ndash;                    <el-dropdown-item >Change Language</el-dropdown-item>&ndash;&gt;-->
+<!--                          <el-dropdown-item  @click="returnMySelf()" v-if="isThirdCompanyStatus == 1">-->
+<!--                            Return to My Account-->
+<!--                          </el-dropdown-item>-->
+<!--                          <el-dropdown-item  @click="loginOut()">Log Out</el-dropdown-item>-->
+<!--                        </el-dropdown-menu>-->
+<!--                      </template>-->
+<!--                    </el-dropdown>-->
 
                   </div>
-
 
                 </div>
               </template>
               <template v-else>
-                <router-link class="login-btn" :to="{path:'/edupassport',query:{type:'login'}}">Login</router-link>
-                <el-button class="sign-up-btn" type="default" @click="signUp()">Sign Up</el-button>
+                <el-button link @click="login()">
+                  LOGIN
+                </el-button>
+                <el-button class="sign-up-btn"
+                           round
+                           type="primary"
+                           @click="signUp()">
+                  Sign Up
+                </el-button>
               </template>
             </div>
           </el-col>
@@ -433,12 +451,14 @@ import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
 import discountCardImg from '@/assets/discountcard/discountCard.png'
 import {encode, decode} from 'js-base64'
+import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
 
 export default {
   name: "Header",
   data() {
     return {
       logoImg,
+      logoImgLight,
       discountCardImg,
       defaultAvatar,
       menuDrawerStatus: false,
@@ -717,6 +737,18 @@ export default {
       })
 
     },
+    turnOverview(){
+      let self = this;
+      this.$loading({
+        text: 'Loading...'
+      })
+
+      this.$router.push('/overview')
+
+      setTimeout(function () {
+        self.$loading().close()
+      },1500)
+    },
     turnEditProfile(){
       this.$loading({
         text: 'Loading...'
@@ -726,7 +758,7 @@ export default {
       // console.log(companyId)
       if(companyId && companyId != '0' ){
         this.changeIdentity(companyId,identity,2)
-        this.$router.push({path: '/overview', query: {}})
+        // this.$router.push({path: '/account/home', query: {}})
 
         this.$loading().close()
 
@@ -1034,15 +1066,15 @@ export default {
           localStorage.setItem('menuData',str)
 
           this.$store.commit('identity', identity)
+          this.$store.commit('currentCompanyId', companyId)
           this.$store.commit('menuData', res.message)
 
           this.getBasicInfo(identity)
 
-          this.$router.push({
-            path: '/overview', query: {}
-          })
+          this.$router.push('/account/home')
 
           this.$loading().close()
+
         }
       }).catch(err => {
         console.log(err)
@@ -1255,53 +1287,33 @@ export default {
   display: flex;
   align-items: center;
 
-  cursor: pointer;
   color: #262626;
-  font-size: 24px;
+  font-size: 25px;
   font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-
 }
 
-.el-icon-arrow-down {
-  font-size: 12px;
-}
 
-.el-dropdown-link-business {
-  padding-right: 20px;
-  padding-left:10px;
-}
-
-.xll-more-company-dropdown {
+.el-dropdown-link-sp {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
 
+  color: #262626;
+  font-size: 22px;
+  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.xll-more-company-dropdown-l {
-
+.el-dropdown-link-1 {
+  color: #262626;
+  font-size: 20px;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.xll-more-company-dropdown-r {
-
-}
-
-.xll-dropdown-item {
-  padding: 4px 20px;
-  font-size:14px;
-}
-.xll-dropdown-item:hover{
-  color:#00b3d2;
-}
-
-.xll-icon-circle-plus:hover {
-  color: #00b3d2;
-}
-
-.xll-icon-circle-plus {
-  cursor: pointer;
-  color:#808080;
+.el-dropdown-tips{
+  margin-top: 10px;
+  padding-left: 20px;
+  color: #262626;
+  font-size: 14px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .xll-add-icon-container{
@@ -1365,12 +1377,6 @@ export default {
   display: none;
 }
 
-.sign-up-btn {
-  color: #FFFFFF;
-  font-weight: bold;
-  font-size: 14px;
-}
-
 .nav-link-item {
   cursor: pointer;
   padding: 10px;
@@ -1391,13 +1397,7 @@ export default {
 }
 
 @media screen and  (min-width: 1200px) {
-  .login-btn {
-    display: inline;
-  }
 
-  .sign-up-btn {
-    display: inline;
-  }
 }
 
 .xll-icon-size {
@@ -1422,8 +1422,34 @@ export default {
   margin-right: 15px;
 }
 
-.el-dropdown{
 
+
+.logo-new-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  float: left;
+}
+
+.logo-new{
+  cursor: pointer;
+}
+
+.logo-new-logo-img{
+  width: 100px;
+}
+
+.logo-new-beta{
+  position: absolute;
+  top: 0;
+  right: -25px;
+  background-color:#49397f;
+  padding:2px 10px;
+  border-radius:10px;
+  color:#EEEEEE;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 12px;
 }
 
 </style>

@@ -2,13 +2,28 @@
 <div class="container">
   <el-scrollbar class="deals-from-bg-container">
     <div class="deals-from-t">
-      <div class="deals-from-back">
+      <div class="deals-from-back" v-if="!fromVendorProfile">
         <el-button class="deals-from-back-btn"
                    @click="backToSearchResults()"
                    link>
+          <el-icon>
+            <ArrowLeft />
+          </el-icon>
           BACK TO SEARCH RESULTS
         </el-button>
       </div>
+
+      <div class="deals-from-back" v-if="fromVendorProfile">
+        <el-button class="deals-from-back-btn"
+                   @click="backToSearchResults()"
+                   link>
+          <el-icon>
+            <ArrowLeft />
+          </el-icon>
+          EXIT PREVIEW
+        </el-button>
+      </div>
+
       <div class="deals-from-label">
         Deals from {{ info.company_name }}
       </div>
@@ -78,7 +93,7 @@
 <script>
 export default {
   name: "dealByListComponent",
-  props:['listData','info'],
+  props:['listData','info','fromVendorProfile'],
   methods:{
     backToSearchResults(){
         this.$emit('back')

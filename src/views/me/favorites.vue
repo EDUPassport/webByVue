@@ -5,43 +5,62 @@
         <meSideMenu></meSideMenu>
       </div>
       <div class="favorites-r">
+
         <div class="favorites-r-bg">
+
+          <div class="favorites-label">
+            FAVORITED
+          </div>
+
           <div class="list-container">
             <template v-if="favoriteData.length>0">
-              <div class="list-item" v-for="(item,i) in favoriteData" :key="i">
-                <div class="list-item-l">
-                  <el-avatar class="list-item-l-img" :src="item.type_url"></el-avatar>
-                </div>
-                <div class="list-item-r">
-                  <div class="list-item-r-t">
-                    <router-link v-if="item.type==1" :to="{path:'/jobs/detail',query:{id:item.type_id}}">
-                      {{ item.type_title }}
-                    </router-link>
-                    <router-link v-if="item.type==2" :to="{path:'/deals/detail',query:{id:item.type_id}}">
-                      {{ item.type_title }}
-                    </router-link>
+              <div class="list-item-bg" v-for="(item,i) in favoriteData" :key="i">
+
+                <div class="list-item" >
+                  <div class="list-item-l">
+                    <el-avatar class="list-item-l-img" :src="item.type_url"></el-avatar>
+                  </div>
+                  <div class="list-item-r">
+                    <div class="list-item-r-t">
+                      <router-link v-if="item.type==1" :to="{path:'/jobs/detail',query:{id:item.type_id}}">
+                        {{ item.type_title }}
+                      </router-link>
+                      <router-link v-if="item.type==2" :to="{path:'/deals/detail',query:{id:item.type_id}}">
+                        {{ item.type_title }}
+                      </router-link>
+                    </div>
+                  </div>
+                  <div class="list-item-type">
+                    <span v-if="item.type==1">Job</span>
+                    <span v-if="item.type==2">Deal</span>
+                  </div>
+                  <div class="list-item-favorite-icon-container"
+                       @click="cancelFavorite(item.type,item.type_id)">
+                    <el-icon color="#6650B3" :size="25">
+                      <IconFontistoFavorite />
+                    </el-icon>
                   </div>
                 </div>
-                <div class="list-item-type">
-                  <span v-if="item.type==1">Job</span>
-                  <span v-if="item.type==2">Deal</span>
-                </div>
-                <div class="list-item-favorite-icon-container" @click="cancelFavorite(item.type,item.type_id)">
-                  <i class="iconfont el-icon-alixll-heart-filled list-item-favorite-icon"></i>
-                </div>
+
               </div>
 
             </template>
+
             <template v-else>
               <div class="empty-tips">
                 You have no favorites yet. <br>
-                Click on the heartshapes on any job, event or deal to favorite it.
+                Click on the
+                <el-icon >
+                  <CollectionTag />
+                </el-icon>
+                on any job, event or deal to favorite it.
               </div>
             </template>
           </div>
 
-          <div class="list-pagination" v-if="favoriteData.length>0">
+          <div class="list-pagination-container" v-if="favoriteData.length>0">
             <el-pagination layout="prev, pager, next" :default-current-page="1"
+                           class="list-pagination"
                            @size-change="pageSizeChange"
                            @current-change="pageChange"
                            :current-page="page" :page-size="limit"
@@ -51,25 +70,25 @@
           <!--            <el-image :src="dashboardAdsImg"></el-image>-->
           <!--          </div>-->
 
-          <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataTop.length>0">
-            <el-carousel height="220px" indicator-position="none">
-              <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataTop" :key="i">
-                <div class="xll-ads-l">
-                  <el-avatar class="xll-ads-l-img"
-                             :src="item.user_url !='' ? item.user_url : item.url"></el-avatar>
-                </div>
-                <div class="xll-ads-r">
-                  <h4>Advertise with Us</h4>
-                  <h5>Description:</h5>
-                  <div class="xll-ads-r-desc">
-                    Your Adverts and their description will be displayed here.
-                    Just click on the banner
-                  </div>
+<!--          <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataTop.length>0">-->
+<!--            <el-carousel height="220px" indicator-position="none">-->
+<!--              <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataTop" :key="i">-->
+<!--                <div class="xll-ads-l">-->
+<!--                  <el-avatar class="xll-ads-l-img"-->
+<!--                             :src="item.user_url !='' ? item.user_url : item.url"></el-avatar>-->
+<!--                </div>-->
+<!--                <div class="xll-ads-r">-->
+<!--                  <h4>Advertise with Us</h4>-->
+<!--                  <h5>Description:</h5>-->
+<!--                  <div class="xll-ads-r-desc">-->
+<!--                    Your Adverts and their description will be displayed here.-->
+<!--                    Just click on the banner-->
+<!--                  </div>-->
 
-                </div>
-              </el-carousel-item>
-            </el-carousel>
-          </div>
+<!--                </div>-->
+<!--              </el-carousel-item>-->
+<!--            </el-carousel>-->
+<!--          </div>-->
 
         </div>
       </div>
@@ -232,31 +251,52 @@ export default {
 }
 
 .favorites-r{
-  width: calc(100% - 160px);
-  height: calc(100vh - 140px);
+  width: calc(100% - 260px);
+  height: calc(100vh - 240px);
+  padding: 50px;
 }
 
 .favorites-r-bg{
   padding: 50px;
+  background-color: #FFFFFF;
+  box-shadow: 0px 3px 23px #00000012;
+  border-radius: 18px;
 }
 
+.favorites-label{
+  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  color: #262626;
+}
 
 .list-container {
-  background-color: #FFFFFF;
-  padding: 20px;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
 }
+
+.list-item-bg{
+  width: 25%;
+  margin-top: 25px;
+}
+
 
 .list-item {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top: 10px;
-  padding: 10px 0;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
+
   position: relative;
+
+  margin-right: 50px;
+  background-color: #F0F2F5;
+  box-shadow: 0px 0px 23px #14363833;
+  border-radius: 18px;
+  padding: 25px;
 }
 
 .list-item:hover {
@@ -264,19 +304,19 @@ export default {
 }
 
 .list-item-l {
-  width: 20%;
+  width:70px;
   text-align: center;
 }
 
 .list-item-l-img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  border-radius: 70px;
   border: 1px solid #EEEEEE;
 }
 
 .list-item-r {
-  width: 80%;
+  width: calc(100% - 85px);
 
 }
 
@@ -285,19 +325,21 @@ export default {
 }
 
 .list-item-r-t a {
-  font-size: 16px;
-  font-weight: bold;
-  color: #000000;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+
+  color: #262626;
   text-decoration: none;
 }
 
 
 .list-item-type {
   position: absolute;
-  top: 10px;
+  bottom: 10px;
   right: 10px;
   font-size: 14px;
-  background-color: #0AA0A8;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  background-color: #9173ff;
   color: #FFFFFF;
   padding: 4px 10px;
   border-radius: 4px;
@@ -305,8 +347,9 @@ export default {
 
 .list-item-favorite-icon-container {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  top: 0;
+  right: 20px;
+
 }
 
 .list-item-favorite-icon {
@@ -315,9 +358,16 @@ export default {
 
 }
 
-.list-pagination {
-  margin-top: 20px;
+.list-pagination-container {
+  margin-top: 50px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-pagination {
+  margin: 0 auto;
 }
 
 .ads-container {
@@ -327,9 +377,9 @@ export default {
 
 .empty-tips {
   font-size: 24px;
-  font-weight: bold;
-  color: #000000;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   text-align: center;
+  margin: 50px auto;
 }
 
 

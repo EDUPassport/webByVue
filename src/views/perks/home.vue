@@ -9,11 +9,9 @@
         <div class="perks-r-bg-container">
 
           <div class="custom-divider-container">
-            <div class="custom-divider-l"></div>
-            <div class="custom-divider-m">
-              Manage your perks
-            </div>
-            <div class="custom-divider-r"></div>
+            <el-divider  style="height:2px;border-color: #262626" content-position="center">
+              <span>Manage your perks</span>
+            </el-divider>
           </div>
 
           <div class="plain-container">
@@ -91,12 +89,11 @@
           </div>
 
           <div class="custom-divider-container custom-divider-margin">
-            <div class="custom-divider-l"></div>
-            <div class="custom-divider-m">
-              Make the most out of your plan
-            </div>
-            <div class="custom-divider-r"></div>
+            <el-divider  style="height:2px;border-color: #262626" content-position="center">
+              <span>Make the most out of your plan</span>
+            </el-divider>
           </div>
+
           <div class="plain-container">
             <!--          <div class="plain-mask-container"></div>-->
             <div class="plain-item-container">
@@ -195,12 +192,11 @@
           </div>
           <!--        22222222222           -->
           <div class="custom-divider-container custom-divider-margin">
-            <div class="custom-divider-l-disabled"></div>
-            <div class="custom-divider-m-disabled">
-              Pro Plan Perks
-            </div>
-            <div class="custom-divider-r-disabled"></div>
+            <el-divider  style="height:2px;border-color: #262626" content-position="center">
+              <span> Pro Plan Perks</span>
+            </el-divider>
           </div>
+
           <div class="plain-container">
             <div class="plain-mask-container"></div>
             <div class="plain-item-2-container">
@@ -306,12 +302,11 @@
           </div>
           <!--        3333333333 -->
           <div class="custom-divider-container custom-divider-margin">
-            <div class="custom-divider-l-disabled"></div>
-            <div class="custom-divider-m-disabled">
-              Plus Plan Perks
-            </div>
-            <div class="custom-divider-r-disabled"></div>
+            <el-divider  style="height:2px;border-color: #262626" content-position="center">
+              <span>  Plus Plan Perks</span>
+            </el-divider>
           </div>
+
           <div class="plain-container">
             <div class="plain-mask-container"></div>
             <div class="plain-item-3-container">
@@ -525,55 +520,17 @@ export default {
 
 .custom-divider-container {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
 }
-
-.custom-divider-margin{
-  margin-top: 50px;
-}
-
-.custom-divider-l {
-  flex: 1;
-  background-color: #6650B3;
-  height: 2px;
-}
-
-.custom-divider-m {
-  flex: 1;
-  color: #6650B3;
-  font-family: BSemiBold, serif;
-  font-size: 35px;
-  text-align: center;
-}
-
-.custom-divider-r {
-  flex: 1;
-  background-color: #6650B3;
-  height: 2px;
-}
-
-.custom-divider-l-disabled {
-  flex: 1;
-  background-color: #262626;
-  height: 2px;
-}
-
-.custom-divider-m-disabled {
-  flex: 1;
+.custom-divider-container span{
+  /*color: #6650B3;*/
   color: #262626;
   font-family: BSemiBold, serif;
   font-size: 35px;
   text-align: center;
 }
 
-.custom-divider-r-disabled {
-  flex: 1;
-  background-color: #262626;
-  height: 2px;
+.custom-divider-margin{
+  margin-top: 50px;
 }
 
 .plain-container {
@@ -723,6 +680,11 @@ export default {
   font-size: 20px;
 }
 
+/deep/ .el-divider__text{
+  background-color: #F0F2F5;
+  padding: 0 50px;
+}
+
 
 @media screen and (max-width: 768px) {
 
@@ -739,23 +701,6 @@ export default {
 
 @media screen and (min-width: 1200px) {
 
-}
-
-*::-webkit-scrollbar {
-  width: 4px;
-}
-
-
-*::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 5px;
-}
-
-* {
-  scrollbar-width: 10px;
-  scrollbar-base-color: green;
-  scrollbar-track-color: red;
-  scrollbar-arrow-color: blue;
 }
 
 @media screen and  (min-width: 1200px) {

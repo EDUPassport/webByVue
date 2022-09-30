@@ -12,12 +12,12 @@
             <div class="account-profile-t-l">New job post</div>
             <div class="account-profile-t-r">
 
-              <el-button class="account-profile-discard-btn" link round>
+              <el-button class="account-profile-discard-btn" link round @click="discardJobPost()">
                 DISCARD
               </el-button>
-              <el-button class="account-profile-draft-btn" plain round>
-                SAVE AS DRAFT
-              </el-button>
+<!--              <el-button class="account-profile-draft-btn" plain round>-->
+<!--                SAVE AS DRAFT-->
+<!--              </el-button>-->
               <el-button class="account-profile-save-btn" type="primary" round
                          :loading="submitLoadingValue"
                          @click="submitJob('jobForms',3)">
@@ -252,9 +252,12 @@
                       <el-form-item label="Employment Type">
 
                         <el-select
-                            v-model="jobForm.employment_type"
+                            v-model="selectEmploymentTypeList"
+                            multiple
                             collapse-tags
                             collapse-tags-tooltip
+                            filterable
+                            allow-create
                             placeholder="Select employment type"
                             value-key="id"
                         >
@@ -262,7 +265,7 @@
                               v-for="(item,i) in employmentTypeList"
                               :key="i"
                               :label="item.object_en"
-                              :value="item.id"
+                              :value="item"
                           />
                         </el-select>
 
@@ -439,7 +442,7 @@
 
                       <div class="nationality-container">
                         <div>
-                          <el-form-item label="Preferences nationality">
+                          <el-form-item label="Preferred nationality">
 
                             <el-select
                                 v-model="selectPnationalityList"
@@ -499,19 +502,8 @@
 
                     <el-col :span="6">
                       <el-form-item label="Teaching license and certificates">
-                        <el-checkbox v-model="jobForm.is_teaching_license"
-                                     :true-label="1"
-                                     :false-label="0"
-                                     label="TEACHING LICENSE REQUIRED">
-                        </el-checkbox>
-                        <el-checkbox v-model="jobForm.is_teaching_exp"
-                                     :true-label="1"
-                                     :false-label="0"
-                                     label="TEACHING CERTIFICATE(S) REQUIRED">
-                        </el-checkbox>
 
                         <el-select
-                            style="margin-top: 15px;"
                             v-model="selectTeachingCertificateList"
                             multiple
                             collapse-tags
@@ -535,16 +527,9 @@
                     </el-col>
                     <el-col :span="6">
 
-                      <el-form-item label="Minimum degree and experience">
+                      <el-form-item label="Minimum degree">
                         <el-select v-model="jobForm.education" placeholder="Minimum degree">
                           <el-option v-for="(item,i) in educationList" :key="i" :label="item.object_en"
-                                     :value="item.id"></el-option>
-                        </el-select>
-                      </el-form-item>
-
-                      <el-form-item label="" >
-                        <el-select v-model="jobForm.teaching_times" placeholder="Minimum years of experience">
-                          <el-option v-for="(item,i) in teachingExpList" :key="i" :label="item.object_en"
                                      :value="item.id"></el-option>
                         </el-select>
                       </el-form-item>
@@ -597,27 +582,7 @@
                 <div class="account-profile-item-c">
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
 
-                      <el-form-item label="Additional certification">
-                        <el-checkbox
-                            v-model="jobForm.is_cpr"
-                            :true-label="1"
-                            :false-label="0"
-                            label="CPR CERTIFICATE"
-                        >
-                        </el-checkbox>
-                        <el-checkbox
-                            v-model="jobForm.is_first_aide"
-                            :true-label="1"
-                            :false-label="0"
-                            label="FIRST AID CERTIFICATE"
-                        >
-                        </el-checkbox>
-
-                      </el-form-item>
-
-                    </el-col>
                     <el-col :span="6">
                       <el-form-item label="Gender">
                         <el-select v-model="jobForm.sex"
@@ -628,8 +593,9 @@
                         </el-select>
                       </el-form-item>
                     </el-col>
+
                     <el-col :span="6">
-                      <el-form-item label="Work type">
+                      <el-form-item label="Work schedule">
 
                         <el-select
                             v-model="selectWorkTypeList"
@@ -738,7 +704,7 @@
                           v-model="jobForm.is_equal"
                           :true-label="1"
                           :false-label="0"
-                          label="Will you accept applicant of different skin colors?(Equal Opportunity)"
+                          label="I will accept applicants of different races and skin color"
                       >
                       </el-checkbox>
                     </el-col>
@@ -884,12 +850,14 @@ export default {
   },
   data() {
     return {
+      mapCenterValue:[-99.91028767893485, 32.082955230919616],
       submitLoadingValue:false,
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       isInternationalName: 'first',
 
       paymentPeriodList: [],
+
       employmentTypeList: [],
       selectEmploymentTypeList: [],
 
@@ -1054,7 +1022,9 @@ export default {
 
   },
   methods: {
-
+    discardJobPost(){
+      this.$router.go(-1)
+    },
     getJobDetail(id) {
       let that = this;
       let params = {
@@ -1087,6 +1057,7 @@ export default {
           that.jobForm.currency = jobMessage.currency;
           that.jobForm.business_id = jobMessage.business_id;
           that.jobForm.business_name = jobMessage.business_name;
+
           that.jobForm.employment_type = jobMessage.employment_type;
 
           that.jobForm.desc = jobMessage.desc;
@@ -1176,6 +1147,32 @@ export default {
               this.ownCurrencyList.push(obj);
               this.selectCurrencyList.push(obj);
             }
+
+          }
+
+          if (jobMessage.job_type) {
+
+            let arr = jobMessage.job_type;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectEmploymentTypeList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectEmploymentTypeList.push(obj)
+
+              }
+
+            })
 
           }
 
@@ -1527,7 +1524,7 @@ export default {
 
       const map = new mapboxgl.Map({
         container: "mapContainer",
-        center: [121.472644, 31.231706],
+        center: this.mapCenterValue,
         style: this.mapStyle,
         zoom: 12
       });
@@ -1766,7 +1763,16 @@ export default {
     submitEmploymentType(jobId) {
 
       let expand = [];
-      let objectArr = [this.checkedEmploymentTypeValue];
+      let objectArr = [];
+
+      this.selectEmploymentTypeList.forEach(item => {
+        // console.log(item);
+        if (typeof item === 'string') {
+          expand.push(item);
+        } else {
+          objectArr.push(item.id);
+        }
+      })
 
       let data = {
         token: localStorage.getItem('token'),
@@ -2137,7 +2143,7 @@ export default {
                 that.submitSubject(jobId);
               }
 
-              if(this.checkedEmploymentTypeValue){
+              if(this.selectEmploymentTypeList.length > 0){
                 that.submitEmploymentType(jobId)
               }
 
@@ -2391,7 +2397,7 @@ export default {
 
 .map-container {
   width: 100%;
-  height: 160px;
+  height: 260px;
 }
 
 .basemap {

@@ -83,6 +83,12 @@
 
 }
 
+.el-textarea__inner{
+    font-family: AssiRegular, serif;
+    font-size: 16px;
+    color:#262626;
+}
+
 .el-form--default.el-form--label-top .el-form-item .el-form-item__label{
     font-family: BarlowM, serif;
     font-size:20px;

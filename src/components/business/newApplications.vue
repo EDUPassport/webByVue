@@ -202,7 +202,7 @@ export default {
   background-color: #FFFFFF;
   padding: 20px;
   border-radius: 15px;
-  margin-top: 20px;
+  /*margin-top: 20px;*/
 
 }
 

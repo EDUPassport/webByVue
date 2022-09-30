@@ -3,78 +3,81 @@
 
   <div class="filter-bg-container">
 
-    <div class="post-event-btn-container">
-      <el-button type="primary" round @click="postEvent()">Post an Event</el-button>
-    </div>
-    <div class="filter-container">
+<!--    <div class="post-event-btn-container">-->
+<!--      <el-button type="primary" round @click="postEvent()">Post an Event</el-button>-->
+<!--    </div>-->
+    <el-scrollbar class="filter-bg">
+      <div class="filter-container">
 
-      <div class="filter-item">
-        <div class="filter-label">Location</div>
-        <el-select class="filter-select"
-                   v-model="locationValue" clearable
-                   placeholder="Filter by location"
-                   size="default"
-                   @change="locationChange"
-        >
-          <el-option
-              v-for="item in locationData"
-              :key="item.id"
-              :label="item.Pinyin"
-              :value="item.id"
+        <div class="filter-item">
+          <div class="filter-label">Location</div>
+          <el-select class="filter-select"
+                     v-model="locationValue" clearable
+                     placeholder="Filter by location"
+                     size="default"
+                     @change="locationChange"
           >
-          </el-option>
-        </el-select>
-      </div>
-
-      <div class="filter-item">
-        <el-checkbox @change="selectIsOnline" v-model="filterIsOnlineValue" label="Online" />
-      </div>
-
-      <div class="filter-item">
-        <div class="filter-label">Tags</div>
-        <el-select class="filter-select"
-                   v-model="tagValue"
-                   clearable multiple
-                   placeholder="Filter by tag"
-                   size="default"
-                   @change="tagChange"
-        >
-          <el-option
-              v-for="item in tagsData"
-              :key="item.id"
-              :label="item.name_en"
-              :value="item.id"
-          >
-          </el-option>
-        </el-select>
-      </div>
-
-      <div class="filter-item">
-        <div class="filter-label">Event type</div>
-
-        <div class="filter-checkbox-container">
-
-          <el-checkbox-group v-model="checkedCateData"  :max="1">
-
-            <el-checkbox v-for="(item,i) in categoryData" :key="i"
-                         :label="item.id"
+            <el-option
+                v-for="item in locationData"
+                :key="item.id"
+                :label="item.Pinyin"
+                :value="item.id"
             >
-              {{item.name_en}}
-            </el-checkbox>
+            </el-option>
+          </el-select>
+        </div>
 
-          </el-checkbox-group>
+        <div class="filter-item">
+          <el-checkbox @change="selectIsOnline" v-model="filterIsOnlineValue" label="Online" />
+        </div>
+
+        <div class="filter-item">
+          <div class="filter-label">Tags</div>
+          <el-select class="filter-select"
+                     v-model="tagValue"
+                     clearable multiple
+                     placeholder="Filter by tag"
+                     size="default"
+                     @change="tagChange"
+          >
+            <el-option
+                v-for="item in tagsData"
+                :key="item.id"
+                :label="item.name_en"
+                :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </div>
+
+        <div class="filter-item">
+          <div class="filter-label">Event type</div>
+
+          <div class="filter-checkbox-container">
+
+            <el-checkbox-group v-model="checkedCateData"  :max="1">
+
+              <el-checkbox v-for="(item,i) in categoryData" :key="i"
+                           :label="item.id"
+              >
+                {{item.name_en}}
+              </el-checkbox>
+
+            </el-checkbox-group>
+
+          </div>
 
         </div>
 
       </div>
+      <div class="filter-search-btn-container">
+        <el-button type="primary" round @click="search()">
+          SEARCH
+        </el-button>
+      </div>
 
-    </div>
+    </el-scrollbar>
 
-    <div class="filter-search-btn-container">
-      <el-button type="primary" round @click="search()">
-        SEARCH
-      </el-button>
-    </div>
 
     <div class="filter-contact-us-container">
       <el-icon :size="45" color="#6648FF">
@@ -185,6 +188,12 @@ export default {
   padding: 30px;
   position: relative;
 }
+
+.filter-bg{
+  height: calc(100% - 80px);
+}
+
+
 .post-event-btn-container{
   width: 100%;
   text-align: center;

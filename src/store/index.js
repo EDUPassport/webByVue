@@ -6,6 +6,7 @@ const store = createStore({
         let currentUserStr = localStorage.getItem('currentUser')
         let menuDataStr = localStorage.getItem('menuData')
         let isThirdCompanyValue = localStorage.getItem('is_third_company')
+        let companyId = localStorage.getItem('company_id')
 
         return {
             username: localStorage.getItem('name'),
@@ -19,6 +20,7 @@ const store = createStore({
             menuData:menuDataStr ? JSON.parse(menuDataStr) : [],
             menuDataStatus:false,
             isThirdCompanyStatus: isThirdCompanyValue ? isThirdCompanyValue : 0,
+            currentCompanyId: companyId ? companyId : 0,
 
         }
     },
@@ -31,6 +33,9 @@ const store = createStore({
         },
         identity(state, data) {
             state.identity = data
+        },
+        currentCompanyId(state, data){
+            state.currentCompanyId = data
         },
         thirdCompanyId(state, data) {
             state.thirdCompanyId = data

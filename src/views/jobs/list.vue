@@ -8,104 +8,11 @@
     <el-row class="bg-container" :gutter="0" align="top" justify="center">
 
       <el-col class="jobs-filter-col" :xs="22" :sm="22" :md="4" :lg="4" :xl="4">
-
-        <div class="jobs-bg-filter-container">
-          <div class="jobs-filter-container">
-            <div class="jobs-filter-label">Find a job</div>
-            <div class="jobs-filter-location">
-              <el-select class="jobs-filter-select" v-model="locationValue" clearable placeholder="Location"
-                         @change="locationChange"
-                         size="default">
-                <el-option
-                    v-for="item in locationOptions"
-                    :key="item.id"
-                    :label="item.CityPinyin"
-                    :value="item.id"
-                >
-                </el-option>
-              </el-select>
-            </div>
-            <div class="jobs-filter-salary">
-              <el-select class="jobs-filter-select" v-model="salaryValue" clearable
-                         @change="salaryChange"
-                         placeholder="Salary" size="default">
-                <el-option
-                    v-for="item in salaryOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </div>
-            <div class="jobs-filter-gender">
-              <el-select class="jobs-filter-select" v-model="genderValue" clearable
-                         @change="genderChange"
-                         placeholder="Gender" size="default">
-                <el-option
-                    v-for="item in genderOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </div>
-            <div class="jobs-filter-job-type">
-              <el-select class="jobs-filter-select" v-model="jobTypeValue" clearable
-                         @change="jobTypeChange"
-                         placeholder="Job Type" size="default">
-                <el-option
-                    v-for="item in jobTypeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </div>
-            <div class="jobs-filter-student-age">
-              <el-select class="jobs-filter-select" v-model="studentAgeValue" clearable
-                         @change="studentAgeChange"
-                         placeholder="Student Age"
-                         size="default">
-                <el-option
-                    v-for="item in studentAgeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </div>
-
-            <div class="jobs-filter-online">
-              <el-select class="jobs-filter-select" v-model="onlineValue" clearable
-                         @change="onlineChange"
-                         placeholder="Online/Offline"
-                         size="default">
-                <el-option
-                    v-for="item in onlineOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </div>
-
-
-          </div>
-
-        </div>
-        <!--        featuredJobs jobs    -->
-        <!--        <featuredJobs></featuredJobs>-->
-        <!--        latest industry articles-->
-        <!--        <latestIndustryNews></latestIndustryNews>-->
-
+        <filterWithJobList @search="searchByFilter"></filterWithJobList>
       </el-col>
 
       <el-col class="jobs-list-col" :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+
         <template v-if="isOther">
           <jobsListComponent :jobListData="otherJobListData"
                              :selectedJobId="selectedJobId"
@@ -124,6 +31,7 @@
         </template>
         <template v-else>
           <jobsListComponent :jobListData="jobListData"
+                             :jobFeaturedData="jobFeaturedListData"
                              :selectedJobId="selectedJobId"
                              :jobLimit="jobLimit"
                              :jobTotalNum="jobTotalNum"
@@ -190,8 +98,21 @@
                   </div>
                 </div>
                 <div class="job-detail-t-r">
-                  <el-button type="primary" round>QUICK APPLY</el-button>
-                  <el-button plain round>SAVE</el-button>
+                  <el-button link @click="shareJob(detailData)">
+                    SHARE
+                  </el-button>
+                  <el-button type="primary" round
+                             :loading="applyBtnLoading"
+                             @click="applyJob(detailData.id)">
+                    QUICK APPLY
+                  </el-button>
+                  <el-button plain round
+                             @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                    SAVE
+                    <el-icon>
+                      <CollectionTag />
+                    </el-icon>
+                  </el-button>
                 </div>
               </div>
 
@@ -273,14 +194,11 @@
 
                       <div class="job-detail-c-item">
                         <div class="job-detail-c-item-l">Teaching certificates:</div>
-                        <div class="job-detail-c-item-r">CeLaa</div>
+                        <div class="job-detail-c-item-r">
+                          {{ $filters.userObjectFormat(detailData.Teaching_certificate)}}
+                        </div>
                       </div>
-                      <div class="job-detail-c-item">
-                        Teaching license
-                      </div>
-                      <div class="job-detail-c-item">
-                        First AID certificate
-                      </div>
+
                     </div>
 
                   </div>
@@ -329,6 +247,15 @@
 
         </template>
 
+        <shareCard :visible="shareDialogVisible"
+                   :title="shareInfo.title"
+                   :description ="shareInfo.desc"
+                   :quote = "shareInfo.desc"
+                   :url="locationUrl"
+                   @close="shareDialogVisible=false"
+        >
+        </shareCard>
+
 
       </el-col>
     </el-row>
@@ -336,22 +263,19 @@
 </template>
 
 <script>
+import shareCard from "@/components/shareCard";
+import filterWithJobList from "@/components/jobs/filterWithJobList";
 import jobsListComponent from "@/components/jobsListComponent";
 import ads22Img from '@/assets/ads/22.png'
 import {useRouter, useRoute} from "vue-router";
 import {
   ADS_LIST,
   JOB_LIST,
-  USER_OBJECT_LIST,
-  JOBS_AREA_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2,
-  JOBS_COUNTRY_LIST, JOB_DETAIL, COMPANY_JOB_LIST
+  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2, JOB_DETAIL, COMPANY_JOB_LIST, JOB_FEATURED_LIST, APPLY_JOBS
 } from "@/api/api";
 import BusinessProfile from "@/components/businessProfile";
-// import featuredJobs from "@/components/featuredJobs";
-// import latestIndustryNews from "@/components/latestIndustryNews";
 import ExchangeAccountInfo from '@/components/jobs/exchangeInfo';
 import {encode} from "js-base64";
 import {randomString} from "@/utils";
@@ -365,72 +289,17 @@ export default {
   name: "list",
   data() {
     return {
+      shareDialogVisible:false,
+      shareInfo:{},
+      locationUrl: window.location.href,
+
+      applyBtnLoading:false,
       showCompanyStatus:false,
+
       isOther:false,
       companyInfo:{},
       ads22Img,
-      locationValue: '',
-      locationOptions: [],
-      salaryValue: '',
-      salaryOptions: [
-        {
-          label: '0-5K',
-          value: 1
-        },
-        {
-          label: '5K-10K',
-          value: 2
-        },
-        {
-          label: '10K-15K',
-          value: 3
-        },
-        {
-          label: '15K+',
-          value: 4
-        }
-      ],
-      genderValue: '',
-      genderOptions: [
-        {
-          label: 'Male',
-          value: 1
-        }, {
-          label: 'Female',
-          value: 2
-        }
-      ],
-      jobTypeValue: '',
-      jobTypeOptions: [
-        {
-          label: 'Full-time',
-          value: 1
-        },
-        {
-          label: 'Part-time',
-          value: 2
-        },
-        {
-          label: 'Seasonal',
-          value: 3
-        }
-      ],
-      studentAgeValue: '',
-      studentAgeOptions: [],
-      onlineValue: '',
-      onlineOptions: [
-        {
-          label: 'Online',
-          value: 1
-        },
-        {
-          label: 'Offline',
-          value: 0
-        }
 
-      ],
-      workExpValue: '',
-      workExpOptions: [],
       jobFeaturedListData: [],
       jobListData: [],
       articleListData: [],
@@ -459,7 +328,9 @@ export default {
   components: {
     ExchangeAccountInfo,
     jobsListComponent,
-    BusinessProfile
+    BusinessProfile,
+    filterWithJobList,
+    shareCard
 
   },
   setup() {
@@ -519,11 +390,11 @@ export default {
     let page = this.$route.query.page;
     let fromValue = this.$route.query.from;
 
-
     if(jobId){
       this.selectedJobId = jobId
       this.getJobDetail(jobId)
     }
+
     if(page){
 
       if(fromValue == 1){
@@ -534,30 +405,80 @@ export default {
 
     }
 
-    this.getUserObjectList()
-    this.getAdsList()
-
-    let envName = process.env.VUE_APP_ENV_NAME
-    if (envName === 'development' || envName === 'production') {
-      this.getJobCountryList()
-      let countryValue = this.$route.query.country;
-      if (countryValue && countryValue != '') {
-        this.locationValue = Number(countryValue)
-      }
-    }
-
-    if (envName === 'developmentCN' || envName === 'productionCN') {
-      this.getJobsAreaList()
-      let cityValue = this.$route.query.city;
-      if (cityValue && cityValue != '') {
-        this.locationValue = Number(cityValue)
-      }
-    }
-
+    this.getJobFeaturedList()
     this.getJobList(this.jobPage, this.jobLimit)
+    this.getAdsList()
 
   },
   methods: {
+    searchByFilter(e){
+      console.log(e)
+
+      let params = {
+        page: this.jobPage,
+        limit: this.jobLimit
+      }
+
+      let salaryValue = e.salary;
+
+      if (salaryValue) {
+
+        params.salary_begin = salaryValue[0] * 1000
+        params.salary_end = salaryValue[1] * 1000
+
+      }
+
+      let envName = process.env.VUE_APP_ENV_NAME
+
+      if (e.location) {
+        if (envName === 'development' || envName === 'production') {
+          params.country = e.location
+        }
+        if (envName === 'developmentCN' || envName === 'productionCN') {
+          params.city = e.location
+        }
+      }
+
+      if (e.employment_type) {
+        params.employment_type = e.employment_type
+      }
+
+      if (e.student_age) {
+        params.age_to_teach = e.student_age
+      }
+
+      JOB_LIST(params).then(res => {
+        // console.log(res)
+        if (res.code == 200) {
+          let jobData = res.message.data;
+          let routeJobId = this.$route.query.id;
+          if(!routeJobId){
+
+            if(jobData.length>0){
+              this.selectedJobId = jobData[0]['id']
+              this.getJobDetail(jobData[0]['id'])
+            }
+
+          }
+
+          this.jobListData = res.message.data
+          // console.log(res.message.data)
+          this.jobTotalNum = res.message.total
+          this.showLoadingStatus = false
+        } else {
+          console.log(res.msg)
+        }
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+
+    },
     getJobDetail(id) {
       let params = {
         job_id: id
@@ -579,12 +500,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
+        // if(err.msg){
+        //   this.$message.error(err.msg)
+        // }
+        // if(err.message){
+        //   this.$message.error(err.message)
+        // }
       })
 
     },
@@ -652,11 +573,13 @@ export default {
             jobsAdsListTop = res.message.filter(item => item.name == 'educator_j2');
             jobsAdsListMid = res.message.filter(item => item.name == 'educator_j3');
           }
-          if (identity == 2) {
+
+          if (identity == 2 || identity == 3 || identity == 4) {
             jobsAdsListTop = res.message.filter(item => item.name == 'business_j2');
             jobsAdsListMid = res.message.filter(item => item.name == 'business_j3');
           }
-          if (identity == 3) {
+
+          if (identity == 5) {
             jobsAdsListTop = res.message.filter(item => item.name == 'vendor_j2');
             jobsAdsListMid = res.message.filter(item => item.name == 'vendor_j3');
           }
@@ -705,33 +628,6 @@ export default {
       })
 
     },
-    getJobCountryList() {
-      let params = {}
-      JOBS_COUNTRY_LIST(params).then(res => {
-        if (res.code == 200) {
-          this.locationOptions = res.message;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    getJobsAreaList() {
-      let params = {}
-      JOBS_AREA_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.locationOptions = res.message;
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-    },
     jobPageSizeChange(e) {
       console.log(e)
     },
@@ -744,55 +640,11 @@ export default {
       // document.documentElement.scrollTop = 120
     },
     getJobList(page, limit) {
+
       let params = {
         page: page,
         limit: limit
       }
-
-      let salaryValue = this.salaryValue
-      if (salaryValue != '') {
-        if (salaryValue == 1) {
-          params.salary_begin = 0
-          params.salary_end = 5000
-        }
-        if (salaryValue == 2) {
-          params.salary_begin = 5000
-          params.salary_end = 10000
-        }
-        if (salaryValue == 3) {
-          params.salary_begin = 10000
-          params.salary_end = 15000
-        }
-        if (salaryValue == 4) {
-          params.salary_begin = 15000
-        }
-
-      }
-
-      let envName = process.env.VUE_APP_ENV_NAME
-
-      if (this.locationValue != '') {
-        if (envName === 'development' || envName === 'production') {
-          params.country = this.locationValue
-        }
-        if (envName === 'developmentCN' || envName === 'productionCN') {
-          params.city = this.locationValue
-        }
-      }
-
-      if (this.genderValue != '') {
-        params.sex = this.genderValue
-      }
-
-      if (this.jobTypeValue != '') {
-        params.employment_type = this.jobTypeValue
-      }
-
-      if (this.studentAgeValue != '') {
-        params.age_to_teach = this.studentAgeValue
-      }
-
-      params.is_online = this.onlineValue
 
       JOB_LIST(params).then(res => {
         // console.log(res)
@@ -812,6 +664,8 @@ export default {
           // console.log(res.message.data)
           this.jobTotalNum = res.message.total
           this.showLoadingStatus = false
+
+
         } else {
           console.log(res.msg)
         }
@@ -825,78 +679,6 @@ export default {
         }
       })
 
-    },
-    getUserObjectList() {
-      let params = {}
-      USER_OBJECT_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          let ageToTeachList = res.message.filter(item => item.pid == 4)
-          // let lan = localStorage.getItem('language')
-
-          ageToTeachList.forEach(item => {
-            let obj = {
-              label: item.object_en,
-              value: item.id
-            }
-
-            this.studentAgeOptions.push(obj)
-
-          })
-
-        }
-
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-    },
-    locationChange(e) {
-      // console.log(e)
-      this.jobListData = []
-      this.showLoadingStatus = true
-      this.locationValue = e;
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    salaryChange(e) {
-      // console.log(e)
-      this.jobListData = []
-      this.showLoadingStatus = true
-      this.salaryValue = e
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    genderChange(e) {
-      this.jobListData = []
-      this.showLoadingStatus = true
-      // console.log(e)
-      this.genderValue = e
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    jobTypeChange(e) {
-      this.jobListData = []
-      this.showLoadingStatus = true
-      // console.log(e)
-      this.jobTypeValue = e
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    studentAgeChange(e) {
-      this.jobListData = []
-      this.showLoadingStatus = true
-      // console.log(e)
-      this.studentAgeValue = e
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    onlineChange(e) {
-      this.jobListData = []
-      this.showLoadingStatus = true
-      // console.log(e)
-      this.onlineValue = e
-      this.getJobList(this.jobPage, this.jobLimit)
     },
     cancelFavorite(type, typeId, index) {
       let params = {
@@ -1195,8 +977,6 @@ export default {
 
     },
     turnJobDetail(id,page,isOther){
-      console.log(this.jobPage)
-      console.log(isOther)
 
       this.showCompanyStatus = false;
       if(isOther){
@@ -1207,6 +987,94 @@ export default {
 
       }
 
+    },
+    getJobFeaturedList() {
+      let params = {
+        ad_type: 2
+      }
+
+      JOB_FEATURED_LIST(params).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.jobFeaturedListData = res.message;
+        } else {
+          console.log(res.msg)
+        }
+      }).catch(err=>{
+        console.log(err)
+        // this.$message.error(err.msg)
+      })
+
+    },
+    shareJob(data){
+      this.shareInfo = {
+        title:data.job_title,
+        desc:data.desc,
+        id:data.id
+      }
+      this.shareDialogVisible = true;
+    },
+    applyJob(id) {
+      this.applyBtnLoading = true;
+      let identity = localStorage.getItem('identity')
+      let token = localStorage.getItem('token')
+      if (identity == 1) {
+        let params = {
+          job_id: id,
+          token: token
+        }
+        APPLY_JOBS(params).then(res => {
+          if (res.code == 200) {
+            this.$message.success('Apply Success')
+            this.applyBtnLoading = false;
+          }
+        }).catch(err=>{
+          console.log(err)
+          if(err.code === 400){
+            this.$message.error('Please complete your profile in order to apply')
+          }else{
+            if(err.msg){
+              this.$message.error(err.msg)
+            }
+            if(err.message){
+              this.$message.error(err.message)
+            }
+          }
+
+          this.applyBtnLoading = false;
+
+        })
+
+      } else {
+        this.$message.warning('Please switch to an educator profile to be able to apply')
+        this.applyBtnLoading = false;
+      }
+
+
+    },
+    saveJob(id, type, title, url){
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.isFavoriteValue = 1
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+      })
     }
 
 
@@ -1237,55 +1105,6 @@ export default {
 
 .job-detail-col{
   padding-left: 12px;
-}
-
-.jobs-bg-filter-container{
-
-}
-
-.jobs-filter-container {
-  background-color: #F0F2F5;
-  height: calc(100vh - 200px);
-  padding: 30px;
-  /*overflow-y: scroll;*/
-}
-
-.jobs-filter-label {
-  font-size: 18px;
-  font-weight: bold;
-  text-align: left;
-}
-
-.jobs-filter-location {
-  margin-top: 10px;
-}
-
-.jobs-filter-select {
-  width: 100%;
-}
-
-.jobs-filter-salary {
-  margin-top: 10px;
-}
-
-.jobs-filter-gender {
-  margin-top: 10px;
-}
-
-.jobs-filter-job-type {
-  margin-top: 10px;
-}
-
-.jobs-filter-student-age {
-  margin-top: 10px;
-}
-
-.jobs-filter-online {
-  margin-top: 10px;
-}
-
-.jobs-filter-work-exp {
-  margin-top: 10px;
 }
 
 .xll-ads-container {
@@ -1369,7 +1188,6 @@ export default {
 
 .job-detail-c{
   height: calc(87vh - 365px);
-
 }
 
 .job-detail-c-1{

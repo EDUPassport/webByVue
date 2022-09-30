@@ -58,14 +58,23 @@
 }
 
 .chat-message .text-content{
-  padding: 8px;
-  border-radius: 6px;
+  padding: 10px 15px;
+  border-radius: 10px;
   color: #ffffff;
-  background:#00b3d2;
+  background:#9173FF;
+
   word-break: break-all;
   text-align: left;
-  vertical-align: center;
+
   display: block;
+
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+
+}
+.text-content-1{
+  color: #262626 !important;
+  background:#ffffff !important;
 }
 
 .chat-message .text-content img{

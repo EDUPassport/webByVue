@@ -3,7 +3,7 @@
   <el-scrollbar class="container">
     <div class="container-label">
       Active deals
-      <el-button link type="primary">
+      <el-button link type="primary" @click="viewAllDeals()">
         VIEW ALL
       </el-button>
     </div>
@@ -75,6 +75,9 @@ export default {
   methods:{
     showDealDetailDialog(){
 
+    },
+    viewAllDeals(){
+      this.$router.push('/deals/myDeals')
     }
 
   }

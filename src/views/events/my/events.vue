@@ -74,12 +74,12 @@
                         <el-button link @click="showEventDialog(item)">
                           PREVIEW
                         </el-button>
-                        <el-button link>
+                        <el-button link @click="editEvent(item)">
                           EDIT
                         </el-button>
-                        <el-button link>
-                          DELETE
-                        </el-button>
+<!--                        <el-button link @click="deleteEvent(item.id)">-->
+<!--                          DELETE-->
+<!--                        </el-button>-->
                       </div>
                       <div class="events-item-action-r">
                         <el-button link
@@ -138,7 +138,8 @@ import eventDetailCard from "@/components/eventDetailCard";
 import bookEventForm from "@/components/bookEventForm";
 import BookEventList from "@/components/bookEventList";
 import meSideMenu from "@/components/meSideMenu";
-import {EVENTS_MY_EVENT, EVENTS_CATEGORY, EVENT_APPLICATIONS} from '@/api/api';
+import {EVENTS_MY_EVENT, EVENTS_CATEGORY, EVENT_APPLICATIONS, EVENTS_ADD_EVENT} from '@/api/api';
+import {encode} from 'js-base64'
 
 export default {
   name: "events",
@@ -176,6 +177,22 @@ export default {
     showBookEvent(){
       this.bookEventDialogVisible = true;
       // this.eventDialogVisible = false;
+    },
+    deleteEvent(eventId){
+      let params = {
+        event_id:eventId,
+        is_delete:1
+      }
+      EVENTS_ADD_EVENT(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    editEvent(item){
+      let s = encode(JSON.stringify(item))
+
+      this.$router.push({path:'/events/post',query:{str:s}})
     },
     showBookList(item){
       this.bookListDialogVisible = true;
@@ -421,6 +438,7 @@ export default {
   padding: 4px 80px 4px 160px;
   text-align: center;
   font-size: 14px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .actived-0 {

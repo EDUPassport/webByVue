@@ -12,13 +12,18 @@
           <div class="account-profile-t">
             <div class="account-profile-t-l">Your profile</div>
             <div class="account-profile-t-r">
-              <el-button class="account-profile-cancel-btn" plain round>
+              <el-button class="account-profile-cancel-btn" plain round @click="cancel()">
                 CANCEL
               </el-button>
               <el-button class="account-profile-save-btn" type="primary" round
                          :loading="submitLoadingValue"
-                         @click="submitForm('basicForm')">
+                         @click="submitForm('basicForm',1)">
                 SAVE
+              </el-button>
+              <el-button class="account-profile-save-btn" type="primary" round
+                         :loading="submitAndViewLoadingValue"
+                         @click="submitForm('basicForm',2)">
+                SAVE & VIEW
               </el-button>
             </div>
           </div>
@@ -47,7 +52,9 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="Address">
-                        <el-input v-model="basicForm.address" placeholder="Street name,building,apartment"></el-input>
+                        <el-input v-model="basicForm.address"
+                                  @input="inputAddressEvent"
+                                  placeholder="Street name,building,apartment"></el-input>
                       </el-form-item>
                     </el-col>
                     <!--                    <el-col :span="6">-->
@@ -169,7 +176,7 @@
 
               <div class="account-profile-item-container">
                 <div class="account-profile-item-label">
-                  2.Contact information
+                  2.Contact information <span>(Information that Educators will see when they visit you profile)</span>
                 </div>
                 <div class="account-profile-item-c">
 
@@ -199,7 +206,7 @@
                               <el-option
                                   v-for="item in phoneCodeData"
                                   :key="item.phone_code"
-                                  :label="item.en+' '+item.phone_code"
+                                  :label="item.phone_code"
                                   :value="item.phone_code"
                               >
                                 <span style="float: left">{{ item.en }}</span>
@@ -345,7 +352,7 @@
                       <el-form-item label="Introduction" prop="desc">
                         <el-input v-model="basicForm.desc" type="textarea"
                                   :rows="4"
-                                  placeholder="Write a couple of paragraphs about your school and why educators would want to teach there.">
+                                  placeholder="Write a couple of paragraphs about your business.">
                         </el-input>
                       </el-form-item>
                     </el-col>
@@ -552,11 +559,19 @@ import meSideMenu from "@/components/meSideMenu";
 import {
   ZOHO_SYNC,
   SUB_CATE_LIST,
-  GET_COUNTRY_LIST, RECRUITER_COMPANY_EDIT_V2, SWITCH_IDENTITY_V2, USER_INFO_BY_TOKEN_V2,
-  UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, USER_MENU_LIST, USER_SUB_IDENTITY_V2, UPLOAD_IMG, ADD_USER_IMG_V2
+  GET_COUNTRY_LIST,
+  RECRUITER_COMPANY_EDIT_V2,
+  SWITCH_IDENTITY_V2,
+  USER_INFO_BY_TOKEN_V2,
+  UPLOAD_BY_ALI_OSS,
+  UPLOAD_BY_SERVICE,
+  USER_MENU_LIST,
+  USER_SUB_IDENTITY_V2,
+  UPLOAD_IMG,
+  ADD_USER_IMG_V2, RECRUITER_PERCENTAGE_V2
 } from '@/api/api'
 import {countriesData} from "@/utils/data";
-import {decode} from "js-base64";
+import {encode ,decode} from "js-base64";
 
 export default {
   name: "recruiter",
@@ -585,6 +600,7 @@ export default {
       uploadLoadingStatus: false,
       sideMenuStatus: true,
       submitLoadingValue: false,
+      submitAndViewLoadingValue:false,
       phoneCodeData: phoneCodeData,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
       uploadHeaders: {
@@ -604,6 +620,7 @@ export default {
       dialogVideoUrl: '',
       dialogVideoVisible: false,
 
+      mapCenterValue:[-99.91028767893485, 32.082955230919616],
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
       basicForm: {
@@ -688,11 +705,11 @@ export default {
     }
   },
   async mounted() {
+
     await this.getSubIdentityList()
 
     this.getAllCountry()
 
-    this.initMap()
     let str = this.$route.query.s;
 
     if (str) {
@@ -704,8 +721,8 @@ export default {
       this.action = strObj.action;
 
       if (strObj.action == 'add') {
-        this.sideMenuStatus = false;
-        this.getBasicInfo(strObj.i)
+        // this.getBasicInfo(strObj.i)
+        this.initMap()
       }
 
       if (strObj.action == 'edit') {
@@ -1147,12 +1164,15 @@ export default {
       this.uploadLoadingStatus = true;
 
     },
+    inputAddressEvent(e){
+      console.log(e)
+    },
     initMap() {
       mapboxgl.accessToken = this.accessToken;
 
       const map = new mapboxgl.Map({
         container: "mapContainer",
-        center: [121.472644, 31.231706],
+        center: this.mapCenterValue,
         style: this.mapStyle,
         zoom: 12
       });
@@ -1189,14 +1209,14 @@ export default {
       geocoder.on('result', (e) => {
         console.log(e)
         marker.setLngLat(e.result.center).addTo(map)
-        this.basicForm.address = e.result.place_name
+        // this.basicForm.address = e.result.place_name
         this.basicForm.lng = e.result.center[0]
         this.basicForm.lat = e.result.center[1]
 
       })
       geocoder.on('clear', (e) => {
         console.log(e)
-        this.basicForm.address = ''
+        // this.basicForm.address = ''
         this.basicForm.lng = ''
         this.basicForm.lat = ''
       })
@@ -1205,33 +1225,116 @@ export default {
     setPlace(e) {
       console.log(e)
     },
-    changeIdentity(companyId, language) {
+    changeIdentity(companyId, language, typeValue) {
       let params = {
         identity: 2,
         company_id: companyId,
         language: language
       }
       SWITCH_IDENTITY_V2(params).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code == 200) {
+          let str = JSON.stringify(res.message)
+
+          localStorage.setItem('menuData',str)
           localStorage.setItem('identity', 2)
           localStorage.setItem('company_id', companyId)
+
           this.$store.commit('identity', 2)
           this.$store.commit('allIdentityChanged',true )
-
-          let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData',str)
           this.$store.commit('menuData', res.message)
+          this.$store.commit('currentCompanyId', companyId)
 
-          this.$router.push('/account/home')
+          if(typeValue === 1){
+            this.skipToAccountHome()
+          }
+
+          if(typeValue === 2){
+            this.skipToViewProfile(companyId,2)
+          }
 
         }
       }).catch(err => {
         console.log(err)
       })
     },
-    submitForm(formName) {
-      this.submitLoadingValue = true;
+    cancel(){
+      this.$router.push('/account/home')
+    },
+    updateUserProfilePercentage(){
+
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      RECRUITER_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    skipToViewProfile(companyId,roleValue){
+      let userId = localStorage.getItem('uid')
+      if(roleValue == 1){
+        let obj = {
+          cid:companyId,
+          uid:userId,
+          identity:1
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path:'/educator/profile',query:{str:str}})
+      }
+      if(roleValue == 2){
+        let obj = {
+          cid:companyId,
+          uid:userId,
+          identity:2
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path:'/business/profile',query:{str:str}})
+      }
+      if(roleValue == 3){
+        let obj = {
+          cid:companyId,
+          uid:userId,
+          identity:3
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path:'/business/profile',query:{str:str}})
+      }
+      if(roleValue == 4){
+        let obj = {
+          cid:companyId,
+          uid:userId,
+          identity:4
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path:'/business/profile',query:{str:str}})
+      }
+      if(roleValue == 5){
+        let obj = {
+          cid:companyId,
+          uid:userId,
+          identity:5
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path:'/vendor/profile',query:{str:str}})
+      }
+    },
+    skipToAccountHome(){
+      let self = this;
+      setTimeout(function (){
+
+        self.submitLoadingValue = false;
+
+        self.$router.push('/account/home')
+
+      },3000)
+
+    },
+    submitForm(formName,typeValue) {
+
       let businessTypeId;
       let businessTypeName;
       let businessTypeNameCn;
@@ -1262,6 +1365,14 @@ export default {
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
+
+          if(typeValue === 1){
+            this.submitLoadingValue = true;
+          }
+          if(typeValue === 2){
+            this.submitAndViewLoadingValue = true;
+          }
+
           if (action == 'edit') {
             this.basicForm.id = this.cid;
           }
@@ -1270,7 +1381,7 @@ export default {
           }
           let params = Object.assign({}, this.basicForm);
           RECRUITER_COMPANY_EDIT_V2(params).then(res => {
-            console.log(res)
+            // console.log(res)
             if (res.code == 200) {
 
               this.$store.commit('username', this.basicForm.company_name)
@@ -1280,8 +1391,15 @@ export default {
                 if (this.accountImageFileList.length > 0) {
                   this.uploadAccountImages(this.cid)
                 }
+                this.updateUserProfilePercentage()
 
-                this.$router.push('/account/home')
+                if(typeValue === 1){
+                  this.skipToAccountHome()
+                }
+
+                if(typeValue === 2){
+                  this.skipToViewProfile(res.message.recruiting_company_id,2)
+                }
 
               } else {
 
@@ -1296,20 +1414,21 @@ export default {
                 // let uid = localStorage.getItem('uid')
 
                 // this.getUserMenuList(uid, 2, res.message.recruiting_company_id, uid)
+                this.updateUserProfilePercentage()
 
-                this.changeIdentity(res.message.recruiting_company_id, 2)
+                this.changeIdentity(res.message.recruiting_company_id, 2,typeValue)
               }
               // this.submitEduBusinessCompanyForm()
-              this.submitLoadingValue = false;
+
             }
           }).catch(err => {
             console.log(err)
-            this.submitLoadingValue = false;
-            this.$message.error(err.msg)
+            // this.submitLoadingValue = false;
+            // this.$message.error(err.msg)
           })
 
         } else {
-          this.submitLoadingValue = false;
+          this.$message.warning('Please complete all required fields')
           console.log('error submit!!')
           return false
         }
@@ -1451,6 +1570,7 @@ export default {
       let params = {
         identity: 2
       }
+
       USER_INFO_BY_TOKEN_V2(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
@@ -1487,6 +1607,13 @@ export default {
           if (recruiterInfo.lng) {
             this.basicForm.lng = recruiterInfo.lng;
           }
+
+          if(recruiterInfo.lat && recruiterInfo.lng){
+            this.mapCenterValue = [recruiterInfo.lng, recruiterInfo.lat]
+          }
+
+          this.initMap()
+
           if (recruiterInfo.address) {
             this.basicForm.address = recruiterInfo.address;
           }
@@ -1800,7 +1927,7 @@ export default {
 }
 
 .basic-r-container-bg {
-  padding: 25px 50px 50px 50px;
+  padding: 25px 50px 0 50px;
 }
 
 
@@ -1833,7 +1960,7 @@ export default {
 
 
 .basic-form {
-  height: calc(100vh - 285px);
+  height: calc(100vh - 230px);
 }
 
 .demo-ruleForm {
@@ -1957,7 +2084,10 @@ export default {
   font-size: 26px;
   color: #262626;
 }
-
+.account-profile-item-label span{
+  font-size: 20px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
 .account-profile-item-c {
   margin-top: 15px;
 }

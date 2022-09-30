@@ -1,20 +1,121 @@
 <template>
 <el-scrollbar class="jobs-list-bg-container">
+
   <div class="back-btn-container" v-if="isOther">
     <el-button class="back-btn" link type="primary"
                @click="backToSearchResults()"
     >
+              <el-icon>
+                <ArrowLeft />
+              </el-icon>
       BACK TO SEARCH RESULTS
     </el-button>
   </div>
-  <div class="jobs-list-container">
+
+  <div class="back-btn-container" v-if="fromBusinessProfile">
+    <el-button class="back-btn" link type="primary"
+               @click="exitPreview()"
+    >
+      <el-icon>
+        <ArrowLeft />
+      </el-icon>
+      EXIT PREVIEW
+    </el-button>
+  </div>
+
+  <div class="jobs-featured" v-if="jobFeaturedData.length>0">
+    <el-carousel :height="jobHeight+'px'" indicator-position="none">
+      <el-carousel-item
+          v-for="(item,i) in jobFeaturedData" :key="i"
+      >
+        <div  class="jobs-list-item-featured "
+              :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' "
+        >
+          <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+               @click="cancelFavoriteForFeatured(1,item.id,index)">
+            <el-icon :size="30" color="#9173ff">
+              <CollectionTag />
+            </el-icon>
+          </div>
+          <div class="jobs-favorite" v-else
+               @click="addFavoriteForFeatured(item.id,1,item.job_title,item.logo,i)">
+            <el-icon :size="30">
+              <CollectionTag />
+            </el-icon>
+          </div>
+
+          <div class="jobs-list-item-l">
+            <el-image class="jobs-item-logo"
+                      :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+                      fit="contain">
+              <template #error>
+                <div class="image-slot">
+                  <el-icon :size="60" color="#808080">
+                    <Picture/>
+                  </el-icon>
+                </div>
+              </template>
+            </el-image>
+          </div>
+          <div class="jobs-list-item-r">
+            <div class="jobs-list-item-name">
+              {{ item.company_name }}
+            </div>
+
+            <div class="jobs-list-item-title" @click="turnJobDetail(item.id)">
+              {{ item.job_title }}
+            </div>
+            <view class="jobs-list-item-salary">
+              <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
+              {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
+              <span v-if="item.payment_period == 112">hourly</span>
+              <span v-if="item.payment_period == 113">daily</span>
+              <span v-if="item.payment_period == 114">weekly</span>
+              <span v-if="item.payment_period == 115">monthly</span>
+              <span v-if="item.payment_period == 116">annually</span>
+            </view>
+            <div class="jobs-list-item-address">
+              {{ item.address }}
+            </div>
+
+            <div class="jobs-list-item-b">
+              <div class="jobs-list-item-b-l">
+                <view class="jobs-list-item-work-type">
+                  <i class="iconfont el-icon-alishijian"></i>
+                  <span v-if="item.employment_type==1">FT</span>
+                  <span v-if="item.employment_type==2">PT</span>
+                  <span v-if="item.employment_type==3">S</span>
+                </view>
+
+              </div>
+
+              <div class="jobs-list-item-b-r">
+                <view class="jobs-list-item-date">
+                  <el-icon>
+                    <Calendar/>
+                  </el-icon>&nbsp;
+                  {{ $filters.howLongFormat(item.refresh_time) }}
+                </view>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </el-carousel-item>
+    </el-carousel>
+    <div style="height: 25px;background-color: #FFFFFF;"></div>
+  </div>
+
+  <div class="jobs-list-container" >
     <div class="jobs-list-label-container">
-      <div class="jobs-list-label">All jobs <span v-if="isOther">at {{companyInfo.company_name}}</span></div>
+      <div class="jobs-list-label">All jobs <span v-if="isOther || fromBusinessProfile">at {{companyInfo.company_name}}</span></div>
     </div>
 
     <div class="jobs-list-content">
       <template  v-for="(item,index) in jobListData" :key="index">
-        <div class="jobs-list-item "
+        <div  class="jobs-list-item "
              :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' ">
 
           <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
@@ -44,7 +145,7 @@
           </div>
           <div class="jobs-list-item-r">
             <div class="jobs-list-item-name">
-              {{ item.company_name }} {{selectedJobId}}
+              {{ item.company_name }}
             </div>
 
             <div class="jobs-list-item-title" @click="turnJobDetail(item.id)">
@@ -103,20 +204,77 @@
 
   </div>
 
+  <div  class="jobs-list-item " style="position:fixed;z-index: -100; opacity: 0;" id="job">
+
+    <div class="jobs-list-item-l">
+      <el-avatar class="jobs-item-logo"
+                 src=""
+                fit="contain">
+      </el-avatar>
+    </div>
+    <div class="jobs-list-item-r">
+      <div class="jobs-list-item-name">
+        1075  English Teacher English Teacher English Teacher
+      </div>
+
+      <div class="jobs-list-item-title">
+        English Teacher
+      </div>
+      <view class="jobs-list-item-salary">
+        <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
+        ฿ 250 - 500 hourly
+        <span>annually</span>
+      </view>
+      <div class="jobs-list-item-address">
+        Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116
+      </div>
+
+      <div class="jobs-list-item-b">
+        <div class="jobs-list-item-b-l">
+          <view class="jobs-list-item-work-type">
+            <i class="iconfont el-icon-alishijian"></i>
+            <span>FT</span>
+          </view>
+        </div>
+
+        <div class="jobs-list-item-b-r">
+          <view class="jobs-list-item-date">
+            <el-icon>
+              <Calendar/>
+            </el-icon>&nbsp;
+            test test test
+          </view>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
 </el-scrollbar>
 </template>
 
 <script>
 
+import {ADD_FAVORITE, CANCEL_FAVORITE, JOB_FEATURED_LIST} from "@/api/api";
+
 export default {
   name: "jobsListComponent",
-  props:['jobListData','jobPage','jobLimit','jobTotalNum','selectedJobId','isOther','companyInfo'],
+  props:['jobListData', 'jobPage','jobLimit','jobTotalNum','selectedJobId','isOther','companyInfo','fromBusinessProfile'],
   data(){
     return {
-
+      jobHeight:300,
+      jobFeaturedData:[]
     }
   },
+  mounted(){
+    this.getJobFeaturedList()
+  },
   methods:{
+    exitPreview(){
+      this.$router.push('/account/home')
+    },
     jobPageSizeChange(){
       console.log('job page size')
       this.$emit('jobPageSize')
@@ -144,13 +302,71 @@ export default {
       this.$emit('jobDetailEvent',id,this.jobPage,this.isOther)
       // <router-link :to="{'path':'/jobs',query:{id:item.id,page:jobPage}}">
       // this.$router.push({path:'/jobs',query:{id:id,page:this.jobPage}})
-    }
+    },
+    getJobFeaturedList() {
+      let params = {
+        ad_type: 2
+      }
+
+      JOB_FEATURED_LIST(params).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.jobFeaturedData = res.message;
+          let jobDiv = document.getElementById('job')
+          // console.log(jobDiv.offsetHeight)
+          this.jobHeight = jobDiv.offsetHeight;
+        } else {
+          console.log(res.msg)
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
+    addFavoriteForFeatured(id, type, title, url,index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.jobFeaturedData[index]['is_favorite'] = 1
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    cancelFavoriteForFeatured(type,typeId,index){
+      let params = {
+        token:localStorage.getItem('token'),
+        type:type,
+        type_id:typeId
+      }
+      CANCEL_FAVORITE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.jobFeaturedData[index]['is_favorite'] = 0
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+
 
   }
 }
 </script>
 
 <style scoped>
+
 .back-btn-container{
   margin-top: 25px;
   padding-left: 25px;
@@ -158,7 +374,9 @@ export default {
 .back-btn{
   font-size: 20px;
 }
+
 .jobs-list-bg-container {
+  /*max-width: 520px;*/
   height: calc(100vh - 140px);
   background-color: #F0F2F5;
 }
@@ -185,6 +403,19 @@ export default {
 
 .jobs-list-content {
   margin-top: 10px;
+}
+
+.jobs-list-item-featured{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 25px;
+  text-align: left;
+
 }
 
 .jobs-list-item {
@@ -321,6 +552,18 @@ export default {
   margin: 20px;
   display: flex;
   justify-content: center;
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1919px) {
+  .jobs-list-label{
+    font-size: 20px;
+  }
+  .jobs-list-item-featured{
+    padding: 10px;
+  }
+
+
+
 }
 
 </style>
