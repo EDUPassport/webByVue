@@ -236,7 +236,7 @@
                             :disabled="item.id != currentCompanyId"
                             @click="postDeal()"
                             type="primary" round>
-                          POST A Deal
+                          OFFER A Deal
                         </el-button>
 
                       </div>

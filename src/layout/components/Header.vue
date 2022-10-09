@@ -5,14 +5,6 @@
         <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
           <el-col :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
 
-<!--            <div  class="logo-container">-->
-<!--              <div class="logo-logo"  @click="turnHome()">-->
-<!--                <div class="logo-edu">EDU</div>-->
-<!--                <div class="logo-passport">PASSPORT</div>-->
-<!--              </div>-->
-<!--              <div class="logo-beta">Beta</div>-->
-<!--            </div>-->
-
             <div class="logo-new-container">
               <div class="logo-new"  @click="turnHome()">
                 <el-image class="logo-new-logo-img" :src="logoImgLight"></el-image>
@@ -25,21 +17,62 @@
           <el-col :xs="0" :sm="0" :md="0" :lg="14" :xl="14">
             <div class="nav-link-container">
 
-              <router-link to="/jobs" exact>Jobs</router-link>
+              <el-dialog
+                  v-model="dialogSwitchJobVisible"
+                  title=""
+                  width="30%"
+              >
+                <div class="switch-job-container">
+                  <h3>
+                    You will now be redirected to our
+                    international website
+                  </h3>
+                  <div class="switch-job-tips">
+                    Your login and account info will be sent along to ease the transition
+                  </div>
+                  <div class="switch-job-btn-container">
+                    <el-button  class="switch-job-btn" type="primary" round @click="turnEnvJobs()">
+                      Let's Go
+                    </el-button>
+                  </div>
+                </div>
+
+              </el-dialog>
+
+              <el-dropdown size="default">
+                    <span class="el-dropdown-link-job">
+                          Jobs
+                    <el-icon class="el-icon--right">
+                      <arrow-down />
+                      </el-icon>
+                    </span>
+                <template #dropdown>
+                  <el-dropdown-menu >
+                    <el-dropdown-item @click="goChinaJob()">
+                      <span class="el-dropdown-link-job-1">China</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item @click="goInternationalJob()">
+                      <span class="el-dropdown-link-job-1">International</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+
+<!--              <router-link to="/jobs" exact>Jobs</router-link>-->
               <router-link to="/deals" exact> EDU Deals</router-link>
               <router-link to="/events/list" exact> Events</router-link>
 <!--              <span class="zoho-blog-menu" @click="turnZohoBlog()">Blog</span>-->
 <!--              <router-link to="/contact/us" exact> Contact</router-link>-->
 <!--              <router-link to="/about/us" exact> About</router-link>-->
 <!--              <router-link to="/services/price" exact> Pricing</router-link>-->
-              <template v-if="envName === 'development' || envName === 'production'">
-              <span v-if="!identity || identity == 1"
-                    class="nav-china-jobs" @click="turnEnvJobs()">China Jobs</span>
-              </template>
-              <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
-              <span v-if="!identity || identity == 1"
-                    class="nav-china-jobs" @click="turnEnvJobs()">International Jobs</span>
-              </template>
+<!--              <template v-if="envName === 'development' || envName === 'production'">-->
+<!--              <span v-if="!identity || identity == 1"-->
+<!--                    class="nav-china-jobs" @click="turnEnvJobs()">China Jobs</span>-->
+<!--              </template>-->
+<!--              <template v-if="envName === 'developmentCN' || envName === 'productionCN'">-->
+<!--              <span v-if="!identity || identity == 1"-->
+<!--                    class="nav-china-jobs" @click="turnEnvJobs()">International Jobs</span>-->
+<!--              </template>-->
             </div>
           </el-col>
 
@@ -471,7 +504,8 @@ export default {
       otherCompanyData:[],
       vendorCompanyData:[],
       educatorContactData:{},
-      educatorContactStatus:false
+      educatorContactStatus:false,
+      dialogSwitchJobVisible:false
 
     }
   },
@@ -526,6 +560,62 @@ export default {
 
   },
   methods: {
+    turnEnvJobs() {
+
+      let token = localStorage.getItem('token')
+      let domain = process.env.VUE_APP_EXCHANGE_DOMAIN
+
+      if (token) {
+        let firstName = localStorage.getItem('first_name')
+        let lastName = localStorage.getItem('last_name')
+        let email = localStorage.getItem('email')
+        let uid = localStorage.getItem('uid')
+
+        let navObj = {
+          uid: uid,
+          email: email,
+          first_name: firstName,
+          last_name: lastName
+        }
+
+        let navObjStr = JSON.stringify(navObj)
+
+        let a = encode(navObjStr)
+        let b = decode(a)
+        console.log(JSON.parse(b))
+
+        let navUrl = domain + '/jobs?exchange_job=' + a
+        // console.log(navUrl)
+        window.open(navUrl, '_self')
+      } else {
+        let adomain = domain + '/jobs'
+        window.open(adomain, '_self')
+      }
+
+    },
+    goChinaJob(){
+      let envName = this.envName;
+
+      if(envName === 'development' || envName === 'production'){
+        this.dialogSwitchJobVisible = true;
+      }
+
+      if(envName === 'developmentCN' || envName === 'productionCN' ){
+        this.$router.push('/jobs')
+      }
+    },
+    goInternationalJob(){
+      let envName = this.envName;
+
+      if(envName === 'development' || envName === 'production'){
+        this.$router.push('/jobs')
+      }
+
+      if(envName === 'developmentCN' || envName === 'productionCN' ){
+
+        this.dialogSwitchJobVisible = true;
+      }
+    },
     getAllIdentity(){
 
       let params = {
@@ -592,39 +682,6 @@ export default {
     },
     signUp() {
       this.$router.push({path: '/edupassport/signup', query: {}})
-    },
-    turnEnvJobs() {
-
-      let token = localStorage.getItem('token')
-      let domain = process.env.VUE_APP_EXCHANGE_DOMAIN
-
-      if (token) {
-        let firstName = localStorage.getItem('first_name')
-        let lastName = localStorage.getItem('last_name')
-        let email = localStorage.getItem('email')
-        let uid = localStorage.getItem('uid')
-
-        let navObj = {
-          uid: uid,
-          email: email,
-          first_name: firstName,
-          last_name: lastName
-        }
-
-        let navObjStr = JSON.stringify(navObj)
-
-        let a = encode(navObjStr)
-        let b = decode(a)
-        console.log(JSON.parse(b))
-
-        let navUrl = domain + '/jobs?exchange_job=' + a
-        // console.log(navUrl)
-        window.open(navUrl, '_self')
-      } else {
-        let adomain = domain + '/jobs'
-        window.open(adomain, '_self')
-      }
-
     },
     getBasicInfo(identity) {
 
@@ -1395,6 +1452,45 @@ export default {
   font-size: 16px;
   line-height: 20px;
 }
+
+.el-dropdown-link-job{
+  font-size: 24px;
+  line-height: 30px;
+
+  margin-left: 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.el-dropdown-link-job-1{
+  font-size: 24px;
+  line-height: 30px;
+  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.switch-job-container{
+  padding:20px;
+  text-align: center;
+}
+
+.switch-job-tips{
+  margin-top: 20px;
+  font-size: 24px;
+  line-height: 30px;
+  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.switch-job-btn-container{
+  margin-top: 40px;
+}
+
+.switch-job-btn{
+
+}
+
 
 @media screen and  (min-width: 1200px) {
 

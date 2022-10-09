@@ -2676,8 +2676,9 @@ export default {
 }
 
 /deep/ .xll-currency-select .el-input__inner{
-   width: 10px;
+  width: 50px;
   border: 0;
+  text-align: center;
 }
 
 /deep/ .xll-currency-select .el-input__suffix{

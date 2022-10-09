@@ -32,9 +32,9 @@
                             v-model="loginForm.password"></el-input>
                 </el-form-item>
 
-                <div class="remeber-forgot-container">
-                  <div class="remeber-container">
-                    <el-checkbox size="large" v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
+                <div class="remember-forgot-container">
+                  <div class="remember-container">
+                    <el-checkbox size="large" v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>
                   </div>
                   <div class="forgot-password-container">
                     <el-button link class="forgot-password-btn"  @click="forgotPassword()">
@@ -105,9 +105,9 @@
                     </div>
                   </el-form-item>
 
-                  <div class="remeber-forgot-container">
-                    <div class="remeber-container">
-                      <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
+                  <div class="remember-forgot-container">
+                    <div class="remember-container">
+                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>
                     </div>
                     <div class="forgot-password-container">
                       <el-button link class="forgot-password-btn" @click="forgotPassword()">Forgot password?
@@ -165,9 +165,9 @@
                               v-model="loginPhonePassForm.password"></el-input>
                   </el-form-item>
 
-                  <div class="remeber-forgot-container">
-                    <div class="remeber-container">
-                      <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
+                  <div class="remember-forgot-container">
+                    <div class="remember-container">
+                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>
                     </div>
                     <div class="forgot-password-container">
                       <el-button link class="forgot-password-btn" @click="forgotPassword()">
@@ -214,7 +214,7 @@
               >
                 <template #icon>
                   <el-icon>
-                    <IconLoginApple />
+                    <IconCarbonEmail />
                   </el-icon>
                 </template>
                  SIGN IN WITH EMAIL
@@ -365,7 +365,7 @@ export default {
       submitLoginLoadingStatus: false,
       submitRegisterLoadingStatus: false,
       humanVerifyStatus: true,
-      remeberValue: false,
+      rememberValue: false,
       registerForm: {
         first_name: '',
         last_name: '',
@@ -439,7 +439,7 @@ export default {
     let router = useRouter()
     let route = useRoute()
     const getParams = () => {
-      console.log(route.query)
+      // console.log(route.query)
       return route.query;
     }
 
@@ -522,6 +522,24 @@ export default {
     if (email) {
       this.loginForm.email = email
     }
+
+    let isAccountCookieExist = this.$cookies.isKey('account')
+    console.log(isAccountCookieExist)
+    if(isAccountCookieExist){
+      let accountCookie = this.$cookies.get('account')
+      this.rememberValue = true;
+
+      if(accountCookie.type === 1){
+        this.loginForm.email = accountCookie.email
+        this.loginForm.password = accountCookie.password
+      }
+
+      if(accountCookie.type === 2){
+        this.loginPhonePassForm.phone = accountCookie.phone
+        this.loginPhonePassForm.password = accountCookie.password
+      }
+    }
+
   },
   created() {
     this.showValue = this.showType
@@ -583,7 +601,7 @@ export default {
     goHome() {
       this.$router.push('/')
     },
-    remeberChange(e) {
+    rememberChange(e) {
       console.log(e)
     },
     humanVerify(response, responseKey) {
@@ -680,6 +698,39 @@ export default {
 
       this.identityValue = value
     },
+    rememberMeAction(data,type){
+      // 1 email login 2 login by phone and password
+      let isExists = this.$cookies.isKey('account')
+      if(isExists){
+        this.$cookies.remove('account')
+      }
+
+      if(this.rememberValue){
+
+        let obj = {}
+        if(type === 1){
+          obj = {
+            type:1,
+            email:data.email,
+            password:data.password
+          }
+
+        }
+
+        if(type === 2){
+          obj = {
+            type:2,
+            phone:data.phone,
+            password:data.password
+          }
+        }
+
+        this.$cookies.set('account',obj, 60 * 60 * 24 * 30)
+
+      }
+
+
+    },
     submitLoginForm(formName) {
       let self = this;
       if (self.humanVerifyStatus) {
@@ -690,6 +741,8 @@ export default {
             LOGIN_EMAIL_PWD_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
+                this.rememberMeAction(params,1)
+
                 let resMessage = res.message;
                 // console.log(resMessage.company_id)
                 localStorage.setItem('token', resMessage.token)
@@ -752,8 +805,7 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
-                      self.showValue = 'sign-up'
+                      self.$router.push({path: '/edupassport/signup', query: {}})
                     }
                   }
 
@@ -847,8 +899,7 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
-                      self.showValue = 'sign-up'
+                      self.$router.push({path: '/edupassport/signup', query: {}})
                     }
                   }
 
@@ -879,6 +930,8 @@ export default {
             LOGIN_PHONE_PWD_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
+
+                this.rememberMeAction(params,2)
 
                 let resMessage = res.message
 
@@ -940,7 +993,7 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport', query: {}})
+                      self.$router.push({path: '/edupassport/signup', query: {}})
                     }
                   }
 
@@ -1423,7 +1476,7 @@ export default {
   margin: 50px auto 0;
 }
 
-.remeber-forgot-container{
+.remember-forgot-container{
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1431,7 +1484,7 @@ export default {
 
 }
 
-.remeber-container {
+.remember-container {
   text-align: left;
 }
 
@@ -1458,6 +1511,7 @@ export default {
 }
 
 .xll-input-container {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;

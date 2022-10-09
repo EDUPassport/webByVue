@@ -186,31 +186,81 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="12">
+                    <el-col :span="6">
                       <el-form-item label="Languages & Proficiency" >
-                        <el-checkbox-group  v-model="selectedLanguageList">
-                          <template v-for="(item,i) in languageOptionsData" :key="i">
 
-                            <div class="language-checkbox-item">
+                        <div class="language-add-container">
+
+                          <template v-if="selectedLanguageList.length > 0">
+                            <div class="language-checkbox-item" v-for="(item,i) in selectedLanguageList" :key="i">
                               <div class="language-checkbox-item-l">
-                                <el-checkbox  :label="item">
-                                  {{item.object_en}}
-                                </el-checkbox>
+                                {{item.object_en}}
                               </div>
                               <div class="language-checkbox-item-r">
-                                <el-select
-                                    v-model="item.level"
-                                >
-                                  <el-option
-                                      v-for="(level,ii) in languageLevelOptionsData" :key="ii"
-                                      :label="level.label" :value="level.value" value-key="value">
-                                  </el-option>
-                                </el-select>
+                                {{item.level_name}}
                               </div>
                             </div>
 
+                            <div class="language-add-icon">
+                              <el-icon :size="45" @click="addLanguageAndProficiency()">
+                                <IconCarbonAddAlt />
+                              </el-icon>
+
+                            </div>
                           </template>
-                        </el-checkbox-group>
+                          <template v-else>
+                            <el-icon :size="45" @click="addLanguageAndProficiency()">
+                              <IconCarbonAddAlt />
+                            </el-icon>
+                          </template>
+
+                        </div>
+
+                        <el-dialog
+                            v-model="languageDialogVisible"
+                            title="Languages & Proficiency"
+                            width="300px"
+                        >
+                          <el-form
+                              ref="languageForm"
+                              label-width="120px"
+                              :model="languageForm"
+                              label-position="top"
+                              class="demo-ruleForm"
+                          >
+                            <el-form-item  label="Language"  >
+                              <el-select v-model="languageValue"  value-key="id">
+                                <el-option v-for="(item,i) in languageOptionsData" :key="i"
+                                           :label="item.object_en"
+                                           :value="item"
+
+                                >
+                                </el-option>
+                              </el-select>
+
+                            </el-form-item>
+
+                            <el-form-item class="work-form-item"  label="Proficiency" >
+                              <el-select v-model="languageLevelValue" value-key="value">
+                                <el-option
+                                    v-for="(level,ii) in languageLevelOptionsData" :key="ii"
+                                    :label="level.label"
+                                    :value="level" >
+                                </el-option>
+                              </el-select>
+                            </el-form-item>
+
+                          </el-form>
+
+                          <div style="margin-top: 25px;text-align: center;">
+                            <el-button round type="primary" @click="submitLanguageItem()" >
+                              SUBMIT
+                            </el-button>
+                          </div>
+
+                        </el-dialog>
+
+
                       </el-form-item>
 
                     </el-col>
@@ -789,21 +839,21 @@
                 </div>
                 <div class="account-profile-item-c">
 
-                  <el-row :gutter="50">
-                    <el-col :span="24">
-                      <el-form-item
-                          label="Introduction" prop="desc">
-                        <el-input v-model="basicForm.desc" type="textarea"
-                                  :rows="4"
-                                  placeholder="Write a couple of paragraphs about your school and why educators would want to teach there.">
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
+<!--                  <el-row :gutter="50">-->
+<!--                    <el-col :span="24">-->
+<!--                      <el-form-item-->
+<!--                          label="Introduction" prop="desc">-->
+<!--                        <el-input v-model="basicForm.desc" type="textarea"-->
+<!--                                  :rows="4"-->
+<!--                                  placeholder="Write a couple of paragraphs about your school and why educators would want to teach there.">-->
+<!--                        </el-input>-->
+<!--                      </el-form-item>-->
+<!--                    </el-col>-->
+<!--                  </el-row>-->
 
                   <el-row :span="50">
                     <el-col :span="6">
-                      <el-form-item label="Profile images(up to 6)" prop="images">
+                      <el-form-item label="Images(up to 6)" prop="images">
                         <el-upload
                             style="width: 90%;"
                             ref="accountImagesUpload"
@@ -931,42 +981,42 @@
                       </el-form-item>
                     </el-col>
 
-<!--                    <el-col :span="6">-->
-<!--                      <el-form-item label="Profile Photo" prop="profile_photo">-->
-<!--                        <el-upload-->
-<!--                            class="profile-uploader"-->
-<!--                            action=""-->
-<!--                            :headers="uploadHeaders"-->
-<!--                            :show-file-list="false"-->
-<!--                            :http-request="profilePhotoHttpRequest"-->
-<!--                            :before-upload="beforeProfilePhotoUpload"-->
-<!--                        >-->
+                    <el-col :span="6">
+                      <el-form-item label="Profile Photo" prop="profile_photo">
+                        <el-upload
+                            class="profile-uploader"
+                            action=""
+                            :headers="uploadHeaders"
+                            :show-file-list="false"
+                            :http-request="profilePhotoHttpRequest"
+                            :before-upload="beforeProfilePhotoUpload"
+                        >
 
-<!--                          <el-icon :size="45">-->
-<!--                            <IconBiPlusSquare/>-->
-<!--                          </el-icon>-->
-<!--                        </el-upload>-->
+                          <el-icon :size="45">
+                            <IconBiPlusSquare/>
+                          </el-icon>
+                        </el-upload>
 
-<!--                        <div class="account-xll-images" >-->
-<!--                          <div class="account-xll-image">-->
-<!--                            <div v-if="profilePhotoUrl">-->
-<!--                              <el-image :src="profilePhotoUrl" style="width: 100%;" ></el-image>-->
-<!--                            </div>-->
-<!--                            <div class="account-xll-image-mask">-->
-<!--                              <span @click="handleSingleImagePreview(profilePhotoUrl)">-->
-<!--                                <el-icon color="#ffffff" :size="45">-->
-<!--                                  <zoom-in />-->
-<!--                                </el-icon>-->
-<!--                              </span>-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>-->
-<!--                          <el-image :src="dialogSingleImageUrl"></el-image>-->
-<!--                        </el-dialog>-->
+                        <div class="account-xll-images" >
+                          <div class="account-xll-image">
+                            <div v-if="profilePhotoUrl">
+                              <el-image :src="profilePhotoUrl" style="width: 100%;" ></el-image>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleSingleImagePreview(profilePhotoUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in />
+                                </el-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
+                          <el-image :src="dialogSingleImageUrl"></el-image>
+                        </el-dialog>
 
-<!--                      </el-form-item>-->
-<!--                    </el-col>-->
+                      </el-form-item>
+                    </el-col>
 
                   </el-row>
 
@@ -1006,7 +1056,12 @@ import {
   UPLOAD_IMG,
   ADD_USER_IMG_V2,
   ALL_LANGUAGE_PROFICIENCY,
-  USER_OBJECT_LIST, ADD_USER_WORK_V2, ADD_USER_EDUCATION_V2, ADD_LANGUAGE_SCORE_V2, EDUCATOR_PERCENTAGE_V2
+  USER_OBJECT_LIST,
+  ADD_USER_WORK_V2,
+  ADD_USER_EDUCATION_V2,
+  ADD_LANGUAGE_SCORE_V2,
+  EDUCATOR_PERCENTAGE_V2,
+  USER_CONTACT_EDIT_V2
 } from '@/api/api'
 import {countriesData} from "@/utils/data";
 import {encode, decode} from "js-base64";
@@ -1047,6 +1102,7 @@ export default {
       businessRegPhotoUrl: '',
       introVideoUrl: '',
       backgroundPhotoUrl: '',
+
       basicForm: {
         name: '',
         resume_pdf: '',
@@ -1273,11 +1329,17 @@ export default {
       selectedJobSeekingValue:'',
 
       degreeOptionsData:[],
+
       languageOptionsData:[],
       selectedLanguageList:[],
+      languageValue:'',
+
       languageLevelOptionsData:[],
       languageLevelValue:'',
+
       selectedLanguageLevelData:[],
+      languageDialogVisible:false,
+      languageForm:{},
 
       checkedYearExpValue: undefined,
       checkedJobTypeValue: undefined,
@@ -1313,6 +1375,22 @@ export default {
 
   },
   methods: {
+    addLanguageAndProficiency(){
+      this.languageDialogVisible = true;
+
+    },
+    submitLanguageItem(){
+      let languageObj = this.languageValue
+      let level = this.languageLevelValue
+
+      languageObj.level = level.value
+      languageObj.level_name = level.label
+
+      this.selectedLanguageList.push(languageObj)
+
+      this.languageDialogVisible = false;
+
+    },
     languageConfirm(){
       let sLanguageData = this.selectedLanguageList
       let sData = []
@@ -1467,6 +1545,17 @@ export default {
               }
               if(this.selectBenefitsList.length > 0){
                 this.benefitsConfirm()
+              }
+
+              if(this.profilePhotoUrl){
+                let contactParas = {
+                  headimgurl:this.profilePhotoUrl
+                }
+                USER_CONTACT_EDIT_V2(contactParas).then(res=>{
+                  console.log(res)
+                }).catch(err=>{
+                  console.log(err)
+                })
               }
 
               if (action == 'edit') {
@@ -1730,9 +1819,8 @@ export default {
             this.basicForm.background_image = educatorContact.background_image
           }
 
-          if (educatorContact.profile_photo) {
-            this.profilePhotoUrl = educatorContact.profile_photo
-            this.basicForm.profile_photo = educatorContact.profile_photo
+          if (userContact.headimgurl) {
+            this.profilePhotoUrl = userContact.headimgurl
           }
 
           if (educatorContact.video_url) {
@@ -1893,6 +1981,19 @@ export default {
 
               if(item.object_score){
                 b[0]['level'] = item.object_score;
+                if(item.object_score == 1){
+                  b[0]['level_name'] = 'Native';
+                }
+                if(item.object_score == 2){
+                  b[0]['level_name'] = 'Fluent';
+                }
+                if(item.object_score == 3){
+                  b[0]['level_name'] = 'Conversational';
+                }
+                if(item.object_score == 4){
+                  b[0]['level_name'] = 'Beginner';
+                }
+
               }
 
               a = a.concat(b)
@@ -3664,17 +3765,40 @@ export default {
 .account-xll-image-mask:hover{
 
 }
+.language-add-container{
+  width: 100%;
+  position: relative;
+}
 
 .language-checkbox-item{
+  width: calc(100% - 80px);
+
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding-right: 10px;
+
+  border-bottom: 1px solid #EEEEEE;
+
 }
+
+
+
 .language-checkbox-item-l{
+  font-size: 20px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 .language-checkbox-item-r{
-  padding-left: 15px;
+  font-size: 20px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
+.language-add-icon{
+  position: absolute;
+  right: 0;
+  top: 0;
+
 }
 
 @media screen and (min-width: 1200px) {

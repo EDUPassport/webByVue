@@ -7,7 +7,7 @@
 
         <div class="logo-new-container">
           <div class="logo-new"  @click="turnHome()">
-            <el-image class="logo-new-logo-img" :src="logoImgLight"></el-image>
+            <el-image class="logo-new-logo-img" :src="logoImgDark"></el-image>
           </div>
           <div class="logo-new-beta">Beta</div>
         </div>
@@ -59,6 +59,7 @@
 <script>
 import {ref, onMounted} from 'vue'
 import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
+import logoImgDark from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.png"
 
 
 export default {
@@ -85,6 +86,7 @@ export default {
       let documentTop = document.scrollingElement.scrollTop;
 
       visible.value = false
+      localStorage.setItem('homeDongHua',1)
       body.style.position = "static";
       body.style.top = "auto";
       document.scrollingElement.scrollTop = documentTop;
@@ -93,67 +95,76 @@ export default {
     onMounted(() => {
 
 
-      let body = document.body;
-      let documentTop = document.scrollingElement.scrollTop;
-      body.style.position = "fixed"
-      body.style.top = -documentTop + "px";
+      let homeDongHuaValue = localStorage.getItem('homeDongHua')
 
-      setTimeout(function () {
-        span1.value = true
-      }, 500)
-      setTimeout(function () {
-        span2.value = true
-      }, 1200)
-      setTimeout(function () {
-        span3.value = true
-      }, 1700)
-
-      setTimeout(function () {
-        span2.value = false
-        span4.value = true
-      }, 10000)
-
-      setTimeout(function () {
-        show1.value = true
-      }, 2200)
-
-      setTimeout(function () {
-        show1.value = false
-        show2.value = true
-      }, 4200)
-
-      setTimeout(function () {
-        show1.value = false
-        show2.value = false
-        show3.value = true
-      }, 6200)
-
-      setTimeout(function () {
-        show1.value = false
-        show2.value = false
-        show3.value = false
-        show4.value = true
-      }, 8200)
-
-      setTimeout(function () {
-        show1.value = false
-        show2.value = false
-        show3.value = false
-        show4.value = false
-        show5.value = true
-      }, 9000)
-
-      setTimeout(function () {
-        cl.value = true
-        cr.value = true
-      }, 13000)
-
-      setTimeout(function () {
+      if(homeDongHuaValue){
         visible.value = false
-        body.style.position = "static";
-        body.style.top = "auto";
-        document.scrollingElement.scrollTop = documentTop;
-      }, 14000)
+      }else{
+        let body = document.body;
+        let documentTop = document.scrollingElement.scrollTop;
+        body.style.position = "fixed"
+        body.style.top = -documentTop + "px";
+
+        setTimeout(function () {
+          span1.value = true
+        }, 500)
+        setTimeout(function () {
+          span2.value = true
+        }, 1200)
+        setTimeout(function () {
+          span3.value = true
+        }, 1700)
+
+        setTimeout(function () {
+          span2.value = false
+          span4.value = true
+        }, 10000)
+
+        setTimeout(function () {
+          show1.value = true
+        }, 2200)
+
+        setTimeout(function () {
+          show1.value = false
+          show2.value = true
+        }, 4200)
+
+        setTimeout(function () {
+          show1.value = false
+          show2.value = false
+          show3.value = true
+        }, 6200)
+
+        setTimeout(function () {
+          show1.value = false
+          show2.value = false
+          show3.value = false
+          show4.value = true
+        }, 8200)
+
+        setTimeout(function () {
+          show1.value = false
+          show2.value = false
+          show3.value = false
+          show4.value = false
+          show5.value = true
+        }, 9000)
+
+        setTimeout(function () {
+          cl.value = true
+          cr.value = true
+        }, 13000)
+
+        setTimeout(function () {
+          visible.value = false
+          localStorage.setItem('homeDongHua',1)
+          body.style.position = "static";
+          body.style.top = "auto";
+          document.scrollingElement.scrollTop = documentTop;
+        }, 14000)
+      }
+
+
 
     })
 
@@ -177,7 +188,8 @@ export default {
   },
   data(){
     return {
-      logoImgLight
+      logoImgLight,
+      logoImgDark
     }
   },
   methods:{
@@ -203,7 +215,7 @@ export default {
   bottom: 0;
   margin: auto;
   /*background-color: #F0F2F5;*/
-  background-color: #6650B3;
+  background-color: #262626;
 
 }
 

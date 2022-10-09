@@ -297,7 +297,7 @@
 
               <div class="account-profile-item-container">
                 <div class="account-profile-item-label">
-                  4.About recruiter
+                  4.About Vendor
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">

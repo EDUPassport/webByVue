@@ -1,6 +1,6 @@
 import {createApp} from 'vue'
 import App from './App.vue'
-
+import VueCookies from 'vue-cookies'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import './style/index.css'
@@ -224,5 +224,7 @@ app.config.globalProperties.formatDate = function (t) {
 app.config.globalProperties.GoEasy = GoEasy
 app.config.globalProperties.goEasy = goEasy
 app.config.globalProperties.service = new IMService(goEasy,GoEasy)
+
+app.config.globalProperties.$cookies = VueCookies
 
 app.mount('#app')

@@ -68,7 +68,7 @@ axios.interceptors.response.use(response => {
                 window.location.href = '/edupassport'
             },1000)
 
-            return
+            return Promise.reject();
         } else {
             return Promise.reject(error.response.data);
         }
