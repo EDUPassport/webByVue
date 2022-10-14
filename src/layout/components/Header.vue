@@ -7,7 +7,7 @@
 
             <div class="logo-new-container">
               <div class="logo-new"  @click="turnHome()">
-                <el-image class="logo-new-logo-img" :src="logoImgLight"></el-image>
+                <el-image class="logo-new-logo-img" :src="logoImgLogo"></el-image>
               </div>
               <div class="logo-new-beta">Beta</div>
             </div>
@@ -356,7 +356,6 @@
 <!--                        </el-dropdown-menu>-->
 <!--                      </template>-->
 <!--                    </el-dropdown>-->
-
                   </div>
 
                 </div>
@@ -383,7 +382,6 @@
                 v-model="menuDrawerStatus"
                 direction="rtl"
                 size="60%"
-
             >
 
               <div class="nav-link-item">
@@ -422,10 +420,10 @@
                 </template>
               </div>
               <div class="nav-link-item">
-                <router-link :to="{path:'/edupassport',query:{type:'login'}}">Login</router-link>
+                <router-link :to="{path:'/login',query:{}}">Login</router-link>
               </div>
               <div class="nav-link-item">
-                <router-link :to="{path: '/edupassport', query: {type: 'sign-up'}}">Sign Up</router-link>
+                <router-link :to="{path: '/signup', query: {}}">Sign Up</router-link>
               </div>
 
             </el-drawer>
@@ -485,6 +483,8 @@ import defaultAvatar from '@/assets/default/avatar.png'
 import discountCardImg from '@/assets/discountcard/discountCard.png'
 import {encode, decode} from 'js-base64'
 import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
+import logoImgLightH from "@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png"
+import logoImgLogo from  '@/assets/newHome/logo/Logo_Transparent.png'
 
 export default {
   name: "Header",
@@ -492,6 +492,8 @@ export default {
     return {
       logoImg,
       logoImgLight,
+      logoImgLightH,
+      logoImgLogo,
       discountCardImg,
       defaultAvatar,
       menuDrawerStatus: false,
@@ -681,7 +683,7 @@ export default {
       })
     },
     signUp() {
-      this.$router.push({path: '/edupassport/signup', query: {}})
+      this.$router.push({path: '/signup', query: {}})
     },
     getBasicInfo(identity) {
 
@@ -696,13 +698,13 @@ export default {
           let userContact = res.message.user_contact;
 
           let companyInfo = {};
+
           let defaultName = userContact.first_name + ' ' + userContact.last_name
-          let name = '';
+          let name = defaultName;
+
           let avatar = 'https://oss.esl-passport.cn/educator.png';
 
           if(identity == 1){
-            let educatorContact = res.message.user_contact.educator_contact;
-            name = educatorContact.name ? educatorContact.name : defaultName;
             avatar = userContact.headimgurl;
           }
 
@@ -710,32 +712,28 @@ export default {
 
             if(userContact.company){
               companyInfo = userContact.company;
-              name = companyInfo.company_name ? companyInfo.company_name : defaultName;
               avatar = companyInfo.logo;
-            }else{
-              name = defaultName;
-              avatar = 'https://oss.esl-passport.cn/educator.png';
             }
 
           }
 
           localStorage.setItem('name', name)
           localStorage.setItem('avatar', avatar)
+          localStorage.setItem('is_third_company',res.message.user_contact.is_third_company )
 
           this.$store.commit('username', name)
           this.$store.commit('userAvatar', avatar)
           this.$store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
 
-          localStorage.setItem('is_third_company',res.message.user_contact.is_third_company )
 
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        // this.$message.error(err.msg)
       })
     },
     login() {
-      this.$router.push('/edupassport')
+      this.$router.push('/login')
     },
     returnMySelf(){
       this.$loading({
@@ -1186,6 +1184,7 @@ export default {
 
 <style scoped>
 .header-container {
+  border-bottom: 1px solid #F0F2F5;
   height: 140px;
   background-color: #FFFFFF;
   color: #262626;
@@ -1194,46 +1193,6 @@ export default {
 
 .header-row-container {
   height: 100%;
-}
-
-.logo-logo{
-
-}
-
-.logo-edu{
-  font-family: BCExtraBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size:40px;
-}
-
-.logo-passport{
-  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size:17px;
-}
-
-.logo-container {
-  text-align: left;
-  position: relative;
-  width: 60px;
-  height: 60px;
-  cursor: pointer;
-}
-
-
-.logo-img {
-  width: 60px;
-  height: 60px;
-  cursor: pointer;
-}
-
-.logo-beta{
-  position: absolute;
-  font-size: 12px;
-  top:0;
-  right:-32px;
-  background-color:#49397f;
-  padding:2px 10px;
-  border-radius:10px;
-  color:#EEEEEE;
 }
 
 
@@ -1521,11 +1480,12 @@ export default {
 
 
 .logo-new-container{
+  width: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  float: left;
+
 }
 
 .logo-new{
@@ -1533,7 +1493,7 @@ export default {
 }
 
 .logo-new-logo-img{
-  width: 100px;
+  width: 60px;
 }
 
 .logo-new-beta{

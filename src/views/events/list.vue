@@ -16,69 +16,80 @@
       <el-col class="events-list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
 
         <el-scrollbar class="events-list-bg-container">
-          <div class="events-list-container">
 
-            <div class="events-item-bg"
-                 v-for="(item,i) in eventsList" :key="i">
+          <template v-if="eventsList.length > 0">
+            <div class="events-list-container">
 
-              <div class="events-item">
-                <div class="events-item-t">
-                  <el-image class="events-item-banner"
-                            :src="item.file !='' ? item.file : '' "
-                  >
-                  </el-image>
-                </div>
-                <div class="events-item-b">
-                  <div class="events-item-item">
-                    <el-space :size="5" wrap spacer="·">
-                      <span>{{ $filters.ymdFormatEvent(item.date)  }}</span>
-                      <span>
+              <div class="events-item-bg"
+                   v-for="(item,i) in eventsList" :key="i">
+
+                <div class="events-item">
+                  <div class="events-item-t">
+                    <el-image class="events-item-banner"
+                              :src="item.file !='' ? item.file : '' "
+                    >
+                    </el-image>
+                  </div>
+                  <div class="events-item-b">
+                    <div class="events-item-item">
+                      <el-space :size="5" wrap spacer="·">
+                        <span>{{ $filters.ymdFormatEvent(item.date)  }}</span>
+                        <span>
                     {{$filters.timeFormatEvent(item.start_time,item.end_time)}}
                   </span>
 
-                      <span v-if="item.is_all == 1">Social</span>
-                      <span v-if="item.is_all == 2">Professional</span>
-                    </el-space>
-                  </div>
-                  <div class="events-item-location">
+                        <span v-if="item.is_all == 1">Social</span>
+                        <span v-if="item.is_all == 2">Professional</span>
+                      </el-space>
+                    </div>
+                    <div class="events-item-location">
                   <span v-if="item.is_online == 2 || item.is_online == 3">
                     {{item.location}}
                   </span>
-                    <span v-else>online</span>
-                  </div>
-                  <div class="events-item-name" @click="showEventDialog(item)">
-                    {{item.name}}
-                  </div>
-                  <div class="events-item-desc">
-                    {{item.desc}}
-                  </div>
-
-                  <div class="events-item-action-container">
-                    <div class="events-item-action-l">
-                      <el-button link>ADD TO CALENDAR</el-button>
+                      <span v-else>online</span>
                     </div>
-                    <div class="events-item-action-r">
-                      <el-button link>FAVORITE</el-button>
+                    <div class="events-item-name" @click="showEventDialog(item)">
+                      {{item.name}}
+                    </div>
+                    <div class="events-item-desc">
+                      {{item.desc}}
                     </div>
 
+                    <div class="events-item-action-container">
+                      <div class="events-item-action-l">
+                        <!--                      <el-button link>ADD TO CALENDAR</el-button>-->
+                      </div>
+                      <div class="events-item-action-r">
+                        <!--                      <el-button link>-->
+                        <!--                        FAVORITE-->
+                        <!--                      </el-button>-->
+                      </div>
+
+                    </div>
                   </div>
+
+
+
                 </div>
-
-
 
               </div>
 
             </div>
 
-          </div>
-          <div class="events-pagination">
-            <el-pagination layout="prev, pager, next"
-                           :default-current-page="1"
-                           @size-change="eventPageSizeChange"
-                           @current-change="eventPageChange"
-                           :current-page="eventPage" :page-size="eventLimit"
-                           :total="eventTotalNum"></el-pagination>
-          </div>
+            <div class="events-pagination">
+              <el-pagination layout="prev, pager, next"
+                             :default-current-page="1"
+                             @size-change="eventPageSizeChange"
+                             @current-change="eventPageChange"
+                             :current-page="eventPage" :page-size="eventLimit"
+                             :total="eventTotalNum"></el-pagination>
+            </div>
+
+
+          </template>
+          <template v-else>
+            <el-empty description="..."></el-empty>
+          </template>
 
         </el-scrollbar>
 

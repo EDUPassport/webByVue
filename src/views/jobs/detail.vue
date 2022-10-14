@@ -15,8 +15,7 @@
         <div class="job-desc-container">
           <div class="job-desc-label">Job Description</div>
           <div class="job-desc-label-underline"></div>
-          <div class="job-desc-content">
-            {{ detailData.desc }}
+          <div class="job-desc-content" v-html="detailData.desc">
           </div>
           <div class="job-tags">
             <div class="job-tag" v-if="detailData.employment_type==1">FullTime</div>
@@ -219,30 +218,30 @@
               {{ detailData.company.desc }}
             </div>
             <div class="view-profile-btn-container">
-              <el-button class="view-profile-btn" type="primary" round
-                         @click="viewCompanyProfile(detailData.user_id)">
-                View Profile
-              </el-button>
+<!--              <el-button class="view-profile-btn" type="primary" round-->
+<!--                         @click="viewCompanyProfile(detailData.user_id)">-->
+<!--                View Profile-->
+<!--              </el-button>-->
             </div>
           </div>
         </div>
 
-        <div class="contact-container" v-if="detailData.user_contact">
-          <div class="contact-label">Contact Person</div>
-          <div class="contact-content">
-            <div class="contact-l">
-              <el-avatar class="contact-profile-photo" :src="detailData.user_contact.headimgurl"></el-avatar>
-            </div>
-            <div class="contact-r">
-              <div class="contact-r-t">
-                Hi I am {{ detailData.user_contact.first_name }} from {{ detailData.company.company_name }}.
-              </div>
-              <div class="contact-r-b">
-                <el-button type="primary" @click="chat(detailData.user_id)">Let's Chat!</el-button>
-              </div>
-            </div>
-          </div>
-        </div>
+<!--        <div class="contact-container" v-if="detailData.user_contact">-->
+<!--          <div class="contact-label">Contact Person</div>-->
+<!--          <div class="contact-content">-->
+<!--            <div class="contact-l">-->
+<!--              <el-avatar class="contact-profile-photo" :src="detailData.user_contact.headimgurl"></el-avatar>-->
+<!--            </div>-->
+<!--            <div class="contact-r">-->
+<!--              <div class="contact-r-t">-->
+<!--                Hi I am {{ detailData.user_contact.first_name }} from {{ detailData.company.company_name }}.-->
+<!--              </div>-->
+<!--              <div class="contact-r-b">-->
+<!--                <el-button type="primary" @click="chat(detailData.user_id)">Let's Chat!</el-button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <div class="other-jobs-container">
           <div class="other-jobs-label">
@@ -266,7 +265,7 @@
           </div>
         </div>
 
-        <latestIndustryNews></latestIndustryNews>
+<!--        <latestIndustryNews></latestIndustryNews>-->
 
       </el-col>
     </el-row>
@@ -282,7 +281,7 @@ import {
   COMPANY_JOB_LIST, JOB_DETAIL, APPLY_JOBS, ADD_FAVORITE, IS_FAVORITE,
   CANCEL_FAVORITE, ADD_TO_CHAT, USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2
 } from "@/api/api";
-import latestIndustryNews from "@/components/latestIndustryNews";
+// import latestIndustryNews from "@/components/latestIndustryNews";
 import {useStore} from 'vuex'
 import {randomString} from "@/utils";
 import {encode } from "js-base64";
@@ -316,7 +315,7 @@ export default {
     }
   },
   components:{
-    latestIndustryNews
+
   },
   mounted() {
     let jobId = this.$route.query.id;
@@ -527,7 +526,7 @@ export default {
       console.log(userId)
       let token = localStorage.getItem('token')
       if(!token || token === ''){
-        return this.$router.push('/edupassport')
+        return this.$router.push('/login')
       }
       let businessInfo = this.detailData.business;
 
@@ -622,7 +621,7 @@ export default {
 
               let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
 
-              self.$router.push({path:'/edupassport',query:{redirect_params:redirectParamsStr}})
+              self.$router.push({path:'/login',query:{redirect_params:redirectParamsStr}})
 
             }
           }

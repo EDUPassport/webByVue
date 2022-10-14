@@ -64,13 +64,13 @@
 
                         <div class="account-first-name">
                           <el-form-item label="First name" prop="first_name">
-                            <el-input v-model="basicForm.first_name" placeholder="First name"></el-input>
+                            <el-input size="small" v-model="basicForm.first_name" placeholder="First name"></el-input>
                           </el-form-item>
                         </div>
 
                         <div class="account-last-name">
                           <el-form-item label="Last name" prop="last_name">
-                            <el-input v-model="basicForm.last_name" placeholder="Last name"></el-input>
+                            <el-input size="small" v-model="basicForm.last_name" placeholder="Last name"></el-input>
                           </el-form-item>
                         </div>
 
@@ -78,12 +78,13 @@
 
                       <el-form-item label="E-mail address" prop="email">
                         <div class="xll-form-email-tips">(Editing this will change your login email)</div>
-                        <el-input v-model="basicForm.email" placeholder="E-mail address"></el-input>
+                        <el-input size="small" v-model="basicForm.email" placeholder="E-mail address"></el-input>
                       </el-form-item>
 
 
                       <el-form-item label="Birth date" prop="birthday">
                         <el-date-picker
+                            size="small"
                             v-model="basicForm.birthday"
                             type="date"
                             format="YYYY-MM-DD"
@@ -95,13 +96,21 @@
                       </el-form-item>
 
                       <el-form-item label="Gender" prop="sex">
-                        <el-select v-model="basicForm.sex" placeholder="Select one">
+                        <el-select v-model="basicForm.sex" size="small" placeholder="Select one">
                           <el-option v-for="(item,i) in sexOptions" :key="i"
                                      :label="item.object_en"
                                      :value="item.value">
                           </el-option>
                         </el-select>
                       </el-form-item>
+
+                      <el-form-item label="Password">
+                        <el-button plain round @click="resetPassword()">
+                          RESET PASSWORD
+                        </el-button>
+                      </el-form-item>
+
+                      <ForgotPassword :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
 
                       <div class="save-form-container">
                         <el-button class="save-form-discard-btn" link
@@ -483,6 +492,7 @@
 import defaultAvatar from '@/assets/default/avatar.png'
 
 import meSideMenu from "@/components/meSideMenu";
+import ForgotPassword from '@/components/forgotPassword'
 
 import {
   USER_INFO_BY_TOKEN_V2,
@@ -511,7 +521,8 @@ export default {
   name: "accountHome",
   components: {
     meSideMenu,
-    xllLoading
+    xllLoading,
+    ForgotPassword
   },
   setup(){
 
@@ -704,15 +715,25 @@ export default {
       contributorUpdateItemData:{},
       versionTime:randomString(),
 
+      forgotDialogVisible:false,
+
 
     }
   },
   async mounted() {
+
     this.getUserInfo()
     this.getUserAllInfo()
     this.getAllAssignUsers()
+
   },
   methods: {
+    resetPassword(){
+      this.forgotDialogVisible = true;
+    },
+    closeForgotDialog() {
+      this.forgotDialogVisible = false
+    },
     upgrade(){
       this.$router.push('/perks/home')
     },
@@ -1473,6 +1494,7 @@ export default {
 
 .account-basic-info {
   background-color: #FFFFFF;
+  width: 490px;
   padding: 20px;
   border-radius: 18px;
   margin-right: 20px;

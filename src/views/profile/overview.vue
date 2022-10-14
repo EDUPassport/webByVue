@@ -12,10 +12,10 @@
             <template v-if="identity == 1">
 
               <div class="dashboard-1-container">
-                <div class="dashboard-1">
-                  <h5>You were viewed</h5>
-                  <h1>18 <span>times this week</span></h1>
-                </div>
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>You were viewed</h5>-->
+<!--                  <h1>18 <span>times this week</span></h1>-->
+<!--                </div>-->
                 <div class="dashboard-1">
                   <h1> <span>
                     More awesome widgets are coming soon...
@@ -42,63 +42,71 @@
             </template>
 
             <template v-if="identity == 2 || identity == 3 || identity == 4">
+<!--              <div class="dashboard-1-container">-->
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>New applications</h5>-->
+<!--                  <h1>+7</h1>-->
+<!--                  <div class="dashboard-1-tips">-->
+<!--                    total:21 applications-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>Views this month</h5>-->
+<!--                  <h1>-->
+<!--                    +18-->
+<!--                  </h1>-->
+<!--                  <div class="dashboard-1-tips">-->
+<!--                    total:156 views-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>New educators</h5>-->
+<!--                  <h1>-->
+<!--                    +48-->
+<!--                  </h1>-->
+<!--                  <div class="dashboard-1-tips">-->
+<!--                    total:892 educators-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="dashboard-1">-->
+<!--                  <h5 >Jobs posted</h5>-->
+<!--                  <h1>-->
+<!--                    3/ <el-icon> <IconIcOutlineAllInclusive /> </el-icon>-->
+<!--                  </h1>-->
+<!--                  <div class="dashboard-1-tips">-->
+<!--                    <span>this month</span>-->
+<!--                    <el-button class="dashboard-post-a-job-btn"-->
+<!--                               @click="postJob()"-->
+<!--                               type="primary" round>-->
+<!--                      POST A JOB-->
+<!--                    </el-button>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+
+<!--                <div class="dashboard-1  dashboard-1-bg-1">-->
+<!--                  <h5>Quick actions</h5>-->
+<!--                  <div class="dashboard-1-actions">-->
+<!--                    <el-button class="dashboard-1-action-btn" plain round>-->
+<!--                      UPGRADE-->
+<!--                    </el-button>-->
+<!--                    <el-button class="dashboard-1-action-btn" plain round>-->
+<!--                      ADVERTISE-->
+<!--                    </el-button>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--              </div>-->
+
               <div class="dashboard-1-container">
                 <div class="dashboard-1">
-                  <h5>New applications</h5>
-                  <h1>+7</h1>
-                  <div class="dashboard-1-tips">
-                    total:21 applications
-                  </div>
+                  <h1> <span>
+                    More awesome widgets are coming soon...
+                  </span></h1>
                 </div>
-
-                <div class="dashboard-1">
-                  <h5>Views this month</h5>
-                  <h1>
-                    +18
-                  </h1>
-                  <div class="dashboard-1-tips">
-                    total:156 views
-                  </div>
-                </div>
-
-                <div class="dashboard-1">
-                  <h5>New educators</h5>
-                  <h1>
-                    +48
-                  </h1>
-                  <div class="dashboard-1-tips">
-                    total:892 educators
-                  </div>
-                </div>
-
-                <div class="dashboard-1">
-                  <h5 >Jobs posted</h5>
-                  <h1>
-                    3/ <el-icon> <IconIcOutlineAllInclusive /> </el-icon>
-                  </h1>
-                  <div class="dashboard-1-tips">
-                    <span>this month</span>
-                    <el-button class="dashboard-post-a-job-btn"
-                               @click="postJob()"
-                               type="primary" round>
-                      POST A JOB
-                    </el-button>
-                  </div>
-
-                </div>
-
-                <div class="dashboard-1  dashboard-1-bg-1">
-                  <h5>Quick actions</h5>
-                  <div class="dashboard-1-actions">
-                    <el-button class="dashboard-1-action-btn" plain round>
-                      UPGRADE
-                    </el-button>
-                    <el-button class="dashboard-1-action-btn" plain round>
-                      ADVERTISE
-                    </el-button>
-                  </div>
-                </div>
-
               </div>
 
               <NewApplications :data="myApplicationsData"></NewApplications>
@@ -107,44 +115,52 @@
 
             <template v-if="identity == 5">
 
+<!--              <div class="dashboard-1-container">-->
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>You posted</h5>-->
+<!--                  <div class="dashboard-1-h">-->
+<!--                    <h1>-->
+<!--                      18 <span>deals</span>-->
+<!--                    </h1>-->
+<!--                    <h1>-->
+<!--                      2 <span>events</span>-->
+<!--                    </h1>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+<!--                <div class="dashboard-1">-->
+<!--                  <h5 >Deals performance</h5>-->
+<!--                  <div  class="dashboard-1-h">-->
+<!--                    <h1>-->
+<!--                      52 <span>favorited</span>-->
+<!--                    </h1>-->
+<!--                    <h1>-->
+<!--                      1 <span>redeemed</span>-->
+<!--                    </h1>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>Events performance</h5>-->
+<!--                  <div  class="dashboard-1-h">-->
+<!--                    <h1>-->
+<!--                      0 <span>favorited</span>-->
+<!--                    </h1>-->
+<!--                    <h1>-->
+<!--                      0 <span>redeemed</span>-->
+<!--                    </h1>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+
+<!--              </div>-->
+
               <div class="dashboard-1-container">
                 <div class="dashboard-1">
-                  <h5>You posted</h5>
-                  <div class="dashboard-1-h">
-                    <h1>
-                      18 <span>deals</span>
-                    </h1>
-                    <h1>
-                      2 <span>events</span>
-                    </h1>
-                  </div>
-
+                  <h1> <span>
+                    More awesome widgets are coming soon...
+                  </span></h1>
                 </div>
-                <div class="dashboard-1">
-                  <h5 >Deals performance</h5>
-                  <div  class="dashboard-1-h">
-                    <h1>
-                      52 <span>favorited</span>
-                    </h1>
-                    <h1>
-                      1 <span>redeemed</span>
-                    </h1>
-                  </div>
-
-                </div>
-                <div class="dashboard-1">
-                  <h5>Events performance</h5>
-                  <div  class="dashboard-1-h">
-                    <h1>
-                      0 <span>favorited</span>
-                    </h1>
-                    <h1>
-                      0 <span>redeemed</span>
-                    </h1>
-                  </div>
-
-                </div>
-
               </div>
 
               <div class="container-4">

@@ -47,10 +47,10 @@
 
               <div class="events-item-action-container">
                 <div class="events-item-action-l">
-                  <el-button link>ADD TO CALENDAR</el-button>
+<!--                  <el-button link>ADD TO CALENDAR</el-button>-->
                 </div>
                 <div class="events-item-action-r">
-                  <el-button link>FAVORITE</el-button>
+<!--                  <el-button link>FAVORITE</el-button>-->
                 </div>
 
               </div>
@@ -91,7 +91,7 @@ export default {
 .container{
   height: 650px;
   background-color: #FFFFFF;
-  padding: 25px 50px;
+  /*padding: 25px 50px;*/
   box-shadow: 0px 3px 23px #00000012;
   border-radius: 18px;
 }
@@ -100,6 +100,7 @@ export default {
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 30px;
   color: #262626;
+  padding: 25px 50px;
 }
 
 
@@ -109,15 +110,16 @@ export default {
   align-items: center;
   justify-content: flex-start;
   flex-wrap:wrap;
-  margin-top: 25px;
+  /*margin-top: 25px;*/
 }
 
 .events-item-bg{
-   width: 480px;
+   width: 580px;
 }
 
 .events-item{
 
+  margin:0 50px 25px 50px;
   box-shadow: 0px 3px 10px #0000001A;
   background:#FFFFFF;
 

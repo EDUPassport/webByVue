@@ -64,13 +64,25 @@
                     </el-col>
 
                     <el-col :span="6">
-                      <el-tabs
-                          class="is-international-container"
-                          v-model="isInternationalName "
-                          type="border-card" @tab-click="handleIsInternationalClick">
-                        <el-tab-pane label="China" name="first">
-                          <template v-if="envName==='developmentCN' || envName==='productionCN' ">
-                            <el-form-item  label="Job Location">
+                      <el-form-item  label="Job Location">
+                        <div class="job-location-container">
+
+                          <div class="job-location-tabs">
+                            <div class="job-location-tab-l"
+                                 :class="jobFromChina ? 'job-location-tab-active' : ''"
+                                 @click="handleJobFromChina()">
+                              China
+                            </div>
+                            <div class="job-location-tab-r"
+                                 :class="jobFromInternational ? 'job-location-tab-active' : '' "
+                                 @click="handleJobFromInternational()">
+                              International
+                            </div>
+                          </div>
+
+                          <div class="job-location-content" v-if="jobFromChina">
+
+                            <template v-if="envName==='developmentCN' || envName==='productionCN' ">
                               <el-select v-model="countryObj"
                                          class="job-location-select"
                                          @change="countryChange"
@@ -103,32 +115,35 @@
                                              :value="item"></el-option>
                                 </el-select>
                               </template>
-                            </el-form-item>
-                          </template>
-                          <template v-if="envName==='development' || envName==='production' ">
-                            <h4>
-                              Oops.. sorry, due to data laws, to post a job on the
-                              Chinese
-                              platform, you first need
-                              to redirect to and post a job there
-                            </h4>
-                            <div class="job-detail-china-btn-container">
-                              <el-button class="job-detail-china-btn" type="primary" @click="letGo()">OK, let's go
-                              </el-button>
-                            </div>
-                            <div class="job-detail-china-tips">
-                              Not clear? Need help setting up?
-                              <el-link
-                                  href="https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4">
-                                Account Management
-                              </el-link>
-                              is here !
-                            </div>
-                          </template>
+                            </template>
+                            <template v-if="envName==='development' || envName==='production' ">
+                              <h5>
+                                Oops.. sorry, due to data laws, to post a job on the
+                                Chinese
+                                platform, you first need
+                                to redirect to and post a job there
+                              </h5>
+                              <div class="job-detail-china-btn-container">
+                                <el-button round type="primary" @click="letGo()">
+                                  OK, let's go
+                                </el-button>
+                              </div>
+                              <div class="job-detail-china-tips">
+                                Not clear? Need help setting up?
+                              </div>
+                              <div class="job-detail-china-tips-2">
+                                <el-link
+                                    href="https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4">
+                                  Account Management
+                                </el-link>
+                                is here !
+                              </div>
+                            </template>
 
-                        </el-tab-pane>
-                        <el-tab-pane label="International" name="second">
-                          <el-form-item  label="Job Location">
+                          </div>
+
+                          <div class="job-location-content" v-if="jobFromInternational">
+
                             <el-select v-model="countryObj"
                                        class="job-location-select"
                                        @change="countryChange"
@@ -161,11 +176,23 @@
                                            :value="item"></el-option>
                               </el-select>
                             </template>
+                          </div>
 
-                          </el-form-item>
-                        </el-tab-pane>
 
-                      </el-tabs>
+                        </div>
+
+                      </el-form-item>
+<!--                      <el-tabs-->
+<!--                          class="is-international-container"-->
+<!--                          v-model="isInternationalName "-->
+<!--                          type="border-card" @tab-click="handleIsInternationalClick">-->
+<!--                        <el-tab-pane label="China" name="first">-->
+
+<!--                        </el-tab-pane>-->
+<!--                        <el-tab-pane label="International" name="second">-->
+<!--                        </el-tab-pane>-->
+
+<!--                      </el-tabs>-->
 
                     </el-col>
                     <el-col :span="12">
@@ -302,23 +329,29 @@
                           <el-select
                               v-model="jobForm.currency"
                               class="xll-currency-select"
+                              value-key="object_en"
                               placeholder="Select" >
                             <el-option
                                 v-for="(item,index) in currencyList"
                                 :key="index"
                                 :label="item.object_en"
-                                :value="item.id"
+                                :value="item.object_en"
                             >
                             </el-option>
                           </el-select>
                           <el-input class="xll-min-salary" v-model="jobForm.salary_min" placeholder="min"></el-input>
                           <div class="xll-salary-line">-</div>
                           <el-input class="xll-max-salary" v-model="jobForm.salary_max" placeholder="max"></el-input>
-                          <el-select class="xll-payment-select" v-model="jobForm.payment_period"
+                          <el-select class="xll-payment-select"
+                                     v-model="jobForm.payment_period"
                                      filterable
+                                     value-key="id"
                                      placeholder="Choose Payment Period">
-                            <el-option v-for="(item,i) in paymentPeriodList" :key="i" :label="item.object_en"
-                                       :value="item.id"></el-option>
+                            <el-option v-for="(item,i) in paymentPeriodList"
+                                       :key="i"
+                                       :label="item.object_en"
+                                       :value="item.id">
+                            </el-option>
                           </el-select>
                         </div>
 
@@ -793,7 +826,7 @@ export default {
           company_id: '',
           company_name: '',
           identity: '',
-          currency:  119,
+          currency:  "USD",
           is_mom_language: 0,
           employment_type: '',
           class_size: '',
@@ -804,7 +837,7 @@ export default {
           town: '',
           lat: '',
           lng: '',
-          international: 0,
+          international: 1,
           nation_address: '',
           working_nums_start:'',
           working_nums_end:'',
@@ -854,6 +887,10 @@ export default {
       submitLoadingValue:false,
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
+
+      jobFromChina:false,
+      jobFromInternational:true,
+
       isInternationalName: 'first',
 
       paymentPeriodList: [],
@@ -1006,7 +1043,7 @@ export default {
     }
   },
   mounted() {
-    this.initMap()
+
 
     this.getBasicInfo(this.identity)
 
@@ -1017,11 +1054,97 @@ export default {
     let jobId = this.$route.query.job_id;
     if(jobId){
       this.getJobDetail(jobId)
+    }else {
+      this.initMap(this.mapCenterValue)
     }
 
 
   },
   methods: {
+    handleJobFromChina(){
+      this.countryName = undefined;
+      this.provinceName = undefined;
+      this.cityName = undefined;
+      this.districtName = undefined;
+
+      this.countryObj = {}
+      this.provinceObj = {}
+      this.cityObj = {}
+      this.districtObj = {}
+
+      this.jobForm.country_id = undefined;
+      this.jobForm.state_id = undefined;
+      this.jobForm.town_id = undefined;
+
+      let countryObj = {
+        "id": 45,
+        "name": "China",
+        "iso3": "CHN",
+        "numeric_code": "156",
+        "iso2": "CN",
+        "phonecode": "86",
+        "capital": "Beijing",
+        "currency": "CNY",
+        "currency_name": "Chinese yuan",
+        "currency_symbol": "¥",
+        "tld": ".cn",
+        "native": "中国",
+        "region": "Asia",
+        "subregion": "Eastern Asia",
+        "timezones": "[{\"zoneName\":\"Asia/Shanghai\",\"gmtOffset\":28800,\"gmtOffsetName\":\"UTC+08:00\",\"abbreviation\":\"CST\",\"tzName\":\"China Standard Time\"},{\"zoneName\":\"Asia/Urumqi\",\"gmtOffset\":21600,\"gmtOffsetName\":\"UTC+06:00\",\"abbreviation\":\"XJT\",\"tzName\":\"China Standard Time\"}]",
+        "translations": "{\"kr\":\"중국\",\"pt-BR\":\"China\",\"pt\":\"China\",\"nl\":\"China\",\"hr\":\"Kina\",\"fa\":\"چین\",\"de\":\"China\",\"es\":\"China\",\"fr\":\"Chine\",\"ja\":\"中国\",\"it\":\"Cina\",\"cn\":\"中国\",\"tr\":\"Çin\"}",
+        "latitude": "35.00000000",
+        "longitude": "105.00000000",
+        "emoji": "🇨🇳",
+        "emojiU": "U+1F1E8 U+1F1F3",
+        "created_at": "2018-07-21 07:11:03",
+        "updated_at": "2022-05-21 21:11:20",
+        "flag": 1,
+        "wikiDataId": "Q148"
+      }
+
+      this.jobForm.state_id = undefined
+      this.jobForm.town_id = undefined
+
+      this.provinceOptions = []
+      this.cityOptions = []
+
+      this.jobForm.country_id = countryObj.id
+      this.countryName = countryObj.name
+      this.countryNameCn = countryObj.name
+      this.getAllProvinces(countryObj.id)
+      this.countryObj = countryObj
+
+      this.jobForm.international = 0;
+      this.jobFromChina = true;
+      this.jobFromInternational = false;
+    },
+    handleJobFromInternational(){
+      this.countryName = undefined;
+      this.provinceName = undefined;
+      this.cityName = undefined;
+      this.districtName = undefined;
+
+      this.countryObj = {}
+      this.provinceObj = {}
+      this.cityObj = {}
+      this.districtObj = {}
+
+      this.jobForm.country_id = undefined;
+      this.jobForm.state_id = undefined;
+      this.jobForm.town_id = undefined;
+
+      this.countryObj = {}
+      this.jobForm.state_id = undefined
+      this.jobForm.town_id = undefined
+
+      this.provinceOptions = []
+      this.cityOptions = []
+
+      this.jobForm.international = 1
+      this.jobFromChina = false;
+      this.jobFromInternational = true;
+    },
     discardJobPost(){
       this.$router.go(-1)
     },
@@ -1040,8 +1163,6 @@ export default {
             // this.jobForm.working_hours = JSON.parse(workHours)
             this.workingHoursData = JSON.parse(workHours)
           }
-
-          this.initMap(res.message.lng,res.message.lat)
 
           let jobMessage = res.message;
 
@@ -1083,8 +1204,17 @@ export default {
           that.jobForm.working_hours = jobMessage.working_hours;
 
           that.jobForm.address = jobMessage.address;
-          that.jobForm.lat = jobMessage.lat;
-          that.jobForm.lng = jobMessage.lng;
+
+          if(jobMessage.lat && jobMessage.lng){
+            that.jobForm.lat = jobMessage.lat;
+            that.jobForm.lng = jobMessage.lng;
+
+            let mapCenterValue = [jobMessage.lng , jobMessage.lat]
+            this.initMap( mapCenterValue )
+          }else{
+            this.initMap(this.mapCenterValue)
+          }
+
           that.jobForm.international = jobMessage.international;
           that.jobForm.nation_address = jobMessage.nation_address;
 
@@ -1132,23 +1262,23 @@ export default {
             }
           }
           // currency
-          if (jobMessage.currency) {
-            let arr = this.currencyList.filter(item => item.object_en == jobMessage.currency);
-            let arrcn = this.currencyList.filter(item => item.object_cn == jobMessage.currency);
-            // console.log(arr)
-            if (arr.length > 0 || arrcn.length > 0) {
-              this.selectCurrencyList = arr;
-            } else {
-              let obj = {
-                id: 0,
-                object_en: jobMessage.currency,
-                object_pid: 117
-              };
-              this.ownCurrencyList.push(obj);
-              this.selectCurrencyList.push(obj);
-            }
-
-          }
+          // if (jobMessage.currency) {
+          //   let arr = this.currencyList.filter(item => item.object_en == jobMessage.currency);
+          //   let arrcn = this.currencyList.filter(item => item.object_cn == jobMessage.currency);
+          //   // console.log(arr)
+          //   if (arr.length > 0 || arrcn.length > 0) {
+          //     this.selectCurrencyList = arr;
+          //   } else {
+          //     let obj = {
+          //       id: 0,
+          //       object_en: jobMessage.currency,
+          //       object_pid: 117
+          //     };
+          //     this.ownCurrencyList.push(obj);
+          //     this.selectCurrencyList.push(obj);
+          //   }
+          //
+          // }
 
           if (jobMessage.job_type) {
 
@@ -1519,12 +1649,12 @@ export default {
       this.cityName = e.name
       this.cityNameCn = e.name
     },
-    initMap() {
+    initMap(mapCenterValue) {
       mapboxgl.accessToken = this.accessToken;
 
       const map = new mapboxgl.Map({
         container: "mapContainer",
-        center: this.mapCenterValue,
+        center:mapCenterValue,
         style: this.mapStyle,
         zoom: 12
       });
@@ -1567,75 +1697,6 @@ export default {
         this.jobForm.lng = ''
         this.jobForm.lat = ''
       })
-
-    },
-    handleIsInternationalClick(tab) {
-      console.log(tab.paneName)
-      this.countryName = undefined;
-      this.provinceName = undefined;
-      this.cityName = undefined;
-      this.districtName = undefined;
-
-      this.countryObj = {}
-      this.provinceObj = {}
-      this.cityObj = {}
-      this.districtObj = {}
-
-      this.jobForm.country_id = undefined;
-      this.jobForm.state_id = undefined;
-      this.jobForm.town_id = undefined;
-
-      if (tab.paneName == 'first') {
-        let countryObj = {
-          "id": 45,
-          "name": "China",
-          "iso3": "CHN",
-          "numeric_code": "156",
-          "iso2": "CN",
-          "phonecode": "86",
-          "capital": "Beijing",
-          "currency": "CNY",
-          "currency_name": "Chinese yuan",
-          "currency_symbol": "¥",
-          "tld": ".cn",
-          "native": "中国",
-          "region": "Asia",
-          "subregion": "Eastern Asia",
-          "timezones": "[{\"zoneName\":\"Asia/Shanghai\",\"gmtOffset\":28800,\"gmtOffsetName\":\"UTC+08:00\",\"abbreviation\":\"CST\",\"tzName\":\"China Standard Time\"},{\"zoneName\":\"Asia/Urumqi\",\"gmtOffset\":21600,\"gmtOffsetName\":\"UTC+06:00\",\"abbreviation\":\"XJT\",\"tzName\":\"China Standard Time\"}]",
-          "translations": "{\"kr\":\"중국\",\"pt-BR\":\"China\",\"pt\":\"China\",\"nl\":\"China\",\"hr\":\"Kina\",\"fa\":\"چین\",\"de\":\"China\",\"es\":\"China\",\"fr\":\"Chine\",\"ja\":\"中国\",\"it\":\"Cina\",\"cn\":\"中国\",\"tr\":\"Çin\"}",
-          "latitude": "35.00000000",
-          "longitude": "105.00000000",
-          "emoji": "🇨🇳",
-          "emojiU": "U+1F1E8 U+1F1F3",
-          "created_at": "2018-07-21 07:11:03",
-          "updated_at": "2022-05-21 21:11:20",
-          "flag": 1,
-          "wikiDataId": "Q148"
-        }
-
-        this.jobForm.state_id = undefined
-        this.jobForm.town_id = undefined
-
-        this.provinceOptions = []
-        this.cityOptions = []
-
-        this.jobForm.country_id = countryObj.id
-        this.countryName = countryObj.name
-        this.countryNameCn = countryObj.name
-        this.getAllProvinces(countryObj.id)
-        this.countryObj = countryObj
-
-      }
-
-      if (tab.paneName == 'second') {
-        this.countryObj = {}
-        this.jobForm.state_id = undefined
-        this.jobForm.town_id = undefined
-
-        this.provinceOptions = []
-        this.cityOptions = []
-      }
-
 
     },
     selectJobTitle(value) {
@@ -2094,12 +2155,12 @@ export default {
 
       this.jobForm.job_location = jobLocationValue
 
-      if (this.selectCurrencyList.length > 0) {
-        let currency = this.selectCurrencyList;
-        that.jobForm.currency = currency[0].object_en;
-      } else {
-        that.jobForm.currency = '';
-      }
+      // if (this.selectCurrencyList.length > 0) {
+      //   let currency = this.selectCurrencyList;
+      //   that.jobForm.currency = currency[0].object_en;
+      // } else {
+      //   that.jobForm.currency = '';
+      // }
 
       that.jobForm.age_min = this.ageValue[0];
       that.jobForm.age_max = this.ageValue[1];
@@ -2233,7 +2294,7 @@ export default {
                     }
 
                     let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
-                    let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/edupassport?type=login&redirect_params=' + redirectParamsStr
+                    let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=login&redirect_params=' + redirectParamsStr
                     window.open(exchange_domain, '_blank')
                   }
 
@@ -2261,7 +2322,7 @@ export default {
                   }
 
                   let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
-                  let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/edupassport?type=login&redirect_params=' + redirectParamsStr
+                  let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=login&redirect_params=' + redirectParamsStr
                   window.open(exchange_domain, '_blank')
                 }
               }
@@ -2617,15 +2678,17 @@ export default {
   font-size: 14px;
   margin-top: 10px;
   color: #808080;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
-.job-detail-china-tips a {
+.job-detail-china-tips-2{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
+.job-detail-china-tips-2 a {
   color: #00b3d2;
   font-size: 16px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-weight: bold;
   padding: 0 10px;
 }
@@ -2707,6 +2770,62 @@ export default {
   margin-left: 5px;
 }
 
+
+.job-location-container{
+
+}
+
+.job-location-tabs{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.job-location-tab-l{
+  flex:1;
+  text-align: center;
+  line-height: 40px;
+
+  border-left: 1px solid #262626;
+  border-top: 1px solid #262626;
+  border-bottom: 1px solid #262626;
+
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+  cursor: pointer;
+
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+
+}
+.job-location-tab-r{
+  flex:1;
+  text-align: center;
+  line-height: 40px;
+
+  border: 1px solid #262626;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+  cursor: pointer;
+
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+
+}
+
+.job-location-tab-active{
+  background: #988CF5;
+  color: #FFFFFF;
+  border: 1px solid #988CF5;
+}
+
+.job-location-content{
+  margin-top: 10px;
+
+}
 
 @media screen and (min-width: 1200px) {
 

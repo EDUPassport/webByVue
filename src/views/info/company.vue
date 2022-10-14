@@ -365,7 +365,7 @@ export default {
       console.log(userId)
       let token = localStorage.getItem('token')
       if(!token || token === ''){
-        return this.$router.push('/edupassport')
+        return this.$router.push('/login')
       }
       let userInfo = this.userInfo;
 

@@ -117,12 +117,28 @@
               </div>
 
               <el-scrollbar class="job-detail-c">
+
                 <div class="job-detail-c-1">
-                  <div class="job-detail-c-item">
+                  <div class="job-detail-c-item" v-if="detailData.entry_date">
                     <div class="job-detail-c-item-l">Start date:</div>
                     <div class="job-detail-c-item-r">{{detailData.entry_date}}</div>
                   </div>
-                  <div class="job-detail-c-item">
+
+                  <div class="job-detail-c-item" v-if="detailData.age_to_teach">
+                    <div class="job-detail-c-item-l">Student's age:</div>
+                    <div class="job-detail-c-item-r">
+                      {{ $filters.userObjectFormat(detailData.age_to_teach)}}
+                    </div>
+                  </div>
+
+                  <div class="job-detail-c-item" v-if="detailData.subject">
+                    <div class="job-detail-c-item-l">Subjects:</div>
+                    <div class="job-detail-c-item-r">
+                      {{ $filters.userObjectFormat(detailData.subject)}}
+                    </div>
+                  </div>
+
+                  <div class="job-detail-c-item" v-if="workingHoursData.length>0">
                     <div class="job-detail-c-item-l">Hours:</div>
                     <div class="job-detail-c-item-r">
                       <div class="working-hours">
@@ -141,43 +157,32 @@
                       </div>
                     </div>
                   </div>
-                  <div class="job-detail-c-item">
-                    <div class="job-detail-c-item-l">Student's age:</div>
-                    <div class="job-detail-c-item-r">
-                      {{ $filters.userObjectFormat(detailData.age_to_teach)}}
-                    </div>
-                  </div>
-                  <div class="job-detail-c-item">
-                    <div class="job-detail-c-item-l">Subjects:</div>
-                    <div class="job-detail-c-item-r">
-                      {{ $filters.userObjectFormat(detailData.subject)}}
-                    </div>
-                  </div>
+
                 </div>
 
                 <div class="job-detail-c-2">
                   <div class="job-detail-c-2-l">
                     <div class="job-detail-c-item-label">Requirements:</div>
                     <div class="job-detail-c-item-c">
-                      <div class="job-detail-c-item">
+                      <div class="job-detail-c-item" v-if="detailData.teaching_times_en">
                         <div class="job-detail-c-item-l">Teaching experience:</div>
                         <div class="job-detail-c-item-r">
                           {{detailData.teaching_times_en}}
                         </div>
                       </div>
-                      <div class="job-detail-c-item">
+                      <div class="job-detail-c-item" v-if="detailData.education_en">
                         <div class="job-detail-c-item-l">Minimum education:</div>
                         <div class="job-detail-c-item-r">
                           {{detailData.education_en}}
                         </div>
                       </div>
-                      <div class="job-detail-c-item">
+                      <div class="job-detail-c-item" v-if="detailData.class_size">
                         <div class="job-detail-c-item-l">Class size:</div>
                         <div class="job-detail-c-item-r">
                           {{detailData.class_size}}
                         </div>
                       </div>
-                      <div class="job-detail-c-item">
+                      <div class="job-detail-c-item" v-if="detailData.numbers">
                         <div class="job-detail-c-item-l">Number of Vacancies:</div>
                         <div class="job-detail-c-item-r">
                           {{detailData.numbers}}
@@ -192,7 +197,7 @@
                         </div>
                       </div>
 
-                      <div class="job-detail-c-item">
+                      <div class="job-detail-c-item" v-if="detailData.Teaching_certificate">
                         <div class="job-detail-c-item-l">Teaching certificates:</div>
                         <div class="job-detail-c-item-r">
                           {{ $filters.userObjectFormat(detailData.Teaching_certificate)}}
@@ -202,6 +207,7 @@
                     </div>
 
                   </div>
+
                   <div class="job-detail-c-2-r">
                     <div class="job-detail-c-item-label">Compensation:</div>
                     <div class="job-detail-c-item-c">
@@ -216,7 +222,7 @@
                           <span v-if="detailData.payment_period == 116">annually</span>
                         </div>
                       </div>
-                      <div class="job-detail-c-item">
+                      <div class="job-detail-c-item" v-if="detailData.benefits">
                         <div class="job-detail-c-item-l">Benefits:</div>
                         <div class="job-detail-c-item-r">
                           {{ $filters.userObjectFormat(detailData.benefits)}}
@@ -226,12 +232,14 @@
                     </div>
 
                   </div>
+
+
                 </div>
 
 
                 <div class="job-detail-desc">
                   <div class="job-detail-desc-label">Job details:</div>
-                  <div style="margin-top: 25px;" v-html="detailData.desc"></div>
+                  <div class="job-detail-desc-content" v-html="detailData.desc"></div>
                 </div>
 
                 <div class="map-container">
@@ -723,7 +731,7 @@ export default {
 
               let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
 
-              self.$router.push({path: '/edupassport', query: {redirect_params: redirectParamsStr}})
+              self.$router.push({path: '/login', query: {redirect_params: redirectParamsStr}})
 
             }
           }
@@ -1160,7 +1168,7 @@ export default {
 }
 
 .job-detail-t-l{
-  width: 70%;
+  width: 50%;
 }
 
 .job-detail-t-l-1{
@@ -1168,6 +1176,10 @@ export default {
   font-family:BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 20px;
   color:#6650B3;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .job-detail-t-l-2{
@@ -1184,6 +1196,10 @@ export default {
   font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color:#262626;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .job-detail-c{
@@ -1202,6 +1218,7 @@ export default {
   margin-bottom: 10px;
 }
 .job-detail-c-item-l{
+  /*width: 210px;*/
   font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color:#262626;
@@ -1218,14 +1235,16 @@ export default {
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
+  flex-wrap: wrap;
   margin-top: 50px;
 }
 
 .job-detail-c-2-l{
-  width: 50%;
+  width: 100%;
 }
 .job-detail-c-2-r{
-  width:50%;
+  width:100%;
+  margin-top: 50px;
 }
 
 .job-detail-c-item-label{
@@ -1239,9 +1258,17 @@ export default {
 .job-detail-desc{
   margin-top: 50px;
 }
+
 .job-detail-desc-label{
   font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 26px;
+  color:#262626;
+}
+
+.job-detail-desc-content{
+  margin-top: 25px;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
   color:#262626;
 }
 
@@ -1253,6 +1280,27 @@ export default {
 #mapContainer{
   height: 300px;
 }
+
+.working-hours{
+  width: 100%;
+}
+
+.working-hours-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin-bottom: 10px;
+  position: relative;
+}
+.working-hours-week{
+  margin-left: 10px;
+}
+.working-hours-hours{
+  margin-left: 20px;
+}
+
 
 @media screen and (max-width: 768px ) {
 

@@ -78,12 +78,11 @@
 
     </el-scrollbar>
 
-
     <div class="filter-contact-us-container">
-      <el-icon :size="45" color="#6648FF">
+      <el-icon :size="45" color="#6648FF" @click="contactUs()">
         <IconIcBaselineLiveHelp />
       </el-icon>
-      <span>Contact Us</span>
+      <span @click="contactUs()">Contact Us</span>
     </div>
 
   </div>
@@ -108,7 +107,10 @@ export default {
     }
   },
   methods:{
-    
+    contactUs(){
+      window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+
+    },
     postEvent(){
       let token = localStorage.getItem('token')
       let identity = localStorage.getItem('identity')

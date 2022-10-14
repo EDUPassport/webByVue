@@ -4,12 +4,9 @@ node_modules
 /dev
 /devCN
 /distCN
-/testDev
-/webProd
-/devEduCN
-/distEduCN
-/testEduDev
-/webEduProd
+/chinaProd
+/chinaDev
+/internationalProd
 
 # local env files
 .env.local

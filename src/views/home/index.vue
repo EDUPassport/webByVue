@@ -31,7 +31,7 @@
 
         <div class="logo-new-container">
           <div class="logo-new">
-            <el-image class="logo-new-logo-img" :src="logoImgLight"></el-image>
+            <el-image class="logo-new-logo-img" :src="logoImgLightH"></el-image>
           </div>
         </div>
 
@@ -100,16 +100,16 @@
              :class="selectIdentityType === 1 ? 'f-c-active' : ''"
              v-if="selectIdentityType ===  1">
           <div class="f-c-l">
+
             <div class="f-c-l-item"
                  :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''"
                  @click="checkedItem(1)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  easy way to connect with fellow educators
+                  Matchmaking for you and your ideal job
                 </div>
                 <p>
-                  We partner up with local vendors to support educators, promote educator-centric events, and offer
-                  exclusive deals to our EDU Passport members.
+                  Being educator-centric allows us to suggest the jobs that match educators’ specific requirements and experience.
                 </p>
 
               </div>
@@ -118,20 +118,19 @@
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
-
               <div class="f-c-l-item-mask" v-if="selectItemValue !== 1"></div>
+
             </div>
+
             <div class="f-c-l-item"
                  :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''"
                  @click="checkedItem(2)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  matchmaking for you and your ideal job
+                  Best educators deserve the best deals
                 </div>
                 <p>
-                  Being educator-centric allows us to suggest the jobs that match educators’ specific requirements and
-                  experience.
-
+                  We partner up with local vendors to support educators, promote educator-centric events, and offer exclusive deals to our EDU Passport members.
                 </p>
 
               </div>
@@ -140,8 +139,8 @@
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
-              <div class="f-c-l-item-mask" v-if="selectItemValue !== 2"></div>
 
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 2"></div>
             </div>
 
             <div class="f-c-l-item"
@@ -149,11 +148,10 @@
                  @click="checkedItem(3)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  having a personal legal support
+                  Having a personal legal support
                 </div>
                 <p>
-                  Living abroad often means facing challenges alone, but it doesn’t have to be that way. Your dedicated
-                  account manager is only a click or tap away from providing you legal and visa support.
+                  Living abroad often means facing challenges alone, but it doesn’t have to be that way. Your dedicated account manager is only a click or tap away from providing you legal and visa support.
                 </p>
 
               </div>
@@ -168,17 +166,19 @@
             </div>
 
             <div class="f-c-btn-container">
-              <el-button type="primary" round @click="signUp()">SIGN UP</el-button>
+              <el-button type="primary" size="large" round @click="signUp()">
+                SIGN UP
+              </el-button>
             </div>
 
           </div>
 
           <div class="f-c-r">
             <template v-if="selectItemValue === 1">
-              <el-image class="f-c-r-img-edu" fit="cover" :src="dealsDemoImg"></el-image>
+              <el-image class="f-c-r-img" fit="contain" :src="jobMatchDemoImg"></el-image>
             </template>
             <template v-if="selectItemValue === 2">
-              <el-image class="f-c-r-img" fit="contain" :src="jobMatchDemoImg"></el-image>
+              <el-image class="f-c-r-img-edu" fit="cover" :src="dealsDemoImg"></el-image>
             </template>
             <template v-if="selectItemValue === 3">
               <el-image class="f-c-r-img" fit="contain" :src="chatDemoImg"></el-image>
@@ -192,16 +192,17 @@
              :class="selectIdentityType === 2 ? 'f-c-active' : ''"
              v-if="selectIdentityType === 2">
           <div class="f-c-l">
+
             <div class="f-c-l-item"
                  :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''"
                  @click="checkedItem(1)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  tracking all applications with ease
+                  Matchmaking for you and your next hire
                 </div>
                 <p>
-                  Whether you have 2 applicants or a 102, you will never get confused who is applying for which job, and
-                  who you’re going to interview.
+                  Being educator-centric allows us to suggest the right candidates matching your job requirements.
+
                 </p>
 
               </div>
@@ -210,19 +211,20 @@
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
-
               <div class="f-c-l-item-mask" v-if="selectItemValue !== 1"></div>
+
             </div>
+
+
             <div class="f-c-l-item"
                  :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''"
                  @click="checkedItem(2)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  matchmaking for you and your next hire
+                  Tracking all applications with ease
                 </div>
                 <p>
-                  Being educator-centric allows us to suggest the right candidates matching your job requirements.
-
+                  Whether you have 2 applicants or a 102, you will never get confused who is applying for which job, and who you’re going to interview.
                 </p>
 
               </div>
@@ -231,8 +233,8 @@
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
-              <div class="f-c-l-item-mask" v-if="selectItemValue !== 2"></div>
 
+              <div class="f-c-l-item-mask" v-if="selectItemValue !== 2"></div>
             </div>
 
             <div class="f-c-l-item"
@@ -241,11 +243,10 @@
                  v-if="selectIdentityType !== 3">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  a direct line to your candidates
+                  A direct line to your candidates
                 </div>
                 <p>
-                  Hire high-quality candidates faster by contacting them directly to get important questions answered
-                  quickly.
+                  Hire high-quality candidates faster by contacting them directly to get important questions answered quickly.
                 </p>
 
               </div>
@@ -260,7 +261,7 @@
             </div>
 
             <div class="f-c-btn-container">
-              <el-button type="primary" round @click="signUp()">SIGN UP</el-button>
+              <el-button type="primary" size="large" round @click="signUp()">SIGN UP</el-button>
             </div>
 
           </div>
@@ -290,12 +291,10 @@
                  @click="checkedItem(1)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  join our mission to support educators
+                  Join our mission to support educators
                 </div>
                 <p>
-                  Our mission is to make access to a better education easier by helping educators work and live abroad.
-                  We believe having safe spaces where educators can meet their peers is crucial for building
-                  connections.
+                  Our mission is to make access to a better education easier by helping educators work and live abroad. We believe having safe spaces where educators can meet their peers is crucial for building connections.
                 </p>
 
               </div>
@@ -313,7 +312,7 @@
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
 
-                  promote your business
+                  Promote your business
                 </div>
                 <p>
                   Let our team of marketing wizards help you connect with your audience and grow your business.
@@ -331,7 +330,7 @@
             </div>
 
             <div class="f-c-btn-container">
-              <el-button type="primary" round @click="signUp()">SIGN UP</el-button>
+              <el-button type="primary" size="large" round @click="signUp()">SIGN UP</el-button>
             </div>
 
           </div>
@@ -347,7 +346,6 @@
 
           </div>
         </div>
-
 
       </el-col>
     </el-row>
@@ -447,29 +445,49 @@
       <div class="footer-container">
         <div class="footer-t">
           <div class="footer-logo">
-            <div class="footer-logo-edu">EDU</div>
-            <div class="footer-logo-passport">PASSPORT</div>
+            <el-image class="footer-logo-img" :src="logoImg"></el-image>
           </div>
-          <div class="footer-menu">
-            <div class="footer-menu-item" @click="turnAboutUs()">
-              ABOUT US
+          <div class="footer-t-r">
+            <div class="footer-menu">
+              <div class="footer-menu-item" @click="turnJobs()">
+                JOBS
+              </div>
+              <div class="footer-menu-item" @click="turnDeals()">
+                DEALS
+              </div>
+              <div class="footer-menu-item" @click="turnAboutUs()">
+                ABOUT US
+              </div>
+              <!--            <div class="footer-menu-item" @click="turnFeatures()">-->
+              <!--              FEATURES-->
+              <!--            </div>-->
+              <!--            <div class="footer-menu-item" @click="turnPricing()">-->
+              <!--              PRICING-->
+              <!--            </div>-->
+              <!--            <div class="footer-menu-item" @click="turnContactUs()">-->
+              <!--              CONTACT US-->
+              <!--            </div>-->
             </div>
-            <div class="footer-menu-item" @click="turnFeatures()">
-              FEATURES
-            </div>
-            <div class="footer-menu-item" @click="turnPricing()">
-              PRICING
-            </div>
-            <div class="footer-menu-item" @click="turnContactUs()">
-              CONTACT US
+            <div class="footer-contact-us">
+              <div class="footer-contact-us-label">Contact us</div>
+              <div class="footer-contact-us-c">
+                hello@edupassport.io
+              </div>
             </div>
           </div>
         </div>
         <div class="footer-m">
-          Make sure to check back soon as we add more information.
+
         </div>
         <div class="footer-b">
-          © 2022 EDU Passport
+
+          <div class="footer-b-l">
+            © 2022 EDU Passport
+          </div>
+          <div class="footer-b-r">
+            Make sure to check back soon as we add more information.
+          </div>
+
         </div>
       </div>
     </div>
@@ -503,6 +521,7 @@ import initLoadingComponent from "@/components/initLoadingComponent";
 import homeDonghua from "@/components/homeDonghua";
 import logoImg from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.png"
 import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
+import logoImgLightH from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
 
 export default {
   name: "index",
@@ -514,6 +533,7 @@ export default {
     return {
       logoImg,
       logoImgLight,
+      logoImgLightH,
       imgLogo,
       imgOne,
       dealsDemoImg,
@@ -537,35 +557,71 @@ export default {
   setup() {
     const selectIdentityType = ref(1)
     const selectItemValue = ref(1)
+    let timer = ref('')
+    let timer2 = ref('')
+    let timer3 = ref('')
 
-    let a = setInterval(function (){
+    const tabSliderEvent = (stop)=>{
 
-      setTimeout(function () {
-        selectIdentityType.value = 2
-      },1000)
+      if(stop){
+        console.log('stop slider')
+        window.clearTimeout(timer)
+        window.clearTimeout(timer2)
+        window.clearTimeout(timer3)
 
-      setTimeout(function () {
-        selectIdentityType.value  = 3
-      },3000)
+      }else{
 
-      setTimeout(function () {
-        selectIdentityType.value  = 1
-      },5000)
+        timer = window.setTimeout(function (){
+          selectIdentityType.value = 2
 
-    }, 7000 )
+          timer2 = window.setTimeout(function (){
+            selectIdentityType.value  = 3
 
-    const clearTimer = ()=>{
-      window.clearInterval(a)
+            timer3 = window.setTimeout(function () {
+              selectIdentityType.value = 1
+
+              tabSliderEvent(false);
+
+            }, 1500)
+
+          }, 1500)
+
+        }, 1500)
+
+      }
     }
 
+    // let a = setInterval(function (){
+    //
+    //   setTimeout(function () {
+    //     selectIdentityType.value = 2
+    //   },1000)
+    //
+    //   setTimeout(function () {
+    //     selectIdentityType.value  = 3
+    //   },3000)
+    //
+    //   setTimeout(function () {
+    //     selectIdentityType.value  = 1
+    //   },5000)
+    //
+    // }, 7000 )
+
+    // const clearTimer = ()=>{
+    //   window.clearInterval(a)
+    // }
+
     onMounted(()=>{
-      a
+      // a
+      tabSliderEvent()
     })
 
     return {
       selectIdentityType,
       selectItemValue,
-      clearTimer
+      tabSliderEvent,
+      timer
+      // clearTimer
     }
 
   },
@@ -596,11 +652,17 @@ export default {
         this.$message.error(err.msg)
       })
     },
+    turnJobs(){
+      this.$router.push('/jobs')
+    },
+    turnDeals(){
+      this.$router.push('/deals')
+    },
     turnAboutUs() {
       this.$router.push('/about/us')
     },
     turnFeatures() {
-      this.$router.push('/edupassport')
+      this.$router.push('/login')
     },
     turnPricing() {
       this.$router.push('/services/price')
@@ -612,19 +674,21 @@ export default {
       this.$router.push('/overview')
     },
     login() {
-      this.$router.push('/edupassport')
+      this.$router.push('/login')
     },
     signUp() {
-      this.$router.push({path: '/edupassport/signup', query: {}})
+      this.$router.push({path: '/signup', query: {}})
     },
     checkedIdentityType(value) {
       this.selectIdentityType = value
       this.selectItemValue = 1
-      this.clearTimer()
+      this.tabSliderEvent(true)
+
     },
     checkedItem(value) {
       this.selectItemValue = value;
-      this.clearTimer()
+      this.tabSliderEvent(true)
+
     },
     turnHome() {
       this.$router.push('/')
@@ -650,20 +714,24 @@ export default {
 }
 
 .t-container {
-  margin-top: 25px;
+  height: 140px;
 }
+
 .logo-new-container{
+
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
+  width: 300px;
 }
 
 .logo-new{
-
+  cursor: pointer;
 }
 
 .logo-new-logo-img{
-  width: 150px;
+  width:260px;
 }
 .logo-edu {
   font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
@@ -912,7 +980,7 @@ export default {
   margin: 0 auto;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding-left: 90px;
   opacity: 0;
@@ -925,18 +993,30 @@ export default {
 }
 
 .f-c-l {
-  max-width: 600px;
+  width: 720px;
+  height: 700px;
+  position: relative;
+}
 
+.f-c-btn-container{
+  position: absolute;
+  bottom: 10px;
+  left: 0px;
+}
+
+.f-c-btn-container button{
+  font-size: 30px;
 }
 
 .f-c-r {
-  max-width: calc(100% - 700px);
+  width: calc(100% - 820px);
   /*height: 870px;*/
-
+  height: 700px;
+  text-align: left;
 }
 
 .f-c-r-img-edu{
-  height: 870px;
+  height: 700px;
 }
 
 .f-c-r-img {
@@ -953,7 +1033,8 @@ export default {
 }
 
 .f-c-l-item {
-  margin-bottom: 50px;
+  margin-top: 50px;
+  /*margin-bottom: 50px;*/
   cursor: pointer;
   padding-left: 10px;
 
@@ -1058,7 +1139,7 @@ export default {
 
 
 .footer-bg-container {
-  background-color: #6648FF;
+  background-color: #262626;
   padding: 50px 100px;
 }
 
@@ -1079,33 +1160,18 @@ export default {
   position: relative;
 
   cursor: pointer;
+  width: 220px;
 }
 
-.footer-logo-edu {
-  color: #FFFFFF;
-  font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 62px;
+.footer-logo-img{
+  width: 120px;
 }
 
-.footer-logo-passport {
-  color: #FFFFFF;
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 26px;
-}
+.footer-t-r{
 
-.footer-logo-beta {
-  position: absolute;
-  font-size: 12px;
-  top: 0;
-  right: -32px;
-  background-color: #49397f;
-  padding: 2px 10px;
-  border-radius: 10px;
-  color: #EEEEEE;
 }
 
 .footer-menu {
-  margin-left: 100px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1124,20 +1190,44 @@ export default {
   text-decoration: underline;
 }
 
+.footer-contact-us{
+  margin-top: 50px;
+}
+
+.footer-contact-us-label{
+  font-family: BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+.footer-contact-us-c{
+  font-family: BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+
 .footer-m {
   margin-top: 40px;
-  color: #FFFFFF;
-  font-size: 23px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+
 }
 
 .footer-b {
   margin-top: 10px;
-  color: #FFFFFF;
-  font-size: 16px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-start;
 }
 
+.footer-b-l{
+  width: 220px;
+  font-size: 16px;
+}
+
+.footer-b-r{
+  font-size: 23px;
+}
 
 
 .nav-link-container {

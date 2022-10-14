@@ -18,13 +18,13 @@
               </el-button>
             </div>
             <div class="account-profile-t-r">
-              <el-button class="account-profile-cancel-btn" plain round>
-                FAVORITED
-              </el-button>
-              <el-button class="account-profile-save-btn" type="primary" round
-                         >
-                SEND A MESSAGE
-              </el-button>
+<!--              <el-button class="account-profile-cancel-btn" plain round>-->
+<!--                FAVORITED-->
+<!--              </el-button>-->
+<!--              <el-button class="account-profile-save-btn" type="primary" round-->
+<!--                         >-->
+<!--                SEND A MESSAGE-->
+<!--              </el-button>-->
             </div>
           </div>
 
@@ -52,9 +52,9 @@
                       <div class="basic-info-six-pic-1">
                         <el-avatar class="basic-info-six-pic" :src="profilePhotoUrl" ></el-avatar>
                       </div>
-                      <div class="basic-info-six-pic-2">
-                        4 MORE
-                      </div>
+<!--                      <div class="basic-info-six-pic-2">-->
+<!--                        4 MORE-->
+<!--                      </div>-->
                     </div>
                   </div>
 
@@ -197,6 +197,18 @@
                 <div class="languages-c-item" v-for="(item,i) in educatorContact.languages" :key="i">
                   <div class="languages-c-item-l">{{ item.object_en }}</div>
                   <div class="languages-c-item-r">
+                    <span v-if="item.object_score == 1">
+                      Native
+                    </span>
+                    <span v-if="item.object_score == 2">
+                      Fluent
+                    </span>
+                    <span v-if="item.object_score == 3">
+                      Conversational
+                    </span>
+                    <span v-if="item.object_score == 4">
+                      Beginner
+                    </span>
 
                   </div>
                 </div>
@@ -211,50 +223,62 @@
               <div class="preferences-label">Preferences</div>
               <div class="preferences-c-container">
 
-                <div class="preferences-c-item">
-                  <div class="preferences-c-item-label">Certifications</div>
-                  <div class="object-show-container" >
-                    <div class="object-show-item" v-for="(cer,i) in certificationsList" :key="i">
-                      {{ cer.object_en }}
+                <el-row :gutter="50" >
+                  <el-col :span="6">
+                    <div class="preferences-c-item">
+                      <div class="preferences-c-item-label">Certifications</div>
+                      <div class="object-show-container" >
+                        <div class="object-show-item" v-for="(cer,i) in certificationsList" :key="i">
+                          {{ cer.object_en }}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </el-col>
+                  <el-col :span="6">
+                    <div class="preferences-c-item">
+                      <div class="preferences-c-item-label">Subject to Teach</div>
+                      <div class="object-show-container">
+                        <div class="object-show-item" v-for="(cer,i) in subjectList" :key="i">
+                          {{ cer.object_en }}
+                        </div>
+                      </div>
+                    </div>
+                  </el-col>
+                  <el-col :span="6">
+                    <div class="preferences-c-item">
+                      <div class="preferences-c-item-label">Preferred Job Type</div>
+                      <div class="object-show-container">
+                        <div class="object-show-item" v-for="(cer,i) in jobTypeList" :key="i">
+                          {{ cer.object_en }}
+                        </div>
+                      </div>
+                    </div>
+                  </el-col>
+                  <el-col :span="6">
+                    <div class="preferences-c-item">
+                      <div class="preferences-c-item-label"> Preferred Age To Teach</div>
+                      <div class="object-show-container" >
+                        <div class="object-show-item" v-for="(cer,i) in ageToTeachList" :key="i">
+                          {{ cer.object_en }}
+                        </div>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
 
-                <div class="preferences-c-item">
-                  <div class="preferences-c-item-label">Subject to Teach</div>
-                  <div class="object-show-container">
-                    <div class="object-show-item" v-for="(cer,i) in subjectList" :key="i">
-                      {{ cer.object_en }}
+                <el-row :gutter="50">
+                  <el-col :span="6">
+                    <div class="preferences-c-item">
+                      <div class="preferences-c-item-label">Preferred Benefits</div>
+                      <div class="object-show-container">
+                        <div class="object-show-item" v-for="(cer,i) in benefitsList" :key="i">
+                          {{ cer.object_en }}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </el-col>
+                </el-row>
 
-                <div class="preferences-c-item">
-                  <div class="preferences-c-item-label">Preferred Job Type</div>
-                  <div class="object-show-container">
-                    <div class="object-show-item" v-for="(cer,i) in jobTypeList" :key="i">
-                      {{ cer.object_en }}
-                    </div>
-                  </div>
-                </div>
-
-                <div class="preferences-c-item">
-                  <div class="preferences-c-item-label"> Preferred Age To Teach</div>
-                  <div class="object-show-container" >
-                    <div class="object-show-item" v-for="(cer,i) in ageToTeachList" :key="i">
-                      {{ cer.object_en }}
-                    </div>
-                  </div>
-                </div>
-
-                <div class="preferences-c-item">
-                  <div class="preferences-c-item-label">Preferred Benefits</div>
-                  <div class="object-show-container">
-                    <div class="object-show-item" v-for="(cer,i) in benefitsList" :key="i">
-                      {{ cer.object_en }}
-                    </div>
-                  </div>
-                </div>
               </div>
 
             </div>
@@ -3919,16 +3943,10 @@ export default {
 
 .preferences-c-container{
   margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-
 }
 
 .preferences-c-item{
-  margin: 25px 25px 25px 0;
+  margin-top: 25px;
 }
 
 .preferences-c-item-label{

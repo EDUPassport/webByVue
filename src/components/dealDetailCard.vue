@@ -65,14 +65,12 @@
           </div>
         </div>
 
-
-
       </div>
 
       <div class="dialog-action">
         <div class="dialog-action-l">
           <el-space :size="5" wrap spacer="·">
-            <span>discount</span>
+<!--            <span>discount</span>-->
             <span v-if="info.company_info">{{ info.company_info.category_name_en }}</span>
           </el-space>
         </div>
@@ -82,7 +80,6 @@
           </el-button>
         </div>
       </div>
-
 
     </div>
 

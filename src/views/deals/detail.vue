@@ -110,30 +110,32 @@
               {{ detailData.company.desc }}
             </div>
             <div class="view-profile-btn-container">
-              <el-button class="view-profile-btn" type="primary" round
-                         @click="viewCompanyProfile(detailData.user_id)">
-                View Profile
-              </el-button>
+<!--              <el-button class="view-profile-btn" type="primary"-->
+<!--                         link-->
+<!--                         round-->
+<!--                         @click="viewCompanyProfile(detailData.user_id)">-->
+<!--                View Profile-->
+<!--              </el-button>-->
             </div>
           </div>
         </div>
 
-        <div class="contact-container" v-if="detailData.user_contact">
-          <div class="contact-label">Contact Person</div>
-          <div class="contact-content">
-            <div class="contact-l">
-              <el-image class="contact-profile-photo" :src="detailData.user_contact.headimgurl"></el-image>
-            </div>
-            <div class="contact-r">
-              <div class="contact-r-t">
-                Hi I am {{ detailData.user_contact.first_name }} from {{ detailData.company.company_name }}.
-              </div>
-              <div class="contact-r-b">
-                <el-button type="primary" @click="chat(detailData.user_id)">Let's Chat!</el-button>
-              </div>
-            </div>
-          </div>
-        </div>
+<!--        <div class="contact-container" v-if="detailData.user_contact">-->
+<!--          <div class="contact-label">Contact Person</div>-->
+<!--          <div class="contact-content">-->
+<!--            <div class="contact-l">-->
+<!--              <el-avatar class="contact-profile-photo" :src="detailData.user_contact.headimgurl"></el-avatar>-->
+<!--            </div>-->
+<!--            <div class="contact-r">-->
+<!--              <div class="contact-r-t">-->
+<!--                Hi I am {{ detailData.user_contact.first_name }} from {{ detailData.company.company_name }}.-->
+<!--              </div>-->
+<!--              <div class="contact-r-b">-->
+<!--                <el-button type="primary" round @click="chat(detailData.user_id)">Let's Chat!</el-button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
       </el-col>
     </el-row>
@@ -349,7 +351,7 @@ export default {
       console.log(userId)
       let token = localStorage.getItem('token')
       if(!token || token === ''){
-        return this.$router.push('/edupassport')
+        return this.$router.push('/login')
       }
 
       let vendorInfo = this.detailData.userInfo;
@@ -444,7 +446,7 @@ export default {
 
               let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
 
-              self.$router.push({path:'/edupassport',query:{redirect_params:redirectParamsStr}})
+              self.$router.push({path:'/login',query:{redirect_params:redirectParamsStr}})
             }
           }
         })
@@ -621,6 +623,7 @@ export default {
 }
 
 .job-title {
+  font-family: BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 24px;
   color: #ff2870;
   padding-left: 20px;
@@ -636,6 +639,7 @@ export default {
 }
 
 .job-address {
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   color: #808080;
   font-size: 14px;
   padding-left: 20px;
@@ -655,8 +659,8 @@ export default {
 }
 
 .job-desc-label {
-  font-weight: bold;
-  font-size: 18px;
+  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 22px;
 }
 
 .job-desc-label-underline {
@@ -666,8 +670,9 @@ export default {
 }
 
 .job-desc-content {
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   padding: 10px 0;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .job-tags {
@@ -687,6 +692,7 @@ export default {
 
 .job-tag:not(:first-child) {
   margin: 10px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 
@@ -698,8 +704,8 @@ export default {
 }
 
 .address-label {
-  font-weight: bold;
-  font-size: 18px;
+  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 22px;
 }
 
 .address-label-underline {
@@ -709,7 +715,7 @@ export default {
 }
 
 .address-content {
-  font-size: 14px;
+
   padding: 10px 0;
   display: flex;
   flex-direction: row;
@@ -723,17 +729,25 @@ export default {
 }
 
 .address-address b {
-  font-size: 14px;
+  font-size: 18px;
+  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .address-address span {
   color: #ff2870;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 14px;
 }
 
 .address-location {
   width: 100%;
 }
+
+.address-location b {
+  font-size: 18px;
+  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
 
 .apply-btn-container {
   padding: 20px;
@@ -766,8 +780,8 @@ export default {
 }
 
 .company-bio-label {
-  font-weight: bold;
-  font-size: 18px;
+  font-size: 22px;
+  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .company-bio-label-underline {
@@ -777,6 +791,7 @@ export default {
 }
 .company-bio-content{
   padding-top:10px;
+
 }
 
 .company-logo-container {
@@ -793,8 +808,8 @@ export default {
 
 .company-bio-text {
   min-height: 140px;
-  font-size: 14px;
-  word-wrap: break-word;
+  font-size: 18px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .view-profile-btn-container {
@@ -816,7 +831,9 @@ export default {
 
 .contact-label {
   font-weight: bold;
-  font-size: 18px;
+
+  font-size: 22px;
+  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .contact-content {
@@ -840,57 +857,13 @@ export default {
   padding: 10px;
 }
 .contact-r-t {
-  font-size: 14px;
+
   font-weight: bold;
+  font-size: 18px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .contact-r-b {
-  font-size: 14px;
-  margin-top: 20px;
-}
-.other-jobs-container{
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
-  margin-top: 20px;
-}
-
-.other-jobs-label{
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.other-jobs-content{
-  padding: 10px 0;
-
-}
-.other-jobs-item{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #eeeeee;
-}
-.other-jobs-l{
-  padding: 10px;
-}
-
-.other-jobs-logo{
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-
-.other-jobs-r{
-  padding: 10px;
-}
-.other-jobs-r-t{
-  font-size: 14px;
-  font-weight: bold;
-}
-.other-jobs-r-b{
   font-size: 14px;
   margin-top: 20px;
 }

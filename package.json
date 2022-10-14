@@ -6,13 +6,10 @@
     "serve": "vue-cli-service serve",
     "build:prod": "vue-cli-service build --mode production",
     "build:stage": "vue-cli-service  build --mode development",
-    "build:stagecn": "vue-cli-service  build --mode cndevelopment",
-    "build:prodcn": "vue-cli-service  build --mode cnproduction",
-    "build:stageedusjp": "vue-cli-service  build --mode edusjpdevelopment",
-    "build:prodedusjp": "vue-cli-service  build --mode edusjpproduction",
-    "build:stageeducn": "vue-cli-service  build --mode educndevelopment",
-    "build:prodeducn": "vue-cli-service  build --mode educnproduction",
-    "all": "vue-cli-service  build --mode educndevelopment && vue-cli-service build --mode educnproduction && vue-cli-service build --mode edusjpdevelopment && vue-cli-service build --mode edusjpproduction",
+    "build:internationalprod": "vue-cli-service  build --mode internationalproduction",
+    "build:chinaprod": "vue-cli-service  build --mode  chinaproduction",
+    "build:chinadev": "vue-cli-service  build --mode  chinadev",
+    "cip": "vue-cli-service  build --mode internationalproduction && vue-cli-service build --mode chinaproduction",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

@@ -65,7 +65,7 @@ axios.interceptors.response.use(response => {
             })
             setTimeout(function () {
                 loadingInstance.close()
-                window.location.href = '/edupassport'
+                window.location.href = '/login'
             },1000)
 
             return Promise.reject();

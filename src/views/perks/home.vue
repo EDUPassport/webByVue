@@ -24,9 +24,9 @@
                 Promote your business with ad banners on our website.
               </div>
               <div class="plain-item-btn-container-1">
-                <el-button class="plain-item-btn" type="primary" link>
-                  MY ADS
-                </el-button>
+<!--                <el-button class="plain-item-btn" type="primary" link>-->
+<!--                  MY ADS-->
+<!--                </el-button>-->
               </div>
 
             </div>
@@ -40,7 +40,9 @@
               </div>
               <div class="plain-item-btn-container-1">
 
-                <el-button class="plain-item-btn" type="primary" link>
+                <el-button class="plain-item-btn" type="primary"
+                           @click="turnMyJobPosts()"
+                           link>
                   MY JOB POSTS
                 </el-button>
               </div>
@@ -96,26 +98,26 @@
 
           <div class="plain-container">
             <!--          <div class="plain-mask-container"></div>-->
-            <div class="plain-item-container">
-              <div class="plain-item-label">
-                Complete your profile
-              </div>
-              <div class="plain-item-percentage">
-                <el-progress color="#f9b019" :stroke-width="10" :percentage="40"/>
-              </div>
-              <div class="plain-item-tips">
-                Increase your chances of finding the right candidate by completing your profile.
-              </div>
-              <div class="plain-item-btn-container">
-                <el-button class="plain-item-btn" link>
-                  DONE
-                </el-button>
-                <el-button class="plain-item-btn" type="primary" link>
-                  GOT TO MY PROFILE
-                </el-button>
-              </div>
+<!--            <div class="plain-item-container">-->
+<!--              <div class="plain-item-label">-->
+<!--                Complete your profile-->
+<!--              </div>-->
+<!--              <div class="plain-item-percentage">-->
+<!--                <el-progress color="#f9b019" :stroke-width="10" :percentage="40"/>-->
+<!--              </div>-->
+<!--              <div class="plain-item-tips">-->
+<!--                Increase your chances of finding the right candidate by completing your profile.-->
+<!--              </div>-->
+<!--              <div class="plain-item-btn-container">-->
+<!--                <el-button class="plain-item-btn" link>-->
+<!--                  DONE-->
+<!--                </el-button>-->
+<!--                <el-button class="plain-item-btn" type="primary" link>-->
+<!--                  GOT TO MY PROFILE-->
+<!--                </el-button>-->
+<!--              </div>-->
 
-            </div>
+<!--            </div>-->
 
             <div class="plain-item-container">
               <div class="plain-item-label">
@@ -129,9 +131,9 @@
               </div>
               <div class="plain-item-btn-container-1">
 
-                <el-button class="plain-item-btn" type="primary" link>
-                  GO TO MESSAGES
-                </el-button>
+<!--                <el-button class="plain-item-btn" type="primary" link>-->
+<!--                  GO TO MESSAGES-->
+<!--                </el-button>-->
               </div>
 
             </div>
@@ -148,9 +150,9 @@
               </div>
               <div class="plain-item-btn-container-1">
 
-                <el-button class="plain-item-btn" type="primary" link>
-                  POST A JOB
-                </el-button>
+<!--                <el-button class="plain-item-btn" type="primary" link>-->
+<!--                  POST A JOB-->
+<!--                </el-button>-->
               </div>
 
             </div>
@@ -181,9 +183,9 @@
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.
               </div>
               <div class="plain-item-btn-container-1">
-                <el-button class="plain-item-btn" type="primary" link>
-                  REDEEM
-                </el-button>
+<!--                <el-button class="plain-item-btn" type="primary" link>-->
+<!--                  REDEEM-->
+<!--                </el-button>-->
               </div>
 
             </div>
@@ -485,7 +487,11 @@ export default {
     },
     turnMyEvents(){
       this.$router.push({path:'/events/myEvents',query:{}})
+    },
+    turnMyJobPosts(){
+      this.$router.push({path:'/jobs/home',query:{}})
     }
+
 
   }
 

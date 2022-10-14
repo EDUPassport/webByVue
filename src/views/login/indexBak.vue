@@ -972,7 +972,7 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
+                      self.$router.push({path: '/login', query: {type: 'sign-up'}})
                       self.showValue = 'sign-up'
                     }
                   }
@@ -1064,7 +1064,7 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
+                      self.$router.push({path: '/login', query: {type: 'sign-up'}})
                       self.showValue = 'sign-up'
                     }
                   }
@@ -1154,7 +1154,7 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
+                      self.$router.push({path: '/login', query: {type: 'sign-up'}})
                       self.showValue = 'sign-up'
                     }
                   }
@@ -1342,7 +1342,7 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action==='confirm'){
-                    self.$router.push({path: '/edupassport', query: {type: 'login',email:self.registerForm.email}})
+                    self.$router.push({path: '/login', query: {type: 'login',email:self.registerForm.email}})
                     self.showValue = 'login'
                   }
                 }
@@ -1404,7 +1404,7 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action==='confirm'){
-                    self.$router.push({path: '/edupassport', query: {type: 'login',phone:self.registerPhoneForm.phone}})
+                    self.$router.push({path: '/login', query: {type: 'login',phone:self.registerPhoneForm.phone}})
                     self.showValue = 'login'
                   }
                 }

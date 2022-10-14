@@ -18,14 +18,14 @@
               fit="cover"
           ></el-image>
 
-          <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-               @click="cancelFavorite(2,item.id,index)">
-            <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-          </div>
-          <div class="deals-item-favorite" v-else
-               @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
-            <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-          </div>
+<!--          <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"-->
+<!--               @click="cancelFavorite(2,item.id,index)">-->
+<!--            <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>-->
+<!--          </div>-->
+<!--          <div class="deals-item-favorite" v-else-->
+<!--               @click="addFavorite(item.id,2,item.title,item.company_logo,index)">-->
+<!--            <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>-->
+<!--          </div>-->
 
         </div>
         <div class="deals-item-c">
@@ -54,9 +54,9 @@
 
           </div>
           <div class="deals-item-b-r">
-            <el-button link  @click="showDealDetailDialog(item)">
-              DETAILS
-            </el-button>
+<!--            <el-button link  @click="showDealDetailDialog(item)">-->
+<!--              DETAILS-->
+<!--            </el-button>-->
           </div>
         </div>
 
@@ -90,7 +90,7 @@ export default {
 .container{
   height: 650px;
   background-color: #FFFFFF;
-  padding: 25px 50px;
+  /*padding: 25px 50px;*/
   box-shadow: 0px 3px 23px #00000012;
   border-radius: 18px;
 }
@@ -99,11 +99,15 @@ export default {
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 30px;
   color: #262626;
+
+  padding: 25px 50px;
+
 }
 
 .deals-item {
   width: 480px;
-  margin-top: 20px;
+  margin:0 50px 25px 50px;
+
   border-radius: 40px;
   overflow: hidden;
 

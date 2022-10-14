@@ -2,8 +2,10 @@
 <div>
   <div class="dashboard-applications">
     <div class="dashboard-applications-label">
-      <span>New applicants(7)</span>
-      <el-button class="dashboard-applications-all-btn" link>
+      <span>New applicants({{data.length}})</span>
+      <el-button class="dashboard-applications-all-btn"
+                 @click="showAllApplications()"
+                 link>
         ALL APPLICATIONS
       </el-button>
     </div>
@@ -115,56 +117,55 @@
                 </div>
               </template>
 
-              <div class="dashboard-education-cer-c-item">
-                <div class="dashboard-education-cer-c-label">
-                  Certificates and Diplomas
-                </div>
-                <div class="dashboard-education-cer-c-text">
-                  TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3
-                </div>
-              </div>
+<!--              <div class="dashboard-education-cer-c-item">-->
+<!--                <div class="dashboard-education-cer-c-label">-->
+<!--                  Certificates and Diplomas-->
+<!--                </div>-->
+<!--                <div class="dashboard-education-cer-c-text">-->
+<!--                  TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3-->
+<!--                </div>-->
+<!--              </div>-->
 
-              <div class="dashboard-education-cer-c-item">
-                <div class="dashboard-education-cer-c-label">
-                  Languages
-                </div>
-                <div class="dashboard-education-cer-c-text">
-                  English(native)
-                </div>
-                <div class="dashboard-education-cer-c-text">
-                  Korean(fluent)
-                </div>
-                <div class="dashboard-education-cer-c-text">
-                  Turkish(beginner)
-                </div>
-              </div>
+<!--              <div class="dashboard-education-cer-c-item">-->
+<!--                <div class="dashboard-education-cer-c-label">-->
+<!--                  Languages-->
+<!--                </div>-->
+<!--                <div class="dashboard-education-cer-c-text">-->
+<!--                  English(native)-->
+<!--                </div>-->
+<!--                <div class="dashboard-education-cer-c-text">-->
+<!--                  Korean(fluent)-->
+<!--                </div>-->
+<!--                <div class="dashboard-education-cer-c-text">-->
+<!--                  Turkish(beginner)-->
+<!--                </div>-->
+<!--              </div>-->
 
             </div>
           </div>
 
           <div class="dashboard-application-b">
             <div class="dashboard-application-b-l">
-              <el-button class="dashboard-application-b-l-btn-1" plain round>
-                VIEW PROFILE
-              </el-button>
-              <el-button class="dashboard-application-b-l-btn-1" plain round>
-                RESUME
-              </el-button>
+<!--              <el-button class="dashboard-application-b-l-btn-1" plain round>-->
+<!--                VIEW PROFILE-->
+<!--              </el-button>-->
+<!--              <el-button class="dashboard-application-b-l-btn-1" plain round>-->
+<!--                RESUME-->
+<!--              </el-button>-->
             </div>
             <div class="dashboard-application-b-r">
-              <el-button class="dashboard-application-b-l-btn-1" link round>
-                NOT INTERESTED
-              </el-button>
-              <el-button class="dashboard-application-b-l-btn-2" type="primary" round>
-                SHORTLIST IT
-              </el-button>
+<!--              <el-button class="dashboard-application-b-l-btn-1" link round>-->
+<!--                NOT INTERESTED-->
+<!--              </el-button>-->
+<!--              <el-button class="dashboard-application-b-l-btn-2" type="primary" round>-->
+<!--                SHORTLIST IT-->
+<!--              </el-button>-->
             </div>
           </div>
 
         </div>
 
       </div>
-
 
     </el-scrollbar>
 
@@ -192,6 +193,9 @@ export default {
       this.selectedApplicationIdWithCompany = id
       // this.expandStatus = !this.expandStatus
     },
+    showAllApplications(){
+      this.$router.push('/jobs/home')
+    }
   }
 }
 </script>

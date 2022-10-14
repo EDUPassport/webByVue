@@ -114,84 +114,90 @@
     </div>
 
     <div class="jobs-list-content">
-      <template  v-for="(item,index) in jobListData" :key="index">
-        <div  class="jobs-list-item "
-             :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' ">
 
-          <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-               @click="cancelFavorite(1,item.id,index)">
-            <el-icon :size="30" color="#9173ff">
-              <CollectionTag />
-            </el-icon>
-          </div>
-          <div class="jobs-favorite" v-else
-               @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
-            <el-icon :size="30">
-              <CollectionTag />
-            </el-icon>
-          </div>
-          <div class="jobs-list-item-l">
-            <el-image class="jobs-item-logo"
-                      :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
-                      fit="contain">
-              <template #error>
-                <div class="image-slot">
-                  <el-icon :size="60" color="#808080">
-                    <Picture/>
-                  </el-icon>
+        <template v-if="jobListData.length > 0">
+          <div  class="jobs-list-item "
+                v-for="(item,index) in jobListData" :key="index"
+                :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' ">
+
+            <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                 @click="cancelFavorite(1,item.id,index)">
+              <el-icon :size="30" color="#9173ff">
+                <CollectionTag />
+              </el-icon>
+            </div>
+            <div class="jobs-favorite" v-else
+                 @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
+              <el-icon :size="30">
+                <CollectionTag />
+              </el-icon>
+            </div>
+            <div class="jobs-list-item-l">
+              <el-image class="jobs-item-logo"
+                        :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+                        fit="contain">
+                <template #error>
+                  <div class="image-slot">
+                    <el-icon :size="60" color="#808080">
+                      <Picture/>
+                    </el-icon>
+                  </div>
+                </template>
+              </el-image>
+            </div>
+            <div class="jobs-list-item-r">
+              <div class="jobs-list-item-name">
+                {{ item.company_name }}
+              </div>
+
+              <div class="jobs-list-item-title" @click="turnJobDetail(item.id)">
+                {{ item.job_title }}
+              </div>
+              <view class="jobs-list-item-salary">
+                <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
+                {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
+                <span v-if="item.payment_period == 112">hourly</span>
+                <span v-if="item.payment_period == 113">daily</span>
+                <span v-if="item.payment_period == 114">weekly</span>
+                <span v-if="item.payment_period == 115">monthly</span>
+                <span v-if="item.payment_period == 116">annually</span>
+              </view>
+              <div class="jobs-list-item-address">
+                {{ item.address }}
+              </div>
+
+              <div class="jobs-list-item-b">
+                <div class="jobs-list-item-b-l">
+                  <view class="jobs-list-item-work-type">
+                    <i class="iconfont el-icon-alishijian"></i>
+                    <span v-if="item.employment_type==1">FT</span>
+                    <span v-if="item.employment_type==2">PT</span>
+                    <span v-if="item.employment_type==3">S</span>
+                  </view>
+
                 </div>
-              </template>
-            </el-image>
-          </div>
-          <div class="jobs-list-item-r">
-            <div class="jobs-list-item-name">
-              {{ item.company_name }}
-            </div>
 
-            <div class="jobs-list-item-title" @click="turnJobDetail(item.id)">
-              {{ item.job_title }}
-            </div>
-            <view class="jobs-list-item-salary">
-              <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
-              {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
-              <span v-if="item.payment_period == 112">hourly</span>
-              <span v-if="item.payment_period == 113">daily</span>
-              <span v-if="item.payment_period == 114">weekly</span>
-              <span v-if="item.payment_period == 115">monthly</span>
-              <span v-if="item.payment_period == 116">annually</span>
-            </view>
-            <div class="jobs-list-item-address">
-              {{ item.address }}
-            </div>
+                <div class="jobs-list-item-b-r">
+                  <view class="jobs-list-item-date">
+                    <el-icon>
+                      <Calendar/>
+                    </el-icon>&nbsp;
+                    {{ $filters.howLongFormat(item.refresh_time) }}
+                  </view>
 
-            <div class="jobs-list-item-b">
-              <div class="jobs-list-item-b-l">
-                <view class="jobs-list-item-work-type">
-                  <i class="iconfont el-icon-alishijian"></i>
-                  <span v-if="item.employment_type==1">FT</span>
-                  <span v-if="item.employment_type==2">PT</span>
-                  <span v-if="item.employment_type==3">S</span>
-                </view>
-
-              </div>
-
-              <div class="jobs-list-item-b-r">
-                <view class="jobs-list-item-date">
-                  <el-icon>
-                    <Calendar/>
-                  </el-icon>&nbsp;
-                  {{ $filters.howLongFormat(item.refresh_time) }}
-                </view>
-
+                </div>
               </div>
             </div>
+
           </div>
 
-        </div>
+        </template>
+        <template v-else>
+          <el-empty description="..."></el-empty>
+        </template>
 
-      </template>
     </div>
-    <div class="jobs-list-pagination">
+    <div class="jobs-list-pagination" v-if="jobListData.length > 0">
       <el-pagination layout="prev, pager, next"
                      :default-current-page="jobPage"
                      @size-change="jobPageSizeChange"

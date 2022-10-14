@@ -4,8 +4,7 @@
     <el-row justify="center" align="top" class="login-container">
       <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
         <div class="login-l" @click="turnHome()">
-          <div class="login-l-edu">EDU</div>
-          <div class="login-l-passport">PASSPORT</div>
+           <el-image class="login-l-logo" :src="logoImgLight"></el-image>
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
@@ -221,34 +220,34 @@
               </el-button>
             </div>
 
-            <div class="sign-in-btn-container">
-              <el-button @click="linkedinSignIn()"
-                         size="large"
-                         class="login-option-btn" link round
-                         >
-                <template #icon>
-                  <el-icon>
-                    <IconLogosLinkedinIcon />
-                  </el-icon>
-                </template>
-                 SIGN IN WITH LINKEDIN
-              </el-button>
-            </div>
+<!--            <div class="sign-in-btn-container">-->
+<!--              <el-button @click="linkedinSignIn()"-->
+<!--                         size="large"-->
+<!--                         class="login-option-btn" link round-->
+<!--                         >-->
+<!--                <template #icon>-->
+<!--                  <el-icon>-->
+<!--                    <IconLogosLinkedinIcon />-->
+<!--                  </el-icon>-->
+<!--                </template>-->
+<!--                 SIGN IN WITH LINKEDIN-->
+<!--              </el-button>-->
+<!--            </div>-->
 
-            <div class="sign-in-btn-container">
-              <el-button @click="googleSignIn()"
-                         size="large"
-                         class="login-option-btn"
-                         link round
-                        >
-                <template #icon>
-                  <el-icon>
-                    <IconLogosGoogleIcon></IconLogosGoogleIcon>
-                  </el-icon>
-                </template>
-                 SIGN IN WITH GOOGLE
-              </el-button>
-            </div>
+<!--            <div class="sign-in-btn-container">-->
+<!--              <el-button @click="googleSignIn()"-->
+<!--                         size="large"-->
+<!--                         class="login-option-btn"-->
+<!--                         link round-->
+<!--                        >-->
+<!--                <template #icon>-->
+<!--                  <el-icon>-->
+<!--                    <IconLogosGoogleIcon></IconLogosGoogleIcon>-->
+<!--                  </el-icon>-->
+<!--                </template>-->
+<!--                 SIGN IN WITH GOOGLE-->
+<!--              </el-button>-->
+<!--            </div>-->
 
           </div>
 
@@ -285,6 +284,29 @@
 
     <ForgotPassword :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
 
+    <el-dialog v-model="loginErrorDialogVisible" width="550px">
+      <div class="login-error-container">
+        <h4>
+          Welcome Back!
+        </h4>
+        <p>
+          If you are sure your username and password are both correct,
+
+        </p>
+        <p> We have exicting news for you!</p>
+        <p>
+          Check your email for instructions.
+        </p>
+
+        <div class="login-error-ok-container">
+          <el-button plain round @click="loginErrorHelp()">GET HELP</el-button>
+          <el-button type="primary" round @click="loginErrorOk()">OK</el-button>
+        </div>
+
+      </div>
+
+    </el-dialog>
+
   </div>
 
 </template>
@@ -292,6 +314,7 @@
 <script>
 
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
+import logoImgLight from  "@/assets/newHome/logo/Logo_Transparent.png"
 import imgLogo from '@/assets/logo.png'
 //WEIXIN_SEND_SMS
 import {
@@ -299,7 +322,7 @@ import {
   SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
   ZOHO_SYNC,
-  LOGIN_EMAIL_PWD_V2, PHONE_REGISTER_V2, LOGIN_PHONE_SMS_V2, LOGIN_PHONE_PWD_V2, USER_MENU_LIST
+  LOGIN_EMAIL_PWD_V2, PHONE_REGISTER_V2, LOGIN_PHONE_SMS_V2, LOGIN_PHONE_PWD_V2, USER_MENU_LIST, SEND_USER_PRIVATE_PASSWORD
 } from "@/api/api";
 //LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
@@ -315,7 +338,9 @@ export default {
   name: "index",
   data() {
     return {
+      loginErrorDialogVisible:false,
       imgLogo,
+      logoImgLight,
       identityBusinessCheckedStatus:false,
       identityBusinessStrBefore:"",
       identityBusinessStr:'Education-Business',
@@ -545,6 +570,24 @@ export default {
     this.showValue = this.showType
   },
   methods: {
+    loginErrorOk(){
+      this.loginErrorDialogVisible = false
+    },
+    loginErrorHelp(){
+      window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+
+    },
+    sendPrivatePassword(email){
+
+      let params = {
+        email:email
+      }
+      SEND_USER_PRIVATE_PASSWORD(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     turnHome(){
       this.$router.push('/')
     },
@@ -596,7 +639,7 @@ export default {
 
     },
     signUp(){
-      this.$router.push('/edupassport/signup')
+      this.$router.push('/signup')
     },
     goHome() {
       this.$router.push('/')
@@ -805,16 +848,21 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport/signup', query: {}})
+                      self.$router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
               }else{
-                this.$message.error(err.msg)
+                // this.$message.error(err.msg)
+                this.sendPrivatePassword(params.email)
+                this.loginErrorDialogVisible = true;
+
               }
+
               this.submitLoginLoadingStatus = false
+
             })
 
           } else {
@@ -899,14 +947,15 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport/signup', query: {}})
+                      self.$router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
               }else{
-                this.$message.error(err.msg)
+                this.loginErrorDialogVisible = true;
+                // this.$message.error(err.msg)
               }
 
             })
@@ -993,14 +1042,15 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport/signup', query: {}})
+                      self.$router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
               }else{
-                this.$message.error(err.msg)
+                this.loginErrorDialogVisible = true;
+                // this.$message.error(err.msg)
               }
 
             })
@@ -1203,7 +1253,7 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action==='confirm'){
-                    self.$router.push({path: '/edupassport', query: {type: 'login',email:self.registerForm.email}})
+                    self.$router.push({path: '/login', query: {type: 'login',email:self.registerForm.email}})
                     self.showValue = 'login'
                   }
                 }
@@ -1265,7 +1315,7 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action==='confirm'){
-                    self.$router.push({path: '/edupassport', query: {type: 'login',phone:self.registerPhoneForm.phone}})
+                    self.$router.push({path: '/login', query: {type: 'login',phone:self.registerPhoneForm.phone}})
                     self.showValue = 'login'
                   }
                 }
@@ -1377,6 +1427,10 @@ export default {
 .login-l{
   padding-left: 50px;
   cursor: pointer;
+}
+
+.login-l-logo{
+  width: 60px;
 }
 
 .login-l-edu{
@@ -1530,6 +1584,28 @@ export default {
   background-color: #F0F2F5;
 }
 
+
+.login-error-container{
+  text-align: center;
+}
+
+.login-error-container h4{
+  margin-bottom: 50px;
+}
+
+.login-error-container p{
+  font-size: 20px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  margin-top: 15px;
+}
+
+.login-error-ok-container{
+  margin-top: 25px;
+}
+
+.login-error-ok-container button{
+  width: 100px;
+}
 
 @media screen and (min-width: 1200px) {
 

@@ -360,3 +360,6 @@ export const ALL_JOB_RESUME = (params) => get('/job/getAllJobResume',params)
 
 //获取用户发布的【所有的】【职位下】的用户
 export const ALL_LANGUAGE_PROFICIENCY = (params) => get('/home/language/proficiency',params)
+
+//向用户发送密码邮件
+export const SEND_USER_PRIVATE_PASSWORD = (params) => post('/user/private/password',params)

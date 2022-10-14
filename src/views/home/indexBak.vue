@@ -1071,7 +1071,7 @@ export default {
       this.$router.push({path: '/search/result', query: {keyword: this.searchKeywordsValue}})
     },
     signUp() {
-      this.$router.push({path: '/edupassport', query: {type: 'sign-up'}})
+      this.$router.push({path: '/login', query: {type: 'sign-up'}})
     },
     turnArticleLink(link) {
       window.open(link, '_blank')

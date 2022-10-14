@@ -120,24 +120,12 @@
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
                     <el-col :span="12">
-                      <el-form-item label="Education Type(Up to 3)">
-
-                        <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
-                          <div v-if="item['children'].length>0" class="category-parent">
-                          </div>
-                          <div v-if="item['children'].length===0" class="categories-tags-item"
-                               :class="selectEducatorTypeList.findIndex(element=>element.id === item.id) == -1 ? '' : 'tag-active' "
-                               @click="selectEducatorType(item)">
-                            {{ item.identity_name }}
-                          </div>
-                          <div class="categories-tags-item" v-for="(child,key) in item['children']" :key="key"
-                               :class="selectEducatorTypeList.findIndex(element=>element.id === child.id) == -1 ? '' : 'tag-active' "
-                               @click="selectEducatorType(child)">
-                            {{ child.identity_name }}
-                          </div>
-                        </div>
+                      <el-form-item label="About yourself" prop="bio">
+                        <el-input type="textarea" v-model="basicForm.bio"
+                                  :rows="6"
+                                  placeholder="A short bio">
+                        </el-input>
                       </el-form-item>
-
                     </el-col>
 
                     <el-col :span="6">
@@ -176,15 +164,27 @@
                   </el-row>
 
                   <el-row :gutter="50">
-
                     <el-col :span="12">
-                      <el-form-item label="About yourself" prop="bio">
-                        <el-input type="textarea" v-model="basicForm.bio"
-                                  :rows="6"
-                                  placeholder="A short bio">
-                        </el-input>
+                      <el-form-item label="Education Type(Up to 3)">
+
+                        <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
+                          <div v-if="item['children'].length>0" class="category-parent">
+                          </div>
+                          <div v-if="item['children'].length===0" class="categories-tags-item"
+                               :class="selectEducatorTypeList.findIndex(element=>element.id === item.id) == -1 ? '' : 'tag-active' "
+                               @click="selectEducatorType(item)">
+                            {{ item.identity_name }}
+                          </div>
+                          <div class="categories-tags-item" v-for="(child,key) in item['children']" :key="key"
+                               :class="selectEducatorTypeList.findIndex(element=>element.id === child.id) == -1 ? '' : 'tag-active' "
+                               @click="selectEducatorType(child)">
+                            {{ child.identity_name }}
+                          </div>
+                        </div>
                       </el-form-item>
+
                     </el-col>
+
 
                     <el-col :span="6">
                       <el-form-item label="Languages & Proficiency" >
@@ -199,14 +199,21 @@
                               <div class="language-checkbox-item-r">
                                 {{item.level_name}}
                               </div>
+
+                              <div class="language-checkbox-item-delete">
+                                <el-button link @click="removeLanguageItem(i)">
+                                  REMOVE
+                                </el-button>
+                              </div>
+
                             </div>
 
                             <div class="language-add-icon">
                               <el-icon :size="45" @click="addLanguageAndProficiency()">
                                 <IconCarbonAddAlt />
                               </el-icon>
-
                             </div>
+
                           </template>
                           <template v-else>
                             <el-icon :size="45" @click="addLanguageAndProficiency()">
@@ -1375,6 +1382,9 @@ export default {
 
   },
   methods: {
+    removeLanguageItem(i){
+      this.selectedLanguageList.splice(i,1)
+    },
     addLanguageAndProficiency(){
       this.languageDialogVisible = true;
 
@@ -2234,8 +2244,9 @@ export default {
       let data = {}
 
       await USER_OBJECT_LIST(data).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code == 200) {
+
           this.editTeachExpList = res.message.filter(item => item.pid === 120)
           this.editSubjectList = res.message.filter(item => item.pid === 1)
           this.editLocationList = res.message.filter(item => item.pid === 71)  // 71 155
@@ -2254,12 +2265,14 @@ export default {
           this.jobSeekingData =  res.message.filter(item => item.pid === 199);
           this.degreeOptionsData =  res.message.filter(item => item.pid === 125);
           this.languageOptionsData =  res.message.filter(item => item.pid === 2);
+
         }
 
       }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
+
     },
     async getAllLanguageProficiencyList() {
       let data = {}
@@ -3499,7 +3512,7 @@ export default {
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
-  border-bottom: 1px dashed #EEEEEE;
+  /*border-bottom: 1px dashed #EEEEEE;*/
   padding-bottom: 10px;
 }
 

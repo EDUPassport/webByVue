@@ -68,7 +68,7 @@
 }
 
 .el-input--large .el-input__inner{
-    font-family: AssiRegular, serif;
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size: 18px;
     color:#262626;
 }
@@ -79,30 +79,58 @@
 
 .el-input--default .el-input__inner{
     font-size: 18px;
-    font-family: AssiRegular, serif;
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 
 }
 
+.el-input--small .el-input__wrapper{
+    min-height: 30px;
+}
+
+.el-input--small .el-input__inner{
+    font-size: 18px;
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.el-input{
+    --el-input-border-color:#262626;
+    --el-input-hover-border: 1px solid #6650B3;
+    --el-input-focus-border: 2px solid #6650B3;
+    --el-input-hover-border-color:#E7DEFF;
+    --el-input-focus-border-color:#6650B3;
+}
+
 .el-textarea__inner{
-    font-family: AssiRegular, serif;
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size: 16px;
     color:#262626;
 }
 
+.el-textarea{
+    --el-input-border-color:#262626;
+    --el-input-hover-border: 1px solid #6650B3;
+    --el-input-focus-border: 2px solid #6650B3;
+    --el-input-hover-border-color:#E7DEFF;
+    --el-input-focus-border-color:#6650B3;
+}
+
+.el-radio__label{
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
 .el-form--default.el-form--label-top .el-form-item .el-form-item__label{
-    font-family: BarlowM, serif;
+    font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size:20px;
     color:#262626;
 }
 
 .el-checkbox.el-checkbox--large .el-checkbox__label{
     font-size: 18px;
-    font-family: AssiRegular, serif;
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     color:#262626;
 }
 
 .el-divider__text{
-    font-family: AssiRegular, serif;
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     color:#262626;
     font-size: 18px;
 

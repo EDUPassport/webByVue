@@ -26,7 +26,7 @@
             :model="forgotForm1"
             :rules="forgotRules1"
             ref="forgotForm1"
-            label-width="150px"
+            label-width="250px"
             label-position="left"
             class="demo-ruleForm"
         >
@@ -79,7 +79,7 @@
             :model="forgotForm2"
             :rules="forgotRules2"
             ref="forgotForm2"
-            label-width="150px"
+            label-width="250px"
             label-position="left"
             class="demo-ruleForm"
         >

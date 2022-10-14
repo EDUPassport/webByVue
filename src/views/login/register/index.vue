@@ -4,8 +4,7 @@
     <el-row justify="center" align="top" class="login-container">
       <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
         <div class="login-l" @click="turnHome()">
-          <div class="login-l-edu">EDU</div>
-          <div class="login-l-passport">PASSPORT</div>
+          <el-image class="login-l-logo" :src="logoImgLight"></el-image>
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
@@ -313,6 +312,7 @@
 <script>
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
 import imgLogo from '@/assets/logo.png'
+import logoImgLight from  "@/assets/newHome/logo/Logo_Transparent.png"
 //WEIXIN_SEND_SMS
 import {
   EMAIL_REGISTER_V2,
@@ -334,6 +334,7 @@ export default {
   name: "index",
   data() {
     return {
+      logoImgLight,
       completeBtnDisabledStatus:true,
       companyName:'',
       createAccountDisabledStatus:true,
@@ -534,7 +535,7 @@ export default {
         callback(action){
           console.log(action)
           if(action==='confirm'){
-            self.$router.push({path: '/edupassport', query: { phone:self.registerForm.phone}})
+            self.$router.push({path: '/login', query: { phone:self.registerForm.phone}})
           }
         }
 
@@ -594,7 +595,7 @@ export default {
 
     },
     turnToLogin(){
-      this.$router.push('/edupassport')
+      this.$router.push('/login')
     },
     goHome() {
       this.$router.push('/')
@@ -771,7 +772,7 @@ export default {
                   callback(action){
                     console.log(action)
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport', query: { phone:self.registerForm.phone}})
+                      self.$router.push({path: '/login', query: { phone:self.registerForm.phone}})
                     }
                   }
 
@@ -815,7 +816,7 @@ export default {
                   "round-button":true,
                   callback(action){
                     if(action==='confirm'){
-                      self.$router.push({path: '/edupassport', query: { email:self.registerForm.email}})
+                      self.$router.push({path: '/login', query: { email:self.registerForm.email}})
                     }
                   }
 
@@ -878,7 +879,7 @@ export default {
                 callback(action){
                   console.log(action)
                   if(action==='confirm'){
-                    self.$router.push({path: '/edupassport', query: {type: 'login',phone:self.registerPhoneForm.phone}})
+                    self.$router.push({path: '/login', query: {type: 'login',phone:self.registerPhoneForm.phone}})
                     self.showValue = 'login'
                   }
                 }
@@ -1100,6 +1101,10 @@ export default {
 .login-l{
   padding-left: 50px;
   cursor: pointer;
+}
+
+.login-l-logo{
+  width: 60px;
 }
 
 .login-l-edu{

@@ -7,7 +7,7 @@
 
         <div class="logo-new-container">
           <div class="logo-new"  @click="turnHome()">
-            <el-image class="logo-new-logo-img" :src="logoImgDark"></el-image>
+            <el-image class="logo-new-logo-img" :src="logoImgDarkH"></el-image>
           </div>
           <div class="logo-new-beta">Beta</div>
         </div>
@@ -28,15 +28,15 @@
 
           <div class="content-r-cc">
 
-            <div class="content-text content-style-1" v-if="show1">an all-in-one education hub</div>
+            <div class="content-text content-style-1" v-if="show1">a dedicated place for all things education</div>
             <div class="content-text content-style-1" v-if="show2">a transparent hiring process</div>
-            <div class="content-text content-style-1" v-if="show3">easy way to connect with fellow educators</div>
+            <div class="content-text content-style-1" v-if="show3">support from local businesses</div>
             <div class="content-text content-style-1" v-if="show4">support in moving and living abroad</div>
 
             <div class="content-r-3" v-if="show5">
-              <div class="content-text">an all-in-one education hub</div>
+              <div class="content-text">a dedicated place for all things education</div>
               <div class="content-text">a transparent hiring process</div>
-              <div class="content-text">easy way to connect with fellow educators</div>
+              <div class="content-text">support from local businesses</div>
               <div class="content-text">support in moving and living abroad</div>
             </div>
 
@@ -51,6 +51,7 @@
           SKIP
         </el-button>
       </div>
+
     </div>
 
   </div>
@@ -60,7 +61,7 @@
 import {ref, onMounted} from 'vue'
 import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
 import logoImgDark from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.png"
-
+import logoImgDarkH from  '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Dark.png'
 
 export default {
   name: "homeDonghua",
@@ -94,12 +95,13 @@ export default {
 
     onMounted(() => {
 
-
       let homeDongHuaValue = localStorage.getItem('homeDongHua')
 
       if(homeDongHuaValue){
         visible.value = false
+
       }else{
+
         let body = document.body;
         let documentTop = document.scrollingElement.scrollTop;
         body.style.position = "fixed"
@@ -118,7 +120,7 @@ export default {
         setTimeout(function () {
           span2.value = false
           span4.value = true
-        }, 10000)
+        }, 21200)
 
         setTimeout(function () {
           show1.value = true
@@ -127,33 +129,33 @@ export default {
         setTimeout(function () {
           show1.value = false
           show2.value = true
-        }, 4200)
-
-        setTimeout(function () {
-          show1.value = false
-          show2.value = false
-          show3.value = true
         }, 6200)
 
         setTimeout(function () {
-          show1.value = false
+          // show1.value = false
           show2.value = false
-          show3.value = false
-          show4.value = true
-        }, 8200)
+          show3.value = true
+        }, 10200)
 
         setTimeout(function () {
-          show1.value = false
-          show2.value = false
+          // show1.value = false
+          // show2.value = false
           show3.value = false
+          show4.value = true
+        }, 14200)
+
+        setTimeout(function () {
+          // show1.value = false
+          // show2.value = false
+          // show3.value = false
           show4.value = false
           show5.value = true
-        }, 9000)
+        }, 18200)
 
         setTimeout(function () {
           cl.value = true
           cr.value = true
-        }, 13000)
+        }, 26200)
 
         setTimeout(function () {
           visible.value = false
@@ -161,10 +163,10 @@ export default {
           body.style.position = "static";
           body.style.top = "auto";
           document.scrollingElement.scrollTop = documentTop;
-        }, 14000)
+        }, 28200)
+
+
       }
-
-
 
     })
 
@@ -189,7 +191,8 @@ export default {
   data(){
     return {
       logoImgLight,
-      logoImgDark
+      logoImgDark,
+      logoImgDarkH
     }
   },
   methods:{
@@ -276,13 +279,13 @@ export default {
 
 .content-l-animation{
   animation-name: slide-out-left;
-  animation-duration: 1s;
+  animation-duration: 2s;
 
 }
 
 .content-r-animation{
   animation-name: slide-out-right;
-  animation-duration: 1s;
+  animation-duration: 2s;
 }
 
 .content-r {
@@ -350,7 +353,7 @@ export default {
 .content-style-1 {
 
   animation-name: slide-out-top;
-  animation-duration: 2s;
+  animation-duration: 4s;
   /*animation-timing-function: linear;*/
 
 }
@@ -363,8 +366,9 @@ export default {
 
 .content-r-3 {
   animation-name: slide-in-top;
-  animation-duration: 1s;
+  animation-duration: 3s;
 }
+
 
 @keyframes slide-out-top {
 
@@ -443,14 +447,12 @@ export default {
 }
 
 
-
-
 .logo-new-container{
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  float: left;
+  width: 300px;
 }
 
 .logo-new{
@@ -458,7 +460,7 @@ export default {
 }
 
 .logo-new-logo-img{
-  width: 100px;
+  width: 260px;
 }
 
 .logo-new-beta{
