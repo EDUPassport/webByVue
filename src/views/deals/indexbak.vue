@@ -874,7 +874,7 @@ export default {
   height: 100%;
 }
 .xll-ads-l-img{
-//width: 100%;
+
   height: 100%;
   border-radius:10px;
   box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);

@@ -27,7 +27,7 @@
         <el-col  :xs="22" :sm="22" :md="16" :lg="15" :xl="16">
 
           <div class="business-profile">
-            <businessProfile :canEdit="true" :info="companyInfo" :identity="identity"></businessProfile>
+            <businessProfile :canEdit="true" :fromDeal="false" :info="companyInfo" :identity="identity"></businessProfile>
           </div>
 
         </el-col>
@@ -366,7 +366,7 @@ export default {
 }
 
 .business-profile{
-  margin: 25px 0 0 100px;
+  margin-left: 100px;
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1919px){

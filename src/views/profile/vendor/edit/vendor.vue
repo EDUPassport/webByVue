@@ -1891,6 +1891,11 @@ export default {
       })
 
     },
+    handleAccountImageRemove(file, i) {
+      console.log(file, i)
+      this.accountImageFileList.splice(i, 1)
+
+    },
     handleAccountImagePreview(file) {
       // console.log(file)
       this.dialogAccountImageUrl = file.url
@@ -1922,7 +1927,7 @@ export default {
       imgParams.append('token', token)
       imgParams.append('platform', 4)
       imgParams.append('file[]', file.raw)
-
+      this.uploadLoadingStatus = true;
       UPLOAD_IMG(imgParams).then(res => {
         console.log(res)
         if (res.code == 200) {
@@ -1934,12 +1939,14 @@ export default {
               url: item.file_url
             }
             this.accountImageFileList.push(obj)
+            this.uploadLoadingStatus = false
+
           })
         }
 
       }).catch(err => {
-        this.$loading().close()
-        console.log(err.code)
+        this.uploadLoadingStatus = false
+        console.log(err)
       })
 
     },
@@ -1967,7 +1974,6 @@ export default {
       })
 
     },
-
     accountImagePreview(url) {
       this.dialogAccountImageVisible = true;
       this.dialogAccountImageUrl = url;

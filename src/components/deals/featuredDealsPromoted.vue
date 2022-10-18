@@ -6,15 +6,18 @@
       <div class="deals-featured-label">
         Promoted
       </div>
-      <template v-if="featuredDealsData.length>0">
-        <div class="deals-featured-item" v-for="(item,index) in featuredDealsData" :key="index">
+
+      <template v-if="featuredData.length>0">
+
+        <div class="deals-featured-item" v-for="(item,index) in featuredData" :key="index">
           <div class="deals-item-bg">
             <el-image
                 class="deals-item-background-img"
                 :src="item.company_info.background_image ? item.company_info.background_image : ''"
                 fit="cover"
                 @click="viewProfile(item.company_info)"
-            ></el-image>
+            >
+            </el-image>
 
             <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
                  @click="cancelFavorite(2,item.id,index)">
@@ -22,6 +25,7 @@
                 <IconFontistoFavorite />
               </el-icon>
             </div>
+
             <div class="deals-item-favorite" v-else
                  @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
               <el-icon :size="25">
@@ -78,6 +82,44 @@
 
     </div>
 
+    <div class="xll-ads-container" v-if="adsData.length>0">
+
+      <el-carousel style="width:100%;margin:0 auto;overflow:hidden;"
+                   height="360px"
+                   indicator-position="none">
+
+        <el-carousel-item class="xll-ads-swiper-item"
+                          v-for="(item,i) in adsData" :key="i"
+                          @click="turnAdsDetail(item.link)"
+        >
+          <div class="xll-ads">
+            <div class="xll-ads-t">
+              <el-image class="xll-ads-img"
+                        fit="cover"
+                        :src="item.user_url !='' ? item.user_url : item.url">
+                <template #error>
+                  <div class="image-ads-slot">
+                    <el-icon :size="80" color="#808080">
+                      <Picture/>
+                    </el-icon>
+                  </div>
+                </template>
+              </el-image>
+            </div>
+            <div class="xll-ads-b">
+              <div class="xll-ads-b-bg">
+                {{item.title}}
+              </div>
+
+            </div>
+          </div>
+
+
+        </el-carousel-item>
+      </el-carousel>
+
+    </div>
+
 
   </el-scrollbar>
 
@@ -85,31 +127,17 @@
 </template>
 
 <script>
-import {ADD_FAVORITE, CANCEL_FAVORITE, FEATURED_DEALS_LIST} from "@/api/api";
 
 export default {
   name: "featuredDealsPromoted",
+  props:['featuredData','adsData'],
   data(){
     return {
-      featuredDealsData:[]
+
     }
   },
-  mounted(){
-    this.getFeaturedDealsList()
-  },
   methods:{
-    getFeaturedDealsList() {
-      let params = {}
-      FEATURED_DEALS_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.featuredDealsData = res.message;
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
+
     viewProfile(e){
       this.$emit('viewProfile',e)
     },
@@ -117,41 +145,15 @@ export default {
       this.$emit('detail',e)
     },
     addFavorite(id, type, title, url, index) {
-      let params = {
-        token: localStorage.getItem('token'),
-        type: type,
-        type_id: id,
-        type_title: title,
-        type_url: url
-      }
-      ADD_FAVORITE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.featuredDealsData[index]['is_favorite'] = 1
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
+      this.$emit('addFavorite',id, type, title, url, index)
     },
     cancelFavorite(type, typeId, index) {
-      let params = {
-        token: localStorage.getItem('token'),
-        type: type,
-        type_id: typeId
-      }
-      CANCEL_FAVORITE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.featuredDealsData[index]['is_favorite'] = 0
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
+      this.$emit('cancelFavorite',type, typeId, index)
+
     },
+    turnAdsDetail(link){
+      window.open(link, '_blank')
+    }
 
   }
 }
@@ -164,8 +166,9 @@ export default {
 }
 
 .deals-featured-container{
-  padding: 25px;
+  padding:0 25px 0 25px;
 }
+
 .deals-featured-label{
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
@@ -174,7 +177,9 @@ export default {
 
 .deals-featured-item{
   width: 100%;
-  margin-top: 20px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+
   border-radius: 40px;
   overflow: hidden;
 
@@ -293,7 +298,43 @@ export default {
   overflow: hidden;
 }
 
+.xll-ads-container{
+  /*padding: 0 25px 25px 25px;*/
+  margin-bottom: 50px;
+}
+.xll-ads-swiper-item{
+  background-color: #FFFFFF;
+  width: 100%;
 
+}
+
+.xll-ads{
+  /*width: 90%;*/
+  overflow: hidden;
+  border-radius: 14px;
+  width: calc(100% - 50px);
+  margin: 0 auto;
+  box-shadow: 0px 0px 10px #0000001A;
+}
+
+.xll-ads-img{
+  border-radius: 14px;
+}
+
+.xll-ads-b{
+ padding: 25px;
+}
+
+.xll-ads-b-bg{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 23px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
 @media screen and (min-width: 1200px) {
 
 }

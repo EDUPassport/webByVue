@@ -15,16 +15,25 @@
 
         <template v-if="showDealDetailStatus">
 
-          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-            <dealByListComponent :listData="dealsListData"
-                                 @back="backToSearchResults"
-                                 @detail="showDealDetailDialog"
-                                 :info="companyInfo">
-            </dealByListComponent>
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <businessProfile :info="companyInfo" :identity="5">
-            </businessProfile>
+          <!--          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">-->
+          <!--            <dealByListComponent :listData="dealsListData"-->
+          <!--                                 @back="backToSearchResults"-->
+          <!--                                 @detail="showDealDetailDialog"-->
+          <!--                                 :info="companyInfo">-->
+          <!--            </dealByListComponent>-->
+          <!--          </el-col>-->
+          <el-col class="deal-business-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+
+            <div class="deal-business-bg">
+              <businessProfile
+                  :canEdit="true"
+                  :fromDeal="true"
+                  @back="backToSearchResults"
+                  :info="companyInfo"
+                  :identity="5">
+              </businessProfile>
+            </div>
+
           </el-col>
 
         </template>
@@ -34,6 +43,10 @@
 
           <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="6">
             <featuredDealsPromoted
+                :adsData="adsDataMid"
+                :featuredData="featuredDealsData"
+                @addFavorite="addFavoriteFeatured"
+                @cancelFavorite="cancelFavoriteFeatured"
                 @viewProfile="viewProfile"
                 @detail="showDealDetailDialog">
             </featuredDealsPromoted>
@@ -43,63 +56,9 @@
 
             <el-scrollbar class="deals-list-scroll">
 
-              <!--                <div class="xll-ads-container" v-if="featuredDealsData.length>0">-->
-              <!--                  <el-carousel style="width:800px;margin:0 auto;overflow:hidden;"-->
-              <!--                               height="20vh"-->
-              <!--                               indicator-position="none">-->
-
-              <!--                    <el-carousel-item class="xll-ads-swiper-item"-->
-              <!--                                      v-for="(item,i) in featuredDealsData" :key="i"-->
-              <!--                    >-->
-              <!--                      <div class="xll-ads-l">-->
-              <!--                        <el-image class="xll-ads-l-img"-->
-              <!--                                  fit="cover"-->
-              <!--                                  :src="item.company_info.background_image !='' ? item.company_info.background_image : '' ">-->
-              <!--                          <template #error>-->
-              <!--                            <div class="image-ads-slot">-->
-              <!--                              <el-icon :size="80" color="#808080">-->
-              <!--                                <Picture/>-->
-              <!--                              </el-icon>-->
-              <!--                            </div>-->
-              <!--                          </template>-->
-              <!--                        </el-image>-->
-              <!--                      </div>-->
-              <!--                      <div class="xll-ads-r">-->
-
-              <!--                        <div class="xll-ads-r-bg">-->
-              <!--                          <el-avatar class="deals-logo"-->
-              <!--                                     @click="viewProfile(item.company_info)"-->
-              <!--                                     :src="item.company_logo">-->
-              <!--                          </el-avatar>-->
-              <!--                          <div class="deals-item-c-r-1" @click="viewProfile(item.company_info)">-->
-              <!--                            {{ item.company_info.company_name }}-->
-              <!--                          </div>-->
-              <!--                          <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">-->
-              <!--                            &lt;!&ndash;                      {{item.desc}}&ndash;&gt;-->
-              <!--                            {{ item.title }}-->
-              <!--                          </div>-->
-              <!--                          <div class="deals-item-b-1">-->
-              <!--                            <div class="deals-item-b-l">-->
-              <!--                              &lt;!&ndash;                          Discount . F&B&ndash;&gt;-->
-              <!--                              {{item.category_name_en}}-->
-              <!--                              &lt;!&ndash;                            <template v-if="item.company_category_logo">&ndash;&gt;-->
-              <!--                              &lt;!&ndash;                              <el-image class="hot-deal-type-icon" :src="item.company_category_logo"></el-image>&ndash;&gt;-->
-              <!--                              &lt;!&ndash;                            </template>&ndash;&gt;-->
-              <!--                            </div>-->
-              <!--                            <div class="deals-item-b-r">-->
-              <!--                              <el-button link @click="showDealDetailDialog(item)">-->
-              <!--                                DETAILS-->
-              <!--                              </el-button>-->
-              <!--                            </div>-->
-              <!--                          </div>-->
-
-              <!--                        </div>-->
-
-              <!--                      </div>-->
-              <!--                    </el-carousel-item>-->
-              <!--                  </el-carousel>-->
-
-              <!--                </div>-->
+              <div class="xll-ads-container" v-if="adsDataTop.length>0">
+                <adsComponent :height="adsHeight" :adsData="adsDataTop"></adsComponent>
+              </div>
 
               <div class="deals-bg-container">
                 <template v-if="dealsListData.length > 0">
@@ -178,7 +137,8 @@
                                    @size-change="dealPageSizeChange"
                                    @current-change="dealPageChange"
                                    :current-page="dealPage" :page-size="dealLimit"
-                                   :total="dealTotalNum"></el-pagination>
+                                   :total="dealTotalNum">
+                    </el-pagination>
                   </div>
 
                 </template>
@@ -186,7 +146,10 @@
                   <el-empty description="..."></el-empty>
                 </template>
 
+              </div>
 
+              <div class="xll-ads-bottom-container" v-if="adsDataBottom.length>0">
+                <adsComponent :height="adsHeight" :adsData="adsDataBottom"></adsComponent>
               </div>
 
             </el-scrollbar>
@@ -241,8 +204,9 @@ import dealDetailCard from "@/components/dealDetailCard";
 import shareCard from "@/components/shareCard";
 import dealFilterComponent from "@/components/dealFilterComponent";
 import businessProfile from "@/components/businessProfile";
-import dealByListComponent from "@/components/dealByListComponent";
+// import dealByListComponent from "@/components/dealByListComponent";
 import featuredDealsPromoted from "@/components/deals/featuredDealsPromoted";
+import adsComponent from "@/components/ads/adsComponent";
 
 export default {
   name: "index",
@@ -251,8 +215,9 @@ export default {
     shareCard,
     dealFilterComponent,
     businessProfile,
-    dealByListComponent,
-    featuredDealsPromoted
+    // dealByListComponent,
+    featuredDealsPromoted,
+    adsComponent
 
   },
   setup() {
@@ -278,6 +243,9 @@ export default {
       dealTotalNum: 0,
       sCateId: 0,
       showLoadingStatus: true,
+
+      adsHeight: '190px',
+      adsDataTop: [],
       adsDataMid: [],
       adsDataBottom: [],
       featuredDealsData: [],
@@ -331,7 +299,7 @@ export default {
     this.getSubIdentityList()
     this.getTagsList()
     this.getDealsAreaList()
-    // this.getAdsList()
+    this.getAdsList()
 
   },
   methods: {
@@ -389,27 +357,34 @@ export default {
       ADS_LIST(ads_data).then(res => {
         if (res.code == 200) {
           // console.log(rs.message)
+          let adsDataTop = []
           let adsDataMid = [];
           let adsDataBottom = [];
           let identity = localStorage.getItem('identity');
 
           if (!identity) {
+            adsDataTop = res.message.filter(item => item.name == 'guest_d1');
             adsDataMid = res.message.filter(item => item.name == 'guest_d2');
             adsDataBottom = res.message.filter(item => item.name == 'guest_d3');
           }
           if (identity == 1) {
+            adsDataTop = res.message.filter(item => item.name == 'educator_d1');
             adsDataMid = res.message.filter(item => item.name == 'educator_d2');
             adsDataBottom = res.message.filter(item => item.name == 'educator_d3');
           }
-          if (identity == 2) {
+          if (identity == 2 || identity == 3 || identity == 4) {
+            adsDataTop = res.message.filter(item => item.name == 'business_d1');
             adsDataMid = res.message.filter(item => item.name == 'business_d2');
             adsDataBottom = res.message.filter(item => item.name == 'business_d3');
           }
-          if (identity == 3) {
+          if (identity == 5) {
+            adsDataTop = res.message.filter(item => item.name == 'vendor_d1');
             adsDataMid = res.message.filter(item => item.name == 'vendor_d2');
             adsDataBottom = res.message.filter(item => item.name == 'vendor_d3');
           }
-
+          if (adsDataTop.length > 0) {
+            this.adsDataTop = adsDataTop[0].data;
+          }
           if (adsDataMid.length > 0) {
             this.adsDataMid = adsDataMid[0].data;
           }
@@ -543,6 +518,42 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.dealsListData[index]['is_favorite'] = 0
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    addFavoriteFeatured(id, type, title, url, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.featuredDealsData[index]['is_favorite'] = 1
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    cancelFavoriteFeatured(type, typeId, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.featuredDealsData[index]['is_favorite'] = 0
         }
       }).catch(err => {
         console.log(err)
@@ -1088,68 +1099,24 @@ export default {
   justify-content: center;
 }
 
+
 .xll-ads-container {
-  padding: 50px 0;
+  padding: 25px 50px 0 50px;
   background-color: #F0F2F5;
 }
 
-.xll-ads-swiper-item {
-
-  cursor: pointer;
-  border-radius: 10px;
-  height: 100%;
-  background-color: #FFFFFF;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
+.xll-ads-bottom-container {
+  padding: 0 50px 50px 50px;
 }
 
-.xll-ads-l {
-  width: 60%;
-  height: 100%;
+.deal-business-col {
+  padding-left: 25px;
 }
 
-.xll-ads-l-img {
-  background-color: #faecd8;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+.deal-business-bg {
+  background-color: #F0F2F5;
+  padding: 0 50px;
 }
-
-.xll-ads-r {
-  width: 36%;
-}
-
-.xll-ads-r-bg {
-  padding-right: 20px;
-}
-
-.xll-ads-r h4 {
-  color: #004956;
-}
-
-.xll-ads-r h5 {
-  margin-top: 20px;
-}
-
-.xll-ads-r-desc {
-  font-size: 14px;
-  margin-top: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-}
-
-.image-ads-slot {
-  text-align: center;
-  padding: 50px 150px;
-}
-
 
 @media screen and (min-width: 1200px) {
 

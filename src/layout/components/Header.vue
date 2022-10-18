@@ -82,7 +82,7 @@
                 <div class="user-container-1">
 
                   <div class="user-1-r">
-                    <div class="user-name"> Welcome back,{{ username }}</div>
+                    <div class="user-name"> Welcome back, {{ username }}</div>
                     <div class="user-dropdown">
                       <template v-if="isThirdCompanyStatus == 1">
                          <span class="el-dropdown-link">

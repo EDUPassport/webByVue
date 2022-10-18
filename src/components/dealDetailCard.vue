@@ -50,9 +50,9 @@
               {{ info.desc }}
             </p>
 
-            <div class="dialog-category">
-              {{ info.company_info.category_name_en }}
-            </div>
+<!--            <div class="dialog-category">-->
+<!--              {{ info.company_info.category_name_en }}-->
+<!--            </div>-->
 
           </el-scrollbar>
 

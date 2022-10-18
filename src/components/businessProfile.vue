@@ -2,24 +2,42 @@
 <div class="profile-container">
 
   <div class="action-container" v-if="canEdit">
-    <div class="action-l">
-<!--      <el-button link @click="exitPreview()">-->
-<!--        <el-icon>-->
-<!--          <ArrowLeft />-->
-<!--        </el-icon>-->
-<!--        EXIT PREVIEW-->
-<!--      </el-button>-->
-    </div>
-    <div class="action-r">
-      <el-button class="action-edit-btn"
-                 @click="editProfile()"
-                 plain round>
-        EDIT PROFILE
-      </el-button>
-    </div>
+    <template v-if="fromDeal">
+      <div class="action-l">
+        <el-button class=""
+                   @click="backToSearchResults()"
+                   link>
+          <el-icon>
+            <ArrowLeft />
+          </el-icon>
+          BACK TO SEARCH RESULTS
+        </el-button>
+      </div>
+      <div class="action-r">
+
+      </div>
+    </template>
+    <template v-else>
+      <div class="action-l">
+        <!--      <el-button link @click="exitPreview()">-->
+        <!--        <el-icon>-->
+        <!--          <ArrowLeft />-->
+        <!--        </el-icon>-->
+        <!--        EXIT PREVIEW-->
+        <!--      </el-button>-->
+      </div>
+      <div class="action-r">
+        <el-button class="action-edit-btn"
+                   @click="editProfile()"
+                   plain round>
+          EDIT PROFILE
+        </el-button>
+      </div>
+    </template>
+
   </div>
 
-  <el-scrollbar :class="canEdit ? 'container' : 'container-2' ">
+  <el-scrollbar :class="canEdit ? 'container' : 'container-2'">
 
     <div class="background-container"
          v-if="info.background_image && info.background_image !== '0' "
@@ -225,7 +243,7 @@ import { useRouter } from 'vue-router'
 
 export default {
   name: "businessProfile",
-  props:[ 'info', 'identity','canEdit'],
+  props:[ 'info', 'identity','canEdit','fromDeal'],
   components: {
     Swiper,
     SwiperSlide,
@@ -266,6 +284,9 @@ export default {
   methods:{
     exitPreview(){
       this.$router.push('/account/home')
+    },
+    backToSearchResults(){
+      this.$emit('back')
     },
     editProfile(){
       let  companyId = this.info.id;
@@ -379,7 +400,7 @@ export default {
 }
 
 .container{
-  height: calc(100vh - 240px);
+  height: calc(100vh - 200px);
   background-color: #F0F2F5;
 }
 
@@ -632,14 +653,21 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 25px;
-  padding-right: 50px;
+  height: 60px;
+
+  /*margin-bottom: 25px;*/
+  /*padding-right: 50px;*/
 }
 
 .action-r{
   text-align: right;
+  padding-right: 50px;
 }
 
+
+.deals-from-back-btn {
+  font-size: 20px;
+}
 
 
 @media screen and (min-width: 1200px) and (max-width: 1919px){

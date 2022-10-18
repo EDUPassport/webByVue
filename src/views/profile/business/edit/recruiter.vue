@@ -1739,6 +1739,8 @@ export default {
     handleAccountImageChange(file, fileList) {
       console.log(file)
       console.log(fileList)
+      this.uploadLoadingStatus = true;
+
       let imgParams = new FormData();
       let token = localStorage.getItem('token')
       imgParams.append('token', token)
@@ -1756,12 +1758,13 @@ export default {
               url: item.file_url
             }
             this.accountImageFileList.push(obj)
+            this.uploadLoadingStatus = false;
           })
         }
 
       }).catch(err => {
-        this.$loading().close()
-        console.log(err.code)
+        this.uploadLoadingStatus = false;
+        console.log(err)
       })
 
     },

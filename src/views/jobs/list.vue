@@ -15,6 +15,7 @@
 
         <template v-if="isOther">
           <jobsListComponent :jobListData="otherJobListData"
+                             :adsData="jobsAdsListMid"
                              :selectedJobId="selectedJobId"
                              :jobLimit="otherJobLimit"
                              :jobTotalNum="otherJobTotalNum"
@@ -31,6 +32,7 @@
         </template>
         <template v-else>
           <jobsListComponent :jobListData="jobListData"
+                             :adsData="jobsAdsListMid"
                              :jobFeaturedData="jobFeaturedListData"
                              :selectedJobId="selectedJobId"
                              :jobLimit="jobLimit"
@@ -50,208 +52,193 @@
 
       <el-col class="job-detail-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <template v-if="showCompanyStatus">
-          <businessProfile :canEdit="false" :info="companyInfo" :identity="detailData.identity" ></businessProfile>
-
+          <businessProfile :canEdit="false" :fromDeal="false" :info="companyInfo" :identity="detailData.identity" ></businessProfile>
         </template>
 
         <template v-else>
-          <div class="job-detail-bg-container">
 
-            <div class="xll-ads-container" v-if="jobsAdsListTop.length>0">
-              <div class="xll-ads-label">Sponsored</div>
-              <el-carousel height="13vh" indicator-position="none">
-                <el-carousel-item class="xll-ads-swiper-item"
-                                  v-for="(item,i) in jobsAdsListTop" :key="i"
-                                  @click="turnBanner(item.link)"
-                >
-                  <div class="xll-ads">
-                    <el-image class="xll-ads-img"
-                              :src="item.user_url !='' ? item.user_url : item.url">
-                      <template #error>
-                        <div class="image-ads-slot">
-                          <el-icon :size="80" color="#808080">
-                            <Picture/>
-                          </el-icon>
-                        </div>
-                      </template>
-                    </el-image>
-                  </div>
-                </el-carousel-item>
-              </el-carousel>
+          <el-scrollbar class="xll-job-detail">
 
-            </div>
-            <div class="job-detail-container">
+            <div class="job-detail-bg-container">
 
-              <div class="job-detail-t">
-                <div class="job-detail-t-l">
-                  <div class="job-detail-t-l-1"
-                       v-if="detailData.company"
-                       @click="turnBusinessProfile(detailData.company)"
-                  >
-                    {{detailData.company.company_name}}
-                  </div>
-                  <div class="job-detail-t-l-2">
-                    {{detailData.job_title}}
-                  </div>
-                  <div class="job-detail-t-l-3">
-                    {{detailData.job_location}}
-                  </div>
-                </div>
-                <div class="job-detail-t-r">
-                  <el-button link @click="shareJob(detailData)">
-                    SHARE
-                  </el-button>
-                  <el-button type="primary" round
-                             :loading="applyBtnLoading"
-                             @click="applyJob(detailData.id)">
-                    QUICK APPLY
-                  </el-button>
-                  <el-button plain round
-                             @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
-                    SAVE
-                    <el-icon>
-                      <CollectionTag />
-                    </el-icon>
-                  </el-button>
-                </div>
+              <div ref="jobDetailAds" class="xll-ads-container" v-if="jobsAdsListTop.length>0">
+                <adsComponent :height="jobAdsHeight" :adsData="jobsAdsListTop">
+                </adsComponent>
               </div>
 
-              <el-scrollbar class="job-detail-c">
+              <div class="job-detail-container">
 
-                <div class="job-detail-c-1">
-                  <div class="job-detail-c-item" v-if="detailData.entry_date">
-                    <div class="job-detail-c-item-l">Start date:</div>
-                    <div class="job-detail-c-item-r">{{detailData.entry_date}}</div>
-                  </div>
-
-                  <div class="job-detail-c-item" v-if="detailData.age_to_teach">
-                    <div class="job-detail-c-item-l">Student's age:</div>
-                    <div class="job-detail-c-item-r">
-                      {{ $filters.userObjectFormat(detailData.age_to_teach)}}
+                <div class="job-detail-t">
+                  <div class="job-detail-t-l">
+                    <div class="job-detail-t-l-1"
+                         v-if="detailData.company"
+                         @click="turnBusinessProfile(detailData.company)"
+                    >
+                      {{detailData.company.company_name}}
+                    </div>
+                    <div class="job-detail-t-l-2">
+                      {{detailData.job_title}}
+                    </div>
+                    <div class="job-detail-t-l-3">
+                      {{detailData.job_location}}
                     </div>
                   </div>
-
-                  <div class="job-detail-c-item" v-if="detailData.subject">
-                    <div class="job-detail-c-item-l">Subjects:</div>
-                    <div class="job-detail-c-item-r">
-                      {{ $filters.userObjectFormat(detailData.subject)}}
-                    </div>
+                  <div class="job-detail-t-r">
+                    <el-button link @click="shareJob(detailData)">
+                      SHARE
+                    </el-button>
+                    <el-button type="primary" round
+                               :loading="applyBtnLoading"
+                               @click="applyJob(detailData.id)">
+                      QUICK APPLY
+                    </el-button>
+                    <el-button plain round
+                               @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                      SAVE
+                      <el-icon>
+                        <CollectionTag />
+                      </el-icon>
+                    </el-button>
                   </div>
-
-                  <div class="job-detail-c-item" v-if="workingHoursData.length>0">
-                    <div class="job-detail-c-item-l">Hours:</div>
-                    <div class="job-detail-c-item-r">
-                      <div class="working-hours">
-                        <div class="working-hours-item" v-for="(item,index) in workingHoursData" :key="index">
-                          <el-tag class="working-hours-week" v-for="(week,i) in item.week" :key="i">
-                            <span v-if="week==1">M</span>
-                            <span v-if="week==2">T</span>
-                            <span v-if="week==3">W</span>
-                            <span v-if="week==4">Th</span>
-                            <span v-if="week==5">F</span>
-                            <span v-if="week==6">Sa</span>
-                            <span v-if="week==7">Su</span>
-                          </el-tag>
-                          <span class="working-hours-hours">{{item.hours}}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                 </div>
 
-                <div class="job-detail-c-2">
-                  <div class="job-detail-c-2-l">
-                    <div class="job-detail-c-item-label">Requirements:</div>
-                    <div class="job-detail-c-item-c">
-                      <div class="job-detail-c-item" v-if="detailData.teaching_times_en">
-                        <div class="job-detail-c-item-l">Teaching experience:</div>
-                        <div class="job-detail-c-item-r">
-                          {{detailData.teaching_times_en}}
-                        </div>
-                      </div>
-                      <div class="job-detail-c-item" v-if="detailData.education_en">
-                        <div class="job-detail-c-item-l">Minimum education:</div>
-                        <div class="job-detail-c-item-r">
-                          {{detailData.education_en}}
-                        </div>
-                      </div>
-                      <div class="job-detail-c-item" v-if="detailData.class_size">
-                        <div class="job-detail-c-item-l">Class size:</div>
-                        <div class="job-detail-c-item-r">
-                          {{detailData.class_size}}
-                        </div>
-                      </div>
-                      <div class="job-detail-c-item" v-if="detailData.numbers">
-                        <div class="job-detail-c-item-l">Number of Vacancies:</div>
-                        <div class="job-detail-c-item-r">
-                          {{detailData.numbers}}
-                        </div>
-                      </div>
-                      <div class="job-detail-c-item"
-                           v-if="detailData.apply_due_date && detailData.apply_due_date !='0000-00-00'"
-                      >
-                        <div class="job-detail-c-item-l">Application:</div>
-                        <div class="job-detail-c-item-r">
-                          {{detailData.apply_due_date}}
-                        </div>
-                      </div>
+                <el-scrollbar class="job-detail-c">
 
-                      <div class="job-detail-c-item" v-if="detailData.Teaching_certificate">
-                        <div class="job-detail-c-item-l">Teaching certificates:</div>
-                        <div class="job-detail-c-item-r">
-                          {{ $filters.userObjectFormat(detailData.Teaching_certificate)}}
+                  <div class="job-detail-c-1">
+                    <div class="job-detail-c-item" v-if="detailData.entry_date">
+                      <div class="job-detail-c-item-l">Start date:</div>
+                      <div class="job-detail-c-item-r">{{detailData.entry_date}}</div>
+                    </div>
+
+                    <div class="job-detail-c-item" v-if="detailData.age_to_teach">
+                      <div class="job-detail-c-item-l">Student's age:</div>
+                      <div class="job-detail-c-item-r">
+                        {{ $filters.userObjectFormat(detailData.age_to_teach)}}
+                      </div>
+                    </div>
+
+                    <div class="job-detail-c-item" v-if="detailData.subject">
+                      <div class="job-detail-c-item-l">Subjects:</div>
+                      <div class="job-detail-c-item-r">
+                        {{ $filters.userObjectFormat(detailData.subject)}}
+                      </div>
+                    </div>
+
+                    <div class="job-detail-c-item" v-if="workingHoursData.length>0">
+                      <div class="job-detail-c-item-l">Hours:</div>
+                      <div class="job-detail-c-item-r">
+                        <div class="working-hours">
+                          <div class="working-hours-item" v-for="(item,index) in workingHoursData" :key="index">
+                            <el-tag class="working-hours-week" v-for="(week,i) in item.week" :key="i">
+                              <span v-if="week==1">M</span>
+                              <span v-if="week==2">T</span>
+                              <span v-if="week==3">W</span>
+                              <span v-if="week==4">Th</span>
+                              <span v-if="week==5">F</span>
+                              <span v-if="week==6">Sa</span>
+                              <span v-if="week==7">Su</span>
+                            </el-tag>
+                            <span class="working-hours-hours">{{item.hours}}</span>
+                          </div>
                         </div>
                       </div>
-
                     </div>
 
                   </div>
 
-                  <div class="job-detail-c-2-r">
-                    <div class="job-detail-c-item-label">Compensation:</div>
-                    <div class="job-detail-c-item-c">
-                      <div class="job-detail-c-item">
-                        <div class="job-detail-c-item-l">Salary range:</div>
-                        <div class="job-detail-c-item-r">
-                          {{ detailData.currency }} {{ detailData.salary_min }} - {{ detailData.salary_max }} /
-                          <span v-if="detailData.payment_period == 112">hourly</span>
-                          <span v-if="detailData.payment_period == 113">daily</span>
-                          <span v-if="detailData.payment_period == 114">weekly</span>
-                          <span v-if="detailData.payment_period == 115">monthly</span>
-                          <span v-if="detailData.payment_period == 116">annually</span>
+                  <div class="job-detail-c-2">
+                    <div class="job-detail-c-2-l">
+                      <div class="job-detail-c-item-label">Requirements:</div>
+                      <div class="job-detail-c-item-c">
+                        <div class="job-detail-c-item" v-if="detailData.teaching_times_en">
+                          <div class="job-detail-c-item-l">Teaching experience:</div>
+                          <div class="job-detail-c-item-r">
+                            {{detailData.teaching_times_en}}
+                          </div>
                         </div>
-                      </div>
-                      <div class="job-detail-c-item" v-if="detailData.benefits">
-                        <div class="job-detail-c-item-l">Benefits:</div>
-                        <div class="job-detail-c-item-r">
-                          {{ $filters.userObjectFormat(detailData.benefits)}}
+                        <div class="job-detail-c-item" v-if="detailData.education_en">
+                          <div class="job-detail-c-item-l">Minimum education:</div>
+                          <div class="job-detail-c-item-r">
+                            {{detailData.education_en}}
+                          </div>
                         </div>
+                        <div class="job-detail-c-item" v-if="detailData.class_size">
+                          <div class="job-detail-c-item-l">Class size:</div>
+                          <div class="job-detail-c-item-r">
+                            {{detailData.class_size}}
+                          </div>
+                        </div>
+                        <div class="job-detail-c-item" v-if="detailData.numbers">
+                          <div class="job-detail-c-item-l">Number of Vacancies:</div>
+                          <div class="job-detail-c-item-r">
+                            {{detailData.numbers}}
+                          </div>
+                        </div>
+                        <div class="job-detail-c-item"
+                             v-if="detailData.apply_due_date && detailData.apply_due_date !='0000-00-00'"
+                        >
+                          <div class="job-detail-c-item-l">Application:</div>
+                          <div class="job-detail-c-item-r">
+                            {{detailData.apply_due_date}}
+                          </div>
+                        </div>
+
+                        <div class="job-detail-c-item" v-if="detailData.Teaching_certificate">
+                          <div class="job-detail-c-item-l">Teaching certificates:</div>
+                          <div class="job-detail-c-item-r">
+                            {{ $filters.userObjectFormat(detailData.Teaching_certificate)}}
+                          </div>
+                        </div>
+
                       </div>
 
                     </div>
 
+                    <div class="job-detail-c-2-r">
+                      <div class="job-detail-c-item-label">Compensation:</div>
+                      <div class="job-detail-c-item-c">
+                        <div class="job-detail-c-item">
+                          <div class="job-detail-c-item-l">Salary range:</div>
+                          <div class="job-detail-c-item-r">
+                            {{ detailData.currency }} {{ detailData.salary_min }} - {{ detailData.salary_max }} /
+                            <span v-if="detailData.payment_period == 112">hourly</span>
+                            <span v-if="detailData.payment_period == 113">daily</span>
+                            <span v-if="detailData.payment_period == 114">weekly</span>
+                            <span v-if="detailData.payment_period == 115">monthly</span>
+                            <span v-if="detailData.payment_period == 116">annually</span>
+                          </div>
+                        </div>
+                        <div class="job-detail-c-item" v-if="detailData.benefits">
+                          <div class="job-detail-c-item-l">Benefits:</div>
+                          <div class="job-detail-c-item-r">
+                            {{ $filters.userObjectFormat(detailData.benefits)}}
+                          </div>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+
                   </div>
 
 
-                </div>
+                  <div class="job-detail-desc">
+                    <div class="job-detail-desc-label">Job details:</div>
+                    <div class="job-detail-desc-content" v-html="detailData.desc"></div>
+                  </div>
 
+                  <div class="map-container">
+                    <div id="mapContainer" class="basemap"></div>
+                  </div>
 
-                <div class="job-detail-desc">
-                  <div class="job-detail-desc-label">Job details:</div>
-                  <div class="job-detail-desc-content" v-html="detailData.desc"></div>
-                </div>
+                </el-scrollbar>
 
-                <div class="map-container">
-                  <div id="mapContainer" class="basemap"></div>
-                </div>
-
-              </el-scrollbar>
+              </div>
 
             </div>
 
-
-          </div>
+          </el-scrollbar>
 
         </template>
 
@@ -293,6 +280,8 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
+import adsComponent from "@/components/ads/adsComponent";
+
 export default {
   name: "list",
   data() {
@@ -318,6 +307,7 @@ export default {
       versionTime: randomString(),
       jobsAdsListTop: [],
       jobsAdsListMid: [],
+      jobAdsHeight:'20vh',
 
       detailData:{},
       selectedJobId:0,
@@ -329,7 +319,8 @@ export default {
       otherJobPage:1,
       otherJobLimit:1,
       otherJobTotalNum:0,
-      otherJobListData:[]
+      otherJobListData:[],
+      jobDetailHeight:0
 
     }
   },
@@ -338,7 +329,8 @@ export default {
     jobsListComponent,
     BusinessProfile,
     filterWithJobList,
-    shareCard
+    shareCard,
+    adsComponent
 
   },
   setup() {
@@ -1116,7 +1108,7 @@ export default {
 }
 
 .xll-ads-container {
-  padding: 0 50px;
+  /*padding: 0 50px;*/
   margin-bottom: 50px;
 }
 
@@ -1146,10 +1138,12 @@ export default {
   padding: 50px 150px;
 }
 
+.xll-job-detail{
+  height: calc(100vh - 140px);
+  background-color: #F0F2F5;
+}
 
 .job-detail-bg-container{
-  background-color: #F0F2F5;
-  height: calc(100vh - 170px);
   padding: 30px 30px 0 30px;
 }
 
@@ -1203,7 +1197,7 @@ export default {
 }
 
 .job-detail-c{
-  height: calc(87vh - 365px);
+  height: calc(80vh - 340px );
 }
 
 .job-detail-c-1{

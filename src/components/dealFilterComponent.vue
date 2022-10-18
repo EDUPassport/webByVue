@@ -196,17 +196,17 @@ export default {
 
     }
 
-
   }
 
 
 }
+
 </script>
 
 <style scoped>
 
 .container{
-  padding-right: 12px;
+  /*padding-right: 12px;*/
 
 }
 

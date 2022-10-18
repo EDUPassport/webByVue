@@ -28,9 +28,8 @@
       <el-carousel-item
           v-for="(item,i) in jobFeaturedData" :key="i"
       >
-        <div  class="jobs-list-item-featured "
-              :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' "
-        >
+        <div  class="jobs-list-item-featured ">
+
           <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
                @click="cancelFavoriteForFeatured(1,item.id,index)">
             <el-icon :size="30" color="#9173ff">
@@ -197,6 +196,7 @@
         </template>
 
     </div>
+
     <div class="jobs-list-pagination" v-if="jobListData.length > 0">
       <el-pagination layout="prev, pager, next"
                      :default-current-page="jobPage"
@@ -209,6 +209,44 @@
     </div>
 
   </div>
+
+  <div class="xll-ads-container" v-if="adsData.length>0">
+
+    <el-carousel style="width:100%;margin:0 auto;overflow:hidden;"
+                 height="420px"
+                 indicator-position="none">
+
+      <el-carousel-item class="xll-ads-swiper-item"
+                        v-for="(item,i) in adsData" :key="i"
+                        @click="turnAdsDetail(item.link)"
+      >
+        <div class="xll-ads">
+          <div class="xll-ads-t">
+            <el-image class="xll-ads-img"
+                      fit="cover"
+                      :src="item.user_url !='' ? item.user_url : item.url">
+              <template #error>
+                <div class="image-ads-slot">
+                  <el-icon :size="80" color="#808080">
+                    <Picture/>
+                  </el-icon>
+                </div>
+              </template>
+            </el-image>
+          </div>
+          <div class="xll-ads-b">
+            <div class="xll-ads-b-bg">
+              {{item.title}}
+            </div>
+
+          </div>
+        </div>
+
+      </el-carousel-item>
+    </el-carousel>
+
+  </div>
+
 
   <div  class="jobs-list-item " style="position:fixed;z-index: -100; opacity: 0;" id="job">
 
@@ -267,7 +305,7 @@ import {ADD_FAVORITE, CANCEL_FAVORITE, JOB_FEATURED_LIST} from "@/api/api";
 
 export default {
   name: "jobsListComponent",
-  props:['jobListData', 'jobPage','jobLimit','jobTotalNum','selectedJobId','isOther','companyInfo','fromBusinessProfile'],
+  props:['jobListData','adsData', 'jobPage','jobLimit','jobTotalNum','selectedJobId','isOther','companyInfo','fromBusinessProfile'],
   data(){
     return {
       jobHeight:300,
@@ -275,7 +313,7 @@ export default {
     }
   },
   mounted(){
-    this.getJobFeaturedList()
+    // this.getJobFeaturedList()
   },
   methods:{
     exitPreview(){
@@ -365,6 +403,9 @@ export default {
         this.$message.error(err.msg)
       })
     },
+    turnAdsDetail(link){
+      window.open(link, '_blank')
+    }
 
 
   }
@@ -558,6 +599,46 @@ export default {
   margin: 20px;
   display: flex;
   justify-content: center;
+}
+
+.xll-ads-container{
+  /*padding: 0 25px 25px 25px;*/
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
+
+.xll-ads-swiper-item{
+  /*background-color: #FFFFFF;*/
+  width: 100%;
+
+}
+
+.xll-ads{
+  /*width: 90%;*/
+  overflow: hidden;
+  border-radius: 14px;
+  width: calc(100% - 50px);
+  margin: 0 auto;
+  box-shadow: 0px 0px 10px #0000001A;
+}
+
+.xll-ads-img{
+  border-radius: 14px;
+}
+
+.xll-ads-b{
+  padding: 25px;
+}
+
+.xll-ads-b-bg{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 23px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1919px) {

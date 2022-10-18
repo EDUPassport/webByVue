@@ -30,58 +30,63 @@
     </div>
 
     <div class="deals-from-b">
+      <template v-if="listData.length > 0">
+        <div class="deals-from-item" v-for="(item,index) in listData" :key="index">
+          <div class="deals-item-bg">
+            <el-image
+                class="deals-item-background-img"
+                :src="item.company_info.background_image ? item.company_info.background_image : ''"
+                fit="cover"
+            ></el-image>
 
-      <div class="deals-from-item" v-for="(item,index) in listData" :key="index">
-        <div class="deals-item-bg">
-          <el-image
-              class="deals-item-background-img"
-              :src="item.company_info.background_image ? item.company_info.background_image : ''"
-              fit="cover"
-          ></el-image>
-
-          <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-               @click="cancelFavorite(2,item.id,index)">
-            <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-          </div>
-          <div class="deals-item-favorite" v-else
-               @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
-            <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-          </div>
-
-        </div>
-        <div class="deals-item-c">
-          <div class="deals-item-c-l">
-            <el-avatar class="deals-logo" :src="item.company_logo"></el-avatar>
-          </div>
-          <div class="deals-item-c-r">
-            <div class="deals-item-c-r-1">
-              {{ item.company_name }}
+            <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                 @click="cancelFavorite(2,item.id,index)">
+              <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
             </div>
-            <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
-              {{ item.title }}
+            <div class="deals-item-favorite" v-else
+                 @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
+              <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
+            </div>
+
+          </div>
+          <div class="deals-item-c">
+            <div class="deals-item-c-l">
+              <el-avatar class="deals-logo" :src="item.company_logo"></el-avatar>
+            </div>
+            <div class="deals-item-c-r">
+              <div class="deals-item-c-r-1">
+                {{ item.company_name }}
+              </div>
+              <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
+                {{ item.title }}
+              </div>
             </div>
           </div>
+
+          <div class="deals-item-b">
+            <div class="deals-item-b-l">
+
+              <template v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
+                {{ item.company_info.category_name_en }}
+              </template>
+              <template v-else>
+                unknown
+              </template>
+
+            </div>
+            <div class="deals-item-b-r">
+              <el-button link  @click="showDealDetailDialog(item)">
+                DETAILS
+              </el-button>
+            </div>
+          </div>
+
         </div>
 
-        <div class="deals-item-b">
-          <div class="deals-item-b-l">
-
-            <template v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
-              {{ item.company_info.category_name_en }}
-            </template>
-            <template v-else>
-              unknown
-            </template>
-
-          </div>
-          <div class="deals-item-b-r">
-            <el-button link  @click="showDealDetailDialog(item)">
-              DETAILS
-            </el-button>
-          </div>
-        </div>
-
-      </div>
+      </template>
+      <template v-else>
+        <el-empty description="..."></el-empty>
+      </template>
 
     </div>
 

@@ -2905,8 +2905,8 @@ export default {
         }
 
       }).catch(err => {
-        this.$loading().close()
-        console.log(err.code)
+        this.uploadLoadingStatus =false;
+        console.log(err)
       })
 
     },
