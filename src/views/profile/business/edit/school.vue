@@ -678,7 +678,6 @@ import {
   ZOHO_SYNC,
   SWITCH_IDENTITY_V2,
   GET_COUNTRY_LIST,
-  SUB_CATE_LIST,
   USER_INFO_BY_TOKEN_V2,
   SCHOOL_COMPANY_EDIT_V2,
   ADD_PROFILE_V2,
@@ -1699,21 +1698,6 @@ export default {
       this.basicForm.town_id = e.id
       this.cityName = e.name
       this.cityNameCn = e.name
-    },
-    getSubCateList() {
-      let params = {
-        pid: 2,
-        tree: 1
-      }
-      SUB_CATE_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.subCateOptions = res.message
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
-      })
     },
     selectBusinessType(item) {
       console.log(item);

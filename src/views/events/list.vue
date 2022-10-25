@@ -85,10 +85,15 @@
                              :total="eventTotalNum"></el-pagination>
             </div>
 
-
           </template>
+
           <template v-else>
-            <el-empty description="..."></el-empty>
+            <div class="empty-post-event-btn-container">
+              <el-button type="primary" round @click="postEventWhenEmpty()">
+                Post an Event
+              </el-button>
+            </div>
+            <el-empty style="height: 100%;" description="Sorry, there are no upcoming events at the moment..."></el-empty>
           </template>
 
         </el-scrollbar>
@@ -268,9 +273,15 @@ export default {
     },
     turnDetail(id,t){
       this.$router.push({path:'/events/detail',query:{id:id,t:t}})
+    },
+    postEventWhenEmpty(){
+      let url = 'https://forms.zohopublic.com/edupassport/form/PostEventform/formperma/ra89j-hqCt3anrCCYpB0OKGeDeC-XbZuMrb__PmaeBo'
+      window.open(url,'_blank')
     }
+
   }
 }
+
 </script>
 
 <style scoped>
@@ -287,7 +298,6 @@ export default {
   height: calc(100vh - 170px);
   padding: 0 30px 30px 30px;
 }
-
 
 .events-list-container{
   display:flex;
@@ -468,7 +478,10 @@ export default {
   color: #262626;
 }
 
-
+.empty-post-event-btn-container{
+  text-align: right;
+  padding: 50px;
+}
 
 @media screen and (min-width: 1200px){
 

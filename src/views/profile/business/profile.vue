@@ -96,9 +96,9 @@ export default {
       console.log(decode(s))
     }
 
-    // this.getUserInfo()
-    // this.updateBusinessProfile()
-    // this.getCompanyJobList(1,10000)
+    this.getUserInfo()
+    this.updateBusinessProfile()
+    this.getCompanyJobList(1,10000)
   },
   methods: {
     updateBusinessProfile() {

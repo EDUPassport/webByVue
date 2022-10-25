@@ -42,7 +42,7 @@
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
                     <el-col :span="6">
-                      <el-form-item  label="Vendor Contact Name" prop="company_name">
+                      <el-form-item  label="Vendor Business Name" prop="company_name">
                         <el-input v-model="basicForm.company_name" placeholder="Vendor contact name"></el-input>
                       </el-form-item>
                     </el-col>
@@ -531,7 +531,6 @@ import {
   ZOHO_SYNC,
   SWITCH_IDENTITY_V2,
   GET_COUNTRY_LIST,
-  SUB_CATE_LIST,
   USER_INFO_BY_TOKEN_V2,
   VENDOR_COMPANY_EDIT_V2,
   USER_INFO_VISITOR_V2,
@@ -1500,21 +1499,6 @@ export default {
       this.basicForm.town_id = e.id
       this.cityName = e.name
       this.cityNameCn = e.name
-    },
-    getSubCateList() {
-      let params = {
-        pid: 3,
-        tree: 1
-      }
-      SUB_CATE_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.subCateOptions = res.message
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
-      })
     },
     selectBusinessType(item) {
       console.log(item);

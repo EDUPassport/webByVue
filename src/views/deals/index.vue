@@ -283,7 +283,50 @@ export default {
     }
 
   },
+  unmounted() {
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    // if (screenWidthFloor < 768) {
+    //   this.adsHeight = '190px'
+    // }
+    //
+    // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
+    //   this.adsHeight = '190px'
+    // }
+    if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
+      this.adsHeight = '120px'
+    }
+    if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
+      this.adsHeight = '140px'
+    }
+    if(screenWidthFloor >= 1920){
+      this.adsHeight = "190px"
+    }
+
+    window.onresize = () =>{
+      // if (screenWidthFloor < 768) {
+      //   this.adsHeight = '190px'
+      // }
+      //
+      // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
+      //   this.adsHeight = '190px'
+      // }
+      if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
+        this.adsHeight = '120px'
+      }
+      if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
+        this.adsHeight = '140px'
+      }
+      if(screenWidthFloor >= 1920){
+        this.adsHeight = "190px"
+      }
+
+    }
 
     let dealId = this.$route.query.id;
     if (dealId) {

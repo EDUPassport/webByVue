@@ -1435,8 +1435,13 @@ export default {
   text-align: center;
 }
 
+.switch-job-container h3{
+  word-break: normal;
+}
+
 .switch-job-tips{
   margin-top: 20px;
+  word-break: normal;
   font-size: 24px;
   line-height: 30px;
   font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;

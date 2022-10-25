@@ -52,7 +52,12 @@
 
       <el-col class="job-detail-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <template v-if="showCompanyStatus">
-          <businessProfile :canEdit="false" :fromDeal="false" :info="companyInfo" :identity="detailData.identity" ></businessProfile>
+          <businessProfile :canEdit="false"
+                           :fromDeal="false"
+                           :info="companyInfo"
+                           :identity="detailData.identity"
+          >
+          </businessProfile>
         </template>
 
         <template v-else>
@@ -61,7 +66,7 @@
 
             <div class="job-detail-bg-container">
 
-              <div ref="jobDetailAds" class="xll-ads-container" v-if="jobsAdsListTop.length>0">
+              <div class="xll-ads-container" v-if="jobsAdsListTop.length>0">
                 <adsComponent :height="jobAdsHeight" :adsData="jobsAdsListTop">
                 </adsComponent>
               </div>
@@ -219,9 +224,7 @@
 
                     </div>
 
-
                   </div>
-
 
                   <div class="job-detail-desc">
                     <div class="job-detail-desc-label">Job details:</div>
@@ -307,7 +310,7 @@ export default {
       versionTime: randomString(),
       jobsAdsListTop: [],
       jobsAdsListMid: [],
-      jobAdsHeight:'20vh',
+      jobAdsHeight:'190px',
 
       detailData:{},
       selectedJobId:0,
@@ -384,7 +387,50 @@ export default {
 
 
   },
+  unmounted() {
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    // if (screenWidthFloor < 768) {
+    //   this.jobAdsHeight = '190px'
+    // }
+    //
+    // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
+    //   this.jobAdsHeight = '190px'
+    // }
+    if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
+      this.jobAdsHeight = '120px'
+    }
+    if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
+      this.jobAdsHeight = '140px'
+    }
+    if(screenWidthFloor >= 1920){
+      this.jobAdsHeight = "190px"
+    }
+
+    window.onresize = () =>{
+      // if (screenWidthFloor < 768) {
+      //   this.jobAdsHeight = '190px'
+      // }
+      //
+      // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
+      //   this.jobAdsHeight = '190px'
+      // }
+      if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
+        this.jobAdsHeight = '120px'
+      }
+      if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
+        this.jobAdsHeight = '140px'
+      }
+      if(screenWidthFloor >= 1920){
+        this.jobAdsHeight = "190px"
+      }
+
+    }
 
     let jobId = this.$route.query.id;
     let page = this.$route.query.page;
@@ -418,16 +464,19 @@ export default {
         page: this.jobPage,
         limit: this.jobLimit
       }
+      let jobTitle = e.job_title
+
+      if(jobTitle){
+        params.job_title = jobTitle
+      }
 
       let salaryValue = e.salary;
 
       if (salaryValue) {
-
         params.salary_begin = salaryValue[0] * 1000
         params.salary_end = salaryValue[1] * 1000
-
       }
-
+      
       let envName = process.env.VUE_APP_ENV_NAME
 
       if (e.location) {
@@ -1112,31 +1161,6 @@ export default {
   margin-bottom: 50px;
 }
 
-.xll-ads-label{
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  color:#262626;
-}
-
-.xll-ads{
-
-}
-
-.xll-ads-swiper-item {
-  cursor: pointer;
-  border-radius: 10px;
-  height: 100%;
-  background-color: #FFFFFF;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.image-ads-slot {
-  text-align: center;
-  padding: 50px 150px;
-}
 
 .xll-job-detail{
   height: calc(100vh - 140px);
@@ -1144,21 +1168,51 @@ export default {
 }
 
 .job-detail-bg-container{
+  height: calc(100vh - 170px);
   padding: 30px 30px 0 30px;
 }
 
-.job-detail-container{
+@media screen and (min-width: 1920px) {
+  /*  190 */
+  .job-detail-container{
+    height: calc(100vh - 190px -  220px);
+  }
+
+  .job-detail-c{
+    height: calc(100vh - 190px - 340px );
+  }
 
 }
+
+@media screen and (max-width: 1919px) and (min-width: 1200px) {
+  /*  140 */
+  .job-detail-container{
+    height: calc(100vh - 140px -  220px);
+  }
+
+  .job-detail-c{
+    height: calc(100vh - 140px - 340px );
+  }
+}
+
+@media screen and (max-width: 1199px) and (min-width: 992px) {
+  /*  120 */
+  .job-detail-container{
+    height: calc(100vh - 120px -  220px);
+  }
+
+  .job-detail-c{
+    height: calc(100vh - 120px - 340px );
+  }
+}
+
 
 .job-detail-t{
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-
   height: 120px;
-
 }
 
 .job-detail-t-l{
@@ -1196,9 +1250,8 @@ export default {
   text-overflow: ellipsis;
 }
 
-.job-detail-c{
-  height: calc(80vh - 340px );
-}
+
+
 
 .job-detail-c-1{
 

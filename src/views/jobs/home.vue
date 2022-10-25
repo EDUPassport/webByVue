@@ -24,11 +24,11 @@
                   <template v-if="filterByJobStatus">
                     <div class="da-filter" @click="filterByApplicants()">
                       <el-icon>
-                        <IconEpMenu />
+                        <IconEpMenu/>
                       </el-icon>
                       <span>VIEW BY: JOBS</span>
                       <el-icon>
-                        <ArrowDownBold />
+                        <ArrowDownBold/>
                       </el-icon>
                     </div>
                   </template>
@@ -36,12 +36,12 @@
                   <template v-if="filterByApplicantStatus">
                     <div class="da-filter" @click="filterByJobs()">
                       <el-icon>
-                        <IconEpMenu />
+                        <IconEpMenu/>
                       </el-icon>
                       <span>VIEW BY: APPLICATIONS</span>
 
                       <el-icon>
-                        <ArrowDownBold />
+                        <ArrowDownBold/>
                       </el-icon>
                     </div>
                   </template>
@@ -84,9 +84,9 @@
 
                 <template v-if="filterByJobStatus">
                   <div class="da-item-container-height">
-                    <div  v-for="(item,i) in myJobsData" :key="i">
+                    <div v-for="(item,i) in myJobsData" :key="i">
 
-                      <el-row :gutter="0" class="da-da-item" >
+                      <el-row :gutter="0" class="da-da-item">
 
                         <el-col :span="6" class="da-job-title">
 
@@ -101,7 +101,7 @@
                             >
                               <template #reference>
                                 <el-icon :size="20" color="#F9B019">
-                                  <IconIcBaselinePendingActions />
+                                  <IconIcBaselinePendingActions/>
                                 </el-icon>
                               </template>
                             </el-popover>
@@ -116,35 +116,36 @@
                             >
                               <template #reference>
                                 <el-icon :size="20" color="#FF4D4D">
-                                  <IconCiError />
+                                  <IconCiError/>
                                 </el-icon>
                               </template>
                             </el-popover>
                           </div>
 
-                         <div class="da-job-title-r">
-                           <el-tooltip
-                               class="box-item"
-                               effect="dark"
-                               :content="item.job_title"
-                               placement="top"
-                           >
-                             {{item.job_title}}
-                           </el-tooltip>
-                         </div>
+                          <div class="da-job-title-r">
+                            <el-tooltip
+                                class="box-item"
+                                effect="dark"
+                                :content="item.job_title"
+                                placement="top"
+                            >
+                              {{ item.job_title }}
+                            </el-tooltip>
+                          </div>
                         </el-col>
 
                         <el-col :span="6" class="da-total-applicants">
                           <div class="da-total-applicants-l-circle" v-if="item.unread_status"></div>
-                          <span>{{item.resume_count}}</span>
+                          <span>{{ item.resume_count }}</span>
                         </el-col>
 
                         <el-col :span="6" class="da-posted-deadline">
-                          {{ $filters.howLongFormat(item.refresh_time) }} / {{ $filters.ymdFormatEvent(item.job_due_time)}}
+                          {{ $filters.howLongFormat(item.refresh_time) }} /
+                          {{ $filters.ymdFormatEvent(item.job_due_time) }}
                         </el-col>
                         <el-col :span="6">
                           <el-button class="da-action-btn"
-                                     @click="viewAllApplicants(item.id,item.unread_id)"
+                                     @click="viewAllApplicants(item.id,item.unread_id,item.unread_status)"
                                      plain round>
                             VIEW APPLICANTS
                           </el-button>
@@ -155,11 +156,11 @@
 
                       </el-row>
 
-                      <div v-if="item.id == selectedJobId && selectedApplicantStatus">
+                      <div v-if="item.id == selectedJobId">
 
                         <template v-for="(item,i) in sApplicantsData" :key="i">
 
-                          <el-row :gutter="50"  class="da-item" >
+                          <el-row :gutter="50" class="da-item">
                             <el-col :span="18">
                               <div class="da-item-basic">
                                 <div class="da-item-basic-l">
@@ -170,11 +171,13 @@
                                 <div class="da-item-basic-r">
                                   <div class="da-item-name">{{ item.user_contact.educator_contact.name }}</div>
                                   <div class="da-item-n">
-                                    <div class="da-item-n-1">{{item.user_contact.educator_contact.job_title}}</div>
-                                    <div class="da-item-n-1">{{item.user_contact.educator_contact.nationality}}</div>
-                                    <div class="da-item-n-1" v-if="item.user_contact.educator_contact.Teaching_experience">
-                                      <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience" :key="i">
-                                        {{exp.object_en}}
+                                    <div class="da-item-n-1">{{ item.user_contact.educator_contact.job_title }}</div>
+                                    <div class="da-item-n-1">{{ item.user_contact.educator_contact.nationality }}</div>
+                                    <div class="da-item-n-1"
+                                         v-if="item.user_contact.educator_contact.Teaching_experience">
+                                      <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience"
+                                            :key="i">
+                                        {{ exp.object_en }}
                                       </span>
                                     </div>
                                   </div>
@@ -194,26 +197,27 @@
 
                           </el-row>
 
-                          <div class="da-item-expand" v-if="item.id == selectedApplicationId && expandStatus">
+                          <div class="da-item-expand" v-if="viewApplicantsChecked.indexOf(item.id) != -1">
                             <div class="dashboard-work-exp">
                               <div class="dashboard-work-exp-label">
                                 <span>Working experience</span>
-                                <el-button class="dashboard-view-detail-btn" link>
+                                <el-button class="dashboard-view-detail-btn" link
+                                           @click="viewEducatorDetail(item.id,item.user_id,item.identity)">
                                   VIEW DETAILS
                                 </el-button>
                               </div>
                               <div class="dashboard-work-exp-c">
 
-                                <template  v-for="(work,i) in item.user_contact.educator_contact.work_info"
-                                           :key="i">
+                                <template v-for="(work,i) in item.user_contact.educator_contact.work_info"
+                                          :key="i">
                                   <div class="dashboard-work-exp-c-item"
-                                      v-if="i<=2"
+                                       v-if="i<=2"
                                   >
                                     <div class="dashboard-work-exp-c-item-label">
-                                      {{work.title}}
+                                      {{ work.title }}
                                     </div>
                                     <div class="dashboard-work-exp-c-item-text">
-                                      {{work.company_name}}, {{work.location}}
+                                      {{ work.company_name }}, {{ work.location }}
                                     </div>
                                     <div class="dashboard-work-exp-c-item-text">
                                       {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
@@ -224,7 +228,7 @@
                                 </template>
 
                                 <div class="dashboard-work-exp-c-item">
-                                  <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>
+                                  <!--                                  <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>-->
                                 </div>
 
 
@@ -241,10 +245,10 @@
                                 >
                                   <div class="dashboard-education-cer-c-item">
                                     <div class="dashboard-education-cer-c-label">
-                                      {{education.school_name}}
+                                      {{ education.school_name }}
                                     </div>
                                     <div class="dashboard-education-cer-c-text">
-                                      {{education.degree}}
+                                      {{ education.degree }}
                                     </div>
                                     <div class="dashboard-education-cer-c-text">
                                       {{
@@ -254,28 +258,30 @@
                                   </div>
                                 </template>
 
-                                <div class="dashboard-education-cer-c-item">
+                                <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.certification">
                                   <div class="dashboard-education-cer-c-label">
                                     Certificates and Diplomas
                                   </div>
                                   <div class="dashboard-education-cer-c-text">
-                                    TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3
+                                    {{ $filters.userObjectFormat(item.user_contact.educator_contact.certification) }}
                                   </div>
                                 </div>
 
-                                <div class="dashboard-education-cer-c-item">
+                                <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.languages">
                                   <div class="dashboard-education-cer-c-label">
                                     Languages
                                   </div>
-                                  <div class="dashboard-education-cer-c-text">
-                                    English(native)
+                                  <div class="dashboard-education-cer-c-text"
+                                       v-for="(language,i) in item.user_contact.educator_contact.languages"
+                                       :key="i"
+                                  >
+                                    {{ language.object_en }}
+                                    <span v-if="language.object_score == 1">(Native)</span>
+                                    <span v-if="language.object_score == 2">(Fluent)</span>
+                                    <span v-if="language.object_score == 3">(Conversational)</span>
+                                    <span v-if="language.object_score == 4">(Beginner)</span>
                                   </div>
-                                  <div class="dashboard-education-cer-c-text">
-                                    Korean(fluent)
-                                  </div>
-                                  <div class="dashboard-education-cer-c-text">
-                                    Turkish(beginner)
-                                  </div>
+
                                 </div>
 
                               </div>
@@ -286,15 +292,15 @@
 
                               </div>
                               <div class="da-item-b-r">
-                                <el-button class="da-item-b-l-btn-1" link round>
-                                  REJECT
-                                </el-button>
-                                <el-button class="da-item-b-l-btn-1" round>
-                                  ARCHIVE
-                                </el-button>
-                                <el-button class="da-item-b-l-btn-2" type="primary" round>
-                                  INTERESTED
-                                </el-button>
+                                <!--                                <el-button class="da-item-b-l-btn-1" link round>-->
+                                <!--                                  REJECT-->
+                                <!--                                </el-button>-->
+                                <!--                                <el-button class="da-item-b-l-btn-1" round>-->
+                                <!--                                  ARCHIVE-->
+                                <!--                                </el-button>-->
+                                <!--                                <el-button class="da-item-b-l-btn-2" type="primary" round>-->
+                                <!--                                  INTERESTED-->
+                                <!--                                </el-button>-->
                               </div>
                             </div>
 
@@ -310,13 +316,24 @@
 
                   </div>
 
+                  <div class="xll-pagination-container">
+                    <el-pagination layout="prev, pager, next"
+                                   :default-current-page="myJobPage"
+                                   @size-change="myJobPageSizeChange"
+                                   @current-change="myJobPageChange"
+                                   :current-page="myJobPage"
+                                   :page-size="myJobLimit"
+                                   :total="myJobTotalNum">
+                    </el-pagination>
+                  </div>
+
                 </template>
 
                 <template v-if="filterByApplicantStatus">
                   <div class="da-item-container-height">
 
-                    <div  v-for="(item,i) in myApplicationsData" :key="i">
-                      <el-row class="da-item"  >
+                    <div v-for="(item,i) in myApplicationsData" :key="i">
+                      <el-row class="da-item">
 
                         <el-col :span="6">
                           <div class="da-item-basic">
@@ -328,12 +345,12 @@
                             <div class="da-item-basic-r">
                               <div class="da-item-name">{{ item.user_contact.educator_contact.name }}</div>
                               <div class="da-item-n">
-                                <div class="da-item-n-1">{{item.user_contact.educator_contact.nationality}}</div>
+                                <div class="da-item-n-1">{{ item.user_contact.educator_contact.nationality }}</div>
                                 <div class="da-item-n-1"
                                      v-if="item.user_contact.educator_contact.Teaching_experience">
                                   <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience"
                                         :key="i"
-                                  >{{exp.object_en}}</span>
+                                  >{{ exp.object_en }}</span>
                                 </div>
                               </div>
                             </div>
@@ -341,14 +358,14 @@
                           </div>
                         </el-col>
                         <el-col :span="6">
-                            <span class="da-item-a-job-title">{{item.job.job_title}}</span>
+                          <span class="da-item-a-job-title">{{ item.job.job_title }}</span>
                         </el-col>
                         <el-col :span="6">
                           <div style="width: 100px;">
-                            <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF" />
+                            <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF"/>
                           </div>
 
-<!--                          {{item.match_meter}}-->
+                          <!--                          {{item.match_meter}}-->
                         </el-col>
                         <el-col :span="6">
                           <div class="dashboard-view-application">
@@ -366,7 +383,8 @@
                         <div class="dashboard-work-exp">
                           <div class="dashboard-work-exp-label">
                             <span>Working experience</span>
-                            <el-button class="dashboard-view-detail-btn" link>
+                            <el-button class="dashboard-view-detail-btn" link
+                                       @click="viewEducatorDetail(item.id,item.user_id,item.identity)">
                               VIEW DETAILS
                             </el-button>
                           </div>
@@ -377,10 +395,10 @@
                                    v-if="i<=2"
                               >
                                 <div class="dashboard-work-exp-c-item-label">
-                                  {{work.title}}
+                                  {{ work.title }}
                                 </div>
                                 <div class="dashboard-work-exp-c-item-text">
-                                  {{work.company_name}}, {{work.location}}
+                                  {{ work.company_name }}, {{ work.location }}
                                 </div>
                                 <div class="dashboard-work-exp-c-item-text">
                                   {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
@@ -391,7 +409,7 @@
                             </template>
 
                             <div class="dashboard-work-exp-c-item">
-                              <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>
+<!--                              <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>-->
                             </div>
 
 
@@ -409,10 +427,10 @@
                             >
                               <div class="dashboard-education-cer-c-item">
                                 <div class="dashboard-education-cer-c-label">
-                                  {{education.school_name}}
+                                  {{ education.school_name }}
                                 </div>
                                 <div class="dashboard-education-cer-c-text">
-                                  {{education.degree}}
+                                  {{ education.degree }}
                                 </div>
                                 <div class="dashboard-education-cer-c-text">
                                   {{
@@ -422,29 +440,55 @@
                               </div>
                             </template>
 
-<!--                            <div class="dashboard-education-cer-c-item">-->
-<!--                              <div class="dashboard-education-cer-c-label">-->
-<!--                                Certificates and Diplomas-->
-<!--                              </div>-->
-<!--                              <div class="dashboard-education-cer-c-text">-->
-<!--                                TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3-->
-<!--                              </div>-->
-<!--                            </div>-->
+                            <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.certification">
+                              <div class="dashboard-education-cer-c-label">
+                                Certificates and Diplomas
+                              </div>
+                              <div class="dashboard-education-cer-c-text">
+                                {{ $filters.userObjectFormat(item.user_contact.educator_contact.certification) }}
+                              </div>
+                            </div>
 
-<!--                            <div class="dashboard-education-cer-c-item">-->
-<!--                              <div class="dashboard-education-cer-c-label">-->
-<!--                                Languages-->
-<!--                              </div>-->
-<!--                              <div class="dashboard-education-cer-c-text">-->
-<!--                                English(native)-->
-<!--                              </div>-->
-<!--                              <div class="dashboard-education-cer-c-text">-->
-<!--                                Korean(fluent)-->
-<!--                              </div>-->
-<!--                              <div class="dashboard-education-cer-c-text">-->
-<!--                                Turkish(beginner)-->
-<!--                              </div>-->
-<!--                            </div>-->
+                            <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.languages">
+                              <div class="dashboard-education-cer-c-label">
+                                Languages
+                              </div>
+                              <div class="dashboard-education-cer-c-text"
+                                   v-for="(language,i) in item.user_contact.educator_contact.languages"
+                                   :key="i"
+                              >
+                                {{ language.object_en }}
+                                <span v-if="language.object_score == 1">(Native)</span>
+                                <span v-if="language.object_score == 2">(Fluent)</span>
+                                <span v-if="language.object_score == 3">(Conversational)</span>
+                                <span v-if="language.object_score == 4">(Beginner)</span>
+                              </div>
+
+                            </div>
+
+                            <!--                            <div class="dashboard-education-cer-c-item">-->
+                            <!--                              <div class="dashboard-education-cer-c-label">-->
+                            <!--                                Certificates and Diplomas-->
+                            <!--                              </div>-->
+                            <!--                              <div class="dashboard-education-cer-c-text">-->
+                            <!--                                TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3-->
+                            <!--                              </div>-->
+                            <!--                            </div>-->
+
+                            <!--                            <div class="dashboard-education-cer-c-item">-->
+                            <!--                              <div class="dashboard-education-cer-c-label">-->
+                            <!--                                Languages-->
+                            <!--                              </div>-->
+                            <!--                              <div class="dashboard-education-cer-c-text">-->
+                            <!--                                English(native)-->
+                            <!--                              </div>-->
+                            <!--                              <div class="dashboard-education-cer-c-text">-->
+                            <!--                                Korean(fluent)-->
+                            <!--                              </div>-->
+                            <!--                              <div class="dashboard-education-cer-c-text">-->
+                            <!--                                Turkish(beginner)-->
+                            <!--                              </div>-->
+                            <!--                            </div>-->
 
                           </div>
                         </div>
@@ -454,15 +498,15 @@
 
                           </div>
                           <div class="da-item-b-r">
-                            <el-button class="da-item-b-l-btn-1" link round>
-                              REJECT
-                            </el-button>
-                            <el-button class="da-item-b-l-btn-1" round>
-                              ARCHIVE
-                            </el-button>
-                            <el-button class="da-item-b-l-btn-2" type="primary" round>
-                              INTERESTED
-                            </el-button>
+                            <!--                            <el-button class="da-item-b-l-btn-1" link round>-->
+                            <!--                              REJECT-->
+                            <!--                            </el-button>-->
+                            <!--                            <el-button class="da-item-b-l-btn-1" round>-->
+                            <!--                              ARCHIVE-->
+                            <!--                            </el-button>-->
+                            <!--                            <el-button class="da-item-b-l-btn-2" type="primary" round>-->
+                            <!--                              INTERESTED-->
+                            <!--                            </el-button>-->
                           </div>
                         </div>
 
@@ -470,6 +514,17 @@
 
                     </div>
 
+                  </div>
+
+                  <div class="xll-pagination-container">
+                    <el-pagination layout="prev, pager, next"
+                                   :default-current-page="myApplicationsPage"
+                                   @size-change="myApplicationsPageSizeChange"
+                                   @current-change="myApplicationsPageChange"
+                                   :current-page="myApplicationsPage"
+                                   :page-size="myApplicationsLimit"
+                                   :total="myApplicationsTotalNum">
+                    </el-pagination>
                   </div>
 
                 </template>
@@ -504,6 +559,7 @@ import dashboardAdsImg from '@/assets/ads/2.png'
 import {computed, ref} from "vue";
 // import {encode} from "js-base64";
 import {randomString} from "@/utils";
+import {encode} from 'js-base64';
 
 export default {
   name: "home",
@@ -538,7 +594,10 @@ export default {
   },
   data() {
     return {
-      expandStatus:false,
+      viewJobApplicantsChecked:[],
+      viewApplicantsChecked:[],
+
+      expandStatus: false,
       dashboardListsImg,
       dashboardAdsImg,
       defaultAvatar,
@@ -552,24 +611,27 @@ export default {
       identity: localStorage.getItem('identity'),
 
       anotherUserId: 0,
-      selectedApplicantsData:[],
-      versionTime:randomString(),
-      selectedJobId:0,
-      selectedApplicationId:0,
-      selectedApplicantStatus:false,
-      sApplicantsData:[],
+      selectedApplicantsData: [],
+      versionTime: randomString(),
+      selectedJobId: 0,
+      selectedApplicationId: 0,
+      selectedApplicantStatus: false,
+      sApplicantsData: [],
 
-      filterByJobStatus:true,
-      filterByApplicantStatus:false,
+      filterByJobStatus: true,
+      filterByApplicantStatus: false,
 
-      myJobsData:[],
-      myJobPage:1,
-      myJObLimit:5,
+      myJobsData: [],
+      myJobPage: 1,
+      myJobLimit: 10,
+      myJobTotalNum: 0,
 
-      myApplicationsData:[],
-      myApplicationsPage:1,
-      myApplicationsLimit:5,
-      selectedApplicationIdWithCompany:0
+      myApplicationsData: [],
+      myApplicationsPage: 1,
+      myApplicationsLimit: 10,
+      myApplicationsTotalNum: 0,
+
+      selectedApplicationIdWithCompany: 0
 
     }
 
@@ -578,22 +640,38 @@ export default {
   mounted() {
     // let uid = localStorage.getItem('uid')
 
-    if(this.identity == 1){
+    if (this.identity == 1) {
       this.filterByApplicantStatus = true;
       this.filterByJobStatus = false;
     }
 
-    if(this.filterByJobStatus){
-      this.getMyJobs(this.myJobPage, this.myJObLimit)
+    if (this.filterByJobStatus) {
+      this.getMyJobs(this.myJobPage, this.myJobLimit)
     }
 
-    if(this.filterByApplicantStatus){
+    if (this.filterByApplicantStatus) {
       this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
     }
 
   },
   methods: {
-    viewApplicationIdWithCompany(id){
+    viewEducatorDetail(companyId, userId, roleValue) {
+      console.log(companyId, userId, roleValue)
+      let obj = {
+        cid: companyId,
+        uid: userId,
+        identity: 1,
+        from:'other'
+      }
+      let str = encode(JSON.stringify(obj))
+      let { href } = this.$router.resolve({
+        path: '/educator/profile', query: {str: str}
+      })
+      window.open(href,'_blank')
+      // this.$router.push({path: '/educator/profile', query: {str: str}})
+
+    },
+    viewApplicationIdWithCompany(id) {
       this.selectedApplicationIdWithCompany = id
     },
     getAllJobResumeList(page, limit) {
@@ -607,92 +685,105 @@ export default {
         if (res.code == 200) {
           this.myApplicationsData = res.message.data
           // console.log(res.message.data)
-          // this.totalNum = res.message.total
+          this.myApplicationsTotalNum = res.message.total
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
 
     },
-    viewApplicationEvent(applicationId){
-      this.expandStatus = !this.expandStatus
-      this.selectedApplicationId = applicationId
-    },
-    editJob(jobId){
-      this.$router.push({path:'/jobs/post',query:{job_id:jobId}})
-    },
-    viewAllApplicants(jobId,unreadId){
-      this.selectedApplicantStatus = !this.selectedApplicantStatus;
-      this.selectedJobId = jobId;
-
-      if(this.selectedApplicantStatus){
-        let data = {
-          id:unreadId,
-          identity:localStorage.getItem('identity'),
-          status:1
-        }
-
-        SET_READ(data).then(res=>{
-          console.log(res)
-          if(res.code == 200){
-            console.log('--------- set unread ----------- ')
-          }else{
-            console.log('set read:'+res.msg)
-          }
-        }).catch(err=>{
-          console.log(err)
-        })
-
-        this.getJobResumes(jobId,1,100)
+    viewApplicationEvent(applicationId) {
+      let index = this.viewApplicantsChecked.indexOf(applicationId)
+      if(index == -1){
+        this.viewApplicantsChecked.push(applicationId)
+      }else{
+        this.viewApplicantsChecked.splice(index,1)
       }
 
+      // this.selectedApplicationId = applicationId
+
+      // this.expandStatus = !this.expandStatus
+
     },
-    postJob(){
-      this.$router.push({path:'/jobs/post',query:{version_time:this.versionTime}})
+    editJob(jobId) {
+      this.$router.push({path: '/jobs/post', query: {job_id: jobId}})
     },
-    getMyJobs(page,limit){
+    viewAllApplicants(jobId, unreadId, unreadStatus) {
+
+      // this.selectedApplicantStatus = !this.selectedApplicantStatus;
+      this.selectedJobId = jobId;
+
+      // if (this.selectedApplicantStatus) {
+      //
+      // }
+      if(unreadStatus){
+        let data = {
+          id: unreadId,
+          identity: localStorage.getItem('identity'),
+          status: 1
+        }
+
+        SET_READ(data).then(res => {
+          console.log(res)
+          if (res.code == 200) {
+            console.log('--------- set unread ----------- ')
+          } else {
+            console.log('set read:' + res.msg)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+
+      this.getJobResumes(jobId, 1, 100)
+
+    },
+    postJob() {
+      this.$router.push({path: '/jobs/post', query: {version_time: this.versionTime}})
+    },
+    getMyJobs(page, limit) {
       let params = {
         token: localStorage.getItem('token'),
         page: page,
         limit: limit
       }
-      MY_JOBS(params).then(res=>{
+      MY_JOBS(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let jobData =  res.message.data
+          let jobData = res.message.data
 
-          this.jobTotalNum = res.message.total
+          this.myJobTotalNum = res.message.total
 
           let unread_data = {
             identity: localStorage.getItem('identity'),
             token: localStorage.getItem('token')
           }
 
-          USER_UNREAD(unread_data).then(res=>{
-            if(res.code == 200){
+          USER_UNREAD(unread_data).then(res => {
+            if (res.code == 200) {
               let unreadListData = res.message.list;
-              jobData.forEach(item=>{
+              jobData.forEach(item => {
                 // console.log(item)
-                let a = unreadListData.filter(function(element){
+                let a = unreadListData.filter(function (element) {
                   return element.type == 1 && element.type_id == item.id
                 })
-                if(a.length>0){
+                if (a.length > 0) {
                   item.unread_status = true;
                   item.unread_id = a[0].id;
-                }else{
+                } else {
                   item.unread_status = false;
                 }
 
               })
               this.myJobsData = jobData
               console.log(jobData)
-            }else{
+            } else {
               console.log('unread:' + res.msg)
             }
 
@@ -700,43 +791,64 @@ export default {
 
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    getJobResumes(jobId,page,limit){
+    getJobResumes(jobId, page, limit) {
       let params = {
         page: page,
         limit: limit,
         job_id: jobId
       }
-      JOBS_APPLICATIONS(params).then(res=>{
+      JOBS_APPLICATIONS(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.sApplicantsData = res.message.data
           // console.log(res.message.data)
           // this.totalNum = res.message.total
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    filterByApplicants(){
+    filterByApplicants() {
       this.filterByJobStatus = false;
       this.filterByApplicantStatus = true;
       this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
     },
-    filterByJobs(){
+    filterByJobs() {
       this.filterByJobStatus = true;
       this.filterByApplicantStatus = false;
-      this.getMyJobs(this.myJobPage, this.myJObLimit)
-    }
+      this.getMyJobs(this.myJobPage, this.myJobLimit)
+    },
+    myJobPageSizeChange(e) {
+      console.log(e)
+    },
+    myJobPageChange(e) {
+      console.log(e)
+      this.myJobPage = e
+      this.getMyJobs(e, this.myJobLimit)
+      // console.log(e)
+      // document.documentElement.scrollTop = 120
+    },
+    myApplicationsPageSizeChange(e) {
+      console.log(e)
+    },
+    myApplicationsPageChange(e) {
+      console.log(e)
+      this.myApplicationsPage = e
+      this.getAllJobResumeList(e, this.myApplicationsLimit)
+      // console.log(e)
+      // document.documentElement.scrollTop = 120
+    },
 
 
   }
 }
+
 </script>
 
 <style scoped>
@@ -751,17 +863,17 @@ export default {
   justify-content: flex-start;
 }
 
-.ja-l-container{
+.ja-l-container {
 
 }
 
-.ja-r-container{
-  width:calc(100% - 160px);
+.ja-r-container {
+  width: calc(100% - 160px);
   height: calc(100vh - 140px);
 }
 
-.ja-r-container-bg{
-  padding:30px 50px 50px 50px;
+.ja-r-container-bg {
+  padding: 30px 50px 50px 50px;
 }
 
 .da-container {
@@ -951,7 +1063,6 @@ export default {
 }
 
 
-
 .dashboard-1-bg-1 {
   box-shadow: 0px 3px 23px 1px rgba(102, 80, 179, 0.29);
   background: #E7DEFF;
@@ -1002,15 +1113,15 @@ export default {
 
 }
 
-.da-t{
+.da-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding:0 20px;
+  padding: 0 20px;
 }
 
-.da-t-l{
+.da-t-l {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
@@ -1024,7 +1135,7 @@ export default {
   color: #262626;
 }
 
-.da-filter{
+.da-filter {
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 20px;
   margin-left: 50px;
@@ -1033,15 +1144,16 @@ export default {
   align-items: center;
   flex-direction: row;
 }
-.da-filter span{
+
+.da-filter span {
   margin: 0 10px 0 10px;
 }
 
-.da-filter:hover{
+.da-filter:hover {
   border-bottom: 1px solid #262626;
 }
 
-.da-t-r-btn{
+.da-t-r-btn {
 
 }
 
@@ -1054,10 +1166,10 @@ export default {
 
 .da-item-container {
   margin-top: 20px;
-  padding:20px;
+  padding: 20px;
 }
 
-.da-item-container-height{
+.da-item-container-height {
   height: 837px;
   padding: 0;
   margin: 0;
@@ -1076,26 +1188,26 @@ export default {
   overflow-y: auto;
 }
 
-.da-item-t-item{
+.da-item-t-item {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #262626;
 
 }
 
-.da-da-item{
+.da-da-item {
   padding: 20px 0;
-  border-bottom:  2px solid #f0f2f5 ;
+  border-bottom: 2px solid #f0f2f5;
   position: relative;
 }
 
-.da-da-item-status-container{
+.da-da-item-status-container {
   position: absolute;
   left: 0;
   top: 0;
 }
 
-.da-job-title{
+.da-job-title {
 
 
   display: flex;
@@ -1104,12 +1216,12 @@ export default {
   justify-content: flex-start;
 }
 
-.da-job-title-l{
+.da-job-title-l {
   display: flex;
   align-items: center;
 }
 
-.da-job-title-r{
+.da-job-title-r {
   font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 25px;
 
@@ -1118,7 +1230,7 @@ export default {
   text-overflow: ellipsis;
 }
 
-.da-total-applicants{
+.da-total-applicants {
   font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   display: flex;
@@ -1126,32 +1238,33 @@ export default {
   align-items: center;
   justify-content: flex-start;
 }
-.da-total-applicants span{
+
+.da-total-applicants span {
   margin-left: 4px;
 }
 
-.da-total-applicants-l-circle{
-  width:10px;
+.da-total-applicants-l-circle {
+  width: 10px;
   height: 10px;
   border-radius: 50%;
   background-color: #6648FF;
 }
 
 
-.da-posted-deadline{
+.da-posted-deadline {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
 }
 
-.da-action-btn{
+.da-action-btn {
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 20px;
   color: #262626;
 }
 
-.da-da-item-item{
-  flex:1;
-  color:#262626;
+.da-da-item-item {
+  flex: 1;
+  color: #262626;
 }
 
 .da-item {
@@ -1176,7 +1289,7 @@ export default {
   padding-left: 20px;
 }
 
-.da-item-basic-l-a{
+.da-item-basic-l-a {
 
 }
 
@@ -1212,7 +1325,7 @@ export default {
   margin-right: 10px;
 }
 
-.da-item-a-job-title{
+.da-item-a-job-title {
   font-size: 26px;
   font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
@@ -1241,13 +1354,14 @@ export default {
   border-bottom: 2px solid #B3B3B3;
 }
 
-.dashboard-work-exp-label span{
+.dashboard-work-exp-label span {
   font-size: 26px;
   font-family: BarlowM, serif;
   font-weight: 500;
   color: #262626;
 }
-.dashboard-view-detail-btn{
+
+.dashboard-view-detail-btn {
   font-size: 20px;
   font-weight: 500;
   color: #6650B3;
@@ -1259,7 +1373,7 @@ export default {
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-start;
-  margin-top:15px;
+  margin-top: 15px;
 }
 
 .dashboard-work-exp-c-item {
@@ -1326,7 +1440,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top:50px;
+  margin-top: 50px;
 
 }
 
@@ -1334,13 +1448,13 @@ export default {
 
 }
 
-.da-item-b-l-btn-1{
+.da-item-b-l-btn-1 {
   font-size: 20px;
   font-weight: 500;
   color: #262626;
 }
 
-.da-item-b-l-btn-2{
+.da-item-b-l-btn-2 {
   font-size: 20px;
   font-weight: 500;
   color: #FFFFFF;
@@ -1350,5 +1464,12 @@ export default {
 
 }
 
+.xll-pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20px;
+  border-top: 1px solid #eeeeee;
+}
 
 </style>

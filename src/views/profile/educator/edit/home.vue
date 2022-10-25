@@ -46,7 +46,7 @@
                   <el-row :gutter="50">
                     <el-col :span="6">
                       <el-form-item label="Display Name" prop="name">
-                        <el-input v-model="basicForm.name" placeholder="Display Name"></el-input>
+                        <el-input v-model="basicForm.name" placeholder="Display Name" disabled></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">

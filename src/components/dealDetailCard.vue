@@ -13,6 +13,13 @@
         <el-image class="dialog-background-img"
                   fit="cover"
                   :src="info.company_info.background_image">
+          <template #error>
+            <div class="img-slot-background">
+              <el-icon :size="80" color="#808080">
+                <Picture/>
+              </el-icon>
+            </div>
+          </template>
         </el-image>
       </div>
       <div class="dialog-b">
@@ -50,6 +57,10 @@
               {{ info.desc }}
             </p>
 
+            <template v-if="info.is_online == 2 || info.is_online == 3">
+              <mapComponent :lng="info.lng" :lat="info.lat"></mapComponent>
+            </template>
+
 <!--            <div class="dialog-category">-->
 <!--              {{ info.company_info.category_name_en }}-->
 <!--            </div>-->
@@ -63,6 +74,7 @@
               <CloseBold />
             </el-icon>
           </div>
+
         </div>
 
       </div>
@@ -89,9 +101,13 @@
 </template>
 
 <script>
+import mapComponent from "@/components/mapComponent";
 export default {
   name: "dealDetailCard",
   props:['info','visible','qrcodeValue'],
+  components:{
+    mapComponent
+  },
   methods:{
     close(){
       this.$emit('close')
@@ -235,6 +251,15 @@ export default {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #262626;
+}
+
+.img-slot-background{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #faf7f7;
+  width: 100%;
+  height: 100%;
 }
 
 </style>

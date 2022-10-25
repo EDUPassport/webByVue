@@ -442,10 +442,9 @@ export default {
 
 .jobs-list-label {
   text-align: left;
-  font-size: 45px;
+  font-size: 35px;
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
-
 }
 
 .jobs-list-content {

@@ -34,7 +34,15 @@
                         class="deals-item-background-img"
                         :src="item.company_info.background_image ? item.company_info.background_image : ''"
                         fit="cover"
-                    ></el-image>
+                    >
+                      <template #error>
+                        <div class="img-slot-background">
+                          <el-icon :size="80" color="#808080">
+                            <Picture/>
+                          </el-icon>
+                        </div>
+                      </template>
+                    </el-image>
 
                     <div class="list-item-tag actived-0" v-if="item.status==0">
                       Pending
@@ -368,6 +376,14 @@ export default {
   justify-content: center;
 }
 
+.img-slot-background{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #faf7f7;
+  width: 100%;
+  height: 100%;
+}
 
 @media screen and (min-width: 1200px){
 

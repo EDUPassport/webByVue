@@ -304,9 +304,12 @@
                   <el-row :gutter="50">
                     <el-col :span="24">
                       <el-form-item label="Job description">
-                        <el-input v-model="jobForm.desc" type="textarea"
-                                  :rows="4"
-                                  placeholder="Be as detailed as possible about responsibilities."></el-input>
+<!--                        <el-input v-model="jobForm.desc" type="textarea"-->
+<!--                                  :rows="4"-->
+<!--                                  placeholder="Be as detailed as possible about responsibilities."></el-input>-->
+
+                        <Tinymce v-model="jobForm.desc" width="100%" :height="300"></Tinymce>
+
                       </el-form-item>
                     
                     </el-col>
@@ -760,7 +763,7 @@
 </template>
 
 <script>
-
+import Tinymce from "@/components/Tinymce";
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -778,7 +781,8 @@ import {encode} from "js-base64";
 export default {
   name: "post",
   components: {
-    meSideMenu
+    meSideMenu,
+    Tinymce
   },
   setup() {
     const envName = process.env.VUE_APP_ENV_NAME
@@ -845,6 +849,7 @@ export default {
         }
     )
 
+
     const validatorOwnJobTitle = (rule,value,callback)=>{
       if(!jobForm.job_title){
         return callback(new Error('Please input job title'))
@@ -876,13 +881,14 @@ export default {
       goDomain,
       jobForms,
       jobForm,
-      jobRules
-
+      jobRules,
     }
 
   },
   data() {
     return {
+
+      descriptionValue:'',
       mapCenterValue:[-99.91028767893485, 32.082955230919616],
       submitLoadingValue:false,
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
@@ -1154,7 +1160,7 @@ export default {
         job_id: id
       }
       JOB_DETAIL(params).then(res => {
-        console.log(res)
+        //console.log(res)
         if (res.code == 200) {
           this.detailData = res.message
 
@@ -1563,7 +1569,7 @@ export default {
       }
 
       USER_INFO_BY_TOKEN_V2(params).then(res => {
-        // console.log(res)
+        // //console.log(res)
         if (res.code == 200) {
           let userContact = res.message.user_contact;
 
@@ -1583,7 +1589,7 @@ export default {
     getAllCountry() {
       let params = {}
       GET_COUNTRY_LIST(params).then(res => {
-        console.log(res)
+        //console.log(res)
         if (res.code == 200) {
           this.countryOptions = res.message;
         }
@@ -1596,7 +1602,7 @@ export default {
         country_id: countryId
       }
       GET_COUNTRY_LIST(params).then(res => {
-        console.log(res)
+        //console.log(res)
         if (res.code == 200) {
           this.provinceOptions = res.message;
         }
@@ -1610,7 +1616,7 @@ export default {
         state_id: stateId
       }
       GET_COUNTRY_LIST(params).then(res => {
-        console.log(res)
+        //console.log(res)
         if (res.code == 200) {
           this.cityOptions = res.message;
         }
@@ -1768,7 +1774,7 @@ export default {
           console.log('age to teach--submit--' + res.data);
         } else {
           console.log('age to Teach--submit--error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
@@ -1808,7 +1814,7 @@ export default {
           console.log('subject--submit--' + res.data);
         } else {
           console.log('subject--submit-error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
@@ -1848,7 +1854,7 @@ export default {
           console.log('employment--submit--' + res.data);
         } else {
           console.log('employment--submit--error');
-          console.log(res.msg)
+          //console.log(res.msg)
         }
 
       }).catch(err => {
@@ -1886,7 +1892,7 @@ export default {
           console.log('teachingcertificate--submit--' + res.data);
         } else {
           console.log('teachingcertificate--submit--error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
@@ -1925,7 +1931,7 @@ export default {
           console.log('languages--submit--' + res.data);
         } else {
           console.log('languages--submit--error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
@@ -1964,7 +1970,7 @@ export default {
           console.log('work type--submit--' + res.data);
         } else {
           console.log('work type --submit--error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
@@ -2005,7 +2011,7 @@ export default {
           console.log('p nationality--submit--' + res.data);
         } else {
           console.log('p nationality --submit--error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
@@ -2045,7 +2051,7 @@ export default {
           console.log('a nationality--submit--' + res.data);
         } else {
           console.log('a nationality --submit--error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
@@ -2126,7 +2132,7 @@ export default {
       } else {
         this.selectWeekItemData.splice(index, 1)
       }
-      console.log(this.selectWeekItemData)
+      // console.log(this.selectWeekItemData)
 
     },
     submitJob(formName, submitType) {
@@ -2189,7 +2195,7 @@ export default {
         if (valid) {
           let data = Object.assign({}, that.jobForm);
           ADD_JOB(data).then(res => {
-            // console.log(res);
+            // //console.log(res);
             if (res.code == 200) {
 
               let jobId = res.data.job_id;
@@ -2264,7 +2270,7 @@ export default {
       }
 
       SYNC_GET_BUSINESS_INFO(params).then(res => {
-        console.log(res)
+        //console.log(res)
         if (res.code == 200) {
           let aParams = {
             data: JSON.stringify(res.message)
@@ -2275,7 +2281,7 @@ export default {
             baseURL: baseUrl,
             timeout: 10000
           }).then(res => {
-            console.log(res)
+            //console.log(res)
             if (res.code == 200) {
               this.$loading().close()
               this.$msgbox({

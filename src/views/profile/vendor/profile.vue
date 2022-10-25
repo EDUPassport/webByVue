@@ -87,6 +87,7 @@ export default {
     this.getUserInfo()
     this.updateBusinessProfile()
     this.getDealsList(1, 1000)
+
   },
   methods: {
     getDealsList(page, limit) {

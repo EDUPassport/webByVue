@@ -290,12 +290,8 @@
           Welcome Back!
         </h4>
         <p>
-          If you are sure your username and password are both correct,
+          Oops, your username or password is wrong
 
-        </p>
-        <p> We have exicting news for you!</p>
-        <p>
-          Check your email for instructions.
         </p>
 
         <div class="login-error-ok-container">
@@ -1590,13 +1586,12 @@ export default {
 }
 
 .login-error-container h4{
-  margin-bottom: 50px;
+  margin-bottom: 25px;
 }
 
 .login-error-container p{
   font-size: 20px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  margin-top: 15px;
 }
 
 .login-error-ok-container{

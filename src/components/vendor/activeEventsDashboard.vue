@@ -9,59 +9,64 @@
       </div>
 
       <div class="container-c">
-        <div class="events-item-bg"
-             v-for="(item,i) in listData" :key="i">
+        <template v-if="listData.length>0">
+          <div class="events-item-bg"
+               v-for="(item,i) in listData" :key="i">
 
-          <div class="events-item">
-            <div class="events-item-t">
-              <el-image class="events-item-banner"
-                        :src="item.file !='' ? item.file : '' "
-                        fit="cover"
-              >
-              </el-image>
-            </div>
-            <div class="events-item-b">
-              <div class="events-item-item">
-                <el-space :size="5" wrap spacer="·">
-                  <span>{{ $filters.ymdFormatEvent(item.date)  }}</span>
-                  <span>
+            <div class="events-item">
+              <div class="events-item-t">
+                <el-image class="events-item-banner"
+                          :src="item.file !='' ? item.file : '' "
+                          fit="cover"
+                >
+                </el-image>
+              </div>
+              <div class="events-item-b">
+                <div class="events-item-item">
+                  <el-space :size="5" wrap spacer="·">
+                    <span>{{ $filters.ymdFormatEvent(item.date)  }}</span>
+                    <span>
                     {{$filters.timeFormatEvent(item.start_time,item.end_time)}}
                   </span>
 
-                  <span v-if="item.is_all == 1">Social</span>
-                  <span v-if="item.is_all == 2">Professional</span>
-                </el-space>
-              </div>
-              <div class="events-item-location">
+                    <span v-if="item.is_all == 1">Social</span>
+                    <span v-if="item.is_all == 2">Professional</span>
+                  </el-space>
+                </div>
+                <div class="events-item-location">
                   <span v-if="item.is_online == 2 || item.is_online == 3">
                     {{item.location}}
                   </span>
-                <span v-else>online</span>
-              </div>
-              <div class="events-item-name" @click="showEventDialog(item)">
-                {{item.name}}
-              </div>
-              <div class="events-item-desc">
-                {{item.desc}}
-              </div>
-
-              <div class="events-item-action-container">
-                <div class="events-item-action-l">
-<!--                  <el-button link>ADD TO CALENDAR</el-button>-->
+                  <span v-else>online</span>
                 </div>
-                <div class="events-item-action-r">
-<!--                  <el-button link>FAVORITE</el-button>-->
+                <div class="events-item-name" @click="showEventDialog(item)">
+                  {{item.name}}
+                </div>
+                <div class="events-item-desc">
+                  {{item.desc}}
                 </div>
 
+                <div class="events-item-action-container">
+                  <div class="events-item-action-l">
+                    <!--                  <el-button link>ADD TO CALENDAR</el-button>-->
+                  </div>
+                  <div class="events-item-action-r">
+                    <!--                  <el-button link>FAVORITE</el-button>-->
+                  </div>
+
+                </div>
               </div>
+
+
+
             </div>
-
-
 
           </div>
 
-        </div>
-
+        </template>
+        <template v-else>
+          <el-empty style="width: 100%;" description="..."></el-empty>
+        </template>
 
       </div>
 

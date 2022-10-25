@@ -71,7 +71,7 @@
                   v-for="item in employmentTypeOptions"
                   :key="item.id"
                   :label="item.object_en"
-                  :value="item"
+                  :value="item.id"
               >
               </el-option>
             </el-select>

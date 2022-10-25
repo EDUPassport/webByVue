@@ -602,7 +602,6 @@ import "swiper/css/thumbs"
 
 import './style.css';
 
-
 // import required modules
 import SwiperCore, {Autoplay, FreeMode, Navigation, Pagination, Thumbs, Zoom} from 'swiper';
 SwiperCore.use([Autoplay, FreeMode, Navigation, Pagination, Thumbs, Zoom]);
@@ -618,9 +617,9 @@ import {
   USER_INFO_BY_TOKEN_V2,
   ADD_USER_IMG_V2,
   ADD_LANGUAGE_SCORE_V2,
-  EDUCATOR_PERCENTAGE_V2, UPLOAD_IMG
+  EDUCATOR_PERCENTAGE_V2, UPLOAD_IMG, USER_INFO_VISITOR_V2
 } from '@/api/api'
-import {encode} from 'js-base64'
+import {encode, decode} from 'js-base64'
 import xllLoading from '@/components/xllLoading'
 
 export default {
@@ -836,11 +835,29 @@ export default {
       }
     }
 
-    this.getUserInfo()
-    this.updateEducatorProfile()
+    let str = this.$route.query.str
+    if(str){
+      let strDecode = decode(str)
+      let strParse = JSON.parse(strDecode)
+      if(strParse.from == 'other'){
+        this.getUserInfoForVisitor(strParse.uid)
+      }else{
+        this.getUserInfo()
+        this.updateEducatorProfile()
+      }
+
+    }else{
+
+      this.getUserInfo()
+      this.updateEducatorProfile()
+
+    }
+
+
   },
   methods: {
     backToAccountHome(){
+      // this.$router.go(-1)
       this.$router.push('/account/home')
     },
     updateEducatorProfile() {
@@ -874,6 +891,122 @@ export default {
     editLanguages() {
       this.getUserObjectList()
       this.languagesDrawer = true
+    },
+    getUserInfoForVisitor(userId) {
+      let params = {
+        user_id:userId,
+        identity:1
+      }
+
+      USER_INFO_VISITOR_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+
+          let userContact = res.message.user_contact;
+          let educatorContact = res.message.user_contact.educator_contact;
+
+          if (userContact) {
+            this.userContact = userContact
+          }
+
+          if (educatorContact) {
+            this.educatorContact = educatorContact;
+          }
+
+          if (educatorContact.Teaching_certificate) {
+            this.certificationsList = educatorContact.Teaching_certificate;
+          }
+
+          if (educatorContact.education_info) {
+            this.educationInfo = educatorContact.education_info;
+          }
+
+          if (educatorContact.places_lived) {
+            this.countriesLivedList = educatorContact.places_lived;
+          }
+          if (educatorContact.places_traveled) {
+            this.countriesTraveledList = educatorContact.places_traveled;
+          }
+
+          if (educatorContact.languages) {
+            this.languagesList = educatorContact.languages;
+          }
+          if (educatorContact.Location) {
+            this.locationList = educatorContact.Location;
+          }
+          if (educatorContact.job_type) {
+            this.jobTypeList = educatorContact.job_type;
+          }
+          if (educatorContact.age_to_teach) {
+            this.ageToTeachList = educatorContact.age_to_teach;
+          }
+          if (educatorContact.region) {
+            this.regionList = educatorContact.region;
+          }
+          if (educatorContact.benefits) {
+            this.benefitsList = educatorContact.benefits;
+          }
+          if (educatorContact.subject) {
+            this.subjectList = educatorContact.subject;
+          }
+          if (educatorContact.images) {
+            console.log(educatorContact.images)
+
+            let userImages = educatorContact.images
+            if (userImages.length>0) {
+              let userImagesArr = []
+              userImages.forEach(item => {
+                let userImageObj = {
+                  name: '',
+                  url: item.url
+                }
+                userImagesArr.push(userImageObj)
+              })
+              this.accountImageFileList = userImagesArr
+              console.log(this.accountImageFileList)
+
+            }
+
+          }
+
+          if (educatorContact.work_info) {
+            this.workInfo = educatorContact.work_info;
+          }
+
+          if (educatorContact.Teaching_experience) {
+            this.teachExpList = educatorContact.Teaching_experience;
+          }
+
+          let hobbies = educatorContact.hobbies;
+          if (hobbies) {
+            this.hobbiesList = hobbies.split(',');
+          }
+
+          if (userContact.headimgurl) {
+            this.profilePhotoUrl = userContact.headimgurl
+          }
+          if (educatorContact.background_image) {
+            this.backgroundUrl = educatorContact.background_image
+          }
+
+
+          let videoUrl = educatorContact.video_url
+          let resumePdf = educatorContact.resume_pdf
+          if (videoUrl) {
+            this.editVideoStatus = true;
+            this.introVideoUrl = videoUrl
+          }
+          if (resumePdf) {
+            this.editResumeStatus = true;
+            this.resumeUrl = resumePdf
+          }
+
+
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
     },
     getUserInfo() {
       let params = {
