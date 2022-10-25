@@ -6,7 +6,7 @@
 
           <router-link to="/jobs" exact>Jobs</router-link>
           <router-link to="/deals" exact> EDU Deals</router-link>
-          <router-link to="/events/list" exact> Events</router-link>
+          <router-link to="/events" exact> Events</router-link>
 
 <!--          <template v-if="envName === 'development' || envName === 'production'">-->
 <!--              <span v-if="!identity || identity == 1"-->
