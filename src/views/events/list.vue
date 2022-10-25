@@ -275,8 +275,9 @@ export default {
       this.$router.push({path:'/events/detail',query:{id:id,t:t}})
     },
     postEventWhenEmpty(){
-      let url = 'https://forms.zohopublic.com/edupassport/form/PostEventform/formperma/ra89j-hqCt3anrCCYpB0OKGeDeC-XbZuMrb__PmaeBo'
-      window.open(url,'_blank')
+      this.$router.push({path:'/post-event',query:{}})
+      // let url = 'https://forms.zohopublic.com/edupassport/form/PostEventform/formperma/ra89j-hqCt3anrCCYpB0OKGeDeC-XbZuMrb__PmaeBo'
+      // window.open(url,'_blank')
     }
 
   }

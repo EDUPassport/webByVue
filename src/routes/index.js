@@ -3,13 +3,14 @@ import layout from "@/layout";
 import {createRouter, createWebHistory} from 'vue-router'
 import appLayout from "@/layout/appLayout";
 import {isPhone} from "@/utils";
+
 const identity = localStorage.getItem('identity')
 const routes = [
 
     {
         path: '/services',
         component: layout,
-        redirect:'/services/price',
+        redirect: '/services/price',
         children: [
             {
                 path: 'price',
@@ -26,7 +27,7 @@ const routes = [
     {
         path: '/food4edu',
         component: layout,
-        redirect:'/food4edu',
+        redirect: '/food4edu',
         children: [
             {
                 path: '/food4edu',
@@ -127,11 +128,24 @@ const routes = [
         children: [
             {
                 path: 'list',
+                redirect: '/events'
+            },
+            {
+                path: '/events',
                 name: 'eventsList',
                 component: () => import('@/views/events/list'),
                 meta: {
                     titleC: 'Events List',
                     titleG: 'Events List',
+                }
+            },
+            {
+                path: '/post-event',
+                name:'zohoPostEvent',
+                component:()=>import('@/views/events/postEvent'),
+                meta:{
+                    titleC: 'Post Event',
+                    titleG: 'Post Event',
                 }
             },
             {
@@ -833,19 +847,19 @@ router.beforeEach((to, from, next) => {
 
     if (isPhone()) {
         let domain = ''
-        if(envName === 'developmentCN'){
+        if (envName === 'developmentCN') {
             domain = 'https://m.dev.edupassport.cn'
         }
 
-        if(envName === 'development'){
+        if (envName === 'development') {
             domain = 'https://test.esl-passport.cn'
         }
 
-        if(envName === 'productionCN'){
+        if (envName === 'productionCN') {
             domain = 'https://m.edupassport.cn'
         }
 
-        if(envName === 'production'){
+        if (envName === 'production') {
             domain = 'https://m.edupassport.io'
         }
 
