@@ -13,149 +13,29 @@
           ></dealFilterComponent>
         </el-col>
 
-        <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="6">
-          <featuredDealsPromoted
-              :adsData="adsDataMid"
-              :featuredData="featuredDealsData"
-              @addFavorite="addFavoriteFeatured"
-              @cancelFavorite="cancelFavoriteFeatured"
-              @viewProfile="viewProfile"
-              @detail="showDealDetailDialog"
-              @dealDetail="turnDealDetail"
-          >
-          </featuredDealsPromoted>
-        </el-col>
+        <!--          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">-->
+        <!--            <dealByListComponent :listData="dealsListData"-->
+        <!--                                 @back="backToSearchResults"-->
+        <!--                                 @detail="showDealDetailDialog"-->
+        <!--                                 :info="companyInfo">-->
+        <!--            </dealByListComponent>-->
+        <!--          </el-col>-->
+        <el-col class="deal-business-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
 
-        <el-col class="deals-list-col" :xs="24" :sm="24" :md="13" :lg="13" :xl="14">
-
-          <el-scrollbar class="deals-list-scroll">
-
-            <div class="xll-ads-container" v-if="adsDataTop.length>0">
-              <adsComponent :height="adsHeight" :adsData="adsDataTop"></adsComponent>
-            </div>
-
-            <div class="deals-bg-container">
-              <template v-if="dealsListData.length > 0">
-                <div class="deals-container">
-
-                  <div class="deals-item-container"
-                       v-for="(item,index) in dealsListData" :key="index"
-                  >
-                    <div class="deals-item">
-                      <div class="deals-item-bg">
-                        <el-image
-                            class="deals-item-background-img"
-                            :src="item.company_info.background_image ? item.company_info.background_image : ''"
-                            fit="cover"
-                            @click="viewProfile(item.user_id, item.identity, item.company_id)"
-                        ></el-image>
-
-                        <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                             @click="cancelFavorite(2,item.id,index)">
-                          <el-icon color="#6650B3" :size="25">
-                            <IconFontistoFavorite/>
-                          </el-icon>
-                        </div>
-                        <div class="deals-item-favorite" v-else
-                             @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
-                          <el-icon :size="25">
-                            <CollectionTag/>
-                          </el-icon>
-                        </div>
-
-                      </div>
-                      <div class="deals-item-c">
-                        <div class="deals-item-c-l">
-                          <el-avatar class="deals-logo"
-                                     :src="item.company_logo"
-                                     @click="viewProfile(item.user_id,item.identity,item.company_id)"
-                          >
-                          </el-avatar>
-                        </div>
-                        <div class="deals-item-c-r">
-                          <div class="deals-item-c-r-1"
-                               @click="viewProfile(item.user_id,item.identity, item.company_id)">
-                            {{ item.company_info.company_name }}
-                          </div>
-                          <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
-                            {{ item.title }}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="deals-item-b">
-                        <div class="deals-item-b-l">
-
-                          <template
-                              v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
-                            {{ item.company_info.category_name_en }}
-                          </template>
-                          <template v-else>
-
-                          </template>
-
-                        </div>
-                        <div class="deals-item-b-r">
-                          <el-button link @click="showDealDetailDialog(item)">
-                            QUICK VIEW
-                          </el-button>
-                          <el-button link @click="turnDealDetail(item.id)">
-                            DETAILS
-                          </el-button>
-                        </div>
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-                <div class="deals-pagination">
-                  <el-pagination layout="prev, pager, next"
-                                 :default-current-page="1"
-                                 @size-change="dealPageSizeChange"
-                                 @current-change="dealPageChange"
-                                 :current-page="dealPage"
-                                 :page-size="dealLimit"
-                                 :total="dealTotalNum">
-                  </el-pagination>
-                </div>
-
-              </template>
-              <template v-else>
-                <el-empty description="..."></el-empty>
-              </template>
-
-            </div>
-
-            <div class="xll-ads-bottom-container" v-if="adsDataBottom.length>0">
-              <adsComponent :height="adsHeight" :adsData="adsDataBottom"></adsComponent>
-            </div>
-
-          </el-scrollbar>
-
+          <div class="deal-business-bg">
+            <businessProfile
+                :canEdit="true"
+                :fromDeal="true"
+                @back="backToSearchResults"
+                :info="companyInfo"
+                :identity="5">
+            </businessProfile>
+          </div>
 
         </el-col>
 
 
       </el-row>
-
-      <dealDetailCard :info="dealDetailData"
-                      :qrcodeValue="qrcodeValue"
-                      @close="dealDetailDialogVisible=false"
-                      @share="shareDeal"
-                      @viewProfile="viewProfile"
-                      :visible="dealDetailDialogVisible">
-      </dealDetailCard>
-
-      <shareCard :visible="shareDialogVisible"
-                 :title="shareInfo.title"
-                 :description="shareInfo.desc"
-                 :quote="shareInfo.desc"
-                 :url="shareUrl"
-                 @close="shareDialogVisible=false"
-      >
-      </shareCard>
 
     </div>
   </div>
@@ -166,11 +46,10 @@
 
 import {
   TAGS_LIST,
-  DEALS_LIST,
   DEALS_AREA_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  ADS_LIST, USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2, USER_SUB_IDENTITY_V2, FEATURED_DEALS_LIST, DEALS_DETAIL
+  ADS_LIST, USER_INFO_VISITOR_V2, USER_SUB_IDENTITY_V2, FEATURED_DEALS_LIST
 } from "@/api/api";
 import {encode} from "js-base64";
 
@@ -179,27 +58,19 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
-import dealDetailCard from "@/components/dealDetailCard";
-import shareCard from "@/components/shareCard";
 import dealFilterComponent from "@/components/dealFilterComponent";
-
-import featuredDealsPromoted from "@/components/deals/featuredDealsPromoted";
-import adsComponent from "@/components/ads/adsComponent";
+import businessProfile from "@/components/businessProfile";
 
 export default {
-  name: "index",
+  name: "vendorProfile",
   components: {
-    dealDetailCard,
-    shareCard,
     dealFilterComponent,
-    // dealByListComponent,
-    featuredDealsPromoted,
-    adsComponent
+    businessProfile,
 
   },
   setup() {
 
-    const locationUrl = window.location.origin;
+    const locationUrl = window.location.href;
 
     return {
       locationUrl
@@ -239,30 +110,11 @@ export default {
 
       shareDialogVisible: false,
       shareInfo: {},
-      shareUrl:'',
 
       filterResultData: {},
       companyInfo: {}
 
     }
-  },
-  beforeRouteUpdate(to) {
-    console.log(to)
-    // let dealId = to.query.id
-    // if (dealId) {
-    //   console.log('deal detail ==========')
-    //   this.getDealDetail(dealId)
-    //   this.showDealDetailStatus = true
-    // } else {
-    //
-    //   this.getDealsList(this.dealPage, this.dealLimit)
-    //   this.getFeaturedDealsList()
-    //   this.showDealDetailStatus = false;
-    // }
-
-  },
-  unmounted() {
-    window.onresize = null
   },
   mounted() {
 
@@ -282,11 +134,11 @@ export default {
     if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
       this.adsHeight = '140px'
     }
-    if (screenWidthFloor >= 1920) {
+    if(screenWidthFloor >= 1920){
       this.adsHeight = "190px"
     }
 
-    window.onresize = () => {
+    window.onresize = () =>{
       // if (screenWidthFloor < 768) {
       //   this.adsHeight = '190px'
       // }
@@ -300,20 +152,18 @@ export default {
       if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
         this.adsHeight = '140px'
       }
-      if (screenWidthFloor >= 1920) {
+      if(screenWidthFloor >= 1920){
         this.adsHeight = "190px"
       }
 
     }
 
-    let page = this.$route.query.page;
-    if(page){
-      let pageNumber = Number(page);
-      this.dealPage = Number(pageNumber);
-      this.getDealsList(pageNumber, this.dealLimit)
+    let userId = this.$route.query.uid;
+    let identity = this.$route.query.i;
+    let cid = this.$route.query.cid;
 
-    }else{
-      this.getDealsList(this.dealPage, this.dealLimit)
+    if(userId && identity && cid){
+      this.getVisitorUserInfo(userId,identity,cid)
     }
 
     this.getFeaturedDealsList()
@@ -331,9 +181,8 @@ export default {
       this.getDealsList(this.dealPage, this.dealLimit)
     },
     backToSearchResults() {
-      this.showDealDetailStatus = false;
-      this.getDealsList(this.dealPage, this.dealLimit)
-      this.getFeaturedDealsList()
+      this.$router.go(-1)
+      // this.$router.push('/deals')
     },
     readMoreDeal(id) {
       this.showDealDetailStatus = true;
@@ -351,32 +200,26 @@ export default {
       // console.log(e)
       this.shareDialogVisible = true;
       this.shareInfo = e;
-      this.shareUrl = this.locationUrl + '/deals/detail?id='+e.id;
     },
-    viewProfile(userId, identity, companyId) {
+    getVisitorUserInfo(userId,identity,companyId) {
 
-      // this.$loading({text:''})
+      let params = {
+        user_id:userId,
+        identity:identity,
+        company_id:companyId
+      }
 
-      this.$router.push({path: '/deals/vendor/profile', query: {uid: userId, i: identity, cid: companyId}})
+      USER_INFO_VISITOR_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.companyInfo = res.message.user_contact.company;
 
-      // let params = {
-      //   user_id:userId,
-      //   identity:identity,
-      //   company_id:companyId
-      // }
-      //
-      // USER_INFO_VISITOR_V2(params).then(res => {
-      //   console.log(res)
-      //   if (res.code == 200) {
-      //     this.companyInfo = res.message.user_contact.company;
-      //     this.showDealDetailStatus = true;
-      //     this.dealDetailDialogVisible = false;
-      //     this.$loading().close()
-      //   }
-      // }).catch(err => {
-      //   console.log(err)
-      //   this.$message.error(err.msg)
-      // })
+          this.showLoadingStatus = false;
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
 
     },
     turnBanner(link) {
@@ -488,29 +331,6 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    getDealsList(page, limit) {
-
-      let filterResult = this.filterResultData;
-
-      let paramsA = {
-        page: page,
-        limit: limit
-      }
-
-      let params = Object.assign(paramsA, filterResult)
-
-      DEALS_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.dealsListData = res.message.data;
-          this.dealTotalNum = res.message.total
-          this.showLoadingStatus = false
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
     getDealsAreaList() {
       DEALS_AREA_LIST({}).then(res => {
         console.log(res)
@@ -521,17 +341,6 @@ export default {
         console.log(err)
         this.$message.error(err.msg)
       })
-    },
-    dealPageSizeChange(e) {
-      console.log(e)
-    },
-    dealPageChange(e) {
-      this.showLoadingStatus = true
-      this.dealPage = e
-      this.getDealsList(e, this.dealLimit)
-
-      this.$router.push({path:'/deals',query:{page:e}})
-      // document.documentElement.scrollTop = 200
     },
     addFavorite(id, type, title, url, index) {
       let params = {
@@ -640,150 +449,6 @@ export default {
 
       self.$router.push({path: '/deals/offer', query: {}})
     },
-    selectRole(e) {
-      this.$loading({
-        text: 'Loading...'
-      })
-
-      let params = {
-        user_id: localStorage.getItem('uid'),
-        identity: e
-      }
-
-      USER_INFO_VISITOR_V2(params).then(res => {
-        let userContact = res.message.user_contact;
-        let educatorContact = {};
-
-        let companyInfo = {};
-
-        let isEducator = userContact.is_educator;
-        let isRecruiting = userContact.is_recruiting;
-        let isSchool = userContact.is_school;
-        let isOther = userContact.is_other;
-        let isVendor = userContact.is_vendor;
-        let identity = e;
-
-        if (identity == 1) {
-          if (isEducator > 10) {
-            educatorContact = res.message.user_contact.educator_contact;
-            this.changeIdentity(educatorContact.id, 1, 2)
-
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 1}})
-
-          }
-
-        }
-
-        if (identity == 2) {
-
-          if (isRecruiting > 10) {
-
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id, 2, 2)
-            // this.$router.push({path: '/overview', query: {identity: identity}})
-
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
-
-            this.dialogBusinessAccountVisible = false
-          }
-        }
-
-        if (identity == 3) {
-
-          if (isSchool > 10) {
-
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id, 3, 2)
-            // this.$router.push({path: '/overview', query: {identity: identity}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
-
-            this.dialogBusinessAccountVisible = false
-          }
-
-        }
-
-        if (identity == 4) {
-
-          if (isOther > 10) {
-            companyInfo = res.message.user_contact.company;
-
-            this.changeIdentity(companyInfo.id, 4, 2)
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 4}})
-
-            this.dialogBusinessAccountVisible = false
-          }
-
-        }
-
-        if (identity == 5) {
-
-          if (isVendor > 10) {
-
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id, 5, 2)
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 5}})
-
-          }
-
-        }
-
-
-      }).catch(err => {
-        console.log(err)
-        this.$loading().close()
-        this.$message.error(err.msg)
-      })
-    },
-    changeIdentity(companyId, identity, language) {
-      let params = {
-        company_id: companyId,
-        language: language,
-        identity: identity
-      }
-
-      SWITCH_IDENTITY_V2(params).then(res => {
-        // console.log(res)
-        if (res.code == 200) {
-          this.$store.commit('allIdentityChanged', true)
-
-          localStorage.setItem('company_id', companyId)
-          localStorage.setItem('identity', identity)
-
-          let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData', str)
-
-          this.$store.commit('identity', identity)
-          this.$store.commit('menuData', res.message)
-
-          this.$loading().close()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$loading().close()
-        this.$message.error(err.msg)
-      })
-
-    },
 
     getFeaturedDealsList() {
       let params = {}
@@ -796,33 +461,6 @@ export default {
         console.log(err)
         this.$message.error(err.msg)
       })
-    },
-
-    getDealDetail(id) {
-      let params = {
-        deal_id: id,
-        token: localStorage.getItem('token')
-      }
-      DEALS_DETAIL(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.detailData = res.message
-          this.showLoadingStatus = false;
-          this.initMap(res.message.lng, res.message.lat)
-
-          // let userId = res.message.user_id
-          // this.getCompanyJobList(userId)
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-
     },
     initMap(lng, lat) {
       mapboxgl.accessToken = this.accessToken;

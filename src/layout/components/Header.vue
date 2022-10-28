@@ -41,7 +41,7 @@
 
               <el-dropdown size="default">
                     <span class="el-dropdown-link-job">
-                          Jobs
+                          EDU Jobs
                     <el-icon class="el-icon--right">
                       <arrow-down />
                       </el-icon>
@@ -60,7 +60,7 @@
 
 <!--              <router-link to="/jobs" exact>Jobs</router-link>-->
               <router-link to="/deals" exact> EDU Deals</router-link>
-              <router-link to="/events" exact> Events</router-link>
+              <router-link to="/events" exact>EDU Events</router-link>
 <!--              <span class="zoho-blog-menu" @click="turnZohoBlog()">Blog</span>-->
 <!--              <router-link to="/contact/us" exact> Contact</router-link>-->
 <!--              <router-link to="/about/us" exact> About</router-link>-->
@@ -385,13 +385,13 @@
             >
 
               <div class="nav-link-item">
-                <router-link to="/jobs" exact>Jobs</router-link>
+                <router-link to="/jobs" exact>EDU Jobs</router-link>
               </div>
               <div class="nav-link-item">
                 <router-link to="/deals" exact> EDU Deals</router-link>
               </div>
               <div class="nav-link-item">
-                <router-link to="/events" exact> Events</router-link>
+                <router-link to="/events" exact>EDU Events</router-link>
               </div>
               <!--              <div class="nav-link-item">-->
               <!--                <router-link to="/industry/news" exact>News</router-link>-->

@@ -529,6 +529,7 @@ export default {
       getCheckCodeTimer,
       forgotDialogVisible
     }
+
   },
   beforeRouteUpdate(to){
     // console.log(to)
@@ -852,7 +853,7 @@ export default {
 
               }else{
                 // this.$message.error(err.msg)
-                this.sendPrivatePassword(params.email)
+                // this.sendPrivatePassword(params.email)
                 this.loginErrorDialogVisible = true;
 
               }

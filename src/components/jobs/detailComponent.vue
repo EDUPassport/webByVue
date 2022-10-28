@@ -1,0 +1,534 @@
+<template>
+<div>
+  <el-scrollbar class="xll-job-detail">
+
+    <div class="job-detail-bg-container">
+
+      <div class="xll-ads-container" v-if="adsData.length>0">
+        <adsComponent :height="adsHeight" :adsData="adsData">
+        </adsComponent>
+      </div>
+
+      <div class="job-detail-container">
+
+        <div class="job-detail-t">
+          <div class="job-detail-t-l">
+            <div class="job-detail-t-l-1"
+                 v-if="detailData.company"
+                 @click="turnBusinessProfile(detailData)"
+            >
+              {{detailData.company.company_name}}
+            </div>
+            <div class="job-detail-t-l-2">
+              {{detailData.job_title}}
+            </div>
+            <div class="job-detail-t-l-3">
+              {{detailData.job_location}}
+            </div>
+          </div>
+          <div class="job-detail-t-r">
+            <el-button link @click="shareJob(detailData)">
+              SHARE
+            </el-button>
+            <el-button type="primary" round
+                       :loading="applyBtnLoading"
+                       @click="applyJob(detailData.id)">
+              QUICK APPLY
+            </el-button>
+            <el-button plain round
+                       @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+              SAVE
+              <el-icon>
+                <CollectionTag />
+              </el-icon>
+            </el-button>
+          </div>
+        </div>
+
+        <div class="job-detail-c">
+
+          <div class="job-detail-c-1">
+            <div class="job-detail-c-item" v-if="detailData.entry_date">
+              <div class="job-detail-c-item-l">Start date:</div>
+              <div class="job-detail-c-item-r">{{detailData.entry_date}}</div>
+            </div>
+
+            <div class="job-detail-c-item" v-if="detailData.age_to_teach">
+              <div class="job-detail-c-item-l">Student's age:</div>
+              <div class="job-detail-c-item-r">
+                {{ $filters.userObjectFormat(detailData.age_to_teach)}}
+              </div>
+            </div>
+
+            <div class="job-detail-c-item" v-if="detailData.subject">
+              <div class="job-detail-c-item-l">Subjects:</div>
+              <div class="job-detail-c-item-r">
+                {{ $filters.userObjectFormat(detailData.subject)}}
+              </div>
+            </div>
+
+            <div class="job-detail-c-item" v-if="workingHoursData.length>0">
+              <div class="job-detail-c-item-l">Hours:</div>
+              <div class="job-detail-c-item-r">
+                <div class="working-hours">
+                  <div class="working-hours-item" v-for="(item,index) in workingHoursData" :key="index">
+                    <el-tag class="working-hours-week" v-for="(week,i) in item.week" :key="i">
+                      <span v-if="week==1">M</span>
+                      <span v-if="week==2">T</span>
+                      <span v-if="week==3">W</span>
+                      <span v-if="week==4">Th</span>
+                      <span v-if="week==5">F</span>
+                      <span v-if="week==6">Sa</span>
+                      <span v-if="week==7">Su</span>
+                    </el-tag>
+                    <span class="working-hours-hours">{{item.hours}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="job-detail-c-2">
+            <div class="job-detail-c-2-l">
+              <div class="job-detail-c-item-label">Requirements:</div>
+              <div class="job-detail-c-item-c">
+                <div class="job-detail-c-item" v-if="detailData.teaching_times_en">
+                  <div class="job-detail-c-item-l">Teaching experience:</div>
+                  <div class="job-detail-c-item-r">
+                    {{detailData.teaching_times_en}}
+                  </div>
+                </div>
+                <div class="job-detail-c-item" v-if="detailData.education_en">
+                  <div class="job-detail-c-item-l">Minimum education:</div>
+                  <div class="job-detail-c-item-r">
+                    {{detailData.education_en}}
+                  </div>
+                </div>
+                <div class="job-detail-c-item" v-if="detailData.class_size">
+                  <div class="job-detail-c-item-l">Class size:</div>
+                  <div class="job-detail-c-item-r">
+                    {{detailData.class_size}}
+                  </div>
+                </div>
+                <div class="job-detail-c-item" v-if="detailData.numbers">
+                  <div class="job-detail-c-item-l">Number of Vacancies:</div>
+                  <div class="job-detail-c-item-r">
+                    {{detailData.numbers}}
+                  </div>
+                </div>
+                <div class="job-detail-c-item"
+                     v-if="detailData.apply_due_date && detailData.apply_due_date !='0000-00-00'"
+                >
+                  <div class="job-detail-c-item-l">Application:</div>
+                  <div class="job-detail-c-item-r">
+                    {{detailData.apply_due_date}}
+                  </div>
+                </div>
+
+                <div class="job-detail-c-item" v-if="detailData.Teaching_certificate">
+                  <div class="job-detail-c-item-l">Teaching certificates:</div>
+                  <div class="job-detail-c-item-r">
+                    {{ $filters.userObjectFormat(detailData.Teaching_certificate)}}
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="job-detail-c-2-r">
+              <div class="job-detail-c-item-label">Compensation:</div>
+              <div class="job-detail-c-item-c">
+                <div class="job-detail-c-item">
+                  <div class="job-detail-c-item-l">Salary range:</div>
+                  <div class="job-detail-c-item-r">
+                    {{ detailData.currency }} {{ detailData.salary_min }} - {{ detailData.salary_max }} /
+                    <span v-if="detailData.payment_period == 112">hourly</span>
+                    <span v-if="detailData.payment_period == 113">daily</span>
+                    <span v-if="detailData.payment_period == 114">weekly</span>
+                    <span v-if="detailData.payment_period == 115">monthly</span>
+                    <span v-if="detailData.payment_period == 116">annually</span>
+                  </div>
+                </div>
+                <div class="job-detail-c-item" v-if="detailData.benefits">
+                  <div class="job-detail-c-item-l">Benefits:</div>
+                  <div class="job-detail-c-item-r">
+                    {{ $filters.userObjectFormat(detailData.benefits)}}
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="job-detail-desc">
+            <div class="job-detail-desc-label">Job details:</div>
+            <div class="job-detail-desc-content" v-html="detailData.desc"></div>
+          </div>
+
+          <div class="map-container">
+            <div id="mapContainer" class="basemap"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </el-scrollbar>
+
+  <shareCard :visible="shareDialogVisible"
+             :title="detailData.job_title"
+             :description ="detailData.desc"
+             :quote = "detailData.desc"
+             :url="locationUrl"
+             @close="shareDialogVisible=false"
+  >
+  </shareCard>
+
+
+</div>
+</template>
+
+<script>
+
+import adsComponent from "@/components/ads/adsComponent";
+import shareCard from "@/components/shareCard";
+import {ADD_FAVORITE, APPLY_JOBS} from "@/api/api";
+
+export default {
+  name: "detailComponent",
+  components: {
+    adsComponent,
+    shareCard
+  },
+  props:['detailData','adsData','workingHoursData'],
+  data(){
+    return {
+      shareDialogVisible:false,
+      locationUrl:'',
+      applyBtnLoading:false,
+      adsHeight:'190px',
+
+    }
+  },
+  unmounted() {
+    window.onresize = null
+  },
+  mounted(){
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    // if (screenWidthFloor < 768) {
+    //   this.adsHeight = '190px'
+    // }
+    //
+    // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
+    //   this.adsHeight = '190px'
+    // }
+
+    if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
+      this.adsHeight = '120px'
+    }
+    if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
+      this.adsHeight = '140px'
+    }
+    if(screenWidthFloor >= 1920){
+      this.adsHeight = "190px"
+    }
+
+    window.onresize = () =>{
+      // if (screenWidthFloor < 768) {
+      //   this.adsHeight = '190px'
+      // }
+      //
+      // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
+      //   this.adsHeight = '190px'
+      // }
+      if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
+        this.adsHeight = '120px'
+      }
+      if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
+        this.adsHeight = '140px'
+      }
+      if(screenWidthFloor >= 1920){
+        this.adsHeight = "190px"
+      }
+
+    }
+  },
+  methods:{
+    shareJob(data){
+      let origin = window.location.origin;
+      let locationUrl = origin + '/jobs/detail?id='+data.id;
+      this.locationUrl = locationUrl;
+      this.shareDialogVisible = true;
+    },
+    applyJob(id) {
+      this.applyBtnLoading = true;
+      let identity = localStorage.getItem('identity')
+      let token = localStorage.getItem('token')
+      if (identity == 1) {
+        let params = {
+          job_id: id,
+          token: token
+        }
+        APPLY_JOBS(params).then(res => {
+          if (res.code == 200) {
+            this.$message.success('Apply Success')
+            this.applyBtnLoading = false;
+          }
+        }).catch(err=>{
+          console.log(err)
+          if(err.code === 400){
+            this.$message.error('Please complete your profile in order to apply')
+          }else{
+            if(err.msg){
+              this.$message.error(err.msg)
+            }
+            if(err.message){
+              this.$message.error(err.message)
+            }
+          }
+
+          this.applyBtnLoading = false;
+
+        })
+
+      } else {
+        this.$message.warning('Please switch to an educator profile to be able to apply')
+        this.applyBtnLoading = false;
+      }
+
+
+    },
+    saveJob(id, type, title, url){
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.isFavoriteValue = 1
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+      })
+    },
+    turnBusinessProfile(info){
+
+      let obj = {
+        jobId:info.id,
+        uid:info.user_id,
+        i:info.identity,
+        cid:info.company_id
+      }
+
+      this.$router.push({path:'/jobs/business/profile',query:obj})
+
+    },
+    turnBanner(link) {
+      console.log(link)
+      if (link != '') {
+        window.location.href = link
+      } else {
+        let token = localStorage.getItem('token')
+        if (!token) {
+          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
+
+  }
+}
+</script>
+
+<style scoped>
+
+.xll-ads-container {
+  margin-bottom: 50px;
+}
+
+.xll-job-detail{
+  height: calc(100vh - 140px);
+  background-color: #F0F2F5;
+}
+
+.job-detail-bg-container{
+  padding: 30px;
+}
+
+@media screen and (min-width: 1920px) {
+  /*  190 */
+}
+
+@media screen and (max-width: 1919px) and (min-width: 1200px) {
+  /*  140 */
+
+}
+
+@media screen and (max-width: 1199px) and (min-width: 992px) {
+  /*  120 */
+
+}
+
+.job-detail-t{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 120px;
+}
+
+.job-detail-t-l{
+  width: 50%;
+}
+
+.job-detail-t-l-1{
+  cursor: pointer;
+  font-family:BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color:#6650B3;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-detail-t-l-2{
+  font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  color:#262626;
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-detail-t-l-3{
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
+
+.job-detail-c-1{
+
+}
+
+.job-detail-c-item{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.job-detail-c-item-l{
+  /*width: 210px;*/
+  font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+}
+.job-detail-c-item-r{
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+  margin-left: 10px;
+}
+
+.job-detail-c-2{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+
+.job-detail-c-2-l{
+  width: 100%;
+}
+.job-detail-c-2-r{
+  width:100%;
+  margin-top: 50px;
+}
+
+.job-detail-c-item-label{
+  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color:#262626;
+}
+.job-detail-c-item-c{
+  margin-top: 25px;
+}
+.job-detail-desc{
+  margin-top: 50px;
+}
+
+.job-detail-desc-label{
+  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color:#262626;
+}
+
+.job-detail-desc-content{
+  margin-top: 25px;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color:#262626;
+}
+
+.map-container{
+  margin-top: 25px;
+  margin-bottom: 50px;
+}
+
+#mapContainer{
+  height: 300px;
+}
+
+.working-hours{
+  width: 100%;
+}
+
+.working-hours-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin-bottom: 10px;
+  position: relative;
+}
+.working-hours-week{
+  margin-left: 10px;
+}
+.working-hours-hours{
+  margin-left: 20px;
+}
+
+
+</style>

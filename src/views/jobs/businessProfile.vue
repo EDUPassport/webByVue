@@ -1,5 +1,5 @@
 <template>
-  <div class="bg">
+  <div class="bg" >
 
     <template v-if="exchangeAccountInfo">
       <ExchangeAccountInfo :info="exchangeAccountInfo"></ExchangeAccountInfo>
@@ -31,19 +31,15 @@
         >
         </jobsListComponent>
 
-
       </el-col>
 
-      <el-col class="job-detail-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12"  v-loading="showLoadingStatus">
-
-        <jobDetailComponent
-            :detailData="detailData"
-            :workingHoursData="workingHoursData"
-            :adsData="jobsAdsListTop"
-            :adsHeight="jobAdsHeight"
-
-        ></jobDetailComponent>
-
+      <el-col class="job-detail-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-loading="showLoadingStatus">
+        <businessProfile :canEdit="false"
+                         :fromDeal="false"
+                         :info="companyInfo"
+                         :identity="detailData.identity"
+        >
+        </businessProfile>
 
       </el-col>
     </el-row>
@@ -51,20 +47,21 @@
 </template>
 
 <script>
-import jobDetailComponent from '@/components/jobs/detailComponent'
+
 import filterWithJobList from "@/components/jobs/filterWithJobList";
 import jobsListComponent from "@/components/jobsListComponent";
 
-import ads22Img from '@/assets/ads/22.png'
 import {useRouter, useRoute} from "vue-router";
 import {
   ADS_LIST,
   ADD_FAVORITE,
-  CANCEL_FAVORITE, JOB_DETAIL, COMPANY_JOB_LIST
+  CANCEL_FAVORITE,
+  USER_INFO_VISITOR_V2, COMPANY_JOB_LIST, JOB_FEATURED_LIST
 } from "@/api/api";
-
+import BusinessProfile from "@/components/businessProfile";
 import ExchangeAccountInfo from '@/components/jobs/exchangeInfo';
-import {randomString} from "@/utils";
+// import {encode} from "js-base64";
+// import {randomString} from "@/utils";
 
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -78,49 +75,28 @@ export default {
       jobLoadingValue:false,
       jobFeaturedLoadingValue:false,
 
-      shareDialogVisible:false,
-      shareInfo:{},
-      locationUrl: window.location.href,
-
-      applyBtnLoading:false,
-      showCompanyStatus:false,
-
-      isOther:false,
       companyInfo:{},
-      ads22Img,
-
       jobFeaturedListData: [],
-      jobListData: [],
-      articleListData: [],
-      jobPage: 1,
-      jobLimit: 10,
-      jobTotalNum: 0,
       showLoadingStatus: false,
-      versionTime: randomString(),
-      jobsAdsListTop: [],
-      jobsAdsListMid: [],
-      jobAdsHeight:'190px',
 
       detailData:{},
       selectedJobId:0,
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
-      workingHoursData:[],
 
-      selectedOtherJobId:0,
       otherJobPage:1,
       otherJobLimit:10,
       otherJobTotalNum:0,
       otherJobListData:[],
-      jobDetailHeight:0
+      jobsAdsListMid:[]
 
     }
   },
   components: {
     ExchangeAccountInfo,
     jobsListComponent,
-    filterWithJobList,
-    jobDetailComponent
+    BusinessProfile,
+    filterWithJobList
 
   },
   setup() {
@@ -150,43 +126,59 @@ export default {
   },
   beforeRouteUpdate(to){
     console.log(to)
-    let jobId = to.query.id;
-
-    if(jobId){
-      this.selectedJobId = jobId
-      this.getJobDetail(jobId)
-
-    }
 
   },
   mounted() {
 
-    let jobId = this.$route.query.id;
+    let userId = this.$route.query.uid;
+    let identity = this.$route.query.i;
+    let cid = this.$route.query.cid;
+    let jobId = this.$route.query.jobId;
 
-    if(jobId){
+    if(userId && identity && cid && jobId){
+
+      this.getCompanyJobList(userId,this.otherJobPage, this.otherJobLimit)
+      this.getVisitorUserInfo(userId,identity,cid)
       this.selectedJobId = jobId
-      this.getJobDetail(jobId)
 
     }
-
     this.getAdsList()
 
   },
   methods: {
-    searchByFilter(e){
-      this.jobLoadingValue = true;
-
-      // this.$router.push('/jobs')
-
-      console.log(e)
+    getVisitorUserInfo(userId,identity,companyId) {
 
       let params = {
-        user_id: this.companyInfo.user_id,
+        user_id:userId,
+        identity:identity,
+        company_id:companyId
+      }
+      this.showLoadingStatus = true;
+      USER_INFO_VISITOR_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.companyInfo = res.message.user_contact.company;
+
+          this.showLoadingStatus = false;
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    searchByFilter(e){
+      console.log(e)
+      this.jobLoadingValue = true;
+
+      let params = {
+        user_id:this.companyInfo.user_id,
         is_open: 1,
         status:1,
-        page: this.jobPage,
-        limit: this.jobLimit
+        page: this.otherJobPage,
+        limit: this.otherJobLimit
       }
+
       let jobTitle = e.job_title
 
       if(jobTitle){
@@ -223,62 +215,42 @@ export default {
         // console.log(res)
         if (res.code == 200) {
 
-          this.otherJobListData = res.message.data
-          // console.log(res.message.data)
-          this.otherJobTotalNum = res.message.total
-          this.jobLoadingValue = false
+          // let jobData = res.message.data;
+          // let routeJobId = this.$route.query.id;
+          // if(!routeJobId){
+          //
+          //   if(jobData && jobData.length>0){
+          //     this.selectedJobId = jobData[0]['id']
+          //   }
+          //
+          // }
+          let resMessage = res.message
+
+          console.log(resMessage.data)
+          if(resMessage.data){
+            this.otherJobListData = res.message.data
+          }else{
+            this.otherJobListData = []
+          }
+
+          if(resMessage.total){
+            this.otherJobTotalNum = res.message.total
+          }
+
+          this.jobLoadingValue = false;
+
         } else {
           console.log(res.msg)
         }
       }).catch(err => {
         console.log(err)
-        this.jobLoadingValue = false
+        this.jobLoadingValue = false;
         if (err.msg) {
           this.$message.error(err.msg)
         }
         if (err.message) {
           this.$message.error(err.message)
         }
-      })
-
-    },
-    getJobDetail(id) {
-      this.showLoadingStatus = true;
-      let self = this;
-      let params = {
-        job_id: id
-      }
-      JOB_DETAIL(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          let resMessage = res.message;
-
-          self.getCompanyJobList(resMessage.user_id,self.otherJobPage,self.otherJobLimit)
-          self.companyInfo = resMessage.company;
-
-          this.detailData = res.message
-
-          const workHours = res.message.working_hours
-          if (workHours) {
-            // this.jobForm.working_hours = JSON.parse(workHours)
-            this.workingHoursData = JSON.parse(workHours)
-          }
-
-          setTimeout(function () {
-            self.initMap(res.message.lng,res.message.lat)
-          },3000)
-
-          this.showLoadingStatus = false
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.showLoadingStatus = false
-        // if(err.msg){
-        //   this.$message.error(err.msg)
-        // }
-        // if(err.message){
-        //   this.$message.error(err.message)
-        // }
       })
 
     },
@@ -313,6 +285,19 @@ export default {
       marker.setLngLat([lng,lat]).addTo(map)
 
     },
+    turnBanner(link) {
+      console.log(link)
+      if (link != '') {
+        window.location.href = link
+      } else {
+        let token = localStorage.getItem('token')
+        if (!token) {
+          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
     getAdsList() {
       let ads_data = {
         page: 1,
@@ -321,32 +306,24 @@ export default {
       ADS_LIST(ads_data).then(res => {
         if (res.code == 200) {
           // console.log(rs.message)
-          let jobsAdsListTop = [];
           let jobsAdsListMid = [];
           let identity = localStorage.getItem('identity');
 
           if (!identity) {
-            jobsAdsListTop = res.message.filter(item => item.name == 'guest_j2');
             jobsAdsListMid = res.message.filter(item => item.name == 'guest_j3');
           }
           if (identity == 1) {
-            jobsAdsListTop = res.message.filter(item => item.name == 'educator_j2');
             jobsAdsListMid = res.message.filter(item => item.name == 'educator_j3');
           }
 
           if (identity == 2 || identity == 3 || identity == 4) {
-            jobsAdsListTop = res.message.filter(item => item.name == 'business_j2');
             jobsAdsListMid = res.message.filter(item => item.name == 'business_j3');
           }
 
           if (identity == 5) {
-            jobsAdsListTop = res.message.filter(item => item.name == 'vendor_j2');
             jobsAdsListMid = res.message.filter(item => item.name == 'vendor_j3');
           }
 
-          if (jobsAdsListTop.length > 0) {
-            this.jobsAdsListTop = jobsAdsListTop[0].data;
-          }
           if (jobsAdsListMid.length > 0) {
             this.jobsAdsListMid = jobsAdsListMid[0].data;
           }
@@ -410,7 +387,7 @@ export default {
       })
     },
     getCompanyJobList(userId,page,limit){
-      this.jobLoadingValue = true
+      this.jobLoadingValue = true;
       let params = {
         user_id: userId,
         is_open: 1,
@@ -470,12 +447,12 @@ export default {
         if(res.code == 200){
           this.otherJobListData = res.message.data;
           this.otherJobTotalNum = res.message.total;
-          this.jobLoadingValue = false
+          this.jobLoadingValue = false;
         }
 
       }).catch(err=>{
         console.log(err)
-        this.jobLoadingValue = false
+        this.jobLoadingValue = false;
         if(err.msg){
           this.$message.error(err.msg)
         }
@@ -493,25 +470,32 @@ export default {
 
     },
     backToResults(){
-      this.$router.push('/jobs')
-      // this.$router.go(-1)
+      this.$router.go(-1)
+      // this.$router.push('/jobs')
       // this.showCompanyStatus = false;
       // this.isOther = false;
       // this.$router.push({path:'/jobs',query:{id:this.selectedJobId,page:this.jobPage}})
 
     },
     turnJobDetail(id){
-
       this.$router.push({path:'/jobs/detail',query:{id:id}})
+    },
+    getJobFeaturedList() {
+      let params = {
+        ad_type: 2
+      }
 
-      // this.showCompanyStatus = false;
-      // if(isOther){
-      //   this.$router.push({path:'/jobs',query:{id:id,page:page,from:1}})
-      //
-      // }else{
-      //   this.$router.push({path:'/jobs',query:{id:id,page:page}})
-      //
-      // }
+      JOB_FEATURED_LIST(params).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.jobFeaturedListData = res.message;
+        } else {
+          console.log(res.msg)
+        }
+      }).catch(err=>{
+        console.log(err)
+        // this.$message.error(err.msg)
+      })
 
     }
 
@@ -544,6 +528,199 @@ export default {
 .job-detail-col{
   padding-left: 12px;
 }
+
+.xll-ads-container {
+  /*padding: 0 50px;*/
+  margin-bottom: 50px;
+}
+
+
+.xll-job-detail{
+  height: calc(100vh - 140px);
+  background-color: #F0F2F5;
+}
+
+.job-detail-bg-container{
+  height: calc(100vh - 170px);
+  padding: 30px 30px 0 30px;
+}
+
+@media screen and (min-width: 1920px) {
+  /*  190 */
+  .job-detail-container{
+    height: calc(100vh - 190px -  220px);
+  }
+
+  .job-detail-c{
+    height: calc(100vh - 190px - 340px );
+  }
+
+}
+
+@media screen and (max-width: 1919px) and (min-width: 1200px) {
+  /*  140 */
+  .job-detail-container{
+    height: calc(100vh - 140px -  220px);
+  }
+
+  .job-detail-c{
+    height: calc(100vh - 140px - 340px );
+  }
+}
+
+@media screen and (max-width: 1199px) and (min-width: 992px) {
+  /*  120 */
+  .job-detail-container{
+    height: calc(100vh - 120px -  220px);
+  }
+
+  .job-detail-c{
+    height: calc(100vh - 120px - 340px );
+  }
+}
+
+
+.job-detail-t{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 120px;
+}
+
+.job-detail-t-l{
+  width: 50%;
+}
+
+.job-detail-t-l-1{
+  cursor: pointer;
+  font-family:BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color:#6650B3;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-detail-t-l-2{
+  font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  color:#262626;
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-detail-t-l-3{
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
+
+.job-detail-c-1{
+
+}
+
+.job-detail-c-item{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.job-detail-c-item-l{
+  /*width: 210px;*/
+  font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+}
+.job-detail-c-item-r{
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+  margin-left: 10px;
+}
+
+.job-detail-c-2{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+
+.job-detail-c-2-l{
+  width: 100%;
+}
+.job-detail-c-2-r{
+  width:100%;
+  margin-top: 50px;
+}
+
+.job-detail-c-item-label{
+  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color:#262626;
+}
+.job-detail-c-item-c{
+  margin-top: 25px;
+}
+.job-detail-desc{
+  margin-top: 50px;
+}
+
+.job-detail-desc-label{
+  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color:#262626;
+}
+
+.job-detail-desc-content{
+  margin-top: 25px;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color:#262626;
+}
+
+.map-container{
+  margin-top: 25px;
+  margin-bottom: 50px;
+}
+
+#mapContainer{
+  height: 300px;
+}
+
+.working-hours{
+  width: 100%;
+}
+
+.working-hours-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin-bottom: 10px;
+  position: relative;
+}
+.working-hours-week{
+  margin-left: 10px;
+}
+.working-hours-hours{
+  margin-left: 20px;
+}
+
 
 @media screen and (max-width: 768px ) {
 

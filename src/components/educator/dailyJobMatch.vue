@@ -36,12 +36,22 @@
             </div>
 
           </div>
-<!--          <div class="e-j-item-r">-->
-<!--            <div class="e-j-item-r-1">90% match</div>-->
-<!--            <div class="e-j-item-r-2">-->
-<!--              <el-avatar class="e-j-c-item-avatar"></el-avatar>-->
-<!--            </div>-->
-<!--          </div>-->
+
+          <div class="e-j-item-r">
+            <div class="e-j-item-r-1">{{item.educator_matching_score}}% match</div>
+            <div class="e-j-item-r-2">
+              <template v-if="item.educator_matching_score <= 60">
+                <el-image class="e-j-c-item-avatar" :src="doubtingImg" fit="contain"></el-image>
+              </template>
+              <template v-if="item.educator_matching_score > 60 && item.educator_matching_score <=80">
+                <el-image class="e-j-c-item-avatar" :src="thumbUpImg" fit="contain"></el-image>
+              </template>
+              <template v-if="item.educator_matching_score > 80">
+                <el-image class="e-j-c-item-avatar" :src="funfareImg" fit="contain"></el-image>
+              </template>
+
+            </div>
+          </div>
         </div>
 
       </div>
@@ -55,17 +65,25 @@
 </template>
 
 <script>
-import {JOB_FEATURED_LIST} from "@/api/api";
+import doubtingImg from '@/assets/newHome/match/doubting.png'
+import funfareImg from '@/assets/newHome/match/funfare.png'
+import thumbUpImg from '@/assets/newHome/match/thumb_up.png'
+
+import {EDUCATOR_JOB_MATCH_LIST, JOB_FEATURED_LIST} from "@/api/api";
 
 export default {
   name: "dailyJobMatch",
   data(){
     return {
+      doubtingImg,
+      funfareImg,
+      thumbUpImg,
       jobFeaturedData:[]
     }
   },
   mounted(){
-    this.getJobFeaturedList()
+    this.getEducatorJobMatchingList()
+    // this.getJobFeaturedList()
   },
   methods:{
     turnJobDetail(id){
@@ -87,8 +105,22 @@ export default {
         console.log(err)
       })
 
+    },
+    getEducatorJobMatchingList(){
+      let params = {
+        user_id:localStorage.getItem('uid')
+      }
+      EDUCATOR_JOB_MATCH_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.jobFeaturedData = res.message
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
     }
   }
+
 }
 </script>
 
@@ -131,9 +163,10 @@ export default {
 }
 
 .e-j-c-item-avatar {
+  margin-top: 15px;
   width: 70px;
   height: 70px;
-
+  /*border-radius: 70px;*/
 }
 
 .e-j-item-l {

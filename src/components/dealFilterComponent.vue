@@ -51,7 +51,7 @@
         </div>
 
         <div class="filter-item">
-          <div class="filter-label">Deal type</div>
+          <div class="filter-label">Deal Category</div>
 
           <div class="filter-checkbox-container">
 

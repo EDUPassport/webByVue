@@ -10,7 +10,7 @@
           <el-icon>
             <ArrowLeft />
           </el-icon>
-          BACK TO SEARCH RESULTS
+          BACK
         </el-button>
       </div>
       <div class="action-r">
@@ -229,7 +229,7 @@
         <mapComponent :lng="info.lng" :lat="info.lat" ></mapComponent>
       </template>
 
-      <div class="cre-container">
+      <div class="cre-container" v-if="info.business_reg_img || info.license">
         <div class="cre-label">Credibility</div>
         <el-row class="cre-c" :gutter="0">
           <el-col :span="12">

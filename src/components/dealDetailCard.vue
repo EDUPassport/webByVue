@@ -37,7 +37,7 @@
 
         <div class="dialog-b-r">
 
-          <el-scrollbar class="dialog-b-r-height">
+          <div class="dialog-b-r-height">
             <div class="dialog-company-name">
               {{ info.company_name }}
             </div>
@@ -45,7 +45,7 @@
               {{ info.company_info.desc }}
             </p>
 
-            <div class="dialog-vendor-profile" @click="readMoreDeal(info.company_info)">
+            <div class="dialog-vendor-profile" @click="readMoreDeal(info.user_id, info.identity, info.company_id)">
               VENDOR PROFILE
             </div>
 
@@ -57,15 +57,15 @@
               {{ info.desc }}
             </p>
 
-            <template v-if="info.is_online == 2 || info.is_online == 3">
-              <mapComponent :lng="info.lng" :lat="info.lat"></mapComponent>
-            </template>
+<!--            <template v-if="info.is_online == 2 || info.is_online == 3">-->
+<!--              <mapComponent :lng="info.lng" :lat="info.lat"></mapComponent>-->
+<!--            </template>-->
 
 <!--            <div class="dialog-category">-->
 <!--              {{ info.company_info.category_name_en }}-->
 <!--            </div>-->
 
-          </el-scrollbar>
+          </div>
 
           <div class="dialog-close">
             <el-icon class="dialog-close-icon"
@@ -101,12 +101,12 @@
 </template>
 
 <script>
-import mapComponent from "@/components/mapComponent";
+// import mapComponent from "@/components/mapComponent";
 export default {
   name: "dealDetailCard",
   props:['info','visible','qrcodeValue'],
   components:{
-    mapComponent
+
   },
   methods:{
     close(){
@@ -116,8 +116,8 @@ export default {
       this.$emit('close')
       done()
     },
-    readMoreDeal(info){
-      this.$emit('viewProfile',info)
+    readMoreDeal(userId,identity,companyId){
+      this.$emit('viewProfile',userId, identity, companyId)
     },
     share(info){
       this.$emit('share',info)
@@ -135,8 +135,8 @@ export default {
   background-color: #FFFFFF;
   box-shadow: 0 3px 10px #0000001A;
 
-  width: 956px;
-  height: 630px;
+  width: 950px;
+  height: 730px;
   border-radius: 40px;
   margin: 0 auto;
   position: relative;
@@ -149,7 +149,7 @@ export default {
 
 .dialog-t{
   width: 100%;
-  height: 180px;
+  height: 380px;
 
 }
 
@@ -200,6 +200,14 @@ export default {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #262626;
+  word-break: normal;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
 }
 
 .dialog-vendor-profile{
@@ -226,6 +234,14 @@ export default {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #262626;
+  word-break: normal;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
 }
 
 .dialog-close{
@@ -262,4 +278,7 @@ export default {
   height: 100%;
 }
 
+/deep/ .el-overlay{
+  background-color: rgba(0, 0, 0, 0.9);
+}
 </style>

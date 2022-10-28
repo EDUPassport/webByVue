@@ -840,7 +840,7 @@ export default {
       let strDecode = decode(str)
       let strParse = JSON.parse(strDecode)
       if(strParse.from == 'other'){
-        this.getUserInfoForVisitor(strParse.uid)
+        this.getUserInfoForVisitor(strParse.uid, strParse.cid)
       }else{
         this.getUserInfo()
         this.updateEducatorProfile()
@@ -892,9 +892,10 @@ export default {
       this.getUserObjectList()
       this.languagesDrawer = true
     },
-    getUserInfoForVisitor(userId) {
+    getUserInfoForVisitor(userId,companyId) {
       let params = {
         user_id:userId,
+        company_id:companyId,
         identity:1
       }
 

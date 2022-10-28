@@ -1,5 +1,5 @@
 <template>
-  <div class="bg" v-loading="showLoadingStatus">
+  <div class="bg">
 
     <template v-if="exchangeAccountInfo">
       <ExchangeAccountInfo :info="exchangeAccountInfo"></ExchangeAccountInfo>
@@ -22,6 +22,8 @@
                              :jobPage="otherJobPage"
                              :isOther="true"
                              :companyInfo="companyInfo"
+                             :loading="jobLoadingValue"
+                             :loadingFeatured="jobFeaturedLoadingValue"
                              @jobDetailEvent="turnJobDetail"
                              @backToResults="backToResults"
                              @jobPageChange="otherJobPageChange"
@@ -39,6 +41,8 @@
                              :jobTotalNum="jobTotalNum"
                              :jobPage="jobPage"
                              :isOther="false"
+                             :loading="jobLoadingValue"
+                             :loadingFeatured="jobFeaturedLoadingValue"
                              @jobDetailEvent="turnJobDetail"
                              @jobPageChange="jobPageChange"
                              @addFavorite = "addFavorite"
@@ -62,7 +66,7 @@
 
         <template v-else>
 
-          <el-scrollbar class="xll-job-detail">
+          <el-scrollbar class="xll-job-detail"  v-loading="showLoadingStatus">
 
             <div class="job-detail-bg-container">
 
@@ -77,7 +81,7 @@
                   <div class="job-detail-t-l">
                     <div class="job-detail-t-l-1"
                          v-if="detailData.company"
-                         @click="turnBusinessProfile(detailData.company)"
+                         @click="turnBusinessProfile(detailData)"
                     >
                       {{detailData.company.company_name}}
                     </div>
@@ -289,9 +293,12 @@ export default {
   name: "list",
   data() {
     return {
+      jobLoadingValue:false,
+      jobFeaturedLoadingValue:false,
+
       shareDialogVisible:false,
       shareInfo:{},
-      locationUrl: window.location.href,
+      locationUrl: '',
 
       applyBtnLoading:false,
       showCompanyStatus:false,
@@ -495,7 +502,7 @@ export default {
       if (e.student_age) {
         params.age_to_teach = e.student_age
       }
-
+      this.jobLoadingValue = true;
       JOB_LIST(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
@@ -513,12 +520,13 @@ export default {
           this.jobListData = res.message.data
           // console.log(res.message.data)
           this.jobTotalNum = res.message.total
-          this.showLoadingStatus = false
+          this.jobLoadingValue = false
         } else {
           console.log(res.msg)
         }
       }).catch(err => {
         console.log(err)
+        this.jobLoadingValue = false
         if (err.msg) {
           this.$message.error(err.msg)
         }
@@ -532,6 +540,7 @@ export default {
       let params = {
         job_id: id
       }
+      this.showLoadingStatus = true;
       JOB_DETAIL(params).then(res => {
         console.log(res)
         if (res.code == 200) {
@@ -544,6 +553,7 @@ export default {
           }
 
           this.initMap(res.message.lng,res.message.lat)
+          this.showLoadingStatus = false;
           // let userId = res.message.user_id
           // this.getCompanyJobList(userId)
         }
@@ -689,7 +699,8 @@ export default {
       // document.documentElement.scrollTop = 120
     },
     getJobList(page, limit) {
-
+      this.jobLoadingValue = true;
+      // this.showLoadingStatus = true;
       let params = {
         page: page,
         limit: limit
@@ -712,7 +723,8 @@ export default {
           this.jobListData = res.message.data
           // console.log(res.message.data)
           this.jobTotalNum = res.message.total
-          this.showLoadingStatus = false
+
+          this.jobLoadingValue = false
 
 
         } else {
@@ -720,6 +732,7 @@ export default {
         }
       }).catch(err => {
         console.log(err)
+        this.jobLoadingValue = false
         if (err.msg) {
           this.$message.error(err.msg)
         }
@@ -930,12 +943,22 @@ export default {
 
     },
     turnBusinessProfile(info){
-      // console.log(info)
-      this.showCompanyStatus = true;
-      this.isOther = true;
 
-      this.companyInfo = info;
-      this.getCompanyJobList(info.user_id,this.otherJobPage,this.otherJobLimit);
+      let obj = {
+        jobId:info.id,
+        uid:info.user_id,
+        i:info.identity,
+        cid:info.company_id
+      }
+
+      this.$router.push({path:'/jobs/business/profile',query:obj})
+
+      // console.log(info)
+      // this.showCompanyStatus = true;
+      // this.isOther = true;
+      //
+      // this.companyInfo = info;
+      // this.getCompanyJobList(info.user_id,this.otherJobPage,this.otherJobLimit);
 
     },
     getCompanyJobList(userId,page,limit){
@@ -993,16 +1016,19 @@ export default {
 
       params.is_online = this.onlineValue
 
+      this.jobLoadingValue = true;
 
       COMPANY_JOB_LIST(params).then(res=>{
         console.log(res)
         if(res.code == 200){
           this.otherJobListData = res.message.data;
           this.otherJobTotalNum = res.message.total;
+          this.jobLoadingValue = false
         }
 
       }).catch(err=>{
         console.log(err)
+        this.jobLoadingValue = false
         if(err.msg){
           this.$message.error(err.msg)
         }
@@ -1041,16 +1067,19 @@ export default {
       let params = {
         ad_type: 2
       }
+      this.jobFeaturedLoadingValue = true;
 
       JOB_FEATURED_LIST(params).then(res => {
         console.log(res)
         if (res.code === 200) {
           this.jobFeaturedListData = res.message;
+          this.jobFeaturedLoadingValue = false;
         } else {
           console.log(res.msg)
         }
       }).catch(err=>{
         console.log(err)
+        this.jobFeaturedLoadingValue = false;
         // this.$message.error(err.msg)
       })
 
@@ -1061,6 +1090,9 @@ export default {
         desc:data.desc,
         id:data.id
       }
+      let origin  = window.location.origin
+      this.locationUrl = origin + '/jobs/detail?id='+data.id;
+
       this.shareDialogVisible = true;
     },
     applyJob(id) {

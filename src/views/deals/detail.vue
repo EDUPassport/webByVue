@@ -1,203 +1,573 @@
 <template>
-  <div class="bg">
-    <el-row class="detail-row" align="top" justify="start">
-      <el-col class="detail-l-col" :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-        <div class="job-title">{{ detailData.title }}</div>
-        <div class="job-address-salary">
-          <div class="job-address">
-            {{ detailData.location }}
-          </div>
-        </div>
+  <div class="bg" v-loading="showLoadingStatus">
+    <div class="xll-container">
 
-        <div class="job-desc-container">
-          <div class="job-desc-label">Deal Description</div>
-          <div class="job-desc-label-underline"></div>
-          <div class="job-desc-content">
-            {{ detailData.desc }}
-          </div>
-          <div class="job-tags" v-if="detailData.tags">
-            <div class="job-tag" v-for="(item,i) in detailData.tags" :key="i">{{item.tag_name_en}}</div>
-          </div>
+      <el-row :gutter="0" align="top" justify="center">
 
-        </div>
+        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+          <dealFilterComponent
+              :locationData="locationOptions"
+              :tagsData="tagsData"
+              :subCateData="subCateData"
+              @search="confirmFilterSearch"
+          ></dealFilterComponent>
+        </el-col>
 
-        <div class="address-container">
-          <div class="address-label">Address & Location</div>
-          <div class="address-label-underline"></div>
-          <div class="address-content">
-            <div class="address-address">
-              <b>Address:</b>
-              <span>{{ detailData.location }}</span>
-            </div>
+        <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="6">
+          <featuredDealsPromoted
+              :adsData="adsDataMid"
+              :featuredData="featuredDealsData"
+              @addFavorite="addFavoriteFeatured"
+              @cancelFavorite="cancelFavoriteFeatured"
+              @viewProfile="viewProfile"
+              @detail="showDealDetailDialog"
+              @dealDetail="turnDealDetail"
+          >
+          </featuredDealsPromoted>
+        </el-col>
+        <el-col class="deal-detail-col" :xs="24" :sm="24" :md="13" :lg="13" :xl="14">
 
-            <div class="address-location">
-              <b>Location: </b>
-              <div class="map-container">
-                <div id="mapContainer" class="basemap"></div>
+          <el-scrollbar class="deal-detail-scroll">
+
+            <div class="dialog-container" >
+
+              <div class="action-container">
+
+                <div class="action-l">
+                  <el-button class=""
+                             @click="backToSearchResults()"
+                             link>
+                    <el-icon>
+                      <ArrowLeft />
+                    </el-icon>
+                    BACK
+                  </el-button>
+                </div>
+                <div class="action-r">
+
+                </div>
+
               </div>
+
+              <div class="dialog-t" >
+                <el-image class="dialog-background-img"
+                          fit="cover"
+                          :src="companyInfo.background_image">
+                  <template #error>
+                    <div class="img-slot-background">
+                      <el-icon :size="80" color="#808080">
+                        <Picture/>
+                      </el-icon>
+                    </div>
+                  </template>
+                </el-image>
+              </div>
+              <div class="dialog-b">
+
+                <div class="dialog-b-l">
+
+                  <div class="dialog-logo">
+                    <el-avatar class="dialog-logo-img" :src="companyInfo.logo"></el-avatar>
+                  </div>
+                  <div class="dialog-qrcode">
+<!--                    <vue-qrcode :value="qrcodeValue" :options="{width:200}"></vue-qrcode>-->
+                  </div>
+
+                </div>
+
+                <div class="dialog-b-r">
+
+                  <div class="dialog-company-name">
+                    {{ detailData.company_name }}
+                  </div>
+                  <p class="dialog-company-desc">
+                    {{ companyInfo.desc }}
+                  </p>
+
+                  <div class="dialog-vendor-profile"
+                       @click="readMoreDeal(detailData.user_id, detailData.identity, detailData.company_id)">
+                    VENDOR PROFILE
+                  </div>
+
+                  <div class="dialog-title">
+                    {{ detailData.title }}
+                  </div>
+
+                  <p class="dialog-desc">
+                    {{ detailData.desc }}
+                  </p>
+
+                  <template v-if="detailData.is_online == 2 || detailData.is_online == 3">
+                    <mapComponent :lng="detailData.lng" :lat="detailData.lat"></mapComponent>
+                  </template>
+
+                  <div class="dialog-category">
+                    <el-space :size="5" wrap spacer="·">
+                      <!--            <span>discount</span>-->
+                      <span>{{ companyInfo.category_name_en }}</span>
+                    </el-space>
+                  </div>
+
+                  <div class="share-btn-container">
+                    <el-button link @click="shareDeal(detailData)" >
+                      SHARE
+                    </el-button>
+                  </div>
+
+
+                </div>
+
+              </div>
+
+
             </div>
-          </div>
-
-        </div>
 
 
-        <!--          <div class="apply-btn-container">-->
-        <!--            <el-button class="apply-btn" type="info">Apply Now!</el-button>-->
-        <!--          </div>-->
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="xll-deals-r-container">
-
-        <div class="deals-detail-share-container">
-          <div class="deals-favorite" v-if="isFavoriteValue == 1"
-               @click="cancelFavorite(2,detailData.id)">
-            <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-          </div>
-          <div class="deals-favorite" v-else @click="addFavorite(detailData.id,2,detailData.title,detailData.company_logo)">
-            <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-          </div>
-
-          <div class="social-share-container">
-
-            <div class="social-share-icon-container"
-                 @click="showSocialShareExpandStatus = !showSocialShareExpandStatus"
-                 @mouseover="showSocialShareExpandStatus=true">
-              <el-icon :size="24">
-                <Share/>
-              </el-icon>
-            </div>
-
-            <div class="social-share-icon-expand" v-if="showSocialShareExpandStatus"
-                 @mouseleave="showSocialShareExpandStatus = false"
-            >
-              <ShareNetwork
-                  network="Twitter"
-                  :url="locationUrl"
-                  :title="detailData.title == undefined ? '' : detailData.title"
-              >
-                <i class="iconfont el-icon-alitwitter xll-icon"></i>
-              </ShareNetwork>
-              <ShareNetwork
-                  network="LinkedIn"
-                  :url="locationUrl"
-                  :title="detailData.title == undefined ? '' : detailData.title"
-              >
-                <i class="iconfont el-icon-alilinkedin xll-icon"></i>
-              </ShareNetwork>
-              <ShareNetwork
-                  network="Facebook"
-                  :url="locationUrl"
-                  :title="detailData.title == undefined ? '' : detailData.title"
-                  :description="detailData.desc == undefined ? '' : detailData.desc"
-                  :quote="detailData.title == undefined ? '' : detailData.title"
-              >
-                <i class="iconfont el-icon-alifacebook xll-icon"></i>
-              </ShareNetwork>
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="company-bio-container">
-          <div class="company-bio-label">Company Bio</div>
-          <div class="company-bio-label-underline"></div>
-          <div class="company-bio-content">
-            <div class="company-logo-container">
-              <el-image class="company-logo" v-if="detailData.company"
-                        :src="detailData.company.logo"></el-image>
-            </div>
-            <div class="company-bio-text" v-if="detailData.company">
-              {{ detailData.company.desc }}
-            </div>
-            <div class="view-profile-btn-container">
-<!--              <el-button class="view-profile-btn" type="primary"-->
-<!--                         link-->
-<!--                         round-->
-<!--                         @click="viewCompanyProfile(detailData.user_id)">-->
-<!--                View Profile-->
-<!--              </el-button>-->
-            </div>
-          </div>
-        </div>
-
-<!--        <div class="contact-container" v-if="detailData.user_contact">-->
-<!--          <div class="contact-label">Contact Person</div>-->
-<!--          <div class="contact-content">-->
-<!--            <div class="contact-l">-->
-<!--              <el-avatar class="contact-profile-photo" :src="detailData.user_contact.headimgurl"></el-avatar>-->
-<!--            </div>-->
-<!--            <div class="contact-r">-->
-<!--              <div class="contact-r-t">-->
-<!--                Hi I am {{ detailData.user_contact.first_name }} from {{ detailData.company.company_name }}.-->
-<!--              </div>-->
-<!--              <div class="contact-r-b">-->
-<!--                <el-button type="primary" round @click="chat(detailData.user_id)">Let's Chat!</el-button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-      </el-col>
-    </el-row>
+          </el-scrollbar>
 
 
+        </el-col>
+
+
+      </el-row>
+
+      <dealDetailCard :info="dealDetailData"
+                      :qrcodeValue="qrcodeValue"
+                      @close="dealDetailDialogVisible=false"
+                      @share="shareDeal"
+                      @viewProfile="viewProfile"
+                      :visible="dealDetailDialogVisible">
+      </dealDetailCard>
+
+      <shareCard :visible="shareDialogVisible"
+                 :title="shareInfo.title"
+                 :description="shareInfo.desc"
+                 :quote="shareInfo.desc"
+                 :url="locationUrl"
+                 @close="shareDialogVisible=false"
+      >
+      </shareCard>
+
+    </div>
   </div>
+
 </template>
 
 <script>
+
+import {
+  TAGS_LIST,
+  DEALS_LIST,
+  DEALS_AREA_LIST,
+  ADD_FAVORITE,
+  CANCEL_FAVORITE,
+  ADS_LIST, USER_INFO_VISITOR_V2, USER_SUB_IDENTITY_V2, FEATURED_DEALS_LIST, DEALS_DETAIL
+} from "@/api/api";
+
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import {
-  COMPANY_JOB_LIST, DEALS_DETAIL, ADD_FAVORITE, IS_FAVORITE, CANCEL_FAVORITE, ADD_TO_CHAT,
-  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2
-} from "@/api/api";
-import {useStore} from "vuex";
-import {encode} from "js-base64";
+import dealDetailCard from "@/components/dealDetailCard";
+import shareCard from "@/components/shareCard";
+import dealFilterComponent from "@/components/dealFilterComponent";
+
+import featuredDealsPromoted from "@/components/deals/featuredDealsPromoted";
 
 export default {
   name: "detail",
-  setup(){
-    const store = useStore()
+  components: {
+    shareCard,
+    dealFilterComponent,
+    featuredDealsPromoted,
+    dealDetailCard
+  },
+  setup() {
 
-    const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
-    const setShowChatStatus = () => store.commit('showChatStatus', true)
-    const locationUrl  = window.location.href;
+    const locationUrl = window.location.href;
+
     return {
-      setNowChatUserInfo,
-      setShowChatStatus,
       locationUrl
     }
 
   },
   data() {
     return {
+
+      subCateData: [],
+      locationValue: '',
+      locationOptions: [],
+      tagValue: [],
+      tagsData: [],
+      dealsListData: [],
+      dealPage: 1,
+      dealLimit: 10,
+      dealTotalNum: 0,
+      sCateId: 0,
+      showLoadingStatus: true,
+
+      dealDetailDialogVisible: false,
+      dealDetailData: {},
+      qrcodeValue: '',
+      webDomain: process.env.VUE_APP_DOMAIN,
+
+      filterIsOnlineValue: false,
+      detailData: {},
+
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
-      detailData: {},
-      otherJobsData:[],
-      isFavoriteValue:0,
-      showSocialShareExpandStatus:false
+
+      shareDialogVisible: false,
+      shareInfo: {},
+
+      filterResultData: {},
+      companyInfo: {},
+      featuredDealsData:[],
+      adsDataMid:[]
+
+
     }
   },
-  components:{
+  beforeRouteUpdate(to){
+    console.log(to)
+    let dealId = to.query.id;
+
+    if(dealId){
+      this.getDealDetail(dealId)
+    }
 
   },
   mounted() {
+
     let dealId = this.$route.query.id;
-    this.getDealDetail(dealId)
-    let token = localStorage.getItem('token')
-    if(token && token != ''){
-      this.isFavorite(2,dealId)
+    if (dealId) {
+      this.getDealDetail(dealId)
     }
+    this.getFeaturedDealsList()
+    this.getSubIdentityList()
+    this.getTagsList()
+    this.getDealsAreaList()
+    this.getAdsList()
 
   },
   methods: {
-    viewCompanyProfile(id){
-      this.$router.push({path:'/info/company',query:{id:id,identity:3}})
+    confirmFilterSearch(e) {
+      console.log(e)
+      this.filterResultData = e;
+      this.getDealsList(this.dealPage, this.dealLimit)
     },
-    initMap(lng,lat){
+    backToSearchResults() {
+      this.$router.go(-1)
+    },
+    readMoreDeal(userId,identity,companyId) {
+      this.$router.push({path:'/deals/vendor/profile', query:{uid:userId,i:identity,cid:companyId}})
+    },
+    showDealDetailDialog(item) {
+
+      this.dealDetailData = item;
+      this.dealDetailDialogVisible = true;
+      this.qrcodeValue = this.webDomain + '?id=' + item.id;
+
+    },
+    turnDealDetail(id){
+      this.$router.push({path:'/deals/detail',query:{id:id}})
+    },
+    shareDeal(e) {
+      // console.log(e)
+      this.shareDialogVisible = true;
+      this.shareInfo = e;
+
+
+    },
+    viewProfile(userId,identity,companyId) {
+
+      this.$loading({text:''})
+
+      let params = {
+        user_id:userId,
+        identity:identity,
+        company_id:companyId
+      }
+
+      USER_INFO_VISITOR_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.companyInfo = res.message.user_contact.company;
+          this.showDealDetailStatus = true;
+          this.dealDetailDialogVisible = false;
+          this.$loading().close()
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    turnBanner(link) {
+      console.log(link)
+      if (link != '') {
+        window.location.href = link
+      } else {
+        let token = localStorage.getItem('token')
+        if (!token) {
+          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
+    getAdsList() {
+      let ads_data = {
+        page: 1,
+        limit: 10000
+      }
+      ADS_LIST(ads_data).then(res => {
+        if (res.code == 200) {
+          // console.log(rs.message)
+          let adsDataTop = []
+          let adsDataMid = [];
+          let adsDataBottom = [];
+          let identity = localStorage.getItem('identity');
+
+          if (!identity) {
+            adsDataTop = res.message.filter(item => item.name == 'guest_d1');
+            adsDataMid = res.message.filter(item => item.name == 'guest_d2');
+            adsDataBottom = res.message.filter(item => item.name == 'guest_d3');
+          }
+          if (identity == 1) {
+            adsDataTop = res.message.filter(item => item.name == 'educator_d1');
+            adsDataMid = res.message.filter(item => item.name == 'educator_d2');
+            adsDataBottom = res.message.filter(item => item.name == 'educator_d3');
+          }
+          if (identity == 2 || identity == 3 || identity == 4) {
+            adsDataTop = res.message.filter(item => item.name == 'business_d1');
+            adsDataMid = res.message.filter(item => item.name == 'business_d2');
+            adsDataBottom = res.message.filter(item => item.name == 'business_d3');
+          }
+          if (identity == 5) {
+            adsDataTop = res.message.filter(item => item.name == 'vendor_d1');
+            adsDataMid = res.message.filter(item => item.name == 'vendor_d2');
+            adsDataBottom = res.message.filter(item => item.name == 'vendor_d3');
+          }
+          if (adsDataTop.length > 0) {
+            this.adsDataTop = adsDataTop[0].data;
+          }
+          if (adsDataMid.length > 0) {
+            this.adsDataMid = adsDataMid[0].data;
+          }
+          if (adsDataBottom.length > 0) {
+            this.adsDataBottom = adsDataBottom[0].data;
+          }
+
+        }
+
+      }).catch(err => {
+        this.$message.error(err.msg)
+      })
+    },
+    getSubIdentityList() {
+      let params = {
+        pid: 5,
+        tree: 1
+      }
+
+      USER_SUB_IDENTITY_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.subCateData = res.message
+        }
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+
+      })
+    },
+    getTagsList() {
+      let params = {
+        page: 1,
+        limit: 1000
+      }
+      TAGS_LIST(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.tagsData = res.message.data;
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    getDealsList(page, limit) {
+
+      let filterResult = this.filterResultData;
+
+      let paramsA = {
+        page: page,
+        limit: limit
+      }
+
+      let params = Object.assign(paramsA, filterResult)
+
+      DEALS_LIST(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.dealsListData = res.message.data;
+          this.dealTotalNum = res.message.total
+          this.showLoadingStatus = false
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    getDealsAreaList() {
+      DEALS_AREA_LIST({}).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.locationOptions = res.message
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    dealPageSizeChange(e) {
+      console.log(e)
+    },
+    dealPageChange(e) {
+      this.showLoadingStatus = true
+      this.dealPage = e
+      this.getDealsList(e, this.dealLimit)
+
+      document.documentElement.scrollTop = 200
+    },
+    addFavorite(id, type, title, url, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.dealsListData[index]['is_favorite'] = 1
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    cancelFavorite(type, typeId, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.dealsListData[index]['is_favorite'] = 0
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    addFavoriteFeatured(id, type, title, url, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.featuredDealsData[index]['is_favorite'] = 1
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    cancelFavoriteFeatured(type, typeId, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.featuredDealsData[index]['is_favorite'] = 0
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    getFeaturedDealsList() {
+      let params = {}
+      FEATURED_DEALS_LIST(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.featuredDealsData = res.message;
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+
+    getDealDetail(id) {
+      let params = {
+        deal_id: id,
+        token: localStorage.getItem('token')
+      }
+      let self = this;
+      DEALS_DETAIL(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.detailData = res.message
+          this.companyInfo = res.message.company;
+
+          if(res.message.is_online == 2 || res.message.is_online == 3){
+
+            setTimeout(function () {
+              self.initMap(res.message.lng, res.message.lat)
+            }, 3000)
+
+          }
+
+          this.showLoadingStatus = false
+          // let userId = res.message.user_id
+          // this.getCompanyJobList(userId)
+        }
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+
+    },
+    initMap(lng, lat) {
       mapboxgl.accessToken = this.accessToken;
 
       const map = new mapboxgl.Map({
@@ -225,383 +595,9 @@ export default {
 
       map.addControl(geocoder, 'top-left')
       const marker = new mapboxgl.Marker()
-      marker.setLngLat([lng,lat]).addTo(map)
+      marker.setLngLat([lng, lat]).addTo(map)
 
-    },
-    getDealDetail(id) {
-      let params = {
-        deal_id: id,
-        token:localStorage.getItem('token')
-      }
-      DEALS_DETAIL(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.detailData = res.message
-
-          this.initMap(res.message.lng,res.message.lat)
-
-          let userId = res.message.user_id
-          this.getCompanyJobList(userId)
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-    getCompanyJobList(userId){
-      let params = {
-        user_id: userId,
-        is_open: 1,
-        status:1,
-        page: 1,
-        limit: 5
-      }
-
-      COMPANY_JOB_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-          this.otherJobsData = res.message.data
-        }
-
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-    addFavorite(id, type, title, url) {
-      let params = {
-        token: localStorage.getItem('token'),
-        type: type,
-        type_id: id,
-        type_title: title,
-        type_url: url
-      }
-      ADD_FAVORITE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.isFavoriteValue = 1
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-    cancelFavorite(type,typeId){
-      let params = {
-        token:localStorage.getItem('token'),
-        type:type,
-        type_id:typeId
-      }
-      CANCEL_FAVORITE(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-          this.isFavoriteValue = 0
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    },
-    isFavorite(type,typeId){
-      let params = {
-        token:localStorage.getItem('token'),
-        type:type,
-        type_id:typeId
-      }
-      IS_FAVORITE(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-          this.isFavoriteValue = res.data;
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    },
-    chat(userId){
-      console.log(userId)
-      let token = localStorage.getItem('token')
-      if(!token || token === ''){
-        return this.$router.push('/login')
-      }
-
-      let vendorInfo = this.detailData.userInfo;
-
-      let type = this.GoEasy.IM_SCENE.PRIVATE;
-      let name = vendorInfo.first_name+' '+ vendorInfo.last_name;
-      let avatar = vendorInfo.profile_photo ? vendorInfo.profile_photo : 'https://oss.esl-passport.cn/educator.png';
-
-      let nowUserInfo = {
-        uuid:userId,
-        name:name,
-        avatar:avatar,
-        identity:3
-      }
-
-      let textMessage = this.goEasy.im.createTextMessage({
-        text: 'Hello',
-        to: {
-          id: userId,
-          type: type,
-          data: {
-            name: name,
-            avatar: avatar,
-            identity:3
-          }
-        }
-      });
-
-      let localHistory;
-      if (type === this.GoEasy.IM_SCENE.PRIVATE) {
-        localHistory = this.service.getPrivateMessages(userId);
-      } else {
-        localHistory = this.service.getGroupMessages(userId);
-      }
-      // console.log(localHistory)
-      localHistory.push(textMessage)
-
-      this.goEasy.im.sendMessage({
-        message: textMessage,
-        onSuccess: function (message) {
-          console.log("发送成功.", message);
-        },
-        onFailed: function (error) {
-          console.log("发送失败:", error);
-        }
-      });
-
-      this.setShowChatStatus()
-      this.setNowChatUserInfo(nowUserInfo)
-
-    },
-    addUserToChat(userId,toIdentity,identity){
-      let params = {
-        identity:identity,
-        to_identity:toIdentity,
-        to_user_id: userId
-      }
-
-      ADD_TO_CHAT(params).then(res=>{
-        if(res.code === 200){
-          console.log('add Chat successfuly')
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-    offerDeal(){
-      let token = localStorage.getItem('token')
-      let self = this
-      if(!token || token == ''){
-        return this.$msgbox({
-          title:'Offer a Deal',
-          message:'Before offer a deal, you need to log in',
-          type:'warning',
-          confirmButtonText:'Log in',
-          callback(action){
-            console.log(action)
-            if(action==='confirm'){
-              let redirectParamsObj = {
-                path:'/deals/detail',
-                query:{
-                  id:self.$route.query.id
-                }
-              }
-
-              let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
-
-              self.$router.push({path:'/login',query:{redirect_params:redirectParamsStr}})
-            }
-          }
-        })
-      }
-
-      let identity = localStorage.getItem('identity')
-
-      if(identity != 3){
-        this.selectRole(3)
-      }
-
-      self.$router.push({path:'/deals/offer',query:{}})
-    },
-    selectRole(e) {
-      this.$loading({
-        text: 'Loading...'
-      })
-
-      let params = {
-        user_id: localStorage.getItem('uid'),
-        identity: e
-      }
-
-      USER_INFO_VISITOR_V2(params).then(res => {
-        let userContact = res.message.user_contact;
-        let educatorContact = {};
-
-        let companyInfo = {};
-
-        let isEducator = userContact.is_educator;
-        let isRecruiting = userContact.is_recruiting;
-        let isSchool = userContact.is_school;
-        let isOther = userContact.is_other;
-        let isVendor = userContact.is_vendor;
-        let identity = e;
-
-        if (identity == 1) {
-          if (isEducator > 10) {
-            educatorContact =  res.message.user_contact.educator_contact;
-            this.changeIdentity(educatorContact.id,1,2)
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 1}})
-
-          }
-
-        }
-
-        if (identity == 2) {
-
-          if (isRecruiting > 10) {
-
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,2,2)
-            // this.$router.push({path: '/overview', query: {identity: identity}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
-
-            this.dialogBusinessAccountVisible = false
-          }
-        }
-
-        if (identity == 3) {
-
-          if (isSchool > 10) {
-
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,3,2)
-            // this.$router.push({path: '/overview', query: {identity: identity}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
-
-            this.dialogBusinessAccountVisible = false
-          }
-
-        }
-
-        if (identity == 4) {
-
-          if (isOther > 10) {
-            companyInfo = res.message.user_contact.company;
-
-            this.changeIdentity(companyInfo.id,4,2)
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 4}})
-
-            this.dialogBusinessAccountVisible = false
-          }
-
-        }
-
-        if (identity == 5) {
-
-          if (isVendor > 10) {
-
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,5,2)
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 5}})
-
-          }
-
-        }
-
-
-      }).catch(err => {
-        console.log(err)
-        this.$loading().close()
-        this.$message.error(err.msg)
-      })
-    },
-    changeIdentity(companyId, identity, language) {
-      let params = {
-        company_id: companyId,
-        language: language,
-        identity: identity
-      }
-
-      SWITCH_IDENTITY_V2(params).then(res => {
-        // console.log(res)
-        if (res.code == 200) {
-          this.$store.commit('allIdentityChanged',true )
-
-          localStorage.setItem('company_id',companyId)
-          localStorage.setItem('identity', identity)
-
-          let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData',str)
-
-          this.$store.commit('identity', identity)
-          this.$store.commit('menuData', res.message)
-
-          this.$loading().close()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$loading().close()
-        this.$message.error(err.msg)
-      })
-
-    },
+    }
 
   }
 }
@@ -609,353 +605,186 @@ export default {
 
 <style scoped>
 .bg {
-  background-color: #f5f6f7;
+  background-color: #FFFFFF;
 }
 
-.detail-row {
+.xll-container {
+  width: 100%;
   margin: 0 auto;
-  text-align: left;
-  padding: 20px 0;
 }
 
-.detail-l-col {
-  padding: 20px;
+
+#mapContainer {
+  height: 300px;
 }
 
-.job-title {
-  font-family: BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 24px;
-  color: #ff2870;
-  padding-left: 20px;
-  font-weight: bold;
-}
-
-.job-address-salary {
+.deal-detail-col {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: bold;
-}
-
-.job-address {
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  color: #808080;
-  font-size: 14px;
-  padding-left: 20px;
-  padding-top: 10px;
-}
-
-.job-salary {
-  font-size: 14px;
-  color: #ff2870;
-}
-
-.job-desc-container {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
-  margin-top: 20px;
-}
-
-.job-desc-label {
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 22px;
-}
-
-.job-desc-label-underline {
-  width: 40px;
-  margin-top: 4px;
-  border-bottom: 2px solid #ff2870;
-}
-
-.job-desc-content {
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  padding: 10px 0;
-  font-size: 18px;
-}
-
-.job-tags {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
 }
 
-.job-tag {
-  font-size: 14px;
-  background-color: #ff2870;
-  color: #ffffff;
-  padding: 4px 10px;
-  border-radius: 4px;
+
+.deal-detail-scroll {
+  background-color: #F0F2F5;
+  height: calc(100vh - 140px);
+  padding:0 0  0 25px ;
 }
 
-.job-tag:not(:first-child) {
-  margin: 10px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+.dialog-container{
+  min-height: calc(100vh - 140px);
+  background-color: #FFFFFF;
+
+  margin: 0 auto;
+
 }
 
-
-.address-container {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
-  margin-top: 20px;
+/deep/ .el-dialog{
+  --el-dialog-bg-color: none;
+  --el-dialog-box-shadow: none;
 }
 
-.address-label {
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 22px;
-}
-
-.address-label-underline {
-  width: 40px;
-  margin-top: 4px;
-  border-bottom: 2px solid #ff2870;
-}
-
-.address-content {
-
-  padding: 10px 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.address-address {
-  padding: 10px 0;
-}
-
-.address-address b {
-  font-size: 18px;
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-}
-
-.address-address span {
-  color: #ff2870;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 14px;
-}
-
-.address-location {
+.dialog-t{
   width: 100%;
-}
-
-.address-location b {
-  font-size: 18px;
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-}
-
-
-.apply-btn-container {
-  padding: 20px;
-  margin-top: 20px;
-}
-
-.apply-btn {
-  width: 100%;
-  background-color: #b1c452;
-  color: #ffffff;
-}
-
-.offer-deal{
-  width: 100%;
-  text-align: center;
-  padding-top: 20px;
-}
-
-.offer-deal-btn{
-  width: 90%;
-  font-size: 14px;
-}
-
-.company-bio-container {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
-  margin-top: 20px;
-  min-height: 200px;
-}
-
-.company-bio-label {
-  font-size: 22px;
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-}
-
-.company-bio-label-underline {
-  width: 100%;
-  margin-top: 4px;
-  border-bottom: 2px solid #ff2870;
-}
-.company-bio-content{
-  padding-top:10px;
+  height: 420px;
 
 }
 
-.company-logo-container {
-  float: left;
-  padding: 10px;
-}
-
-.company-logo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 1px solid #EEEEEE;
-}
-
-.company-bio-text {
-  min-height: 140px;
-  font-size: 18px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-}
-
-.view-profile-btn-container {
-  padding: 10px 0;
-  text-align:right;
-}
-
-.view-profile-btn {
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.contact-container {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
-  margin-top: 20px;
-}
-
-.contact-label {
-  font-weight: bold;
-
-  font-size: 22px;
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-}
-
-.contact-content {
-  padding: 10px 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.contact-l {
-  padding: 10px;
-}
-
-.contact-profile-photo {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-}
-.contact-r{
-  padding: 10px;
-}
-.contact-r-t {
-
-  font-weight: bold;
-  font-size: 18px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-}
-
-.contact-r-b {
-  font-size: 14px;
-  margin-top: 20px;
-}
-
-.map-container{
-  height: 300px;
-}
-.basemap{
+.dialog-background-img{
   width: 100%;
   height: 100%;
 }
 
-.deals-detail-share-container{
+.dialog-b{
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: #FFFFFF;
-  padding:10px 20px;
-  border-radius: 10px;
-  margin-top: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 25px;
 }
 
-.deals-favorite{
+.dialog-b-l{
+
+}
+
+.dialog-logo{
+
+}
+
+.dialog-logo-img{
+
+  width: 150px;
+  height: 150px;
+  box-shadow: 0px 0px 6px #00000029;
+}
+
+.dialog-qrcode{
+  display: none;
+}
+
+.dialog-b-r{
+  width: calc(100% - 220px);
+  position: relative;
+  padding-right: 25px;
+}
+
+.dialog-b-r-height{
+  height: 350px ;
+}
+
+.dialog-company-name{
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color: #262626;
+}
+
+.dialog-company-desc{
+  margin-top: 10px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+  word-break: normal;
+
+
+}
+
+.dialog-vendor-profile{
+  margin-top: 10px;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #6650B3;
   cursor: pointer;
 }
 
-.xll-heart-icon{
-  font-size: 34px;
+.dialog-vendor-profile:hover{
+  text-decoration:underline;
 }
 
-.social-share-container {
-  text-align: left;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-left: 20px;
+.dialog-title{
+  margin-top: 25px;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  color: #262626;
 }
 
-.social-share-icon-container {
-  width: 30px;
-  height: 30px;
-  border: 2px solid #1E7AA2;
-  background-color: #FFFFFF;
-  border-radius: 30px;
+.dialog-desc{
+  margin-top: 25px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+  word-break: normal;
+}
+
+
+.dialog-action-l span{
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #262626;
+}
+
+.img-slot-background{
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  background-color: #faf7f7;
+  width: 100%;
+  height: 100%;
+}
+.dialog-category{
+  margin-top: 25px;
 }
 
-.social-share-icon-expand {
-  font-size: 14px;
+.dialog-category span{
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #262626;
+}
+
+.share-btn-container{
+  margin-top: 15px;
+}
+
+
+.action-container{
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
+  height: 60px;
 }
 
-.social-share-icon-expand >>> a {
-  margin-left: -6px;
-  background-color: #FFFFFF;
-  width: 30px;
-  height: 30px;
-  border: 2px solid #000000;
-  display: flex;
-  border-radius: 30px;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
+.action-r{
+  text-align: right;
+  padding-right: 50px;
 }
 
-.xll-icon {
-  font-size: 24px;
-}
 
-@media screen and (min-width: 1200px){
-
-  .detail-row {
-    width: 1100px;
-  }
+@media screen and (min-width: 1200px) {
 
 }
 
-@media screen  and (max-width: 768px ){
-  .xll-deals-r-container{
-    padding:20px;
-  }
-
-
-
+@media screen and (max-width: 768px) {
 
 }
 

@@ -202,7 +202,7 @@
                               <div class="dashboard-work-exp-label">
                                 <span>Working experience</span>
                                 <el-button class="dashboard-view-detail-btn" link
-                                           @click="viewEducatorDetail(item.id,item.user_id,item.identity)">
+                                           @click="viewEducatorDetail(item)">
                                   VIEW DETAILS
                                 </el-button>
                               </div>
@@ -292,15 +292,19 @@
 
                               </div>
                               <div class="da-item-b-r">
-                                <!--                                <el-button class="da-item-b-l-btn-1" link round>-->
-                                <!--                                  REJECT-->
-                                <!--                                </el-button>-->
-                                <!--                                <el-button class="da-item-b-l-btn-1" round>-->
-                                <!--                                  ARCHIVE-->
-                                <!--                                </el-button>-->
-                                <!--                                <el-button class="da-item-b-l-btn-2" type="primary" round>-->
-                                <!--                                  INTERESTED-->
-                                <!--                                </el-button>-->
+                                <el-button class="da-item-b-l-btn-1" link round
+                                           @click="updateApplyJobStatus(item.id,3)"
+                                >
+                                  NOT SELECTED
+                                </el-button>
+<!--                                <el-button class="da-item-b-l-btn-1" round>-->
+<!--                                  ARCHIVE-->
+<!--                                </el-button>-->
+                                <el-button class="da-item-b-l-btn-2" type="primary" round
+                                           @click="updateApplyJobStatus(item.id,4)"
+                                >
+                                  INTERESTED
+                                </el-button>
                               </div>
                             </div>
 
@@ -384,7 +388,7 @@
                           <div class="dashboard-work-exp-label">
                             <span>Working experience</span>
                             <el-button class="dashboard-view-detail-btn" link
-                                       @click="viewEducatorDetail(item.id,item.user_id,item.identity)">
+                                       @click="viewEducatorDetail(item)">
                               VIEW DETAILS
                             </el-button>
                           </div>
@@ -466,30 +470,6 @@
 
                             </div>
 
-                            <!--                            <div class="dashboard-education-cer-c-item">-->
-                            <!--                              <div class="dashboard-education-cer-c-label">-->
-                            <!--                                Certificates and Diplomas-->
-                            <!--                              </div>-->
-                            <!--                              <div class="dashboard-education-cer-c-text">-->
-                            <!--                                TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3-->
-                            <!--                              </div>-->
-                            <!--                            </div>-->
-
-                            <!--                            <div class="dashboard-education-cer-c-item">-->
-                            <!--                              <div class="dashboard-education-cer-c-label">-->
-                            <!--                                Languages-->
-                            <!--                              </div>-->
-                            <!--                              <div class="dashboard-education-cer-c-text">-->
-                            <!--                                English(native)-->
-                            <!--                              </div>-->
-                            <!--                              <div class="dashboard-education-cer-c-text">-->
-                            <!--                                Korean(fluent)-->
-                            <!--                              </div>-->
-                            <!--                              <div class="dashboard-education-cer-c-text">-->
-                            <!--                                Turkish(beginner)-->
-                            <!--                              </div>-->
-                            <!--                            </div>-->
-
                           </div>
                         </div>
 
@@ -498,15 +478,19 @@
 
                           </div>
                           <div class="da-item-b-r">
-                            <!--                            <el-button class="da-item-b-l-btn-1" link round>-->
-                            <!--                              REJECT-->
-                            <!--                            </el-button>-->
-                            <!--                            <el-button class="da-item-b-l-btn-1" round>-->
-                            <!--                              ARCHIVE-->
-                            <!--                            </el-button>-->
-                            <!--                            <el-button class="da-item-b-l-btn-2" type="primary" round>-->
-                            <!--                              INTERESTED-->
-                            <!--                            </el-button>-->
+                            <el-button class="da-item-b-l-btn-1" link round
+                                       @click="updateApplyJobStatus(item.id,3)"
+                            >
+                              NOT SELECTED
+                            </el-button>
+<!--                            <el-button class="da-item-b-l-btn-1" round>-->
+<!--                              ARCHIVE-->
+<!--                            </el-button>-->
+                            <el-button class="da-item-b-l-btn-2" type="primary" round
+                                       @click="updateApplyJobStatus(item.id,3)"
+                            >
+                              INTERESTED
+                            </el-button>
                           </div>
                         </div>
 
@@ -550,7 +534,7 @@ import meSideMenu from "@/components/meSideMenu";
 import {
   ALL_JOB_RESUME,
   JOBS_APPLICATIONS,
-  MY_JOBS, SET_READ,
+  MY_JOBS, SET_APPLY_JOB_STATUS, SET_READ,
   USER_UNREAD
 } from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
@@ -655,14 +639,18 @@ export default {
 
   },
   methods: {
-    viewEducatorDetail(companyId, userId, roleValue) {
-      console.log(companyId, userId, roleValue)
+    viewEducatorDetail(info) {
+      console.log(info)
+      let companyId = info.user_contact.company_id;
+      let userId = info.user_contact.id;
+
       let obj = {
         cid: companyId,
         uid: userId,
         identity: 1,
         from:'other'
       }
+
       let str = encode(JSON.stringify(obj))
       let { href } = this.$router.resolve({
         path: '/educator/profile', query: {str: str}
@@ -844,6 +832,24 @@ export default {
       // console.log(e)
       // document.documentElement.scrollTop = 120
     },
+    updateApplyJobStatus(id,value){
+      let params = {
+        id:id,
+        status:value
+      }
+      SET_APPLY_JOB_STATUS(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.$message({
+            type:'success',
+            message:'Success'
+          })
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
 
 
   }

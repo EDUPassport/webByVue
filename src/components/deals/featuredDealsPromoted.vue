@@ -65,6 +65,9 @@
                 </div>
                 <div class="deals-item-b-r">
                   <el-button link @click="showDealDetailDialog(item)">
+                    QUICK VIEW
+                  </el-button>
+                  <el-button link @click="turnDealDetail(item.id)">
                     DETAILS
                   </el-button>
                 </div>
@@ -107,10 +110,7 @@
               </el-image>
             </div>
             <div class="xll-ads-b">
-              <div class="xll-ads-b-bg">
-                {{item.title}}
-              </div>
-
+              <div class="xll-ads-b-bg" v-html="item.title"></div>
             </div>
           </div>
 
@@ -153,6 +153,9 @@ export default {
     },
     turnAdsDetail(link){
       window.open(link, '_blank')
+    },
+    turnDealDetail(id){
+      this.$emit('dealDetail', id)
     }
 
   }

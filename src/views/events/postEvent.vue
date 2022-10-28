@@ -14,12 +14,15 @@ export default {
 </script>
 
 <style scoped>
+
 .container{
   width: 100%;
   height: calc(100vh - 140px);
   overflow: hidden;
 }
+
 iframe::-webkit-scrollbar{
   display: none;
 }
+
 </style>

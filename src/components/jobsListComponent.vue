@@ -23,7 +23,7 @@
     </el-button>
   </div>
 
-  <div class="jobs-featured" v-if="jobFeaturedData.length>0">
+  <div class="jobs-featured" v-if="jobFeaturedData.length>0" v-loading="loadingFeatured">
     <el-carousel :height="jobHeight+'px'" indicator-position="none">
       <el-carousel-item
           v-for="(item,i) in jobFeaturedData" :key="i"
@@ -107,7 +107,7 @@
     <div style="height: 25px;background-color: #FFFFFF;"></div>
   </div>
 
-  <div class="jobs-list-container" >
+  <div class="jobs-list-container" v-loading="loading" >
     <div class="jobs-list-label-container">
       <div class="jobs-list-label">All jobs <span v-if="isOther || fromBusinessProfile">at {{companyInfo.company_name}}</span></div>
     </div>
@@ -235,11 +235,9 @@
             </el-image>
           </div>
           <div class="xll-ads-b">
-            <div class="xll-ads-b-bg">
-              {{item.title}}
-            </div>
-
+            <div class="xll-ads-b-bg" v-html="item.title"></div>
           </div>
+
         </div>
 
       </el-carousel-item>
@@ -305,7 +303,8 @@ import {ADD_FAVORITE, CANCEL_FAVORITE, JOB_FEATURED_LIST} from "@/api/api";
 
 export default {
   name: "jobsListComponent",
-  props:['jobListData','adsData', 'jobPage','jobLimit','jobTotalNum','selectedJobId','isOther','companyInfo','fromBusinessProfile'],
+  props:['jobListData','loading','loadingFeatured',
+    'adsData', 'jobPage','jobLimit','jobTotalNum','selectedJobId','isOther','companyInfo','fromBusinessProfile'],
   data(){
     return {
       jobHeight:300,

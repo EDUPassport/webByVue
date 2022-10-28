@@ -64,6 +64,15 @@ const routes = [
                 }
             },
             {
+                path: 'business/profile',
+                name: 'jobsBusinessProfile',
+                component: () => import('@/views/jobs/businessProfile'),
+                meta: {
+                    titleC: 'Jobs Business Profile',
+                    titleG: 'Jobs Business Profile'
+                }
+            },
+            {
                 path: 'post',
                 name: 'postJob',
                 component: () => import('@/views/jobs/post/post'),
@@ -220,6 +229,15 @@ const routes = [
                 meta: {
                     titleC: 'Deal Detail',
                     titleG: 'Deal Detail',
+                }
+            },
+            {
+                path: 'vendor/profile',
+                name: 'dealsVendorProfile',
+                component: () => import('@/views/deals/vendorProfile'),
+                meta: {
+                    titleC: 'Deal Vendor Profile',
+                    titleG: 'Deal Vendor Profile',
                 }
             },
 

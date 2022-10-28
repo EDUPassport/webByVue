@@ -363,3 +363,9 @@ export const ALL_LANGUAGE_PROFICIENCY = (params) => get('/home/language/proficie
 
 //向用户发送密码邮件
 export const SEND_USER_PRIVATE_PASSWORD = (params) => post('/user/private/password',params)
+
+// 用户申请职位后 更新教育者对职位的状态
+export const SET_APPLY_JOB_STATUS = (params) => post('/home/setApplyJobStatus', params)
+
+// 教育者 智能匹配 职位 结果列表
+export const EDUCATOR_JOB_MATCH_LIST = (params) => get('/home/educator/matching',params)
