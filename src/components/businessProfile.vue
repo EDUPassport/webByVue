@@ -39,19 +39,21 @@
 
   <el-scrollbar :class="canEdit ? 'container' : 'container-2'">
 
-    <div class="background-container"
-         v-if="info.background_image && info.background_image != '0' "
-    >
-      <el-image class="background-img" :src="info.background_image" fit="cover">
-        <template #error>
-          <div class="img-slot-background">
-            <el-icon :size="180" color="#808080">
-              <Picture/>
-            </el-icon>
-          </div>
-        </template>
-      </el-image>
-    </div>
+    <template v-if="info.background_image && info.background_image != '0' ">
+
+      <div class="background-container" :style="'background-image:url('+ info.background_image +')'">
+        <el-image class="background-img" :src="info.background_image" fit="contain">
+          <template #error>
+            <div class="img-slot-background">
+              <el-icon :size="180" color="#808080">
+                <Picture/>
+              </el-icon>
+            </div>
+          </template>
+        </el-image>
+      </div>
+
+    </template>
 
     <div class="content-bg-container">
       <div class="info-1-container">
@@ -460,12 +462,17 @@ export default {
 }
 
 .background-container{
-  height: 260px;
+  /*height: 260px;*/
+  background-size: 50%;
+  background-repeat: repeat;
+  background-position: center;
+  height: 380px;
   overflow: hidden;
+
+  text-align: center;
 }
 
 .background-img{
-  width: 100%;
   height: 100%;
 }
 

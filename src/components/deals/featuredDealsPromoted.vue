@@ -15,7 +15,7 @@
                 class="deals-item-background-img"
                 :src="item.company_info.background_image ? item.company_info.background_image : ''"
                 fit="cover"
-                @click="viewProfile(item.company_info)"
+                @click="viewProfile(item.user_id,item.identity, item.company_id)"
             >
             </el-image>
 
@@ -38,12 +38,12 @@
             <div class="deals-item-c-l">
               <el-avatar class="deals-logo"
                          :src="item.company_logo"
-                         @click="viewProfile(item.company_info)"
+                         @click="viewProfile(item.user_id,item.identity, item.company_id)"
               >
               </el-avatar>
             </div>
             <div class="deals-item-c-r">
-              <div class="deals-item-c-r-1" @click="viewProfile(item.company_info)">
+              <div class="deals-item-c-r-1" @click="viewProfile(item.user_id,item.identity, item.company_id)">
                 {{ item.company_info.company_name }}
               </div>
               <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
@@ -138,8 +138,8 @@ export default {
   },
   methods:{
 
-    viewProfile(e){
-      this.$emit('viewProfile',e)
+    viewProfile(userId, identity, companyId){
+      this.$emit('viewProfile', userId, identity, companyId)
     },
     showDealDetailDialog(e){
       this.$emit('detail',e)

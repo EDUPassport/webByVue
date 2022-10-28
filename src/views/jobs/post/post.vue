@@ -694,10 +694,20 @@
                               <span v-if="week==6 ">Sa</span>
                               <span v-if="week==7 ">Su</span>
                             </div>
-                            <view class="hours-show-container">{{ item.hours }}</view>
+                            <div class="hours-show-container">{{ item.hours }}</div>
+                            <div class="hours-show-delete">
+                              <el-button link @click="workingHourDelete(index)">DELETE</el-button>
+                            </div>
+
                           </div>
+
+
                         </div>
-                        <div class="working-hours-add" @click="addWorkingHours">Add+</div>
+
+                        <div class="working-hours-add" >
+                          <el-button type="primary" round @click="addWorkingHours">ADD+</el-button>
+                        </div>
+
                         <div class="working-hours-container" v-if="workingHoursContainerStatus">
                           <div class="week-container">
                             <div class="week-item" v-for="(item,index) in weekList" :key="index"
@@ -2098,6 +2108,10 @@ export default {
         }
       })
     },
+    workingHourDelete(index){
+      this.workingHoursData.splice(index, 1)
+      console.log(this.workingHoursData)
+    },
     addWorkingHours() {
       // this.workingHoursData = [];
       this.selectWeekItemData = [];
@@ -2575,12 +2589,7 @@ export default {
 
 
 .working-hours-add {
-  width: 70px;
-  margin-top: 10px;
-  text-align: center;
-  border-radius: 10px;
-  font-size: 14px;
-  background-color: rgba(0, 180, 210, 0.2);
+  margin-left: 20px;
 }
 
 .working-hours-container {
@@ -2600,13 +2609,14 @@ export default {
 }
 
 .week-item {
-  background-color: rgba(0, 179, 210, 0.1);
+  background-color: #F0F2F5;
   color: #000000;
   width: 40px;
   height: 40px;
   margin-left: 10px;
   text-align: center;
   border-radius: 40px;
+  cursor: pointer;
 }
 
 .hours-container {
@@ -2624,7 +2634,7 @@ export default {
 
 .working-hours-button button {
   width: 30%;
-  background-color: #0AA0A8;
+  background-color: #6650B3;
   color: #FFFFFF;
   font-size: 14px;
 }
@@ -2647,7 +2657,7 @@ export default {
 .week-show-item {
   width: 60px;
 
-  background-color: rgba(0, 180, 210, 0.9);
+  background-color: #6650B3;
   color: #FFFFFF;
   font-size: 14px;
   text-align: center;
@@ -2662,8 +2672,12 @@ export default {
   background-color: #FFFFFF;
 }
 
+.hours-show-delete{
+  margin-left: 10px;
+}
+
 .week-item-active {
-  background-color: #00CE47;
+  background-color: #9173ff;
   color: #FFFFFF;
 }
 
