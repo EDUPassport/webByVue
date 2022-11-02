@@ -24,7 +24,12 @@
                        :to="{path:item.link}" exact>
             <el-image  class="xll-icon-image" :src="item.icon"></el-image>
             <span>{{item.menu_name_en}}</span>
+
           </router-link>
+
+          <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
+            {{unreadTotal}}
+          </div>
 
 <!--          <template v-if="item.link === '/jobs/post' ">-->
 <!--            <router-link :to="{path:item.link,query:{version_time:versionTime}}" exact>-->
@@ -56,7 +61,7 @@ import {USER_MENU_LIST} from '@/api/api'
 import defaultAvatar from '@/assets/default/avatar.png'
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
 
 export default {
   name: "meSideMenu",
@@ -68,11 +73,14 @@ export default {
     const currentRoute = useRoute()
     const activeMenuStr = currentRoute.meta.activeMenu;
     const selectedKeys = ref(activeMenuStr ? activeMenuStr : currentRoute.path)
+    const currentUser = computed(() => store.state.currentUser)
 
     return {
       setNowChatUserInfo,
       setShowChatStatus,
-      selectedKeys
+      selectedKeys,
+      currentUser
+
     }
 
   },
@@ -83,14 +91,19 @@ export default {
       accountPhotoValue:'',
       versionTime:randomString(),
       activeMsg:false,
-      showSideMenuStatus:true
+      showSideMenuStatus:true,
 
     }
   },
   watch:{
     menuData(newValue){
       console.log(newValue)
+    },
+    unreadTotal(newValue){
+      console.log(newValue)
     }
+
+
   },
   computed:{
     username:{
@@ -112,6 +125,11 @@ export default {
     menuData:{
       get(){
         return this.$store.state.menuData
+      }
+    },
+    unreadTotal:{
+      get(){
+        return this.$store.state.imUnreadTotal
       }
     }
 
@@ -209,6 +227,7 @@ export default {
 
 .l-item{
   margin-bottom: 20px;
+  position: relative;
 }
 
 .l-item-margin{
@@ -255,6 +274,20 @@ export default {
   width: 35px;
   height: 35px;
 }
+
+.item-head_unread {
+  padding: 2px 5px;
+  background-color: #EE593C;
+  color: #FFFFFF;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  border-radius: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 
 @media screen and (max-width: 768px) {
 

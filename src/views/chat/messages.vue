@@ -54,24 +54,23 @@
                             <div class="item-info-bottom_action">
                               <el-popover
                                   :visible="activeActionKey === key"
-                                  placement="right"
+                                  placement="bottom"
                                   :width="150"
-                                  trigger="click"
                               >
                                 <template #reference>
                                   <el-icon @click="showAction(conversation,key)">
-                                    <more-filled/>
+<!--                                    <more-filled/>--><ArrowDownBold />
                                   </el-icon>
                                 </template>
                                 <div class="item-info-bottom_action-btn" v-if="action.show">
                                   <div>
-                                    <el-button type="primary" @click="topConversation">
-                                      {{ action.conversation.top ? 'Unpin' : 'Pin chat to the top' }}
+                                    <el-button link type="primary" @click="topConversation">
+                                      {{ action.conversation.top ? 'UNPIN' : 'PIN CHAT TO THE TOP' }}
                                     </el-button>
                                   </div>
                                   <div class="item-info-bottom_delete_btn">
-                                    <el-button type="warning" @click="removeConversation">
-                                      Delete Chat
+                                    <el-button link type="warning"  @click="removeConversation">
+                                      DELETE CHATS
                                     </el-button>
                                   </div>
                                 </div>
@@ -249,27 +248,34 @@ export default {
     //加载会话列表
     this.goEasy.im.latestConversations({
       onSuccess: function (res) {
+        console.log('加载会话列表----------- messages page')
         let content = res.content;
         self.showLoading = false;
-        self.unreadTotal = content.unreadTotal;
+        // self.unreadTotal = content.unreadTotal;
+        self.$store.commit('setImUnreadTotal',content.unreadTotal)
         self.conversationsData = content.conversations;
       },
       onFailed: function (error) {
         this.showLoading = false;
         console.log("失败获取最新会话列表, code:" + error.code + " content:" + error.content);
       }
-    });
+
+    })
 
     //监听会话列表变化
     this.goEasy.im.on(this.GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, (conversations) => {
+      console.log('监听会话列表变化-------  messages page')
       self.conversationsData = conversations.conversations || [];
-      self.unreadTotal = conversations.unreadTotal;
+      self.$store.commit('setImUnreadTotal',conversations.unreadTotal)
+      // self.unreadTotal = conversations.unreadTotal;
       // console.log(this.conversationsData)
     });
 
     let nowChatUserInfo = self.nowChatUserInfo
 
     if (JSON.stringify(nowChatUserInfo) !== '{}') {
+      console.log('now chat user info ----- ')
+      this.type = this.GoEasy.IM_SCENE.PRIVATE;
       self.messages = self.service.getPrivateMessages(nowChatUserInfo.uuid);
       self.friend = nowChatUserInfo;
       self.activeConversationKey = nowChatUserInfo.uuid + '_' + nowChatUserInfo.identity
@@ -278,6 +284,8 @@ export default {
       if (self.messages.length !== 0) {
         self.markMessageAsRead(nowChatUserInfo.uuid);
       }
+
+      // console.log(self.friend)
     }
 
 
@@ -354,12 +362,13 @@ export default {
 
       let id = conversation.userId || conversation.groupId;
       let identity = conversation.data.identity;
+      let companyId = conversation.data.companyId;
       let friendId = id;
 
       this.type = this.GoEasy.IM_SCENE.PRIVATE;
       // this.currentUser = this.service.currentUser;
 
-      this.friend = await this.service.findFriendById(friendId, identity);
+      this.friend = await this.service.findFriendById(friendId, identity, companyId);
       // this.friend = this.nowChatUserInfo;
 
       // 获取的是未读的短消息
@@ -604,11 +613,12 @@ export default {
 .conversations-box .scroll-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 14px;
 }
 
 .conversations-box .scroll-item_info {
-  width: 70%;
+  width: calc(100% - 90px);
   cursor: pointer;
   box-sizing: border-box;
   border-bottom: 1px solid #EFEFEF;
@@ -642,6 +652,7 @@ export default {
 
 .conversations-box .item-info-bottom {
   overflow: hidden;
+  padding: 10px 0;
 }
 
 .conversations-box .item-info-bottom-item {
@@ -705,7 +716,7 @@ export default {
 
 .item-head {
   position: relative;
-  width: 30%;
+  width: 70px;
   overflow: hidden;
   display: flex;
   align-items: center;

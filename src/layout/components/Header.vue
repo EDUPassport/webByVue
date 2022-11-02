@@ -23,7 +23,11 @@
                   width="30%"
               >
                 <div class="switch-job-container">
-                  <h3>
+                  <h3 v-if="envName==='development' || envName === 'production' ">
+                    You will now be redirected to our
+                    chinese website
+                  </h3>
+                  <h3 v-if="envName==='developmentCN' || envName === 'productionCN' ">
                     You will now be redirected to our
                     international website
                   </h3>
@@ -98,9 +102,55 @@
 
                         <div class="user-dropdown-ll">
                           <div class="user-dropdown-bell">
-                            <el-icon :size="24">
-                              <IconEduNotificationNofill24 />
-                            </el-icon>
+                            <el-popover :width="330">
+                              <template #reference>
+                                <el-icon :size="24" color="#6650B3" v-if="unreadTotal>0">
+                                  <IconEduNotificationFill24 />
+                                </el-icon>
+                                <el-icon :size="24" v-else>
+                                  <IconEduNotificationNofill24 />
+                                </el-icon>
+
+                              </template>
+                              <template #default>
+
+                                <div class="notification-c">
+<!--                                  <div class="notification-all-read">-->
+<!--                                    Mark all as read-->
+<!--                                  </div>-->
+<!--                                  <el-scrollbar class="notification-items">-->
+<!--                                    <div class="notification-item">-->
+<!--                                      <div class="notification-item-time">-->
+<!--                                        Today 12:22 pm-->
+<!--                                      </div>-->
+<!--                                      <div class="notification-item-c">-->
+<!--                                        <div class="notification-item-c-l">-->
+<!--                                          <el-icon :size="20" >-->
+<!--                                            <IconEduChatNofill></IconEduChatNofill>-->
+<!--                                          </el-icon>-->
+<!--                                        </div>-->
+<!--                                        <div class="notification-item-c-r">-->
+<!--                                          <span>New application received</span>-->
+<!--                                        </div>-->
+
+<!--                                      </div>-->
+<!--                                    </div>-->
+<!--                                  </el-scrollbar>-->
+
+                                  <div class="im-msg-container" @click="turnChatPage()">
+                                    <el-icon :size="30" color="#FFFFFF">
+                                      <IconJamMessagesAlt />
+                                    </el-icon>
+
+                                    <span>{{unreadTotal}}</span>
+                                  </div>
+
+                                </div>
+
+
+                              </template>
+                            </el-popover>
+
                           </div>
 
                           <el-dropdown size="large" trigger="click"
@@ -519,7 +569,11 @@ export default {
         this.getBasicInfo(this.identity)
 
       }
+    },
+    unreadTotal(newValue){
+      console.log(newValue)
     }
+
   },
   computed: {
     allIdentityChanged:{
@@ -547,6 +601,11 @@ export default {
       get() {
         return this.$store.state.isThirdCompanyStatus
       }
+    },
+    unreadTotal:{
+      get(){
+        return this.$store.state.imUnreadTotal
+      }
     }
 
   },
@@ -562,6 +621,9 @@ export default {
 
   },
   methods: {
+    turnChatPage(){
+      this.$router.push('/chat/messages')
+    },
     turnEnvJobs() {
 
       let token = localStorage.getItem('token')
@@ -713,9 +775,20 @@ export default {
             if(userContact.company){
               companyInfo = userContact.company;
               avatar = companyInfo.logo;
+              name = companyInfo.display_name;
             }
 
           }
+
+          let currentUser = {
+            uuid: userContact.id,
+            identity: identity,
+            name: name,
+            avatar: avatar,
+            companyId: userContact.company_id
+          }
+
+          this.$store.commit('currentUser',currentUser)
 
           localStorage.setItem('name', name)
           localStorage.setItem('avatar', avatar)
@@ -1513,4 +1586,75 @@ export default {
   font-size: 12px;
 }
 
+.notification-c{
+  padding: 15px;
+}
+
+.notification-all-read{
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  text-align: right;
+  cursor: pointer;
+}
+
+.notification-items{
+  margin-top: 25px;
+  max-height: 400px;
+}
+
+.notification-item{
+  margin-bottom: 25px;
+}
+
+.notification-item-time{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+.notification-item-c{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  margin-top: 15px;
+}
+
+.notification-item-c-l{
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+
+}
+
+.no-read-1{
+  background-color: #E7DEFF;
+}
+
+.no-read-2{
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
+.notification-item-c-r span{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  margin-left: 15px;
+}
+.im-msg-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: #9173ff;
+  height: 40px;
+  border-radius: 40px;
+  cursor: pointer;
+
+}
+
+.im-msg-container span{
+  color: #FFFFFF;
+  font-size: 18px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  margin-left: 15px;
+}
 </style>

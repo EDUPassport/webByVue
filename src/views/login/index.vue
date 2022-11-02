@@ -567,6 +567,29 @@ export default {
     this.showValue = this.showType
   },
   methods: {
+    imUnread(user){
+      let self = this;
+      if (this.goEasy.getConnectionStatus() === 'disconnected') {
+        this.service.connect(user);
+      }
+      //加载会话列表
+      this.goEasy.im.latestConversations({
+        onSuccess: function (res) {
+          console.log('监听会话列表----- me side menu page')
+          let content = res.content;
+          self.$store.commit('setImUnreadTotal',content.unreadTotal)
+        },
+        onFailed: function (error) {
+          console.log("失败获取最新会话列表, code:" + error.code + " content:" + error.content);
+        }
+      });
+
+      //监听会话列表变化
+      this.goEasy.im.on(this.GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, (conversations) => {
+        console.log('监听会话列表变化 ----- me side menu page')
+        self.$store.commit('setImUnreadTotal',conversations.unreadTotal)
+      });
+    },
     loginErrorOk(){
       this.loginErrorDialogVisible = false
     },
@@ -802,6 +825,7 @@ export default {
                 let firstName = resMessage.first_name;
                 let lastName = resMessage.last_name;
                 let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
+                let companyId = resMessage.company_id;
 
                 localStorage.setItem('name', firstName + ' ' + lastName)
                 localStorage.setItem('first_name', firstName)
@@ -814,10 +838,12 @@ export default {
                   identity: identity,
                   name: firstName + ' ' + lastName,
                   avatar: currentAvatar,
+                  companyId: companyId
                 }
                 // // console.log(currentUser)
                 //
                 this.setCurrentUser(currentUser)
+                this.imUnread(currentUser)
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
                 this.getUserMenuList(resMessage.id,identity, resMessage.company_id, resMessage.id)
 
@@ -903,6 +929,7 @@ export default {
                 let firstName =  resMessage.first_name
                 let lastName = resMessage.last_name
                 let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
+                let companyId = resMessage.company_id
 
                 localStorage.setItem('name', firstName + ' ' + lastName)
                 localStorage.setItem('first_name', firstName)
@@ -915,6 +942,7 @@ export default {
                   identity: identity,
                   name: firstName + ' ' + lastName,
                   avatar: currentAvatar,
+                  companyId: companyId
                 }
                 // console.log(currentUser)
 
@@ -998,6 +1026,7 @@ export default {
                 let firstName = resMessage.first_name
                 let lastName = resMessage.last_name
                 let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
+                let companyId = resMessage.company_id
 
                 localStorage.setItem('name', firstName + ' ' + lastName)
                 localStorage.setItem('first_name', firstName)
@@ -1010,6 +1039,7 @@ export default {
                   identity: identity,
                   name: firstName + ' ' + lastName,
                   avatar: currentAvatar,
+                  companyId: companyId
                 }
                 // console.log(currentUser)
 

@@ -1,10 +1,11 @@
 import restApi from './restapi';
 
-function Friend(uuid, name, avatar, identity) {
+function Friend(uuid, name, avatar, identity,companyId) {
     this.uuid = uuid;
     this.name = name;
     this.avatar = avatar;
     this.identity = identity;
+    this.companyId = companyId;
 }
 
 function Group(uuid, name, avatar, identity) {
@@ -65,9 +66,9 @@ IMService.prototype.findGroupById = function (groupId) {
     return new Group(group.uuid, group.name, group.avatar);
 };
 
-IMService.prototype.findFriendById = async function (userId,identity) {
-    let user = await restApi.findUserById(userId,identity);
-    return new Friend(user.uuid, user.name, user.avatar,user.identity);
+IMService.prototype.findFriendById = async function (userId,identity,companyId) {
+    let user = await restApi.findUserById(userId,identity,companyId);
+    return new Friend(user.uuid, user.name, user.avatar,user.identity, user.companyId);
 };
 
 IMService.prototype.getGroupMessages = function (groupId) {
@@ -90,7 +91,8 @@ IMService.prototype.connect = function (currentUser) {
     let userData = {
         name:this.currentUser.name,
         avatar: this.currentUser.avatar,
-        identity:this.currentUser.identity
+        identity:this.currentUser.identity,
+        companyId:this.currentUser.companyId
     }
     //初始化相关的监听器
     this.initialListeners();

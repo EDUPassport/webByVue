@@ -37,7 +37,7 @@
         <businessProfile :canEdit="false"
                          :fromDeal="false"
                          :info="companyInfo"
-                         :identity="detailData.identity"
+                         :identity="identity"
         >
         </businessProfile>
 
@@ -76,6 +76,7 @@ export default {
       jobFeaturedLoadingValue:false,
 
       companyInfo:{},
+      identity:0,
       jobFeaturedListData: [],
       showLoadingStatus: false,
 
@@ -136,7 +137,7 @@ export default {
     let jobId = this.$route.query.jobId;
 
     if(userId && identity && cid && jobId){
-
+      this.identity = identity
       this.getCompanyJobList(userId,this.otherJobPage, this.otherJobLimit)
       this.getVisitorUserInfo(userId,identity,cid)
       this.selectedJobId = jobId

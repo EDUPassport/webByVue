@@ -109,7 +109,9 @@
                 </div>
               </div>
 
-              <NewApplications :data="myApplicationsData"></NewApplications>
+              <NewApplications :data="myApplicationsData"
+                               @updateIndex="updateApplicationIndex">
+              </NewApplications>
 
             </template>
 
@@ -324,10 +326,14 @@ export default {
 
     // this.getPercentage(this.identity)
     // this.getAllAssignUsers()
-    this.getDealsList(1,10000)
-    this.getEventsList(1,10000)
+    if(this.identity == 2 || this.identity == 3 || this.identity == 4){
+      this.getAllJobResumeList(1,10000)
+    }
 
-    this.getAllJobResumeList(1,10000)
+    if(this.identity == 5){
+      this.getDealsList(1,10000)
+      this.getEventsList(1,10000)
+    }
 
   },
   methods: {
@@ -585,6 +591,9 @@ export default {
         }
       })
 
+    },
+    updateApplicationIndex(i,value){
+      this.myApplicationsData[i]['status'] = value;
     }
 
 

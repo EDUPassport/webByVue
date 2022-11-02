@@ -320,12 +320,13 @@ export default {
       this.activeConversationKey = conversation.userId +'_'+ conversation.data.identity
 
       let identity = conversation.data.identity;
+      let companyId = conversation.data.companyId;
       // console.log(identity)
 
       this.friendId = id;
       this.chatType = conversation.type;
 
-      this.friend = await this.service.findFriendById(id,identity);
+      this.friend = await this.service.findFriendById(id,identity,companyId);
 
       this.messages =await this.service.getPrivateMessages(id);
       // console.log(this.messages)

@@ -6,55 +6,61 @@
     </div>
     <el-scrollbar max-height="320px" class="e-j-c">
 
-      <div class="e-j-item-bg" v-for="(item,i) in jobFeaturedData" :key="i">
-        <div class="e-j-item">
-          <div class="e-j-item-l">
-            <el-avatar class="e-j-c-item-avatar"
-                       :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
-            ></el-avatar>
-          </div>
-          <div class="e-j-item-m">
-            <div class="e-j-item-m-1"> {{ item.company_name }}</div>
-            <div class="e-j-item-m-2" @click="turnJobDetail(item.id)">
-              {{ item.job_title }}
+      <template v-if="jobFeaturedData.length>0">
+        <div class="e-j-item-bg" v-for="(item,i) in jobFeaturedData" :key="i">
+          <div class="e-j-item">
+            <div class="e-j-item-l">
+              <el-avatar class="e-j-c-item-avatar"
+                         :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+              ></el-avatar>
             </div>
-            <div class="e-j-item-m-3">
-              {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
-              <span v-if="item.payment_period == 112">hourly</span>
-              <span v-if="item.payment_period == 113">daily</span>
-              <span v-if="item.payment_period == 114">weekly</span>
-              <span v-if="item.payment_period == 115">monthly</span>
-              <span v-if="item.payment_period == 116">annually</span>
-            </div>
-<!--            <div class="e-j-item-m-3">-->
-<!--              Multiple-->
-<!--            </div>-->
-            <div class="e-j-item-m-3">
-              <span v-if="item.employment_type==1">Full time</span>
-              <span v-if="item.employment_type==2">Part time</span>
-              <span v-if="item.employment_type==3">Seasonal</span>
-            </div>
-
-          </div>
-
-          <div class="e-j-item-r">
-            <div class="e-j-item-r-1">{{item.educator_matching_score}}% match</div>
-            <div class="e-j-item-r-2">
-              <template v-if="item.educator_matching_score <= 60">
-                <el-image class="e-j-c-item-avatar" :src="doubtingImg" fit="contain"></el-image>
-              </template>
-              <template v-if="item.educator_matching_score > 60 && item.educator_matching_score <=80">
-                <el-image class="e-j-c-item-avatar" :src="thumbUpImg" fit="contain"></el-image>
-              </template>
-              <template v-if="item.educator_matching_score > 80">
-                <el-image class="e-j-c-item-avatar" :src="funfareImg" fit="contain"></el-image>
-              </template>
+            <div class="e-j-item-m">
+              <div class="e-j-item-m-1"> {{ item.company_name }}</div>
+              <div class="e-j-item-m-2" @click="turnJobDetail(item.id)">
+                {{ item.job_title }}
+              </div>
+              <div class="e-j-item-m-3">
+                {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
+                <span v-if="item.payment_period == 112">hourly</span>
+                <span v-if="item.payment_period == 113">daily</span>
+                <span v-if="item.payment_period == 114">weekly</span>
+                <span v-if="item.payment_period == 115">monthly</span>
+                <span v-if="item.payment_period == 116">annually</span>
+              </div>
+              <!--            <div class="e-j-item-m-3">-->
+              <!--              Multiple-->
+              <!--            </div>-->
+              <div class="e-j-item-m-3">
+                <span v-if="item.employment_type==1">Full time</span>
+                <span v-if="item.employment_type==2">Part time</span>
+                <span v-if="item.employment_type==3">Seasonal</span>
+              </div>
 
             </div>
+
+            <div class="e-j-item-r">
+              <div class="e-j-item-r-1">{{item.educator_matching_score}}% match</div>
+              <div class="e-j-item-r-2">
+                <template v-if="item.educator_matching_score <= 60">
+                  <el-image class="e-j-c-item-avatar" :src="doubtingImg" fit="contain"></el-image>
+                </template>
+                <template v-if="item.educator_matching_score > 60 && item.educator_matching_score <=80">
+                  <el-image class="e-j-c-item-avatar" :src="thumbUpImg" fit="contain"></el-image>
+                </template>
+                <template v-if="item.educator_matching_score > 80">
+                  <el-image class="e-j-c-item-avatar" :src="funfareImg" fit="contain"></el-image>
+                </template>
+
+              </div>
+            </div>
           </div>
+
         </div>
 
-      </div>
+      </template>
+      <template v-else>
+        <el-empty description="..."></el-empty>
+      </template>
 
 
 

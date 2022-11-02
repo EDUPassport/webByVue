@@ -21,6 +21,7 @@ const store = createStore({
             menuDataStatus:false,
             isThirdCompanyStatus: isThirdCompanyValue ? isThirdCompanyValue : 0,
             currentCompanyId: companyId ? companyId : 0,
+            imUnreadTotal:0
 
         }
     },
@@ -62,6 +63,9 @@ const store = createStore({
         changeThirdCompanyStatus(state, data){
             state.isThirdCompanyStatus = data
         },
+        setImUnreadTotal(state, data){
+            state.imUnreadTotal = data
+        }
 
     },
     actions:{

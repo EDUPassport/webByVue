@@ -56,13 +56,11 @@ function RestApi() {
 }
 
 RestApi.prototype.findFriends = function (user) {
-    var friendList = users.filter(v => v.uuid != user.uuid);
-    return friendList;
+    return users.filter(v => v.uuid != user.uuid);
 }
 
 RestApi.prototype.findGroups = function (user) {
-    var groupList = groups.filter(v => v.userList.find(id => id == user.uuid));
-    return groupList;
+    return groups.filter(v => v.userList.find(id => id == user.uuid));
 }
 
 RestApi.prototype.findUser = function (username, password) {
@@ -70,7 +68,8 @@ RestApi.prototype.findUser = function (username, password) {
     return {
         uuid: user.uuid,
         avatar: user.avatar,
-        name: user.name
+        name: user.name,
+
     };
 }
 
@@ -80,13 +79,14 @@ RestApi.prototype.findGroupById = function (groupId) {
 };
 
 
-RestApi.prototype.findUserById = async function (userId, identity) {
+RestApi.prototype.findUserById = async function (userId, identity, companyId) {
     // var user = users.find(user => (user.uuid == userId))
     // return user;
 
     let data = {
         user_id: userId,
-        identity: identity
+        identity: identity,
+        company_id:companyId
     }
     let user = {};
     let res = await USER_INFO_VISITOR_V2(data)
@@ -98,12 +98,12 @@ RestApi.prototype.findUserById = async function (userId, identity) {
 
         if (identity == 1) {
 
-            let info1 = res.message.user_contact;
+            let userContact = res.message.user_contact;
 
-            if (info1) {
-                name = info1.first_name + '' + info1.last_name;
-                if(info1.headimgurl){
-                    avatar = info1.headimgurl;
+            if (userContact) {
+                name = userContact.first_name + '' + userContact.last_name;
+                if(userContact.headimgurl){
+                    avatar = userContact.headimgurl;
                 }
             }
 
@@ -127,7 +127,8 @@ RestApi.prototype.findUserById = async function (userId, identity) {
             uuid: userId,
             name: name,
             avatar: avatar,
-            identity: identity
+            identity: identity,
+            companyId:companyId
         }
         // console.log(user)
         // console.log('from rest api js')

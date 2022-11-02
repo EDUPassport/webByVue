@@ -11,181 +11,211 @@
     </div>
     <el-scrollbar class="dashboard-application-container">
 
-      <div  v-for="(item,i) in data" :key="i">
+      <template v-if="data.length > 0">
+        <div  v-for="(item,i) in data" :key="i">
 
-        <div class="dashboard-application" >
+          <div class="dashboard-application" >
 
-          <div class="dashboard-application-basic">
-            <div class="dashboard-application-basic-l">
-              <el-avatar class="dashboard-application-avatar-img"
-                         :src="item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
-              </el-avatar>
-            </div>
-            <div class="dashboard-application-basic-r">
-              <div class="dashboard-application-name">{{ item.user_contact.educator_contact.name }}</div>
-              <div class="dashboard-application-n">
-                <div class="dashboard-application-n-1">{{item.user_contact.educator_contact.nationality}}</div>
-                <div class="dashboard-application-n-2"
-                     v-if="item.user_contact.educator_contact.Teaching_experience"
-                >
+            <div class="dashboard-application-basic">
+              <div class="dashboard-application-basic-l">
+                <el-avatar class="dashboard-application-avatar-img"
+                           :src="item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
+                </el-avatar>
+              </div>
+              <div class="dashboard-application-basic-r">
+                <div class="dashboard-application-name">{{ item.user_contact.educator_contact.name }}</div>
+                <div class="dashboard-application-n">
+                  <div class="dashboard-application-n-1">{{item.user_contact.educator_contact.nationality}}</div>
+                  <div class="dashboard-application-n-2"
+                       v-if="item.user_contact.educator_contact.Teaching_experience"
+                  >
                 <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience"
                       :key="i"
                 >{{exp.object_en}}</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-          </div>
-          <div class="dashboard-application-job">
-            <div class="dashboard-application-job-1">{{item.job.job_title}}</div>
-            <div class="dashboard-application-job-2">
-              position applied for
             </div>
-          </div>
-
-          <div class="dashboard-application-match">
-            <div class="dashboard-application-match-1">
-              <div style="width: 100px;">
-                <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF" />
+            <div class="dashboard-application-job">
+              <div class="dashboard-application-job-1">{{item.job.job_title}}</div>
+              <div class="dashboard-application-job-2">
+                position applied for
               </div>
             </div>
-            <div class="dashboard-application-match-2">match meter</div>
-          </div>
 
-          <div class="dashboard-view-application">
-            <el-button class="dashboard-view-application-btn" plain round @click="viewApplicationEvent(item.id)">
-              VIEW APPLICATION
-            </el-button>
-          </div>
+            <div class="dashboard-application-match">
+              <div class="dashboard-application-match-1">
+                <div style="width: 100px;">
+                  <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF" />
+                </div>
+              </div>
+              <div class="dashboard-application-match-2">match meter</div>
+            </div>
 
-        </div>
-
-        <div class="dashboard-application-expand" v-if="item.id == selectedApplicationIdWithCompany">
-          <div class="dashboard-work-exp">
-            <div class="dashboard-work-exp-label">
-              <span>Working experience</span>
-              <el-button class="dashboard-view-detail-btn" link>
-                VIEW DETAILS
+            <div class="dashboard-view-application">
+              <el-button class="dashboard-view-application-btn" plain round @click="viewApplicationEvent(item.id)">
+                VIEW APPLICATION
               </el-button>
             </div>
-            <div class="dashboard-work-exp-c">
 
-              <template v-for="(work,i) in item.user_contact.educator_contact.work_info" :key="i">
+          </div>
 
-                <div class="dashboard-work-exp-c-item"  v-if="i<=2">
-                  <div class="dashboard-work-exp-c-item-label"> {{work.title}}</div>
-                  <div class="dashboard-work-exp-c-item-text">
-                    {{work.company_name}}, {{work.location}}
-                  </div>
-                  <div class="dashboard-work-exp-c-item-text">
-                    {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
-                      $filters.ymdFormatTimestamp(work.work_time_to)
-                    }}
-                  </div>
-                </div>
-
-              </template>
-
-              <div class="dashboard-work-exp-c-item">
-                <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>
+          <div class="dashboard-application-expand" v-if="item.id == selectedApplicationIdWithCompany">
+            <div class="dashboard-work-exp">
+              <div class="dashboard-work-exp-label">
+                <span>Working experience</span>
+                <el-button class="dashboard-view-detail-btn" link  @click="viewEducatorDetail(item)">
+                  VIEW DETAILS
+                </el-button>
               </div>
+              <div class="dashboard-work-exp-c">
 
+                <template v-for="(work,i) in item.user_contact.educator_contact.work_info" :key="i">
 
-            </div>
-          </div>
-
-          <div class="dashboard-education-cer">
-            <div class="dashboard-education-cer-label">
-              Education & Certifications
-            </div>
-            <div class="dashboard-education-cer-c">
-
-              <template v-for="(education,i) in item.user_contact.educator_contact.education_info"
-                        :key="i">
-                <div class="dashboard-education-cer-c-item">
-                  <div class="dashboard-education-cer-c-label">
-                    {{education.school_name}}
+                  <div class="dashboard-work-exp-c-item"  v-if="i<=2">
+                    <div class="dashboard-work-exp-c-item-label"> {{work.title}}</div>
+                    <div class="dashboard-work-exp-c-item-text">
+                      {{work.company_name}}, {{work.location}}
+                    </div>
+                    <div class="dashboard-work-exp-c-item-text">
+                      {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
+                        $filters.ymdFormatTimestamp(work.work_time_to)
+                      }}
+                    </div>
                   </div>
-                  <div class="dashboard-education-cer-c-text">
-                    {{education.degree}}
-                  </div>
-                  <div class="dashboard-education-cer-c-text">
-                    {{
-                      $filters.ymdFormatTimestamp(education.start_time)
-                    }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
-                  </div>
+
+                </template>
+
+                <div class="dashboard-work-exp-c-item">
+<!--                  <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>-->
                 </div>
-              </template>
 
-<!--              <div class="dashboard-education-cer-c-item">-->
-<!--                <div class="dashboard-education-cer-c-label">-->
-<!--                  Certificates and Diplomas-->
-<!--                </div>-->
-<!--                <div class="dashboard-education-cer-c-text">-->
-<!--                  TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3-->
-<!--                </div>-->
-<!--              </div>-->
 
-<!--              <div class="dashboard-education-cer-c-item">-->
-<!--                <div class="dashboard-education-cer-c-label">-->
-<!--                  Languages-->
-<!--                </div>-->
-<!--                <div class="dashboard-education-cer-c-text">-->
-<!--                  English(native)-->
-<!--                </div>-->
-<!--                <div class="dashboard-education-cer-c-text">-->
-<!--                  Korean(fluent)-->
-<!--                </div>-->
-<!--                <div class="dashboard-education-cer-c-text">-->
-<!--                  Turkish(beginner)-->
-<!--                </div>-->
-<!--              </div>-->
-
+              </div>
             </div>
-          </div>
 
-          <div class="dashboard-application-b">
-            <div class="dashboard-application-b-l">
-<!--              <el-button class="dashboard-application-b-l-btn-1" plain round>-->
-<!--                VIEW PROFILE-->
-<!--              </el-button>-->
-<!--              <el-button class="dashboard-application-b-l-btn-1" plain round>-->
-<!--                RESUME-->
-<!--              </el-button>-->
+            <div class="dashboard-education-cer">
+              <div class="dashboard-education-cer-label">
+                Education & Certifications
+              </div>
+              <div class="dashboard-education-cer-c">
+
+                <template v-for="(education,i) in item.user_contact.educator_contact.education_info"
+                          :key="i">
+                  <div class="dashboard-education-cer-c-item">
+                    <div class="dashboard-education-cer-c-label">
+                      {{education.school_name}}
+                    </div>
+                    <div class="dashboard-education-cer-c-text">
+                      {{education.degree}}
+                    </div>
+                    <div class="dashboard-education-cer-c-text">
+                      {{
+                        $filters.ymdFormatTimestamp(education.start_time)
+                      }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
+                    </div>
+                  </div>
+                </template>
+
+                <!--              <div class="dashboard-education-cer-c-item">-->
+                <!--                <div class="dashboard-education-cer-c-label">-->
+                <!--                  Certificates and Diplomas-->
+                <!--                </div>-->
+                <!--                <div class="dashboard-education-cer-c-text">-->
+                <!--                  TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3-->
+                <!--                </div>-->
+                <!--              </div>-->
+
+                <!--              <div class="dashboard-education-cer-c-item">-->
+                <!--                <div class="dashboard-education-cer-c-label">-->
+                <!--                  Languages-->
+                <!--                </div>-->
+                <!--                <div class="dashboard-education-cer-c-text">-->
+                <!--                  English(native)-->
+                <!--                </div>-->
+                <!--                <div class="dashboard-education-cer-c-text">-->
+                <!--                  Korean(fluent)-->
+                <!--                </div>-->
+                <!--                <div class="dashboard-education-cer-c-text">-->
+                <!--                  Turkish(beginner)-->
+                <!--                </div>-->
+                <!--              </div>-->
+
+              </div>
             </div>
-            <div class="dashboard-application-b-r">
-<!--              <el-button class="dashboard-application-b-l-btn-1" link round>-->
-<!--                NOT INTERESTED-->
-<!--              </el-button>-->
-<!--              <el-button class="dashboard-application-b-l-btn-2" type="primary" round>-->
-<!--                SHORTLIST IT-->
-<!--              </el-button>-->
+
+            <div class="dashboard-application-b">
+              <div class="dashboard-application-b-l">
+                <!--              <el-button class="dashboard-application-b-l-btn-1" plain round>-->
+                <!--                VIEW PROFILE-->
+                <!--              </el-button>-->
+                <!--              <el-button class="dashboard-application-b-l-btn-1" plain round>-->
+                <!--                RESUME-->
+                <!--              </el-button>-->
+              </div>
+              <div class="dashboard-application-b-r">
+                <el-button class="dashboard-application-b-l-btn-1" link round
+                           :disabled="item.status == 3"
+                           @click="showApplyJobStatusDialog(item.id,3,i)"
+                >
+                  NOT INTERESTED
+                </el-button>
+                <el-button class="dashboard-application-b-l-btn-2" type="primary" round
+                           :disabled="item.status == 2"
+                           @click="showApplyJobStatusDialog(item.id,2,i)"
+                >
+                  SHORTLIST IT
+                </el-button>
+              </div>
             </div>
+
           </div>
 
         </div>
 
-      </div>
+      </template>
+      <template v-else>
+        <el-empty description="..."></el-empty>
+      </template>
 
     </el-scrollbar>
 
   </div>
 
+  <jobApplyStatusPopup  :visible="applyJobStatusVisible"
+                        :status="applyJobStatusValue"
+                        @update="updateApplyJobStatus"
+                        @close="applyJobStatusVisible = false">
+
+  </jobApplyStatusPopup>
+
 </div>
 </template>
 
 <script>
-
+import jobApplyStatusPopup from "@/components/status/jobApplyStatusPopup";
 import defaultAvatar from '@/assets/default/avatar.png'
+import {SET_APPLY_JOB_STATUS} from "@/api/api";
+import {encode } from 'js-base64'
 
 export default {
   name: "newApplications",
   props:['data'],
+  components: {
+    jobApplyStatusPopup
+  },
   data(){
     return {
       defaultAvatar,
       expandStatus:false,
-      selectedApplicationIdWithCompany:undefined
+      selectedApplicationIdWithCompany:undefined,
+
+      applyJobStatusVisible:false,
+      applyJobStatusValue:0,
+      applyJobStatusIndex:0,
+      applyJobAlwaysValue:false
+
     }
   },
   methods:{
@@ -195,7 +225,79 @@ export default {
     },
     showAllApplications(){
       this.$router.push('/jobs/home')
-    }
+    },
+    setApplyJobStatus(id,value,index,type){
+
+      let params = {
+        id: id,
+        status: value
+      }
+
+      SET_APPLY_JOB_STATUS(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          // this.applyJobStatusValue = value
+          this.$message({
+            type:'success',
+            message:'Success'
+          })
+
+          if(type === 1){
+            this.applyJobStatusVisible =false
+            if(this.applyJobAlwaysValue){
+              localStorage.setItem('statusDialogAlways', this.applyJobAlwaysValue)
+            }
+          }
+
+          this.$emit('updateIndex',index, value)
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
+    updateApplyJobStatus(alwaysValue){
+      // console.log(alwaysValue)
+      this.applyJobAlwaysValue = alwaysValue
+      this.setApplyJobStatus(this.applyJobStatusId, this.applyJobStatusValue, this.applyJobStatusIndex,1)
+
+    },
+    showApplyJobStatusDialog(id,value,index){
+      let alwaysValue = localStorage.getItem('statusDialogAlways')
+      if(alwaysValue){
+        this.setApplyJobStatus(id, value, index,2)
+        return;
+      }
+
+      this.applyJobStatusIndex = index
+      this.applyJobStatusId = id;
+      this.applyJobStatusValue = value;
+      this.applyJobStatusVisible = true;
+
+    },
+    viewEducatorDetail(info) {
+      console.log(info)
+      let companyId = info.user_contact.company_id;
+      let userId = info.user_contact.id;
+
+      let obj = {
+        cid: companyId,
+        uid: userId,
+        identity: 1,
+        from:'other'
+      }
+
+      let str = encode(JSON.stringify(obj))
+      let { href } = this.$router.resolve({
+        path: '/educator/profile', query: {str: str}
+      })
+      window.open(href,'_blank')
+      // this.$router.push({path: '/educator/profile', query: {str: str}})
+
+    },
+
+
   }
 }
 </script>

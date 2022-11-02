@@ -1,8 +1,8 @@
 <template>
 	<div class="message-item" :class="{'self' : message.senderId == currentUser.uuid}">
-		<el-image :src="message.senderData.avatar" class="chat-avatar" v-if="type == 'group'" ></el-image>
-    <el-image :src="currentUser.avatar" class="chat-avatar" v-else-if="message.senderId == currentUser.uuid"></el-image>
-    <el-image :src="to.avatar" class="chat-avatar" v-else ></el-image>
+		<el-avatar :src="message.senderData.avatar" class="chat-avatar" v-if="type == 'group'" ></el-avatar>
+    <el-avatar :src="currentUser.avatar" class="chat-avatar" v-else-if="message.senderId == currentUser.uuid"></el-avatar>
+    <el-avatar :src="to.avatar" class="chat-avatar" v-else ></el-avatar>
 		<div class="chat-message">
 			<div class="pending" v-if="messageStatus == 'sending'"></div>
 			<div class="send-fail" v-if="messageStatus == 'fail'"></div>

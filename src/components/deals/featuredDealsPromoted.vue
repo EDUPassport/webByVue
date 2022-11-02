@@ -9,74 +9,85 @@
 
       <template v-if="featuredData.length>0">
 
-        <div class="deals-featured-item" v-for="(item,index) in featuredData" :key="index">
-          <div class="deals-item-bg">
-            <el-image
-                class="deals-item-background-img"
-                :src="item.company_info.background_image ? item.company_info.background_image : ''"
-                fit="cover"
-                @click="viewProfile(item.user_id,item.identity, item.company_id)"
-            >
-            </el-image>
+        <el-carousel style="width:100%;margin:0 auto;overflow:hidden;"
+                     height="460px"
+                     indicator-position="none">
 
-            <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                 @click="cancelFavorite(2,item.id,index)">
-              <el-icon color="#6650B3" :size="25">
-                <IconFontistoFavorite />
-              </el-icon>
-            </div>
+          <el-carousel-item
+              v-for="(item,index) in featuredData" :key="index"
+          >
+            <div class="deals-featured-item" >
+              <div class="deals-item-bg">
+                <el-image
+                    class="deals-item-background-img"
+                    :src="item.company_info.background_image ? item.company_info.background_image : ''"
+                    fit="cover"
+                    @click="viewProfile(item.user_id,item.identity, item.company_id)"
+                >
+                </el-image>
 
-            <div class="deals-item-favorite" v-else
-                 @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
-              <el-icon :size="25">
-                <CollectionTag />
-              </el-icon>
-            </div>
+                <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                     @click="cancelFavorite(2,item.id,index)">
+                  <el-icon color="#6650B3" :size="25">
+                    <IconFontistoFavorite />
+                  </el-icon>
+                </div>
 
-          </div>
-          <div class="deals-item-c">
-            <div class="deals-item-c-l">
-              <el-avatar class="deals-logo"
-                         :src="item.company_logo"
-                         @click="viewProfile(item.user_id,item.identity, item.company_id)"
-              >
-              </el-avatar>
-            </div>
-            <div class="deals-item-c-r">
-              <div class="deals-item-c-r-1" @click="viewProfile(item.user_id,item.identity, item.company_id)">
-                {{ item.company_info.company_name }}
+                <div class="deals-item-favorite" v-else
+                     @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
+                  <el-icon :size="25">
+                    <CollectionTag />
+                  </el-icon>
+                </div>
+
               </div>
-              <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
-                {{ item.title }}
-              </div>
-              <div class="deals-item-c-r-3" @click="showDealDetailDialog(item)">
-                {{ item.desc }}
-              </div>
-              <div class="deals-item-b">
-                <div class="deals-item-b-l">
+              <div class="deals-item-c">
+                <div class="deals-item-c-l">
+                  <el-avatar class="deals-logo"
+                             :src="item.company_logo"
+                             @click="viewProfile(item.user_id,item.identity, item.company_id)"
+                  >
+                  </el-avatar>
+                </div>
+                <div class="deals-item-c-r">
+                  <div class="deals-item-c-r-1" @click="viewProfile(item.user_id,item.identity, item.company_id)">
+                    {{ item.company_info.company_name }}
+                  </div>
+                  <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
+                    {{ item.title }}
+                  </div>
+                  <div class="deals-item-c-r-3" @click="showDealDetailDialog(item)">
+                    {{ item.desc }}
+                  </div>
+                  <div class="deals-item-b">
+                    <div class="deals-item-b-l">
 
-                  <template v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
-                    {{ item.company_info.category_name_en }}
-                  </template>
-                  <template v-else>
+                      <template v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
+                        {{ item.company_info.category_name_en }}
+                      </template>
+                      <template v-else>
 
-                  </template>
+                      </template>
+
+                    </div>
+                    <div class="deals-item-b-r">
+                      <el-button link @click="showDealDetailDialog(item)">
+                        QUICK VIEW
+                      </el-button>
+                      <el-button link @click="turnDealDetail(item.id)">
+                        DETAILS
+                      </el-button>
+                    </div>
+                  </div>
 
                 </div>
-                <div class="deals-item-b-r">
-                  <el-button link @click="showDealDetailDialog(item)">
-                    QUICK VIEW
-                  </el-button>
-                  <el-button link @click="turnDealDetail(item.id)">
-                    DETAILS
-                  </el-button>
-                </div>
               </div>
 
             </div>
-          </div>
 
-        </div>
+          </el-carousel-item>
+        </el-carousel>
+
 
       </template>
       <template v-else>
@@ -169,25 +180,28 @@ export default {
 }
 
 .deals-featured-container{
-  padding:0 25px 0 25px;
+  /*padding:0 25px 0 25px;*/
 }
 
 .deals-featured-label{
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #262626;
+  padding: 0 25px;
 }
 
 .deals-featured-item{
-  width: 100%;
-  margin-top: 5px;
-  margin-bottom: 20px;
+  /*width: 100%;*/
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-top: 10px;
+  /*margin-bottom: 30px;*/
 
   border-radius: 40px;
   overflow: hidden;
 
   background-color: #ffffff;
-  box-shadow: 0px 0px 10px #0000001A;
+  box-shadow: 0px 3px 14px rgba(0,0,0,0.2);
 }
 
 .deals-item-bg {
@@ -253,6 +267,7 @@ export default {
   font-size: 23px;
   color: #262626;
 
+  /*min-height: 100px;*/
   /*word-break: break-all;*/
   text-overflow: ellipsis;
   display: -webkit-box;

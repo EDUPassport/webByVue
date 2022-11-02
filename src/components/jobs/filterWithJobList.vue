@@ -16,7 +16,7 @@
           <el-select class="jobs-filter-select"
                      v-model="locationValue"
                      clearable
-                     placeholder="Country or city"
+                     :placeholder="locationPlaceholder"
                      @change="locationChange"
                      size="default">
             <el-option
@@ -155,7 +155,9 @@ export default {
       paymentPeriodOptions:[],
       currencyOptions:[],
       workTypeOptions:[],
-      isSalaryChange:false
+      isSalaryChange:false,
+
+      locationPlaceholder:''
 
     }
   },
@@ -163,6 +165,7 @@ export default {
     this.getUserObjectList()
     let envName = process.env.VUE_APP_ENV_NAME
     if (envName === 'development' || envName === 'production') {
+      this.locationPlaceholder = 'Country'
       this.getJobCountryList()
       let countryValue = this.$route.query.country;
       if (countryValue && countryValue != '') {
@@ -171,6 +174,7 @@ export default {
     }
 
     if (envName === 'developmentCN' || envName === 'productionCN') {
+      this.locationPlaceholder = 'City'
       this.getJobsAreaList()
       let cityValue = this.$route.query.city;
       if (cityValue && cityValue != '') {
@@ -337,6 +341,7 @@ export default {
 .filter-hide{
   margin-bottom: 25px;
 }
+
 /deep/ .el-checkbox{
   width: 100%;
   font-size: 18px;

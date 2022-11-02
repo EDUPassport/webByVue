@@ -65,6 +65,11 @@
 
                     <el-col :span="6">
                       <el-form-item  label="Job Location">
+
+                        <div class="job-current-location" v-if="jobForm.job_location">
+                          {{jobForm.job_location}}
+                        </div>
+
                         <div class="job-location-container">
 
                           <div class="job-location-tabs">
@@ -182,17 +187,6 @@
                         </div>
 
                       </el-form-item>
-<!--                      <el-tabs-->
-<!--                          class="is-international-container"-->
-<!--                          v-model="isInternationalName "-->
-<!--                          type="border-card" @tab-click="handleIsInternationalClick">-->
-<!--                        <el-tab-pane label="China" name="first">-->
-
-<!--                        </el-tab-pane>-->
-<!--                        <el-tab-pane label="International" name="second">-->
-<!--                        </el-tab-pane>-->
-
-<!--                      </el-tabs>-->
 
                     </el-col>
                     <el-col :span="12">
@@ -669,7 +663,7 @@
 
                     <el-col :span="12">
                       <el-form-item label="Years of Experience Required">
-                        <el-slider v-model="yearOfExpValue" range show-stops :max="100"></el-slider>
+                        <el-slider v-model="yearOfExpValue" range show-stops :max="40"></el-slider>
                       </el-form-item>
                     </el-col>
 
@@ -1647,6 +1641,8 @@ export default {
       this.countryNameCn = e.name
       this.getAllProvinces(e.id)
 
+      this.jobForm.job_location = this.countryName
+
     },
     provinceChange(e) {
       console.log(e)
@@ -1658,12 +1654,14 @@ export default {
       this.provinceNameCn = e.name
 
       this.getAllCitys(this.jobForm.country_id, e.id)
+      this.jobForm.job_location = this.provinceName + ', ' + this.countryName
     },
     cityChange(e) {
       console.log(e)
       this.jobForm.town_id = e.id
       this.cityName = e.name
       this.cityNameCn = e.name
+      this.jobForm.job_location =this.cityName + ', ' + this.provinceName + ', ' + this.countryName
     },
     initMap(mapCenterValue) {
       mapboxgl.accessToken = this.accessToken;
@@ -2790,7 +2788,12 @@ export default {
   margin-left: 5px;
 }
 
+.job-current-location{
+  width:100%;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 23px;
 
+}
 .job-location-container{
 
 }

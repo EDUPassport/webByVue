@@ -293,15 +293,17 @@
                               </div>
                               <div class="da-item-b-r">
                                 <el-button class="da-item-b-l-btn-1" link round
-                                           @click="updateApplyJobStatus(item.id,3)"
+                                           :disabled="item.status == 3"
+                                           @click="showApplyJobStatusDialog(item,3, i)"
                                 >
-                                  NOT SELECTED
+                                  NOT INTERESTED
                                 </el-button>
 <!--                                <el-button class="da-item-b-l-btn-1" round>-->
 <!--                                  ARCHIVE-->
 <!--                                </el-button>-->
                                 <el-button class="da-item-b-l-btn-2" type="primary" round
-                                           @click="updateApplyJobStatus(item.id,4)"
+                                           :disabled="item.status == 4"
+                                           @click="showApplyJobStatusDialog(item,4, i)"
                                 >
                                   INTERESTED
                                 </el-button>
@@ -365,19 +367,82 @@
                           <span class="da-item-a-job-title">{{ item.job.job_title }}</span>
                         </el-col>
                         <el-col :span="6">
-                          <div style="width: 100px;">
-                            <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF"/>
-                          </div>
+
+                          <template v-if="identity == 1">
+                            <el-tag type="info" round  effect="plain"
+                                    v-if="item.status == 1">
+                              Submitted
+                            </el-tag>
+                            <el-tag type="warning" round effect="plain"
+                                    v-if="item.status == 2">
+                              Shortlisted
+                            </el-tag>
+                            <el-tag type="danger" round effect="plain"
+                                    v-if="item.status == 3">
+                             Not Selected
+                            </el-tag>
+                            <el-tag type="success" round effect="plain"
+                                    v-if="item.status == 4">
+                             Accepted
+                            </el-tag>
+                          </template>
+
+                          <template v-if="identity == 2 || identity == 3 || identity == 4">
+
+                            <div style="width: 100px;" >
+                              <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF"/>
+                            </div>
+                            <div style="margin-top: 10px;">
+                              <el-tag type="info" round  effect="plain"
+                                      v-if="item.status == 1">
+                                Submitted
+                              </el-tag>
+                              <el-tag type="warning" round effect="plain"
+                                      v-if="item.status == 2">
+                                Shortlisted
+                              </el-tag>
+                              <el-tag type="danger" round effect="plain"
+                                      v-if="item.status == 3">
+                                Not interested
+                              </el-tag>
+                              <el-tag type="success" round effect="plain"
+                                      v-if="item.status == 4">
+                                Interested
+                              </el-tag>
+                            </div>
+
+                          </template>
+
 
                           <!--                          {{item.match_meter}}-->
                         </el-col>
                         <el-col :span="6">
                           <div class="dashboard-view-application">
-                            <el-button class="dashboard-view-application-btn"
-                                       plain round
-                                       @click="viewApplicationIdWithCompany(item.id)">
-                              VIEW APPLICATION
-                            </el-button>
+
+                            <template v-if="identity == 1">
+                              <chatButton text="SEND A MESSAGE"
+                                          :target-user="item.job.company"
+                                          @onSuccess="chatSuccess"
+                                          btn-style="primary"
+                                          :identity="item.job.identity">
+
+                              </chatButton>
+                            </template>
+                            <template v-if="identity == 2 || identity == 3 || identity == 4">
+                              <el-button class="dashboard-view-application-btn"
+                                         plain round
+                                         @click="viewApplicationIdWithCompany(item.id)">
+                                VIEW APPLICATION
+                              </el-button>
+                              <chatButton text="SEND A MESSAGE"
+                                          :target-user="item.user_contact.educator_contact"
+                                          @onSuccess="chatSuccess"
+                                          btn-style="primary"
+                                          :identity="1">
+
+                              </chatButton>
+                            </template>
+
                           </div>
                         </el-col>
 
@@ -479,18 +544,21 @@
                           </div>
                           <div class="da-item-b-r">
                             <el-button class="da-item-b-l-btn-1" link round
-                                       @click="updateApplyJobStatus(item.id,3)"
+                                       :disabled="item.status == 3"
+                                       @click="showApplyJobStatusDialog(item,3,i)"
                             >
-                              NOT SELECTED
+                              NOT INTERESTED
                             </el-button>
 <!--                            <el-button class="da-item-b-l-btn-1" round>-->
 <!--                              ARCHIVE-->
 <!--                            </el-button>-->
                             <el-button class="da-item-b-l-btn-2" type="primary" round
-                                       @click="updateApplyJobStatus(item.id,3)"
+                                       :disabled="item.status == 4"
+                                       @click="showApplyJobStatusDialog(item,4,i)"
                             >
                               INTERESTED
                             </el-button>
+
                           </div>
                         </div>
 
@@ -524,6 +592,16 @@
 
       </el-scrollbar>
 
+      <jobApplyStatusPopup :visible="applyJobStatusVisible"
+                           :status="applyJobStatusValue"
+                           @update="updateApplyJobStatus"
+                           :info="companyInfo"
+                           @close="applyJobStatusVisible = false"
+                           @updateAndChat="updateApplyJobAndChat"
+      >
+
+      </jobApplyStatusPopup>
+
     </div>
   </div>
 </template>
@@ -533,7 +611,7 @@ import defaultAvatar from '@/assets/default/avatar.png'
 import meSideMenu from "@/components/meSideMenu";
 import {
   ALL_JOB_RESUME,
-  JOBS_APPLICATIONS,
+  JOBS_APPLICATIONS, MY_APPLY_JOBS,
   MY_JOBS, SET_APPLY_JOB_STATUS, SET_READ,
   USER_UNREAD
 } from '@/api/api';
@@ -544,11 +622,16 @@ import {computed, ref} from "vue";
 // import {encode} from "js-base64";
 import {randomString} from "@/utils";
 import {encode} from 'js-base64';
+import jobApplyStatusPopup from "@/components/status/jobApplyStatusPopup";
+import chatButton from "@/components/chat/chatButton";
+import { useRouter } from 'vue-router'
 
 export default {
   name: "home",
   components: {
-    meSideMenu
+    meSideMenu,
+    jobApplyStatusPopup,
+    chatButton
   },
   setup() {
 
@@ -557,9 +640,16 @@ export default {
     const identity1 = computed(() => {
       return i.value
     })
+    const router = useRouter()
+
+    function turnChatPage(){
+      router.push({path:'/chat/messages'})
+    }
+
 
     return {
-      identity1
+      identity1,
+      turnChatPage
     }
 
   },
@@ -615,7 +705,12 @@ export default {
       myApplicationsLimit: 10,
       myApplicationsTotalNum: 0,
 
-      selectedApplicationIdWithCompany: 0
+      selectedApplicationIdWithCompany: 0,
+
+      applyJobStatusValue: 0,
+      applyJobStatusVisible:false,
+      applyJobStatusId: 0,
+      applyJobAlwaysValue:false
 
     }
 
@@ -623,18 +718,23 @@ export default {
   },
   mounted() {
     // let uid = localStorage.getItem('uid')
+    let currentIdentity = this.identity
 
-    if (this.identity == 1) {
+    if (currentIdentity == 1) {
       this.filterByApplicantStatus = true;
       this.filterByJobStatus = false;
+      this.getMyApplyJobs(1,5);
     }
 
-    if (this.filterByJobStatus) {
-      this.getMyJobs(this.myJobPage, this.myJobLimit)
-    }
+    if(currentIdentity == 2 || currentIdentity == 3 || currentIdentity == 4){
+      if (this.filterByJobStatus) {
+        this.getMyJobs(this.myJobPage, this.myJobLimit)
+      }
 
-    if (this.filterByApplicantStatus) {
-      this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
+      if (this.filterByApplicantStatus) {
+        this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
+      }
+
     }
 
   },
@@ -685,6 +785,22 @@ export default {
         }
       })
 
+    },
+    getMyApplyJobs(page,limit){
+      let params = {
+        page:page,
+        limit:limit
+      }
+      MY_APPLY_JOBS(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.myApplicationsData = res.message.data
+          // console.log(res.message.data)
+          this.myApplicationsTotalNum = res.message.total
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
     },
     viewApplicationEvent(applicationId) {
       let index = this.viewApplicantsChecked.indexOf(applicationId)
@@ -832,23 +948,75 @@ export default {
       // console.log(e)
       // document.documentElement.scrollTop = 120
     },
-    updateApplyJobStatus(id,value){
+    setApplyJobStatus(id,value,index,type){
+
       let params = {
-        id:id,
-        status:value
+        id: id,
+        status: value
       }
+
       SET_APPLY_JOB_STATUS(params).then(res=>{
         console.log(res)
         if(res.code == 200){
+          // this.applyJobStatusValue = value
           this.$message({
             type:'success',
             message:'Success'
           })
+
+          if(type === 1){
+            this.applyJobStatusVisible =false
+            if(this.applyJobAlwaysValue){
+              localStorage.setItem('statusDialogAlways', this.applyJobAlwaysValue)
+            }
+          }
+
+          if(this.filterByJobStatus){
+            this.sApplicantsData[index]['status'] = value
+          }
+
+          if(this.filterByApplicantStatus){
+            this.myApplicationsData[index]['status'] = value
+          }
+
+          if(type === 3){
+            this.turnChatPage()
+          }
+
+
         }
       }).catch(err=>{
         console.log(err)
       })
 
+    },
+    showApplyJobStatusDialog(item,value,index){
+      console.log(item)
+      this.companyInfo = item.user_contact.educator_contact;
+
+      let alwaysValue = localStorage.getItem('statusDialogAlways')
+      if(alwaysValue){
+        this.setApplyJobStatus(item.id, value, index,2)
+        return;
+      }
+
+      this.applyJobStatusIndex = index
+      this.applyJobStatusId = item.id;
+      this.applyJobStatusValue = value;
+      this.applyJobStatusVisible = true;
+
+    },
+    updateApplyJobStatus(alwaysValue){
+      this.applyJobAlwaysValue = alwaysValue
+      this.setApplyJobStatus(this.applyJobStatusId, this.applyJobStatusValue, this.applyJobStatusIndex,1)
+
+    },
+    updateApplyJobAndChat(alwaysValue){
+      this.applyJobAlwaysValue = alwaysValue
+      this.setApplyJobStatus(this.applyJobStatusId, this.applyJobStatusValue, this.applyJobStatusIndex,3)
+    },
+    chatSuccess(){
+      this.turnChatPage()
     }
 
 

@@ -74,7 +74,8 @@ export default {
           data: {
             name: this.to.name,
             avatar: this.to.avatar,
-            identity:this.to.identity
+            identity:this.to.identity,
+            companyId:this.to.companyId
           }
         },
         file: file,
@@ -94,7 +95,8 @@ export default {
           data: {
             name: this.to.name,
             avatar: this.to.avatar,
-            identity:this.to.identity
+            identity:this.to.identity,
+            companyId:this.to.companyId
           }
         },
         file: file,
@@ -114,7 +116,8 @@ export default {
           data: {
             name: this.to.name,
             avatar: this.to.avatar,
-            identity:this.to.identity
+            identity:this.to.identity,
+            companyId:this.to.companyId
           }
         },
         file: file,
@@ -134,7 +137,8 @@ export default {
           data: {
             name: this.to.name,
             avatar: this.to.avatar,
-            identity:this.to.identity
+            identity:this.to.identity,
+            companyId:this.to.companyId
           }
         },
         file: file,
@@ -146,7 +150,8 @@ export default {
       this.$emit('onSent');
     },
     sendTextMessage() {
-
+      console.log(this.to)
+      console.log(this.type)
       if (this.content.trim().length !== 0) {
         let textMessage = this.goEasy.im.createTextMessage({
           text: this.content,
@@ -156,7 +161,8 @@ export default {
             data: {
               name: this.to.name,
               avatar: this.to.avatar,
-              identity:this.to.identity
+              identity:this.to.identity,
+              companyId:this.to.companyId
             }
           }
         });
@@ -182,6 +188,7 @@ export default {
           self.$emit('onSent',localHistory);
         },
         onFailed: function (error) {
+          console.log(error.response)
           console.log("发送失败:", error);
         }
       });

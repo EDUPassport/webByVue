@@ -124,7 +124,7 @@
 <script>
 import eventFilterComponent from "@/components/eventFilterComponent";
 import bannerImg from '../../assets/events/banner.png'
-import {EVENT_APPLICATIONS, EVENTS_CATEGORY, EVENTS_LIST} from "@/api/api";
+import {EVENT_APPLICATIONS, EVENTS_CATEGORY, EVENTS_LIST, TAGS_LIST} from "@/api/api";
 import eventDetailCard from "@/components/eventDetailCard";
 import bookEventForm from "@/components/bookEventForm";
 import BookEventList from "@/components/bookEventList";
@@ -164,6 +164,7 @@ export default {
   },
   mounted() {
     this.getEventCategories()
+    this.getEventTags()
     this.getEventsList(this.eventPage,this.eventLimit)
   },
   methods:{
@@ -216,6 +217,20 @@ export default {
       this.showLoadingStatus = true
       this.tagValue = e
       this.getEventsList(this.dealPage, this.dealLimit)
+    },
+    getEventTags(){
+      let params = {
+        type:2,
+        page:1,
+        limit:10000
+      }
+      TAGS_LIST(params).then(res=>{
+        if(res.code == 200){
+          this.tagsData = res.message.data;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
     },
     getEventCategories(){
       let params = {

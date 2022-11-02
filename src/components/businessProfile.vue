@@ -42,7 +42,9 @@
     <template v-if="info.background_image && info.background_image != '0' ">
 
       <div class="background-container" :style="'background-image:url('+ info.background_image +')'">
-        <el-image class="background-img" :src="info.background_image" fit="contain">
+        <el-image class="background-img" :src="info.background_image" fit="cover"
+                  :preview-src-list="[info.background_image]"
+        >
           <template #error>
             <div class="img-slot-background">
               <el-icon :size="180" color="#808080">
@@ -133,12 +135,13 @@
               {{info.display_name}} <span>{{info.job_title}}</span>
             </div>
             <div class="contact-r-2">
-              <el-button link
-                         type="primary"
-                         @click="chat(info.user_id)"
+              <chatButton text="GET IN TOUCH"
+                          btn-style="link"
+                          :targetUser="info"
+                          :identity="identity"
+                          @onSuccess="chatSuccess"
               >
-                GET IN TOUCH
-              </el-button>
+              </chatButton>
             </div>
           </div>
         </div>
@@ -291,6 +294,7 @@ import {useStore} from 'vuex'
 import {encode} from 'js-base64'
 import { useRouter } from 'vue-router'
 import mapComponent from "@/components/mapComponent";
+import chatButton from '@/components/chat/chatButton';
 
 export default {
   name: "businessProfile",
@@ -298,7 +302,8 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
-    mapComponent
+    mapComponent,
+    chatButton
   },
   setup() {
 
@@ -311,10 +316,6 @@ export default {
     const store = useStore()
     const router = useRouter()
 
-    const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
-
-    const setShowChatStatus = () => store.commit('showChatStatus', true)
-
     function turnChatPage(){
       router.push({path:'/chat/messages'})
     }
@@ -324,8 +325,6 @@ export default {
     return {
       thumbsSwiper,
       setThumbsSwiper,
-      setNowChatUserInfo,
-      setShowChatStatus,
       currentUser,
       turnChatPage
 
@@ -376,70 +375,10 @@ export default {
       }
 
     },
-    chat(userId){
-
-      let user = this.currentUser
-
-      if (this.goEasy.getConnectionStatus() === 'disconnected') {
-        this.service.connect(user);
-      }
-
-      console.log(userId)
-      let token = localStorage.getItem('token')
-      if(!token || token === ''){
-        return this.$router.push('/edupassport')
-      }
-      
-      let companyInfo = this.info;
-
-      let type = this.GoEasy.IM_SCENE.PRIVATE;
-      let name = companyInfo.display_name;
-      let avatar = companyInfo.logo ? companyInfo.logo : 'https://oss.esl-passport.cn/educator.png';
-
-      let nowUserInfo = {
-        uuid:userId,
-        name:name,
-        avatar:avatar,
-        identity: this.identity
-      }
-
-      let textMessage = this.goEasy.im.createTextMessage({
-        text: 'Hello',
-        to: {
-          id: userId,
-          type: type,
-          data: {
-            name: name,
-            avatar: avatar,
-            identity:this.identity
-          }
-        }
-      });
-
-      let localHistory;
-      if (type === this.GoEasy.IM_SCENE.PRIVATE) {
-        localHistory = this.service.getPrivateMessages(userId);
-      } else {
-        localHistory = this.service.getGroupMessages(userId);
-      }
-      // console.log(localHistory)
-      localHistory.push(textMessage)
-
-      this.goEasy.im.sendMessage({
-        message: textMessage,
-        onSuccess: function (message) {
-          console.log("发送成功.", message);
-        },
-        onFailed: function (error) {
-          console.log("发送失败:", error);
-        }
-      })
-
-      this.setNowChatUserInfo(nowUserInfo)
-      // this.setShowChatStatus()
+    chatSuccess(){
       this.turnChatPage()
-
     },
+
 
   }
 
@@ -463,7 +402,7 @@ export default {
 
 .background-container{
   /*height: 260px;*/
-  background-size: 50%;
+  background-size: 100%;
   background-repeat: repeat;
   background-position: center;
   height: 380px;
@@ -473,6 +412,7 @@ export default {
 }
 
 .background-img{
+  width: 100%;
   height: 100%;
 }
 

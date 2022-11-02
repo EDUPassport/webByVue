@@ -94,6 +94,7 @@ export default {
 <style scoped>
 
 .container{
+  min-width: 550px;
   height: 650px;
   background-color: #FFFFFF;
   /*padding: 25px 50px;*/

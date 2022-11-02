@@ -32,10 +32,10 @@
 
 .el-button--default{
     --el-button-border-color:transparent;
-    --el-button-text-color:#9173ff;
+    /*--el-button-text-color:#9173ff;*/
     --el-button-font-size: 20px;
-    --el-button-hover-bg-color: #9173ff;
-    --el-button-hover-text-color: #ffffff;
+    /*--el-button-hover-bg-color: #9173ff;*/
+    /*--el-button-hover-text-color: #ffffff;*/
 }
 
 .el-button--primary {

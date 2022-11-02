@@ -62,6 +62,7 @@ export default {
         identity: identity,
         name: firstName + ' ' + lastName,
         avatar: currentAvatar,
+        companyId:userObj.company_id
       }
 
       this.$store.commit('currentCompanyId', userObj.company_id)
