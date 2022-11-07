@@ -723,7 +723,7 @@ export default {
     if (currentIdentity == 1) {
       this.filterByApplicantStatus = true;
       this.filterByJobStatus = false;
-      this.getMyApplyJobs(1,5);
+      this.getMyApplyJobs(this.myApplicationsPage,this.myApplicationsLimit);
     }
 
     if(currentIdentity == 2 || currentIdentity == 3 || currentIdentity == 4){
@@ -944,7 +944,14 @@ export default {
     myApplicationsPageChange(e) {
       console.log(e)
       this.myApplicationsPage = e
-      this.getAllJobResumeList(e, this.myApplicationsLimit)
+
+      if(this.identity == 1){
+        this.getMyApplyJobs(e, this.myApplicationsLimit)
+      }
+      if(this.identity == 2 || this.identity == 3 || this.identity == 4){
+        this.getAllJobResumeList(e, this.myApplicationsLimit)
+      }
+
       // console.log(e)
       // document.documentElement.scrollTop = 120
     },

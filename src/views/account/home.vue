@@ -1737,7 +1737,7 @@ export default {
   font-size: 20px;
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color:#262626;
-
+  cursor: pointer;
 }
 
 .account-profile-c-item-b {

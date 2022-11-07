@@ -4,7 +4,7 @@
 
       <div class="e-a-label">
         Favorited jobs 
-        <el-button link primary>VIEW ALL</el-button>
+        <el-button link primary @click="viewAll()">VIEW ALL</el-button>
       </div>
 
       <el-scrollbar max-height="350px" class="e-a-c">
@@ -102,7 +102,7 @@ export default {
   data(){
    return {
      page:1,
-     limit:10000,
+     limit:20,
      favoriteData:[],
      totalNum:0
    }
@@ -134,6 +134,9 @@ export default {
         }
       })
 
+    },
+    viewAll(){
+      this.$router.push({path:'/favorites'})
     }
   }
 

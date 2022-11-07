@@ -4,42 +4,90 @@
       <div class="favorites-l">
         <meSideMenu></meSideMenu>
       </div>
-      <div class="favorites-r">
+
+      <el-scrollbar class="favorites-r">
 
         <div class="favorites-r-bg">
 
           <div class="favorites-label">
-            FAVORITED
+
+            <el-dropdown v-if="identity == 1">
+              <span class="favorites-label">
+                <template v-if="type == 1">Favorited jobs</template>
+                <template v-if="type == 2">Favorited deals</template>
+                <template v-if="type == 4">Favorited profiles</template>
+
+                <el-icon class="el-icon--right">
+                   <arrow-down />
+                </el-icon>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="changeType(1)">
+                    <span class="favorites-label-span">Favorited jobs</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item @click="changeType(2)">
+                    <span class="favorites-label-span">Favorited deals</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item @click="changeType(4)">
+                    <span class="favorites-label-span">Favorited profiles</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+
+            <el-dropdown v-if="identity == 2 || identity == 3 || identity == 4 || identity == 5">
+              <span class="favorites-label">
+                <template v-if="type == 1">Favorited jobs</template>
+                <template v-if="type == 2">Favorited deals</template>
+                <template v-if="type == 4">Favorited profiles</template>
+                <el-icon class="el-icon--right">
+                   <arrow-down />
+                </el-icon>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="changeType(4)">
+                    <span class="favorites-label-span">Favorited profiles</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item @click="changeType(1)">
+                    <span class="favorites-label-span">Favorited jobs</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item @click="changeType(2)">
+                    <span class="favorites-label-span">Favorited deals</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+
+
           </div>
 
-          <div class="list-container">
+          <div class="list-container" v-if="type == 4 || type == 5 || type == 6 || type == 7 || type == 8">
+
             <template v-if="favoriteData.length>0">
+
               <div class="list-item-bg" v-for="(item,i) in favoriteData" :key="i">
 
                 <div class="list-item" >
                   <div class="list-item-l">
-                    <el-avatar class="list-item-l-img" :src="item.type_url"></el-avatar>
+                    <el-avatar class="list-item-l-img" :src="item.company_info.user_contact.headimgurl"></el-avatar>
                   </div>
                   <div class="list-item-r">
-                    <div class="list-item-r-t">
-                      <router-link v-if="item.type==1" :to="{path:'/jobs/detail',query:{id:item.type_id}}">
-                        {{ item.type_title }}
-                      </router-link>
-                      <router-link v-if="item.type==2" :to="{path:'/deals/detail',query:{id:item.type_id}}">
-                        {{ item.type_title }}
-                      </router-link>
+                    <div class="list-item-r-t" v-if="item.type==4">
+                      <div class="list-item-r-t-name" @click="viewEducatorDetail(item.company_info)">
+                        {{item.company_info.user_contact.educator_contact.name}}
+                      </div>
                     </div>
                   </div>
-                  <div class="list-item-type">
-                    <span v-if="item.type==1">Job</span>
-                    <span v-if="item.type==2">Deal</span>
-                  </div>
+
                   <div class="list-item-favorite-icon-container"
                        @click="cancelFavorite(item.type,item.type_id)">
                     <el-icon color="#6650B3" :size="25">
                       <IconFontistoFavorite />
                     </el-icon>
                   </div>
+
                 </div>
 
               </div>
@@ -58,54 +106,172 @@
             </template>
           </div>
 
+          <div class="list-container" v-if="type == 2">
+
+            <template v-if="favoriteData.length>0">
+
+              <div class="list-item-bg" v-for="(item,i) in favoriteData" :key="i">
+
+                <div class="list-item" >
+                  <div class="list-item-l">
+                    <el-avatar class="list-item-l-img" :src="item.deal_info.company_logo"></el-avatar>
+                  </div>
+                  <div class="list-item-r">
+                    <div class="list-item-r-t">
+                      <div class="list-item-r-t-name" @click="turnDealDetail(item.type_id)">
+                        {{item.deal_info.title }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="list-item-favorite-icon-container"
+                       @click="cancelFavorite(item.type,item.type_id)">
+                    <el-icon color="#6650B3" :size="25">
+                      <IconFontistoFavorite />
+                    </el-icon>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </template>
+
+            <template v-else>
+              <div class="empty-tips">
+                You have no favorites yet. <br>
+                Click on the
+                <el-icon >
+                  <CollectionTag />
+                </el-icon>
+                on any job, event or deal to favorite it.
+              </div>
+            </template>
+          </div>
+
+
+          <div class="list-container" v-if="type == 1">
+
+            <div class="da-item-container">
+              <el-row :gutter="0" >
+                <el-col :span="6" class="da-item-t-item">Company</el-col>
+                <el-col :span="6" class="da-item-t-item">Position</el-col>
+                <el-col :span="6" class="da-item-t-item">Status</el-col>
+                <el-col :span="6" class="da-item-t-item">Action</el-col>
+              </el-row>
+
+              <div class="da-item-container-height">
+
+                <div v-for="(item,i) in favoriteData" :key="i">
+                  <el-row class="da-item">
+
+                    <el-col :span="6">
+                      <div class="da-item-basic">
+                        <div class="da-item-basic-l-a">
+                          <el-avatar class="da-item-avatar-img"
+                                     :src="item.job_info.company_logo">
+                          </el-avatar>
+                        </div>
+                        <div class="da-item-basic-r">
+                          <div class="da-item-name">{{ item.job_info.company_name }}</div>
+                          <div class="da-item-n">
+                            <el-button link @click="turnBusinessProfile(item.job_info)">
+                              Click to view profile
+                            </el-button>
+                          </div>
+                        </div>
+
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+
+                      <div class="da-item-a-job-title">{{ item.job_info.job_title }}</div>
+                      <div class="da-item-a-job-other">
+                        {{ item.job_info.currency }} {{ item.job_info.salary_min }} - {{ item.job_info.salary_max }}
+                        <span v-if="item.job_info.payment_period == 112">hourly</span>
+                        <span v-if="item.job_info.payment_period == 113">daily</span>
+                        <span v-if="item.job_info.payment_period == 114">weekly</span>
+                        <span v-if="item.job_info.payment_period == 115">monthly</span>
+                        <span v-if="item.job_info.payment_period == 116">annually</span>
+                      </div>
+                      <div class="da-item-a-job-other">{{item.job_info.job_location}}</div>
+                      <div class="da-item-a-job-other">
+                        <span v-if="item.employment_type==1">Full time</span>
+                        <span v-if="item.employment_type==2">Part time</span>
+                        <span v-if="item.employment_type==3">Seasonal</span>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+
+                      <el-tag type="info" round  effect="plain"
+                              v-if="item.job_info.is_open == 1">
+                        Open
+                      </el-tag>
+                      <el-tag type="warning" round effect="plain"
+                              v-else>
+                        Position closed
+                      </el-tag>
+
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="dashboard-view-application">
+<!--                        <el-button type="primary"-->
+<!--                                   :loading="applyBtnLoading && applyJobId == item.job_info.id"-->
+<!--                                   round-->
+<!--                                   @click="applyJob(item.job_info.id)">-->
+<!--                          Apply-->
+<!--                        </el-button>-->
+                        <applyJobButton
+                                        :selectJobId = "item.job_info.id"
+                                        btn-text="Apply"
+                                        :job-info="item.job_info">
+                        </applyJobButton>
+
+                      </div>
+                    </el-col>
+
+                  </el-row>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+          </div>
+
+
           <div class="list-pagination-container" v-if="favoriteData.length>0">
             <el-pagination layout="prev, pager, next" :default-current-page="1"
                            class="list-pagination"
                            @size-change="pageSizeChange"
                            @current-change="pageChange"
                            :current-page="page" :page-size="limit"
-                           :total="totalNum"></el-pagination>
+                           :total="totalNum">
+            </el-pagination>
           </div>
-          <!--          <div class="ads-container">-->
-          <!--            <el-image :src="dashboardAdsImg"></el-image>-->
-          <!--          </div>-->
-
-<!--          <div class="xll-ads-container xll-ads-container-margin" v-if="adsDataTop.length>0">-->
-<!--            <el-carousel height="220px" indicator-position="none">-->
-<!--              <el-carousel-item class="xll-ads-swiper-item" v-for="(item,i) in adsDataTop" :key="i">-->
-<!--                <div class="xll-ads-l">-->
-<!--                  <el-avatar class="xll-ads-l-img"-->
-<!--                             :src="item.user_url !='' ? item.user_url : item.url"></el-avatar>-->
-<!--                </div>-->
-<!--                <div class="xll-ads-r">-->
-<!--                  <h4>Advertise with Us</h4>-->
-<!--                  <h5>Description:</h5>-->
-<!--                  <div class="xll-ads-r-desc">-->
-<!--                    Your Adverts and their description will be displayed here.-->
-<!--                    Just click on the banner-->
-<!--                  </div>-->
-
-<!--                </div>-->
-<!--              </el-carousel-item>-->
-<!--            </el-carousel>-->
-<!--          </div>-->
 
         </div>
-      </div>
+      </el-scrollbar>
 
     </div>
   </div>
 </template>
 
 <script>
-import {GET_FAVORITE_LIST, CANCEL_FAVORITE, ADS_LIST} from "@/api/api";
+import {GET_FAVORITE_LIST, CANCEL_FAVORITE, ADS_LIST, APPLY_JOBS} from "@/api/api";
 import dashboardAdsImg from '@/assets/ads/2.png'
 import meSideMenu from "@/components/meSideMenu";
+import {encode} from 'js-base64'
+import applyJobButton from '@/components/jobs/applyButton'
 
 export default {
   name: "favorites",
   components: {
-    meSideMenu
+    meSideMenu,
+    applyJobButton
   },
   data() {
     return {
@@ -114,14 +280,120 @@ export default {
       page: 1,
       limit: 8,
       totalNum: 0,
-      adsDataTop: []
+      adsDataTop: [],
+      type:0,
+      identity:0,
+      applyBtnLoading:false,
+      applyJobId:0
     }
   },
   mounted() {
-    this.getFavoriteList(this.page, this.limit)
-    this.getAdsList()
+    let identity = localStorage.getItem('identity')
+    this.identity = identity;
+    // 1.jobs 2.deals 3.Event 4.educator 5.recruitor 6.school 7.other 8.vendor
+
+    if(identity == 1){
+      this.type = 1
+    }
+
+    if(identity == 2){
+      this.type = 4
+    }
+    if( identity == 3){
+      this.type = 4
+    }
+    if(identity == 4){
+      this.type = 4
+    }
+    if(identity == 5){
+      this.type = 4
+    }
+
+    this.getFavoriteList(this.type, this.page, this.limit)
+    // this.getAdsList()
   },
   methods: {
+    turnDealDetail(id){
+      let obj = {id:id}
+      let { href } = this.$router.resolve({
+        path: '/deals/detail', query: obj
+      })
+      window.open(href,'_blank')
+
+    },
+    applyJob(id) {
+      this.applyBtnLoading = true;
+      this.applyJobId = id;
+
+      let identity = localStorage.getItem('identity')
+      let token = localStorage.getItem('token')
+      if (identity == 1) {
+        let params = {
+          job_id: id,
+          token: token
+        }
+        APPLY_JOBS(params).then(res => {
+          if (res.code == 200) {
+            this.$message.success('Apply Success')
+            this.applyBtnLoading = false;
+          }
+        }).catch(err=>{
+          console.log(err)
+          this.$message.error(err.msg)
+          this.applyBtnLoading = false;
+
+        })
+
+      } else {
+        this.$message.warning('Please switch to an educator profile to be able to apply')
+        this.applyBtnLoading = false;
+      }
+
+
+    },
+    turnBusinessProfile(info){
+
+      let obj = {
+        jobId:info.id,
+        uid:info.user_id,
+        i:info.identity,
+        cid:info.company_id
+      }
+      let { href } = this.$router.resolve({
+        path: '/jobs/business/profile', query: obj
+      })
+      window.open(href,'_blank')
+
+      // this.$router.push({path:'/jobs/business/profile',query:obj})
+
+    },
+    viewEducatorDetail(info) {
+      console.log(info)
+      let companyId = info.user_contact.company_id;
+      let userId = info.user_contact.id;
+
+      let obj = {
+        cid: companyId,
+        uid: userId,
+        identity: 1,
+        from:'other'
+      }
+
+      let str = encode(JSON.stringify(obj))
+      let { href } = this.$router.resolve({
+        path: '/educator/profile', query: {str: str}
+      })
+      window.open(href,'_blank')
+      // this.$router.push({path: '/educator/profile', query: {str: str}})
+
+    },
+    changeType(type){
+      this.type = type;
+      this.favoriteData = [];
+      this.page = 1
+      this.limit = 8
+      this.getFavoriteList(type, this.page, this.limit)
+    },
     turnBanner(link) {
       console.log(link)
       if (link != '') {
@@ -176,15 +448,19 @@ export default {
         }
       })
     },
-    getFavoriteList(page, limit) {
+    getFavoriteList(type, page, limit) {
       let params = {
-        token: localStorage.getItem('token'),
         page: page,
         limit: limit
       }
+      if(type){
+        params.type = type
+      }
+
       GET_FAVORITE_LIST(params).then(res => {
         console.log(res)
         if (res.code == 200) {
+
           this.favoriteData = res.message.data
           // console.log(res.message.data)
           this.totalNum = res.message.total
@@ -205,7 +481,7 @@ export default {
     },
     pageChange(e) {
       this.page = e
-      this.getFavoriteList(e, this.limit)
+      this.getFavoriteList(this.type, e, this.limit)
       console.log(e)
     },
     cancelFavorite(type, typeId) {
@@ -254,10 +530,12 @@ export default {
   width: calc(100% - 260px);
   height: calc(100vh - 240px);
   padding: 50px;
+  /*margin: 50px;*/
 }
 
 .favorites-r-bg{
   padding: 50px;
+  /*margin: 50px;*/
   background-color: #FFFFFF;
   box-shadow: 0px 3px 23px #00000012;
   border-radius: 18px;
@@ -267,6 +545,14 @@ export default {
   font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 30px;
   color: #262626;
+  cursor: pointer;
+}
+
+.favorites-label-span{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 22px;
+  color: #262626;
+  cursor: pointer;
 }
 
 .list-container {
@@ -324,12 +610,15 @@ export default {
   text-align: left;
 }
 
-.list-item-r-t a {
+.list-item-r-t-name {
   font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 26px;
-
+  cursor: pointer;
   color: #262626;
-  text-decoration: none;
+}
+
+.list-item-r-t-name:hover{
+  text-decoration: underline;
 }
 
 
@@ -440,6 +729,121 @@ export default {
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 }
+
+
+
+.da-item-container {
+  width: 100%;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.da-item-container-height {
+  /*height: 837px;*/
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow: auto
+}
+
+.da-item-container-height::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
+
+.da-item-container-height {
+  scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.da-item-t-item {
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+
+}
+
+
+.da-total-applicants span {
+  margin-left: 4px;
+}
+
+
+.da-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  /*border-bottom: 2px solid #f0f2f5;*/
+}
+
+
+.da-item-basic {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.da-item-basic-l {
+  padding-left: 20px;
+}
+
+.da-item-basic-l-a {
+
+}
+
+.da-item-avatar-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 70px;
+}
+
+
+.da-item-basic-r {
+  margin-left: 10px;
+}
+
+.da-item-name {
+  font-size: 26px;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
+
+.da-item-n {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 15px;
+}
+
+.da-item-n-1 {
+  font-size: 18px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+  margin-right: 10px;
+}
+
+.da-item-a-job-title {
+  font-size: 26px;
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
+
+.da-item-a-job-other{
+  font-size: 18px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
+
+.dashboard-view-application {
+  flex: 1;
+}
+
 
 @media screen and (min-width: 1200px) {
 

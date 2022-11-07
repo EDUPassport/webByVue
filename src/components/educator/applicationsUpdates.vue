@@ -4,7 +4,7 @@
 
     <div class="e-a-label">
       Your applications updates
-      <el-button link primary>SEE ALL UPDATES</el-button>
+      <el-button link primary @click="turnMyApplications()">SEE ALL UPDATES</el-button>
     </div>
     <el-scrollbar max-height="320px" class="e-a-c">
       <template v-if="myApplyJobData.length>0">
@@ -144,7 +144,7 @@ export default {
     return {
       myApplyJobData:[],
       page:1,
-      limit:1000
+      limit:20
     }
   },
   mounted(){
@@ -168,6 +168,9 @@ export default {
     chatSuccess(){
       this.turnChatPage()
     },
+    turnMyApplications(){
+      this.$router.push({path:'/jobs/home'})
+    }
 
   }
 }

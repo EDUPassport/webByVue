@@ -28,7 +28,7 @@
                          :class="activeConversationKey === conversation.userId+'_'+conversation.data.identity ? 'conversation-active' : ''"
                     >
                       <div class="item-head">
-                        <el-image :src="conversation.data.avatar" class="head-icon"/>
+                        <el-avatar :src="conversation.data.avatar" class="head-icon"/>
                         <div class="item-head_unread" v-if="conversation.unread">{{ conversation.unread }}</div>
                       </div>
                       <div class="scroll-item_info" @click="navigateToChat(conversation)">

@@ -81,6 +81,9 @@
 
                     </div>
                     <div class="deals-item-b-r">
+                      <el-button link @click="turnEditDeal(item.id)">
+                        EDIT
+                      </el-button>
                       <el-button link @click="turnDealDetail(item.id)">
                         DETAILS
                       </el-button>
@@ -143,6 +146,9 @@ export default {
       this.$router.push({path:'/deals/detail',query:{
         id:id
         }})
+    },
+    turnEditDeal(id){
+      this.$router.push({path:'/deals/offer',query:{deal_id:id}})
     },
     dealPageSizeChange(e) {
       console.log(e)

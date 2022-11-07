@@ -153,7 +153,8 @@
 
                           </div>
 
-                          <el-dropdown size="large" trigger="click"
+                          <el-dropdown size="large"
+                                       trigger="click"
                                        :hide-on-click="false"
                                        popper-class="xll-dropdown"
                           >

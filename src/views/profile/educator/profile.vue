@@ -18,13 +18,33 @@
               </el-button>
             </div>
             <div class="account-profile-t-r">
-<!--              <el-button class="account-profile-cancel-btn" plain round>-->
-<!--                FAVORITED-->
-<!--              </el-button>-->
-<!--              <el-button class="account-profile-save-btn" type="primary" round-->
-<!--                         >-->
-<!--                SEND A MESSAGE-->
-<!--              </el-button>-->
+
+              <template v-if="isFromOther">
+                <el-button class="account-profile-cancel-btn" plain round
+                           v-if="isFavorite"
+                           @click="cancelFavorite(educatorContact.id, 4)">
+                  <el-icon color="#6650B3" :size="20">
+                    <IconFontistoFavorite/>
+                  </el-icon>
+                  FAVORITED
+                </el-button>
+                <el-button class="account-profile-cancel-btn" plain round
+                           v-if="!isFavorite"
+                           @click="addFavorite(educatorContact.id, 4, educatorContact.name, educatorContact.profile_photo)">
+                  <el-icon :size="20">
+                    <CollectionTag/>
+                  </el-icon>
+                  FAVORITED
+                </el-button>
+                <chatButton text="SEND A MESSAGE"
+                            :target-user="educatorContact"
+                            @onSuccess="chatSuccess"
+                            btn-style="primary"
+                            :identity="1">
+                ></chatButton>
+
+              </template>
+
             </div>
           </div>
 
@@ -617,10 +637,12 @@ import {
   USER_INFO_BY_TOKEN_V2,
   ADD_USER_IMG_V2,
   ADD_LANGUAGE_SCORE_V2,
-  EDUCATOR_PERCENTAGE_V2, UPLOAD_IMG, USER_INFO_VISITOR_V2
+  EDUCATOR_PERCENTAGE_V2, UPLOAD_IMG, USER_INFO_VISITOR_V2, ADD_FAVORITE, CANCEL_FAVORITE
 } from '@/api/api'
 import {encode, decode} from 'js-base64'
 import xllLoading from '@/components/xllLoading'
+
+import chatButton from "@/components/chat/chatButton";
 
 export default {
   name: "profile",
@@ -629,6 +651,7 @@ export default {
     xllLoading,
     Swiper,
     SwiperSlide,
+    chatButton
   },
   setup() {
 
@@ -799,47 +822,22 @@ export default {
       selectBenefitsArr: [],
 
       editVideoStatus:false,
-      editResumeStatus:false
+      editResumeStatus:false,
+
+      isFromOther:false,
+      isFavorite:false
 
     }
   },
   mounted() {
-    let screenWidth = document.body.clientWidth
-
-    if (Math.floor(screenWidth) < 768) {
-      this.languagesDrawerSize = '90%'
-    }
-    if (Math.floor(screenWidth) >= 768 && Math.floor(screenWidth) < 992) {
-      this.languagesDrawerSize = '90%'
-    }
-    if (Math.floor(screenWidth) >= 992 && Math.floor(screenWidth) < 1200) {
-      this.languagesDrawerSize = '30%'
-    }
-    if (Math.floor(screenWidth) >= 1200) {
-      this.languagesDrawerSize = '30%'
-    }
-
-    window.onresize = () => {
-      let screenWidth2 = document.body.clientWidth
-      if (Math.floor(screenWidth2) < 768) {
-        this.languagesDrawerSize = '90%'
-      }
-      if (Math.floor(screenWidth2) >= 768 && Math.floor(screenWidth2) < 992) {
-        this.languagesDrawerSize = '90%'
-      }
-      if (Math.floor(screenWidth2) >= 992 && Math.floor(screenWidth2) < 1200) {
-        this.languagesDrawerSize = '30%'
-      }
-      if (Math.floor(screenWidth2) >= 1200) {
-        this.languagesDrawerSize = '30%'
-      }
-    }
 
     let str = this.$route.query.str
     if(str){
       let strDecode = decode(str)
       let strParse = JSON.parse(strDecode)
+
       if(strParse.from == 'other'){
+        this.isFromOther = true;
         this.getUserInfoForVisitor(strParse.uid, strParse.cid)
       }else{
         this.getUserInfo()
@@ -856,6 +854,44 @@ export default {
 
   },
   methods: {
+    chatSuccess(){
+      this.$router.push({path:'/chat/messages'})
+    },
+    cancelFavorite(type, typeId) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.isFavorite = false
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    addFavorite(id, type, title, url){
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      ADD_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.isFavorite = true;
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
     backToAccountHome(){
       // this.$router.go(-1)
       this.$router.push('/account/home')

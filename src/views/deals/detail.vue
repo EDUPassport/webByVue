@@ -628,6 +628,7 @@ export default {
 
 .deal-detail-scroll {
   background-color: #F0F2F5;
+  width: calc(100% - 25px);
   height: calc(100vh - 140px);
   padding:0 0  0 25px ;
 }

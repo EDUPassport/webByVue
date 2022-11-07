@@ -22,6 +22,9 @@ export const EMAIL_LOGIN = (params) => post('email/login', params)
 // 获取deals列表
 export const DEALS_LIST = (params) => get('deals/dealsList', params)
 
+// 获取deal详情
+export const DEALS_DEAL_DETAIL = (params) => get('deals/detail', params)
+
 // 获取广告列表
 // export const ADS_LIST = (params) => get('ad/list', params)
 export const ADS_LIST = (params) => get('chrome/list', params)

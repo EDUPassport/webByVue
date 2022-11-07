@@ -194,6 +194,9 @@
                         <div class="map-container">
                           <div id="mapContainer" class="basemap"></div>
                         </div>
+                        <div class="job-current-address">
+                          {{jobForm.address}}
+                        </div>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -763,6 +766,13 @@
       </div>
 
     </div>
+
+    <submitMessage :title="jobSuccessTitle"
+                   :description="jobSuccessDesc"
+                   @close="submitJobSuccess"
+                   :visible="jobSuccessVisible">
+    </submitMessage>
+
   </div>
 </template>
 
@@ -781,12 +791,15 @@ import {
 import {ref, reactive} from "vue";
 import axios from 'axios'
 import {encode} from "js-base64";
+import submitMessage from "@/components/popup/submitMessage";
+
 
 export default {
   name: "post",
   components: {
     meSideMenu,
-    Tinymce
+    Tinymce,
+    submitMessage
   },
   setup() {
     const envName = process.env.VUE_APP_ENV_NAME
@@ -1041,7 +1054,12 @@ export default {
       provinceOptions: [],
       cityOptions: [],
 
-      checkedEmploymentTypeValue:undefined
+      checkedEmploymentTypeValue:undefined,
+
+      jobSuccessTitle:'',
+      jobSuccessDesc:'',
+      jobSuccessVisible:false
+
 
     }
   },
@@ -2249,12 +2267,20 @@ export default {
               if (submitType == 3) {
                 // this.$router.push('/')
               }
+
               this.$loading().close()
-              this.$router.push('/jobs/home')
+
+              this.jobSuccessTitle = 'Success'
+              this.jobSuccessDesc = 'Your Job Submission '+ this.jobForm.job_title + ' has been successfully sent.'
+              this.jobSuccessVisible = true;
+
+              // this.$router.push('/jobs/home')
 
             }
           }).catch(err => {
             console.log(err)
+            this.$loading().close()
+
             if (err.msg) {
               this.$message.error(err.msg)
             }
@@ -2264,10 +2290,16 @@ export default {
           })
 
         } else {
+          this.$loading().close()
           console.log('error submit!!')
           return false
         }
       })
+
+    },
+    submitJobSuccess(){
+      this.jobSuccessVisible = false
+      this.$router.push('/jobs/home')
 
     },
     letGo() {
@@ -2791,9 +2823,17 @@ export default {
 .job-current-location{
   width:100%;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 23px;
+  font-size: 20px;
 
 }
+
+.job-current-address{
+  width:100%;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+
+}
+
 .job-location-container{
 
 }

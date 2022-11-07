@@ -96,11 +96,12 @@
                     <el-button link @click="shareJob(detailData)">
                       SHARE
                     </el-button>
-                    <el-button type="primary" round
-                               :loading="applyBtnLoading"
-                               @click="applyJob(detailData.id)">
-                      QUICK APPLY
-                    </el-button>
+
+                    <applyJobButton :selectJobId="detailData.id"
+                                    btn-text="QUICK APPLY"
+                                    :job-info="detailData" >
+                    </applyJobButton>
+
                     <el-button plain round
                                @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
                       SAVE
@@ -261,10 +262,12 @@
 
       </el-col>
     </el-row>
+
   </div>
 </template>
 
 <script>
+import applyJobButton from '@/components/jobs/applyButton'
 import shareCard from "@/components/shareCard";
 import filterWithJobList from "@/components/jobs/filterWithJobList";
 import jobsListComponent from "@/components/jobsListComponent";
@@ -330,7 +333,9 @@ export default {
       otherJobLimit:1,
       otherJobTotalNum:0,
       otherJobListData:[],
-      jobDetailHeight:0
+      jobDetailHeight:0,
+
+      searchFilterParams:{}
 
     }
   },
@@ -340,7 +345,8 @@ export default {
     BusinessProfile,
     filterWithJobList,
     shareCard,
-    adsComponent
+    adsComponent,
+    applyJobButton
 
   },
   setup() {
@@ -466,6 +472,7 @@ export default {
   methods: {
     searchByFilter(e){
       console.log(e)
+      this.searchFilterParams = e;
 
       let params = {
         page: this.jobPage,
@@ -705,6 +712,41 @@ export default {
         page: page,
         limit: limit
       }
+
+      let e = this.searchFilterParams;
+
+      let jobTitle = e.job_title
+
+      if(jobTitle){
+        params.job_title = jobTitle
+      }
+
+      let salaryValue = e.salary;
+
+      if (salaryValue) {
+        params.salary_begin = salaryValue[0] * 1000
+        params.salary_end = salaryValue[1] * 1000
+      }
+
+      let envName = process.env.VUE_APP_ENV_NAME
+
+      if (e.location) {
+        if (envName === 'development' || envName === 'production') {
+          params.country = e.location
+        }
+        if (envName === 'developmentCN' || envName === 'productionCN') {
+          params.city = e.location
+        }
+      }
+
+      if (e.employment_type) {
+        params.employment_type = e.employment_type
+      }
+
+      if (e.student_age) {
+        params.age_to_teach = e.student_age
+      }
+
 
       JOB_LIST(params).then(res => {
         // console.log(res)
@@ -962,6 +1004,7 @@ export default {
 
     },
     getCompanyJobList(userId,page,limit){
+      this.jobLoadingValue = true;
 
       let params = {
         user_id: userId,
@@ -971,52 +1014,40 @@ export default {
         limit: limit
       }
 
-      let salaryValue = this.salaryValue
-      if (salaryValue != '') {
-        if (salaryValue == 1) {
-          params.salary_begin = 0
-          params.salary_end = 5000
-        }
-        if (salaryValue == 2) {
-          params.salary_begin = 5000
-          params.salary_end = 10000
-        }
-        if (salaryValue == 3) {
-          params.salary_begin = 10000
-          params.salary_end = 15000
-        }
-        if (salaryValue == 4) {
-          params.salary_begin = 15000
-        }
+      let e = this.searchFilterParams;
 
+      let jobTitle = e.job_title
+
+      if(jobTitle){
+        params.job_title = jobTitle
+      }
+
+      let salaryValue = e.salary;
+
+      if (salaryValue) {
+        params.salary_begin = salaryValue[0] * 1000
+        params.salary_end = salaryValue[1] * 1000
       }
 
       let envName = process.env.VUE_APP_ENV_NAME
 
-      if (this.locationValue != '') {
+      if (e.location) {
         if (envName === 'development' || envName === 'production') {
-          params.country = this.locationValue
+          params.country = e.location
         }
         if (envName === 'developmentCN' || envName === 'productionCN') {
-          params.city = this.locationValue
+          params.city = e.location
         }
       }
 
-      if (this.genderValue != '') {
-        params.sex = this.genderValue
+      if (e.employment_type) {
+        params.employment_type = e.employment_type
       }
 
-      if (this.jobTypeValue != '') {
-        params.employment_type = this.jobTypeValue
+      if (e.student_age) {
+        params.age_to_teach = e.student_age
       }
 
-      if (this.studentAgeValue != '') {
-        params.age_to_teach = this.studentAgeValue
-      }
-
-      params.is_online = this.onlineValue
-
-      this.jobLoadingValue = true;
 
       COMPANY_JOB_LIST(params).then(res=>{
         console.log(res)
@@ -1111,16 +1142,18 @@ export default {
           }
         }).catch(err=>{
           console.log(err)
-          if(err.code === 400){
-            this.$message.error('Please complete your profile in order to apply')
-          }else{
-            if(err.msg){
-              this.$message.error(err.msg)
-            }
-            if(err.message){
-              this.$message.error(err.message)
-            }
-          }
+          this.$message.error(err.msg)
+
+          // if(err.code === 400){
+          //   this.$message.error('Please complete your profile in order to apply')
+          // }else{
+          //   if(err.msg){
+          //     this.$message.error(err.msg)
+          //   }
+          //   if(err.message){
+          //     this.$message.error(err.message)
+          //   }
+          // }
 
           this.applyBtnLoading = false;
 
@@ -1249,6 +1282,13 @@ export default {
 
 .job-detail-t-l{
   width: 50%;
+}
+
+.job-detail-t-r{
+  /*display: flex;*/
+  /*align-items: center;*/
+  /*justify-content: flex-start;*/
+  /*flex-direction: row;*/
 }
 
 .job-detail-t-l-1{

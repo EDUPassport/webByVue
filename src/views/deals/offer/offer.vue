@@ -62,7 +62,11 @@
                     <div class="tags-tips">
                       Tags will help find your deal easier
                     </div>
-
+                    <template v-if="editDealStatus">
+                      <div class="tags-current-container">
+                        {{basicForm.tags_en}}
+                      </div>
+                    </template>
                     <div class="object-tags-add">
                       <div class="object-tags-item-add">
                         <el-input type="text"
@@ -93,9 +97,9 @@
                       </div>
                       <div class="object-tags">
                         <div class="object-tags-item"
-                             :class=" selectTagsList.indexOf(item) == -1 ? '' : 'tags-active' "
+                             :class=" selectOwnTagsList.indexOf(item) == -1 ? '' : 'tags-active' "
                              v-for="(item,index) in ownTagsList" :key="index"
-                             @click="selectTagA(item)">
+                             @click="selectTagB(item)">
                           {{ item }}
                         </div>
                       </div>
@@ -127,6 +131,10 @@
                              @click="changeDealLocationType(3)">
                           BOTH
                         </div>
+                      </div>
+
+                      <div class="deal-location-current-container" v-if="editDealStatus">
+                        {{basicForm.location}}
                       </div>
 
                       <template v-if="dealLocationType === 1">
@@ -247,22 +255,31 @@
       </div>
 
     </div>
+
+    <submitMessage :title="dealSuccessTitle"
+                   :description="dealSuccessDesc"
+                   @close="submitDealSuccess"
+                   :visible="dealSuccessVisible">
+    </submitMessage>
+
   </div>
 </template>
 
 <script>
 
 import meSideMenu from "@/components/meSideMenu";
-import {TAG_LIST, TAG_IS_EXISTS, ADD_DEALS, GET_COUNTRY_LIST} from '@/api/api';
+import {TAG_LIST, TAG_IS_EXISTS, ADD_DEALS, GET_COUNTRY_LIST, DEALS_DEAL_DETAIL} from '@/api/api';
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import submitMessage from "@/components/popup/submitMessage";
 
 export default {
   name: "jobs",
   components: {
-    meSideMenu
+    meSideMenu,
+    submitMessage
   },
   data() {
     return {
@@ -279,6 +296,7 @@ export default {
       ownTagsValue: '',
       ownTagsList: [],
       selectTagsList: [],
+      selectOwnTagsList:[],
       selectTagsArr: [],
       tagsCnData:[],
       tagsEnData:[],
@@ -300,6 +318,7 @@ export default {
       basicForm: {
         token: localStorage.getItem('token'),
         user_id: localStorage.getItem('uid'),
+        deal_id:'',
         title: '',
         desc: '',
         tag:'',
@@ -332,15 +351,76 @@ export default {
       },
 
       dealLocationType: 1,
+      editDealStatus:false,
 
+      dealSuccessTitle:'',
+      dealSuccessDesc:'',
+      dealSuccessVisible:false
 
     }
   },
   mounted() {
     this.getTagsList()
     this.getAllCountry()
+
+    let dealId = this.$route.query.deal_id
+    if(dealId){
+      this.basicForm.deal_id = dealId
+      this.getDealDetail(dealId)
+      this.editDealStatus = true;
+
+    }
+
   },
   methods: {
+    getDealDetail(id){
+      let self =this
+
+      let params = {
+        deal_id:id
+      }
+      DEALS_DEAL_DETAIL(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          let resMessage = res.message;
+          this.basicForm.title = resMessage.title
+          this.basicForm.desc = resMessage.desc
+          this.basicForm.tags_cn = resMessage.tags_cn
+          this.basicForm.tags_en = resMessage.tags_en
+          this.basicForm.is_online = resMessage.is_online
+          this.dealLocationType = resMessage.is_online
+          this.basicForm.location = resMessage.location
+
+          if(resMessage.is_online == 2){
+            this.mapLoading=true
+            setTimeout(function () {
+              self.initMap()
+              self.mapLoading=false
+            },1000)
+          }
+
+          if(resMessage.is_online == 3){
+            this.map1Loading=true
+            setTimeout(function () {
+              self.initMap1()
+              self.map1Loading=false
+            },1000)
+
+          }
+
+          // tags 返回的数据和tagslist里面的数据的id不一致
+          // let tags = resMessage.tags;
+          // let tagsData = []
+          // tags.forEach(item=>{
+          //   tagsData.push(item.id)
+          // })
+          // this.selectTagsList = tagsData
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     changeDealLocationType(value){
       this.dealLocationType = value
       let self =this
@@ -572,20 +652,8 @@ export default {
             let ownIndex = this.ownTagsList.indexOf(this.ownTagsValue);
             if(ownIndex == -1){
               this.ownTagsList.push(this.ownTagsValue);
+              this.selectOwnTagsList.push(this.ownTagsValue);
             }
-            let index = this.selectTagsList.indexOf(this.ownTagsValue);
-
-            if (index == -1) {
-              // this.selectTagsList.splice(index, 1, obj);
-              this.selectTagsList.push(this.ownTagsValue)
-              this.tagsCnData.push(this.ownTagsValue);
-              this.tagsEnData.push(this.ownTagsValue);
-            } else {
-              this.selectTagsList.splice(index, 1);
-              this.tagsCnData.splice(index,1);
-              this.tagsEnData.splice(index,1);
-            }
-
             this.ownTagsValue = '';
 
           }
@@ -610,21 +678,45 @@ export default {
       }
 
     },
+    selectTagB(item){
+      let index = this.selectOwnTagsList.indexOf(item);
+
+      if (index == -1) {
+        // this.selectTagsArr.push(item.id)
+        this.tagsCnData.push(item);
+        this.tagsEnData.push(item);
+
+      } else {
+        // this.selectTagsArr.splice(index, 1);
+        this.tagsCnData.splice(index,1);
+        this.tagsEnData.splice(index,1);
+      }
+
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.basicForm.tag = this.selectTagsList;
           this.basicForm.tags_cn = this.tagsCnData.join(',');
           this.basicForm.tags_en = this.tagsEnData.join(',');
+          this.basicForm.is_online = this.dealLocationType
+
           this.$loading({
             text:'Loading...'
           })
+
           let params = Object.assign({}, this.basicForm);
           ADD_DEALS(params).then(res => {
             console.log(res)
             if(res.code == 200){
-              this.$router.push('/deals/myDeals')
+              // this.$router.push('/deals/myDeals')
               this.$loading().close()
+
+              this.dealSuccessTitle = 'Success'
+              this.dealSuccessDesc = 'Your Deal offer Submission '+ this.basicForm.title + ' has been successfully sent.'
+              this.dealSuccessVisible = true;
+
+
             }
           }).catch(err=>{
             console.log(err)
@@ -634,13 +726,21 @@ export default {
             if(err.message){
               this.$message.error(err.message)
             }
+            this.$loading().close()
+
           })
 
         } else {
+          this.$loading().close()
           console.log('error submit!!')
           return false
         }
       })
+    },
+    submitDealSuccess(){
+      this.dealSuccessVisible = false
+      this.$router.push('/deals/myDeals')
+
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -859,6 +959,17 @@ export default {
   text-align: left;
   font-size: 12px;
   color: #808080;
+}
+
+.deal-location-current-container{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.tags-current-container{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
 }
 
 @media screen and (min-width: 1200px){

@@ -30,11 +30,16 @@
             <el-button link @click="shareJob(detailData)">
               SHARE
             </el-button>
-            <el-button type="primary" round
-                       :loading="applyBtnLoading"
-                       @click="applyJob(detailData.id)">
-              QUICK APPLY
-            </el-button>
+<!--            <el-button type="primary" round-->
+<!--                       :loading="applyBtnLoading"-->
+<!--                       @click="applyJob(detailData.id)">-->
+<!--              QUICK APPLY-->
+<!--            </el-button>-->
+            <applyJobButton btn-text="QUICK APPLY"
+                            :selectJobId="detailData.id"
+                            :job-info="detailData">
+            </applyJobButton>
+
             <el-button plain round
                        @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
               SAVE
@@ -199,12 +204,14 @@
 import adsComponent from "@/components/ads/adsComponent";
 import shareCard from "@/components/shareCard";
 import {ADD_FAVORITE, APPLY_JOBS} from "@/api/api";
+import applyJobButton from '@/components/jobs/applyButton'
 
 export default {
   name: "detailComponent",
   components: {
     adsComponent,
-    shareCard
+    shareCard,
+    applyJobButton
   },
   props:['detailData','adsData','workingHoursData'],
   data(){
@@ -284,16 +291,17 @@ export default {
           }
         }).catch(err=>{
           console.log(err)
-          if(err.code === 400){
-            this.$message.error('Please complete your profile in order to apply')
-          }else{
-            if(err.msg){
-              this.$message.error(err.msg)
-            }
-            if(err.message){
-              this.$message.error(err.message)
-            }
-          }
+          this.$message.error(err.msg)
+          // if(err.code === 400){
+          //   this.$message.error('Please complete your profile in order to apply')
+          // }else{
+          //   if(err.msg){
+          //     this.$message.error(err.msg)
+          //   }
+          //   if(err.message){
+          //     this.$message.error(err.message)
+          //   }
+          // }
 
           this.applyBtnLoading = false;
 
