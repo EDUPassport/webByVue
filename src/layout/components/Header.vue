@@ -104,49 +104,78 @@
                           <div class="user-dropdown-bell">
                             <el-popover :width="330">
                               <template #reference>
-                                <el-icon :size="24" color="#6650B3" v-if="unreadTotal>0">
-                                  <IconEduNotificationFill24 />
+                                <el-icon class="circle-circle" :size="20" color="#6650B3" v-if="unreadTotal>0 || inAppUnreadTotal > 0">
+                                  <IconBiBellFill></IconBiBellFill>
+                                  <span class="circle-red"></span>
                                 </el-icon>
-                                <el-icon :size="24" v-else>
-                                  <IconEduNotificationNofill24 />
+                                <el-icon :size="20" v-else>
+                                  <IconBiBell></IconBiBell>
                                 </el-icon>
 
                               </template>
                               <template #default>
 
                                 <div class="notification-c">
-<!--                                  <div class="notification-all-read">-->
-<!--                                    Mark all as read-->
-<!--                                  </div>-->
-<!--                                  <el-scrollbar class="notification-items">-->
-<!--                                    <div class="notification-item">-->
-<!--                                      <div class="notification-item-time">-->
-<!--                                        Today 12:22 pm-->
-<!--                                      </div>-->
-<!--                                      <div class="notification-item-c">-->
-<!--                                        <div class="notification-item-c-l">-->
-<!--                                          <el-icon :size="20" >-->
-<!--                                            <IconEduChatNofill></IconEduChatNofill>-->
-<!--                                          </el-icon>-->
-<!--                                        </div>-->
-<!--                                        <div class="notification-item-c-r">-->
-<!--                                          <span>New application received</span>-->
-<!--                                        </div>-->
+                                  <div class="notification-all-read"
+                                       @click="setInAppReadAll()"
+                                  >
+                                    Mark all as read
+                                  </div>
 
-<!--                                      </div>-->
-<!--                                    </div>-->
-<!--                                  </el-scrollbar>-->
+                                  <div class="notification-items"
+                                                v-infinite-scroll="loadUserUnreadMore" >
 
-                                  <div class="im-msg-container" @click="turnChatPage()">
-                                    <el-icon :size="30" color="#FFFFFF">
-                                      <IconJamMessagesAlt />
-                                    </el-icon>
+                                    <div class="notification-item"
+                                         v-for="(item,i) in inAppNotificationData" :key="i"
+                                    >
+                                      <div class="notification-item-time">
+                                        {{ $filters.howLongFormat(item.c_time) }}
+                                      </div>
 
-                                    <span>{{unreadTotal}}</span>
+                                      <div class="notification-item-c">
+                                        <div class="notification-item-c-l"
+                                        :class="item.is_read ? '' : 'no-read-1'"
+                                        >
+                                          <template v-if="item.type == 1">
+                                            <el-icon :size="20" >
+                                              <IconEduApplicationNofill20 />
+                                            </el-icon>
+                                          </template>
+                                          <template v-else-if="item.type == 2">
+                                            <el-icon :size="20" >
+                                              <IconEduPerksNofill20 />
+                                            </el-icon>
+                                          </template>
+                                          <template v-else>
+                                            <el-icon :size="20" >
+                                              <IconBiCardText />
+                                            </el-icon>
+                                          </template>
+
+                                        </div>
+                                        <div class="notification-item-c-r"
+                                             @click="setInAppRead(item.id,item.identity,i)"
+                                          :class="item.is_read ? '' : 'no-read-2' "
+                                        >
+                                          {{item.desc}}
+                                        </div>
+
+                                      </div>
+                                    </div>
+
+                                  </div>
+
+                                  <div class="im-msg-container">
+                                    <el-button class="im-msg-btn" plain round
+                                               @click="turnChatPage()">
+                                      <el-icon :size="20">
+                                        <IconEduChatNofill20 />
+                                      </el-icon>
+                                      <span>{{unreadTotal}}</span>
+                                    </el-button>
                                   </div>
 
                                 </div>
-
 
                               </template>
                             </el-popover>
@@ -240,7 +269,6 @@
                                   </el-dropdown>
 
                                 </el-dropdown-item>
-
 
                                 <el-dropdown-item class="xll-dropdown-item">
                                   <el-dropdown size="large" placement="left-start" :max-height="400">
@@ -527,7 +555,7 @@ import {
   SWITCH_IDENTITY_V2,
   USER_INFO_VISITOR_V2,
   USER_ALL_IDENTITY_V2,
-  LOGOUT_V2, USER_MENU_LIST, COMEBACK_MYSELF
+  LOGOUT_V2, USER_MENU_LIST, COMEBACK_MYSELF, USER_UNREAD_LIST, SET_READ, SET_READ_ALL, USER_UNREAD
 } from '@/api/api'
 import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
@@ -536,9 +564,30 @@ import {encode, decode} from 'js-base64'
 import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
 import logoImgLightH from "@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png"
 import logoImgLogo from  '@/assets/newHome/logo/Logo_Transparent.png'
+import {onBeforeRouteUpdate, onBeforeRouteLeave} from 'vue-router'
+import {ref} from 'vue'
 
 export default {
   name: "Header",
+  setup(){
+    let unreadChanged = ref(0)
+
+    onBeforeRouteUpdate((to)=>{
+      console.log('------- header router -------')
+      console.log(to)
+      unreadChanged.value ++
+    })
+    onBeforeRouteLeave((to)=>{
+      console.log(to)
+      unreadChanged.value ++
+
+    })
+
+    return {
+      unreadChanged
+    }
+
+  },
   data() {
     return {
       logoImg,
@@ -558,7 +607,13 @@ export default {
       vendorCompanyData:[],
       educatorContactData:{},
       educatorContactStatus:false,
-      dialogSwitchJobVisible:false
+      dialogSwitchJobVisible:false,
+
+      inAppNotificationData:[],
+      inAppPage:1,
+      inAppLimit:10,
+      inAppLastPage:0,
+      inAppUnreadTotal:0
 
     }
   },
@@ -568,15 +623,28 @@ export default {
       if(newValue){
         this.getAllIdentity()
         this.getBasicInfo(this.identity)
-
+        this.inAppNotificationData = []
+        this.getUserUnreadList(1, this.inAppLimit)
+        this.getUserUnread()
       }
     },
     unreadTotal(newValue){
       console.log(newValue)
+
+    },
+    unreadChanged(newValue){
+      console.log('---- unread ------' + newValue)
+      if(this.token){
+        this.inAppNotificationData = []
+        this.getUserUnreadList( 1, this.inAppLimit)
+        this.getUserUnread()
+      }
+
     }
 
   },
   computed: {
+
     allIdentityChanged:{
       get(){
         return this.$store.state.allIdentityChanged
@@ -618,6 +686,8 @@ export default {
     if (token) {
       this.getBasicInfo(identity)
       this.getAllIdentity()
+      this.getUserUnreadList(this.inAppPage, this.inAppLimit)
+      this.getUserUnread()
     }
 
   },
@@ -1249,6 +1319,77 @@ export default {
       }
 
 
+    },
+    loadUserUnreadMore(){
+      this.inAppPage ++
+      if(this.inAppPage <= this.inAppLastPage){
+        this.getUserUnreadList(this.inAppPage, this.inAppLimit)
+      }
+
+    },
+    getUserUnreadList(page,limit){
+      let params = {
+        page: page,
+        limit: limit
+      }
+      USER_UNREAD_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.inAppNotificationData =  this.inAppNotificationData.concat(res.message.data);
+          this.inAppLastPage = res.message.last_page;
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    setInAppRead(id,identity,index){
+      let params = {
+        id:id,
+        identity:identity,
+        status:1
+      }
+      SET_READ(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.inAppNotificationData[index]['is_read'] = 1
+          this.getUserUnread()
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
+    setInAppReadAll(){
+
+      let params = {
+        status:1
+      }
+
+      SET_READ_ALL(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.inAppNotificationData = []
+          this.getUserUnreadList(1,this.inAppLimit)
+          this.getUserUnread()
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
+    getUserUnread(){
+      let params = {
+        identity: localStorage.getItem('identity')
+      }
+      USER_UNREAD(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.inAppUnreadTotal = res.message.count;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
     }
 
   }
@@ -1600,10 +1741,40 @@ export default {
 
 .notification-items{
   margin-top: 25px;
-  max-height: 400px;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.notification-items::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.notification-items::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius   : 10px;
+  background-color: #9173ff;
+  background-image: -webkit-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.2) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0.2) 75%,
+      transparent 75%,
+      transparent
+  );
+}
+
+.notification-items::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background   : #ededed;
+  border-radius: 10px;
 }
 
 .notification-item{
+  padding: 0 15px;
   margin-bottom: 25px;
 }
 
@@ -1614,8 +1785,8 @@ export default {
 
 .notification-item-c{
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-start;
+  justify-content: space-between;
   flex-direction: row;
   margin-top: 15px;
 }
@@ -1624,7 +1795,19 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 40px;
+  background-color: #F0F2F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.notification-item-c-r{
+  width: calc(100% - 50px);
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  word-break: break-word;
+  text-align: left;
+  cursor: pointer;
 }
 
 .no-read-1{
@@ -1635,27 +1818,40 @@ export default {
   font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
-.notification-item-c-r span{
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  margin-left: 15px;
-}
 .im-msg-container{
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  background-color: #9173ff;
-  height: 40px;
-  border-radius: 40px;
-  cursor: pointer;
+  padding-top: 25px;
+}
 
+.im-msg-btn{
+  width: 100%;
 }
 
 .im-msg-container span{
-  color: #FFFFFF;
+
   font-size: 18px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   margin-left: 15px;
 }
+
+
+.circle-circle{
+  position: relative;
+}
+
+.circle-red{
+  display: block;
+  position: absolute;
+  right: 0;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background-color: #FF4D4D ;
+}
+
 </style>

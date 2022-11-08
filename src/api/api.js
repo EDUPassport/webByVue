@@ -352,6 +352,9 @@ export const USER_UNREAD = (params) => get('user/unread',params)
 // set read
 export const SET_READ = (params) => post('user/setRead', params)
 
+// set read all
+export const SET_READ_ALL = (params) => post('user/setRead/all', params)
+
 // 获取报名【event】人员
 export const EVENT_APPLICATIONS = (params) => get('/home/getEventApplicants',params)
 
@@ -372,3 +375,9 @@ export const SET_APPLY_JOB_STATUS = (params) => post('/home/setApplyJobStatus', 
 
 // 教育者 智能匹配 职位 结果列表
 export const EDUCATOR_JOB_MATCH_LIST = (params) => get('/home/educator/matching',params)
+
+// 未读消息列表
+export const USER_UNREAD_LIST = (params) => get('/user/unread/list',params)
+
+// 未读消息详情
+export const USER_UNREAD_DETAIL = (params) => get('/user/unread/detail',params)
