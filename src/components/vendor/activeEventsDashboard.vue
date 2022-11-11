@@ -109,10 +109,9 @@ export default {
   padding: 25px 50px;
 }
 
-
 .container-c{
   display:flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   flex-wrap:wrap;

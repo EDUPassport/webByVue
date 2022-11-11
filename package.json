@@ -10,6 +10,7 @@
     "build:chinaprod": "vue-cli-service  build --mode  chinaproduction",
     "build:chinadev": "vue-cli-service  build --mode  chinadev",
     "cip": "vue-cli-service  build --mode internationalproduction && vue-cli-service build --mode chinaproduction",
+    "all": "vue-cli-service  build --mode internationalproduction && vue-cli-service build --mode chinaproduction && vue-cli-service  build --mode  chinadev",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

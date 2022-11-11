@@ -11,6 +11,7 @@
       <div class="event-dialog-l">
         <el-image class="event-dialog-l-img"
                   fit="cover"
+                  :preview-src-list="[info.file]"
                   :src="info.file !='' ? info.file : '' ">
         </el-image>
       </div>
@@ -35,18 +36,18 @@
           <div class="event-dialog-r-4">
             {{info.name}}
           </div>
-          <div class="event-dialog-r-5">
+          <el-scrollbar class="event-dialog-r-5">
             {{info.desc}}
-          </div>
-          <div class="event-dialog-r-lc">
+          </el-scrollbar>
+          <div class="event-dialog-r-lc" v-if="info.type_desc">
             <div class="event-dialog-r-lc-label">
               For EDU Passport members
             </div>
-            <div class="event-dialog-r-lc-content">
+            <el-scrollbar class="event-dialog-r-lc-type-desc">
               {{info.type_desc}}
-            </div>
+            </el-scrollbar>
           </div>
-          <div class="event-dialog-r-lc">
+          <div class="event-dialog-r-lc" v-if="info.pay_money">
             <div class="event-dialog-r-lc-label">Price</div>
             <div class="event-dialog-r-lc-content">
               {{info.currency}} {{info.pay_money}}
@@ -129,8 +130,6 @@ export default {
   height: 720px;
   margin: 0 auto;
 
-
-
 }
 
 /deep/ .el-dialog{
@@ -194,6 +193,8 @@ export default {
   font-size: 35px;
   color: #262626;
   margin-top: 50px;
+  word-break: break-word;
+
 }
 .event-dialog-r-5{
   font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
@@ -201,13 +202,15 @@ export default {
   color: #262626;
   margin-top: 10px;
 
-  min-height: 115px;
+  word-break: break-word;
 
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
+  height: 115px;
+
+  /*overflow: hidden;*/
+  /*text-overflow: ellipsis;*/
+  /*display: -webkit-box;*/
+  /*-webkit-line-clamp: 5;*/
+  /*-webkit-box-orient: vertical;*/
 }
 .event-dialog-r-lc{
   margin-top: 25px;
@@ -219,6 +222,15 @@ export default {
   color: #262626;
 }
 
+.event-dialog-r-lc-type-desc{
+  margin-top: 10px;
+  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+  word-break: break-word;
+  height: 115px;
+
+}
 
 .event-dialog-r-lc-content{
   margin-top: 10px;
@@ -288,6 +300,11 @@ export default {
   font-family:BCM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 20px;
   color: #262626;
+}
+
+
+/deep/ .el-overlay{
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
 </style>

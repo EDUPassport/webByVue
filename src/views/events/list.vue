@@ -18,6 +18,11 @@
         <el-scrollbar class="events-list-bg-container">
 
           <template v-if="eventsList.length > 0">
+            <div class="empty-post-event-btn-container">
+              <el-button type="primary" round @click="postEventWhenEmpty()">
+                Post an Event
+              </el-button>
+            </div>
             <div class="events-list-container">
 
               <div class="events-item-bg"
@@ -26,6 +31,8 @@
                 <div class="events-item">
                   <div class="events-item-t">
                     <el-image class="events-item-banner"
+                              fit="cover"
+                              :preview-src-list="[item.file]"
                               :src="item.file !='' ? item.file : '' "
                     >
                     </el-image>
@@ -35,40 +42,42 @@
                       <el-space :size="5" wrap spacer="·">
                         <span>{{ $filters.ymdFormatEvent(item.date)  }}</span>
                         <span>
-                    {{$filters.timeFormatEvent(item.start_time,item.end_time)}}
-                  </span>
+                              {{$filters.timeFormatEvent(item.start_time,item.end_time)}}
+                        </span>
 
-                        <span v-if="item.is_all == 1">Social</span>
-                        <span v-if="item.is_all == 2">Professional</span>
+                        <span v-if="item.is_online == 1">online</span>
+                        <span v-if="item.is_online == 2">offline</span>
+                        <span v-if="item.is_online == 3">both</span>
                       </el-space>
                     </div>
-                    <div class="events-item-location">
-                  <span v-if="item.is_online == 2 || item.is_online == 3">
-                    {{item.location}}
-                  </span>
-                      <span v-else>online</span>
-                    </div>
-                    <div class="events-item-name" @click="showEventDialog(item)">
+<!--                    <div class="events-item-location">-->
+<!--                      <span v-if="item.is_online == 2 || item.is_online == 3">-->
+<!--                          {{item.location}}-->
+<!--                      </span>-->
+<!--                      <span v-else>online</span>-->
+<!--                    </div>-->
+                    <el-scrollbar class="events-item-name" @click="showEventDialog(item)">
                       {{item.name}}
-                    </div>
-                    <div class="events-item-desc">
+                    </el-scrollbar>
+                    <el-scrollbar class="events-item-desc">
                       {{item.desc}}
-                    </div>
+                    </el-scrollbar>
 
                     <div class="events-item-action-container">
                       <div class="events-item-action-l">
                         <!--                      <el-button link>ADD TO CALENDAR</el-button>-->
                       </div>
                       <div class="events-item-action-r">
-                        <!--                      <el-button link>-->
-                        <!--                        FAVORITE-->
-                        <!--                      </el-button>-->
+                        <el-button link @click="showBookEvent()">
+                          <el-icon :size="20">
+                            <CollectionTag/>
+                          </el-icon>
+                          Rsvp
+                        </el-button>
                       </div>
 
                     </div>
                   </div>
-
-
 
                 </div>
 
@@ -290,7 +299,27 @@ export default {
       this.$router.push({path:'/events/detail',query:{id:id,t:t}})
     },
     postEventWhenEmpty(){
-      this.$router.push({path:'/post-event',query:{}})
+      let token = localStorage.getItem('token')
+      let identity = localStorage.getItem('identity')
+
+      if(token){
+
+        if(identity == 1){
+
+          this.$router.push({path:'/post-event',query:{}})
+
+        }else{
+          this.$router.push({path:'/events/post'})
+        }
+
+
+      }else{
+
+        this.$router.push({path:'/post-event',query:{}})
+
+      }
+
+
       // let url = 'https://forms.zohopublic.com/edupassport/form/PostEventform/formperma/ra89j-hqCt3anrCCYpB0OKGeDeC-XbZuMrb__PmaeBo'
       // window.open(url,'_blank')
     }
@@ -318,7 +347,7 @@ export default {
 .events-list-container{
   display:flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   flex-wrap:wrap;
 }
@@ -334,41 +363,58 @@ export default {
   background:#FFFFFF;
 
   overflow: hidden;
-  border-radius:40px;
+  /*border-radius:40px;*/
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
+}
 
+.events-item-t{
+  max-height: 700px;
+  overflow: hidden;
+  /*aspect-ratio: 2 / 3;*/
 }
 
 .events-item-banner{
   width: 100%;
+  aspect-ratio: 2 / 3;
+
   border:1px solid #ffffff;
-  border-radius:20px;
+  /*border-radius:20px;*/
 
   background-color: #ececec;
   box-shadow: 0 0 8px 0 rgba(100,100,100,0.1);
+  cursor: pointer;
+
 }
+
 .events-item-b{
   padding: 25px;
 }
+
 .events-item-item{
 
 }
+
 .events-item-item span{
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #262626;
 
 }
+
 .events-item-desc{
   margin-top: 25px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #262626;
 
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  height: 66px;
+
+  /*overflow: hidden;*/
+  /*text-overflow: ellipsis;*/
+  /*display: -webkit-box;*/
+  /*-webkit-line-clamp: 3;*/
+  /*-webkit-box-orient: vertical;*/
 
 }
 
@@ -385,10 +431,13 @@ export default {
   font-size: 24px;
   color: #262626;
   cursor: pointer;
+  height: 60px;
 }
 
 .events-item-name:hover{
   color: #000000;
+  text-decoration: underline;
+
 }
 
 .events-item-action-container{
@@ -400,104 +449,18 @@ export default {
 
 }
 
-
 .events-pagination{
   padding:40px;
   display:flex;
   justify-content: center;
 }
 
-.event-dialog-container{
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: center;
-
-}
-
-.event-dialog-l{}
-.event-dialog-r{
-  padding-left: 25px;
-}
-
-.event-dialog-r-1{
-  font-family:BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #262626;
-}
-.event-dialog-r-2{
-  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-
-.event-dialog-r-3{
-  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-
-.event-dialog-r-4{
-  font-family:BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 35px;
-  color: #262626;
-  margin-top: 50px;
-}
-.event-dialog-r-5{
-  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-
-.event-dialog-r-price{
-  margin-top: 20px;
-}
-
-.event-dialog-r-price-label{
-  font-family:BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #262626;
-}
-.event-dialog-r-price-content{
-  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-.event-dialog-r-btn-1-container{
-  margin-top: 25px;
-}
-.event-dialog-r-btn-container{
-
-}
-
-.event-dialog-r-btn{
-  font-size: 20px;
-}
-
-.event-dialog-r-b{
-  margin-top: 50px;
-  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 17px;
-  color: #262626;
-}
-
-.event-dialog-r-b-l{
-
-}
-
-.event-dialog-r-b-r{
-
-}
-.event-dialog-r-b-r span{
-  font-family:BCM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #262626;
-}
 
 .empty-post-event-btn-container{
   text-align: right;
   padding: 50px;
 }
+
 
 @media screen and (min-width: 1200px){
 

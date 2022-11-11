@@ -327,12 +327,12 @@ export default {
     // this.getPercentage(this.identity)
     // this.getAllAssignUsers()
     if(this.identity == 2 || this.identity == 3 || this.identity == 4){
-      this.getAllJobResumeList(1,10000)
+      this.getAllJobResumeList(1,100)
     }
 
     if(this.identity == 5){
-      this.getDealsList(1,10000)
-      this.getEventsList(1,10000)
+      this.getDealsList(1,100)
+      this.getEventsList(1,100)
     }
 
   },

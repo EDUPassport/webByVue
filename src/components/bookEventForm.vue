@@ -41,13 +41,13 @@
                  @click="submitForm('bookForm')">
         Book
       </el-button>
-      <el-button class="inquire-btn"
-                 type="primary"
-                 round
-                 @click="inquire()"
-      >
-        Inquiries
-      </el-button>
+<!--      <el-button class="inquire-btn"-->
+<!--                 type="primary"-->
+<!--                 round-->
+<!--                 @click="inquire()"-->
+<!--      >-->
+<!--        Inquiries-->
+<!--      </el-button>-->
     </div>
 
 
