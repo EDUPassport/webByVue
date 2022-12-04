@@ -214,6 +214,8 @@ import favoritedJobsDashboard from "@/components/educator/favoritedJobsDashboard
 import activeDealsDashboard from "@/components/vendor/activeDealsDashboard";
 import activeEventsDashboard from "@/components/vendor/activeEventsDashboard";
 import {randomString} from "@/utils";
+import {updateWindowHeight} from "@/utils/tools";
+// import {removeZohoFloat, removeJs} from "@/utils/tools";
 
 export default {
   name: "index",
@@ -298,7 +300,6 @@ export default {
       myApplicationsData:[],
       versionTime:randomString(),
 
-
     }
   },
   beforeMount() {
@@ -310,6 +311,10 @@ export default {
 
     }
 
+  },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
   },
   mounted() {
 
@@ -326,13 +331,29 @@ export default {
 
     // this.getPercentage(this.identity)
     // this.getAllAssignUsers()
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+      this.contributorWidth = '80%'
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        this.contributorWidth = '80%'
+        updateWindowHeight()
+      }
+    }
+
     if(this.identity == 2 || this.identity == 3 || this.identity == 4){
       this.getAllJobResumeList(1,100)
     }
 
     if(this.identity == 5){
-      this.getDealsList(1,100)
-      this.getEventsList(1,100)
+      this.getDealsList(1,5)
+      this.getEventsList(1,5)
     }
 
   },
@@ -755,5 +776,57 @@ export default {
   margin-left: 50px;
 }
 
+@media screen and (max-width: 768px){
+  .dashboard-1{
+    margin-right: 15px;
+    margin-bottom: 15px;
+  }
+
+  .overview-r-container{
+      width: 100%;
+      height: calc( var(--i-window-height) - 160px);
+  }
+
+  .overview-r-container-bg{
+    padding: 0;
+  }
+
+  .dashboard-1-container{
+    margin: 15px;
+  }
+
+  .container-2{
+    flex-direction: column;
+  }
+
+  .container-2-l{
+    width: 100%;
+  }
+
+  .container-2-r{
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .container-3{
+    margin-top: 15px;
+  }
+
+  .container-3-l{
+    width: 100%;
+  }
+
+  .container-4{
+    flex-direction: column;
+  }
+  .container-4-l{
+    width: 100%;
+  }
+
+  .container-4-r{
+    margin-left: 0;
+  }
+
+}
 
 </style>

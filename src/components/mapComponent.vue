@@ -80,4 +80,11 @@ export default {
   height: 300px;
 }
 
+@media screen and (max-width: 768px) {
+  #mapContainer{
+    height: 200px;
+  }
+
+}
+
 </style>

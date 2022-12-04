@@ -10,7 +10,7 @@
 
       <el-row :gutter="0" align="top" justify="space-between">
 
-        <el-col :xs="22" :sm="22" :md="8" :lg="9" :xl="8">
+        <el-col :xs="0" :sm="0" :md="8" :lg="9" :xl="8">
 
           <div class="business-jobs">
             <jobsListComponent
@@ -32,11 +32,13 @@
 
         </el-col>
 
-        <el-col  :xs="22" :sm="22" :md="16" :lg="15" :xl="16">
+        <el-col class="business-profile-col" :xs="24" :sm="24" :md="16" :lg="15" :xl="16">
 
-          <div class="business-profile">
-            <businessProfile :canEdit="true" :fromDeal="false" :info="companyInfo" :identity="identity"></businessProfile>
-          </div>
+          <businessProfileActionWithPreview></businessProfileActionWithPreview>
+
+          <el-scrollbar class="business-profile">
+            <businessProfile :info="companyInfo" :identity="identity"></businessProfile>
+          </el-scrollbar>
 
         </el-col>
 
@@ -51,21 +53,24 @@
 import meSideMenu from "@/components/meSideMenu";
 import businessProfile from "@/components/businessProfile";
 import jobsListComponent from "@/components/jobsListComponent";
+import businessProfileActionWithPreview from "@/components/businessProfileActionWithPreview";
 
 import {
   ZOHO_SYNC,
   USER_INFO_BY_TOKEN_V2,
   RECRUITER_PERCENTAGE_V2,
   OTHER_PERCENTAGE_V2, SCHOOL_PERCENTAGE_V2, COMPANY_JOB_LIST, ADD_FAVORITE, CANCEL_FAVORITE
-} from '@/api/api'
-import {decode} from 'js-base64'
+} from '@/api/api';
+import {decode} from 'js-base64';
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "profile",
   components: {
     meSideMenu,
     businessProfile,
-    jobsListComponent
+    jobsListComponent,
+    businessProfileActionWithPreview
 
   },
   computed:{
@@ -90,7 +95,25 @@ export default {
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
     let s = this.$route.query.str;
     if(s){
       console.log(decode(s))
@@ -392,6 +415,7 @@ export default {
 
 }
 
+
 .business-profile-r {
   width:calc(100% - 210px);
   height: calc(100vh - 140px);
@@ -399,23 +423,31 @@ export default {
 
 }
 
-.business-jobs{
-
+.business-profile{
+  margin-left: 50px;
+  height: calc(100vh - 200px);
 }
 
+
 .business-profile{
-  margin-left: 100px;
+
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1919px){
-  .business-profile{
-    margin-left: 20px;
-  }
-
 
 }
 
 @media screen and (max-width: 768px){
+  .business-profile-r{
+    width: 100%;
+    height: calc( var(--i-window-height) - 160px);
+    padding: 0;
+  }
+
+  .business-profile{
+    margin-left: 0;
+    height: calc( var(--i-window-height) - 220px);
+  }
 
 }
 

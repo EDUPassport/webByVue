@@ -1,118 +1,118 @@
 <template>
-<el-scrollbar class="jobs-list-bg-container">
+  <el-scrollbar class="jobs-list-bg-container">
 
-  <div class="back-btn-container" v-if="isOther">
-    <el-button class="back-btn" link type="primary"
-               @click="backToSearchResults()"
-    >
-              <el-icon>
-                <ArrowLeft />
-              </el-icon>
-      BACK TO SEARCH RESULTS
-    </el-button>
-  </div>
-
-  <div class="back-btn-container" v-if="fromBusinessProfile">
-    <el-button class="back-btn" link type="primary"
-               @click="exitPreview()"
-    >
-      <el-icon>
-        <ArrowLeft />
-      </el-icon>
-      EXIT PREVIEW
-    </el-button>
-  </div>
-
-  <div class="jobs-featured" v-if="jobFeaturedData.length>0" v-loading="loadingFeatured">
-    <el-carousel :height="jobHeight+'px'" indicator-position="none">
-      <el-carousel-item
-          v-for="(item,i) in jobFeaturedData" :key="i"
+    <div class="back-btn-container" v-if="isOther">
+      <el-button class="back-btn" link type="primary"
+                 @click="backToSearchResults()"
       >
-        <div  class="jobs-list-item-featured ">
-
-          <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-               @click="cancelFavoriteForFeatured(1,item.id,index)">
-            <el-icon :size="30" color="#9173ff">
-              <CollectionTag />
-            </el-icon>
-          </div>
-          <div class="jobs-favorite" v-else
-               @click="addFavoriteForFeatured(item.id,1,item.job_title,item.logo,i)">
-            <el-icon :size="30">
-              <CollectionTag />
-            </el-icon>
-          </div>
-
-          <div class="jobs-list-item-l">
-            <el-image class="jobs-item-logo"
-                      :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
-                      fit="contain">
-              <template #error>
-                <div class="image-slot">
-                  <el-icon :size="60" color="#808080">
-                    <Picture/>
-                  </el-icon>
-                </div>
-              </template>
-            </el-image>
-          </div>
-          <div class="jobs-list-item-r">
-            <div class="jobs-list-item-name">
-              {{ item.company_name }}
-            </div>
-
-            <div class="jobs-list-item-title" @click="turnJobDetail(item.id)">
-              {{ item.job_title }}
-            </div>
-            <view class="jobs-list-item-salary">
-              <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
-              {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
-              <span v-if="item.payment_period == 112">hourly</span>
-              <span v-if="item.payment_period == 113">daily</span>
-              <span v-if="item.payment_period == 114">weekly</span>
-              <span v-if="item.payment_period == 115">monthly</span>
-              <span v-if="item.payment_period == 116">annually</span>
-            </view>
-            <div class="jobs-list-item-address">
-              {{ item.address }}
-            </div>
-
-            <div class="jobs-list-item-b">
-              <div class="jobs-list-item-b-l">
-                <view class="jobs-list-item-work-type">
-                  <i class="iconfont el-icon-alishijian"></i>
-                  <span v-if="item.employment_type==1">FT</span>
-                  <span v-if="item.employment_type==2">PT</span>
-                  <span v-if="item.employment_type==3">S</span>
-                </view>
-
-              </div>
-
-              <div class="jobs-list-item-b-r">
-                <view class="jobs-list-item-date">
-                  <el-icon>
-                    <Calendar/>
-                  </el-icon>&nbsp;
-                  {{ $filters.howLongFormat(item.refresh_time) }}
-                </view>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </el-carousel-item>
-    </el-carousel>
-    <div style="height: 25px;background-color: #FFFFFF;"></div>
-  </div>
-
-  <div class="jobs-list-container" v-loading="loading" >
-    <div class="jobs-list-label-container">
-      <div class="jobs-list-label">All jobs <span v-if="isOther || fromBusinessProfile">at {{companyInfo.company_name}}</span></div>
+        <el-icon>
+          <ArrowLeft />
+        </el-icon>
+        BACK
+      </el-button>
     </div>
 
-    <div class="jobs-list-content">
+    <div class="back-btn-container" v-if="fromBusinessProfile">
+      <el-button class="back-btn" link type="primary"
+                 @click="exitPreview()"
+      >
+        <el-icon>
+          <ArrowLeft />
+        </el-icon>
+        EXIT PREVIEW
+      </el-button>
+    </div>
+
+    <div class="jobs-featured" v-if="jobFeaturedData.length>0" v-loading="loadingFeatured">
+      <el-carousel :height="jobHeight+'px'" indicator-position="none">
+        <el-carousel-item
+            v-for="(item,i) in jobFeaturedData" :key="i"
+        >
+          <div  class="jobs-list-item-featured ">
+
+            <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                 @click="cancelFavoriteForFeatured(1,item.id,index)">
+              <el-icon :size="30" color="#9173ff">
+                <CollectionTag />
+              </el-icon>
+            </div>
+            <div class="jobs-favorite" v-else
+                 @click="addFavoriteForFeatured(item.id,1,item.job_title,item.logo,i)">
+              <el-icon :size="30">
+                <CollectionTag />
+              </el-icon>
+            </div>
+
+            <div class="jobs-list-item-l">
+              <el-image class="jobs-item-logo"
+                        :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+                        fit="contain">
+                <template #error>
+                  <div class="image-slot">
+                    <el-icon :size="60" color="#808080">
+                      <Picture/>
+                    </el-icon>
+                  </div>
+                </template>
+              </el-image>
+            </div>
+            <div class="jobs-list-item-r">
+              <div class="jobs-list-item-name">
+                {{ item.company_name }}
+              </div>
+
+              <div class="jobs-list-item-title" @click="turnJobDetail(item.id)">
+                {{ item.job_title }}
+              </div>
+              <view class="jobs-list-item-salary">
+                <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
+                {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
+                <span v-if="item.payment_period == 112">hourly</span>
+                <span v-if="item.payment_period == 113">daily</span>
+                <span v-if="item.payment_period == 114">weekly</span>
+                <span v-if="item.payment_period == 115">monthly</span>
+                <span v-if="item.payment_period == 116">annually</span>
+              </view>
+              <div class="jobs-list-item-address">
+                {{ item.address }}
+              </div>
+
+              <div class="jobs-list-item-b">
+                <div class="jobs-list-item-b-l">
+                  <view class="jobs-list-item-work-type">
+                    <i class="iconfont el-icon-alishijian"></i>
+                    <span v-if="item.employment_type==1">FT</span>
+                    <span v-if="item.employment_type==2">PT</span>
+                    <span v-if="item.employment_type==3">S</span>
+                  </view>
+
+                </div>
+
+                <div class="jobs-list-item-b-r">
+                  <view class="jobs-list-item-date">
+                    <el-icon>
+                      <Calendar/>
+                    </el-icon>&nbsp;
+                    {{ $filters.howLongFormat(item.refresh_time) }}
+                  </view>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </el-carousel-item>
+      </el-carousel>
+      <div class="xll-jian-ge" ></div>
+    </div>
+
+    <div class="jobs-list-container" v-loading="loading" >
+      <div class="jobs-list-label-container">
+        <div class="jobs-list-label">All jobs <span v-if="isOther || fromBusinessProfile">at {{companyInfo.company_name}}</span></div>
+      </div>
+
+      <div class="jobs-list-content">
 
         <template v-if="jobListData.length > 0">
           <div  class="jobs-list-item "
@@ -195,111 +195,236 @@
           <el-empty description="..."></el-empty>
         </template>
 
-    </div>
+      </div>
 
-    <div class="jobs-list-pagination" v-if="jobListData.length > 0">
-      <el-pagination layout="prev, pager, next"
-                     :default-current-page="jobPage"
-                     @size-change="jobPageSizeChange"
-                     @current-change="jobPageChange"
-                     :current-page="jobPage"
-                     :page-size="jobLimit"
-                     :total="jobTotalNum">
-      </el-pagination>
-    </div>
+      <div class="jobs-mobile-featured" v-if="jobFeaturedData.length>0" v-loading="loadingFeatured">
+        <el-carousel :height="jobHeight+'px'" indicator-position="none">
+          <el-carousel-item
+              v-for="(item,i) in jobFeaturedData" :key="i"
+          >
+            <div  class="jobs-list-item-featured ">
 
-  </div>
+              <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                   @click="cancelFavoriteForFeatured(1,item.id,index)">
+                <el-icon :size="30" color="#9173ff">
+                  <CollectionTag />
+                </el-icon>
+              </div>
+              <div class="jobs-favorite" v-else
+                   @click="addFavoriteForFeatured(item.id,1,item.job_title,item.logo,i)">
+                <el-icon :size="30">
+                  <CollectionTag />
+                </el-icon>
+              </div>
 
-  <div class="xll-ads-container" v-if="adsData.length>0">
-
-    <el-carousel style="width:100%;margin:0 auto;overflow:hidden;"
-                 height="420px"
-                 indicator-position="none">
-
-      <el-carousel-item class="xll-ads-swiper-item"
-                        v-for="(item,i) in adsData" :key="i"
-                        @click="turnAdsDetail(item.link)"
-      >
-        <div class="xll-ads">
-          <div class="xll-ads-t">
-            <el-image class="xll-ads-img"
-                      fit="cover"
-                      :src="item.user_url !='' ? item.user_url : item.url">
-              <template #error>
-                <div class="image-ads-slot">
-                  <el-icon :size="80" color="#808080">
-                    <Picture/>
-                  </el-icon>
+              <div class="jobs-list-item-l">
+                <el-image class="jobs-item-logo"
+                          @click="turnJobDetailFromMobile(item.id)"
+                          :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+                          fit="contain">
+                  <template #error>
+                    <div class="image-slot">
+                      <el-icon :size="60" color="#808080">
+                        <Picture/>
+                      </el-icon>
+                    </div>
+                  </template>
+                </el-image>
+              </div>
+              <div class="jobs-list-item-r">
+                <div class="jobs-list-item-name" @click="turnJobDetailFromMobile(item.id)">
+                  {{ item.company_name }}
                 </div>
-              </template>
-            </el-image>
+
+                <div class="jobs-list-item-title" @click="turnJobDetailFromMobile(item.id)">
+                  {{ item.job_title }}
+                </div>
+                <view class="jobs-list-item-salary" @click="turnJobDetailFromMobile(item.id)">
+                  <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
+                  {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
+                  <span v-if="item.payment_period == 112">hourly</span>
+                  <span v-if="item.payment_period == 113">daily</span>
+                  <span v-if="item.payment_period == 114">weekly</span>
+                  <span v-if="item.payment_period == 115">monthly</span>
+                  <span v-if="item.payment_period == 116">annually</span>
+                </view>
+                <div class="jobs-list-item-address" @click="turnJobDetailFromMobile(item.id)">
+                  {{ item.address }}
+                </div>
+
+                <div class="jobs-list-item-b" @click="turnJobDetailFromMobile(item.id)">
+                  <div class="jobs-list-item-b-l">
+                    <view class="jobs-list-item-work-type">
+                      <i class="iconfont el-icon-alishijian"></i>
+                      <span v-if="item.employment_type==1">FT</span>
+                      <span v-if="item.employment_type==2">PT</span>
+                      <span v-if="item.employment_type==3">S</span>
+                    </view>
+
+                  </div>
+
+                  <div class="jobs-list-item-b-r">
+                    <view class="jobs-list-item-date">
+                      <el-icon>
+                        <Calendar/>
+                      </el-icon>&nbsp;
+                      {{ $filters.howLongFormat(item.refresh_time) }}
+                    </view>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+
+
+      <div class="jobs-mobile-list-content">
+
+        <template v-if="jobListData.length > 0">
+          <div  class="jobs-list-item "
+                v-for="(item,index) in jobListData" :key="index"
+                :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' ">
+
+            <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                 @click="cancelFavorite(1,item.id,index)">
+              <el-icon :size="30" color="#9173ff">
+                <CollectionTag />
+              </el-icon>
+            </div>
+            <div class="jobs-favorite" v-else
+                 @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
+              <el-icon :size="30">
+                <CollectionTag />
+              </el-icon>
+            </div>
+            <div class="jobs-list-item-l" >
+              <el-image class="jobs-item-logo"
+                        @click="turnJobDetailFromMobile(item.id)"
+                        :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+                        fit="contain">
+                <template #error>
+                  <div class="image-slot">
+                    <el-icon :size="60" color="#808080">
+                      <Picture/>
+                    </el-icon>
+                  </div>
+                </template>
+              </el-image>
+            </div>
+            <div class="jobs-list-item-r">
+              <div class="jobs-list-item-name" @click="turnJobDetailFromMobile(item.id)">
+                {{ item.company_name }}
+              </div>
+
+              <div class="jobs-list-item-title" @click="turnJobDetailFromMobile(item.id)">
+                {{ item.job_title }}
+              </div>
+              <view class="jobs-list-item-salary" @click="turnJobDetailFromMobile(item.id)">
+                <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
+                {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
+                <span v-if="item.payment_period == 112">hourly</span>
+                <span v-if="item.payment_period == 113">daily</span>
+                <span v-if="item.payment_period == 114">weekly</span>
+                <span v-if="item.payment_period == 115">monthly</span>
+                <span v-if="item.payment_period == 116">annually</span>
+              </view>
+              <div class="jobs-list-item-address" @click="turnJobDetailFromMobile(item.id)">
+                {{ item.address }}
+              </div>
+
+              <div class="jobs-list-item-b" @click="turnJobDetailFromMobile(item.id)">
+                <div class="jobs-list-item-b-l">
+                  <view class="jobs-list-item-work-type">
+                    <i class="iconfont el-icon-alishijian"></i>
+                    <span v-if="item.employment_type==1">FT</span>
+                    <span v-if="item.employment_type==2">PT</span>
+                    <span v-if="item.employment_type==3">S</span>
+                  </view>
+
+                </div>
+
+                <div class="jobs-list-item-b-r">
+                  <view class="jobs-list-item-date">
+                    <el-icon>
+                      <Calendar/>
+                    </el-icon>&nbsp;
+                    {{ $filters.howLongFormat(item.refresh_time) }}
+                  </view>
+
+                </div>
+              </div>
+            </div>
+
           </div>
-          <div class="xll-ads-b">
-            <div class="xll-ads-b-bg" v-html="item.title"></div>
+
+        </template>
+        <template v-else>
+          <el-empty description="..."></el-empty>
+        </template>
+
+      </div>
+
+
+      <div class="jobs-list-pagination" v-if="jobListData.length > 0">
+        <el-pagination layout="prev, pager, next"
+                       :default-current-page="jobPage"
+                       @size-change="jobPageSizeChange"
+                       @current-change="jobPageChange"
+                       :current-page="jobPage"
+                       :page-size="jobLimit"
+                       :total="jobTotalNum">
+        </el-pagination>
+      </div>
+
+    </div>
+
+    <div class="xll-ads-container" v-if="adsData.length>0">
+
+      <el-carousel style="width:100%;margin:0 auto;overflow:hidden;"
+                   :height="adsHeight"
+                   indicator-position="none">
+
+        <el-carousel-item class="xll-ads-swiper-item"
+                          v-for="(item,i) in adsData" :key="i"
+                          @click="turnAdsDetail(item.link)"
+        >
+          <div class="xll-ads">
+            <div class="xll-ads-t">
+              <el-image class="xll-ads-img"
+                        fit="cover"
+                        :src="item.user_url !='' ? item.user_url : item.url">
+                <template #error>
+                  <div class="image-ads-slot">
+                    <el-icon :size="80" color="#808080">
+                      <Picture/>
+                    </el-icon>
+                  </div>
+                </template>
+              </el-image>
+            </div>
+            <div class="xll-ads-b">
+              <div class="xll-ads-b-bg" v-html="item.title"></div>
+            </div>
+
           </div>
 
-        </div>
+        </el-carousel-item>
+      </el-carousel>
 
-      </el-carousel-item>
-    </el-carousel>
-
-  </div>
-
-
-  <div  class="jobs-list-item " style="position:fixed;z-index: -100; opacity: 0;" id="job">
-
-    <div class="jobs-list-item-l">
-      <el-avatar class="jobs-item-logo"
-                 src=""
-                fit="contain">
-      </el-avatar>
-    </div>
-    <div class="jobs-list-item-r">
-      <div class="jobs-list-item-name">
-        1075  English Teacher English Teacher English Teacher
-      </div>
-
-      <div class="jobs-list-item-title">
-        English Teacher
-      </div>
-      <view class="jobs-list-item-salary">
-        <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
-        ฿ 250 - 500 hourly
-        <span>annually</span>
-      </view>
-      <div class="jobs-list-item-address">
-        Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116
-      </div>
-
-      <div class="jobs-list-item-b">
-        <div class="jobs-list-item-b-l">
-          <view class="jobs-list-item-work-type">
-            <i class="iconfont el-icon-alishijian"></i>
-            <span>FT</span>
-          </view>
-        </div>
-
-        <div class="jobs-list-item-b-r">
-          <view class="jobs-list-item-date">
-            <el-icon>
-              <Calendar/>
-            </el-icon>&nbsp;
-            test test test
-          </view>
-
-        </div>
-      </div>
     </div>
 
-  </div>
+  </el-scrollbar>
 
-
-</el-scrollbar>
 </template>
 
 <script>
 
 import {ADD_FAVORITE, CANCEL_FAVORITE, JOB_FEATURED_LIST} from "@/api/api";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "jobsListComponent",
@@ -307,12 +432,36 @@ export default {
     'adsData', 'jobPage','jobLimit','jobTotalNum','selectedJobId','isOther','companyInfo','fromBusinessProfile'],
   data(){
     return {
-      jobHeight:300,
-      jobFeaturedData:[]
+      jobHeight: 140,
+      jobFeaturedData:[],
+      adsHeight:'420px'
+
     }
   },
   mounted(){
-    // this.getJobFeaturedList()
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+      this.adsHeight = '300px'
+      this.jobHeight = 130
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+        this.adsHeight = '300px'
+        this.jobHeight = 130
+      }
+    }
+
+    this.getJobFeaturedList()
+
+  },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
   },
   methods:{
     exitPreview(){
@@ -343,8 +492,9 @@ export default {
     },
     turnJobDetail(id){
       this.$emit('jobDetailEvent',id,this.jobPage,this.isOther)
-      // <router-link :to="{'path':'/jobs',query:{id:item.id,page:jobPage}}">
-      // this.$router.push({path:'/jobs',query:{id:id,page:this.jobPage}})
+    },
+    turnJobDetailFromMobile(id){
+      this.$router.push({path:'/jobs/detail',query:{id:id}})
     },
     getJobFeaturedList() {
       let params = {
@@ -355,9 +505,7 @@ export default {
         console.log(res)
         if (res.code === 200) {
           this.jobFeaturedData = res.message;
-          let jobDiv = document.getElementById('job')
-          // console.log(jobDiv.offsetHeight)
-          this.jobHeight = jobDiv.offsetHeight;
+
         } else {
           console.log(res.msg)
         }
@@ -412,7 +560,10 @@ export default {
 </script>
 
 <style scoped>
-
+.xll-jian-ge{
+  height: 25px;
+  background-color: #FFFFFF;
+}
 .back-btn-container{
   margin-top: 25px;
   padding-left: 25px;
@@ -647,7 +798,77 @@ export default {
     padding: 10px;
   }
 
+}
 
+@media screen and (min-width: 769px) {
+  .jobs-mobile-list-content{
+    display: none;
+  }
+  .jobs-mobile-featured{
+    display: none;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+
+  .jobs-list-bg-container{
+    height:calc(var(--i-window-height) - 180px) ;
+    background-color: #FFFFFF;
+  }
+
+  .jobs-featured{
+    display: none;
+  }
+
+  .jobs-list-content{
+    display: none;
+  }
+
+  .jobs-list-label-container{
+    padding: 15px;
+  }
+
+  .jobs-list-label{
+    font-size: 20px;
+  }
+
+  .jobs-list-item{
+    border-bottom: none;
+    margin-top: 0;
+    padding: 15px;
+  }
+
+  .jobs-list-item-r{
+    border-bottom: 1px solid #F0F2F5;
+  }
+
+  .jobs-list-item-name{
+    font-size: 12px;
+  }
+  .jobs-list-item-title{
+    font-size: 18px;
+  }
+
+  .jobs-list-item-salary{
+    font-size: 16px;
+  }
+
+  .jobs-list-item-address{
+    font-size: 16px;
+  }
+
+  .jobs-list-item-active{
+    box-shadow: none;
+  }
+  .jobs-list-item-featured{
+    margin-top: 0;
+    padding: 15px;
+  }
+
+  .xll-jian-ge{
+    height: 0;
+  }
 
 }
 

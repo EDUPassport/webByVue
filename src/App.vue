@@ -58,8 +58,11 @@ export default {
 </script>
 
 <style>
+:root {
+  --i-window-height: 100vh;
+}
 #app{
-  background-color:  #f6f7f8;
+  background-color:  #F0F2F5;
 }
 /*css 初始化 */
 html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, legend, img {

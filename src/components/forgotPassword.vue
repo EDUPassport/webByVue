@@ -27,7 +27,7 @@
             :rules="forgotRules1"
             ref="forgotForm1"
             label-width="250px"
-            label-position="left"
+            :label-position="formLabelPosition"
             class="demo-ruleForm"
         >
           <el-form-item label="Email" prop="email" required>
@@ -80,7 +80,7 @@
             :rules="forgotRules2"
             ref="forgotForm2"
             label-width="250px"
-            label-position="left"
+            :label-position="formLabelPosition"
             class="demo-ruleForm"
         >
           <el-form-item label="Phone #" prop="phone" required>
@@ -207,6 +207,7 @@ export default {
   },
   data(){
     return {
+      formLabelPosition:'left',
       dialogWidthValue:'50%',
       forgotForm1:{
         email: '',
@@ -254,32 +255,40 @@ export default {
   mounted() {
     let screenWidth = document.body.clientWidth
 
-    if (Math.floor(screenWidth) < 768) {
+    if (Math.floor(screenWidth) <= 768) {
       this.dialogWidthValue = "90%"
+      this.formLabelPosition = 'top'
     }
-    if (Math.floor(screenWidth) >= 768 && Math.floor(screenWidth) < 992) {
+    if (Math.floor(screenWidth) > 768 && Math.floor(screenWidth) <= 992) {
       this.dialogWidthValue = "90%"
+      this.formLabelPosition = 'top'
     }
-    if (Math.floor(screenWidth) >= 992 && Math.floor(screenWidth) < 1200) {
+    if (Math.floor(screenWidth) > 992 && Math.floor(screenWidth) <= 1200) {
       this.dialogWidthValue = "50%"
+      this.formLabelPosition = 'left'
     }
-    if (Math.floor(screenWidth) >= 1200) {
+    if (Math.floor(screenWidth) > 1200) {
       this.dialogWidthValue = "50%"
+      this.formLabelPosition = 'left'
     }
 
     window.onresize = () => {
       let screenWidth2 = document.body.clientWidth
-      if (Math.floor(screenWidth2) < 768) {
+      if (Math.floor(screenWidth2) <= 768) {
         this.dialogWidthValue = "90%"
+        this.formLabelPosition = 'top'
       }
-      if (Math.floor(screenWidth2) >= 768 && Math.floor(screenWidth2) < 992) {
+      if (Math.floor(screenWidth2) > 768 && Math.floor(screenWidth2) <= 992) {
         this.dialogWidthValue = "90%"
+        this.formLabelPosition = 'top'
       }
-      if (Math.floor(screenWidth2) >= 992 && Math.floor(screenWidth2) < 1200) {
+      if (Math.floor(screenWidth2) > 992 && Math.floor(screenWidth2) <= 1200) {
         this.dialogWidthValue = "50%"
+        this.formLabelPosition = 'left'
       }
-      if (Math.floor(screenWidth2) >= 1200) {
+      if (Math.floor(screenWidth2) > 1200) {
         this.dialogWidthValue = "50%"
+        this.formLabelPosition = 'left'
       }
 
       // console.log(document.body.clientWidth)

@@ -17,9 +17,8 @@
                 </el-button>
               </div>
 
-              <div :class="editAccountStatus ? 'account-basic-info-c-edit' : 'account-basic-info-c'"
+              <div :class="editAccountStatus ? 'account-basic-info-c-edit' : 'account-basic-info-c'">
 
-              >
                 <div class="account-basic-info-c-l">
                   <template v-if="identity == 1">
                     <el-avatar class="account-basic-info-c-avatar"
@@ -41,9 +40,7 @@
                       :http-request="profilePhotoHttpRequest"
                       :before-upload="beforeProfilePhotoUpload"
                   >
-                    <el-button class="account-basic-info-c-change-btn"
-                               link
-                    >
+                    <el-button class="account-basic-info-c-change-btn" link>
                       CHANGE
                     </el-button>
                   </el-upload>
@@ -182,8 +179,20 @@
           </div>
           <div class="account-container-2">
             <div class="account-profile-container">
-              <div class="account-profile-label">
-                Your profiles
+
+              <div class="account-profile-t">
+
+                <div class="account-profile-label">
+                  Your profiles
+                </div>
+                <div class="account-add-profile">
+                  <el-button class="account-add-profile-btn" type="primary" round
+                             @click="turnAddProfile()"
+                  >
+                    ADD PROFILE
+                  </el-button>
+                </div>
+
               </div>
 
               <el-scrollbar class="account-profile-c" max-height="400px">
@@ -214,88 +223,112 @@
                       </div>
 
                     </div>
+
+                    <div class="account-profile-c-item-b-mobile">
+                      <el-progress :text-inside="false" :stroke-width="3"
+                                   :percentage="item.completion <= 100 ? item.completion : 100"/>
+                    </div>
+
                     <div class="account-profile-c-item-r">
                       <div class="account-profile-c-item-r-1">
-                        <span v-if="item.identity == 1">Complete at least 75% of your profile to apply jobs</span>
-                        <span v-if="item.identity == 2">Complete at least 75% of your profile to post jobs</span>
-                        <span v-if="item.identity == 3">Complete at least 75% of your profile to post jobs</span>
-                        <span v-if="item.identity == 4">Complete at least 75% of your profile to post jobs</span>
-                        <span v-if="item.identity == 5">Complete at least 75% of your profile to offer a deal or post event</span>
+                        <span v-if="item.identity == 1">Complete at least 80% of your profile to apply jobs</span>
+                        <span v-if="item.identity == 2">Complete at least 60% of your profile to post jobs</span>
+                        <span v-if="item.identity == 3">Complete at least 60% of your profile to post jobs</span>
+                        <span v-if="item.identity == 4">Complete at least 60% of your profile to post jobs</span>
+                        <span v-if="item.identity == 5">Complete at least 60% of your profile to offer a deal or post event</span>
                       </div>
-                      <div class="account-profile-c-item-r-2">
-                        <el-button
-                            v-if="item.identity == 1"
-                            class="account-profile-c-item-r-2-btn"
-                            @click="searchJobs()"
-                            :disabled="item.id != currentCompanyId"
-                            type="primary" round>
-                          SEARCH JOBS
-                        </el-button>
-                        <el-button
-                            v-if="item.identity == 2  || item.identity == 3 || item.identity == 4"
-                            class="account-profile-c-item-r-2-btn"
-                            :disabled="item.id != currentCompanyId"
-                            @click="postJob()"
-                            type="primary" round>
-                          POST A JOB
-                        </el-button>
-                        <el-button
-                            v-if="item.identity == 5"
-                            class="account-profile-c-item-r-2-btn"
-                            :disabled="item.id != currentCompanyId"
-                            @click="postDeal()"
-                            type="primary" round>
-                          OFFER A Deal
-                        </el-button>
-
-                      </div>
-                      <div class="account-profile-c-item-r-3">
-
-                        <template v-if="item.id == currentCompanyId">
+                      <div class="account-profile-c-item-r-mobile">
+                        <div class="account-profile-c-item-r-2">
                           <el-button
-                              class="account-profile-c-item-r-3-btn"
-                              @click="editUserProfile(item.id,item.identity)"
-                              plain round>
-                            EDIT
+                              v-if="item.identity == 1"
+                              class="account-profile-c-item-r-2-btn"
+                              @click="searchJobs()"
+                              :disabled="item.id != currentCompanyId"
+                              type="primary" round>
+                            SEARCH JOBS
                           </el-button>
-                        </template>
-                        <template v-else>
                           <el-button
-                              class="account-profile-c-item-r-3-btn"
-                              @click="makeCurrent(item.id,item.identity,2)"
-                              plain round>
-                            MAKE CURRENT
+                              v-if="item.identity == 2  || item.identity == 3 || item.identity == 4"
+                              class="account-profile-c-item-r-2-btn"
+                              :disabled="item.id != currentCompanyId"
+                              @click="postJob()"
+                              type="primary" round>
+                            POST A JOB
                           </el-button>
-                        </template>
+                          <el-button
+                              v-if="item.identity == 5"
+                              class="account-profile-c-item-r-2-btn"
+                              :disabled="item.id != currentCompanyId"
+                              @click="postDeal()"
+                              type="primary" round>
+                            OFFER A Deal
+                          </el-button>
 
-                      </div>
-                      <div class="account-profile-c-item-r-4" v-if="item.id == currentCompanyId">
-                        <el-dropdown>
+                        </div>
+                        <div class="account-profile-c-item-r-3">
+
+                          <template v-if="item.id == currentCompanyId">
+                            <el-button
+                                class="account-profile-c-item-r-3-btn"
+                                @click="editUserProfile(item.id,item.identity)"
+                                plain round>
+                              EDIT
+                            </el-button>
+                          </template>
+                          <template v-else>
+                            <el-button
+                                class="account-profile-c-item-r-3-btn"
+                                @click="makeCurrent(item.id,item.identity,2)"
+                                plain round>
+                              MAKE CURRENT
+                            </el-button>
+                          </template>
+
+                        </div>
+                        <div class="account-profile-c-item-r-4" v-if="item.id == currentCompanyId">
+                          <el-dropdown :hide-on-click="false" trigger="click">
                           <span class="account-profile-c-item-r-4-btn">
                             MORE
                             <el-icon class="el-icon--right">
                               <arrow-down />
                             </el-icon>
                           </span>
-                          <template #dropdown>
-                            <el-dropdown-menu>
-                              <el-dropdown-item @click="viewUserProfile(item.id,item.user_id,item.identity)">
-                                <span class="account-profile-c-item-r-4-btn"> VIEW PROFILE</span>
-                              </el-dropdown-item>
-                              <el-dropdown-item v-if="item.identity != 1"
-                                                @click="showContributorDialog(item.id,item.user_id,item.identity)">
-                                <span class="account-profile-c-item-r-4-btn">
-                                  ADD A CONTRIBUTOR
-                                </span>
-                              </el-dropdown-item>
-                              <el-dropdown-item >
-                                <span class="account-profile-c-item-r-4-btn">REMOVE</span>
-                              </el-dropdown-item>
-                            </el-dropdown-menu>
-                          </template>
-                        </el-dropdown>
+                            <template #dropdown>
+                              <el-dropdown-menu >
+                                <el-dropdown-item>
+                                  <el-button link @click="viewUserProfile(item.id,item.user_id,item.identity)">
+                                    VIEW PROFILE
+                                  </el-button>
+                                </el-dropdown-item>
+                                <el-dropdown-item v-if="item.identity != 1">
+                                  <el-button link @click="showContributorDialog(item.id,item.user_id,item.identity)">
+                                    ADD A CONTRIBUTOR
+                                  </el-button>
+                                </el-dropdown-item>
+<!--                                <el-dropdown-item v-if="item.identity == 3">-->
+<!--                                    &lt;!&ndash;                                  CONVERT TO A RECRUITER&ndash;&gt;-->
+<!--                                  <el-button link @click="schoolConvertToRecruiter(item.id,item.user_id,item.identity)">-->
+<!--                                    COPY AS A RECRUITER-->
+<!--                                  </el-button>-->
+<!--                                </el-dropdown-item>-->
+                                <el-dropdown-item >
+                                  <el-popconfirm
+                                      title="Are you sure to delete this?"
+                                      @confirm="removeProfile(item.id, item.identity)"
+                                  >
+                                    <template #reference>
+                                      <el-button link>REMOVE</el-button>
+                                    </template>
+                                  </el-popconfirm>
 
+                                </el-dropdown-item>
+                              </el-dropdown-menu>
+                            </template>
+                          </el-dropdown>
+
+                        </div>
                       </div>
+
                     </div>
 
                   </div>
@@ -347,13 +380,7 @@
               </el-scrollbar>
             </div>
 
-            <div class="account-add-profile">
-              <el-button class="account-add-profile-btn" type="primary" round
-                         @click="turnAddProfile()"
-              >
-                ADD PROFILE
-              </el-button>
-            </div>
+
 
           </div>
 
@@ -363,8 +390,7 @@
 
     </div>
 
-    <el-dialog v-model="contributorDialogVisible"
-    >
+    <el-dialog :width="contributorWidth" v-model="contributorDialogVisible">
       <template #header="{ titleId, titleClass }">
         <div class="my-header">
           <h3 :id="titleId" :class="titleClass">Add a contributor for columbia University</h3>
@@ -420,8 +446,7 @@
 
     </el-dialog>
 
-    <el-dialog v-model="contributorUpdateDialogVisible"
-    >
+    <el-dialog v-model="contributorUpdateDialogVisible">
       <template #header="{ titleId, titleClass }">
         <div class="my-header">
           <h3 :id="titleId" :class="titleClass">
@@ -483,7 +508,6 @@
 
     </el-dialog>
 
-
     <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
   </div>
 </template>
@@ -506,7 +530,7 @@ import {
   USER_MENU_DELETE,
   USER_ADD_MENU,
   USER_MENU_LIST,
-  ALL_MENU_LIST, ALL_ASSIGN_USERS
+  ALL_MENU_LIST, ALL_ASSIGN_USERS, DELETE_USER_PROFILE, SCHOOL_CONVERT_TO_RECRUITER
 } from '@/api/api'
 
 import xllLoading from '@/components/xllLoading'
@@ -516,6 +540,7 @@ import {ref,reactive} from "vue";
 import ImageCompressor from "compressorjs";
 import {encode} from "js-base64";
 import {randomString} from "@/utils";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "accountHome",
@@ -717,10 +742,30 @@ export default {
 
       forgotDialogVisible:false,
 
+      contributorWidth:'50%',
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   async mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+      this.contributorWidth = '80%'
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+        this.contributorWidth = '80%'
+      }
+    }
 
     this.getUserInfo()
     this.getUserAllInfo()
@@ -973,6 +1018,22 @@ export default {
         this.$router.push({path:'/vendor/edit/vendor',query:{s:str}})
 
       }
+    },
+    removeProfile(companyId, identity){
+      let params = {
+        company_id: companyId,
+        identity: identity
+      }
+      DELETE_USER_PROFILE(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.getUserAllInfo()
+          this.$store.commit('allIdentityChanged',true )
+          this.getAllAssignUsers()
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
     },
     viewUserProfile(companyId,userId,roleValue){
       if(roleValue == 1){
@@ -1346,6 +1407,26 @@ export default {
         console.log(err)
       })
     },
+    schoolConvertToRecruiter(id,uid,identity){
+
+      let params = {
+        school_id:id,
+        user_id: uid,
+        identity: identity
+
+      }
+
+      SCHOOL_CONVERT_TO_RECRUITER(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.getUserAllInfo()
+          this.$message.success('Success')
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
     showContributorDialog(companyId,userId,i){
       this.contributorDialogVisible = true;
       this.contributorCompanyId = companyId;
@@ -1648,9 +1729,16 @@ export default {
 
 .account-profile-container {
   background-color: #ffffff;
-  padding: 20px 40px 80px 40px;
+  padding: 40px;
   border-radius: 18px;
 
+}
+
+.account-profile-t{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .account-profile-label {
@@ -1660,6 +1748,15 @@ export default {
   color: #262626;
 }
 
+.account-add-profile {
+  text-align: right;
+}
+
+.account-add-profile-btn {
+  font-size: 20px;
+}
+
+
 .account-profile-c {
   margin-top: 15px;
 
@@ -1668,7 +1765,7 @@ export default {
 }
 
 .account-profile-c-item {
-  margin-top: 30px;
+  margin: 30px 0;
 }
 
 .account-profile-c-item-t {
@@ -1711,7 +1808,12 @@ export default {
   font-weight: 400;
   color: #262626;
 }
-
+.account-profile-c-item-r-mobile{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
 .account-profile-c-item-r-2 {
   margin-left: 25px;
 }
@@ -1722,15 +1824,6 @@ export default {
 
 .account-profile-c-item-r-4 {
   margin-left: 25px;
-}
-
-
-.account-profile-c-item-r-2-btn {
-  font-size: 20px;
-}
-
-.account-profile-c-item-r-3-btn {
-  font-size: 20px;
 }
 
 .account-profile-c-item-r-4-btn {
@@ -1744,15 +1837,6 @@ export default {
   margin-top: 10px;
 }
 
-.account-add-profile {
-  position: absolute;
-  bottom: 20px;
-  left:40px;
-}
-
-.account-add-profile-btn {
-  font-size: 20px;
-}
 
 .account-first-last-name{
   display: flex;
@@ -1912,11 +1996,190 @@ export default {
   font-size: 18px;
 }
 
-@media screen and (min-width: 1200px) {
-
+@media screen and (min-width: 769px) {
+  .account-profile-c-item-b-mobile{
+    display: none;
+  }
 }
 
 @media screen and (max-width: 768px) {
+
+  .account-profile-c-item-b{
+    display: none;
+  }
+
+  .account-profile-c-item-b-mobile{
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .account-r-container{
+    width: 100%;
+    height: calc( var(--i-window-height) - 160px);
+
+    /*height: calc(100vh - 160px);*/
+  }
+
+  .account-r-container-bg{
+    padding: 0;
+  }
+
+  .account-basic-info-c-edit{
+    min-width: 300px;
+  }
+
+  .save-form-discard-btn{
+    font-size: 12px;
+  }
+
+  .save-form-save-btn{
+    font-size: 12px;
+  }
+
+  .account-basic-info{
+    margin: 15px;
+    padding: 15px;
+  }
+
+  .account-basic-info-label{
+    font-size: 18px;
+  }
+
+  .account-basic-info-c{
+    margin-top: 15px;
+  }
+
+  .account-basic-info-edit-btn{
+    font-size: 12px;
+  }
+  .account-basic-info-c-avatar{
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+  }
+
+  .account-basic-info-c-name{
+    font-size: 16px;
+  }
+
+  .account-basic-info-c-email{
+    font-size: 16px;
+  }
+
+  .account-container-1{
+    flex-wrap: nowrap;
+    overflow: scroll;
+  }
+
+  .account-perks-container{
+    flex-shrink: 0;
+    margin: 15px;
+    padding: 15px;
+  }
+
+  .account-perks-label{
+    font-size: 18px;
+  }
+
+  .account-perks-tips{
+    font-size: 16px;
+  }
+
+  .account-container-2{
+    margin-top: 15px;
+  }
+
+  .account-profile-label{
+    font-size: 20px;
+  }
+
+  .account-profile-container{
+    padding: 0;
+    background-color: #F0F2F5;
+  }
+
+  .account-profile-t{
+    padding: 0 15px ;
+  }
+
+  .account-add-profile{
+    /*display: none;*/
+  }
+
+  .account-add-profile-btn{
+    font-size: 12px;
+  }
+
+  .account-profile-c-item{
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 18px;
+    margin: 15px;
+  }
+
+  .account-profile-c-item-t{
+    flex-direction: column;
+  }
+
+  .account-profile-c-item-l{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .account-profile-c-item-r{
+    flex-direction: column;
+  }
+
+  .account-profile-name{
+    font-size: 18px;
+  }
+
+  .account-profile-identity{
+    font-size: 12px;
+  }
+
+  .account-profile-c-item-r-1{
+    font-size: 16px;
+    margin-top: 10px;
+  }
+
+  .account-profile-c-item-r-mobile{
+    width: 100%;
+    margin-top: 10px;
+    justify-content: space-between;
+  }
+
+  .account-profile-c-item-r-2{
+    margin-left: 0;
+  }
+  .account-profile-c-item-r-3{
+    margin-left: 0;
+  }
+
+  .account-profile-c-item-r-4{
+    margin-left: 0;
+  }
+
+
+  .xll-contributor-tips{
+    font-size: 18px;
+  }
+
+  .xll-contributor-c{
+    flex-direction: column;
+  }
+
+  .xll-contributor-c-l{
+    width: 100%;
+  }
+  .xll-contributor-c-r{
+    width: 100%;
+  }
+
+
 
 
 }

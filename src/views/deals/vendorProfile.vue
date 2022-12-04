@@ -4,7 +4,7 @@
 
       <el-row :gutter="0" align="top" justify="center">
 
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+        <el-col :xs="0" :sm="24" :md="4" :lg="4" :xl="4">
           <dealFilterComponent
               :locationData="locationOptions"
               :tagsData="tagsData"
@@ -22,15 +22,14 @@
         <!--          </el-col>-->
         <el-col class="deal-business-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
 
-          <div class="deal-business-bg">
+          <businessProfileActionWithBack></businessProfileActionWithBack>
+
+          <el-scrollbar class="deal-business-bg">
             <businessProfile
-                :canEdit="true"
-                :fromDeal="true"
-                @back="backToSearchResults"
                 :info="companyInfo"
                 :identity="5">
             </businessProfile>
-          </div>
+          </el-scrollbar>
 
         </el-col>
 
@@ -60,12 +59,15 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 import dealFilterComponent from "@/components/dealFilterComponent";
 import businessProfile from "@/components/businessProfile";
+import businessProfileActionWithBack from "@/components/businessProfileActionWithBack";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "vendorProfile",
   components: {
     dealFilterComponent,
     businessProfile,
+    businessProfileActionWithBack
 
   },
   setup() {
@@ -116,14 +118,18 @@ export default {
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
 
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
 
-    // if (screenWidthFloor < 768) {
-    //   this.adsHeight = '190px'
-    // }
+    if (screenWidthFloor < 768) {
+      updateWindowHeight()
+    }
     //
     // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
     //   this.adsHeight = '190px'
@@ -139,9 +145,9 @@ export default {
     }
 
     window.onresize = () =>{
-      // if (screenWidthFloor < 768) {
-      //   this.adsHeight = '190px'
-      // }
+      if (screenWidthFloor < 768) {
+        updateWindowHeight()
+      }
       //
       // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
       //   this.adsHeight = '190px'
@@ -508,290 +514,6 @@ export default {
   margin: 0 auto;
 }
 
-.filter-deal-col {
-  padding-right: 13px;
-}
-
-.deal-detail-col {
-
-}
-
-.deal-detail-bg-container {
-  background-color: #F0F2F5;
-  height: calc(100vh - 200px);
-  padding: 30px;
-}
-
-.deal-detail-background {
-  width: 100%;
-  height: 240px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.deal-detail-background-img {
-  width: 100%;
-}
-
-.deal-detail-c {
-  margin-top: 25px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-.deal-detail-c-l {
-
-}
-
-.deal-detail-c-l-logo {
-  width: 150px;
-  height: 150px;
-  border-radius: 150px;
-
-}
-
-.deal-detail-c-r {
-  padding-left: 25px;
-}
-
-.deal-detail-c-r-1 {
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 45px;
-  color: #262626;
-}
-
-.deal-detail-item-container {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-}
-
-.deal-detail-item {
-  width: 45%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.deal-detail-item-l {
-
-  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 23px;
-  color: #262626;
-}
-
-.deal-detail-item-r {
-  padding-left: 15px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 23px;
-  color: #262626;
-}
-
-.deal-detail-desc {
-  margin-top: 25px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 23px;
-  color: #262626;
-}
-
-.map-container {
-  margin-top: 25px;
-}
-
-#mapContainer {
-  height: 300px;
-}
-
-.deals-list-col {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-.deals-featured-scroll {
-  height: calc(100vh - 140px);
-}
-
-.deals-featured-container {
-  padding: 25px;
-}
-
-.deals-featured-label {
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-
-.deals-list-scroll {
-  background-color: #F0F2F5;
-  height: calc(100vh - 140px);
-}
-
-.deals-bg-container {
-  padding: 37px 37px 0 37px;
-  /*padding: 0 30px 0 30px;*/
-}
-
-.deals-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-}
-
-.deals-featured-item {
-  width: 100%;
-  margin-top: 20px;
-  border-radius: 40px;
-  overflow: hidden;
-
-  background-color: #ffffff;
-  box-shadow: 0px 0px 10px #0000001A;
-}
-
-.deals-item-container {
-  width: 50%;
-  /*margin-top: 20px;*/
-}
-
-.deals-item {
-  margin: 13px;
-  border-radius: 40px;
-  overflow: hidden;
-
-  background-color: #ffffff;
-  box-shadow: 0px 0px 10px #0000001A;
-}
-
-.deals-from-col {
-  padding-left: 12px;
-}
-
-
-.deals-item-bg {
-  height: 240px;
-  border-radius: 40px;
-
-  background-color: #faf7f7;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-  overflow: hidden;
-
-  position: relative;
-}
-
-.deals-item-favorite {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-
-}
-
-.deals-item-background-img {
-  width: 100%;
-}
-
-.deals-item-c {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 25px;
-}
-
-.deals-logo {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: 1px solid #EEEEEE;
-  background-color: #FFFFFF;
-}
-
-.deals-item-c-r {
-  margin-left: 25px;
-}
-
-.deals-item-c-r-1 {
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-  cursor: pointer;
-}
-
-.deals-item-c-r-2 {
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 24px;
-  color: #262626;
-  cursor: pointer;
-}
-
-.deals-item-b {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 25px 25px 25px;
-
-}
-
-.deals-item-b-1 {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.deals-item-b-l {
-  text-align: left;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
-}
-
-.hot-deal-type-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.deals-item-b-r {
-  font-size: 12px;
-  color: #808080;
-  padding-right: 20px;
-  text-align: right;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.deals-pagination {
-  margin-top: 25px;
-  margin-bottom: 25px;
-  display: flex;
-  justify-content: center;
-}
-
-
-.xll-ads-container {
-  padding: 25px 50px 0 50px;
-  background-color: #F0F2F5;
-}
-
-.xll-ads-bottom-container {
-  padding: 0 50px 50px 50px;
-}
-
 .deal-business-col {
   padding-left: 25px;
 }
@@ -799,6 +521,8 @@ export default {
 .deal-business-bg {
   background-color: #F0F2F5;
   padding: 0 50px;
+  height: calc(100vh - 200px);
+
 }
 
 @media screen and (min-width: 1200px) {
@@ -806,7 +530,15 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+  .deal-business-col{
+    padding: 0;
+  }
 
+  .deal-business-bg{
+    height: calc( var(--i-window-height) - 110px);
+    padding: 0;
+    background-color: #FFFFFF;
+  }
 }
 
 </style>

@@ -1,6 +1,5 @@
 <template>
-<div>
-  <el-scrollbar class="container">
+  <div class="container">
     <div class="container-label">
       Active deals
       <el-button link type="primary" @click="viewAllDeals()">
@@ -8,7 +7,7 @@
       </el-button>
     </div>
 
-    <div class="container-c">
+    <el-scrollbar class="container-c">
 
       <template v-if="listData.length>0">
         <div class="deals-item" v-for="(item,index) in listData" :key="index">
@@ -68,10 +67,10 @@
         <el-empty style="width: 100%;" description="..."></el-empty>
       </template>
 
-    </div>
+    </el-scrollbar>
 
-  </el-scrollbar>
-</div>
+  </div>
+
 </template>
 
 <script>
@@ -95,7 +94,7 @@ export default {
 
 .container{
   min-width: 550px;
-  height: 650px;
+
   background-color: #FFFFFF;
   /*padding: 25px 50px;*/
   box-shadow: 0px 3px 23px #00000012;
@@ -106,9 +105,12 @@ export default {
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 30px;
   color: #262626;
-
   padding: 25px 50px;
 
+}
+
+.container-c{
+  height: 600px;
 }
 
 .deals-item {
@@ -154,6 +156,7 @@ export default {
   align-items: center;
   justify-content: flex-start;
   padding: 25px;
+
 }
 
 .deals-logo {
@@ -219,6 +222,31 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+@media screen and (max-width: 768px) {
+  .container{
+    width: 100%;
+    min-width: auto;
+    background-color: #F0F2F5;
+    box-shadow: none;
+  }
+
+  .container-label{
+    font-size: 20px;
+    padding: 0;
+    margin: 0 15px 8px 15px;
+  }
+
+  .deals-item{
+    width: auto;
+    margin: 7px 15px 15px 15px;
+  }
+
+  .deals-item-bg{
+    height: 150px;
+  }
+
 }
 
 </style>

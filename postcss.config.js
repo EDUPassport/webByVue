@@ -20,6 +20,7 @@ module.exports = {
             replace: true, // 是否直接更换属性值，而不添加备用属性
             include:[],
             exclude: [/(\/|\\)(node_modules)(\/|\\)/, /\components\/reportDetaillList\/toll_administration\/sf-report.vue/], // 忽略某些文件夹下的文件或特定文件，例如 'node_modules' 下的文件
-        }
+        },
+
     }
 }

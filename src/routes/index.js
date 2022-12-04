@@ -2,9 +2,9 @@ import layout from "@/layout";
 // import appLayout from "@/layout/appLayout";
 import {createRouter, createWebHistory} from 'vue-router'
 import appLayout from "@/layout/appLayout";
-import {isPhone} from "@/utils";
+// import {isPhone} from "@/utils";
+// const identity = localStorage.getItem('identity')
 
-const identity = localStorage.getItem('identity')
 const routes = [
 
     {
@@ -334,15 +334,6 @@ const routes = [
         component: layout,
         children: [
             {
-                path: 'applications',
-                name: 'myApplications',
-                component: () => import('@/views/me/applications'),
-                meta: {
-                    titleC: 'My Applications',
-                    titleG: 'My Applications',
-                }
-            },
-            {
                 path: 'ads',
                 name: 'myAds',
                 component: () => import('@/views/me/ads/ads'),
@@ -404,36 +395,7 @@ const routes = [
         path: '/profile',
         component: layout,
         children: [
-            {
-                path: 'admin/add',
-                name: 'profileAdminAdd',
-                component: () => import('@/views/profile/admin/add'),
-                meta: {
-                    activeMenu: identity == 1 ? "/educator/profile" : identity == 2 ? '/business/profile' : identity == 3 ? '/vendor/profile' : '',
-                    titleC: 'Add an Agent',
-                    titleG: 'Add an Agent',
-                }
-            },
-            {
-                path: 'contact/user',
-                name: 'profileUserContact',
-                component: () => import('@/views/profile/contact/user'),
-                meta: {
-                    activeMenu: identity == 1 ? "/educator/profile" : identity == 2 ? '/business/profile' : identity == 3 ? '/vendor/profile' : '',
-                    titleC: 'My User Contact',
-                    titleG: 'My User Contact',
-                }
-            },
-            {
-                path: 'contact/company',
-                name: 'profileCompanyContact',
-                component: () => import('@/views/profile/contact/company'),
-                meta: {
-                    activeMenu: identity == 1 ? "/educator/profile" : identity == 2 ? '/business/profile' : identity == 3 ? '/vendor/profile' : '',
-                    titleC: 'My Company Contact',
-                    titleG: 'My Company Contact',
-                }
-            },
+
         ]
 
     },
@@ -459,37 +421,8 @@ const routes = [
                     titleC: 'Add Profile',
                     titleG: 'Add Profile',
                 }
-            },
-            {
-                path: 'edit/basic',
-                name: 'editEducatorBasic',
-                component: () => import('@/views/profile/educator/edit/basic'),
-                meta: {
-                    activeMenu: "/educator/profile",
-                    titleC: 'Edit Basic Info',
-                    titleG: 'Edit Basic Info',
-                }
-            },
-            {
-                path: 'edit/education',
-                name: 'editEducatorEducation',
-                component: () => import('@/views/profile/educator/edit/education'),
-                meta: {
-                    activeMenu: "/educator/profile",
-                    titleC: 'Education',
-                    titleG: 'Education',
-                }
-            },
-            {
-                path: 'edit/work',
-                name: 'editEducatorWork',
-                component: () => import('@/views/profile/educator/edit/work'),
-                meta: {
-                    activeMenu: "/educator/profile",
-                    titleC: 'Work Experience',
-                    titleG: 'Work Experience',
-                }
-            },
+            }
+
         ]
 
     },
@@ -863,26 +796,26 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.titleG ? to.meta.titleG : defaultTitle;
     }
 
-    if (isPhone()) {
-        let domain = ''
-        if (envName === 'developmentCN') {
-            domain = 'https://m.dev.edupassport.cn'
-        }
-
-        if (envName === 'development') {
-            domain = 'https://test.esl-passport.cn'
-        }
-
-        if (envName === 'productionCN') {
-            domain = 'https://m.edupassport.cn'
-        }
-
-        if (envName === 'production') {
-            domain = 'https://m.edupassport.io'
-        }
-
-        return window.location.href = domain
-    }
+    // if (isPhone()) {
+    //     let domain = ''
+    //     if (envName === 'developmentCN') {
+    //         domain = 'https://m.dev.edupassport.cn'
+    //     }
+    //
+    //     if (envName === 'development') {
+    //         domain = 'https://test.esl-passport.cn'
+    //     }
+    //
+    //     if (envName === 'productionCN') {
+    //         domain = 'https://m.edupassport.cn'
+    //     }
+    //
+    //     if (envName === 'production') {
+    //         domain = 'https://m.edupassport.io'
+    //     }
+    //
+    //     return window.location.href = domain
+    // }
 
     next();
 

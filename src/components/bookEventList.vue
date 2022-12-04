@@ -135,4 +135,30 @@ export default {
 
 }
 
+@media screen and (max-width: 768px) {
+  .dialog-container{
+    width: 100%;
+    border-radius: 20px;
+  }
+  .dialog-bg-container{
+    padding: 15px;
+  }
+  .dialog-title{
+    font-size: 18px;
+  }
+  .dialog-tips{
+    font-size: 14px;
+  }
+  .dialog-c-item-name{
+    font-size: 14px;
+  }
+  .dialog-c-item-contact{
+    font-size: 14px;
+  }
+  .close-container{
+    right: 15px;
+    bottom: 15px;
+  }
+}
+
 </style>

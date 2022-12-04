@@ -546,6 +546,23 @@ export default {
 }
 
 @media screen and (max-width: 768px ) {
+  .jobs-filter-col{
+    display: none;
+  }
+
+  .jobs-list-col{
+    display: none;
+  }
+
+  .job-detail-col{
+    padding-left: 0;
+  }
+
+
+
+
+
+
 
 }
 

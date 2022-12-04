@@ -9,6 +9,17 @@
         </adsComponent>
       </div>
 
+      <div class="back-btn-container">
+        <el-button class="back-btn" link type="primary"
+                   @click="backToSearchResults()"
+        >
+          <el-icon>
+            <ArrowLeft />
+          </el-icon>
+          BACK
+        </el-button>
+      </div>
+
       <div class="job-detail-container">
 
         <div class="job-detail-t">
@@ -205,6 +216,7 @@ import adsComponent from "@/components/ads/adsComponent";
 import shareCard from "@/components/shareCard";
 import {ADD_FAVORITE, APPLY_JOBS} from "@/api/api";
 import applyJobButton from '@/components/jobs/applyButton'
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "detailComponent",
@@ -224,19 +236,21 @@ export default {
     }
   },
   unmounted() {
+    updateWindowHeight()
     window.onresize = null
   },
   mounted(){
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
 
-    // if (screenWidthFloor < 768) {
-    //   this.adsHeight = '190px'
-    // }
-    //
-    // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
-    //   this.adsHeight = '190px'
-    // }
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+      this.adsHeight = '120px'
+    }
+
+    if (screenWidthFloor > 768 && screenWidthFloor < 992) {
+      this.adsHeight = '120px'
+    }
 
     if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
       this.adsHeight = '120px'
@@ -249,13 +263,14 @@ export default {
     }
 
     window.onresize = () =>{
-      // if (screenWidthFloor < 768) {
-      //   this.adsHeight = '190px'
-      // }
-      //
-      // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
-      //   this.adsHeight = '190px'
-      // }
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+        this.adsHeight = '120px'
+      }
+
+      if (screenWidthFloor > 768 && screenWidthFloor < 992) {
+        this.adsHeight = '120px'
+      }
       if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
         this.adsHeight = '120px'
       }
@@ -363,6 +378,9 @@ export default {
         this.$router.push('/me/ads/platform')
       }
     },
+    backToSearchResults(){
+      this.$router.go(-1)
+    }
 
   }
 }
@@ -383,19 +401,6 @@ export default {
   padding: 30px;
 }
 
-@media screen and (min-width: 1920px) {
-  /*  190 */
-}
-
-@media screen and (max-width: 1919px) and (min-width: 1200px) {
-  /*  140 */
-
-}
-
-@media screen and (max-width: 1199px) and (min-width: 992px) {
-  /*  120 */
-
-}
 
 .job-detail-t{
   display: flex;
@@ -538,5 +543,126 @@ export default {
   margin-left: 20px;
 }
 
+
+@media screen and (min-width: 1920px) {
+  /*  190 */
+}
+
+@media screen and (max-width: 1919px) and (min-width: 1200px) {
+  /*  140 */
+
+}
+
+@media screen and (max-width: 1199px) and (min-width: 992px) {
+  /*  120 */
+
+}
+
+@media screen and (min-width: 769px) {
+  .back-btn-container{
+    display: none;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+  .xll-job-detail{
+    height: calc( var(--i-window-height) - 80px);
+    background-color: #FFFFFF;
+  }
+  .job-detail-bg-container{
+    padding: 15px;
+  }
+
+  .xll-ads-container{
+    margin-bottom: 25px;
+  }
+
+  .job-detail-t{
+    flex-direction: column;
+    background-color: #F0F2F5;
+    padding: 15px;
+    border-radius: 4px;
+    height: auto;
+  }
+
+  .job-detail-t-l{
+    width: 100%;
+  }
+
+  .job-detail-t-l-1{
+    text-align: center;
+    font-size: 12px;
+  }
+  .job-detail-t-l-2{
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+  }
+  .job-detail-t-l-3{
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .job-detail-t-r{
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .job-detail-c-1{
+    margin-top: 15px;
+    margin-left: 15px;
+  }
+
+  .job-detail-c-item{
+    flex-direction: column;
+  }
+
+  .job-detail-c-item-l{
+    font-size: 16px;
+  }
+
+  .job-detail-c-item-r{
+    font-size: 16px;
+    margin-left: 0;
+  }
+
+  .job-detail-c-2{
+    margin-top: 15px;
+  }
+
+  .job-detail-c-item-label{
+    font-size: 18px;
+  }
+
+  .job-detail-c-item-c{
+    margin-top: 10px;
+    margin-left: 15px;
+  }
+
+  .job-detail-c-2-r{
+    margin-top: 15px;
+  }
+
+  .job-detail-desc{
+    margin-top: 15px;
+
+  }
+
+  .job-detail-desc-label{
+    font-size: 18px;
+  }
+
+  .job-detail-desc-content{
+    margin-top: 10px;
+    margin-left: 15px;
+  }
+
+  .back-btn-container{
+    margin-bottom: 15px;
+  }
+
+}
 
 </style>

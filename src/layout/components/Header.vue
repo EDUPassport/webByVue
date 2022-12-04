@@ -6,11 +6,20 @@
           <el-col :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
 
             <div class="logo-new-container">
-              <div class="logo-new"  @click="turnHome()">
+              <div class="logo-new" @click="turnHome()">
                 <el-image class="logo-new-logo-img" :src="logoImgLogo"></el-image>
               </div>
               <div class="logo-new-beta">Beta</div>
             </div>
+
+            <div class="logo-mobile-new-container">
+              <div class="logo-mobile-new">
+                <el-image class="logo-mobile-new-logo-img" :src="logoImgLogo"></el-image>
+              </div>
+              <div class="logo-mobile-new-beta">Beta</div>
+              <el-button link @click="showMobileMenu()">menu</el-button>
+            </div>
+
 
           </el-col>
 
@@ -35,7 +44,7 @@
                     Your login and account info will be sent along to ease the transition
                   </div>
                   <div class="switch-job-btn-container">
-                    <el-button  class="switch-job-btn" type="primary" round @click="turnEnvJobs()">
+                    <el-button class="switch-job-btn" type="primary" round @click="turnEnvJobs()">
                       Let's Go
                     </el-button>
                   </div>
@@ -47,11 +56,11 @@
                     <span class="el-dropdown-link-job">
                           EDU Jobs
                     <el-icon class="el-icon--right">
-                      <arrow-down />
+                      <arrow-down/>
                       </el-icon>
                     </span>
                 <template #dropdown>
-                  <el-dropdown-menu >
+                  <el-dropdown-menu>
                     <el-dropdown-item @click="goChinaJob()">
                       <span class="el-dropdown-link-job-1">China</span>
                     </el-dropdown-item>
@@ -62,25 +71,13 @@
                 </template>
               </el-dropdown>
 
-<!--              <router-link to="/jobs" exact>Jobs</router-link>-->
               <router-link to="/deals" exact> EDU Deals</router-link>
               <router-link to="/events" exact>EDU Events</router-link>
-<!--              <span class="zoho-blog-menu" @click="turnZohoBlog()">Blog</span>-->
-<!--              <router-link to="/contact/us" exact> Contact</router-link>-->
-<!--              <router-link to="/about/us" exact> About</router-link>-->
-<!--              <router-link to="/services/price" exact> Pricing</router-link>-->
-<!--              <template v-if="envName === 'development' || envName === 'production'">-->
-<!--              <span v-if="!identity || identity == 1"-->
-<!--                    class="nav-china-jobs" @click="turnEnvJobs()">China Jobs</span>-->
-<!--              </template>-->
-<!--              <template v-if="envName === 'developmentCN' || envName === 'productionCN'">-->
-<!--              <span v-if="!identity || identity == 1"-->
-<!--                    class="nav-china-jobs" @click="turnEnvJobs()">International Jobs</span>-->
-<!--              </template>-->
+
             </div>
           </el-col>
 
-          <el-col :xs="16" :sm="16" :md="18" :lg="8" :xl="8">
+          <el-col :xs="20" :sm="20" :md="22" :lg="8" :xl="8">
             <div class="user-container">
               <template v-if="token && token !='' ">
                 <div class="user-container-1">
@@ -104,7 +101,8 @@
                           <div class="user-dropdown-bell">
                             <el-popover :width="330">
                               <template #reference>
-                                <el-icon class="circle-circle" :size="20" color="#6650B3" v-if="unreadTotal>0 || inAppUnreadTotal > 0">
+                                <el-icon class="circle-circle" :size="20" color="#6650B3"
+                                         v-if="unreadTotal>0 || inAppUnreadTotal > 0">
                                   <IconBiBellFill></IconBiBellFill>
                                   <span class="circle-red"></span>
                                 </el-icon>
@@ -123,7 +121,7 @@
                                   </div>
 
                                   <div class="notification-items"
-                                                v-infinite-scroll="loadUserUnreadMore" >
+                                       v-infinite-scroll="loadUserUnreadMore">
 
                                     <div class="notification-item"
                                          v-for="(item,i) in inAppNotificationData" :key="i"
@@ -134,30 +132,30 @@
 
                                       <div class="notification-item-c">
                                         <div class="notification-item-c-l"
-                                        :class="item.is_read ? '' : 'no-read-1'"
+                                             :class="item.is_read ? '' : 'no-read-1'"
                                         >
                                           <template v-if="item.type == 1">
-                                            <el-icon :size="20" >
-                                              <IconEduApplicationNofill20 />
+                                            <el-icon :size="20">
+                                              <IconEduApplicationNofill20/>
                                             </el-icon>
                                           </template>
                                           <template v-else-if="item.type == 2">
-                                            <el-icon :size="20" >
-                                              <IconEduPerksNofill20 />
+                                            <el-icon :size="20">
+                                              <IconEduPerksNofill20/>
                                             </el-icon>
                                           </template>
                                           <template v-else>
-                                            <el-icon :size="20" >
-                                              <IconBiCardText />
+                                            <el-icon :size="20">
+                                              <IconBiCardText/>
                                             </el-icon>
                                           </template>
 
                                         </div>
                                         <div class="notification-item-c-r"
                                              @click="setInAppRead(item.id,item.identity,i)"
-                                          :class="item.is_read ? '' : 'no-read-2' "
+                                             :class="item.is_read ? '' : 'no-read-2' "
                                         >
-                                          {{item.desc}}
+                                          {{ item.desc }}
                                         </div>
 
                                       </div>
@@ -169,9 +167,9 @@
                                     <el-button class="im-msg-btn" plain round
                                                @click="turnChatPage()">
                                       <el-icon :size="20">
-                                        <IconEduChatNofill20 />
+                                        <IconEduChatNofill20/>
                                       </el-icon>
-                                      <span>{{unreadTotal}}</span>
+                                      <span>{{ unreadTotal }}</span>
                                     </el-button>
                                   </div>
 
@@ -197,34 +195,34 @@
                             <template v-if="identity == 4">Edu-Business</template>
                             <template v-if="identity == 5">Vendor</template>
                             <el-icon :size="24" style="margin-left: 5px;">
-                              <IconIcBaselineExpandMore />
+                              <IconIcBaselineExpandMore/>
                             </el-icon>
 
                           </span>
 
-                            <template #dropdown >
-                              <el-dropdown-menu >
+                            <template #dropdown>
+                              <el-dropdown-menu>
 
                                 <el-dropdown-item
                                     @click="turnOverview()"
                                 >
                                   <el-icon>
-                                    <IconMaterialSymbolsDashboardOutlineRounded />
+                                    <IconMaterialSymbolsDashboardOutlineRounded/>
                                   </el-icon>
 
                                   <span class="el-dropdown-link-1">DASHBOARD</span>
 
                                 </el-dropdown-item>
-                                <el-dropdown-item  @click="turnEditProfile()">
+                                <el-dropdown-item @click="turnEditProfile()">
                                   <el-icon>
-                                    <IconIconoirProfileCircled />
+                                    <IconIconoirProfileCircled/>
                                   </el-icon>
 
                                   <span class="el-dropdown-link-1"> MY PROFILE</span>
                                 </el-dropdown-item>
 
                                 <div class="el-dropdown-tips">switch profile</div>
-                                <el-dropdown-item  class="xll-dropdown-item">
+                                <el-dropdown-item class="xll-dropdown-item">
 
                                   <el-dropdown size="large"
                                                placement="left-start"
@@ -233,8 +231,8 @@
                                               Educator
                                           </span>
                                     <template #dropdown>
-                                      <el-dropdown-menu >
-                                        <div class="xll-sub-dropdown"  v-if="educatorContactData.length>0">
+                                      <el-dropdown-menu>
+                                        <div class="xll-sub-dropdown" v-if="educatorContactData.length>0">
                                           <el-dropdown-item
                                               class="xll-dropdown-item"
                                               v-for="(item,i) in educatorContactData"
@@ -243,7 +241,7 @@
 
                                             <template v-if="item.name">
 
-                                              <span class="el-dropdown-link">{{item.name}}</span>
+                                              <span class="el-dropdown-link">{{ item.name }}</span>
                                             </template>
                                             <template v-else>
                                               <span class="el-dropdown-link">Click to Update Profile</span>
@@ -254,7 +252,7 @@
 
                                         <div class="xll-sub-dropdown" v-else>
                                           <el-dropdown-item class="xll-dropdown-item" @click="createRole(1)">
-                                            <div class="xll-add-icon-container" >
+                                            <div class="xll-add-icon-container">
                                               <span>Add</span>
                                               <el-icon class="xll-icon-circle-plus-1" :size="14">
                                                 <CirclePlus/>
@@ -278,7 +276,7 @@
                                   </span>
                                     <template #dropdown>
                                       <el-dropdown-menu>
-                                        <div class="xll-sub-dropdown"  v-if="recruiterCompanyData.length>0">
+                                        <div class="xll-sub-dropdown" v-if="recruiterCompanyData.length>0">
                                           <el-dropdown-item
                                               class="xll-dropdown-item"
                                               v-for="(item,i) in recruiterCompanyData"
@@ -286,7 +284,7 @@
                                               @click="changeIdentity(item.id,2,2)">
 
                                             <template v-if="item.company_name">
-                                              <span class="el-dropdown-link">{{item.company_name}}</span>
+                                              <span class="el-dropdown-link">{{ item.company_name }}</span>
                                             </template>
                                             <template v-else>
                                               <span class="el-dropdown-link">Click to Update Profile</span>
@@ -302,7 +300,7 @@
                                               @click="changeIdentity(item.id,3,2)">
                                             <template v-if="item.company_name">
 
-                                              <span class="el-dropdown-link">{{item.company_name}}</span>
+                                              <span class="el-dropdown-link">{{ item.company_name }}</span>
                                             </template>
                                             <template v-else>
                                               <span class="el-dropdown-link">Click to Update Profile</span>
@@ -317,7 +315,7 @@
                                               @click="changeIdentity(item.id,4,2)">
                                             <template v-if="item.company_name">
 
-                                              <span class="el-dropdown-link">{{item.company_name}}</span>
+                                              <span class="el-dropdown-link">{{ item.company_name }}</span>
                                             </template>
                                             <template v-else>
                                               <span class="el-dropdown-link">Click to Update Profile</span>
@@ -327,7 +325,7 @@
 
                                         <div class="xll-sub-dropdown">
                                           <el-dropdown-item class="xll-dropdown-item" @click="selectBusinessRole()">
-                                            <div class="xll-add-icon-container" >
+                                            <div class="xll-add-icon-container">
                                               <span>Add</span>
                                               <el-icon class="xll-icon-circle-plus-1" :size="14">
                                                 <CirclePlus/>
@@ -349,7 +347,7 @@
                                      Vendor
                                   </span>
                                     <template #dropdown>
-                                      <el-dropdown-menu >
+                                      <el-dropdown-menu>
                                         <template v-if="vendorCompanyData.length>0">
 
                                           <el-dropdown-item
@@ -358,7 +356,7 @@
                                               :key="i"
                                               @click="changeIdentity(item.id,5,2)">
                                             <template v-if="item.company_name">
-                                              <span class="el-dropdown-link">{{item.company_name}}</span>
+                                              <span class="el-dropdown-link">{{ item.company_name }}</span>
                                             </template>
                                             <template v-else>
                                               <span class="el-dropdown-link">Click to Update Profile</span>
@@ -367,7 +365,7 @@
                                         </template>
 
                                         <el-dropdown-item class="xll-dropdown-item" @click="createRole(5)">
-                                          <div class="xll-add-icon-container" >
+                                          <div class="xll-add-icon-container">
                                             <span>Add</span>
                                             <el-icon class="xll-icon-circle-plus-1" :size="14">
                                               <CirclePlus/>
@@ -387,18 +385,18 @@
                                 <!--                                  My Discount Card-->
                                 <!--                                </el-dropdown-item>-->
 
-<!--                                v-if="isThirdCompanyStatus == 1"-->
-                                <el-dropdown-item v-if="isThirdCompanyStatus == 1"  @click="returnMySelf()" >
+                                <!--                                v-if="isThirdCompanyStatus == 1"-->
+                                <el-dropdown-item v-if="isThirdCompanyStatus == 1" @click="returnMySelf()">
                                   <el-icon>
-                                    <IconAkarIconsArrowBackThick />
+                                    <IconAkarIconsArrowBackThick/>
                                   </el-icon>
                                   <span class="el-dropdown-link-1"> RETURN TO MY ACCOUNT</span>
 
                                 </el-dropdown-item>
 
-                                <el-dropdown-item  @click="loginOut()">
+                                <el-dropdown-item @click="loginOut()">
                                   <el-icon>
-                                    <IconIcBaselineLogout />
+                                    <IconIcBaselineLogout/>
                                   </el-icon>
                                   <span class="el-dropdown-link-1">  LOG OUT</span>
 
@@ -420,21 +418,6 @@
 
                   <div class="user-avatar">
                     <el-avatar class="user-avatar-img" :src="userAvatar !='' ? userAvatar : defaultAvatar"></el-avatar>
-<!--                    <el-dropdown>-->
-<!--                      -->
-<!--                      <template #dropdown>-->
-<!--                        <el-dropdown-menu>-->
-<!--                          <el-dropdown-item @click="dialogDiscountCardVisible=true">My Discount Card</el-dropdown-item>-->
-<!--                          <el-dropdown-item @click="turnEditProfile()">My Profile</el-dropdown-item>-->
-<!--                          &lt;!&ndash;                    <el-dropdown-item>Change Password</el-dropdown-item>&ndash;&gt;-->
-<!--                          &lt;!&ndash;                    <el-dropdown-item >Change Language</el-dropdown-item>&ndash;&gt;-->
-<!--                          <el-dropdown-item  @click="returnMySelf()" v-if="isThirdCompanyStatus == 1">-->
-<!--                            Return to My Account-->
-<!--                          </el-dropdown-item>-->
-<!--                          <el-dropdown-item  @click="loginOut()">Log Out</el-dropdown-item>-->
-<!--                        </el-dropdown-menu>-->
-<!--                      </template>-->
-<!--                    </el-dropdown>-->
                   </div>
 
                 </div>
@@ -453,62 +436,9 @@
             </div>
           </el-col>
 
-          <el-col :xs="4" :sm="4" :md="4" :lg="0" :xl="0">
-            <div @click="menuDrawerStatus = true">
-              <i class="iconfont el-icon-alihamburger-menu-gray xll-icon-size"></i>
-            </div>
-            <el-drawer
-                v-model="menuDrawerStatus"
-                direction="rtl"
-                size="60%"
-            >
-
-              <div class="nav-link-item">
-                <router-link to="/jobs" exact>EDU Jobs</router-link>
-              </div>
-              <div class="nav-link-item">
-                <router-link to="/deals" exact> EDU Deals</router-link>
-              </div>
-              <div class="nav-link-item">
-                <router-link to="/events" exact>EDU Events</router-link>
-              </div>
-              <!--              <div class="nav-link-item">-->
-              <!--                <router-link to="/industry/news" exact>News</router-link>-->
-              <!--              </div>-->
-<!--              <div class="nav-link-item">-->
-<!--                <span class="zoho-blog-menu-2" @click="turnZohoBlog()">Blog</span>-->
-<!--              </div>-->
-<!--              <div class="nav-link-item">-->
-<!--                <router-link to="/contact/us" exact> Contact</router-link>-->
-<!--              </div>-->
-<!--              <div class="nav-link-item">-->
-<!--                <router-link to="/about/us" exact> About</router-link>-->
-<!--              </div>-->
-<!--              <div class="nav-link-item">-->
-<!--                <router-link to="/services/price" exact> Pricing</router-link>-->
-<!--              </div>-->
-
-              <div class="nav-link-item">
-                <template v-if="envName === 'development' || envName === 'production'">
-                            <span v-if="!identity || identity == 1"
-                                  @click="turnEnvJobs()">China Jobs</span>
-                </template>
-                <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
-                             <span v-if="!identity || identity == 1"
-                                   @click="turnEnvJobs()">International Jobs</span>
-                </template>
-              </div>
-              <div class="nav-link-item">
-                <router-link :to="{path:'/login',query:{}}">Login</router-link>
-              </div>
-              <div class="nav-link-item">
-                <router-link :to="{path: '/signup', query: {}}">Sign Up</router-link>
-              </div>
-
-            </el-drawer>
-          </el-col>
-
         </el-row>
+
+
       </el-header>
 
     </el-affix>
@@ -545,6 +475,70 @@
       </div>
     </el-dialog>
 
+
+    <el-drawer
+        v-model="menuDrawerStatus"
+        direction="ltr"
+        size="50%"
+    >
+      <template #header>
+        <div style="width: 30px;">
+          <div class="logo-mobile-new-container">
+            <div class="logo-mobile-new">
+              <el-image class="logo-mobile-new-logo-img" :src="logoImgLogo"></el-image>
+            </div>
+            <div class="logo-mobile-new-beta">Beta</div>
+            <el-button link @click="closeMobileMenu()">close</el-button>
+          </div>
+        </div>
+
+      </template>
+      <div class="mobile-menu-drawer-bg">
+
+        <div class="nav-link-item">
+          <router-link to="/jobs" exact>EDU Jobs</router-link>
+        </div>
+        <div class="nav-link-item">
+          <router-link to="/deals" exact> EDU Deals</router-link>
+        </div>
+        <div class="nav-link-item">
+          <router-link to="/events" exact>EDU Events</router-link>
+        </div>
+
+        <template v-if="envName === 'development' || envName === 'production'">
+          <div class="nav-link-item" v-if="!identity || identity == 1">
+            <span @click="turnEnvJobs()">China Jobs</span>
+          </div>
+        </template>
+
+        <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
+          <div class="nav-link-item" v-if="!identity || identity == 1">
+           <span  @click="turnEnvJobs()">International Jobs</span>
+          </div>
+        </template>
+
+<!--        <div class="nav-link-item">-->
+<!--          <router-link :to="{path:'/login',query:{}}">Login</router-link>-->
+<!--        </div>-->
+<!--        <div class="nav-link-item">-->
+<!--          <router-link :to="{path: '/signup', query: {}}">Sign Up</router-link>-->
+<!--        </div>-->
+
+        <div class="mobile-chose-country">
+          <div class="mobile-country-china">
+            <el-button link>China</el-button>
+          </div>
+          <div class="mobile-country-global">
+            <el-button link>Global</el-button>
+          </div>
+        </div>
+
+      </div>
+
+
+    </el-drawer>
+
+
   </div>
 
 </template>
@@ -561,25 +555,25 @@ import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
 import discountCardImg from '@/assets/discountcard/discountCard.png'
 import {encode, decode} from 'js-base64'
-import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
+import logoImgLight from "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
 import logoImgLightH from "@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png"
-import logoImgLogo from  '@/assets/newHome/logo/Logo_Transparent.png'
+import logoImgLogo from '@/assets/newHome/logo/Logo_Transparent.png'
 import {onBeforeRouteUpdate, onBeforeRouteLeave} from 'vue-router'
 import {ref} from 'vue'
 
 export default {
   name: "Header",
-  setup(){
+  setup() {
     let unreadChanged = ref(0)
 
-    onBeforeRouteUpdate((to)=>{
+    onBeforeRouteUpdate((to) => {
       console.log('------- header router -------')
       console.log(to)
-      unreadChanged.value ++
+      unreadChanged.value++
     })
-    onBeforeRouteLeave((to)=>{
+    onBeforeRouteLeave((to) => {
       console.log(to)
-      unreadChanged.value ++
+      unreadChanged.value++
 
     })
 
@@ -601,26 +595,26 @@ export default {
       token: '',
       dialogDiscountCardVisible: false,
       envName: process.env.VUE_APP_ENV_NAME,
-      recruiterCompanyData:[],
-      schoolCompanyData:[],
-      otherCompanyData:[],
-      vendorCompanyData:[],
-      educatorContactData:{},
-      educatorContactStatus:false,
-      dialogSwitchJobVisible:false,
+      recruiterCompanyData: [],
+      schoolCompanyData: [],
+      otherCompanyData: [],
+      vendorCompanyData: [],
+      educatorContactData: {},
+      educatorContactStatus: false,
+      dialogSwitchJobVisible: false,
 
-      inAppNotificationData:[],
-      inAppPage:1,
-      inAppLimit:10,
-      inAppLastPage:0,
-      inAppUnreadTotal:0
+      inAppNotificationData: [],
+      inAppPage: 1,
+      inAppLimit: 10,
+      inAppLastPage: 0,
+      inAppUnreadTotal: 0
 
     }
   },
-  watch:{
-    allIdentityChanged(newValue){
+  watch: {
+    allIdentityChanged(newValue) {
       console.log('header all ' + newValue)
-      if(newValue){
+      if (newValue) {
         this.getAllIdentity()
         this.getBasicInfo(this.identity)
         this.inAppNotificationData = []
@@ -628,15 +622,15 @@ export default {
         this.getUserUnread()
       }
     },
-    unreadTotal(newValue){
+    unreadTotal(newValue) {
       console.log(newValue)
 
     },
-    unreadChanged(newValue){
+    unreadChanged(newValue) {
       console.log('---- unread ------' + newValue)
-      if(this.token){
+      if (this.token) {
         this.inAppNotificationData = []
-        this.getUserUnreadList( 1, this.inAppLimit)
+        this.getUserUnreadList(1, this.inAppLimit)
         this.getUserUnread()
       }
 
@@ -645,8 +639,8 @@ export default {
   },
   computed: {
 
-    allIdentityChanged:{
-      get(){
+    allIdentityChanged: {
+      get() {
         return this.$store.state.allIdentityChanged
       }
     },
@@ -671,8 +665,8 @@ export default {
         return this.$store.state.isThirdCompanyStatus
       }
     },
-    unreadTotal:{
-      get(){
+    unreadTotal: {
+      get() {
         return this.$store.state.imUnreadTotal
       }
     }
@@ -692,7 +686,13 @@ export default {
 
   },
   methods: {
-    turnChatPage(){
+    showMobileMenu(){
+      this.menuDrawerStatus = true;
+    },
+    closeMobileMenu(){
+      this.menuDrawerStatus = false;
+    },
+    turnChatPage() {
       this.$router.push('/chat/messages')
     },
     turnEnvJobs() {
@@ -728,38 +728,36 @@ export default {
       }
 
     },
-    goChinaJob(){
+    goChinaJob() {
       let envName = this.envName;
 
-      if(envName === 'development' || envName === 'production'){
+      if (envName === 'development' || envName === 'production') {
         this.dialogSwitchJobVisible = true;
       }
 
-      if(envName === 'developmentCN' || envName === 'productionCN' ){
+      if (envName === 'developmentCN' || envName === 'productionCN') {
         this.$router.push('/jobs')
       }
     },
-    goInternationalJob(){
+    goInternationalJob() {
       let envName = this.envName;
 
-      if(envName === 'development' || envName === 'production'){
+      if (envName === 'development' || envName === 'production') {
         this.$router.push('/jobs')
       }
 
-      if(envName === 'developmentCN' || envName === 'productionCN' ){
+      if (envName === 'developmentCN' || envName === 'productionCN') {
 
         this.dialogSwitchJobVisible = true;
       }
     },
-    getAllIdentity(){
+    getAllIdentity() {
 
-      let params = {
-
-      }
-      USER_ALL_IDENTITY_V2(params).then(res=>{
+      let params = {}
+      USER_ALL_IDENTITY_V2(params).then(res => {
         // console.log(res)
-        if(res.code == 200){
-          this.$store.commit('allIdentityChanged',false)
+        if (res.code == 200) {
+          this.$store.commit('allIdentityChanged', false)
 
           let vendorCompany = []
           let recruitingCompany = []
@@ -768,40 +766,40 @@ export default {
 
           let userContact = res.message.user_contact
 
-          if(userContact){
+          if (userContact) {
             let educatorContact = userContact.educarot_contact
 
-            if(educatorContact){
+            if (educatorContact) {
               this.educatorContactStatus = true;
               this.educatorContactData = educatorContact
-            }else{
+            } else {
               this.educatorContactStatus = false;
             }
 
-            if(res.message.user_contact){
+            if (res.message.user_contact) {
               vendorCompany = res.message.user_contact.vendor_company
               recruitingCompany = res.message.user_contact.recruiting_company
               schoolCompany = res.message.user_contact.school_company
               otherCompany = res.message.user_contact.other_company
             }
 
-            if(vendorCompany){
+            if (vendorCompany) {
               this.vendorCompanyData = vendorCompany
             }
 
-            if(recruitingCompany){
+            if (recruitingCompany) {
               this.recruiterCompanyData = recruitingCompany
             }
 
-            if(schoolCompany){
+            if (schoolCompany) {
               this.schoolCompanyData = schoolCompany
             }
 
-            if(otherCompany){
+            if (otherCompany) {
               this.otherCompanyData = otherCompany
             }
 
-          }else{
+          } else {
             this.educatorContactData = []
             this.vendorCompanyData = []
             this.recruiterCompanyData = []
@@ -811,7 +809,7 @@ export default {
 
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
@@ -837,16 +835,16 @@ export default {
 
           let avatar = 'https://oss.esl-passport.cn/educator.png';
 
-          if(identity == 1){
+          if (identity == 1) {
             avatar = userContact.headimgurl;
           }
 
-          if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
+          if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
 
-            if(userContact.company){
+            if (userContact.company) {
               companyInfo = userContact.company;
               avatar = companyInfo.logo;
-              name = companyInfo.display_name;
+              name = companyInfo.company_name;
             }
 
           }
@@ -859,11 +857,11 @@ export default {
             companyId: userContact.company_id
           }
 
-          this.$store.commit('currentUser',currentUser)
+          this.$store.commit('currentUser', currentUser)
 
           localStorage.setItem('name', name)
           localStorage.setItem('avatar', avatar)
-          localStorage.setItem('is_third_company',res.message.user_contact.is_third_company )
+          localStorage.setItem('is_third_company', res.message.user_contact.is_third_company)
 
           this.$store.commit('username', name)
           this.$store.commit('userAvatar', avatar)
@@ -879,34 +877,34 @@ export default {
     login() {
       this.$router.push('/login')
     },
-    returnMySelf(){
+    returnMySelf() {
       this.$loading({
         text: 'Loading...'
       })
       let self = this;
-      COMEBACK_MYSELF().then(res=>{
+      COMEBACK_MYSELF().then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let uid = localStorage.getItem('uid')
           let identityValue = res.message.return_identity
           let companyIdValue = res.message.return_company_id
           this.$store.commit('identity', identityValue)
-          this.$store.commit('allIdentityChanged',true )
+          this.$store.commit('allIdentityChanged', true)
 
-          localStorage.setItem('identity',identityValue)
-          localStorage.setItem('company_id',companyIdValue)
+          localStorage.setItem('identity', identityValue)
+          localStorage.setItem('company_id', companyIdValue)
 
           this.getBasicInfo(identityValue)
           this.getAllIdentity()
-          this.getUserMenuList(uid,identityValue,companyIdValue,uid)
+          this.getUserMenuList(uid, identityValue, companyIdValue, uid)
 
           setTimeout(function () {
-            self.$router.push({path:'/overview',query:{}})
+            self.$router.push({path: '/overview', query: {}})
             self.$loading().close()
-          },1200)
+          }, 1200)
           // window.location.reload()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
@@ -916,12 +914,12 @@ export default {
       })
 
       let params = {
-        token:localStorage.getItem('token'),
-        platform:4
+        token: localStorage.getItem('token'),
+        platform: 4
       }
 
-      LOGOUT_V2(params).then(res=>{
-        if(res.code == 200){
+      LOGOUT_V2(params).then(res => {
+        if (res.code == 200) {
           localStorage.clear()
           this.token = '';
           this.$store.commit('username', '')
@@ -931,12 +929,12 @@ export default {
         }
 
         // console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
-    turnOverview(){
+    turnOverview() {
       let self = this;
       this.$loading({
         text: 'Loading...'
@@ -946,55 +944,55 @@ export default {
 
       setTimeout(function () {
         self.$loading().close()
-      },1500)
+      }, 1500)
     },
-    turnEditProfile(){
+    turnEditProfile() {
       this.$loading({
         text: 'Loading...'
       })
       let companyId = localStorage.getItem('company_id')
       let identity = localStorage.getItem('identity')
       // console.log(companyId)
-      if(companyId && companyId != '0' ){
-        this.changeIdentity(companyId,identity,2)
+      if (companyId && companyId != '0') {
+        this.changeIdentity(companyId, identity, 2)
         // this.$router.push({path: '/account/home', query: {}})
 
         this.$loading().close()
 
-      }else{
+      } else {
         if (identity == 1) {
           this.$loading().close()
-          let strObj={
-            i:1,
-            action:'add'
+          let strObj = {
+            i: 1,
+            action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
           // this.$message.warning('Oops!.. Your profile is incomplete. ')
           // this.$router.push({path: '/profile/contact/user', query: {s:str}})
-          this.$router.push({path: '/educator/edit/home', query: {s:str}})
+          this.$router.push({path: '/educator/edit/home', query: {s: str}})
 
         }
 
         if (identity == 2) {
 
           this.$loading().close()
-          let strObj={
-            i:2,
-            action:'add'
+          let strObj = {
+            i: 2,
+            action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
           // this.$message.warning('Oops!.. Your profile is incomplete. ')
           // this.$router.push({path: '/profile/contact/user', query: {s:str}})
-          this.$router.push({path: '/business/edit/recruiter', query: {s:str}})
+          this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
 
         }
 
         if (identity == 3) {
 
           this.$loading().close()
-          let strObj={
-            i:3,
-            action:'add'
+          let strObj = {
+            i: 3,
+            action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
           // this.$message.warning('Oops!.. Your profile is incomplete. ')
@@ -1007,9 +1005,9 @@ export default {
 
           this.$loading().close()
 
-          let strObj={
-            i:4,
-            action:'add'
+          let strObj = {
+            i: 4,
+            action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
 
@@ -1023,9 +1021,9 @@ export default {
 
           this.$loading().close()
 
-          let strObj={
-            i:5,
-            action:'add'
+          let strObj = {
+            i: 5,
+            action: 'add'
           }
 
           let str = encode(JSON.stringify(strObj))
@@ -1042,34 +1040,34 @@ export default {
       console.log('select business role')
       this.dialogBusinessAccountVisible = true;
     },
-    createRole(identity){
+    createRole(identity) {
       this.$loading({
         text: 'Loading...'
       })
       if (identity == 1) {
         this.$loading().close()
-        let strObj={
-          i:1,
-          action:'add'
+        let strObj = {
+          i: 1,
+          action: 'add'
         }
         let str = encode(JSON.stringify(strObj))
         // this.$message.warning('Oops!.. Your profile is incomplete. ')
         // this.$router.push({path: '/profile/contact/user', query: {s:str}})
-        this.$router.push({path: '/educator/edit/home', query: {s:str}})
+        this.$router.push({path: '/educator/edit/home', query: {s: str}})
 
       }
 
       if (identity == 2) {
 
         this.$loading().close()
-        let strObj={
-          i:2,
-          action:'add'
+        let strObj = {
+          i: 2,
+          action: 'add'
         }
         let str = encode(JSON.stringify(strObj))
         // this.$message.warning('Oops!.. Your profile is incomplete. ')
         // this.$router.push({path: '/profile/contact/user', query: {s:str}})
-        this.$router.push({path: '/business/edit/recruiter', query: {s:str}})
+        this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
 
         this.dialogBusinessAccountVisible = false
       }
@@ -1077,9 +1075,9 @@ export default {
       if (identity == 3) {
 
         this.$loading().close()
-        let strObj={
-          i:3,
-          action:'add'
+        let strObj = {
+          i: 3,
+          action: 'add'
         }
         let str = encode(JSON.stringify(strObj))
         // this.$message.warning('Oops!.. Your profile is incomplete. ')
@@ -1088,41 +1086,41 @@ export default {
 
         this.dialogBusinessAccountVisible = false
 
+      }
+
+      if (identity == 4) {
+
+        this.$loading().close()
+
+        let strObj = {
+          i: 4,
+          action: 'add'
+        }
+        let str = encode(JSON.stringify(strObj))
+
+        // this.$message.warning('Oops!.. Your profile is incomplete. ')
+        // this.$router.push({path: '/profile/contact/user', query: {s: str}})
+        this.$router.push({path: '/business/edit/other', query: {s: str}})
+
+        this.dialogBusinessAccountVisible = false
+
+      }
+
+      if (identity == 5) {
+
+        this.$loading().close()
+
+        let strObj = {
+          i: 5,
+          action: 'add'
         }
 
-        if (identity == 4) {
+        let str = encode(JSON.stringify(strObj))
 
-          this.$loading().close()
-
-          let strObj={
-            i:4,
-            action:'add'
-          }
-          let str = encode(JSON.stringify(strObj))
-
-          // this.$message.warning('Oops!.. Your profile is incomplete. ')
-          // this.$router.push({path: '/profile/contact/user', query: {s: str}})
-          this.$router.push({path: '/business/edit/other', query: {s: str}})
-
-          this.dialogBusinessAccountVisible = false
-
-        }
-
-        if (identity == 5) {
-
-          this.$loading().close()
-
-          let strObj={
-            i:5,
-            action:'add'
-          }
-
-          let str = encode(JSON.stringify(strObj))
-
-          // this.$message.warning('Oops!.. Your profile is incomplete. ')
-          // this.$router.push({path: '/profile/contact/user', query: {s: str}})
-          this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
-        }
+        // this.$message.warning('Oops!.. Your profile is incomplete. ')
+        // this.$router.push({path: '/profile/contact/user', query: {s: str}})
+        this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
+      }
 
 
     },
@@ -1151,8 +1149,8 @@ export default {
 
         if (identity == 1) {
           if (isEducator > 10) {
-            educatorContact =  res.message.user_contact.educator_contact;
-            this.changeIdentity(educatorContact.id,1,2)
+            educatorContact = res.message.user_contact.educator_contact;
+            this.changeIdentity(educatorContact.id, 1, 2)
             this.$router.push({path: '/overview', query: {}})
             this.$loading().close()
           } else {
@@ -1170,8 +1168,8 @@ export default {
           if (isRecruiting > 10) {
 
             companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,2,2)
-            this.$router.push({path: '/overview',query:{}})
+            this.changeIdentity(companyInfo.id, 2, 2)
+            this.$router.push({path: '/overview', query: {}})
             this.$loading().close()
 
           } else {
@@ -1187,7 +1185,7 @@ export default {
           if (isSchool > 10) {
 
             companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,3,2)
+            this.changeIdentity(companyInfo.id, 3, 2)
             this.$router.push({path: '/overview', query: {}})
             // this.$router.push({path: '/profile/contact/user', query: {i: 3}})
             this.$loading().close()
@@ -1207,7 +1205,7 @@ export default {
           if (isOther > 10) {
             companyInfo = res.message.user_contact.company;
 
-            this.changeIdentity(companyInfo.id,4,2)
+            this.changeIdentity(companyInfo.id, 4, 2)
             this.$router.push({path: '/overview', query: {}})
             this.$loading().close()
           } else {
@@ -1226,7 +1224,7 @@ export default {
           if (isVendor > 10) {
 
             companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id,5,2)
+            this.changeIdentity(companyInfo.id, 5, 2)
             this.$router.push({path: '/overview', query: {}})
             this.$loading().close()
           } else {
@@ -1256,13 +1254,13 @@ export default {
       SWITCH_IDENTITY_V2(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
-          this.$store.commit('allIdentityChanged',true )
+          this.$store.commit('allIdentityChanged', true)
 
-          localStorage.setItem('company_id',companyId)
+          localStorage.setItem('company_id', companyId)
           localStorage.setItem('identity', identity)
 
           let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData',str)
+          localStorage.setItem('menuData', str)
 
           this.$store.commit('identity', identity)
           this.$store.commit('currentCompanyId', companyId)
@@ -1282,112 +1280,112 @@ export default {
       })
 
     },
-    getUserMenuList(uid,identity,companyId,cId){
+    getUserMenuList(uid, identity, companyId, cId) {
 
       let params = {
-        user_id:uid,
-        identity:identity,
-        company_id:companyId,
-        create_user_id:cId,
-        page:1,
-        limit:1000
+        user_id: uid,
+        identity: identity,
+        company_id: companyId,
+        create_user_id: cId,
+        page: 1,
+        limit: 1000
       }
-      USER_MENU_LIST(params).then(res=>{
+      USER_MENU_LIST(params).then(res => {
         // console.log(res)
-        if(res.code === 200){
+        if (res.code === 200) {
           let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData',str)
+          localStorage.setItem('menuData', str)
 
           this.$store.commit('menuData', res.message)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
     turnHome() {
       this.$router.push('/')
     },
-    turnZohoBlog(){
+    turnZohoBlog() {
       let envName = this.envName;
 
-      if(envName === 'development' || envName === 'production'){
-        window.open('https://news.edupassport.io/blogs','_blank')
+      if (envName === 'development' || envName === 'production') {
+        window.open('https://news.edupassport.io/blogs', '_blank')
       }
 
-      if(envName === 'developmentCN' || envName === 'productionCN' ){
-        window.open('https://news.esl-passport.cn/blogs','_blank')
+      if (envName === 'developmentCN' || envName === 'productionCN') {
+        window.open('https://news.esl-passport.cn/blogs', '_blank')
       }
 
 
     },
-    loadUserUnreadMore(){
-      this.inAppPage ++
-      if(this.inAppPage <= this.inAppLastPage){
+    loadUserUnreadMore() {
+      this.inAppPage++
+      if (this.inAppPage <= this.inAppLastPage) {
         this.getUserUnreadList(this.inAppPage, this.inAppLimit)
       }
 
     },
-    getUserUnreadList(page,limit){
+    getUserUnreadList(page, limit) {
       let params = {
         page: page,
         limit: limit
       }
-      USER_UNREAD_LIST(params).then(res=>{
+      USER_UNREAD_LIST(params).then(res => {
         console.log(res)
-        if(res.code == 200){
-          this.inAppNotificationData =  this.inAppNotificationData.concat(res.message.data);
+        if (res.code == 200) {
+          this.inAppNotificationData = this.inAppNotificationData.concat(res.message.data);
           this.inAppLastPage = res.message.last_page;
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    setInAppRead(id,identity,index){
+    setInAppRead(id, identity, index) {
       let params = {
-        id:id,
-        identity:identity,
-        status:1
+        id: id,
+        identity: identity,
+        status: 1
       }
-      SET_READ(params).then(res=>{
+      SET_READ(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.inAppNotificationData[index]['is_read'] = 1
           this.getUserUnread()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
-    setInAppReadAll(){
+    setInAppReadAll() {
 
       let params = {
-        status:1
+        status: 1
       }
 
-      SET_READ_ALL(params).then(res=>{
+      SET_READ_ALL(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.inAppNotificationData = []
-          this.getUserUnreadList(1,this.inAppLimit)
+          this.getUserUnreadList(1, this.inAppLimit)
           this.getUserUnread()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
-    getUserUnread(){
+    getUserUnread() {
       let params = {
         identity: localStorage.getItem('identity')
       }
-      USER_UNREAD(params).then(res=>{
+      USER_UNREAD(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.inAppUnreadTotal = res.message.count;
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     }
@@ -1429,7 +1427,7 @@ export default {
   color: #000000;
 }
 
-.zoho-blog-menu{
+.zoho-blog-menu {
   cursor: pointer;
 
   margin-left: 20px;
@@ -1487,6 +1485,7 @@ export default {
   width: 80px;
   height: 80px;
   border-radius: 80px;
+
   cursor: pointer;
 }
 
@@ -1539,7 +1538,7 @@ export default {
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.el-dropdown-tips{
+.el-dropdown-tips {
   margin-top: 10px;
   padding-left: 20px;
   color: #262626;
@@ -1547,11 +1546,15 @@ export default {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.xll-add-icon-container{
-  display:flex;flex-direction:row;align-items:center;justify-content: center;
+.xll-add-icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
-.xll-icon-circle-plus-1{
-  margin-left:4px;
+
+.xll-icon-circle-plus-1 {
+  margin-left: 4px;
 }
 
 .xll-icon-arrow-left {
@@ -1561,13 +1564,15 @@ export default {
   bottom: 0;
   margin: auto;
 }
-.xll-sub-dropdown{
-  padding:10px;
+
+.xll-sub-dropdown {
+  padding: 10px;
 }
-.xll-sub-dropdown h4{
-  padding:4px 10px;
-  border-bottom:1px solid #eeeeee;
-  color:#808080;
+
+.xll-sub-dropdown h4 {
+  padding: 4px 10px;
+  border-bottom: 1px solid #eeeeee;
+  color: #808080;
 }
 
 .switch-account-tips {
@@ -1611,23 +1616,27 @@ export default {
 .nav-link-item {
   cursor: pointer;
   padding: 10px;
-  color: #000000;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 20px;
-  border-bottom: 1px solid #EEEEEE;
+  /*border-bottom: 1px solid #EEEEEE;*/
 }
+
+.nav-link-item span{
+  font-size: 16px;
+  color: #262626;
+  line-height: 20px;
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
 
 .nav-link-item a {
-  display: block;
+  /*display: block;*/
   text-decoration: none;
-  color: #000000;
-  font-weight: bold;
   font-size: 16px;
+  color: #262626;
   line-height: 20px;
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
-.el-dropdown-link-job{
+.el-dropdown-link-job {
   font-size: 24px;
   line-height: 30px;
 
@@ -1639,22 +1648,22 @@ export default {
   justify-content: center;
 }
 
-.el-dropdown-link-job-1{
+.el-dropdown-link-job-1 {
   font-size: 24px;
   line-height: 30px;
   font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.switch-job-container{
-  padding:20px;
+.switch-job-container {
+  padding: 20px;
   text-align: center;
 }
 
-.switch-job-container h3{
+.switch-job-container h3 {
   word-break: normal;
 }
 
-.switch-job-tips{
+.switch-job-tips {
   margin-top: 20px;
   word-break: normal;
   font-size: 24px;
@@ -1662,18 +1671,14 @@ export default {
   font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.switch-job-btn-container{
+.switch-job-btn-container {
   margin-top: 40px;
 }
 
-.switch-job-btn{
+.switch-job-btn {
 
 }
 
-
-@media screen and  (min-width: 1200px) {
-
-}
 
 .xll-icon-size {
   font-size: 40px;
@@ -1682,7 +1687,7 @@ export default {
 }
 
 
-.user-dropdown-ll{
+.user-dropdown-ll {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1690,7 +1695,7 @@ export default {
   margin-top: 20px;
 }
 
-.user-dropdown-bell{
+.user-dropdown-bell {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -1698,8 +1703,7 @@ export default {
 }
 
 
-
-.logo-new-container{
+.logo-new-container {
   width: 120px;
   display: flex;
   align-items: center;
@@ -1708,38 +1712,40 @@ export default {
 
 }
 
-.logo-new{
+.logo-new {
   cursor: pointer;
 }
 
-.logo-new-logo-img{
+.logo-new-logo-img {
   width: 60px;
 }
 
-.logo-new-beta{
+
+
+.logo-new-beta {
   position: absolute;
   top: 0;
   right: -25px;
-  background-color:#49397f;
-  padding:2px 10px;
-  border-radius:10px;
-  color:#EEEEEE;
+  background-color: #49397f;
+  padding: 2px 10px;
+  border-radius: 10px;
+  color: #EEEEEE;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 12px;
 }
 
-.notification-c{
+.notification-c {
   padding: 15px;
 }
 
-.notification-all-read{
+.notification-all-read {
   font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
   text-align: right;
   cursor: pointer;
 }
 
-.notification-items{
+.notification-items {
   margin-top: 25px;
   max-height: 300px;
   overflow: auto;
@@ -1747,12 +1753,13 @@ export default {
 
 .notification-items::-webkit-scrollbar {
   /*滚动条整体样式*/
-  width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+  width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
   height: 1px;
 }
+
 .notification-items::-webkit-scrollbar-thumb {
   /*滚动条里面小方块*/
-  border-radius   : 10px;
+  border-radius: 10px;
   background-color: #9173ff;
   background-image: -webkit-linear-gradient(
       45deg,
@@ -1768,22 +1775,22 @@ export default {
 
 .notification-items::-webkit-scrollbar-track {
   /*滚动条里面轨道*/
-  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
-  background   : #ededed;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #ededed;
   border-radius: 10px;
 }
 
-.notification-item{
+.notification-item {
   padding: 0 15px;
   margin-bottom: 25px;
 }
 
-.notification-item-time{
+.notification-item-time {
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 16px;
 }
 
-.notification-item-c{
+.notification-item-c {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -1791,7 +1798,7 @@ export default {
   margin-top: 15px;
 }
 
-.notification-item-c-l{
+.notification-item-c-l {
   width: 40px;
   height: 40px;
   border-radius: 40px;
@@ -1801,7 +1808,7 @@ export default {
   justify-content: center;
 }
 
-.notification-item-c-r{
+.notification-item-c-r {
   width: calc(100% - 50px);
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
@@ -1810,15 +1817,15 @@ export default {
   cursor: pointer;
 }
 
-.no-read-1{
+.no-read-1 {
   background-color: #E7DEFF;
 }
 
-.no-read-2{
+.no-read-2 {
   font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
-.im-msg-container{
+.im-msg-container {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1827,11 +1834,11 @@ export default {
   padding-top: 25px;
 }
 
-.im-msg-btn{
+.im-msg-btn {
   width: 100%;
 }
 
-.im-msg-container span{
+.im-msg-container span {
 
   font-size: 18px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
@@ -1839,11 +1846,11 @@ export default {
 }
 
 
-.circle-circle{
+.circle-circle {
   position: relative;
 }
 
-.circle-red{
+.circle-red {
   display: block;
   position: absolute;
   right: 0;
@@ -1851,7 +1858,97 @@ export default {
   width: 10px;
   height: 10px;
   border-radius: 10px;
-  background-color: #FF4D4D ;
+  background-color: #FF4D4D;
 }
+
+.logo-mobile-new-container {
+  display: none;
+}
+
+@media screen and  (max-width: 768px) {
+
+  /deep/ .el-drawer{
+    background-color: #F0F2F5;
+  }
+
+  .user-name {
+    font-size: 14px;
+  }
+
+  .el-dropdown-link {
+    font-size: 12px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+
+  }
+
+  .user-avatar-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .user-dropdown-ll {
+    margin-top: 0;
+
+  }
+
+  .header-container {
+    height: 80px;
+  }
+
+  .logo-new-container {
+    display: none;
+  }
+
+  .logo-mobile-new-container {
+    width: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+  }
+
+  .logo-mobile-new {
+    cursor: pointer;
+  }
+
+  .logo-mobile-new-logo-img {
+    width: 30px;
+  }
+
+  .logo-mobile-new-beta {
+    position: absolute;
+    top: 0;
+    right: -25px;
+    background-color: #49397f;
+    padding: 2px 10px;
+    border-radius: 10px;
+    color: #EEEEEE;
+    font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+  }
+
+  .mobile-menu-drawer-bg{
+    background-color: #F0F2F5;
+    height: calc(100% - 100px);
+    position: relative;
+  }
+
+  .mobile-chose-country{
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    margin: auto;
+
+  }
+
+}
+
 
 </style>

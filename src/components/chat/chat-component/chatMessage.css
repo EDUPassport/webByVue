@@ -206,3 +206,10 @@
   text-overflow:ellipsis;
   white-space: nowrap;
 }
+
+@media screen and (max-width: 768px) {
+  .chat-message .text-content{
+    font-size: 12px;
+
+  }
+}

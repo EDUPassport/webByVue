@@ -38,6 +38,7 @@
     /*--el-button-hover-text-color: #ffffff;*/
 }
 
+
 .el-button--primary {
     --el-button-hover-text-color: #ffffff;
     --el-button-font-size: 20px;
@@ -164,4 +165,44 @@
 .el-message-box__message p{
     font-size: 22px;
     font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+
+
+@media screen and (max-width: 768px){
+
+   :root{
+       --el-font-size-base:12px;
+   }
+
+    .el-checkbox.el-checkbox--large .el-checkbox__label{
+        font-size: 12px;
+        font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+        color:#262626;
+    }
+
+    .el-input--large{
+        --el-input-height: 34px;
+    }
+    .el-input--default .el-input__wrapper{
+        min-height: 30px;
+    }
+
+    .el-input--large .el-input__inner{
+        font-size: 12px;
+    }
+
+    .el-input--default .el-input__inner{
+        font-size: 12px;
+    }
+
+    .el-input--small .el-input__inner{
+        font-size: 12px;
+    }
+
+    .el-form--default.el-form--label-top .el-form-item .el-form-item__label{
+        font-size:12px;
+    }
+
+
 }

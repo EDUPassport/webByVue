@@ -62,6 +62,7 @@ import {ref, onMounted} from 'vue'
 import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
 import logoImgDark from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.png"
 import logoImgDarkH from  '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Dark.png'
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "homeDonghua",
@@ -195,6 +196,25 @@ export default {
       logoImgDarkH
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
+  mounted(){
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
+  },
   methods:{
     turnHome(){
       this.$router.push('/')
@@ -209,7 +229,7 @@ export default {
 .donghua {
 
   width: 100%;
-  height: 100vh;
+  height: var(--i-window-height);
   position: fixed;
   z-index: 2000;
   top: 0;
@@ -223,8 +243,8 @@ export default {
 }
 
 .donghua-bg {
-  height: 100vh;
-  width: 100%;
+  height: var(--i-window-height);
+  padding: 30px 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -475,5 +495,32 @@ export default {
   font-size: 12px;
 }
 
+@media screen and (max-width: 768px){
+  .content-container{
+    width: 100%;
+    flex-direction: column;
+  }
 
+  .content-r{
+    min-width: auto;
+    padding-left: 0;
+    margin-top: 15px;
+  }
+
+  .content-l{
+    font-size: 16px;
+  }
+
+  .content-r-1-item{
+    font-size: 16px;
+  }
+
+  .content-r-1-item-2{
+    font-size: 16px;
+  }
+
+  .content-text{
+    font-size: 14px;
+  }
+}
 </style>

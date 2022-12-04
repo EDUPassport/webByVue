@@ -43,7 +43,7 @@
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
 
                       <template v-if="identity == 2">
                         <el-form-item label="Recruiter name" >
@@ -63,7 +63,7 @@
 
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Job Location">
 
                         <div class="job-current-location" v-if="jobForm.job_location">
@@ -189,7 +189,7 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item  label="Add Location Pin">
                         <div class="map-container">
                           <div id="mapContainer" class="basemap"></div>
@@ -212,7 +212,7 @@
                 <div class="account-profile-item-c">
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Job Title" required prop="job_title">
 
                         <div class="object-tags-add">
@@ -236,7 +236,7 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Start Date">
 
                         <div class="object-tags-add">
@@ -259,7 +259,7 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Application Deadline">
                         <el-date-picker
                             v-model="jobForm.apply_due_date"
@@ -272,7 +272,7 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Employment Type">
 
                         <el-select
@@ -299,7 +299,7 @@
                   </el-row>
 
                   <el-row :gutter="50">
-                    <el-col :span="24">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                       <el-form-item label="Job description">
 <!--                        <el-input v-model="jobForm.desc" type="textarea"-->
 <!--                                  :rows="4"-->
@@ -358,7 +358,7 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Benefits">
 
                         <el-select
@@ -383,7 +383,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Number of Vacancies">
                         <el-input v-model="jobForm.numbers" type="number" placeholder="Number of Vacancies"></el-input>
                       </el-form-item>
@@ -401,7 +401,7 @@
                 <div class="account-profile-item-c">
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Subjects">
 
                         <el-select
@@ -426,13 +426,13 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Class Size">
                         <el-input v-model="jobForm.class_size" placeholder="Number of students per class"></el-input>
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Student Ages">
 
                         <el-select
@@ -471,7 +471,7 @@
 
                   <el-row :gutter="50">
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
 
                       <div class="nationality-container">
                         <div>
@@ -533,7 +533,7 @@
                     </el-col>
 
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Teaching license and certificates">
 
                         <el-select
@@ -558,7 +558,7 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
 
                       <el-form-item label="Minimum degree">
                         <el-select v-model="jobForm.education" placeholder="Minimum degree">
@@ -569,7 +569,7 @@
 
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Languages">
 
                         <el-select
@@ -616,7 +616,7 @@
 
                   <el-row :gutter="50">
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Gender">
                         <el-select v-model="jobForm.sex"
                                    :popper-append-to-body="false"
@@ -627,7 +627,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Work schedule">
 
                         <el-select
@@ -658,13 +658,13 @@
 
                   <el-row :gutter="50">
 
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="Applicant's age">
                         <el-slider v-model="ageValue" range show-stops :max="100"></el-slider>
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="Years of Experience Required">
                         <el-slider v-model="yearOfExpValue" range show-stops :max="40"></el-slider>
                       </el-form-item>
@@ -677,7 +677,7 @@
 
 
 
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="Working Hours">
                         <div class="working-hours-show-container" v-if="workingHoursData.length>0">
 
@@ -742,7 +742,7 @@
                     </el-col>
 
 
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-checkbox
                           v-model="jobForm.is_equal"
                           :true-label="1"
@@ -792,6 +792,7 @@ import {ref, reactive} from "vue";
 import axios from 'axios'
 import {encode} from "js-base64";
 import submitMessage from "@/components/popup/submitMessage";
+import {updateWindowHeight} from "@/utils/tools";
 
 
 export default {
@@ -1037,7 +1038,7 @@ export default {
       teachingExpList: [],
       educationList: [],
       ageValue: [18, 60],
-      yearOfExpValue:[20, 60],
+      yearOfExpValue:[0, 20],
 
       sLocationType: 1,
       countryObj: {},
@@ -1070,8 +1071,25 @@ export default {
       }
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
 
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
 
     this.getBasicInfo(this.identity)
 
@@ -2896,6 +2914,74 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+  .post-r-container{
+    width: 100%;
+  }
+
+  .post-r-container-bg{
+    padding: 15px;
+  }
+
+  .account-profile-t{
+    height: 40px;
+    margin-bottom: 15px;
+  }
+
+  .account-profile-t-l{
+    font-size: 20px;
+  }
+
+  .job-form-container{
+    height: calc( var(--i-window-height) - 245px);
+  }
+
+  .account-profile-item-container{
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 18px;
+  }
+
+  .account-profile-item-label{
+    font-size: 18px;
+  }
+
+  /deep/  .mce-container *{
+    white-space: normal;
+  }
+
+  .account-profile-save-btn{
+    font-size: 12px;
+  }
+  .account-profile-discard-btn{
+    font-size: 12px;
+  }
+
+  .job-location-tab-l{
+    font-size: 12px;
+  }
+
+  .job-location-tab-r{
+    font-size: 12px;
+  }
+  .object-tags-item{
+    font-size: 12px;
+  }
+
+  .working-hours-show-container{
+    margin-bottom: 15px;
+  }
+
+  .working-hours-add{
+    margin-left: 0;
+  }
+
+  /deep/ .el-checkbox{
+    white-space: normal;
+  }
+
+  /deep/ .el-checkbox__label{
+    font-size: 12px;
+  }
 
 }
 

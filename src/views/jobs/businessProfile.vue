@@ -34,12 +34,20 @@
       </el-col>
 
       <el-col class="job-detail-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-loading="showLoadingStatus">
-        <businessProfile :canEdit="false"
-                         :fromDeal="false"
-                         :info="companyInfo"
-                         :identity="identity"
-        >
-        </businessProfile>
+
+        <div class="business-profile-mobile-back">
+          <businessProfileActionWithBack></businessProfileActionWithBack>
+        </div>
+
+        <el-scrollbar class="business-profile">
+          <businessProfile
+              :info="companyInfo"
+              :identity="identity"
+              @back="back()"
+          >
+          </businessProfile>
+        </el-scrollbar>
+
 
       </el-col>
     </el-row>
@@ -67,6 +75,8 @@ import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import {updateWindowHeight} from "@/utils/tools";
+import businessProfileActionWithBack from "@/components/businessProfileActionWithBack";
 
 export default {
   name: "detail",
@@ -97,7 +107,8 @@ export default {
     ExchangeAccountInfo,
     jobsListComponent,
     BusinessProfile,
-    filterWithJobList
+    filterWithJobList,
+    businessProfileActionWithBack
 
   },
   setup() {
@@ -129,7 +140,24 @@ export default {
     console.log(to)
 
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
 
     let userId = this.$route.query.uid;
     let identity = this.$route.query.i;
@@ -147,6 +175,9 @@ export default {
 
   },
   methods: {
+    back(){
+      this.$router.go(-1)
+    },
     getVisitorUserInfo(userId,identity,companyId) {
 
       let params = {
@@ -530,204 +561,38 @@ export default {
   padding-left: 12px;
 }
 
-.xll-ads-container {
-  /*padding: 0 50px;*/
-  margin-bottom: 50px;
-}
-
-
-.xll-job-detail{
-  height: calc(100vh - 140px);
+.business-profile{
   background-color: #F0F2F5;
+  height: calc(100vh - 140px);
 }
 
-.job-detail-bg-container{
-  height: calc(100vh - 170px);
-  padding: 30px 30px 0 30px;
-}
-
-@media screen and (min-width: 1920px) {
-  /*  190 */
-  .job-detail-container{
-    height: calc(100vh - 190px -  220px);
-  }
-
-  .job-detail-c{
-    height: calc(100vh - 190px - 340px );
-  }
-
-}
-
-@media screen and (max-width: 1919px) and (min-width: 1200px) {
-  /*  140 */
-  .job-detail-container{
-    height: calc(100vh - 140px -  220px);
-  }
-
-  .job-detail-c{
-    height: calc(100vh - 140px - 340px );
+@media screen and (min-width: 769px) {
+  .business-profile-mobile-back{
+    display: none;
   }
 }
-
-@media screen and (max-width: 1199px) and (min-width: 992px) {
-  /*  120 */
-  .job-detail-container{
-    height: calc(100vh - 120px -  220px);
-  }
-
-  .job-detail-c{
-    height: calc(100vh - 120px - 340px );
-  }
-}
-
-
-.job-detail-t{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  height: 120px;
-}
-
-.job-detail-t-l{
-  width: 50%;
-}
-
-.job-detail-t-l-1{
-  cursor: pointer;
-  font-family:BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color:#6650B3;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.job-detail-t-l-2{
-  font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 35px;
-  color:#262626;
-  width: 80%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.job-detail-t-l-3{
-  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 23px;
-  color:#262626;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-
-
-
-.job-detail-c-1{
-
-}
-
-.job-detail-c-item{
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: flex-start;
-  margin-bottom: 10px;
-}
-.job-detail-c-item-l{
-  /*width: 210px;*/
-  font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 23px;
-  color:#262626;
-}
-.job-detail-c-item-r{
-  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 23px;
-  color:#262626;
-  margin-left: 10px;
-}
-
-.job-detail-c-2{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-top: 50px;
-}
-
-.job-detail-c-2-l{
-  width: 100%;
-}
-.job-detail-c-2-r{
-  width:100%;
-  margin-top: 50px;
-}
-
-.job-detail-c-item-label{
-  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 26px;
-  color:#262626;
-}
-.job-detail-c-item-c{
-  margin-top: 25px;
-}
-.job-detail-desc{
-  margin-top: 50px;
-}
-
-.job-detail-desc-label{
-  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 26px;
-  color:#262626;
-}
-
-.job-detail-desc-content{
-  margin-top: 25px;
-  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color:#262626;
-}
-
-.map-container{
-  margin-top: 25px;
-  margin-bottom: 50px;
-}
-
-#mapContainer{
-  height: 300px;
-}
-
-.working-hours{
-  width: 100%;
-}
-
-.working-hours-item{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-
-  margin-bottom: 10px;
-  position: relative;
-}
-.working-hours-week{
-  margin-left: 10px;
-}
-.working-hours-hours{
-  margin-left: 20px;
-}
-
 
 @media screen and (max-width: 768px ) {
 
+  .jobs-filter-col{
+    display: none;
+  }
+
+  .jobs-list-col{
+    display: none;
+  }
+
+  .job-detail-col{
+    padding-left: 0;
+  }
+
+  .business-profile{
+    background-color: #FFFFFF;
+    height: calc( var(--i-window-height) - 110px);
+  }
+
+
 }
 
-@media screen  and (min-width: 1200px) {
 
-}
 </style>

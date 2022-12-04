@@ -10,7 +10,7 @@
 
       <el-row :gutter="0" align="top" justify="space-between">
 
-        <el-col :xs="22" :sm="22" :md="8" :lg="9" :xl="8">
+        <el-col :xs="0" :sm="0" :md="8" :lg="9" :xl="8">
 
           <div class="business-deals">
             <dealByListComponent
@@ -24,7 +24,7 @@
 
         </el-col>
 
-        <el-col  :xs="22" :sm="22" :md="16" :lg="15" :xl="16">
+        <el-col  :xs="24" :sm="24" :md="16" :lg="15" :xl="16">
 
           <div class="business-profile">
             <businessProfile :canEdit="true" :fromDeal="false" :info="companyInfo" :identity="identity"></businessProfile>
@@ -51,6 +51,7 @@ import {
   OTHER_PERCENTAGE_V2, SCHOOL_PERCENTAGE_V2, ADD_FAVORITE, CANCEL_FAVORITE, MY_DEALS
 } from '@/api/api'
 import {decode} from 'js-base64'
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "profile",
@@ -78,7 +79,25 @@ export default {
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
     let s = this.$route.query.str;
     if(s){
       console.log(decode(s))
@@ -380,6 +399,16 @@ export default {
 
 
 @media screen and (max-width: 768px){
+  .business-profile{
+    margin-left: 0;
+  }
+   .business-profile-r{
+     width: 100%;
+     height: calc( var(--i-window-height) - 160px);
+     padding: 0;
+   }
+
+
 
 }
 

@@ -2,12 +2,12 @@
   <div class="login-bg">
 
     <el-row justify="center" align="top" class="login-container">
-      <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
+      <el-col :xs="2" :sm="4" :md="4" :lg="4" :xl="4">
         <div class="login-l" @click="turnHome()">
           <el-image class="login-l-logo" :src="logoImgLight"></el-image>
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+      <el-col class="login-m-col" :xs="20" :sm="16" :md="16" :lg="16" :xl="16">
 
         <div class="login-m">
           <h1>Sign up</h1>
@@ -288,16 +288,16 @@
         </div>
 
       </el-col>
-      <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
+      <el-col :xs="2" :sm="4" :md="4" :lg="4" :xl="4">
 
         <div class="login-r">
 
           <div class="login-close">
-            <el-button class="login-close-btn"  link @click="goHome()" >CLOSE</el-button>
+            <el-button type="primary"  link @click="goHome()" >CLOSE</el-button>
           </div>
 
           <div class="sign-up">
-            <el-button class="sign-up-btn" plain round @click="turnToLogin()">LOG IN</el-button>
+            <el-button  plain round @click="turnToLogin()">LOG IN</el-button>
           </div>
 
         </div>
@@ -1406,6 +1406,77 @@ export default {
 }
 
 @media screen and (max-width: 768px){
+  .login-bg{
+    padding-bottom: 0;
+  }
+
+  .login-container {
+    padding-top: 0;
+  }
+
+  .login-m-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .login-l {
+    padding-left: 15px;
+    padding-top: 15px;
+  }
+
+  .login-m {
+    width: 100%;
+  }
+
+  .login-m h1 {
+    font-size: 20px;
+  }
+
+  .login-r {
+    padding-top: 15px;
+    padding-right: 15px;
+  }
+
+  .login-l-logo{
+    width: 30px;
+  }
+
+  .register-step-tips{
+    font-size: 12px;
+  }
+
+  .send-code-btn{
+    font-size: 12px;
+  }
+
+  .xll-change-phone{
+    font-size: 12px;
+  }
+
+  .identity-label{
+    font-size: 18px;
+  }
+
+  .identity-label span{
+    font-size: 14px;
+  }
+  .identity-tab{
+    font-size: 12px;
+  }
+  .identity-tips{
+    font-size: 12px;
+  }
+
+  .complete-btn{
+    font-size: 12px;
+  }
+
+  .complete-back-btn{
+    font-size: 12px;
+  }
+
 
 }
 </style>

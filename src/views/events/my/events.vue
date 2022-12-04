@@ -14,19 +14,7 @@
                 <el-button class="post-event-btn" type="primary" round @click="turnPostEvent()">
                   POST AN EVENT
                 </el-button>
-<!--                <el-select v-model="categoryId"-->
-<!--                           clearable-->
-<!--                           @change="getMyEvents(eventPage,eventLimit)"-->
-<!--                           style="margin-left: 20px;"-->
-<!--                           placeholder="Select"-->
-<!--                >-->
-<!--                  <el-option-->
-<!--                      v-for="item in categoryOptions"-->
-<!--                      :key="item.id"-->
-<!--                      :label="item.name_en"-->
-<!--                      :value="item.id"-->
-<!--                  />-->
-<!--                </el-select>-->
+
               </div>
             </div>
 
@@ -140,6 +128,7 @@ import BookEventList from "@/components/bookEventList";
 import meSideMenu from "@/components/meSideMenu";
 import {EVENTS_MY_EVENT, EVENTS_CATEGORY, EVENT_APPLICATIONS, EVENTS_ADD_EVENT} from '@/api/api';
 import {encode} from 'js-base64'
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "events",
@@ -169,7 +158,25 @@ export default {
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
     this.getEventCategories()
     this.getMyEvents(this.eventPage, this.eventLimit)
   },
@@ -453,8 +460,6 @@ export default {
   background-color: #FF2870;
 }
 
-
-
 .events-pagination{
   padding:40px;
   display:flex;
@@ -467,7 +472,50 @@ export default {
 }
 
 @media screen and (max-width: 768px){
+.profile-r-container{
+  width: 100%;
+  height: calc( var(--i-window-height) - 160px);
+  padding: 0;
+}
 
+  .profile-r-bg-container{
+    background-color: #F0F2F5;
+    box-shadow: none;
+    border-radius: 0;
+    height: calc( var(--i-window-height) - 160px);
+  }
+
+  .deals-list-container{
+    padding: 15px;
+  }
+  .deals-list-label{
+    font-size: 18px;
+  }
+
+  .events-item-bg{
+    width: 100%;
+    padding: 0;
+  }
+
+  .events-item{
+    width: 100%;
+    margin: 15px 0;
+  }
+  .events-item-b{
+    padding: 15px;
+  }
+  .events-item-item span{
+    font-size: 12px;
+  }
+
+  .events-item-name{
+    font-size: 18px;
+    margin-top: 15px;
+  }
+
+  .events-item-desc{
+    font-size: 14px;
+  }
 }
 
 

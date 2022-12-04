@@ -69,17 +69,17 @@
               <div class="da-item-container">
 
                 <el-row :gutter="0" v-if="filterByJobStatus">
-                  <el-col :span="6" class="da-item-t-item">Job title</el-col>
-                  <el-col :span="6" class="da-item-t-item">Total applicants</el-col>
-                  <el-col :span="6" class="da-item-t-item">Posted/Deadline</el-col>
-                  <el-col :span="6" class="da-item-t-item">Action</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Job title</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Total applicants</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Posted/Deadline</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Action</el-col>
                 </el-row>
 
                 <el-row :gutter="0" v-if="filterByApplicantStatus">
-                  <el-col :span="6" class="da-item-t-item">Applicant</el-col>
-                  <el-col :span="6" class="da-item-t-item">Position applied for</el-col>
-                  <el-col :span="6" class="da-item-t-item">Status</el-col>
-                  <el-col :span="6" class="da-item-t-item">Action</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Applicant</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Position applied for</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Status</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Action</el-col>
                 </el-row>
 
                 <template v-if="filterByJobStatus">
@@ -88,7 +88,7 @@
 
                       <el-row :gutter="0" class="da-da-item">
 
-                        <el-col :span="6" class="da-job-title">
+                        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-job-title">
 
                           <div class="da-job-title-l">
                             <el-popover
@@ -134,16 +134,16 @@
                           </div>
                         </el-col>
 
-                        <el-col :span="6" class="da-total-applicants">
+                        <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" class="da-total-applicants">
                           <div class="da-total-applicants-l-circle" v-if="item.unread_status"></div>
                           <span>{{ item.resume_count }}</span>
                         </el-col>
 
-                        <el-col :span="6" class="da-posted-deadline">
+                        <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" class="da-posted-deadline">
                           {{ $filters.howLongFormat(item.refresh_time) }} /
                           {{ $filters.ymdFormatEvent(item.job_due_time) }}
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-action-btn-container" >
                           <el-button class="da-action-btn"
                                      @click="viewAllApplicants(item.id,item.unread_id,item.unread_status)"
                                      plain round>
@@ -160,7 +160,7 @@
 
                         <template v-for="(item,i) in sApplicantsData" :key="i">
 
-                          <el-row :gutter="50" class="da-item">
+                          <el-row :gutter="50" class="da-item-jobs">
                             <el-col :span="18">
                               <div class="da-item-basic">
                                 <div class="da-item-basic-l">
@@ -341,7 +341,7 @@
                     <div v-for="(item,i) in myApplicationsData" :key="i">
                       <el-row class="da-item">
 
-                        <el-col :span="6">
+                        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" >
                           <div class="da-item-basic">
                             <div class="da-item-basic-l-a">
                               <el-avatar class="da-item-avatar-img"
@@ -363,10 +363,11 @@
 
                           </div>
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-item-a-job-title-col" >
                           <span class="da-item-a-job-title">{{ item.job.job_title }}</span>
                         </el-col>
-                        <el-col :span="6">
+
+                        <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" >
 
                           <template v-if="identity == 1">
                             <el-tag type="info" round  effect="plain"
@@ -413,10 +414,10 @@
 
                           </template>
 
-
                           <!--                          {{item.match_meter}}-->
                         </el-col>
-                        <el-col :span="6">
+
+                        <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" >
                           <div class="dashboard-view-application">
 
                             <template v-if="identity == 1">
@@ -624,7 +625,8 @@ import {randomString} from "@/utils";
 import {encode} from 'js-base64';
 import jobApplyStatusPopup from "@/components/status/jobApplyStatusPopup";
 import chatButton from "@/components/chat/chatButton";
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "home",
@@ -716,7 +718,25 @@ export default {
 
 
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
     // let uid = localStorage.getItem('uid')
     let currentIdentity = this.identity
 
@@ -1066,226 +1086,6 @@ export default {
   color: #FFFFFF;
 }
 
-
-.xll-ads-container {
-  padding: 20px 20px 0 20px;
-}
-
-.xll-ads-container-margin {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.xll-ads-swiper-item {
-  cursor: pointer;
-  border-radius: 10px;
-  height: 100%;
-  background-color: #FFFFFF;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.xll-ads-l {
-  width: 60%;
-  height: 100%;
-}
-
-.xll-ads-l-img {
-
-  height: 100%;
-  border-radius: 10px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-}
-
-.xll-ads-r {
-  width: 36%;
-}
-
-.xll-ads-r {
-  padding-right: 4%;
-}
-
-.xll-ads-r h4 {
-  color: #004956;
-}
-
-.xll-ads-r h5 {
-  margin-top: 20px;
-}
-
-.xll-ads-r-desc {
-  font-size: 14px;
-  margin-top: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-}
-
-
-.admin-container {
-  padding: 20px;
-
-}
-
-.admin-container h3 {
-
-}
-
-.admin-content-container {
-  background-color: #ffffff;
-  padding: 20px 0;
-  margin-top: 20px;
-  border-radius: 20px;
-  position: relative;
-}
-
-.admin-content-container h4 {
-  margin-left: 20px;
-}
-
-.admin-content-underline {
-  width: 60px;
-  height: 4px;
-  background-color: #DD4A68;
-  margin-left: 20px;
-}
-
-.admin-list-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  padding: 20px 0;
-}
-
-.admin-item-container {
-  margin-left: 20px;
-  margin-top: 20px;
-  cursor: pointer;
-}
-
-.admin-item-img-container {
-  width: 80px;
-  height: 80px;
-  border: 4px solid #004956;
-  border-radius: 80px;
-  overflow: hidden;
-}
-
-.admin-item-img {
-  width: 100%;
-}
-
-.admin-item-name {
-  text-align: center;
-  font-weight: bold;
-  line-height: 24px;
-}
-
-.admin-item-role {
-  color: #00b3d2;
-  line-height: 24px;
-  text-align: center;
-}
-
-.add-admin {
-  position: absolute;
-  right: 40px;
-  top: 20px;
-
-}
-
-.switch-account-tips {
-  font-size: 16px;
-  text-align: center;
-}
-
-.switch-account-container {
-  padding: 10px;
-}
-
-.switch-account-item {
-  font-size: 14px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-  text-align: center;
-}
-
-.switch-account-item:hover {
-  background-color: #0AA0A8;
-  color: #FFFFFF;
-}
-
-
-.dashboard-1-container {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-
-}
-
-.dashboard-1 {
-  background-color: #FFFFFF;
-  padding: 20px;
-  box-shadow: 0px 3px 23px 1px rgba(0, 0, 0, 0.07);
-  border-radius: 18px;
-  margin-right: 20px;
-  margin-top: 20px;
-}
-
-
-.dashboard-1-bg-1 {
-  box-shadow: 0px 3px 23px 1px rgba(102, 80, 179, 0.29);
-  background: #E7DEFF;
-}
-
-.dashboard-1-label {
-  font-size: 30px;
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 600;
-  color: #262626;
-
-}
-
-.dashboard-1-actions {
-  margin-top: 20px;
-}
-
-.dashboard-1-action-btn {
-  font-size: 20px;
-
-}
-
-.dashboard-1-number {
-  font-weight: bold;
-  font-size: 60px;
-  font-family: BCBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #6650B3;
-
-}
-
-.dashboard-1-tips {
-  font-size: 23px;
-  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-
-}
-
-.dashboard-post-a-job-btn {
-  margin-left: 15px;
-}
-
-
 .da {
   background-color: #FFFFFF;
   padding: 20px;
@@ -1446,6 +1246,13 @@ export default {
 .da-da-item-item {
   flex: 1;
   color: #262626;
+}
+.da-item-jobs{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
 }
 
 .da-item {
@@ -1651,6 +1458,198 @@ export default {
   justify-content: center;
   padding-top: 20px;
   border-top: 1px solid #eeeeee;
+}
+
+@media screen and (max-width: 768px){
+  .ja-r-container{
+    width: 100%;
+    height: calc( var(--i-window-height) - 160px);
+
+  }
+
+  .ja-r-container-bg{
+    padding: 0;
+
+  }
+
+  .da{
+    background-color: #F0F2F5;
+    padding: 0;
+    margin-top: 0;
+    border-radius: 0;
+  }
+
+  .da-t{
+    padding: 15px;
+    height: 30px;
+  }
+
+  .da-label{
+    font-size: 18px;
+
+  }
+  .da-filter{
+    font-size: 12px;
+  }
+
+  .da-item-container{
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .da-item-container-height{
+    height: auto;
+  }
+  .da-da-item{
+    padding: 15px;
+    margin: 15px;
+    background-color: #FFFFFF;
+    border-radius: 18px;
+  }
+
+  .da-job-title-r{
+    font-size: 18px;
+  }
+
+  .da-total-applicants{
+    margin-top: 15px;
+    font-size: 12px;
+  }
+
+  .da-posted-deadline{
+    margin-top: 15px;
+    font-size: 12px;
+  }
+
+  .da-action-btn-container{
+    margin-top: 15px;
+    text-align: right;
+  }
+
+  .da-action-btn{
+    font-size: 12px;
+  }
+
+  .da-item-jobs{
+    padding: 15px;
+    border-bottom:1px solid #F0F2F5;
+    background-color: #FFFFFF;
+  }
+
+  .da-item{
+    padding: 15px;
+    border-bottom:1px solid #F0F2F5;
+    background-color: #FFFFFF;
+    margin: 15px;
+    border-radius: 18px;
+  }
+
+  .da-item-avatar-img{
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+  }
+
+  .da-item-name{
+    font-size: 18px;
+  }
+  .da-item-n{
+    margin-top: 10px;
+  }
+
+  .da-item-n-1{
+    font-size: 12px;
+  }
+
+  .dashboard-view-application{
+
+  }
+  .dashboard-view-application-btn{
+    margin-right: 15px;
+    font-size: 12px;
+  }
+
+  .da-item-expand{
+    padding: 15px;
+  }
+
+  .dashboard-work-exp-label span{
+    font-size: 14px;
+  }
+  .dashboard-view-detail-btn{
+    font-size: 12px;
+  }
+
+  .dashboard-work-exp-c{
+    flex-direction: column;
+
+  }
+  .dashboard-work-exp-c-item{
+    width: 100%;
+    padding-right: 0;
+    flex: auto;
+
+  }
+  .dashboard-work-exp-c-item-label{
+    font-size: 14px;
+  }
+  .dashboard-work-exp-c-item-text{
+    font-size: 12px;
+  }
+
+  .dashboard-education-cer{
+    margin-top: 15px;
+  }
+  .dashboard-education-cer-label{
+    font-size: 14px;
+  }
+
+  .dashboard-education-cer-c{
+    flex-direction: column;
+  }
+
+  .dashboard-education-cer-c-item{
+    padding-right: 0;
+    margin-top: 15px;
+  }
+  .dashboard-education-cer-c-label{
+    font-size: 14px;
+  }
+
+  .dashboard-education-cer-c-text{
+    font-size: 12px;
+  }
+
+  .da-item-b-l-btn-1{
+    font-size: 12px;
+  }
+  .da-item-b-l-btn-2{
+    font-size: 12px;
+  }
+
+
+  .da-item-basic{
+    flex: auto;
+    width: 100%;
+  }
+
+  .da-item-a-job-title{
+    font-size: 18px;
+  }
+
+  .da-item-a-job-title-col{
+    margin: 15px 0;
+  }
+  .dashboard-view-application{
+    display: flex;
+    flex-direction: column;
+
+  }
+  .dashboard-view-application-btn{
+    margin: 0 0 15px 0;
+  }
+
+
 }
 
 </style>

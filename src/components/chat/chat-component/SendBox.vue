@@ -270,4 +270,29 @@ export default {
   height: 50px;
 }
 
+
+@media screen and (max-width: 768px) {
+  .send-box{
+    padding: 15px;
+    height: 30px;
+  }
+
+  .send-box-l{
+    width: 40px;
+  }
+  .send-box-m{
+    width: calc( 100% - 105px);
+  }
+
+  .send-box-r{
+    width: 50px;
+  }
+
+  .send-btn{
+    font-size: 12px;
+  }
+
+
+}
+
 </style>

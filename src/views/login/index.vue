@@ -2,14 +2,15 @@
   <div class="login-bg">
 
     <el-row justify="center" align="top" class="login-container">
-      <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
+      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
         <div class="login-l" @click="turnHome()">
-           <el-image class="login-l-logo" :src="logoImgLight"></el-image>
+          <el-image class="login-l-logo" :src="logoImgLight"></el-image>
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+      <el-col class="login-m-col" :xs="16" :sm="16" :md="16" :lg="16" :xl="16">
 
         <div class="login-m">
+
           <h1>Log in</h1>
 
           <div class="xll-login-form-container">
@@ -22,10 +23,10 @@
                   label-position="top"
                   class="demo-ruleForm"
               >
-                <el-form-item  prop="email">
+                <el-form-item prop="email">
                   <el-input size="large" placeholder="Email Address" v-model="loginForm.email"></el-input>
                 </el-form-item>
-                <el-form-item style="margin-top:25px;"  prop="password">
+                <el-form-item style="margin-top:25px;" prop="password">
                   <el-input size="large" placeholder="Password" type="password"
                             show-password
                             v-model="loginForm.password"></el-input>
@@ -33,10 +34,11 @@
 
                 <div class="remember-forgot-container">
                   <div class="remember-container">
-                    <el-checkbox size="large" v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>
+                    <el-checkbox size="large" v-model="rememberValue" label="Remember Me"
+                                 @change="rememberChange"></el-checkbox>
                   </div>
                   <div class="forgot-password-container">
-                    <el-button link class="forgot-password-btn"  @click="forgotPassword()">
+                    <el-button link class="forgot-password-btn" @click="forgotPassword()">
                       Forgot password?
                     </el-button>
                   </div>
@@ -153,7 +155,7 @@
                           <span class="login-label-text">Password</span>
                         </div>
                         <div class="password-r">
-                          <el-button  link size="large" @click="switchToPhoneBySms()">
+                          <el-button link size="large" @click="switchToPhoneBySms()">
                             Log in via SMS verification code
                           </el-button>
                         </div>
@@ -198,8 +200,8 @@
                          @click="loginWithPhone()"
                          class="login-option-btn" link round>
                 <template #icon>
-                  <el-icon >
-                    <IconBytesizeMobile />
+                  <el-icon>
+                    <IconBytesizeMobile/>
                   </el-icon>
                 </template>
 
@@ -213,41 +215,41 @@
               >
                 <template #icon>
                   <el-icon>
-                    <IconCarbonEmail />
+                    <IconCarbonEmail/>
                   </el-icon>
                 </template>
-                 SIGN IN WITH EMAIL
+                SIGN IN WITH EMAIL
               </el-button>
             </div>
 
-<!--            <div class="sign-in-btn-container">-->
-<!--              <el-button @click="linkedinSignIn()"-->
-<!--                         size="large"-->
-<!--                         class="login-option-btn" link round-->
-<!--                         >-->
-<!--                <template #icon>-->
-<!--                  <el-icon>-->
-<!--                    <IconLogosLinkedinIcon />-->
-<!--                  </el-icon>-->
-<!--                </template>-->
-<!--                 SIGN IN WITH LINKEDIN-->
-<!--              </el-button>-->
-<!--            </div>-->
+            <!--            <div class="sign-in-btn-container">-->
+            <!--              <el-button @click="linkedinSignIn()"-->
+            <!--                         size="large"-->
+            <!--                         class="login-option-btn" link round-->
+            <!--                         >-->
+            <!--                <template #icon>-->
+            <!--                  <el-icon>-->
+            <!--                    <IconLogosLinkedinIcon />-->
+            <!--                  </el-icon>-->
+            <!--                </template>-->
+            <!--                 SIGN IN WITH LINKEDIN-->
+            <!--              </el-button>-->
+            <!--            </div>-->
 
-<!--            <div class="sign-in-btn-container">-->
-<!--              <el-button @click="googleSignIn()"-->
-<!--                         size="large"-->
-<!--                         class="login-option-btn"-->
-<!--                         link round-->
-<!--                        >-->
-<!--                <template #icon>-->
-<!--                  <el-icon>-->
-<!--                    <IconLogosGoogleIcon></IconLogosGoogleIcon>-->
-<!--                  </el-icon>-->
-<!--                </template>-->
-<!--                 SIGN IN WITH GOOGLE-->
-<!--              </el-button>-->
-<!--            </div>-->
+            <!--            <div class="sign-in-btn-container">-->
+            <!--              <el-button @click="googleSignIn()"-->
+            <!--                         size="large"-->
+            <!--                         class="login-option-btn"-->
+            <!--                         link round-->
+            <!--                        >-->
+            <!--                <template #icon>-->
+            <!--                  <el-icon>-->
+            <!--                    <IconLogosGoogleIcon></IconLogosGoogleIcon>-->
+            <!--                  </el-icon>-->
+            <!--                </template>-->
+            <!--                 SIGN IN WITH GOOGLE-->
+            <!--              </el-button>-->
+            <!--            </div>-->
 
           </div>
 
@@ -255,23 +257,24 @@
         </div>
 
       </el-col>
-      <el-col :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
+      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
         <div class="login-r">
 
           <div class="login-close">
-            <el-button class="login-close-btn"
-                       link
-                       @click="goHome()"
+            <el-button
+                type="primary"
+                link
+                @click="goHome()"
             >
               CLOSE
             </el-button>
           </div>
 
           <div class="sign-up">
-            <el-button class="sign-up-btn"
-                       plain
-                       round
-                       @click="signUp()"
+            <el-button
+                plain
+                round
+                @click="signUp()"
             >
               SIGN UP
             </el-button>
@@ -284,7 +287,7 @@
 
     <ForgotPassword :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
 
-    <el-dialog v-model="loginErrorDialogVisible" width="550px">
+    <el-dialog v-model="loginErrorDialogVisible" :width="loginErrorDialogWidthValue">
       <div class="login-error-container">
         <h4>
           Welcome Back!
@@ -310,7 +313,7 @@
 <script>
 
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
-import logoImgLight from  "@/assets/newHome/logo/Logo_Transparent.png"
+import logoImgLight from "@/assets/newHome/logo/Logo_Transparent.png"
 import imgLogo from '@/assets/logo.png'
 //WEIXIN_SEND_SMS
 import {
@@ -318,7 +321,12 @@ import {
   SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
   ZOHO_SYNC,
-  LOGIN_EMAIL_PWD_V2, PHONE_REGISTER_V2, LOGIN_PHONE_SMS_V2, LOGIN_PHONE_PWD_V2, USER_MENU_LIST, SEND_USER_PRIVATE_PASSWORD
+  LOGIN_EMAIL_PWD_V2,
+  PHONE_REGISTER_V2,
+  LOGIN_PHONE_SMS_V2,
+  LOGIN_PHONE_PWD_V2,
+  USER_MENU_LIST,
+  SEND_USER_PRIVATE_PASSWORD
 } from "@/api/api";
 //LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
@@ -334,12 +342,13 @@ export default {
   name: "index",
   data() {
     return {
-      loginErrorDialogVisible:false,
+      loginErrorDialogWidthValue:'50%',
+      loginErrorDialogVisible: false,
       imgLogo,
       logoImgLight,
-      identityBusinessCheckedStatus:false,
-      identityBusinessStrBefore:"",
-      identityBusinessStr:'Education-Business',
+      identityBusinessCheckedStatus: false,
+      identityBusinessStrBefore: "",
+      identityBusinessStr: 'Education-Business',
       loginPhoneStatus: false,
       loginEmailStatus: true,
 
@@ -446,7 +455,7 @@ export default {
       identityValue: 0,
       sendCodeLoading: false,
       showValue: 'login',
-      businessDialogStatus:false
+      businessDialogStatus: false
 
     }
   },
@@ -531,14 +540,31 @@ export default {
     }
 
   },
-  beforeRouteUpdate(to){
+  beforeRouteUpdate(to) {
     // console.log(to)
-    if(to.query.email){
+    if (to.query.email) {
       this.loginForm.email = to.query.email
     }
 
   },
+  unmounted() {
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      this.loginErrorDialogWidthValue = '90%'
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        this.loginErrorDialogWidthValue = '90%'
+      }
+    }
+
 
     let email = this.$route.query.email
     if (email) {
@@ -547,16 +573,16 @@ export default {
 
     let isAccountCookieExist = this.$cookies.isKey('account')
     console.log(isAccountCookieExist)
-    if(isAccountCookieExist){
+    if (isAccountCookieExist) {
       let accountCookie = this.$cookies.get('account')
       this.rememberValue = true;
 
-      if(accountCookie.type === 1){
+      if (accountCookie.type === 1) {
         this.loginForm.email = accountCookie.email
         this.loginForm.password = accountCookie.password
       }
 
-      if(accountCookie.type === 2){
+      if (accountCookie.type === 2) {
         this.loginPhonePassForm.phone = accountCookie.phone
         this.loginPhonePassForm.password = accountCookie.password
       }
@@ -567,7 +593,7 @@ export default {
     this.showValue = this.showType
   },
   methods: {
-    imUnread(user){
+    imUnread(user) {
       let self = this;
       if (this.goEasy.getConnectionStatus() === 'disconnected') {
         this.service.connect(user);
@@ -577,7 +603,7 @@ export default {
         onSuccess: function (res) {
           console.log('监听会话列表----- me side menu page')
           let content = res.content;
-          self.$store.commit('setImUnreadTotal',content.unreadTotal)
+          self.$store.commit('setImUnreadTotal', content.unreadTotal)
         },
         onFailed: function (error) {
           console.log("失败获取最新会话列表, code:" + error.code + " content:" + error.content);
@@ -587,31 +613,31 @@ export default {
       //监听会话列表变化
       this.goEasy.im.on(this.GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, (conversations) => {
         console.log('监听会话列表变化 ----- me side menu page')
-        self.$store.commit('setImUnreadTotal',conversations.unreadTotal)
+        self.$store.commit('setImUnreadTotal', conversations.unreadTotal)
       });
     },
-    loginErrorOk(){
+    loginErrorOk() {
       this.loginErrorDialogVisible = false
     },
-    loginErrorHelp(){
+    loginErrorHelp() {
       window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
 
     },
-    sendPrivatePassword(email){
+    sendPrivatePassword(email) {
 
       let params = {
-        email:email
+        email: email
       }
-      SEND_USER_PRIVATE_PASSWORD(params).then(res=>{
+      SEND_USER_PRIVATE_PASSWORD(params).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    turnHome(){
+    turnHome() {
       this.$router.push('/')
     },
-    changeType(e){
+    changeType(e) {
       e.target.type = 'password'
     },
     getCheckCode() {
@@ -627,10 +653,10 @@ export default {
           this.$message.success('Success')
         }
       }).catch(err => {
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -649,16 +675,16 @@ export default {
           this.$message.success('Success')
         }
       }).catch(err => {
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
 
     },
-    signUp(){
+    signUp() {
       this.$router.push('/signup')
     },
     goHome() {
@@ -716,38 +742,38 @@ export default {
           }
         }).catch(err => {
           console.log(err)
-          if(err.msg){
+          if (err.msg) {
             this.$message.error(err.msg)
           }
-          if(err.message){
+          if (err.message) {
             this.$message.error(err.message)
           }
         })
       }
 
     },
-    selectEducationBusiness(){
+    selectEducationBusiness() {
       this.businessDialogStatus = true
       this.identityBusinessCheckedStatus = false
       this.identityValue = 0
     },
-    submitIdentityBusiness(){
-      if(this.identityValue == 0 ){
+    submitIdentityBusiness() {
+      if (this.identityValue == 0) {
         return;
       }
       this.businessDialogStatus = false;
     },
-    selectedIdentityBusiness(identity,identityName){
+    selectedIdentityBusiness(identity, identityName) {
       this.businessDialogStatus = true;
 
-      if(identity && identityName){
+      if (identity && identityName) {
         this.identityBusinessCheckedStatus = true
         this.identityValue = identity
         this.identityBusinessStr = identityName
       }
 
     },
-    closeBusinessDialog(){
+    closeBusinessDialog() {
       this.businessDialogStatus = false
       this.identityBusinessCheckedStatus = false
       this.identityValue = 0
@@ -761,34 +787,34 @@ export default {
 
       this.identityValue = value
     },
-    rememberMeAction(data,type){
+    rememberMeAction(data, type) {
       // 1 email login 2 login by phone and password
       let isExists = this.$cookies.isKey('account')
-      if(isExists){
+      if (isExists) {
         this.$cookies.remove('account')
       }
 
-      if(this.rememberValue){
+      if (this.rememberValue) {
 
         let obj = {}
-        if(type === 1){
+        if (type === 1) {
           obj = {
-            type:1,
-            email:data.email,
-            password:data.password
+            type: 1,
+            email: data.email,
+            password: data.password
           }
 
         }
 
-        if(type === 2){
+        if (type === 2) {
           obj = {
-            type:2,
-            phone:data.phone,
-            password:data.password
+            type: 2,
+            phone: data.phone,
+            password: data.password
           }
         }
 
-        this.$cookies.set('account',obj, 60 * 60 * 24 * 30)
+        this.$cookies.set('account', obj, 60 * 60 * 24 * 30)
 
       }
 
@@ -804,7 +830,7 @@ export default {
             LOGIN_EMAIL_PWD_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
-                this.rememberMeAction(params,1)
+                this.rememberMeAction(params, 1)
 
                 let resMessage = res.message;
                 // console.log(resMessage.company_id)
@@ -816,9 +842,9 @@ export default {
                 localStorage.setItem('company_id', resMessage.company_id)
                 this.$store.commit('currentCompanyId', resMessage.company_id)
 
-                if(resMessage.third_company_id){
+                if (resMessage.third_company_id) {
                   localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
-                  this.$store.commit('thirdCompanyId',resMessage.third_company_id)
+                  this.$store.commit('thirdCompanyId', resMessage.third_company_id)
                 }
 
                 let identity = resMessage.identity;
@@ -831,7 +857,7 @@ export default {
                 localStorage.setItem('first_name', firstName)
                 localStorage.setItem('last_name', lastName)
 
-                this.$store.commit('identity',resMessage.identity)
+                this.$store.commit('identity', resMessage.identity)
 
                 let currentUser = {
                   uuid: resMessage.id,
@@ -845,7 +871,7 @@ export default {
                 this.setCurrentUser(currentUser)
                 this.imUnread(currentUser)
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
-                this.getUserMenuList(resMessage.id,identity, resMessage.company_id, resMessage.id)
+                this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
 
                 setTimeout(function () {
                   self.skipHomePage()
@@ -856,28 +882,28 @@ export default {
             }).catch(err => {
               console.log(err)
 
-              if(err.message.status == 10001){
+              if (err.message.status == 10001) {
 
                 this.$msgbox({
-                  title:"Seems you dont have an account",
-                  message:"would you like to sign up?",
-                  dangerouslyUseHTMLString:false,
-                  type:"warning",
-                  center:true,
-                  showCancelButton:true,
-                  cancelButtonText:"No,thank you",
-                  confirmButtonText:"Sign Up",
-                  "round-button":true,
-                  callback(action){
+                  title: "Seems you dont have an account",
+                  message: "would you like to sign up?",
+                  dangerouslyUseHTMLString: false,
+                  type: "warning",
+                  center: true,
+                  showCancelButton: true,
+                  cancelButtonText: "No,thank you",
+                  confirmButtonText: "Sign Up",
+                  "round-button": true,
+                  callback(action) {
                     console.log(action)
-                    if(action==='confirm'){
+                    if (action === 'confirm') {
                       self.$router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
-              }else{
+              } else {
                 // this.$message.error(err.msg)
                 // this.sendPrivatePassword(params.email)
                 this.loginErrorDialogVisible = true;
@@ -919,14 +945,14 @@ export default {
                 localStorage.setItem('company_id', resMessage.company_id)
                 this.$store.commit('currentCompanyId', resMessage.company_id)
 
-                if(resMessage.third_company_id){
+                if (resMessage.third_company_id) {
                   localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
-                  this.$store.commit('thirdCompanyId',resMessage.third_company_id)
+                  this.$store.commit('thirdCompanyId', resMessage.third_company_id)
                 }
 
                 let identity = resMessage.identity
 
-                let firstName =  resMessage.first_name
+                let firstName = resMessage.first_name
                 let lastName = resMessage.last_name
                 let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
                 let companyId = resMessage.company_id
@@ -935,7 +961,7 @@ export default {
                 localStorage.setItem('first_name', firstName)
                 localStorage.setItem('last_name', lastName)
 
-                this.$store.commit('identity',resMessage.identity)
+                this.$store.commit('identity', resMessage.identity)
 
                 let currentUser = {
                   uuid: resMessage.id,
@@ -948,7 +974,7 @@ export default {
 
                 this.setCurrentUser(currentUser)
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
-                this.getUserMenuList(resMessage.id,identity, resMessage.company_id, resMessage.id)
+                this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
 
                 setTimeout(function () {
                   self.skipHomePage()
@@ -957,28 +983,28 @@ export default {
               }
             }).catch(err => {
               console.log(err)
-              if(err.message.status == 10001){
+              if (err.message.status == 10001) {
 
                 this.$msgbox({
-                  title:"Seems you dont have an account",
-                  message:"would you like to sign up?",
-                  dangerouslyUseHTMLString:false,
-                  type:"warning",
-                  center:true,
-                  showCancelButton:true,
-                  cancelButtonText:"No,thank you",
-                  confirmButtonText:"Sign Up",
-                  "round-button":true,
-                  callback(action){
+                  title: "Seems you dont have an account",
+                  message: "would you like to sign up?",
+                  dangerouslyUseHTMLString: false,
+                  type: "warning",
+                  center: true,
+                  showCancelButton: true,
+                  cancelButtonText: "No,thank you",
+                  confirmButtonText: "Sign Up",
+                  "round-button": true,
+                  callback(action) {
                     console.log(action)
-                    if(action==='confirm'){
+                    if (action === 'confirm') {
                       self.$router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
-              }else{
+              } else {
                 this.loginErrorDialogVisible = true;
                 // this.$message.error(err.msg)
               }
@@ -1005,7 +1031,7 @@ export default {
               console.log(res)
               if (res.code == 200) {
 
-                this.rememberMeAction(params,2)
+                this.rememberMeAction(params, 2)
 
                 let resMessage = res.message
 
@@ -1017,9 +1043,9 @@ export default {
                 localStorage.setItem('company_id', resMessage.company_id)
                 this.$store.commit('currentCompanyId', resMessage.company_id)
 
-                if(resMessage.third_company_id){
+                if (resMessage.third_company_id) {
                   localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
-                  this.$store.commit('thirdCompanyId',resMessage.third_company_id)
+                  this.$store.commit('thirdCompanyId', resMessage.third_company_id)
                 }
 
                 let identity = resMessage.identity
@@ -1032,7 +1058,7 @@ export default {
                 localStorage.setItem('first_name', firstName)
                 localStorage.setItem('last_name', lastName)
 
-                this.$store.commit('identity',resMessage.identity)
+                this.$store.commit('identity', resMessage.identity)
 
                 let currentUser = {
                   uuid: resMessage.id,
@@ -1045,7 +1071,7 @@ export default {
 
                 this.setCurrentUser(currentUser)
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
-                this.getUserMenuList(resMessage.id,identity, resMessage.company_id, resMessage.id)
+                this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
 
                 setTimeout(function () {
                   self.skipHomePage()
@@ -1054,28 +1080,28 @@ export default {
               }
             }).catch(err => {
               console.log(err)
-              if(err.message.status == 10001){
+              if (err.message.status == 10001) {
 
                 this.$msgbox({
-                  title:"Seems you dont have an account",
-                  message:"would you like to sign up?",
-                  dangerouslyUseHTMLString:false,
-                  type:"warning",
-                  center:true,
-                  showCancelButton:true,
-                  cancelButtonText:"No,thank you",
-                  confirmButtonText:"Sign Up",
-                  "round-button":true,
-                  callback(action){
+                  title: "Seems you dont have an account",
+                  message: "would you like to sign up?",
+                  dangerouslyUseHTMLString: false,
+                  type: "warning",
+                  center: true,
+                  showCancelButton: true,
+                  cancelButtonText: "No,thank you",
+                  confirmButtonText: "Sign Up",
+                  "round-button": true,
+                  callback(action) {
                     console.log(action)
-                    if(action==='confirm'){
+                    if (action === 'confirm') {
                       self.$router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
-              }else{
+              } else {
                 this.loginErrorDialogVisible = true;
                 // this.$message.error(err.msg)
               }
@@ -1091,82 +1117,105 @@ export default {
 
       }
     },
-    getUserMenuList(uid,identity,companyId,cId){
+    getUserMenuList(uid, identity, companyId, cId) {
 
       let params = {
-        user_id:uid,
-        identity:identity,
-        company_id:companyId,
-        create_user_id:cId,
-        page:1,
-        limit:1000
+        user_id: uid,
+        identity: identity,
+        company_id: companyId,
+        create_user_id: cId,
+        page: 1,
+        limit: 1000
       }
 
-      USER_MENU_LIST(params).then(res=>{
+      USER_MENU_LIST(params).then(res => {
         // console.log(res)
-        if(res.code === 200){
+        if (res.code === 200) {
           let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData',str)
+          localStorage.setItem('menuData', str)
           this.$store.commit('menuData', res.message)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
-    async submitEducatorContactForm(userId){
+    async submitEducatorContactForm(userId) {
 
       let params = Object.assign({}, this.registerForm)
 
       let zohoData = [
-        {'zf_referrer_name':''},
-        {'zf_redirect_url':''},
-        {'zc_gad':''},
-        {'SingleLine':userId //UserID
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {
+          'SingleLine': userId //UserID
         },
-        {'SingleLine1':params.first_name // First Name
+        {
+          'SingleLine1': params.first_name // First Name
         },
-        {'SingleLine2':params.last_name //  Last Name
+        {
+          'SingleLine2': params.last_name //  Last Name
         },
-        {'Dropdown':'' //  Gender
+        {
+          'Dropdown': '' //  Gender
         },
-        {'Date':'' //   Date of Birth dd-MMM-yyyy
+        {
+          'Date': '' //   Date of Birth dd-MMM-yyyy
         },
-        {'SingleLine3':'' //   Title
+        {
+          'SingleLine3': '' //   Title
         },
-        {'Email':params.email //   Email
+        {
+          'Email': params.email //   Email
         },
-        {'PhoneNumber_countrycode':'' //   Phone
+        {
+          'PhoneNumber_countrycode': '' //   Phone
         },
-        {'SingleLine4':'' //   Nationality
+        {
+          'SingleLine4': '' //   Nationality
         },
-        {'Dropdown1':'' //   Membership Type
+        {
+          'Dropdown1': '' //   Membership Type
         },
-        {'MultiLine':'' //   Languages Spoken
+        {
+          'MultiLine': '' //   Languages Spoken
         },
-        {'Number':'' //   Membership Duration
+        {
+          'Number': '' //   Membership Duration
         },
-        {'SingleLine5':'' //   City
+        {
+          'SingleLine5': '' //   City
         },
-        {'SingleLine6':'' //   Province
+        {
+          'SingleLine6': '' //   Province
         },
-        {'SingleLine7':'' //   Country
+        {
+          'SingleLine7': '' //   Country
         },
-        {'Dropdown2':'' //   Educator Type
+        {
+          'Dropdown2': '' //   Educator Type
         },
-        {'MultiLine1':'' //   Education
+        {
+          'MultiLine1': '' //   Education
         },
-        {'MultiLine2':'' //    Work History
+        {
+          'MultiLine2': '' //    Work History
         },
-        {'Dropdown3':'' //    Teaching Experience
+        {
+          'Dropdown3': '' //    Teaching Experience
         },
-        {'MultiLine3':'' //   Certifications
+        {
+          'MultiLine3': '' //   Certifications
         },
-        {'MultiLine4':'' //   Educator Intro
+        {
+          'MultiLine4': '' //   Educator Intro
         },
-        {'Website':'' //   Contact image Link
+        {
+          'Website': '' //   Contact image Link
         },
-        {'Website1':'' //   Intro Video Link
+        {
+          'Website1': '' //   Intro Video Link
         }
       ]
 
@@ -1179,52 +1228,67 @@ export default {
         console.log(res)
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
 
     },
-    async submitCompanyContactForm(userId){
+    async submitCompanyContactForm(userId) {
 
       let params = Object.assign({}, this.registerForm)
 
       let zohoData = [
-        {'zf_referrer_name':''},
-        {'zf_redirect_url':''},
-        {'zc_gad':''},
-        {'SingleLine':userId  //UserID
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {
+          'SingleLine': userId  //UserID
         },
-        {'SingleLine1':params.first_name  // First Name
+        {
+          'SingleLine1': params.first_name  // First Name
         },
-        {'SingleLine2':params.last_name  //  Last Name
+        {
+          'SingleLine2': params.last_name  //  Last Name
         },
-        {'Dropdown':'' //  Gender
+        {
+          'Dropdown': '' //  Gender
         },
-        {'Date':''  //   Date of Birth dd-MMM-yyyy params.birthday
+        {
+          'Date': ''  //   Date of Birth dd-MMM-yyyy params.birthday
         },
-        {'SingleLine3':''  //   Title
+        {
+          'SingleLine3': ''  //   Title
         },
-        {'Email':params.email  //   Email
+        {
+          'Email': params.email  //   Email
         },
-        {'PhoneNumber_countrycode':''  //   Phone
+        {
+          'PhoneNumber_countrycode': ''  //   Phone
         },
-        {'SingleLine4':''  //   Nationality
+        {
+          'SingleLine4': ''  //   Nationality
         },
-        {'Dropdown1':''  //   Membership Type
+        {
+          'Dropdown1': ''  //   Membership Type
         },
-        {'Number':''  //   Membership Duration
+        {
+          'Number': ''  //   Membership Duration
         },
-        {'SingleLine5':''  //   City
+        {
+          'SingleLine5': ''  //   City
         },
-        {'SingleLine6':''  //   Province
+        {
+          'SingleLine6': ''  //   Province
         },
-        {'SingleLine7':''  //   Country
+        {
+          'SingleLine7': ''  //   Country
         },
-        {'Website':'' //   Contact image Link
+        {
+          'Website': '' //   Contact image Link
         }
 
       ]
@@ -1262,7 +1326,7 @@ export default {
                 this.submitEducatorContactForm(res.message.id)
               }
               if (self.identityValue == 2 || self.identityValue == 3
-              || self.identityValue == 4 || self.identityValue == 5
+                  || self.identityValue == 4 || self.identityValue == 5
               ) {
                 this.submitCompanyContactForm(res.message.id)
               }
@@ -1270,17 +1334,17 @@ export default {
               self.submitRegisterLoadingStatus = false
 
               this.$msgbox({
-                title:"All Set",
-                message:"Let's get you logged in!",
-                dangerouslyUseHTMLString:false,
-                type:"success",
-                center:true,
-                confirmButtonText:"OK",
-                "round-button":true,
-                callback(action){
+                title: "All Set",
+                message: "Let's get you logged in!",
+                dangerouslyUseHTMLString: false,
+                type: "success",
+                center: true,
+                confirmButtonText: "OK",
+                "round-button": true,
+                callback(action) {
                   console.log(action)
-                  if(action==='confirm'){
-                    self.$router.push({path: '/login', query: {type: 'login',email:self.registerForm.email}})
+                  if (action === 'confirm') {
+                    self.$router.push({path: '/login', query: {type: 'login', email: self.registerForm.email}})
                     self.showValue = 'login'
                   }
                 }
@@ -1324,7 +1388,7 @@ export default {
                 this.submitEducatorContactForm(res.message.id)
               }
               if (self.identityValue == 2 || self.identityValue == 3
-                || self.identityValue == 4 || self.identityValue == 5
+                  || self.identityValue == 4 || self.identityValue == 5
               ) {
                 this.submitCompanyContactForm(res.message.id)
               }
@@ -1332,17 +1396,17 @@ export default {
               self.submitRegisterLoadingStatus = false
 
               this.$msgbox({
-                title:"All Set",
-                message:"Let's get you logged in!",
-                dangerouslyUseHTMLString:false,
-                type:"success",
-                center:true,
-                confirmButtonText:"OK",
-                "round-button":true,
-                callback(action){
+                title: "All Set",
+                message: "Let's get you logged in!",
+                dangerouslyUseHTMLString: false,
+                type: "success",
+                center: true,
+                confirmButtonText: "OK",
+                "round-button": true,
+                callback(action) {
                   console.log(action)
-                  if(action==='confirm'){
-                    self.$router.push({path: '/login', query: {type: 'login',phone:self.registerPhoneForm.phone}})
+                  if (action === 'confirm') {
+                    self.$router.push({path: '/login', query: {type: 'login', phone: self.registerPhoneForm.phone}})
                     self.showValue = 'login'
                   }
                 }
@@ -1441,59 +1505,58 @@ export default {
 
 <style scoped>
 
-.login-bg{
+.login-bg {
   min-height: 100vh;
   background-color: #F0F2F5;
 
 }
 
-.login-container{
+.login-container {
   padding-top: 50px;
 }
 
-.login-l{
+.login-l {
   padding-left: 50px;
   cursor: pointer;
 }
 
-.login-l-logo{
+.login-l-logo {
   width: 60px;
 }
 
-.login-l-edu{
-  font-family: BCExtraBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size:40px;
+.login-l-edu {
+  font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 40px;
 }
 
-.login-l-passport{
+.login-l-passport {
   font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size:17px;
+  font-size: 17px;
 }
 
 
-
-.login-m{
-  width:576px;
-  margin:0 auto;
+.login-m {
+  width: 576px;
+  margin: 0 auto;
 }
 
-.login-m h1{
+.login-m h1 {
   text-align: center;
 }
 
-.xll-login-form-container{
-  margin-top:67px;
+.xll-login-form-container {
+  margin-top: 67px;
 }
 
-.xll-divider{
-  margin-top:50px;
+.xll-divider {
+  margin-top: 50px;
 }
 
-.sign-in-btn-container{
+.sign-in-btn-container {
 
 }
 
-.login-r{
+.login-r {
   padding-right: 50px;
   display: flex;
   flex-direction: row;
@@ -1502,21 +1565,22 @@ export default {
 
 }
 
-.sign-up{
+.sign-up {
 
 }
-.sign-up-btn{
+
+.sign-up-btn {
   font-size: 20px;
-  color:#262626;
+  color: #262626;
 }
 
-.login-close{
+.login-close {
   margin-right: 20px;
 }
 
-.login-close-btn{
+.login-close-btn {
   font-size: 20px;
-  color:#262626;
+  color: #262626;
 }
 
 
@@ -1535,15 +1599,15 @@ export default {
 
 }
 
-/deep/ .el-checkbox__label{
-  font-family: BCM,"Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+/deep/ .el-checkbox__label {
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
   font-size: 20px;
 }
 
 .login-option-btn {
-  font-family: BCM,"Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+
   width: 100%;
-  font-size: 20px;
+  /*font-size: 20px;*/
   margin-top: 20px;
   display: flex;
   flex-direction: row;
@@ -1557,7 +1621,7 @@ export default {
   margin: 50px auto 0;
 }
 
-.remember-forgot-container{
+.remember-forgot-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1607,29 +1671,29 @@ export default {
   width: 26%;
 }
 
-/deep/ .el-divider__text{
+/deep/ .el-divider__text {
   background-color: #F0F2F5;
 }
 
 
-.login-error-container{
+.login-error-container {
   text-align: center;
 }
 
-.login-error-container h4{
+.login-error-container h4 {
   margin-bottom: 25px;
 }
 
-.login-error-container p{
+.login-error-container p {
   font-size: 20px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
-.login-error-ok-container{
+.login-error-ok-container {
   margin-top: 25px;
 }
 
-.login-error-ok-container button{
+.login-error-ok-container button {
   width: 100px;
 }
 
@@ -1637,7 +1701,48 @@ export default {
 
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
+  .login-bg{
+
+
+  }
+  .login-container {
+    padding-top: 0;
+  }
+
+  .login-m-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .login-l {
+    padding-left: 15px;
+    padding-top: 15px;
+  }
+
+  .login-m {
+    width: 100%;
+  }
+
+  .login-m h1 {
+    font-size: 20px;
+  }
+
+  .login-r {
+    padding-top: 15px;
+    padding-right: 15px;
+  }
+
+  .login-l-logo{
+    width: 30px;
+  }
+
+  /deep/ .el-checkbox__label {
+    font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+    font-size: 12px;
+  }
 
 }
 </style>

@@ -281,4 +281,51 @@ export default {
 /deep/ .el-overlay{
   background-color: rgba(0, 0, 0, 0.9);
 }
+
+@media screen and (max-width: 768px) {
+  .dialog-container{
+    width: 100%;
+    height: auto;
+  }
+
+  .dialog-t{
+    height: 120px;
+  }
+
+  .dialog-b{
+    padding: 15px;
+  }
+
+  .dialog-logo-img{
+    width: 40px;
+    height: 40px;
+
+  }
+
+  .dialog-b-r{
+    width: calc(100% - 75px);
+    padding-right: 20px;
+  }
+
+  .dialog-company-name{
+    font-size: 16px;
+  }
+  .dialog-company-desc{
+    font-size: 14px;
+  }
+  .dialog-vendor-profile{
+    font-size: 12px;
+  }
+
+  .dialog-title{
+    font-size: 18px;
+  }
+  .dialog-desc{
+    font-size: 14px;
+  }
+  .dialog-action-l span{
+    font-size: 12px;
+  }
+
+}
 </style>

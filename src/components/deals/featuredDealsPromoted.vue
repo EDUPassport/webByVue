@@ -227,6 +227,7 @@ export default {
 
 .deals-item-background-img {
   width: 100%;
+  height: 100%;
 }
 
 .deals-item-c {

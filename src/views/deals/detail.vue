@@ -4,7 +4,7 @@
 
       <el-row :gutter="0" align="top" justify="center">
 
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+        <el-col :xs="0" :sm="24" :md="4" :lg="4" :xl="4">
           <dealFilterComponent
               :locationData="locationOptions"
               :tagsData="tagsData"
@@ -13,7 +13,7 @@
           ></dealFilterComponent>
         </el-col>
 
-        <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="6">
+        <el-col :xs="0" :sm="24" :md="7" :lg="7" :xl="6">
           <featuredDealsPromoted
               :adsData="adsDataMid"
               :featuredData="featuredDealsData"
@@ -173,6 +173,7 @@ import shareCard from "@/components/shareCard";
 import dealFilterComponent from "@/components/dealFilterComponent";
 
 import featuredDealsPromoted from "@/components/deals/featuredDealsPromoted";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "detail",
@@ -237,7 +238,25 @@ export default {
     }
 
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
 
     let dealId = this.$route.query.id;
     if (dealId) {
@@ -773,6 +792,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 60px;
+  padding: 0 15px;
 }
 
 .action-r{
@@ -786,6 +806,72 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+
+  .deal-detail-scroll{
+    width: 100%;
+    padding: 0;
+    height: calc(var(--i-window-height) - 80px);
+  }
+
+  .dialog-container{
+    min-height: calc(var(--i-window-height) - 80px);
+  }
+
+  .action-container{
+    height: 30px;
+  }
+
+  .dialog-t{
+    height: 120px;
+  }
+  .dialog-b{
+    padding:25px 15px 15px 15px;
+    flex-direction: column;
+    position: relative;
+  }
+  .dialog-b-l{
+    width: 40px;
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  .dialog-logo-img{
+    width: 40px;
+    height: 40px;
+  }
+  .dialog-b-r{
+    width: 100%;
+    padding-right: 0;
+  }
+
+  .dialog-company-name{
+    font-size: 16px;
+  }
+
+  .dialog-company-desc{
+    font-size: 14px;
+  }
+
+  .dialog-vendor-profile{
+    font-size: 12px;
+  }
+
+  .dialog-title{
+    font-size: 18px;
+  }
+
+  .dialog-desc{
+    font-size: 14px;
+  }
+
+  .dialog-category span{
+    font-size: 12px;
+  }
+
+
+
 
 }
 

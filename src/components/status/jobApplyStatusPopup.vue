@@ -235,4 +235,40 @@ export default {
 /deep/ .el-overlay{
   background-color: rgba(0, 0, 0, 0.9);
 }
+
+
+@media screen and (max-width: 768px) {
+  .dialog-container{
+    width: auto;
+    height: auto;
+    padding: 15px;
+  }
+
+  .dialog-t span{
+    font-size: 20px;
+  }
+  .dialog-b{
+    padding:15px 0;
+  }
+  .dialog-b-l{
+    width: 60px;
+  }
+  .dialog-b-r{
+    width: calc(100% - 75px);
+  }
+
+  .dialog-b-r p{
+    font-size: 14px;
+  }
+
+  /deep/ .el-checkbox__label{
+    font-size: 12px;
+  }
+
+  .dialog-action{
+    position: unset;
+  }
+
+}
+
 </style>

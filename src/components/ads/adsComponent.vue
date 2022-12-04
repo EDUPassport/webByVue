@@ -189,4 +189,12 @@ export default {
   height: 100%;
 }
 
+@media screen and (max-width: 768px) {
+  .xll-ads-swiper-item{
+    background-color: #F0F2F5;
+  }
+  .xll-ads-r{
+    display: none;
+  }
+}
 </style>

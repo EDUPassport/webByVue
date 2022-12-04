@@ -40,12 +40,12 @@
                 class="deals-form"
             >
               <el-row :gutter="50">
-                <el-col :span="6">
+                <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                   <el-form-item label="Deal Name" prop="title">
                     <el-input v-model="basicForm.title" placeholder="eg. 10% off your first class."></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="18">
+                <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
                   <el-form-item label="Deal Description" prop="desc">
                     <el-input v-model="basicForm.desc" type="textarea"
                               :rows="4"
@@ -57,7 +57,7 @@
 
               <el-row :gutter="50">
 
-                <el-col :span="6">
+                <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                   <el-form-item label="Tags" >
                     <div class="tags-tips">
                       Tags will help find your deal easier
@@ -110,7 +110,7 @@
 
                 </el-col>
 
-                <el-col :span="18">
+                <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
 
                   <el-form-item  label="Deal Location">
 
@@ -274,6 +274,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import submitMessage from "@/components/popup/submitMessage";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "jobs",
@@ -359,7 +360,27 @@ export default {
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
+
     this.getTagsList()
     this.getAllCountry()
 
@@ -720,13 +741,14 @@ export default {
             }
           }).catch(err=>{
             console.log(err)
+            this.$loading().close()
+
             if(err.msg){
-              this.$message.error(err.msg)
+              return this.$message.error(err.msg)
             }
             if(err.message){
-              this.$message.error(err.message)
+              return  this.$message.error(err.message)
             }
-            this.$loading().close()
 
           })
 
@@ -977,6 +999,62 @@ export default {
 }
 
 @media screen and (max-width: 768px){
+    .profile-r-container{
+      width: 100%;
+      height: calc( var(--i-window-height) - 160px);
+
+    }
+
+  .new-deal-t{
+    padding: 15px;
+    height: 30px;
+  }
+
+  .new-deal-t-l{
+    font-size: 18px;
+  }
+  .new-deal-btn{
+    font-size: 12px;
+  }
+
+  .profile-r-bg-container{
+    height: calc( var(--i-window-height) - 220px);
+  }
+
+  .basic-form{
+    padding: 15px;
+    margin: 15px;
+    border-radius: 18px;
+  }
+
+  .basic-form-label{
+    font-size: 18px;
+  }
+
+  .object-tags-item{
+    font-size: 12px;
+    padding: 0 6px;
+  }
+
+  .object-tags-item-btn-container{
+    top: 0px;
+  }
+
+  .deals-tabs-l{
+    font-size: 12px;
+  }
+
+  .deals-tabs-m{
+    font-size: 12px;
+  }
+
+  .deals-tabs-r{
+    font-size: 12px;
+  }
+
+  .map-container{
+    min-width: 300px;
+  }
 
 }
 

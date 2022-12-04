@@ -235,4 +235,59 @@ export default {
   color: #262626;
 }
 
+
+@media screen and (max-width: 768px){
+  .e-a{
+    background-color: #F0F2F5;
+    box-shadow: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  .e-a-label{
+    font-size: 20px;
+    margin: 0 15px 8px 15px;
+  }
+
+  .e-a-c{
+    margin-top: 0;
+  }
+  .e-a-item-bg{
+    margin: 7px 15px 15px 15px;
+    padding: 0;
+  }
+  .e-a-item{
+    padding: 15px;
+    box-shadow: 0px 0px 10px #00000012;
+    border-radius: 18px;
+
+  }
+
+  .e-a-item-l{
+    width: 40px;
+  }
+
+  .e-a-item-avatar{
+    width: 40px;
+    height: 40px;
+  }
+
+
+  .e-a-item-m{
+    width: calc(100% - 55px);
+  }
+
+  .e-a-item-m-1{
+    font-size: 12px;
+  }
+
+  .e-a-item-m-2{
+    font-size: 18px;
+  }
+
+  .e-a-item-r{
+    display: none;
+  }
+}
+
 </style>

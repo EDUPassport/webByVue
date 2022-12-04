@@ -28,7 +28,7 @@
                    v-for="(item,index) in dealsListData" :key="index"
               >
 
-                <div class="deals-item" >
+                <div class="deals-item">
                   <div class="deals-item-bg">
                     <el-image
                         class="deals-item-background-img"
@@ -117,6 +117,7 @@
 
 import meSideMenu from "@/components/meSideMenu";
 import {MY_DEALS} from '@/api/api';
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "deals",
@@ -127,28 +128,50 @@ export default {
     return {
       userInfo: {},
       basicUserInfo: {},
-      dealsListData:[],
-      dealPage:1,
-      dealLimit:10,
-      dealTotalNum:0,
+      dealsListData: [],
+      dealPage: 1,
+      dealLimit: 10,
+      dealTotalNum: 0,
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
-    this.getMyDeals(this.dealPage,this.dealLimit)
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
+
+    this.getMyDeals(this.dealPage, this.dealLimit)
   },
   methods: {
-    postDeal(){
+    postDeal() {
       this.$router.push({
-        path:'/deals/offer',query:{}
+        path: '/deals/offer', query: {}
       })
     },
-    turnDealDetail(id){
-      this.$router.push({path:'/deals/detail',query:{
-        id:id
-        }})
+    turnDealDetail(id) {
+      this.$router.push({
+        path: '/deals/detail', query: {
+          id: id
+        }
+      })
     },
-    turnEditDeal(id){
-      this.$router.push({path:'/deals/offer',query:{deal_id:id}})
+    turnEditDeal(id) {
+      this.$router.push({path: '/deals/offer', query: {deal_id: id}})
     },
     dealPageSizeChange(e) {
       console.log(e)
@@ -158,13 +181,13 @@ export default {
       this.getMyDeals(e, this.dealLimit)
       console.log(e)
     },
-    getMyDeals(page,limit){
+    getMyDeals(page, limit) {
       let params = {
         token: localStorage.getItem('token'),
         page: page,
         limit: limit
       }
-      MY_DEALS(params).then(res=>{
+      MY_DEALS(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.dealsListData = res.message.data
@@ -173,12 +196,12 @@ export default {
         } else {
           console.log(res.msg)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
@@ -211,7 +234,7 @@ export default {
   height: calc(100vh - 240px);
 }
 
-.profile-r-bg-container{
+.profile-r-bg-container {
   width: 100%;
   height: calc(100vh - 240px);
   background-color: #FFFFFF;
@@ -223,7 +246,7 @@ export default {
   padding: 25px 50px;
 }
 
-.deals-list-t{
+.deals-list-t {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -237,7 +260,7 @@ export default {
 
 }
 
-.post-deal-btn{
+.post-deal-btn {
   font-size: 20px;
 }
 
@@ -249,7 +272,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.deals-item-container{
+.deals-item-container {
   width: 33%;
   margin-top: 25px;
 }
@@ -274,7 +297,7 @@ export default {
   transform: rotate(30deg);
   padding: 4px 80px 4px 160px;
   text-align: center;
-  font-size:14px;
+  font-size: 14px;
 }
 
 .actived-0 {
@@ -382,7 +405,7 @@ export default {
   justify-content: center;
 }
 
-.img-slot-background{
+.img-slot-background {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -391,11 +414,81 @@ export default {
   height: 100%;
 }
 
-@media screen and (min-width: 1200px){
+@media screen and (min-width: 1200px) {
 
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
+  .profile-r-container {
+    width: 100%;
+    padding: 0;
+    height: calc( var(--i-window-height) - 160px);
+  }
+
+  .profile-r-bg-container {
+    background-color: #F0F2F5;
+    border-radius: 0;
+    box-shadow: none;
+    height: calc( var(--i-window-height) - 160px);
+
+  }
+
+  .deals-list-container{
+    padding: 15px;
+  }
+
+  .deals-list-label{
+    font-size: 18px;
+  }
+  .post-deal-btn{
+    font-size: 12px;
+  }
+
+  .deals-list-content{
+    flex-direction: column;
+  }
+
+  .deals-item-container{
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .deals-item{
+    width: 100%;
+  }
+
+  .deals-item-bg{
+    height:140px;
+  }
+
+  .deals-item-c{
+    padding: 15px;
+  }
+
+  .deals-logo{
+    width:40px;
+    height: 40px;
+  }
+
+  .deals-item-c-r{
+    margin-left: 15px;
+  }
+
+  .deals-item-c-r-1{
+    font-size: 14px;
+  }
+
+  .deals-item-c-r-2{
+    font-size: 18px;
+  }
+
+  .deals-item-b{
+    padding: 0 15px 15px 15px;
+  }
+  .deals-item-b-l{
+    font-size: 12px;
+  }
+
 
 }
 </style>

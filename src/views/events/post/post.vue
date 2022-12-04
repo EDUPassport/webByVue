@@ -45,7 +45,7 @@
                 </div>
                 <div class="event-item-c">
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Event Type">
 
                         <div class="event-type-container">
@@ -72,7 +72,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <template v-if="dealLocationTypeValue === 2 || dealLocationTypeValue === 3">
                         <el-form-item label="Venue" prop="event_place">
                           <el-input v-model="basicForm.event_place" type="text"
@@ -88,7 +88,7 @@
                     </el-col>
 
 
-                    <el-col :span="6" v-if="dealLocationTypeValue === 2 || dealLocationTypeValue === 3">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" v-if="dealLocationTypeValue === 2 || dealLocationTypeValue === 3">
 
                       <el-form-item label="Location">
                         <div class="deals-location-select-container">
@@ -133,7 +133,7 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Category" prop="category_id">
                         <el-select v-model="basicForm.category_id"
                                    placeholder="Select category"
@@ -165,12 +165,12 @@
                 </div>
                 <div class="event-item-c">
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Event name" prop="name">
                         <el-input v-model="basicForm.name" placeholder="Name of the event"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="Event description" prop="desc">
                         <el-input v-model="basicForm.desc"
                                   type="textarea"
@@ -179,7 +179,7 @@
 
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Event Date" required prop="date">
                         <div class="event-date-container">
                           <div class="event-date">
@@ -227,17 +227,17 @@
                   </el-row>
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="ESL Passport Members Get" prop="type_desc">
                         <el-input v-model="basicForm.type_desc" type="textarea"
                                   placeholder="Enter the deal/discount you will offer our members."></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
 
                       <el-form-item label="Price" prop="pay_money">
                         <el-row :gutter="10">
-                          <el-col :span="8">
+                          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
                             <el-select v-model="basicForm.currency"
                                        placeholder="currency"
                             >
@@ -249,7 +249,7 @@
                               />
                             </el-select>
                           </el-col>
-                          <el-col :span="16">
+                          <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
                             <el-input v-model="basicForm.pay_money"
                                       placeholder="amount per ticket">
                             </el-input>
@@ -259,14 +259,14 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Company name" prop="third_company_name">
                         <el-input v-model="basicForm.third_company_name" type="text"
                                   placeholder="Company name"
                         ></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Tags">
 
                         <el-select
@@ -295,7 +295,7 @@
 
                   <el-row :gutter="50">
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Poster(2:3 ratio)" prop="file">
                         <el-upload
                             class="profile-uploader"
@@ -333,7 +333,7 @@
 
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Company Logo" prop="third_company_logo">
                         <el-upload
                             class="profile-uploader"
@@ -404,6 +404,7 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import ImageCompressor from 'compressorjs'
 import {decode} from 'js-base64'
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "post",
@@ -580,7 +581,25 @@ export default {
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
 
     let str = this.$route.query.str;
     if(str){
@@ -1453,6 +1472,40 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+    .profile-r-container{
+      padding: 0;
+      height: calc( var(--i-window-height) - 160px);
+      width: 100%;
+    }
+
+  .profile-r-bg-container{
+    height: calc( var(--i-window-height) - 160px);
+
+  }
+
+  .new-deal-t{
+    padding: 15px;
+    height: 30px;
+  }
+  .new-deal-t-l{
+    font-size: 18px;
+  }
+  .new-deal-btn{
+    font-size: 12px;
+  }
+
+  .basic-form{
+    height: calc( var(--i-window-height) - 220px);
+
+  }
+  .event-item-container{
+    margin: 15px;
+    padding: 15px;
+  }
+
+  .event-type{
+    font-size: 12px;
+  }
 
 }
 

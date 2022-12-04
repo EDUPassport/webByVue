@@ -16,7 +16,7 @@
             <div class="e-a-item-m">
               <div class="e-a-item-m-1">{{item.job.company_name}}</div>
               <div class="e-a-item-m-2">
-                {{item.job_title}}
+                {{item.job.job_title}}
               </div>
               <div class="e-a-item-m-3">
                 {{ item.job.currency }} {{ item.job.salary_min }} - {{ item.job.salary_max }}
@@ -30,15 +30,18 @@
                 {{item.job.job_location}}
               </div>
               <div class="e-a-item-m-3">
-                <span v-if="item.employment_type==1">Full time</span>
-                <span v-if="item.employment_type==2">Part time</span>
-                <span v-if="item.employment_type==3">Seasonal</span>
+                <span v-if="item.job.employment_type==1">Full time</span>
+                <span v-if="item.job.employment_type==2">Part time</span>
+                <span v-if="item.job.employment_type==3">Seasonal</span>
               </div>
             </div>
             <div class="e-a-item-r">
               <!--             . Interested -->
               <div class="e-a-item-r-1">
-
+                <span v-if="item.status == 1">Submitted</span>
+                <span v-if="item.status == 2">Shortlisted</span>
+                <span v-if="item.status == 3">Not Selected</span>
+                <span v-if="item.status == 4">Interested</span>
               </div>
               <div class="e-a-item-r-2">
                 <chatButton text="SEND A MESSAGE"
@@ -265,6 +268,80 @@ export default {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #262626;
+}
+
+@media screen and (max-width: 768px) {
+  .e-a{
+    padding: 0;
+    background-color: #F0F2F5;
+    box-shadow: none;
+  }
+
+  .e-a-label{
+    font-size: 20px;
+    margin: 0 15px 8px 15px;
+  }
+
+  .e-a-item-bg{
+    padding: 0;
+    margin: 7px 15px 15px 15px;
+  }
+
+  .e-a-c{
+    margin-top: 0;
+  }
+
+  .e-a-item{
+    padding: 15px;
+    flex-wrap: wrap;
+    box-shadow: 0px 0px 10px #00000012;
+    border-radius: 18px;
+  }
+
+  .e-a-item-l{
+    width: 40px;
+  }
+  .e-a-item-avatar{
+    width: 40px;
+    height: 40px;
+  }
+
+  .e-a-item-m{
+    width: calc(100% - 55px);
+  }
+
+  .e-a-item-m-1{
+    font-size: 12px;
+  }
+
+  .e-a-item-m-2{
+    font-size: 18px;
+  }
+
+  .e-a-item-m-3{
+    font-size: 12px;
+  }
+
+
+
+  .e-a-item-r{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .e-a-item-r-1{
+    font-size: 12px;
+  }
+  .e-a-item-r-2{
+    margin-top: 0;
+  }
+  .e-a-item-r-3{
+    font-size: 12px;
+    margin-top: 0;
+  }
+
 }
 
 </style>

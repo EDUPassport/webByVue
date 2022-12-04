@@ -46,22 +46,22 @@
                 <div class="account-profile-item-c">
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="School name" prop="company_name">
                         <el-input v-model="basicForm.company_name" placeholder="School name"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Address">
                         <el-input v-model="basicForm.address" placeholder="Street name,building,apartment"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Website">
                         <el-input v-model="basicForm.website" placeholder="https://"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item class="account-profile-item-location" label="Location">
                         <div class="xll-location-container">
                           <div class="xll-location-l">
@@ -123,7 +123,7 @@
                   </el-row>
 
                   <el-row :gutter="50">
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="Add Location Pin">
                         <div class="map-container">
                           <div id="mapContainer" class="basemap"></div>
@@ -142,28 +142,28 @@
                 <div class="account-profile-item-c">
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Displayed name" prop="display_name">
                         <el-input v-model="basicForm.display_name"
                                   placeholder="Name that will be visible to others">
                         </el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Job title" prop="job_title">
                         <el-input v-model="basicForm.job_title"
                                   placeholder="eg, HR, recruiter, etc.">
                         </el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="E-mail address">
                         <el-input v-model="basicForm.work_email"
                                   placeholder="Your business email address">
                         </el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Phone number" prop="phone" >
                         <div class="contact-phone-container">
                           <div class="contact-phone-l">
@@ -201,7 +201,7 @@
 
                   <el-row :gutter="50">
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item class="account-profile-category" label="Category" prop="category_id" required>
                         <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
                           <div v-if="item['children'].length>0" class="category-parent">
@@ -220,7 +220,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item
                           label="Business registration certificate"
                           prop="business_reg_img">
@@ -255,7 +255,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="License" prop="license">
                         <el-upload
                             class="profile-uploader"
@@ -288,7 +288,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Year of establishment">
                         <el-date-picker
                             v-model="basicForm.year_founded"
@@ -313,7 +313,7 @@
                 <div class="account-profile-item-c">
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Subjects we teach">
 
                         <el-select
@@ -338,7 +338,7 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Student's age">
 
                         <el-select
@@ -363,26 +363,26 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Average class size">
                         <el-input v-model="basicForm.class_size" type="number" placeholder="Number of students per class"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="School organizes field trips">
                         <el-switch v-model="basicForm.felds_trips"></el-switch>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Core Curriculum" prop="curriculum">
                         <el-input v-model="basicForm.staff_student_ratio" type="textarea"
                                   placeholder="List courses you teach">
                         </el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Available technologies" prop="technology_available">
                         <el-input v-model="basicForm.technology_available" type="textarea"
                                   placeholder="Computers, Smart screens, 3D Printing, etc...">
@@ -390,7 +390,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Facilities">
                         <el-select
                             v-model="selectSchoolFacilitesList"
@@ -414,7 +414,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Tuition">
                         <el-input v-model="tuitionValue" type="number" placeholder="amount per year">
                           <template #prepend>
@@ -450,7 +450,7 @@
                   </el-row>
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Logo" prop="logo">
                         <el-upload
                             class="profile-uploader"
@@ -482,7 +482,7 @@
 
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item
                           label="Introduction Video" prop="video_url">
                         <el-upload
@@ -520,7 +520,7 @@
 
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item
                           label="Background Image" prop="background_image">
                         <el-upload
@@ -553,7 +553,7 @@
 
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Profile Photo" prop="profile_photo">
                         <el-upload
                             class="profile-uploader"
@@ -590,7 +590,7 @@
                   </el-row>
 
                   <el-row :gutter="50" >
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
 
                       <el-form-item label="Additional images(up to 20mb/image)" prop="images">
                         <el-upload
@@ -685,9 +685,8 @@ import {
   UPLOAD_BY_ALI_OSS,
   UPLOAD_BY_SERVICE,
   USER_MENU_LIST,
-  UPLOAD_IMG,
   ADD_USER_IMG_V2,
-  SCHOOL_PERCENTAGE_V2
+  SCHOOL_PERCENTAGE_V2, UPLOAD_BY_SERVICE_MORE
 } from '@/api/api'
 import {phoneCodeData} from "@/utils/phoneCode";
 import mapboxgl from "mapbox-gl";
@@ -696,7 +695,8 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import {countriesData} from "@/utils/data";
 import {encode ,decode} from "js-base64";
-import ImageCompressor from 'compressorjs'
+import ImageCompressor from 'compressorjs';
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "school",
@@ -850,7 +850,24 @@ export default {
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   async mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
 
     await this.getSubIdentityList()
 
@@ -2191,15 +2208,15 @@ export default {
       imgParams.append('platform', 4)
       imgParams.append('file[]', file.raw)
 
-      UPLOAD_IMG(imgParams).then(res => {
+      UPLOAD_BY_SERVICE_MORE(imgParams).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let imgData = res.data;
+          let imgData = res.message;
           // let imgArr = [];
           imgData.forEach(item => {
             let obj = {
-              name: item.file_name,
-              url: item.file_url
+              name: '',
+              url: item
             }
             this.accountImageFileList.push(obj)
             this.uploadLoadingStatus = false
@@ -2292,11 +2309,11 @@ export default {
 }
 
 .account-profile-cancel-btn{
-  font-size:20px;
+  /*font-size:20px;*/
 }
 
 .account-profile-save-btn{
-  font-size:20px;
+  /*font-size:20px;*/
 }
 
 .basic-form {
@@ -2315,7 +2332,7 @@ export default {
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
-  border-bottom: 1px dashed #EEEEEE;
+  /*border-bottom: 1px dashed #EEEEEE;*/
   padding-bottom: 10px;
 }
 
@@ -2591,7 +2608,44 @@ export default {
 }
 
 @media screen and (max-width: 768px){
+  .basic-r-container{
+    width: 100%;
+    height: calc( var(--i-window-height) - 160px);
+  }
 
+  .basic-r-container-bg{
+    padding: 15px;
+  }
+
+  .account-profile-t{
+    padding-bottom: 15px;
+  }
+
+  .account-profile-t-l{
+    font-size: 20px;
+  }
+
+  .account-profile-item-container{
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .account-profile-item-label{
+    font-size: 18px;
+  }
+
+  .account-profile-item-label span{
+    font-size: 14px;
+  }
+
+  .categories-tags{
+    padding-bottom: 0px;
+  }
+
+  .categories-tags-item{
+    font-size: 12px;
+    padding: 0 8px;
+  }
 }
 
 </style>

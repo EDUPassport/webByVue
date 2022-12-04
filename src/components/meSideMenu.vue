@@ -1,24 +1,39 @@
 <template>
-  <el-scrollbar class="menu-xll-bg-container">
+  <div >
+    <el-scrollbar class="menu-xll-bg-container">
 
-    <div class="menu-btn-container">
-      <el-button class="menu-btn" type="primary" @click="showSideMenu()">Menu</el-button>
-    </div>
+      <div class="menu-btn-container">
+        <el-button class="menu-btn" type="primary" @click="showSideMenu()">Menu</el-button>
+      </div>
 
-    <div class="profile-l-container" v-if="showSideMenuStatus">
+      <div class="profile-l-container">
 
-      <div class="l-container">
+        <div class="l-container">
 
-<!--        <div class="l-item">-->
-<!--          <router-link :to="{path:'/overview',query:{identity:identity}}" exact>-->
-<!--            <el-icon :size="30">-->
-<!--              <IconEduHomeNofill />-->
-<!--            </el-icon>-->
-<!--            <span>Overview</span>-->
-<!--          </router-link>-->
-<!--        </div>-->
+          <div class="l-item l-item-margin" v-for="(item,i) in menuData" :Key="i">
 
-        <div class="l-item l-item-margin" v-for="(item,i) in menuData" :Key="i">
+            <router-link :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' "
+                         :to="{path:item.link}" exact>
+              <el-image  class="xll-icon-image" :src="item.icon"></el-image>
+              <span>{{item.menu_name_en}}</span>
+
+            </router-link>
+
+            <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
+              {{unreadTotal}}
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </el-scrollbar>
+
+    <div class="menu-mobile-bg">
+      <div class="menu-mobile-container">
+
+        <div class="menu-mobile-item" v-for="(item,i) in menuData" :Key="i">
 
           <router-link :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' "
                        :to="{path:item.link}" exact>
@@ -31,27 +46,14 @@
             {{unreadTotal}}
           </div>
 
-<!--          <template v-if="item.link === '/jobs/post' ">-->
-<!--            <router-link :to="{path:item.link,query:{version_time:versionTime}}" exact>-->
-<!--              <el-image class="xll-icon-image" :src="item.icon"></el-image>-->
-<!--              <span>{{item.menu_name_en}}</span>-->
-<!--            </router-link>-->
-<!--          </template>-->
-<!--          <template v-else>-->
-<!--            <router-link :to="{path:item.link}" exact>-->
-<!--              <el-image  class="xll-icon-image" :src="item.icon"></el-image>-->
-<!--              <span>{{item.menu_name_en}}</span>-->
-<!--            </router-link>-->
-<!--          </template>-->
-
         </div>
 
       </div>
 
     </div>
 
+  </div>
 
-  </el-scrollbar>
 
 </template>
 
@@ -289,7 +291,59 @@ export default {
 }
 
 
+@media screen and (min-width: 769px) {
+  .menu-mobile-bg{
+    display: none;
+  }
+}
+
 @media screen and (max-width: 768px) {
+  .menu-xll-bg-container{
+    display: none;
+  }
+
+  .menu-mobile-bg{
+    /*display: none;*/
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background-color: #FFFFFF;
+    z-index: 1000;
+    padding: 10px 20px;
+    height: 60px;
+
+    overflow: scroll;
+  }
+
+  .menu-mobile-container{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .menu-mobile-item {
+
+  }
+  .menu-mobile-item a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:column;
+
+    padding:10px;
+    border-radius: 15px;
+
+    margin: 0 auto;
+    text-align: center;
+
+    font-size: 12px;
+    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    color: #262626;
+
+  }
 
 
 }

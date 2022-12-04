@@ -1,43 +1,40 @@
 <template>
   <div class="bg">
     <el-row class="t-container" :gutter="0" align="middle" justify="center">
-      <el-col :span="7">
+      <el-col :xs="0" :sm="0" :md="7" :lg="7" :xl="7">
         <div class="nav-link-container">
 
           <router-link to="/jobs" exact>EDU Jobs</router-link>
           <router-link to="/deals" exact> EDU Deals</router-link>
           <router-link to="/events" exact>EDU Events</router-link>
 
-<!--          <template v-if="envName === 'development' || envName === 'production'">-->
-<!--              <span v-if="!identity || identity == 1"-->
-<!--                    class="nav-china-jobs" @click="turnEnvJobs()">China Jobs</span>-->
-<!--          </template>-->
-<!--          <template v-if="envName === 'developmentCN' || envName === 'productionCN'">-->
-<!--              <span v-if="!identity || identity == 1"-->
-<!--                    class="nav-china-jobs" @click="turnEnvJobs()">International Jobs</span>-->
-<!--          </template>-->
-
         </div>
 
       </el-col>
-      <el-col :span="8">
-<!--        <div class="logo-container">-->
-<!--          <div class="logo-logo" @click="turnHome()">-->
-<!--            <div class="logo-edu">EDU</div>-->
-<!--            <div class="logo-passport">PASSPORT</div>-->
-<!--          </div>-->
-<!--          <div class="logo-beta">Beta</div>-->
-<!--        </div>-->
+
+      <el-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8">
 
         <div class="logo-new-container">
           <div class="logo-new">
-            <el-image class="logo-new-logo-img" :src="logoImgLightH"></el-image>
+            <el-image class="logo-new-logo-img" :src="logoImgLightH" fit="contain"></el-image>
+            <el-image class="logo-new-logo-mobile-img" :src="logoImgLight" fit="contain"></el-image>
           </div>
         </div>
 
       </el-col>
 
-      <el-col class="t-btn-container" :span="7">
+      <el-col class="t-btn-container" :xs="12" :sm="12" :md="0" :lg="0" :xl="0">
+
+        <div class="t-btn-menu-icon-container">
+          <el-icon :size="25" color="#6648FF" @click="menuDrawerStatus=true">
+            <IconMaterialSymbolsMenuRounded />
+          </el-icon>
+        </div>
+        <mobileDrawerMenu :visible="menuDrawerStatus" @close="menuDrawerStatus=false"></mobileDrawerMenu>
+      </el-col>
+
+
+      <el-col class="t-btn-container" :xs="0" :sm="0" :md="7" :lg="7" :xl="7">
 
         <template v-if="token">
           <el-button class="home-profile-btn" type="primary" link @click="turnDashboard()">
@@ -58,6 +55,8 @@
 
 
       </el-col>
+
+
     </el-row>
 
     <el-row :gutter="0" justify="center" align="middle">
@@ -114,7 +113,7 @@
 
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 1">
-                <el-icon :size="80" color="#9173ff" >
+                <el-icon :size="homeArrowRightSize" color="#9173ff" >
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
@@ -135,7 +134,7 @@
 
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 2">
-                <el-icon :size="80" color="#9173ff" >
+                <el-icon :size="homeArrowRightSize" color="#9173ff" >
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
@@ -156,7 +155,7 @@
 
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 3">
-                <el-icon :size="80" color="#9173ff" >
+                <el-icon :size="homeArrowRightSize" color="#9173ff" >
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
@@ -207,7 +206,7 @@
 
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 1">
-                <el-icon :size="80" color="#9173ff" >
+                <el-icon :size="homeArrowRightSize" color="#9173ff" >
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
@@ -229,7 +228,7 @@
 
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 2">
-                <el-icon :size="80" color="#9173ff" >
+                <el-icon :size="homeArrowRightSize" color="#9173ff" >
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
@@ -251,7 +250,7 @@
 
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 3">
-                <el-icon :size="80" color="#9173ff" >
+                <el-icon :size="homeArrowRightSize" color="#9173ff" >
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
@@ -299,7 +298,7 @@
 
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 1">
-                <el-icon :size="80" color="#9173ff" >
+                <el-icon :size="homeArrowRightSize" color="#9173ff" >
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
@@ -321,7 +320,7 @@
 
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 2">
-                <el-icon :size="80" color="#9173ff" >
+                <el-icon :size="homeArrowRightSize" color="#9173ff" >
                   <IconBiChevronCompactRight />
                 </el-icon>
               </div>
@@ -364,6 +363,11 @@
           <div class="d-c-bg">
 
           </div>
+
+          <div class="d-c-bg-mobile">
+            <el-image class="d-c-bg-mobile-img" :src="landingPageMobileResponsiveImg" fit="cover"></el-image>
+          </div>
+
           <div>
             <el-button type="primary" round @click="searchJobs()">
               SEARCH JOBS
@@ -374,13 +378,13 @@
     </el-row>
 
     <el-row class="a-row-container" :gutter="0" justify="center" align="middle">
-      <el-col :span="10">
+      <el-col :xs="22" :sm="22" :md="12" :lg="12" :xl="12">
         and so <span>much more</span>
       </el-col>
     </el-row>
 
     <el-row class="b-row-container" :gutter="0" justify="center" align="middle">
-      <el-col :span="6">
+      <el-col :xs="22" :sm="22" :md="8" :lg="8" :xl="8">
         <div class="s-tips" v-if="selectIdentityType === 1">
           Search and quickly apply for jobs Receive jobs that match your profile Track your application updates.
         </div>
@@ -522,18 +526,23 @@ import homeDonghua from "@/components/homeDonghua";
 import logoImg from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.png"
 import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
 import logoImgLightH from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
+import landingPageMobileResponsiveImg  from '@/assets/newHome/Landing_Page_Mobile_Responsive.png'
+import mobileDrawerMenu from "@/components/mobileDrawerMenu";
+// import {loadJs, removeJs} from "@/utils/tools";
 
 export default {
   name: "index",
   components: {
     initLoadingComponent,
-    homeDonghua
+    homeDonghua,
+    mobileDrawerMenu
   },
   data() {
     return {
       logoImg,
       logoImgLight,
       logoImgLightH,
+      landingPageMobileResponsiveImg,
       imgLogo,
       imgOne,
       dealsDemoImg,
@@ -547,10 +556,11 @@ export default {
       dashboardDemoImg,
       dashboardBDemoImg,
       dashboardVDemoImg,
-
       subscribeEmailValue: '',
       initLoadingStatus: false,
-      token: localStorage.getItem('token')
+      token: localStorage.getItem('token'),
+      homeArrowRightSize:80,
+      menuDrawerStatus:false
 
     }
   },
@@ -627,6 +637,22 @@ export default {
   },
   mounted() {
     let self = this;
+    // loadJs('https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js')
+    // loadJs('/zoho.js')
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      this.homeArrowRightSize = 30
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        this.homeArrowRightSize = 30
+      }
+    }
+
     this.initLoadingStatus = false;
     setTimeout(function () {
       self.initLoadingStatus = false;
@@ -634,6 +660,9 @@ export default {
 
   },
   unmounted() {
+    // console.log('home index unmounted')
+    // removeJs('https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js')
+    // removeJs('/zoho.js')
     window.onresize = null
   },
   methods: {
@@ -733,6 +762,11 @@ export default {
 .logo-new-logo-img{
   width:260px;
 }
+
+.logo-new-logo-mobile-img{
+  display: none;
+}
+
 .logo-edu {
   font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 40px;
@@ -866,6 +900,10 @@ export default {
   background-size: 100%;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.d-c-bg-mobile {
+  display: none;
 }
 
 .f-col-container {
@@ -1280,6 +1318,223 @@ export default {
     /*transform: translateX(340px);*/
     opacity: 1;
   }
+}
+
+@media screen and (max-width: 768px){
+
+  .logo-new-logo-img{
+    display: none;
+  }
+
+  .logo-new-container{
+    width: 100px;
+    float: left;
+    padding-left: 15px;
+  }
+
+  .logo-new-logo-mobile-img{
+    display: block;
+  }
+
+
+  .f-col-container{
+    padding: 15px;
+  }
+
+  .f-label{
+    font-size: 32px;
+  }
+
+  .f-tabs {
+    /*display: none;*/
+    width: auto;
+    margin: 15px auto;
+    flex-direction: column;
+  }
+
+  .f-tab {
+
+    padding: 0 25px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+
+  .f-tab-e{
+    width: auto;
+  }
+
+  .f-tab-b{
+    width: auto;
+  }
+
+  .f-tab-v{
+    width: auto;
+  }
+
+  .f-tab-active{
+    background-color: #9173ff;
+  }
+
+  .f-tab-bg{
+
+    position: absolute;
+  }
+
+  .f-tab-bg-t-1{
+    display: none;
+  }
+
+  .f-tab-bg-t-2{
+    display: none;
+  }
+
+  .f-tab-bg-t-3{
+    display: none;
+  }
+
+
+
+  .f-c{
+    flex-direction: column;
+    padding-left: 0;
+  }
+
+
+  .f-c-l{
+    width: auto;
+    height: auto;
+  }
+
+  .f-c-btn-container{
+    display: none;
+  }
+
+  .f-c-l-item{
+    margin-top: 20px;
+  }
+  .f-c-l-item-r{
+
+  }
+  .f-c-l-item-label{
+    font-size: 16px;
+  }
+
+  .f-c-l-item-l p{
+    display: none;
+  }
+
+  .f-c-r{
+    width: 100%;
+    height: auto;
+    padding: 25px 0;
+  }
+
+  .d-label{
+    font-size: 24px;
+  }
+  .d-tips{
+    font-size: 16px;
+  }
+  .d-c-bg{
+    display: none;
+  }
+
+  .d-c-bg-mobile {
+    display: block;
+    height: auto;
+    margin-top: 15px;
+  }
+
+  .d-c-bg-mobile-img{
+    width: 60%;
+  }
+
+  .d-col-container{
+    padding: 15px;
+  }
+
+  .a-row-container{
+    padding-top: 20px;
+    font-size: 24px;
+  }
+  .b-row-container{
+    padding-top: 10px;
+
+  }
+
+  .s-tips{
+    font-size: 16px;
+  }
+
+
+
+
+  .c-row-container{
+    padding-top: 15px;
+  }
+  .c-col-container{
+    padding: 15px;
+  }
+
+  .s-container{
+    width: auto;
+  }
+
+  .s-label{
+    font-size: 24px;
+  }
+
+  .footer-bg-container{
+    padding: 15px;
+  }
+
+  .footer-t{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-t-r{
+    display: flex;
+    flex-direction: row;
+
+  }
+
+  .footer-menu{
+    margin-top: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-menu-item{
+    font-size: 18px;
+    margin-top: 10px;
+  }
+
+  .footer-contact-us-label{
+    font-size: 16px;
+  }
+
+  .footer-contact-us-c{
+    font-size: 16px;
+  }
+
+  .footer-b{
+    flex-direction: column;
+  }
+  .footer-b-l{
+    text-align: left;
+    width: 100%;
+  }
+
+  .footer-b-r{
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  .t-btn-menu-icon-container{
+    padding-right: 15px;
+  }
+
 }
 
 

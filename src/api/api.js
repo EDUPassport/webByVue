@@ -321,6 +321,8 @@ export const UPLOAD_BY_ALI_OSS = (params) => post('user/uploadImg', params)
 
 // 直接存储到服务器上
 export const UPLOAD_BY_SERVICE = (params) => post('home/upload/storage', params)
+// 批量上传文件到本地
+export const UPLOAD_BY_SERVICE_MORE = (params) => post('home/upload/storage/more', params)
 
 // 管理第三方公司状态下【返回自己公司】
 export const COMEBACK_MYSELF = (params) => post('home/user/comeback/myself', params)
@@ -381,3 +383,12 @@ export const USER_UNREAD_LIST = (params) => get('/user/unread/list',params)
 
 // 未读消息详情
 export const USER_UNREAD_DETAIL = (params) => get('/user/unread/detail',params)
+
+// 删除用户profile 【物理删除】
+export const DELETE_USER_PROFILE = (params) => post('/home/user/profile/delete', params)
+
+// 复制School信息到Recruiting
+export const SCHOOL_CONVERT_TO_RECRUITER = (params) => post('/home/school/copy/recruiting', params)
+
+// 未读消息详情
+export const EDUCATOR_MANUAL_MATCH_JOB = (params) => get('/home/educator/manual/match/job',params)

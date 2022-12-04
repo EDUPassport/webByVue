@@ -48,7 +48,7 @@
             </div>
           </div>
 
-          <div class="profile-c-container">
+          <el-scrollbar class="profile-c-container">
 
             <div class="profile-1-container">
 
@@ -128,182 +128,182 @@
               </el-row>
 
             </div>
+            <div class="profile-2-container">
 
-          </div>
+              <div class="exp-container">
+                <div class="exp-label">Experience</div>
+                <div class="exp-years">
+                  <template v-for="(item,i) in teachExpList" :key="i">
+                    {{ item.object_en }}
+                  </template>
+                </div>
 
-          <div class="profile-2-container">
-
-            <div class="exp-container">
-              <div class="exp-label">Experience</div>
-              <div class="exp-years">
-                <template v-for="(item,i) in teachExpList" :key="i">
-                  {{ item.object_en }}
-                </template>
-              </div>
-
-              <div class="exp-c-container">
-                <div class="exp-c-item"  v-for="(work,i) in workInfo" :key="i">
-                  <div class="exp-c-item-l">
-                    <el-avatar class="exp-c-item-l-icon"></el-avatar>
+                <div class="exp-c-container">
+                  <div class="exp-c-item"  v-for="(work,i) in workInfo" :key="i">
+                    <div class="exp-c-item-l">
+                      <el-avatar class="exp-c-item-l-icon"></el-avatar>
+                    </div>
+                    <div class="exp-c-item-r">
+                      <div class="exp-c-item-1"  @click="turnEditWorkExperience(work)">
+                        {{ work.title }}
+                      </div>
+                      <div class="exp-c-item-2">
+                        {{ work.company_name }}
+                      </div>
+                      <div class="exp-c-item-3">
+                        {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
+                          $filters.ymdFormatTimestamp(work.work_time_to)
+                        }}
+                      </div>
+                      <div class="exp-c-item-3">
+                        {{ work.location }}
+                      </div>
+                      <div class="exp-c-item-4">
+                        {{ work.teaching_experience }}
+                      </div>
+                      <!--                    <div class="exp-c-item-readmore">READ MORE</div>-->
+                    </div>
                   </div>
-                  <div class="exp-c-item-r">
-                    <div class="exp-c-item-1"  @click="turnEditWorkExperience(work)">
-                      {{ work.title }}
-                    </div>
-                    <div class="exp-c-item-2">
-                      {{ work.company_name }}
-                    </div>
-                    <div class="exp-c-item-3">
-                      {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
-                        $filters.ymdFormatTimestamp(work.work_time_to)
-                      }}
-                    </div>
-                    <div class="exp-c-item-3">
-                      {{ work.location }}
-                    </div>
-                    <div class="exp-c-item-4">
-                      {{ work.teaching_experience }}
-                    </div>
-<!--                    <div class="exp-c-item-readmore">READ MORE</div>-->
-                  </div>
+
                 </div>
 
               </div>
 
             </div>
+            <div class="profile-3-container">
 
-          </div>
+              <div class="education-container">
+                <div class="education-label">Education</div>
+                <div class="education-c-container">
 
-          <div class="profile-3-container">
-
-            <div class="education-container">
-              <div class="education-label">Education</div>
-              <div class="education-c-container">
-
-                <div class="education-c-item" v-for="(education,i) in educationInfo" :key="i">
-                  <div class="education-c-item-l">
-                    <el-avatar class="education-c-item-l-icon"></el-avatar>
-                  </div>
-                  <div class="education-c-item-r">
-                    <div class="education-c-item-r-1" @click="turnEditEducation(education)">
-                      {{ education.school_name }}
+                  <div class="education-c-item" v-for="(education,i) in educationInfo" :key="i">
+                    <div class="education-c-item-l">
+                      <el-avatar class="education-c-item-l-icon"></el-avatar>
                     </div>
-                    <div class="education-c-item-r-2">
-                      {{ education.degree }}
-                    </div>
-                    <div class="education-c-item-r-3">
-                      {{
-                        $filters.ymdFormatTimestamp(education.start_time)
-                      }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
-                    </div>
-                    <div class="education-c-item-r-4">
-                      {{ education.field_of_study }}
+                    <div class="education-c-item-r">
+                      <div class="education-c-item-r-1" @click="turnEditEducation(education)">
+                        {{ education.school_name }}
+                      </div>
+                      <div class="education-c-item-r-2">
+                        {{ education.degree }}
+                      </div>
+                      <div class="education-c-item-r-3">
+                        {{
+                          $filters.ymdFormatTimestamp(education.start_time)
+                        }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
+                      </div>
+                      <div class="education-c-item-r-4">
+                        {{ education.field_of_study }}
+                      </div>
                     </div>
                   </div>
+
+                </div>
+              </div>
+
+            </div>
+            <div class="profile-4-container">
+              <div class="languages-container">
+                <div class="languages-label">
+                  Languages
                 </div>
 
-              </div>
-            </div>
-
-          </div>
-
-          <div class="profile-4-container">
-            <div class="languages-container">
-              <div class="languages-label">
-                Languages
-              </div>
-
-              <div class="languages-c-container" v-if="educatorContact.languages">
-                <div class="languages-c-item" v-for="(item,i) in educatorContact.languages" :key="i">
-                  <div class="languages-c-item-l">{{ item.object_en }}</div>
-                  <div class="languages-c-item-r">
+                <div class="languages-c-container" v-if="educatorContact.languages">
+                  <div class="languages-c-item" v-for="(item,i) in educatorContact.languages" :key="i">
+                    <div class="languages-c-item-l">{{ item.object_en }}</div>
+                    <div class="languages-c-item-r">
                     <span v-if="item.object_score == 1">
                       Native
                     </span>
-                    <span v-if="item.object_score == 2">
+                      <span v-if="item.object_score == 2">
                       Fluent
                     </span>
-                    <span v-if="item.object_score == 3">
+                      <span v-if="item.object_score == 3">
                       Conversational
                     </span>
-                    <span v-if="item.object_score == 4">
+                      <span v-if="item.object_score == 4">
                       Beginner
                     </span>
 
+                    </div>
                   </div>
                 </div>
+
+              </div>
+            </div>
+            <div class="profile-5-container">
+
+              <div class="preferences-container">
+                <div class="preferences-label">Preferences</div>
+                <div class="preferences-c-container">
+
+                  <el-row :gutter="50" >
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <div class="preferences-c-item">
+                        <div class="preferences-c-item-label">Certifications</div>
+                        <div class="object-show-container" >
+                          <div class="object-show-item" v-for="(cer,i) in certificationsList" :key="i">
+                            {{ cer.object_en }}
+                          </div>
+                        </div>
+                      </div>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <div class="preferences-c-item">
+                        <div class="preferences-c-item-label">Subject to Teach</div>
+                        <div class="object-show-container">
+                          <div class="object-show-item" v-for="(cer,i) in subjectList" :key="i">
+                            {{ cer.object_en }}
+                          </div>
+                        </div>
+                      </div>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <div class="preferences-c-item">
+                        <div class="preferences-c-item-label">Preferred Job Type</div>
+                        <div class="object-show-container">
+                          <div class="object-show-item" v-for="(cer,i) in jobTypeList" :key="i">
+                            {{ cer.object_en }}
+                          </div>
+                        </div>
+                      </div>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <div class="preferences-c-item">
+                        <div class="preferences-c-item-label"> Preferred Age To Teach</div>
+                        <div class="object-show-container" >
+                          <div class="object-show-item" v-for="(cer,i) in ageToTeachList" :key="i">
+                            {{ cer.object_en }}
+                          </div>
+                        </div>
+                      </div>
+                    </el-col>
+                  </el-row>
+
+                  <el-row :gutter="50">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <div class="preferences-c-item">
+                        <div class="preferences-c-item-label">Preferred Benefits</div>
+                        <div class="object-show-container">
+                          <div class="object-show-item" v-for="(cer,i) in benefitsList" :key="i">
+                            {{ cer.object_en }}
+                          </div>
+                        </div>
+                      </div>
+                    </el-col>
+                  </el-row>
+
+                </div>
+
               </div>
 
             </div>
-          </div>
 
-          <div class="profile-5-container">
+          </el-scrollbar>
 
-            <div class="preferences-container">
-              <div class="preferences-label">Preferences</div>
-              <div class="preferences-c-container">
 
-                <el-row :gutter="50" >
-                  <el-col :span="6">
-                    <div class="preferences-c-item">
-                      <div class="preferences-c-item-label">Certifications</div>
-                      <div class="object-show-container" >
-                        <div class="object-show-item" v-for="(cer,i) in certificationsList" :key="i">
-                          {{ cer.object_en }}
-                        </div>
-                      </div>
-                    </div>
-                  </el-col>
-                  <el-col :span="6">
-                    <div class="preferences-c-item">
-                      <div class="preferences-c-item-label">Subject to Teach</div>
-                      <div class="object-show-container">
-                        <div class="object-show-item" v-for="(cer,i) in subjectList" :key="i">
-                          {{ cer.object_en }}
-                        </div>
-                      </div>
-                    </div>
-                  </el-col>
-                  <el-col :span="6">
-                    <div class="preferences-c-item">
-                      <div class="preferences-c-item-label">Preferred Job Type</div>
-                      <div class="object-show-container">
-                        <div class="object-show-item" v-for="(cer,i) in jobTypeList" :key="i">
-                          {{ cer.object_en }}
-                        </div>
-                      </div>
-                    </div>
-                  </el-col>
-                  <el-col :span="6">
-                    <div class="preferences-c-item">
-                      <div class="preferences-c-item-label"> Preferred Age To Teach</div>
-                      <div class="object-show-container" >
-                        <div class="object-show-item" v-for="(cer,i) in ageToTeachList" :key="i">
-                          {{ cer.object_en }}
-                        </div>
-                      </div>
-                    </div>
-                  </el-col>
-                </el-row>
 
-                <el-row :gutter="50">
-                  <el-col :span="6">
-                    <div class="preferences-c-item">
-                      <div class="preferences-c-item-label">Preferred Benefits</div>
-                      <div class="object-show-container">
-                        <div class="object-show-item" v-for="(cer,i) in benefitsList" :key="i">
-                          {{ cer.object_en }}
-                        </div>
-                      </div>
-                    </div>
-                  </el-col>
-                </el-row>
 
-              </div>
-
-            </div>
-
-          </div>
 
 <!--          <div class="credentials-container">-->
 <!--            <div class="credentials-label">Credentials</div>-->
@@ -641,8 +641,8 @@ import {
 } from '@/api/api'
 import {encode, decode} from 'js-base64'
 import xllLoading from '@/components/xllLoading'
-
 import chatButton from "@/components/chat/chatButton";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "profile",
@@ -829,7 +829,24 @@ export default {
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
 
     let str = this.$route.query.str
     if(str){
@@ -3761,7 +3778,7 @@ export default {
   position: absolute;
   top:-100px;
   left: 50px;
-  border:2px solid #EEEEEE;
+  border:1px solid #FFFFFF;
 }
 
 .basic-info-six-pic-container{
@@ -3794,7 +3811,7 @@ export default {
 .basic-info-six-pic{
   width: 66px;
   height: 66px;
-  border:2px solid #EEEEEE;
+  border:1px solid #FFFFFF;
   cursor: pointer;
 }
 
@@ -4175,6 +4192,236 @@ export default {
     padding:0;
   }
   .education-date{
+    font-size: 12px;
+  }
+
+  .educator-r-container{
+    width: 100%;
+  }
+
+  .educator-r-container-bg{
+    padding: 0;
+  }
+
+  .account-profile-t{
+    padding: 15px;
+    height: 30px;
+  }
+
+  .account-profile-cancel-btn{
+    font-size: 12px;
+  }
+
+  .profile-c-container{
+    height: calc( var(--i-window-height) - 220px);
+  }
+
+  .profile-1-container{
+    margin: 15px;
+    box-shadow: 0px 0px 10px #00000012;
+  }
+
+  .profile-background-container{
+    height: 150px;
+  }
+
+  .basic-info-images-container{
+    width: 66px;
+    height: 66px;
+  }
+  .basic-info-profile-photo{
+    width: 66px;
+    height: 66px;
+    position: relative;
+    left: 0;
+    top: 0;
+    border: 1px solid #FFFFFF;
+  }
+
+  .basic-info-c-container{
+    width: calc(100% - 91px);
+  }
+
+  .basic-info-six-pic-container{
+    left: 56px;
+    bottom: 1px;
+    z-index: 10;
+
+  }
+
+  .basic-info-six-pic{
+    width: 25px;
+    height: 25px;
+    border: 1px solid #FFFFFF;
+  }
+
+  .basic-info-1-container{
+    position: relative;
+  }
+
+  .basic-info-images-container{
+    position: absolute;
+    top: -30px;
+    left: 15px;
+  }
+
+
+  .basic-info-c-container{
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+
+  }
+
+  .basic-info-c-l{
+    width: auto;
+    padding-left: 110px;
+    padding-top: 10px;
+  }
+
+  .basic-info-c-name{
+    font-size: 18px;
+  }
+  .basic-info-c-title{
+    font-size: 14px;
+  }
+  .basic-info-c-nationality{
+    font-size: 14px;
+  }
+
+  .basic-info-c-r{
+    margin:15px 15px 15px 15px;
+    padding-right: 0;
+    width: auto;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .basic-info-c-r p{
+    font-size: 14px;
+  }
+
+  .basic-info-c-hobby{
+    font-size: 13px;
+  }
+
+  .profile-2-container{
+
+    margin: 15px;
+  }
+
+  .exp-container{
+    padding: 15px;
+    margin-top: 0;
+  }
+
+  .exp-label{
+    font-size: 18px;
+  }
+
+  .exp-years{
+    font-size: 14px;
+  }
+
+  .exp-c-container{
+    margin-top: 15px;
+  }
+
+  .exp-c-item{
+    margin-bottom: 15px;
+  }
+  .exp-c-item-1{
+    font-size: 18px;
+  }
+  .exp-c-item-2{
+    font-size: 14px;
+  }
+  .exp-c-item-3{
+    font-size: 14px;
+  }
+  .exp-c-item-4{
+    font-size: 14px;
+    margin-top: 15px;
+  }
+
+  .profile-3-container{
+    margin: 15px;
+  }
+
+  .education-container{
+    padding: 15px;
+    margin-top: 0;
+  }
+
+  .education-label{
+    font-size: 18px;
+  }
+  .education-c-container{
+    margin-top: 15px;
+  }
+  .education-c-item{
+    margin: 15px 15px 15px 0;
+  }
+  .education-c-item-r-1{
+    font-size: 18px;
+  }
+  .education-c-item-r-2{
+    font-size: 14px;
+  }
+  .education-c-item-r-3{
+    font-size: 14px;
+  }
+  .education-c-item-r-4{
+    font-size: 14px;
+    margin-top: 15px;
+  }
+
+  .profile-4-container{
+    margin: 15px;
+
+  }
+
+  .languages-container{
+    padding: 15px;
+  }
+
+  .languages-label{
+    font-size: 18px;
+  }
+  .languages-c-container{
+    margin-top: 15px;
+  }
+  .languages-c-item{
+    margin: 10px 10px 10px 0;
+  }
+  .languages-c-item-l{
+    font-size: 14px;
+  }
+  .languages-c-item-r{
+    font-size: 14px;
+    margin-left: 10px;
+    padding-left: 0;
+  }
+
+  .profile-5-container{
+    margin: 15px;
+
+  }
+
+  .preferences-container{
+    padding: 15px;
+  }
+  .preferences-label{
+    font-size: 18px;
+  }
+  .preferences-c-container{
+    margin-top: 15px;
+  }
+
+  .preferences-c-item-label{
+    font-size: 14px;
+  }
+  .object-show-item{
     font-size: 12px;
   }
 

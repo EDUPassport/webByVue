@@ -137,6 +137,7 @@ import {EVENT_APPLICATIONS, EVENTS_CATEGORY, EVENTS_LIST, TAGS_LIST} from "@/api
 import eventDetailCard from "@/components/eventDetailCard";
 import bookEventForm from "@/components/bookEventForm";
 import BookEventList from "@/components/bookEventList";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "list",
@@ -150,7 +151,7 @@ export default {
     return {
       bannerImg,
       eventPage:1,
-      eventLimit:4,
+      eventLimit:6,
       eventTotalNum:0,
       showLoadingStatus:false,
       eventsList:[],
@@ -171,7 +172,26 @@ export default {
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
     this.getEventCategories()
     this.getEventTags()
     this.getEventsList(this.eventPage,this.eventLimit)
@@ -198,6 +218,7 @@ export default {
     confirmFilterSearch(e){
       console.log(e)
       this.filterResultData = e;
+      this.eventPage = 1;
       this.getEventsList(this.eventPage,this.eventLimit)
     },
     showEventDialog(item){
@@ -468,6 +489,62 @@ export default {
 }
 
 @media screen and (max-width: 768px){
+  .events-list-col{
+    padding-left: 0;
+
+  }
+
+  .empty-post-event-btn-container{
+    padding: 15px;
+  }
+
+  .events-list-bg-container{
+    height: calc( var(--i-window-height) - 180px);
+    padding: 0;
+    background-color: #FFFFFF;
+  }
+
+  .events-list-container{
+    flex-direction: column;
+  }
+
+  .events-item-bg{
+    width: 100%;
+    padding: 0;
+  }
+
+  .events-item{
+    margin: 15px;
+  }
+
+  .events-item-t{
+    max-height: 180px;
+  }
+
+  .events-item-banner{
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  .events-item-b{
+    padding: 15px;
+  }
+  .events-item-item span{
+    font-size: 12px;
+  }
+
+  .events-item-name{
+    margin-top: 15px;
+    font-size: 18px;
+    height: auto;
+  }
+
+  .events-item-desc{
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+
 
 }
 

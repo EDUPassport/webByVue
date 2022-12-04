@@ -220,7 +220,13 @@ export default {
   },
   methods:{
     viewApplicationEvent(id){
-      this.selectedApplicationIdWithCompany = id
+
+      if(this.selectedApplicationIdWithCompany === id){
+        this.selectedApplicationIdWithCompany = 0
+      }else{
+        this.selectedApplicationIdWithCompany = id
+      }
+
       // this.expandStatus = !this.expandStatus
     },
     showAllApplications(){
@@ -559,6 +565,152 @@ export default {
 }
 
 .dashboard-application-b-r {
+
+}
+
+@media screen and (max-width: 768px) {
+  .dashboard-applications{
+    padding: 0;
+    background-color: #F0F2F5;
+  }
+
+  .dashboard-applications-label{
+    font-size: 20px;
+    margin: 0 15px 8px 15px;
+  }
+  .dashboard-applications-all-btn{
+    font-size: 12px;
+  }
+
+  .dashboard-application{
+    padding: 15px;
+    margin: 7px 15px 15px 15px;
+    border-radius: 18px;
+    border-bottom:none;
+    background-color: #FFFFFF;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .dashboard-application-basic{
+    width: 100%;
+  }
+  .dashboard-application-avatar-img{
+    width: 40px;
+    height: 40px;
+  }
+  .dashboard-application-name{
+    font-size: 18px;
+  }
+  .dashboard-application-n{
+    margin-top: 4px;
+  }
+  .dashboard-application-n-1{
+    font-size: 12px;
+  }
+
+  .dashboard-application-n-2{
+    font-size: 12px;
+  }
+
+  .dashboard-application-job{
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .dashboard-application-job-1{
+    font-size: 18px;
+  }
+  .dashboard-application-job-2{
+    display: none;
+  }
+
+  .dashboard-application-match{
+    width: 100%;
+    margin-top: 20px;
+  }
+  .dashboard-application-match-2{
+    display: none;
+  }
+
+  .dashboard-view-application{
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+
+  }
+
+  .dashboard-view-application-btn{
+    font-size: 12px;
+  }
+
+  .dashboard-application-expand{
+    padding: 15px;
+  }
+  .dashboard-work-exp-label span{
+    font-size: 18px;
+  }
+  .dashboard-view-detail-btn{
+    font-size: 12px;
+  }
+  .dashboard-work-exp-c{
+    flex-wrap: wrap;
+    margin-top: 15px;
+  }
+  .dashboard-work-exp-c-item{
+    width: 100%;
+    flex: auto;
+    padding-right: 0;
+    margin-bottom: 4px;
+  }
+
+  .dashboard-work-exp-c-item-label{
+    font-size: 14px;
+  }
+  .dashboard-work-exp-c-item-text{
+    font-size: 12px;
+  }
+
+  .dashboard-education-cer{
+    margin-top: 15px;
+  }
+
+  .dashboard-education-cer-label{
+    font-size: 18px;
+  }
+  .dashboard-education-cer-c{
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+
+  .dashboard-education-cer-c-item{
+    width: 100%;
+    flex: auto;
+    padding-right: 0;
+    margin-bottom: 4px;
+  }
+
+  .dashboard-education-cer-c-label{
+    font-size: 14px;
+  }
+
+  .dashboard-education-cer-c-text{
+    font-size: 12px;
+  }
+
+  .dashboard-application-b{
+    margin-top: 15px;
+  }
+
+  .dashboard-application-b-l-btn-1{
+    font-size: 12px;
+  }
+
+  .dashboard-application-b-l-btn-2{
+    font-size: 12px;
+  }
+
 
 }
 

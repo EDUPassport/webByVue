@@ -1,6 +1,6 @@
 <template>
   <div class="bg">
-    <div class="basic-container" v-loading="submitLoadingValue" >
+    <div class="basic-container" v-loading="submitLoadingValue">
       <!--      <profileTitle :i="i" :action="action"></profileTitle>-->
       <div class="basic-l-container">
         <meSideMenu></meSideMenu>
@@ -8,7 +8,7 @@
 
       <el-scrollbar class="basic-r-container">
 
-        <div class="basic-r-container-bg" >
+        <div class="basic-r-container-bg">
 
           <div class="account-profile-t">
             <div class="account-profile-t-l">Your profile</div>
@@ -44,12 +44,12 @@
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
-<!--                    <el-col :span="6">-->
-<!--                      <el-form-item label="Display Name" prop="name">-->
-<!--                        <el-input v-model="basicForm.name" placeholder="Display Name" disabled></el-input>-->
-<!--                      </el-form-item>-->
-<!--                    </el-col>-->
-                    <el-col :span="6">
+                    <!--                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">-->
+                    <!--                      <el-form-item label="Display Name" prop="name">-->
+                    <!--                        <el-input v-model="basicForm.name" placeholder="Display Name" disabled></el-input>-->
+                    <!--                      </el-form-item>-->
+                    <!--                    </el-col>-->
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Nationality" prop="nationality">
                         <el-select v-model="basicForm.nationality"
                                    filterable
@@ -60,20 +60,20 @@
                       </el-form-item>
 
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Profile visibility">
                         <el-radio-group v-model="selectedProfileStatusValue">
                           <template v-for="(item,i) in profileStatusData" :key="i">
-                            <el-radio :label="item.id" >{{item.object_en}}</el-radio>
+                            <el-radio :label="item.id">{{ item.object_en }}</el-radio>
                           </template>
                         </el-radio-group>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Job seeking status">
                         <el-radio-group v-model="selectedJobSeekingValue">
                           <template v-for="(item,i) in jobSeekingData" :key="i">
-                            <el-radio :label="item.id" >{{item.object_en}}</el-radio>
+                            <el-radio :label="item.id">{{ item.object_en }}</el-radio>
                           </template>
                         </el-radio-group>
                       </el-form-item>
@@ -89,25 +89,25 @@
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="E-mail address" prop="email">
                         <el-input v-model="basicForm.email" placeholder="Your email address"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Phone number" prop="phone">
                         <el-input v-model="basicForm.phone" placeholder="Phone #"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Current Address" prop="address">
                         <el-input v-model="basicForm.address" placeholder="Current Address"></el-input>
                       </el-form-item>
                     </el-col>
 
-<!--                    <el-col :span="6">-->
+                    <!--                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">-->
 
-<!--                    </el-col>-->
+                    <!--                    </el-col>-->
 
                   </el-row>
                 </div>
@@ -119,7 +119,7 @@
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
-                    <el-col :span="12">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="About yourself" prop="bio">
                         <el-input type="textarea" v-model="basicForm.bio"
                                   :rows="6"
@@ -128,14 +128,14 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Job title" prop="job_title">
                         <el-input v-model="basicForm.job_title"
                                   placeholder="eg, Homeroom teacher"></el-input>
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Interests">
 
                         <el-select
@@ -164,8 +164,8 @@
                   </el-row>
 
                   <el-row :gutter="50">
-                    <el-col :span="12">
-                      <el-form-item label="Education Type(Up to 3)">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                      <el-form-item label="Educator Type(Up to 3)">
 
                         <div class="categories-tags" v-for="(item,k) in subCateOptions" :key="k">
                           <div v-if="item['children'].length>0" class="category-parent">
@@ -186,18 +186,18 @@
                     </el-col>
 
 
-                    <el-col :span="6">
-                      <el-form-item label="Languages & Proficiency" >
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Languages & Proficiency">
 
                         <div class="language-add-container">
 
                           <template v-if="selectedLanguageList.length > 0">
                             <div class="language-checkbox-item" v-for="(item,i) in selectedLanguageList" :key="i">
                               <div class="language-checkbox-item-l">
-                                {{item.object_en}}
+                                {{ item.object_en }}
                               </div>
                               <div class="language-checkbox-item-r">
-                                {{item.level_name}}
+                                {{ item.level_name }}
                               </div>
 
                               <div class="language-checkbox-item-delete">
@@ -210,14 +210,14 @@
 
                             <div class="language-add-icon">
                               <el-icon :size="45" @click="addLanguageAndProficiency()">
-                                <IconCarbonAddAlt />
+                                <IconCarbonAddAlt/>
                               </el-icon>
                             </div>
 
                           </template>
                           <template v-else>
                             <el-icon :size="45" @click="addLanguageAndProficiency()">
-                              <IconCarbonAddAlt />
+                              <IconCarbonAddAlt/>
                             </el-icon>
                           </template>
 
@@ -235,8 +235,8 @@
                               label-position="top"
                               class="demo-ruleForm"
                           >
-                            <el-form-item  label="Language"  >
-                              <el-select v-model="languageValue"  value-key="id">
+                            <el-form-item label="Language">
+                              <el-select v-model="languageValue" value-key="id">
                                 <el-option v-for="(item,i) in languageOptionsData" :key="i"
                                            :label="item.object_en"
                                            :value="item"
@@ -247,12 +247,12 @@
 
                             </el-form-item>
 
-                            <el-form-item class="work-form-item"  label="Proficiency" >
+                            <el-form-item class="work-form-item" label="Proficiency">
                               <el-select v-model="languageLevelValue" value-key="value">
                                 <el-option
                                     v-for="(level,ii) in languageLevelOptionsData" :key="ii"
                                     :label="level.label"
-                                    :value="level" >
+                                    :value="level">
                                 </el-option>
                               </el-select>
                             </el-form-item>
@@ -260,7 +260,7 @@
                           </el-form>
 
                           <div style="margin-top: 25px;text-align: center;">
-                            <el-button round type="primary" @click="submitLanguageItem()" >
+                            <el-button round type="primary" @click="submitLanguageItem()">
                               SUBMIT
                             </el-button>
                           </div>
@@ -272,28 +272,28 @@
 
                     </el-col>
 
-<!--                    <el-col :span="6">-->
-<!--                      <el-form-item label="Minimum expected salary (Monthly)" prop="min_monthly_salary">-->
-<!--                        <el-input type="number" v-model="basicForm.min_monthly_salary" placeholder="minimum expected salary">-->
-<!--                          <template #prepend>-->
-<!--                            <el-icon :size="20">-->
-<!--                              <IconIonLogoUsd />-->
-<!--                            </el-icon>-->
-<!--                          </template>-->
-<!--                        </el-input>-->
-<!--                      </el-form-item>-->
-<!--                    </el-col>-->
-<!--                    <el-col :span="6">-->
-<!--                      <el-form-item label="Minimum expected salary (Hourly)" prop="min_monthly_salary">-->
-<!--                        <el-input type="number" v-model="basicForm.min_hourly_salary" placeholder="minimum expected salary">-->
-<!--                          <template #prepend>-->
-<!--                            <el-icon :size="20">-->
-<!--                              <IconIonLogoUsd />-->
-<!--                            </el-icon>-->
-<!--                          </template>-->
-<!--                        </el-input>-->
-<!--                      </el-form-item>-->
-<!--                    </el-col>-->
+                    <!--                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">-->
+                    <!--                      <el-form-item label="Minimum expected salary (Monthly)" prop="min_monthly_salary">-->
+                    <!--                        <el-input type="number" v-model="basicForm.min_monthly_salary" placeholder="minimum expected salary">-->
+                    <!--                          <template #prepend>-->
+                    <!--                            <el-icon :size="20">-->
+                    <!--                              <IconIonLogoUsd />-->
+                    <!--                            </el-icon>-->
+                    <!--                          </template>-->
+                    <!--                        </el-input>-->
+                    <!--                      </el-form-item>-->
+                    <!--                    </el-col>-->
+                    <!--                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">-->
+                    <!--                      <el-form-item label="Minimum expected salary (Hourly)" prop="min_monthly_salary">-->
+                    <!--                        <el-input type="number" v-model="basicForm.min_hourly_salary" placeholder="minimum expected salary">-->
+                    <!--                          <template #prepend>-->
+                    <!--                            <el-icon :size="20">-->
+                    <!--                              <IconIonLogoUsd />-->
+                    <!--                            </el-icon>-->
+                    <!--                          </template>-->
+                    <!--                        </el-input>-->
+                    <!--                      </el-form-item>-->
+                    <!--                    </el-col>-->
 
 
                   </el-row>
@@ -307,7 +307,7 @@
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Years of experience">
 
                         <el-select v-model="checkedYearExpValue"
@@ -325,22 +325,22 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="18" >
+                    <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
 
                       <el-form-item label="Working experience">
-                        <div class="work-experience" >
+                        <div class="work-experience">
                           <div class="work-exp-temp-container">
                             <div class="work-exp-temp-container">
                               <div class="work-exp-temp-item"
                                    v-for="(item,i) in workExpData" :key="i">
-                                <el-form-item class="work-form-item" label="Job title" >
-                                  {{item.title}}
+                                <el-form-item class="work-form-item" label="Job title">
+                                  {{ item.title }}
                                 </el-form-item>
-                                <el-form-item class="work-form-item" label="Company" >
-                                  {{item.company_name}}
+                                <el-form-item class="work-form-item" label="Company">
+                                  {{ item.company_name }}
                                 </el-form-item>
-                                <el-form-item class="work-form-item" label="Location" >
-                                  {{item.location}}
+                                <el-form-item class="work-form-item" label="Location">
+                                  {{ item.location }}
                                 </el-form-item>
 
                                 <el-form-item class="work-form-item" label="Duration" prop="date">
@@ -349,8 +349,8 @@
                                   }}
                                 </el-form-item>
 
-                                <el-form-item class="work-form-item" label="Responsibilities" >
-                                  {{item.teaching_experience}}
+                                <el-form-item class="work-form-item" label="Responsibilities">
+                                  {{ item.teaching_experience }}
                                 </el-form-item>
 
                                 <div class="work-exp-temp-btn-container">
@@ -368,25 +368,25 @@
                               </div>
 
                             </div>
-                            <div class="work-exp-temp-container" >
+                            <div class="work-exp-temp-container">
                               <div class="work-exp-temp-item"
                                    v-for="(item,i) in workExpTempData" :key="i">
-                                <el-form-item class="work-form-item" label="Job title" >
-                                  {{item.title}}
+                                <el-form-item class="work-form-item" label="Job title">
+                                  {{ item.title }}
                                 </el-form-item>
-                                <el-form-item class="work-form-item" label="Company" >
-                                  {{item.company_name}}
+                                <el-form-item class="work-form-item" label="Company">
+                                  {{ item.company_name }}
                                 </el-form-item>
-                                <el-form-item class="work-form-item" label="Location" >
-                                  {{item.location}}
+                                <el-form-item class="work-form-item" label="Location">
+                                  {{ item.location }}
                                 </el-form-item>
 
                                 <el-form-item class="work-form-item" label="Duration" prop="date">
-                                  {{item.date}}
+                                  {{ item.date }}
                                 </el-form-item>
 
-                                <el-form-item class="work-form-item" label="Responsibilities" >
-                                  {{item.teaching_experience}}
+                                <el-form-item class="work-form-item" label="Responsibilities">
+                                  {{ item.teaching_experience }}
                                 </el-form-item>
 
                                 <div class="work-exp-temp-btn-container">
@@ -406,10 +406,10 @@
                             </div>
 
                           </div>
-                          <el-button  class="work-exp-temp-btn"
-                                      plain
-                                      round
-                                      @click="showWorkExpDialog()">
+                          <el-button class="work-exp-temp-btn"
+                                     plain
+                                     round
+                                     @click="showWorkExpDialog()">
                             ADD JOB
                           </el-button>
                         </div>
@@ -417,7 +417,7 @@
                         <el-dialog
                             v-model="workExpDialogVisible"
                             title="Work experience"
-                            width="454px"
+                            :width="workExpDialogWidth"
                         >
 
                           <el-form
@@ -434,7 +434,7 @@
                             <el-form-item class="work-form-item" label="Company" prop="company_name">
                               <el-input v-model="workExpForm.company_name" placeholder="ABC Academy"></el-input>
                             </el-form-item>
-                            <el-form-item class="work-form-item" label="Location" >
+                            <el-form-item class="work-form-item" label="Location">
                               <el-input v-model="workExpForm.location" placeholder="City, Country"></el-input>
                             </el-form-item>
 
@@ -454,7 +454,7 @@
                               </el-date-picker>
                             </el-form-item>
 
-                            <el-form-item class="work-form-item" label="Responsibilities" >
+                            <el-form-item class="work-form-item" label="Responsibilities">
                               <el-input v-model="workExpForm.teaching_experience"
                                         :rows="4"
                                         type="textarea"
@@ -464,14 +464,14 @@
                           </el-form>
 
                           <div class="work-exp-btn-container">
-                            <el-button class="work-exp-cancel-btn" type="primary"
+                            <el-button type="primary"
                                        link
                                        @click="workExpDialogVisible=false"
                             >
                               CANCEL
                             </el-button>
                             <el-button type="primary"
-                                       class="work-exp-save-btn"
+                                       round
                                        :loading="submitWorkExpLoadingValue"
                                        @click="saveWorkExpTemp()">
                               SAVE
@@ -487,7 +487,7 @@
                   </el-row>
 
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Places Traveled">
 
                         <el-select
@@ -510,7 +510,7 @@
 
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Places Lived">
 
                         <el-select
@@ -543,115 +543,116 @@
                 </div>
                 <div class="account-profile-item-c">
 
-                    <div class="work-experience" >
+                  <div class="work-experience">
+                    <div class="work-exp-temp-container">
                       <div class="work-exp-temp-container">
-                        <div class="work-exp-temp-container">
 
-                          <div class="work-exp-temp-item"
-                               v-for="(item,i) in educationData" :key="i">
+                        <div class="work-exp-temp-item"
+                             v-for="(item,i) in educationData" :key="i">
 
-                            <el-form-item label="School" prop="school_name">
-                              {{item.school_name}}
-                            </el-form-item>
-                            <el-form-item label="Degree" prop="degree">
-                              {{item.degree}}
-                            </el-form-item>
-                            <el-form-item label="Field of Study" >
-                              {{item.field_of_study}}
-                            </el-form-item>
+                          <el-form-item label="School" prop="school_name">
+                            {{ item.school_name }}
+                          </el-form-item>
+                          <el-form-item label="Degree" prop="degree">
+                            {{ item.degree }}
+                          </el-form-item>
+                          <el-form-item label="Field of Study">
+                            {{ item.field_of_study }}
+                          </el-form-item>
 
-                            <el-form-item label="Duration of Study" prop="date">
-                              {{
-                                $filters.ymdFormatTimestamp(item.start_time)
-                              }}-{{ $filters.ymdFormatTimestamp(item.end_time) }}
-                            </el-form-item>
+                          <el-form-item label="Duration of Study" prop="date">
+                            {{
+                              $filters.ymdFormatTimestamp(item.start_time)
+                            }}-{{ $filters.ymdFormatTimestamp(item.end_time) }}
+                          </el-form-item>
 
-                            <div class="work-exp-temp-btn-container">
-                              <el-button class="work-exp-temp-btn" link type="primary"
-                                         @click="deleteEducation(item)"
-                              >
-                                DELETE
-                              </el-button>
-                              <el-button class="work-exp-temp-btn" plain round
-                                         @click="editEducation(item)"
-                              >
-                                EDIT
-                              </el-button>
-                            </div>
+                          <div class="work-exp-temp-btn-container">
+                            <el-button class="work-exp-temp-btn" link type="primary"
+                                       @click="deleteEducation(item)"
+                            >
+                              DELETE
+                            </el-button>
+                            <el-button class="work-exp-temp-btn" plain round
+                                       @click="editEducation(item)"
+                            >
+                              EDIT
+                            </el-button>
                           </div>
-
                         </div>
 
                       </div>
-                      <el-button  class="work-exp-temp-btn"
-                                  plain
-                                  round
-                                  @click="showEducationDialog()">
-                        ADD EDUCATION
+
+                    </div>
+                    <el-button class="work-exp-temp-btn"
+                               plain
+                               round
+                               @click="showEducationDialog()">
+                      ADD EDUCATION
+                    </el-button>
+                  </div>
+
+                  <el-dialog
+                      v-model="educationDialogVisible"
+                      title="Education"
+                      :width="educationDialogWidth"
+                  >
+                    <el-form
+                        ref="educationForm"
+                        :model="educationForm"
+                        :rules="educationRules"
+                        label-width="120px"
+                        label-position="top"
+                        class="demo-ruleForm"
+                    >
+                      <el-form-item label="School" prop="school_name">
+                        <el-input v-model="educationForm.school_name" placeholder="University"></el-input>
+                      </el-form-item>
+                      <el-form-item label="Degree" prop="degree">
+                        <el-select v-model="educationForm.degree_id"
+                                   placeholder="Doctorate, Master's, Bachelor's, etc...">
+                          <el-option v-for="(degree,i) in degreeOptionsData" :key="i"
+                                     :value-key="degree.id"
+                                     :label="degree.object_en"
+                                     :value="degree.id"
+                          ></el-option>
+                        </el-select>
+                      </el-form-item>
+                      <el-form-item label="Field of Study">
+                        <el-input v-model="educationForm.field_of_study" type="textarea"
+                                  placeholder="Chemistry, International Business, Dance, etc..."></el-input>
+                      </el-form-item>
+                      <el-form-item label="Duration of Study" prop="date">
+                        <el-date-picker
+                            v-model="educationForm.date"
+                            type="monthrange"
+                            unlink-panels
+                            format="MM/YYYY"
+                            value-format="x"
+                            range-separator="To"
+                            start-placeholder="Start month"
+                            end-placeholder="End month"
+                        >
+                        </el-date-picker>
+                      </el-form-item>
+
+                    </el-form>
+
+                    <div class="work-exp-btn-container">
+                      <el-button type="primary"
+                                 link
+                                 @click="educationDialogVisible=false"
+                      >
+                        CANCEL
+                      </el-button>
+                      <el-button type="primary"
+                                 round
+                                 :loading="submitEducationLoadingValue"
+                                 @click="saveEducationTemp()">
+                        SAVE
                       </el-button>
                     </div>
 
-                    <el-dialog
-                        v-model="educationDialogVisible"
-                        title="Education"
-                        width="454px"
-                    >
-                      <el-form
-                          ref="educationForm"
-                          :model="educationForm"
-                          :rules="educationRules"
-                          label-width="120px"
-                          label-position="top"
-                          class="demo-ruleForm"
-                      >
-                        <el-form-item label="School" prop="school_name">
-                          <el-input v-model="educationForm.school_name" placeholder="University"></el-input>
-                        </el-form-item>
-                        <el-form-item label="Degree" prop="degree">
-                          <el-select  v-model="educationForm.degree_id" placeholder="Doctorate, Master's, Bachelor's, etc...">
-                            <el-option v-for="(degree,i) in degreeOptionsData" :key="i"
-                                       :value-key="degree.id"
-                                       :label="degree.object_en"
-                                       :value="degree.id"
-                            ></el-option>
-                          </el-select>
-                        </el-form-item>
-                        <el-form-item label="Field of Study" >
-                          <el-input v-model="educationForm.field_of_study" type="textarea"
-                                    placeholder="Chemistry, International Business, Dance, etc..."></el-input>
-                        </el-form-item>
-                        <el-form-item label="Duration of Study" prop="date">
-                          <el-date-picker
-                              v-model="educationForm.date"
-                              type="monthrange"
-                              unlink-panels
-                              format="MM/YYYY"
-                              value-format="x"
-                              range-separator="To"
-                              start-placeholder="Start month"
-                              end-placeholder="End month"
-                          >
-                          </el-date-picker>
-                        </el-form-item>
-
-                      </el-form>
-
-                      <div class="work-exp-btn-container">
-                        <el-button class="work-exp-cancel-btn" type="primary"
-                                   link
-                                   @click="educationDialogVisible=false"
-                        >
-                          CANCEL
-                        </el-button>
-                        <el-button type="primary"
-                                   class="work-exp-save-btn"
-                                   :loading="submitEducationLoadingValue"
-                                   @click="saveEducationTemp()">
-                          SAVE
-                        </el-button>
-                      </div>
-
-                    </el-dialog>
+                  </el-dialog>
 
                 </div>
               </div>
@@ -662,7 +663,7 @@
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
 
                       <el-form-item label="Work destination (Type to add new) ">
 
@@ -687,7 +688,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Job type">
 
                         <el-select
@@ -710,7 +711,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Work schedule type">
 
                         <el-select v-model="checkedWorkScheduleTypeValue"
@@ -729,7 +730,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Benefits">
 
                         <el-select
@@ -758,7 +759,7 @@
 
                   <el-row :gutter="50">
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Subject(s) to teach">
 
                         <el-select
@@ -783,7 +784,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label=" Preferred Age To Teach">
 
                         <el-select
@@ -808,7 +809,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Certifications">
 
                         <el-select
@@ -846,20 +847,20 @@
                 </div>
                 <div class="account-profile-item-c">
 
-<!--                  <el-row :gutter="50">-->
-<!--                    <el-col :span="24">-->
-<!--                      <el-form-item-->
-<!--                          label="Introduction" prop="desc">-->
-<!--                        <el-input v-model="basicForm.desc" type="textarea"-->
-<!--                                  :rows="4"-->
-<!--                                  placeholder="Write a couple of paragraphs about your school and why educators would want to teach there.">-->
-<!--                        </el-input>-->
-<!--                      </el-form-item>-->
-<!--                    </el-col>-->
-<!--                  </el-row>-->
+                  <!--                  <el-row :gutter="50">-->
+                  <!--                    <el-col :span="24">-->
+                  <!--                      <el-form-item-->
+                  <!--                          label="Introduction" prop="desc">-->
+                  <!--                        <el-input v-model="basicForm.desc" type="textarea"-->
+                  <!--                                  :rows="4"-->
+                  <!--                                  placeholder="Write a couple of paragraphs about your school and why educators would want to teach there.">-->
+                  <!--                        </el-input>-->
+                  <!--                      </el-form-item>-->
+                  <!--                    </el-col>-->
+                  <!--                  </el-row>-->
 
                   <el-row :span="50">
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Images(up to 6)" prop="images">
                         <el-upload
                             style="width: 90%;"
@@ -868,9 +869,9 @@
                             :headers="uploadHeaders"
                             :data="uploadData"
                             :auto-upload="false"
-                            name="file[]"
                             :show-file-list="false"
                             :limit="6"
+                            name="file[]"
                             :multiple="true"
                             :before-upload="beforeAccountImageUpload"
                             :file-list="accountImageFileList"
@@ -882,19 +883,19 @@
 
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image"
                                v-for="(item,i) in accountImageFileList" :key="i">
                             <el-image :src="item.url"></el-image>
                             <div class="account-xll-image-mask">
                               <span @click="handleAccountImagePreview(item)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                               <span @click="handleAccountImageRemove(item,i)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <Delete />
+                                  <Delete/>
                                 </el-icon>
                               </span>
                             </div>
@@ -908,7 +909,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Introduction Video" prop="video_url">
                         <el-upload
                             class="profile-uploader"
@@ -923,22 +924,22 @@
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
                             <div v-if="introVideoUrl">
-                              <video  style="width: 100%;" :src="introVideoUrl" controls  />
+                              <video style="width: 100%;" :src="introVideoUrl" controls/>
                             </div>
                             <div class="account-xll-image-mask">
                               <span @click="handleVideoPreview(introVideoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
-<!--                              <span @click="handleVideoRemove(introVideoUrl)">-->
-<!--                                <el-icon color="#ffffff" :size="45">-->
-<!--                                  <Delete />-->
-<!--                                </el-icon>-->
-<!--                              </span>-->
+                              <!--                              <span @click="handleVideoRemove(introVideoUrl)">-->
+                              <!--                                <el-icon color="#ffffff" :size="45">-->
+                              <!--                                  <Delete />-->
+                              <!--                                </el-icon>-->
+                              <!--                              </span>-->
                             </div>
                           </div>
                         </div>
@@ -948,7 +949,7 @@
 
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Background Image" prop="background_image">
                         <el-upload
                             class="profile-uploader"
@@ -964,7 +965,7 @@
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
                             <div v-if="backgroundPhotoUrl">
                               <el-image
@@ -975,7 +976,7 @@
                             <div class="account-xll-image-mask">
                               <span @click="handleSingleImagePreview(backgroundPhotoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                             </div>
@@ -988,7 +989,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Profile Photo" prop="profile_photo">
                         <el-upload
                             class="profile-uploader"
@@ -1004,15 +1005,15 @@
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
                             <div v-if="profilePhotoUrl">
-                              <el-image :src="profilePhotoUrl" style="width: 100%;" ></el-image>
+                              <el-image :src="profilePhotoUrl" style="width: 100%;"></el-image>
                             </div>
                             <div class="account-xll-image-mask">
                               <span @click="handleSingleImagePreview(profilePhotoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                             </div>
@@ -1039,7 +1040,7 @@
 
     </div>
 
-    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()" ></xllLoading>
+    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()"></xllLoading>
 
   </div>
 </template>
@@ -1060,7 +1061,6 @@ import {
   UPLOAD_BY_ALI_OSS,
   UPLOAD_BY_SERVICE,
   ADD_PROFILE_V2,
-  UPLOAD_IMG,
   ADD_USER_IMG_V2,
   ALL_LANGUAGE_PROFICIENCY,
   USER_OBJECT_LIST,
@@ -1068,11 +1068,12 @@ import {
   ADD_USER_EDUCATION_V2,
   ADD_LANGUAGE_SCORE_V2,
   EDUCATOR_PERCENTAGE_V2,
-  USER_CONTACT_EDIT_V2
+  USER_CONTACT_EDIT_V2, UPLOAD_BY_SERVICE_MORE
 } from '@/api/api'
 import {countriesData} from "@/utils/data";
 import {encode, decode} from "js-base64";
 import ImageCompressor from "compressorjs";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "editEducatorHome",
@@ -1080,8 +1081,8 @@ export default {
     meSideMenu,
     xllLoading
   },
-  setup(){
-    const birthdayDisabledDate = (date)=>{
+  setup() {
+    const birthdayDisabledDate = (date) => {
       let myDate = new Date();
       return date.getTime() >= myDate.getTime();
     }
@@ -1091,9 +1092,11 @@ export default {
   },
   data() {
     return {
+      workExpDialogWidth: '454px',
+      educationDialogWidth: '454px',
       uploadLoadingStatus: false,
       submitLoadingValue: false,
-      submitAndViewLoadingValue:false,
+      submitAndViewLoadingValue: false,
 
       sideMenuStatus: true,
       uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
@@ -1129,8 +1132,8 @@ export default {
         background_image: '',
         profile_photo: '',
         logo: '',
-        min_monthly_salary:'',
-        min_hourly_salary:''
+        min_monthly_salary: '',
+        min_hourly_salary: ''
 
       },
       basicRules: {
@@ -1209,10 +1212,10 @@ export default {
       dialogAccountImageVisible: false,
       accountImageFileList: [],
       resumeUrl: '',
-      dialogVideoVisible:false,
-      dialogVideoUrl:'',
-      dialogSingleImageVisible:false,
-      dialogSingleImageUrl:'',
+      dialogVideoVisible: false,
+      dialogVideoUrl: '',
+      dialogSingleImageVisible: false,
+      dialogSingleImageUrl: '',
 
       editSubjectList: [],
       selectSubjectList: [],
@@ -1225,7 +1228,7 @@ export default {
       editWorkDestinationList: [],
       selectWorkDestinationList: [],
 
-      selectJobTypeList:[],
+      selectJobTypeList: [],
       editJobTypeList: [],
 
       editAgeToTeachList: [],
@@ -1240,8 +1243,8 @@ export default {
       editBenefitsList: [],
       selectBenefitsList: [],
 
-      workExpDialogVisible:false,
-      submitWorkExpLoadingValue:false,
+      workExpDialogVisible: false,
+      submitWorkExpLoadingValue: false,
       workExpForm: {
         company_name: '',
         title: '',
@@ -1250,8 +1253,8 @@ export default {
         teaching_experience: '',
         work_time_from: '',
         work_time_to: '',
-        date:'',
-        token:localStorage.getItem('token')
+        date: '',
+        token: localStorage.getItem('token')
       },
       workExpRules: {
         title: [
@@ -1278,22 +1281,22 @@ export default {
 
 
       },
-      workExpData:[],
-      workExpTempData:[],
+      workExpData: [],
+      workExpTempData: [],
       editWorkExpIndex: -1,
-      editExistWorkExpStatus:false,
+      editExistWorkExpStatus: false,
 
-      educationDialogVisible:false,
-      submitEducationLoadingValue:false,
+      educationDialogVisible: false,
+      submitEducationLoadingValue: false,
       educationForm: {
         school_name: '',
         degree: '',
-        degree_id:'',
+        degree_id: '',
         field_of_study: '',
         start_time: '',
         end_time: '',
         grade: '',
-        token:localStorage.getItem('token')
+        token: localStorage.getItem('token')
       },
       educationRules: {
         school_name: [
@@ -1319,36 +1322,58 @@ export default {
         ]
 
       },
-      educationData:[],
-      educationTempData:[],
+      educationData: [],
+      educationTempData: [],
       editEducationIndex: -1,
-      editExistEducationStatus:false,
+      editExistEducationStatus: false,
 
-      profileStatusData:[],
-      selectedProfileStatusValue:'',
-      jobSeekingData:[],
-      selectedJobSeekingValue:'',
+      profileStatusData: [],
+      selectedProfileStatusValue: '',
+      jobSeekingData: [],
+      selectedJobSeekingValue: '',
 
-      degreeOptionsData:[],
+      degreeOptionsData: [],
 
-      languageOptionsData:[],
-      selectedLanguageList:[],
-      languageValue:'',
+      languageOptionsData: [],
+      selectedLanguageList: [],
+      languageValue: '',
 
-      languageLevelOptionsData:[],
-      languageLevelValue:'',
+      languageLevelOptionsData: [],
+      languageLevelValue: '',
 
-      selectedLanguageLevelData:[],
-      languageDialogVisible:false,
-      languageForm:{},
+      selectedLanguageLevelData: [],
+      languageDialogVisible: false,
+      languageForm: {},
 
       checkedYearExpValue: undefined,
       checkedJobTypeValue: undefined,
-      checkedWorkScheduleTypeValue:undefined,
+      checkedWorkScheduleTypeValue: undefined,
 
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   async mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+      this.workExpDialogWidth = '90%'
+      this.educationDialogWidth = '90%'
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+        this.workExpDialogWidth = '90%'
+        this.educationDialogWidth = '90%'
+      }
+    }
 
     await this.getSubIdentityList()
     await this.getUserObjectList()
@@ -1376,14 +1401,14 @@ export default {
 
   },
   methods: {
-    removeLanguageItem(i){
-      this.selectedLanguageList.splice(i,1)
+    removeLanguageItem(i) {
+      this.selectedLanguageList.splice(i, 1)
     },
-    addLanguageAndProficiency(){
+    addLanguageAndProficiency() {
       this.languageDialogVisible = true;
 
     },
-    submitLanguageItem(){
+    submitLanguageItem() {
       let languageObj = this.languageValue
       let level = this.languageLevelValue
 
@@ -1395,10 +1420,10 @@ export default {
       this.languageDialogVisible = false;
 
     },
-    languageConfirm(){
+    languageConfirm() {
       let sLanguageData = this.selectedLanguageList
       let sData = []
-      sLanguageData.forEach(item=>{
+      sLanguageData.forEach(item => {
         let obj = {
 
           object_id: item.id,
@@ -1410,7 +1435,7 @@ export default {
       })
       console.log(sData)
       let params = {
-        company_id:this.educatorContact.id,
+        company_id: this.educatorContact.id,
         object_arr: sData,
         token: localStorage.getItem('token')
       }
@@ -1425,7 +1450,7 @@ export default {
       })
 
     },
-    cancel(){
+    cancel() {
       this.$router.push('/account/home')
     },
     updateUserProfilePercentage() {
@@ -1444,11 +1469,11 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
-          if(typeValue === 1){
+          if (typeValue === 1) {
             this.submitLoadingValue = true;
           }
 
-          if(typeValue === 2){
+          if (typeValue === 2) {
             this.submitAndViewLoadingValue = true;
           }
 
@@ -1481,7 +1506,7 @@ export default {
             this.basicForm.is_seeking = 0
           }
 
-          if(this.selectHobbyInfoList.length>0){
+          if (this.selectHobbyInfoList.length > 0) {
             this.basicForm.hobbies = this.selectHobbyInfoList.join(',');
           }
 
@@ -1491,98 +1516,98 @@ export default {
             if (res.code == 200) {
 
               // years of experience single
-              if(this.checkedYearExpValue){
+              if (this.checkedYearExpValue) {
                 this.yearOfExpConfirm()
               }
               // job type
-              if(this.selectJobTypeList.length > 0){
+              if (this.selectJobTypeList.length > 0) {
                 this.jobTypeConfirm()
               }
               // work schedule type
-              if(this.checkedWorkScheduleTypeValue){
+              if (this.checkedWorkScheduleTypeValue) {
                 this.workScheduleTypeConfirm()
               }
 
 
-              if(this.selectedProfileStatusValue){
+              if (this.selectedProfileStatusValue) {
                 this.profileStatusConfirm()
               }
 
-              if(this.selectedJobSeekingValue){
+              if (this.selectedJobSeekingValue) {
                 this.jobSeekingConfirm()
               }
 
-              if(this.selectCertificationsList.length > 0){
+              if (this.selectCertificationsList.length > 0) {
                 this.certificationsConfirm()
               }
 
-              if(this.selectedLanguageList.length > 0){
+              if (this.selectedLanguageList.length > 0) {
                 this.languageConfirm()
               }
 
-              if(this.selectCountriesTraveledList.length > 0){
+              if (this.selectCountriesTraveledList.length > 0) {
                 this.countriesTraveledConfirm()
               }
 
-              if(this.selectCountriesLivedList.length > 0){
+              if (this.selectCountriesLivedList.length > 0) {
                 this.countriesLivedConfirm()
               }
 
-              if(this.selectSubjectList.length > 0){
+              if (this.selectSubjectList.length > 0) {
                 this.subjectConfirm()
               }
 
-              if(this.selectLocationList.length > 0){
+              if (this.selectLocationList.length > 0) {
                 this.locationConfirm()
               }
 
-              if(this.selectWorkDestinationList.length > 0){
+              if (this.selectWorkDestinationList.length > 0) {
                 this.workDestinationConfirm()
               }
 
-              if(this.selectAgeToTeachList.length > 0){
+              if (this.selectAgeToTeachList.length > 0) {
                 this.ageToTeachConfirm()
               }
 
-              if(this.selectRegionList.length > 0){
+              if (this.selectRegionList.length > 0) {
                 this.regionConfirm()
               }
-              if(this.selectBenefitsList.length > 0){
+              if (this.selectBenefitsList.length > 0) {
                 this.benefitsConfirm()
               }
 
-              if(this.profilePhotoUrl){
+              if (this.profilePhotoUrl) {
                 let contactParas = {
-                  headimgurl:this.profilePhotoUrl
+                  headimgurl: this.profilePhotoUrl
                 }
-                USER_CONTACT_EDIT_V2(contactParas).then(res=>{
+                USER_CONTACT_EDIT_V2(contactParas).then(res => {
                   console.log(res)
-                }).catch(err=>{
+                }).catch(err => {
                   console.log(err)
                 })
               }
 
               if (action == 'edit') {
                 // this.$router.go(-1)
-                if(this.accountImageFileList.length > 0){
+                if (this.accountImageFileList.length > 0) {
                   this.uploadAccountImages(this.cid)
                 }
 
                 this.updateUserProfilePercentage()
                 this.$store.commit('username', this.basicForm.name)
 
-                if(typeValue === 1){
+                if (typeValue === 1) {
                   this.skipToAccountHome()
                 }
 
-                if(typeValue === 2){
-                  this.skipToViewProfile(res.message.educator_id , 1)
+                if (typeValue === 2) {
+                  this.skipToViewProfile(res.message.educator_id, 1)
                 }
 
 
               } else {
 
-                if(this.accountImageFileList.length > 0){
+                if (this.accountImageFileList.length > 0) {
                   this.uploadAccountImages(res.message.educator_id)
                 }
 
@@ -1596,7 +1621,7 @@ export default {
 
                 // this.getUserMenuList(uid, 1, res.message.educator_id, uid)
 
-                this.changeIdentity(res.message.educator_id, res.message.user_id,2, typeValue)
+                this.changeIdentity(res.message.educator_id, res.message.user_id, 2, typeValue)
 
               }
 
@@ -1615,13 +1640,13 @@ export default {
         }
       })
     },
-    skipToAccountHome(){
+    skipToAccountHome() {
       let self = this;
-      setTimeout(function (){
+      setTimeout(function () {
 
         self.$router.push('/account/home')
 
-      },3000)
+      }, 3000)
 
     },
     getUserMenuList(uid, identity, companyId, createUid) {
@@ -1709,52 +1734,52 @@ export default {
 
 
     },
-    skipToViewProfile(companyId,roleValue){
+    skipToViewProfile(companyId, roleValue) {
       let userId = localStorage.getItem('uid')
-      if(roleValue == 1){
+      if (roleValue == 1) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:1
+          cid: companyId,
+          uid: userId,
+          identity: 1
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/educator/profile',query:{str:str}})
+        this.$router.push({path: '/educator/profile', query: {str: str}})
       }
-      if(roleValue == 2){
+      if (roleValue == 2) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:2
+          cid: companyId,
+          uid: userId,
+          identity: 2
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/business/profile',query:{str:str}})
+        this.$router.push({path: '/business/profile', query: {str: str}})
       }
-      if(roleValue == 3){
+      if (roleValue == 3) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:3
+          cid: companyId,
+          uid: userId,
+          identity: 3
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/business/profile',query:{str:str}})
+        this.$router.push({path: '/business/profile', query: {str: str}})
       }
-      if(roleValue == 4){
+      if (roleValue == 4) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:4
+          cid: companyId,
+          uid: userId,
+          identity: 4
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/business/profile',query:{str:str}})
+        this.$router.push({path: '/business/profile', query: {str: str}})
       }
-      if(roleValue == 5){
+      if (roleValue == 5) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:5
+          cid: companyId,
+          uid: userId,
+          identity: 5
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/vendor/profile',query:{str:str}})
+        this.$router.push({path: '/vendor/profile', query: {str: str}})
       }
     },
     changeIdentity(companyId, companyContactId, language, typeValue) {
@@ -1773,17 +1798,17 @@ export default {
           this.$store.commit('allIdentityChanged', true)
 
           let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData',str)
+          localStorage.setItem('menuData', str)
 
           this.$store.commit('identity', 1)
           this.$store.commit('menuData', res.message)
           this.$store.commit('currentCompanyId', companyId)
 
-          if(typeValue === 1){
+          if (typeValue === 1) {
             this.skipToAccountHome()
           }
 
-          if(typeValue === 2){
+          if (typeValue === 2) {
             this.skipToViewProfile(companyId, 1)
           }
 
@@ -1980,21 +2005,21 @@ export default {
             let languagesArr = educatorContact.languages
             let languagesOptionsData = this.languageOptionsData
             let a = []
-            languagesArr.forEach(item=>{
-              let b = languagesOptionsData.filter(option=>item.object_id == option.id )
+            languagesArr.forEach(item => {
+              let b = languagesOptionsData.filter(option => item.object_id == option.id)
 
-              if(item.object_score){
+              if (item.object_score) {
                 b[0]['level'] = item.object_score;
-                if(item.object_score == 1){
+                if (item.object_score == 1) {
                   b[0]['level_name'] = 'Native';
                 }
-                if(item.object_score == 2){
+                if (item.object_score == 2) {
                   b[0]['level_name'] = 'Fluent';
                 }
-                if(item.object_score == 3){
+                if (item.object_score == 3) {
                   b[0]['level_name'] = 'Conversational';
                 }
-                if(item.object_score == 4){
+                if (item.object_score == 4) {
                   b[0]['level_name'] = 'Beginner';
                 }
 
@@ -2078,7 +2103,6 @@ export default {
             })
 
           }
-
 
 
           if (educatorContact.age_to_teach) {
@@ -2223,7 +2247,7 @@ export default {
     },
     async getUserObjectListtest() {
       let data = {
-        pid:0
+        pid: 0
       }
 
       await USER_OBJECT_LIST(data).then(res => {
@@ -2255,10 +2279,10 @@ export default {
           this.editCountriesTraveledList = res.message.filter(item => item.pid === 8);
           this.editWorkScheduleTypeList = res.message.filter(item => item.pid === 184);
 
-          this.profileStatusData =  res.message.filter(item => item.pid === 195);
-          this.jobSeekingData =  res.message.filter(item => item.pid === 199);
-          this.degreeOptionsData =  res.message.filter(item => item.pid === 125);
-          this.languageOptionsData =  res.message.filter(item => item.pid === 2);
+          this.profileStatusData = res.message.filter(item => item.pid === 195);
+          this.jobSeekingData = res.message.filter(item => item.pid === 199);
+          this.degreeOptionsData = res.message.filter(item => item.pid === 125);
+          this.languageOptionsData = res.message.filter(item => item.pid === 2);
 
         }
 
@@ -2659,9 +2683,9 @@ export default {
       let objectArr = [];
       this.selectCertificationsList.forEach(item => {
 
-        if(typeof item === 'string'){
+        if (typeof item === 'string') {
           expand.push(item)
-        }else{
+        } else {
 
           objectArr.push(item.id);
         }
@@ -2845,7 +2869,7 @@ export default {
     },
     handleAccountImageRemove(file, i) {
       console.log(file, i)
-      this.accountImageFileList.splice(i,1)
+      this.accountImageFileList.splice(i, 1)
 
     },
     handleAccountImagePreview(file) {
@@ -2860,7 +2884,7 @@ export default {
       this.dialogVideoVisible = true
 
     },
-    handleSingleImagePreview(file){
+    handleSingleImagePreview(file) {
       this.dialogSingleImageUrl = file
       this.dialogSingleImageVisible = true;
     },
@@ -2872,7 +2896,7 @@ export default {
       }
       return isJpeg
     },
-    handleAccountImageChange(file,fileList) {
+    handleAccountImageChange(file, fileList) {
       console.log(file)
       console.log(fileList)
       this.uploadLoadingStatus = true;
@@ -2882,15 +2906,15 @@ export default {
       imgParams.append('platform', 4)
       imgParams.append('file[]', file.raw)
 
-      UPLOAD_IMG(imgParams).then(res => {
+      UPLOAD_BY_SERVICE_MORE(imgParams).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let imgData = res.data;
+          let imgData = res.message;
           // let imgArr = [];
           imgData.forEach(item => {
             let obj = {
-              name:item.file_name,
-              url:item.file_url
+              name: '',
+              url: item
             }
             this.accountImageFileList.push(obj)
 
@@ -2899,7 +2923,7 @@ export default {
         }
 
       }).catch(err => {
-        this.uploadLoadingStatus =false;
+        this.uploadLoadingStatus = false;
         console.log(err)
       })
 
@@ -2934,43 +2958,43 @@ export default {
       this.dialogAccountImageVisible = true;
       this.dialogAccountImageUrl = url;
     },
-    videoHttpRequest(options){
+    videoHttpRequest(options) {
       let self = this;
       // console.log(options)
       const formData = new FormData();
       let file = options.file;
 
-      formData.append('token',localStorage.getItem('token'))
+      formData.append('token', localStorage.getItem('token'))
       // console.log(file)
       let isInChina = process.env.VUE_APP_CHINA
-      if(isInChina === 'yes'){
-        formData.append('file[]',file,file.name)
-        UPLOAD_BY_ALI_OSS(formData).then(res=>{
+      if (isInChina === 'yes') {
+        formData.append('file[]', file, file.name)
+        UPLOAD_BY_ALI_OSS(formData).then(res => {
           // console.log(res)
-          if(res.code == 200){
+          if (res.code == 200) {
             let myFileUrl = res.data[0]['file_url'];
             self.uploadLoadingStatus = false;
             self.introVideoUrl = myFileUrl
             self.basicForm.video_url = myFileUrl
 
           }
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err)
         })
 
       }
 
-      if(isInChina === 'no'){
-        formData.append('file',file,file.name)
-        UPLOAD_BY_SERVICE(formData).then(res=>{
+      if (isInChina === 'no') {
+        formData.append('file', file, file.name)
+        UPLOAD_BY_SERVICE(formData).then(res => {
           // console.log(res)
-          if(res.code == 200){
+          if (res.code == 200) {
             let myFileUrl = res.message.file_path;
             self.uploadLoadingStatus = false;
             self.introVideoUrl = myFileUrl
             self.basicForm.video_url = myFileUrl
           }
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err)
         })
 
@@ -3014,9 +3038,9 @@ export default {
       let objectArr = [];
       this.selectSubjectList.forEach(item => {
 
-        if(typeof item === 'string'){
+        if (typeof item === 'string') {
           expand.push(item)
-        }else{
+        } else {
           objectArr.push(item.id);
         }
       })
@@ -3047,9 +3071,9 @@ export default {
 
       this.selectLocationList.forEach(item => {
 
-        if(typeof item === 'string'){
+        if (typeof item === 'string') {
           expand.push(item)
-        }else{
+        } else {
           objectArr.push(item.id)
         }
 
@@ -3156,9 +3180,9 @@ export default {
       let objectArr = [];
       this.selectAgeToTeachList.forEach(item => {
 
-        if(typeof item === 'string'){
+        if (typeof item === 'string') {
           expand.push(item)
-        }else{
+        } else {
           objectArr.push(item.id);
         }
 
@@ -3188,9 +3212,9 @@ export default {
       let objectArr = [];
       this.selectRegionList.forEach(item => {
 
-        if(typeof item === 'string'){
+        if (typeof item === 'string') {
           expand.push(item);
-        }else{
+        } else {
           objectArr.push(item.id);
         }
       })
@@ -3219,9 +3243,9 @@ export default {
       let objectArr = [];
       this.selectBenefitsList.forEach(item => {
 
-        if(typeof item === 'string'){
+        if (typeof item === 'string') {
           expand.push(item);
-        }else{
+        } else {
           objectArr.push(item.id);
         }
 
@@ -3246,10 +3270,10 @@ export default {
       })
 
     },
-    showWorkExpDialog(){
+    showWorkExpDialog() {
       this.workExpDialogVisible = true;
     },
-    saveWorkExpTemp(){
+    saveWorkExpTemp() {
       this.submitWorkExpForm('workExpForm')
 
       // let existsStatus = this.editExistWorkExpStatus
@@ -3271,48 +3295,48 @@ export default {
 
 
     },
-    deleteWorkExp(item){
+    deleteWorkExp(item) {
 
       let params = {
-        work_id:item.id,
-        is_delete:1
+        work_id: item.id,
+        is_delete: 1
       }
-      ADD_USER_WORK_V2(params).then(res=>{
+      ADD_USER_WORK_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.submitLoadingValue = false;
-          this.workExpDialogVisible =false;
+          this.workExpDialogVisible = false;
           this.getBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.submitLoadingValue = false;
         this.$message.error(err.msg)
       })
 
     },
-    editWorkExp(item){
+    editWorkExp(item) {
 
-      let obj = Object.assign({},item)
+      let obj = Object.assign({}, item)
       this.workExpForm = obj;
 
       let workTimeFrom = item.work_time_from
       let workTimeTo = item.work_time_to
 
-      this.workExpForm.date = [workTimeFrom*1000,workTimeTo*1000]
+      this.workExpForm.date = [workTimeFrom * 1000, workTimeTo * 1000]
       this.workExpForm.work_id = item.id;
       this.editExistWorkExpStatus = true;
       this.workExpDialogVisible = true;
 
     },
-    deleteTempWorkExp(item,i){
+    deleteTempWorkExp(item, i) {
       console.log(item)
       let temp = this.workExpTempData
-      temp.splice(i,1)
+      temp.splice(i, 1)
     },
-    editTempWorkExp(item, i){
+    editTempWorkExp(item, i) {
       this.editWorkExpIndex = i;
-      let obj = Object.assign({},item)
+      let obj = Object.assign({}, item)
       this.workExpForm = obj;
       this.workExpDialogVisible = true;
     },
@@ -3325,16 +3349,16 @@ export default {
           this.workExpForm.work_time_from = Math.floor(dateArr[0] / 1000)
           this.workExpForm.work_time_to = Math.floor(dateArr[1] / 1000)
 
-          let params = Object.assign({},this.workExpForm)
-          ADD_USER_WORK_V2(params).then(res=>{
+          let params = Object.assign({}, this.workExpForm)
+          ADD_USER_WORK_V2(params).then(res => {
             console.log(res)
-            if(res.code == 200){
+            if (res.code == 200) {
               this.submitLoadingValue = false;
               this.editExistWorkExpStatus = false;
-              this.workExpDialogVisible =false;
+              this.workExpDialogVisible = false;
               this.getBasicInfo()
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.submitLoadingValue = false;
             this.$message.error(err.msg)
@@ -3346,54 +3370,54 @@ export default {
         }
       })
     },
-    showEducationDialog(){
+    showEducationDialog() {
       this.educationDialogVisible = true;
     },
-    saveEducationTemp(){
+    saveEducationTemp() {
       this.submitEducationForm('educationForm')
     },
-    deleteEducation(item){
+    deleteEducation(item) {
 
       let params = {
-        education_id:item.id,
-        is_delete:1
+        education_id: item.id,
+        is_delete: 1
       }
-      ADD_USER_EDUCATION_V2(params).then(res=>{
+      ADD_USER_EDUCATION_V2(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.submitLoadingValue = false;
-          this.educationDialogVisible =false;
+          this.educationDialogVisible = false;
           this.getBasicInfo()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.submitLoadingValue = false;
         this.$message.error(err.msg)
       })
 
     },
-    editEducation(item){
+    editEducation(item) {
 
-      let obj = Object.assign({},item)
+      let obj = Object.assign({}, item)
       this.educationForm = obj;
 
       let startTime = item.start_time
       let endTime = item.end_time
-      this.educationForm.date = [startTime*1000,endTime*1000]
+      this.educationForm.date = [startTime * 1000, endTime * 1000]
 
       this.educationForm.education_id = item.id;
       this.editExistEducationStatus = true;
       this.educationDialogVisible = true;
 
     },
-    deleteTempEducation(item,i){
+    deleteTempEducation(item, i) {
       console.log(item)
       let temp = this.educationTempData
-      temp.splice(i,1)
+      temp.splice(i, 1)
     },
-    editTempEducation(item, i){
+    editTempEducation(item, i) {
       this.editEducationIndex = i;
-      let obj = Object.assign({},item)
+      let obj = Object.assign({}, item)
       this.educationForm = obj;
       this.educationDialogVisible = true;
     },
@@ -3406,16 +3430,16 @@ export default {
           this.educationForm.start_time = Math.floor(dateArr[0] / 1000)
           this.educationForm.end_time = Math.floor(dateArr[1] / 1000)
 
-          let params = Object.assign({},this.educationForm)
-          ADD_USER_EDUCATION_V2(params).then(res=>{
+          let params = Object.assign({}, this.educationForm)
+          ADD_USER_EDUCATION_V2(params).then(res => {
             console.log(res)
-            if(res.code == 200){
+            if (res.code == 200) {
               this.submitLoadingValue = false;
               this.editExistEducationStatus = false;
-              this.educationDialogVisible =false;
+              this.educationDialogVisible = false;
               this.getBasicInfo()
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.submitLoadingValue = false;
             this.$message.error(err.msg)
@@ -3428,7 +3452,6 @@ export default {
       })
 
     },
-
 
 
   }
@@ -3482,11 +3505,11 @@ export default {
 }
 
 .account-profile-cancel-btn {
-  font-size: 20px;
+  /*font-size: 20px;*/
 }
 
 .account-profile-save-btn {
-  font-size: 20px;
+  /*font-size: 20px;*/
 }
 
 
@@ -3565,10 +3588,12 @@ export default {
   font-size: 26px;
   color: #262626;
 }
-.account-profile-item-label span{
+
+.account-profile-item-label span {
   font-size: 20px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
+
 .account-profile-item-c {
   margin-top: 15px;
 }
@@ -3680,33 +3705,33 @@ export default {
   color: #FFFFFF;
 }
 
-.work-form-item{
-  margin-top:25px;
+.work-form-item {
+  margin-top: 25px;
 }
 
-.work-exp-btn-container{
+.work-exp-btn-container {
   text-align: right;
-  margin-top:20px;
+  margin-top: 20px;
 }
 
-.work-exp-cancel-btn{
-  font-size:20px;
+.work-exp-cancel-btn {
+  font-size: 20px;
 }
 
-.work-exp-save-btn{
-  font-size:20px;
+.work-exp-save-btn {
+  font-size: 20px;
 }
 
-.work-exp-temp-container{
+.work-exp-temp-container {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 }
 
-.work-exp-temp-item{
-  width:320px;
+.work-exp-temp-item {
+  width: 320px;
   /*height: 500px;*/
   /*overflow: auto;*/
   margin-right: 20px;
@@ -3716,47 +3741,47 @@ export default {
   border-radius: 38px;
 }
 
-.work-exp-temp-btn-container{
+.work-exp-temp-btn-container {
   text-align: right;
 }
 
-.work-exp-temp-btn{
-  font-size:20px;
+.work-exp-temp-btn {
+  /*font-size: 20px;*/
 }
 
-.work-experience{
-  display:flex;
+.work-experience {
+  display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
 
 }
 
-.account-xll-images{
-  width:90%;
+.account-xll-images {
+  width: 90%;
 }
 
-.account-xll-image{
+.account-xll-image {
   position: relative;
   margin-top: 10px;
 
 }
 
-.account-xll-image-mask{
+.account-xll-image-mask {
   position: absolute;
-  width:100%;
+  width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  margin:auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   display: none;
 
 }
 
-.account-xll-image:hover .account-xll-image-mask{
+.account-xll-image:hover .account-xll-image-mask {
   /*display: inline;*/
   display: flex;
   flex-direction: row;
@@ -3764,20 +3789,21 @@ export default {
   justify-content: center;
 }
 
-.account-xll-image-mask span{
+.account-xll-image-mask span {
   margin-right: 15px;
   cursor: pointer;
 }
 
-.account-xll-image-mask:hover{
+.account-xll-image-mask:hover {
 
 }
-.language-add-container{
+
+.language-add-container {
   width: 100%;
   position: relative;
 }
 
-.language-checkbox-item{
+.language-checkbox-item {
   width: calc(100% - 80px);
 
   display: flex;
@@ -3791,17 +3817,17 @@ export default {
 }
 
 
-
-.language-checkbox-item-l{
-  font-size: 20px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-}
-.language-checkbox-item-r{
+.language-checkbox-item-l {
   font-size: 20px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
-.language-add-icon{
+.language-checkbox-item-r {
+  font-size: 20px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
+.language-add-icon {
   position: absolute;
   right: 0;
   top: 0;
@@ -3815,6 +3841,61 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+  .basic-r-container {
+    width: 100%;
+    height: calc( var(--i-window-height) - 160px);
+  }
+
+  .basic-r-container-bg{
+    padding: 15px;
+  }
+
+  .account-profile-t{
+    padding-bottom: 15px;
+  }
+
+  .account-profile-t-l{
+    font-size: 20px;
+  }
+
+  .account-profile-item-container{
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .account-profile-item-label{
+    font-size: 18px;
+  }
+
+  .account-profile-item-label span{
+    font-size: 14px;
+  }
+
+  .categories-tags{
+    padding-bottom: 0px;
+  }
+
+  .categories-tags-item{
+    font-size: 12px;
+    padding: 0 8px;
+  }
+
+  .work-experience{
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .work-exp-temp-container{
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .work-exp-temp-item{
+    width: calc(100% - 30px);
+    padding: 15px;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
 
 }
 

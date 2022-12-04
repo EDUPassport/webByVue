@@ -1,66 +1,24 @@
 <template>
-<div class="profile-container">
+  <div class="profile-container">
 
-  <div class="action-container" v-if="canEdit">
-    <template v-if="fromDeal">
-      <div class="action-l">
-        <el-button class=""
-                   @click="backToSearchResults()"
-                   link>
-          <el-icon>
-            <ArrowLeft />
-          </el-icon>
-          BACK
-        </el-button>
-      </div>
-      <div class="action-r">
-
-      </div>
-    </template>
-    <template v-else>
-      <div class="action-l">
-        <!--      <el-button link @click="exitPreview()">-->
-        <!--        <el-icon>-->
-        <!--          <ArrowLeft />-->
-        <!--        </el-icon>-->
-        <!--        EXIT PREVIEW-->
-        <!--      </el-button>-->
-      </div>
-      <div class="action-r">
-        <el-button class="action-edit-btn"
-                   @click="editProfile()"
-                   plain round>
-          EDIT PROFILE
-        </el-button>
-      </div>
-    </template>
-
-  </div>
-
-  <el-scrollbar :class="canEdit ? 'container' : 'container-2'">
-
-    <template v-if="info.background_image && info.background_image != '0' ">
-
-      <div class="background-container" :style="'background-image:url('+ info.background_image +')'">
-        <el-image class="background-img" :src="info.background_image" fit="cover"
-                  :preview-src-list="[info.background_image]"
-        >
-          <template #error>
-            <div class="img-slot-background">
-              <el-icon :size="180" color="#808080">
-                <Picture/>
-              </el-icon>
-            </div>
-          </template>
-        </el-image>
-      </div>
-
-    </template>
+    <div class="background-container" :style="'background-image:url('+ info.background_image +')'">
+      <el-image class="background-img" :src="info.background_image" fit="cover"
+                :preview-src-list="[info.background_image]"
+      >
+        <template #error>
+          <div class="img-slot-background">
+            <el-icon :size="180" color="#808080">
+              <Picture/>
+            </el-icon>
+          </div>
+        </template>
+      </el-image>
+    </div>
 
     <div class="content-bg-container">
       <div class="info-1-container">
         <div class="info-1-l">
-          <el-image class="logo-img" :src="info.logo">
+          <el-image class="logo-img" :src="info.logo" fit="cover">
             <template #error>
               <div class="img-slot-logo">
                 <el-icon :size="60" color="#808080">
@@ -69,23 +27,26 @@
               </div>
             </template>
           </el-image>
+
+          <span class="info-1-l-company-name">{{ info.company_name }}</span>
+
         </div>
         <div class="info-1-r">
           <div class="info-1-r-1">
-            {{info.company_name}}
+            {{ info.company_name }}
           </div>
           <div class="info-1-r-c">
             <div class="info-item" v-if="info.website">
               <div class="info-item-l">Website:</div>
-              <div class="info-item-r">{{info.website }}</div>
+              <div class="info-item-r">{{ info.website }}</div>
             </div>
             <div class="info-item" v-if="info.work_phone">
               <div class="info-item-l">Work phone:</div>
-              <div class="info-item-r">{{info.work_phone }}</div>
+              <div class="info-item-r">{{ info.work_phone }}</div>
             </div>
             <div class="info-item" v-if="info.work_email">
               <div class="info-item-l">Work email:</div>
-              <div class="info-item-r">{{info.work_email }}</div>
+              <div class="info-item-r">{{ info.work_email }}</div>
             </div>
             <div class="info-item" v-if="info.country_info && $filters.countryInfoFormat(info.country_info)">
               <div class="info-item-l">Location:</div>
@@ -101,23 +62,23 @@
               <div class="info-item-l" v-if="identity == 4">Other type:</div>
               <div class="info-item-l" v-if="identity == 5">Vendor type:</div>
               <div class="info-item-r">
-                {{info.category_name_en}}
+                {{ info.category_name_en }}
               </div>
             </div>
 
             <div class="info-item" v-if="info.year_founded">
               <div class="info-item-l">Founded:</div>
-              <div class="info-item-r">{{info.year_founded }}</div>
+              <div class="info-item-r">{{ info.year_founded }}</div>
             </div>
 
             <div class="info-item" v-if="identity == 3 && info.tuition_type && info.tuition">
               <div class="info-item-l">Tuition:</div>
-              <div class="info-item-r">{{info.tuitions.object_en}} {{ info.tuition }}</div>
+              <div class="info-item-r">{{ info.tuitions.object_en }} {{ info.tuition }}</div>
             </div>
 
             <div class="info-item" v-if="identity == 3 && info.class_size">
               <div class="info-item-l">Avg class size:</div>
-              <div class="info-item-r">{{info.class_size }}</div>
+              <div class="info-item-r">{{ info.class_size }}</div>
             </div>
 
           </div>
@@ -132,7 +93,7 @@
           </div>
           <div class="contact-r">
             <div class="contact-r-1">
-              {{info.display_name}} <span>{{info.job_title}}</span>
+              {{ info.display_name }} <span>{{ info.job_title }}</span>
             </div>
             <div class="contact-r-2">
               <chatButton text="GET IN TOUCH"
@@ -148,7 +109,7 @@
 
       </div>
       <div class="about-container">
-        <div class="about-label">About {{info.company_name}}</div>
+        <div class="about-label">About {{ info.company_name }}</div>
         <div class="about-desc" v-html="info.desc"></div>
       </div>
 
@@ -159,9 +120,9 @@
       <div class="images-container" v-if="info.images">
         <swiper
             :style="{
-      '--swiper-navigation-color': '#000000',
-      '--swiper-pagination-color': '#000000',
-    }"
+              '--swiper-navigation-color': '#000000',
+              '--swiper-pagination-color': '#000000',
+             }"
             :slidesPerView="4"
             :slidersPerGroup="4"
             :loop="false"
@@ -184,6 +145,37 @@
           </swiper-slide>
         </swiper>
       </div>
+
+      <div class="images-mobile-container" v-if="info.images">
+        <swiper
+            :style="{
+              '--swiper-navigation-color': '#000000',
+              '--swiper-pagination-color': '#000000',
+             }"
+            :slidesPerView="1"
+            :slidersPerGroup="1"
+            :loop="false"
+            :loopFillGroupWithBlank="true"
+            :spaceBetween="0"
+            :pagination="{clickable: true,}"
+            :navigation="true"
+            class="mySwiper2"
+        >
+          <swiper-slide v-for="(item,i) in info.images" :key="i">
+            <el-image class="images-item-img" :src="item.url">
+              <template #error>
+                <div class="img-slot-swiper">
+                  <el-icon :size="80" color="#808080">
+                    <Picture/>
+                  </el-icon>
+                </div>
+              </template>
+            </el-image>
+          </swiper-slide>
+        </swiper>
+      </div>
+
+
       <div class="expect-container" v-if="identity == 3">
         <div class="expect-label">What to expect</div>
         <div class="expect-c">
@@ -196,19 +188,19 @@
           <div class="expect-c-item" v-if="$filters.userObjectFormat(info.subject)">
             <div class="expect-c-item-label">Subjects we teach</div>
             <div class="expect-c-item-c">
-              {{ $filters.userObjectFormat(info.subject)  }}
+              {{ $filters.userObjectFormat(info.subject) }}
             </div>
           </div>
           <div class="expect-c-item" v-if="$filters.userObjectFormat(info.Student_Age)">
             <div class="expect-c-item-label">Student's age</div>
             <div class="expect-c-item-c">
-              {{ $filters.userObjectFormat(info.Student_Age)  }}
+              {{ $filters.userObjectFormat(info.Student_Age) }}
             </div>
           </div>
           <div class="expect-c-item" v-if="info.technology_available">
             <div class="expect-c-item-label">Technology available</div>
             <div class="expect-c-item-c">
-              {{info.technology_available}}
+              {{ info.technology_available }}
             </div>
           </div>
           <div class="expect-c-item" v-if="$filters.userObjectFormat(info.facilities)">
@@ -231,15 +223,16 @@
       </div>
 
       <template v-if="info.lng && info.lat">
-        <mapComponent :lng="info.lng" :lat="info.lat" ></mapComponent>
+        <mapComponent :lng="info.lng" :lat="info.lat"></mapComponent>
       </template>
 
       <div class="cre-container" v-if="info.business_reg_img || info.license">
+
         <div class="cre-label">Credibility</div>
         <el-row class="cre-c" :gutter="0">
-          <el-col :span="12">
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-if="info.business_reg_img">
             <div class="cre-item-label">Business registration certificate</div>
-            <div class="cre-item-img-container" v-if="info.business_reg_img">
+            <div class="cre-item-img-container">
               <el-image class="cre-item-img" :src="info.business_reg_img">
                 <template #error>
                   <div class="img-slot-cre">
@@ -251,34 +244,37 @@
               </el-image>
             </div>
           </el-col>
-          <el-col :span="12" v-if="identity == 3 || identity == 4">
-            <div class="cre-item-label">License</div>
-            <div class="cre-item-img-container" v-if="info.license">
-              <el-image class="cre-item-img" :src="info.license">
-                <template #error>
-                  <div class="img-slot-cre">
-                    <el-icon :size="80" color="#808080">
-                      <Picture/>
-                    </el-icon>
-                  </div>
-                </template>
-              </el-image>
-            </div>
-          </el-col>
+          <template v-if="info.license">
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-if="identity == 2 || identity == 3 || identity == 4">
+
+              <div class="cre-item-label">License</div>
+              <div class="cre-item-img-container">
+                <el-image class="cre-item-img" :src="info.license">
+                  <template #error>
+                    <div class="img-slot-cre">
+                      <el-icon :size="80" color="#808080">
+                        <Picture/>
+                      </el-icon>
+                    </div>
+                  </template>
+                </el-image>
+              </div>
+            </el-col>
+
+          </template>
         </el-row>
       </div>
 
 
     </div>
 
-  </el-scrollbar>
-</div>
+  </div>
 
 </template>
 
 <script>
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from 'swiper/vue';
+import {Swiper, SwiperSlide} from 'swiper/vue';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -288,17 +284,19 @@ import "swiper/css/navigation";
 
 // import required modules
 import SwiperCore, {Autoplay, Pagination, Navigation} from 'swiper';
+
 SwiperCore.use([Autoplay, Navigation, Pagination]);
-import {ref,computed} from 'vue'
+import {ref, computed} from 'vue'
 import {useStore} from 'vuex'
-import {encode} from 'js-base64'
-import { useRouter } from 'vue-router'
+
+import {useRouter} from 'vue-router'
 import mapComponent from "@/components/mapComponent";
 import chatButton from '@/components/chat/chatButton';
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "businessProfile",
-  props:[ 'info', 'identity','canEdit','fromDeal'],
+  props: ['info', 'identity', 'canEdit', 'fromDeal', 'fromJob'],
   components: {
     Swiper,
     SwiperSlide,
@@ -316,11 +314,11 @@ export default {
     const store = useStore()
     const router = useRouter()
 
-    function turnChatPage(){
-      router.push({path:'/chat/messages'})
+    function turnChatPage() {
+      router.push({path: '/chat/messages'})
     }
 
-    const currentUser = computed(()=>store.state.currentUser)
+    const currentUser = computed(() => store.state.currentUser)
 
     return {
       thumbsSwiper,
@@ -329,53 +327,35 @@ export default {
       turnChatPage
 
     }
-    
+
 
   },
-  methods:{
-    exitPreview(){
-      this.$router.push('/account/home')
-    },
-    backToSearchResults(){
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
+  mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
+  },
+  methods: {
+
+    backToSearchResults() {
       this.$emit('back')
     },
-    editProfile(){
-      let  companyId = this.info.id;
-      let identity = this.identity;
-      let str = '';
-
-      if(companyId){
-        let strObj = {
-          cid: companyId,
-          action:'edit'
-        }
-
-        str = encode(JSON.stringify(strObj))
-
-      }else{
-        let strObj = {
-          i:identity,
-          action:'add'
-        }
-        str = encode(JSON.stringify(strObj))
-      }
-
-      if(identity == 2){
-        this.$router.push({path:'/business/edit/recruiter',query:{s:str}})
-      }
-      if(identity == 3){
-        this.$router.push({path:'/business/edit/school',query:{s:str}})
-      }
-      if(identity == 4){
-        this.$router.push({path:'/business/edit/other',query:{s:str}})
-      }
-
-      if(identity == 5){
-        this.$router.push({path:'/vendor/edit/vendor',query:{s:str}})
-      }
-
-    },
-    chatSuccess(){
+    chatSuccess() {
       this.turnChatPage()
     },
 
@@ -386,41 +366,30 @@ export default {
 </script>
 
 <style scoped>
-.profile-container{
-  /*max-width: 1130px;*/
+.profile-container {
+
 }
 
-.container{
-  height: calc(100vh - 200px);
-  background-color: #F0F2F5;
-}
-
-.container-2{
-  height: calc(100vh - 140px);
-  background-color: #F0F2F5;
-}
-
-.background-container{
+.background-container {
   /*height: 260px;*/
   background-size: 100%;
   background-repeat: repeat;
   background-position: center;
   height: 380px;
   overflow: hidden;
-
   text-align: center;
 }
 
-.background-img{
+.background-img {
   width: 100%;
   height: 100%;
 }
 
-.content-bg-container{
+.content-bg-container {
   padding: 25px;
 }
 
-.info-1-container{
+.info-1-container {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -429,25 +398,26 @@ export default {
 
 }
 
-.info-1-l{
+.info-1-l {
 
 }
-.logo-img{
- width: 100px;
+
+.logo-img {
+  width: 100px;
   height: 100px;
 }
 
-.info-1-r{
+.info-1-r {
   width: calc(100% - 125px);
 }
 
-.info-1-r-1{
+.info-1-r-1 {
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 35px;
   color: #262626;
 }
 
-.info-1-r-c{
+.info-1-r-c {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -455,7 +425,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.info-item{
+.info-item {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -463,31 +433,31 @@ export default {
   width: 100%;
 }
 
-.info-item-l{
+.info-item-l {
   font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color: #262626;
 }
 
-.info-item-r{
+.info-item-r {
   margin-left: 4px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color: #262626;
 }
 
-.contact-container{
+.contact-container {
   margin-top: 50px;
 
 }
 
-.contact-label{
+.contact-label {
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 30px;
   color: #262626;
 }
 
-.contact-c{
+.contact-c {
   margin-top: 25px;
   display: flex;
   flex-direction: row;
@@ -495,116 +465,120 @@ export default {
   justify-content: space-between;
 }
 
-.contact-l{
+.contact-l {
 
 }
-.contact-l-img{
+
+.contact-l-img {
   width: 74px;
   height: 74px;
 }
 
-.contact-r{
+.contact-r {
   width: calc(100% - 89px);
 }
 
-.contact-r-1{
+.contact-r-1 {
   font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 26px;
   color: #262626;
 }
-.contact-r-1 span{
+
+.contact-r-1 span {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color: #262626;
 }
 
-.contact-r-2{
+.contact-r-2 {
   font-size: 20px;
 }
 
-.about-container{
+.about-container {
   margin-top: 50px;
 }
 
-.about-label{
+.about-label {
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 30px;
   color: #262626;
 }
 
-.about-desc{
+.about-desc {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color: #262626;
   margin-top: 25px;
 }
 
-.video-container{
+.video-container {
   width: 100%;
   margin-top: 25px;
   text-align: center;
 }
 
-#video{
+#video {
   width: 400px;
 }
 
-.expect-container{
+.expect-container {
   margin-top: 50px;
 }
-.expect-label{
+
+.expect-label {
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 26px;
   color: #262626;
 }
 
-.expect-c{
+.expect-c {
   margin-top: 25px;
 }
 
-.expect-c-item{
+.expect-c-item {
   margin-top: 25px;
 }
-.expect-c-item-label{
+
+.expect-c-item-label {
   font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color: #262626;
 }
 
-.expect-c-item-c{
+.expect-c-item-c {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color: #262626;
 }
 
-.cre-container{
+.cre-container {
   margin-top: 50px;
 }
 
-.cre-label{
+.cre-label {
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 26px;
   color: #262626;
 }
 
-.cre-c{
+.cre-c {
   margin-top: 25px;
 }
 
-.cre-item-label{
+.cre-item-label {
   font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color: #262626;
 }
 
-.cre-item-img-container{
+.cre-item-img-container {
   width: 98%;
   min-height: 200px;
   margin: 10px auto;
 
 }
 
-.cre-item-img{
+.cre-item-img {
   width: 100%;
   min-height: 200px;
 }
@@ -641,33 +615,28 @@ export default {
   object-fit: cover;
 }
 
-.images-container{
+.images-container {
   width: 100%;
   margin-top: 25px;
 }
-.images-item-img{
+
+.images-item-img {
   height: 140px;
 }
 
-.action-container{
+.img-slot-background {
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  height: 60px;
+  justify-content: center;
+  margin: 0 auto;
+  /*background-color: #F0F2F5;*/
+  border: 1px solid #F0F2F5;
 }
 
-.action-r{
-  text-align: right;
-  padding-right: 50px;
-}
-
-
-.deals-from-back-btn {
-  font-size: 20px;
-}
-
-.img-slot-background{
+.img-slot-logo {
   width: 100%;
   height: 100%;
   display: flex;
@@ -677,17 +646,7 @@ export default {
 
 }
 
-.img-slot-logo{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-
-}
-
-.img-slot-swiper{
+.img-slot-swiper {
   width: 100%;
   height: 100%;
   display: flex;
@@ -695,70 +654,264 @@ export default {
   justify-content: center;
 }
 
-.img-slot-cre{
+.img-slot-cre {
   width: 90%;
   height: 94%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border:1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-@media screen and (min-width: 1200px) and (max-width: 1919px){
+@media screen and (min-width: 1200px) and (max-width: 1919px) {
 
-  .logo-img{
+  .logo-img {
     width: 40px;
     height: 40px;
 
   }
 
-  .info-1-r-1{
+  .info-1-r-1 {
     font-size: 20px;
   }
 
-  .info-1-r{
+  .info-1-r {
     width: calc(100% - 50px);
   }
 
-  .info-item-l{
+  .info-item-l {
     font-size: 14px;
   }
 
-  .info-item-r{
+  .info-item-r {
     font-size: 14px;
   }
 
-  .contact-label{
+  .contact-label {
     font-size: 20px;
   }
 
-  .contact-l-img{
+  .contact-l-img {
     width: 40px;
     height: 40px;
   }
 
-  .contact-r{
+  .contact-r {
     width: calc(100% - 50px);
   }
 
-  .contact-r-1{
+  .contact-r-1 {
     font-size: 16px;
   }
-  .content-r-1 span{
+
+  .content-r-1 span {
     font-size: 14px;
   }
 
-  .about-label{
+  .about-label {
     font-size: 20px;
   }
-  .about-desc{
+
+  .about-desc {
     font-size: 14px;
   }
 
-  .cre-label{
+  .cre-label {
     font-size: 20px;
   }
 
 }
+
+@media screen and (min-width: 769px) {
+  .info-1-l-company-name {
+    display: none;
+  }
+  .images-mobile-container{
+    display: none;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+
+  .profile-container {
+    background-color: #FFFFFF;
+  }
+
+  .background-container {
+    height: 90px;
+    margin: 15px 15px 0 15px;
+
+  }
+
+  .logo-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 60px;
+  }
+
+  .info-1-l-company-name {
+    margin-left: 15px;
+    font-size: 20px;
+    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  }
+
+  .content-bg-container {
+    padding: 0 15px 15px 15px;
+  }
+
+  .info-1-container {
+    margin-top: 0;
+    flex-direction: column;
+    background-color: #F0F2F5;
+    padding: 0 15px 15px 15px;
+    border-radius: 4px;
+    position: relative;
+
+  }
+
+  .info-1-l {
+    /*width: 100%;*/
+    position: absolute;
+    top: -30px;
+    left: 15px;
+    right: 15px;
+
+  }
+
+  .info-1-l-company-name {
+    font-size: 18px;
+  }
+
+  .info-1-r {
+    width: 100%;
+    margin-top: 45px;
+  }
+
+  .info-1-r-1 {
+    display: none;
+  }
+
+  .info-item {
+    flex-direction: column;
+    width: 50%;
+  }
+
+  .info-item-l {
+    font-size: 14px;
+  }
+
+  .info-item-r {
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .contact-container {
+    margin-top: 15px;
+  }
+
+  .contact-label {
+    font-size: 18px;
+  }
+
+  .contact-c {
+    margin-top: 10px;
+  }
+
+  .contact-l-img {
+    width: 40px;
+    height: 40px;
+
+  }
+
+  .contact-r {
+    width: calc(100% - 55px);
+  }
+
+  .contact-r-1 {
+    font-size: 14px;
+  }
+
+  .contact-r-1 span {
+    font-size: 14px;
+  }
+
+  .about-container {
+    margin-top: 15px;
+  }
+
+  .about-label {
+    font-size: 18px;
+  }
+
+  .about-desc {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+
+  .video-container {
+    margin-top: 15px;
+  }
+
+  .images-container {
+    display: none;
+  }
+
+  .images-mobile-container {
+    margin-top: 15px;
+  }
+
+  .cre-container {
+    margin: 15px 0;
+  }
+
+  .cre-label {
+    font-size: 18px;
+  }
+
+  .cre-c {
+    margin-top: 15px;
+  }
+
+  .cre-item-label {
+    font-size: 14px;
+  }
+
+  #mapContainer {
+    height: 90px;
+  }
+
+
+
+  .map-container {
+    margin: 15px 0;
+  }
+
+  .expect-container {
+    margin-top: 15px;
+  }
+
+  .expect-label {
+    font-size: 18px;
+  }
+
+  .expect-c {
+    margin-top: 15px;
+  }
+
+  .expect-c-item-label {
+    font-size: 14px;
+  }
+
+  .expect-c-item-c {
+    font-size: 14px;
+  }
+
+  .expect-c-item {
+    margin-top: 15px;
+  }
+
+}
+
 
 </style>

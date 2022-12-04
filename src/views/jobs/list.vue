@@ -7,7 +7,7 @@
 
     <el-row class="bg-container" :gutter="0" align="top" justify="center">
 
-      <el-col class="jobs-filter-col" :xs="22" :sm="22" :md="4" :lg="4" :xl="4">
+      <el-col class="jobs-filter-col" :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
         <filterWithJobList @search="searchByFilter"></filterWithJobList>
       </el-col>
 
@@ -35,7 +35,6 @@
         <template v-else>
           <jobsListComponent :jobListData="jobListData"
                              :adsData="jobsAdsListMid"
-                             :jobFeaturedData="jobFeaturedListData"
                              :selectedJobId="selectedJobId"
                              :jobLimit="jobLimit"
                              :jobTotalNum="jobTotalNum"
@@ -54,7 +53,7 @@
 
       </el-col>
 
-      <el-col class="job-detail-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+      <el-col class="job-detail-col" :xs="0" :sm="0" :md="12" :lg="12" :xl="12">
         <template v-if="showCompanyStatus">
           <businessProfile :canEdit="false"
                            :fromDeal="false"
@@ -464,7 +463,7 @@ export default {
 
     }
 
-    this.getJobFeaturedList()
+    // this.getJobFeaturedList()
     this.getJobList(this.jobPage, this.jobLimit)
     this.getAdsList()
 
@@ -473,6 +472,7 @@ export default {
     searchByFilter(e){
       console.log(e)
       this.searchFilterParams = e;
+      this.jobPage = 1;
 
       let params = {
         page: this.jobPage,
@@ -535,10 +535,10 @@ export default {
         console.log(err)
         this.jobLoadingValue = false
         if (err.msg) {
-          this.$message.error(err.msg)
+          return this.$message.error(err.msg)
         }
         if (err.message) {
-          this.$message.error(err.message)
+          return  this.$message.error(err.message)
         }
       })
 
@@ -1420,12 +1420,22 @@ export default {
   margin-left: 20px;
 }
 
-
-@media screen and (max-width: 768px ) {
-
-}
-
 @media screen  and (min-width: 1200px) {
 
 }
+
+@media screen and (max-width: 768px ) {
+  .jobs-list-col{
+    padding: 0;
+  }
+
+  .jobs-filter-col{
+    padding-right: 0;
+  }
+
+
+
+}
+
+
 </style>

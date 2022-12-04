@@ -9,7 +9,7 @@
 
         <div class="favorites-r-bg">
 
-          <div class="favorites-label">
+          <div class="favorites-label-container">
 
             <el-dropdown v-if="identity == 1">
               <span class="favorites-label">
@@ -154,10 +154,10 @@
 
             <div class="da-item-container">
               <el-row :gutter="0" >
-                <el-col :span="6" class="da-item-t-item">Company</el-col>
-                <el-col :span="6" class="da-item-t-item">Position</el-col>
-                <el-col :span="6" class="da-item-t-item">Status</el-col>
-                <el-col :span="6" class="da-item-t-item">Action</el-col>
+                <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Company</el-col>
+                <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Position</el-col>
+                <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Status</el-col>
+                <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Action</el-col>
               </el-row>
 
               <div class="da-item-container-height">
@@ -165,7 +165,7 @@
                 <div v-for="(item,i) in favoriteData" :key="i">
                   <el-row class="da-item">
 
-                    <el-col :span="6">
+                    <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
                       <div class="da-item-basic">
                         <div class="da-item-basic-l-a">
                           <el-avatar class="da-item-avatar-img"
@@ -183,7 +183,7 @@
 
                       </div>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
 
                       <div class="da-item-a-job-title">{{ item.job_info.job_title }}</div>
                       <div class="da-item-a-job-other">
@@ -201,7 +201,8 @@
                         <span v-if="item.employment_type==3">Seasonal</span>
                       </div>
                     </el-col>
-                    <el-col :span="6">
+
+                    <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
 
                       <el-tag type="info" round  effect="plain"
                               v-if="item.job_info.is_open == 1">
@@ -213,14 +214,11 @@
                       </el-tag>
 
                     </el-col>
-                    <el-col :span="6">
+
+                    <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
+
                       <div class="dashboard-view-application">
-<!--                        <el-button type="primary"-->
-<!--                                   :loading="applyBtnLoading && applyJobId == item.job_info.id"-->
-<!--                                   round-->
-<!--                                   @click="applyJob(item.job_info.id)">-->
-<!--                          Apply-->
-<!--                        </el-button>-->
+
                         <applyJobButton
                                         :selectJobId = "item.job_info.id"
                                         btn-text="Apply"
@@ -265,7 +263,8 @@ import {GET_FAVORITE_LIST, CANCEL_FAVORITE, ADS_LIST, APPLY_JOBS} from "@/api/ap
 import dashboardAdsImg from '@/assets/ads/2.png'
 import meSideMenu from "@/components/meSideMenu";
 import {encode} from 'js-base64'
-import applyJobButton from '@/components/jobs/applyButton'
+import applyJobButton from '@/components/jobs/applyButton';
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "favorites",
@@ -287,7 +286,25 @@ export default {
       applyJobId:0
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
     let identity = localStorage.getItem('identity')
     this.identity = identity;
     // 1.jobs 2.deals 3.Event 4.educator 5.recruitor 6.school 7.other 8.vendor
@@ -512,7 +529,7 @@ export default {
 
 <style scoped>
 .bg {
-  background-color: #f5f6f7;
+  background-color: #F0F2F5;
 }
 
 .favorites-container {
@@ -540,7 +557,9 @@ export default {
   box-shadow: 0px 3px 23px #00000012;
   border-radius: 18px;
 }
+.favorites-label-container{
 
+}
 .favorites-label{
   font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 30px;
@@ -851,6 +870,94 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+
+  .favorites-r{
+    width: 100%;
+    height: calc( var(--i-window-height) - 160px);
+    padding: 0;
+  }
+
+  .favorites-r-bg{
+    padding: 0;
+    background-color: #F0F2F5;
+    box-shadow: none;
+  }
+
+  .favorites-label-container{
+    margin: 15px;
+  }
+  .favorites-label{
+    font-size: 20px;
+
+  }
+
+  .empty-tips{
+    font-size: 12px;
+  }
+  .list-item-bg{
+    width: 100%;
+    margin-top: 0;
+  }
+  .list-item{
+    margin:0 15px 15px  15px;
+    padding: 15px;
+    background-color: #FFFFFF;
+  }
+
+  .list-item-l-img{
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+  }
+
+  .list-item-r-t-name{
+    font-size: 18px;
+  }
+
+  .list-pagination-container{
+    margin: 15px;
+  }
+
+  .da-item-container{
+    margin-top: 0px;
+    padding: 15px;
+  }
+
+  .da-item{
+    padding: 15px;
+    background-color: #FFFFFF;
+    border-radius: 18px;
+    margin-bottom: 15px;
+  }
+
+  .da-item-avatar-img{
+    width: 40px;
+    height: 40px;
+  }
+
+  .da-item-basic-r{
+    margin-left: 4px;
+  }
+
+  .da-item-name{
+    font-size: 18px;
+  }
+
+  .da-item-n{
+    margin-top: 4px;
+  }
+
+  .da-item-a-job-title{
+    font-size: 18px;
+  }
+
+  .da-item-a-job-other{
+    font-size: 12px;
+  }
+
+  .dashboard-view-application{
+    text-align: right;
+  }
 
 }
 

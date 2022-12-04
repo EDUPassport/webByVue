@@ -9,14 +9,14 @@
         <div class="perks-r-bg-container">
 
           <div class="custom-divider-container">
-            <el-divider  style="height:2px;border-color: #262626" content-position="center">
+            <el-divider class="custom-divider-el" :content-position="dividerPosition">
               <span>Manage your perks</span>
             </el-divider>
           </div>
 
-          <div class="plain-container">
+          <div class="plain-xll-container">
             <!--          <div class="plain-mask-container"></div>-->
-            <div class="plain-item-container">
+            <div class="plain-xll-item-container">
               <div class="plain-item-label">
                 Ads
               </div>
@@ -31,7 +31,7 @@
 
             </div>
 
-            <div class="plain-item-container">
+            <div class="plain-xll-item-container">
               <div class="plain-item-label">
                 Job posts
               </div>
@@ -49,7 +49,7 @@
 
             </div>
 
-            <div class="plain-item-container">
+            <div class="plain-xll-item-container">
               <div class="plain-item-label">
                 Deals
               </div>
@@ -68,7 +68,7 @@
 
             </div>
 
-            <div class="plain-item-container">
+            <div class="plain-xll-item-container">
               <div class="plain-item-label">
                 Events
               </div>
@@ -91,7 +91,7 @@
           </div>
 
           <div class="custom-divider-container custom-divider-margin">
-            <el-divider  style="height:2px;border-color: #262626" content-position="center">
+            <el-divider  class="custom-divider-el" :content-position="dividerPosition">
               <span>Make the most out of your plan</span>
             </el-divider>
           </div>
@@ -180,7 +180,7 @@
                 <el-image></el-image>
               </div>
               <div class="plain-item-tips">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.
+                Get great deals from business who support education!
               </div>
               <div class="plain-item-btn-container-1">
 <!--                <el-button class="plain-item-btn" type="primary" link>-->
@@ -190,11 +190,10 @@
 
             </div>
 
-
           </div>
           <!--        22222222222           -->
           <div class="custom-divider-container custom-divider-margin">
-            <el-divider  style="height:2px;border-color: #262626" content-position="center">
+            <el-divider  class="custom-divider-el" :content-position="dividerPosition">
               <span> Pro Plan Perks</span>
             </el-divider>
           </div>
@@ -290,8 +289,7 @@
               </div>
 
               <div class="plain-item-tips">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                tempor invidunt ut labore et.
+                Share great deals and discounts from businesses who support education with friends
               </div>
               <div class="plain-item-btn-container-1">
                 <el-button class="plain-item-btn" type="primary" link>
@@ -304,7 +302,7 @@
           </div>
           <!--        3333333333 -->
           <div class="custom-divider-container custom-divider-margin">
-            <el-divider  style="height:2px;border-color: #262626" content-position="center">
+            <el-divider  class="custom-divider-el" :content-position="dividerPosition">
               <span>  Plus Plan Perks</span>
             </el-divider>
           </div>
@@ -400,8 +398,7 @@
               </div>
 
               <div class="plain-item-tips">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                tempor invidunt ut labore et.
+                Share great deals and discounts from businesses who support education with friends
               </div>
               <div class="plain-item-btn-container-1">
                 <el-button class="plain-item-btn" type="primary" link>
@@ -447,7 +444,8 @@ import plainImgThree from '@/assets/perks/warning_fill.png'
 
 import meSideMenu from "@/components/meSideMenu";
 import {computed, ref} from "vue";
-import imgLogo from '@/assets/logo.png'
+import imgLogo from '@/assets/logo.png';
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "index",
@@ -470,6 +468,7 @@ export default {
   computed: {},
   data() {
     return {
+      dividerPosition:'center',
       defaultAvatar,
       imgLogo,
       plainImgOne,
@@ -478,8 +477,25 @@ export default {
     }
   },
   mounted() {
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
 
+    if (screenWidthFloor <= 768) {
+      this.dividerPosition = 'left'
+      updateWindowHeight()
+    }
 
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        this.dividerPosition = 'left'
+        updateWindowHeight()
+      }
+    }
+
+  },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
   },
   methods: {
     turnMyDeals(){
@@ -527,6 +543,10 @@ export default {
 .custom-divider-container {
   width: 100%;
 }
+.custom-divider-el{
+  height:2px;
+  border-color: #262626;
+}
 .custom-divider-container span{
   /*color: #6650B3;*/
   color: #262626;
@@ -539,7 +559,7 @@ export default {
   margin-top: 50px;
 }
 
-.plain-container {
+.plain-container, .plain-xll-container{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -562,7 +582,7 @@ export default {
   z-index: 200;
 }
 
-.plain-item-container {
+.plain-item-container,.plain-xll-item-container {
 
   width: 276px;
   padding:50px;
@@ -579,7 +599,7 @@ export default {
 /*}*/
 
 
-.plain-item-container:hover {
+.plain-item-container:hover, .plain-xll-item-container:hover {
   background-color: rgba(102, 72, 255, .2);
   box-shadow: 10px 10px 23px #14363833;
 }
@@ -714,6 +734,78 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+
+  .perks-r-container{
+    width: 100%;
+    height: calc( var(--i-window-height) - 160px);
+  }
+
+  .perks-r-bg-container{
+    padding: 15px 0;
+  }
+  /deep/ .el-divider__text{
+    background-color: #F0F2F5;
+    padding: 0;
+    font-size: 20px;
+  }
+
+  .custom-divider-container span{
+    /*color: #6650B3;*/
+    color: #262626;
+    font-family: BSemiBold, serif;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .custom-divider-el{
+    border-color: #F0F2F5;
+  }
+
+  .plain-xll-container{
+
+  }
+
+  .plain-xll-item-container{
+    width: calc(50% - 60px);
+    padding: 15px;
+    margin: 15px;
+  }
+
+  .plain-item-btn{
+    font-size: 12px;
+  }
+
+  .plain-container{
+
+    flex-wrap: nowrap;
+    overflow: scroll;
+  }
+
+  .plain-item-container{
+    padding: 15px;
+    flex-shrink: 0;
+    margin: 15px;
+  }
+
+  .plain-item-2-container{
+    padding: 15px;
+    flex-shrink: 0;
+    margin: 15px;
+  }
+
+  .plain-item-3-container{
+    padding: 15px;
+    flex-shrink: 0;
+    margin: 15px;
+  }
+
+  .plain-item-label{
+    font-size: 18px;
+  }
+
+  .plain-item-tips{
+    font-size: 14px;
+  }
 
 
 }

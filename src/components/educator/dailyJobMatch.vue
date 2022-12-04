@@ -75,7 +75,7 @@ import doubtingImg from '@/assets/newHome/match/doubting.png'
 import funfareImg from '@/assets/newHome/match/funfare.png'
 import thumbUpImg from '@/assets/newHome/match/thumb_up.png'
 
-import {EDUCATOR_JOB_MATCH_LIST, JOB_FEATURED_LIST} from "@/api/api";
+import {EDUCATOR_JOB_MATCH_LIST, EDUCATOR_MANUAL_MATCH_JOB, JOB_FEATURED_LIST} from "@/api/api";
 
 export default {
   name: "dailyJobMatch",
@@ -88,10 +88,24 @@ export default {
     }
   },
   mounted(){
+    this.manualMatchJob()
+
     this.getEducatorJobMatchingList()
     // this.getJobFeaturedList()
   },
   methods:{
+    manualMatchJob(){
+      let self = this;
+      let params = {}
+      EDUCATOR_MANUAL_MATCH_JOB(params).then(res=>{
+        console.log(res)
+        setTimeout(function () {
+          self.getEducatorJobMatchingList()
+        }, 1000 * 6)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     turnJobDetail(id){
       this.$router.push({path:'/jobs',query:{id:id}})
     },
@@ -205,6 +219,71 @@ export default {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #262626;
+}
+
+@media screen and (max-width: 768px){
+  .e-j{
+    padding: 0;
+    background-color: #F0F2F5;
+    box-shadow: none;
+  }
+
+  .e-j-label{
+    font-size: 20px;
+    margin: 0 15px 8px 15px;
+  }
+
+  .e-j-item-bg{
+    padding: 0;
+    margin: 7px 15px 15px 15px;
+  }
+
+
+
+  .e-j-c{
+    margin-top: 0;
+  }
+
+  .e-j-item{
+    padding: 15px;
+    box-shadow: 0px 0px 10px #00000012;
+    border-radius: 18px;
+    justify-content: space-between;
+  }
+
+  .e-j-item-l{
+    width: 40px;
+  }
+
+  .e-j-c-item-avatar{
+    width: 40px;
+    height: 40px;
+  }
+
+  .e-j-item-m{
+    width: calc(100% - 135px);
+  }
+
+  .e-j-item-m-1{
+    font-size: 12px;
+  }
+
+  .e-j-item-m-2{
+    font-size: 18px;
+  }
+
+  .e-j-item-m-3{
+    font-size: 12px;
+  }
+
+  .e-j-item-r{
+    width: 75px;
+  }
+
+  .e-j-item-r-1{
+    font-size: 12px;
+  }
+
 }
 
 </style>

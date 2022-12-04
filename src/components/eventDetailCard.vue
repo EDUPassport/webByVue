@@ -307,4 +307,77 @@ export default {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
+@media screen and (max-width: 768px) {
+  .event-dialog-container{
+    width: 100%;
+    flex-direction: column;
+    border-top-right-radius:0;
+    border-bottom-right-radius:0;
+    border-radius: 20px;
+    overflow: hidden;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: auto;
+  }
+
+  .event-dialog-l{
+    width: 100%;
+    height: 140px;
+  }
+
+  .event-dialog-r{
+    width: 100%;
+  }
+  .event-dialog-close-container{
+    padding: 15px 15px 0 0;
+  }
+
+  .event-dialog-r-1{
+    font-size: 14px;
+  }
+
+  .event-dialog-r-2{
+    font-size: 14px;
+  }
+
+  .event-dialog-r-3{
+    font-size: 12px;
+  }
+  .event-dialog-r-4{
+    font-size: 18px;
+    margin-top: 15px;
+  }
+
+  .event-dialog-r-5{
+    font-size: 12px;
+    height: 60px;
+  }
+
+  .event-dialog-r-lc{
+    margin-top: 15px;
+  }
+  .event-dialog-r-lc-label{
+    font-size: 14px;
+  }
+
+  .event-dialog-r-lc-type-desc{
+    font-size: 12px;
+    height: 60px;
+  }
+  .event-dialog-r-btn-container{
+    margin-top: 15px;
+  }
+
+
+  .event-dialog-r-b{
+    font-size: 12px;
+    bottom: -25px;
+    position: unset;
+    margin-top: 15px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+}
+
 </style>

@@ -59,7 +59,8 @@
                               >
                                 <template #reference>
                                   <el-icon @click="showAction(conversation,key)">
-<!--                                    <more-filled/>--><ArrowDownBold />
+                                    <!--                                    <more-filled/>-->
+                                    <ArrowDownBold/>
                                   </el-icon>
                                 </template>
                                 <div class="item-info-bottom_action-btn" v-if="action.show">
@@ -69,7 +70,7 @@
                                     </el-button>
                                   </div>
                                   <div class="item-info-bottom_delete_btn">
-                                    <el-button link type="warning"  @click="removeConversation">
+                                    <el-button link type="warning" @click="removeConversation">
                                       DELETE CHATS
                                     </el-button>
                                   </div>
@@ -93,48 +94,74 @@
 
             </div>
             <div class="chat-chat-container" >
-              <!--            <div class="chat-chat-header">-->
-              <!--              <span class="chat-chat-title">{{ friend.name }}</span>-->
-              <!--              <div class="chat-chat-close" @click="setShowChatStatus()">-->
-              <!--                <el-icon :size="30" color="#808080">-->
-              <!--                  <circle-close/>-->
-              <!--                </el-icon>-->
-              <!--              </div>-->
-              <!--            </div>-->
+              <div class="chat-chat-header">
+                <div class="chat-chat-header-l">
+                  <el-icon :size="25" @click="showConversationsForMobile()">
+                    <IconPhUserList />
+                  </el-icon>
+                </div>
+                <div class="chat-chat-header-m" v-if="friend">
+                  {{ friend.name }}
+                </div>
+                <div class="chat-chat-header-r">
+
+                </div>
+
+<!--                <div class="chat-chat-close" @click="setShowChatStatus()">-->
+<!--                  <el-icon :size="30" color="#808080">-->
+<!--                    <circle-close/>-->
+<!--                  </el-icon>-->
+<!--                </div>-->
+              </div>
               <div class="chat-message-container">
                 <el-scrollbar class="scroll-view" ref="scrollView">
-                  <div class="history-load-tip" @click="loadMoreHistoryMessage()">
+                  <div class="history-load-tip"
+                       v-if="friend"
+                       @click="loadMoreHistoryMessage()">
                     {{ allHistoryLoaded ? 'History has no more messages' : 'Click to get history messages' }}
                   </div>
-                  <div v-for="(message, index) in messages" :key="index">
-                    <div class="time-lag"
-                         v-if="index == 0 || (messages[index].timestamp - messages[index - 1].timestamp > 5 * 60 * 1000)">
-                      {{ formatDate(message.timestamp) }}
+
+                  <template  v-if="messages.length > 0">
+                    <div v-for="(message, index) in messages" :key="index">
+                      <div class="time-lag"
+                           v-if="index == 0 || (messages[index].timestamp - messages[index - 1].timestamp > 5 * 60 * 1000)">
+                        {{ formatDate(message.timestamp) }}
+                      </div>
+                      <chat-message :message="message" :messageStatus="message.status"
+                                    :to="friend"
+                                    :currentUser="currentUser" :type="type"
+                                    @showImageFullScreen="showImageFullScreen"/>
                     </div>
-                    <chat-message :message="message" :messageStatus="message.status"
-                                  :to="friend"
-                                  :currentUser="currentUser" :type="type"
-                                  @showImageFullScreen="showImageFullScreen"/>
-                  </div>
+
+                  </template>
+                  <template v-else>
+                    <el-empty description="..."></el-empty>
+                  </template>
+
+
                 </el-scrollbar>
               </div>
-              <send-box :to="friend" :type="type" @onSent="messageOnSent"/>
+
+
+              <template v-if="friend">
+                <send-box :to="friend" :type="type" @onSent="messageOnSent"/>
+              </template>
 
               <div class="img-layer" @click="image.show = false" v-show="image.show">
                 <el-image :src="image.url"></el-image>
               </div>
             </div>
 
-<!--            <div class="chat-chat-container" v-else>-->
-              <!--            <div class="chat-chat-header">-->
-              <!--              <span class="chat-chat-title"></span>-->
-              <!--              <div class="chat-chat-close" @click="setShowChatStatus()">-->
-              <!--                <el-icon :size="30" color="#808080">-->
-              <!--                  <circle-close/>-->
-              <!--                </el-icon>-->
-              <!--              </div>-->
-              <!--            </div>-->
-<!--            </div>-->
+            <!--            <div class="chat-chat-container" v-else>-->
+            <!--            <div class="chat-chat-header">-->
+            <!--              <span class="chat-chat-title"></span>-->
+            <!--              <div class="chat-chat-close" @click="setShowChatStatus()">-->
+            <!--                <el-icon :size="30" color="#808080">-->
+            <!--                  <circle-close/>-->
+            <!--                </el-icon>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--            </div>-->
 
           </div>
 
@@ -143,7 +170,105 @@
       </div>
 
     </div>
+
+    <el-drawer
+        v-model="conversationsDrawerStatus"
+        direction="rtl"
+        size="80%"
+    >
+      <template #header>
+
+      </template>
+
+      <div class="chat-side-mobile-container">
+
+        <div class="chat-side-t-container">
+          <div class="chat-side-t-label">
+            Messages
+          </div>
+          <div class="chat-side-search">
+            <el-input placeholder="Search chats"></el-input>
+          </div>
+        </div>
+
+        <div class="conversations">
+          <el-scrollbar class="conversations-box">
+            <div v-if="conversationsData.length !==0">
+              <div class="scroll-item" v-for="(conversation, key) in conversationsData" :key="key"
+                   :class="activeConversationKey === conversation.userId+'_'+conversation.data.identity ? 'conversation-active' : ''"
+              >
+                <div class="item-head">
+                  <el-avatar :src="conversation.data.avatar" class="head-icon"/>
+                  <div class="item-head_unread" v-if="conversation.unread">{{ conversation.unread }}</div>
+                </div>
+                <div class="scroll-item_info" @click="navigateToChat(conversation)">
+                  <div class="item-info-top">
+                        <span class="item-info-top_name">
+                          {{ conversation.data.name }}
+                        </span>
+                    <!--                        <div class="item-info-top_time">{{formatDate(conversation.lastMessage.timestamp)}}</div>-->
+                  </div>
+                  <div class="item-info-bottom">
+                    <div class="item-info-bottom-item">
+                      <div class="item-info-top_content">
+                        <span v-if="conversation.lastMessage.type == 'text'" class="text-conversation">
+                          {{ conversation.lastMessage.payload.text }}
+                        </span>
+                        <span v-else-if="conversation.lastMessage.type == 'video'">[Video Message]</span>
+                        <span v-else-if="conversation.lastMessage.type == 'audio'">[Audio Message]</span>
+                        <span v-else-if="conversation.lastMessage.type == 'image'">[Image Message]</span>
+                        <span v-else-if="conversation.lastMessage.type == 'file'">[File Message]</span>
+                        <span v-else-if="conversation.lastMessage.type == 'order'">[Order Message]</span>
+                        <span v-else>[Unidentified content]</span>
+                      </div>
+                      <div class="item-info-bottom_action-mobile">
+                        <el-popover
+                            :visible="activeActionKeyMobile === key"
+                            placement="bottom"
+                            :width="150"
+                        >
+                          <template #reference>
+                            <el-icon @click="showActionForMobile(conversation,key)">
+                              <!--                                    <more-filled/>-->
+                              <ArrowDownBold/>
+                            </el-icon>
+                          </template>
+                          <div class="item-info-bottom_action-btn" v-if="action.show">
+                            <div>
+                              <el-button link type="primary" @click="topConversation">
+                                {{ action.conversation.top ? 'UNPIN' : 'PIN CHAT TO THE TOP' }}
+                              </el-button>
+                            </div>
+                            <div class="item-info-bottom_delete_btn">
+                              <el-button link type="warning" @click="removeConversation">
+                                DELETE CHATS
+                              </el-button>
+                            </div>
+                          </div>
+                        </el-popover>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="no-conversation" v-else>
+              No Chat Currently
+            </div>
+
+          </el-scrollbar>
+          <div class="mask" v-show="showLoading">
+
+          </div>
+        </div>
+
+      </div>
+
+
+    </el-drawer>
+
   </div>
+
 </template>
 
 <script>
@@ -156,6 +281,7 @@ import chatIcon1 from '@/assets/chat/chat-icon-1.png'
 import {useStore} from 'vuex'
 import SendBox from "@/components/chat/chat-component/SendBox";
 import ChatMessage from "@/components/chat/chat-component/ChatMessage";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "index",
@@ -194,14 +320,11 @@ export default {
     }
 
   },
-  watch: {
-
-  },
-  computed: {
-
-  },
+  watch: {},
+  computed: {},
   data() {
     return {
+      conversationsDrawerStatus:false,
       defaultAvatar,
       imgLogo,
       chatIcon,
@@ -230,7 +353,8 @@ export default {
       type: "",
       unreadTotal: 0,
       showBottomActionStatus: false,
-      activeActionKey: undefined
+      activeActionKey: undefined,
+      activeActionKeyMobile: undefined
 
     }
   },
@@ -252,7 +376,7 @@ export default {
         let content = res.content;
         self.showLoading = false;
         // self.unreadTotal = content.unreadTotal;
-        self.$store.commit('setImUnreadTotal',content.unreadTotal)
+        self.$store.commit('setImUnreadTotal', content.unreadTotal)
         self.conversationsData = content.conversations;
       },
       onFailed: function (error) {
@@ -266,7 +390,7 @@ export default {
     this.goEasy.im.on(this.GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, (conversations) => {
       console.log('监听会话列表变化-------  messages page')
       self.conversationsData = conversations.conversations || [];
-      self.$store.commit('setImUnreadTotal',conversations.unreadTotal)
+      self.$store.commit('setImUnreadTotal', conversations.unreadTotal)
       // self.unreadTotal = conversations.unreadTotal;
       // console.log(this.conversationsData)
     });
@@ -291,7 +415,25 @@ export default {
 
   },
   unmounted() {
-    this.service.onNewPrivateMessageReceive = function(){};
+    updateWindowHeight()
+    window.onresize = null
+
+    this.service.onNewPrivateMessageReceive = function () {
+    };
+  },
+  mounted(){
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
   },
   methods: {
     topConversation() {
@@ -325,6 +467,7 @@ export default {
       }
       this.action.show = false;
       self.activeActionKey = undefined
+      self.activeActionKeyMobile = undefined
     },
     removeConversation() {
       let self = this;
@@ -355,6 +498,7 @@ export default {
       }
       this.action.show = false;
       self.activeActionKey = undefined
+      self.activeActionKeyMobile = undefined
     },
     async navigateToChat(conversation) {
       console.log('navigate to chat --------------------')
@@ -387,6 +531,15 @@ export default {
         this.activeActionKey = undefined
       } else {
         this.activeActionKey = key
+      }
+      this.action.conversation = conversation;
+      this.action.show = true
+    },
+    showActionForMobile(conversation, key) {
+      if (this.activeActionKeyMobile === key) {
+        this.activeActionKeyMobile = undefined
+      } else {
+        this.activeActionKeyMobile = key
       }
       this.action.conversation = conversation;
       this.action.show = true
@@ -474,12 +627,15 @@ export default {
       })
 
     },
-    messageOnSent(e){
+    messageOnSent(e) {
 
       this.messages = [];
       this.messages = e;
       this.scrollToBottom()
       this.$forceUpdate()
+    },
+    showConversationsForMobile(){
+      this.conversationsDrawerStatus = true;
     }
 
 
@@ -504,11 +660,11 @@ export default {
 }
 
 .message-r-container {
-  width:calc(100% - 160px);
+  width: calc(100% - 160px);
   height: calc(100vh - 140px);
 }
 
-.message-r-bg-container{
+.message-r-bg-container {
   padding: 50px;
 }
 
@@ -791,18 +947,18 @@ export default {
 }
 
 
-.chat-chat-header {
-  width: 100%;
-  height: 10%;
+/*.chat-chat-header {*/
+/*  width: 100%;*/
+/*  height: 10%;*/
 
-  background: rgb(243, 244, 247);
-  border-top-right-radius: 10px;
-  position: relative;
+/*  background: rgb(243, 244, 247);*/
+/*  border-top-right-radius: 10px;*/
+/*  position: relative;*/
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*}*/
 
 .chat-chat-title {
   font-size: 16px;
@@ -882,9 +1038,6 @@ export default {
   color: #B1C452;
 }
 
-@media screen and (max-width: 768px) {
-
-}
 
 @media screen and (min-width: 769px) and (max-width: 992px) {
 
@@ -898,5 +1051,127 @@ export default {
 @media screen and (min-width: 1200px) {
 
 }
+
+@media screen and (min-width: 769px) {
+  .chat-chat-header{
+    display: none;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+
+  .chat-side-container{
+    display: none;
+  }
+
+  .chat-chat-header{
+    width: auto;
+    height: 30px;
+    padding: 15px;
+    border-bottom: 2px solid #FFFFFF;
+    background-color: #F0F2F5;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .chat-chat-header-l{
+      width: 50px;
+  }
+
+  .chat-chat-header-m{
+    width: calc(100% - 100px);
+    text-align: center;
+    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    font-size: 18px;
+  }
+
+  .chat-chat-header-r{
+      width: 50px;
+  }
+
+  .message-r-container {
+    width: 100%;
+    height: calc( var(--i-window-height) - 160px);
+  }
+
+  .message-r-bg-container{
+    padding: 0;
+  }
+
+  .chat-content-container{
+    height: calc( var(--i-window-height) - 160px);
+    box-shadow: none;
+    background-color: #F0F2F5;
+  }
+
+
+  .chat-chat-container{
+    width: 100%;
+  }
+
+  .chat-message-container{
+    height: calc( var(--i-window-height) - 280px);
+  }
+
+  .chat-side-mobile-container {
+    width:auto;
+    height: auto;
+
+  }
+
+  .chat-side-t-container{
+    height: auto;
+    padding: 0;
+  }
+
+  .chat-side-t-label{
+    margin-top: 0;
+    font-size: 18px;
+  }
+
+  .chat-side-search{
+    margin-top: 15px;
+  }
+
+  .conversations{
+    height: auto;
+    margin-top: 15px;
+  }
+
+  .conversations-box .scroll-item{
+    padding: 4px 10px;
+  }
+
+  .item-head{
+    width: 40px;
+  }
+  .conversations-box .scroll-item .head-icon{
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+  }
+  .conversations-box .scroll-item_info{
+    width: calc(100% - 55px);
+  }
+
+  .conversations-box .item-info-top_name{
+    font-size: 18px;
+  }
+
+  .item-info-top_content{
+    font-size: 14px;
+  }
+
+  .conversations .text-conversation{
+    font-size: 14px;
+  }
+
+
+
+}
+
 
 </style>

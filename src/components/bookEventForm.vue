@@ -2,6 +2,7 @@
 <div>
   <el-dialog :model-value="visible" title="RSVP"
              :before-close="beforeClose"
+             :width="widthValue"
   >
 
     <el-form
@@ -65,6 +66,7 @@ export default {
   props:['visible','info'],
   data() {
     return {
+      widthValue:'50%',
       bookForm: {
         first_name: '',
         last_name: '',
@@ -95,6 +97,26 @@ export default {
       eventApplicationsData:[]
 
     }
+  },
+  mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      this.widthValue = '90%'
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        this.widthValue = '90%'
+      }
+    }
+
+  },
+  unmounted() {
+    window.onresize = null
   },
   methods:{
     beforeClose(done){

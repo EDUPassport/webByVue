@@ -13,7 +13,7 @@
           ></dealFilterComponent>
         </el-col>
 
-        <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="6">
+        <el-col :xs="0" :sm="24" :md="7" :lg="7" :xl="6">
           <featuredDealsPromoted
               :adsData="adsDataMid"
               :featuredData="featuredDealsData"
@@ -44,11 +44,21 @@
                     <div class="deals-item">
                       <div class="deals-item-bg">
                         <el-image
+                            v-if="item.company_info"
                             class="deals-item-background-img"
                             :src="item.company_info.background_image ? item.company_info.background_image : ''"
                             fit="cover"
                             @click="viewProfile(item.user_id, item.identity, item.company_id)"
-                        ></el-image>
+                        >
+                          <template #error>
+                          <div class="img-slot-background">
+                            <el-icon :size="45" color="#808080">
+                              <Picture/>
+                            </el-icon>
+                          </div>
+                        </template>
+
+                        </el-image>
 
                         <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
                              @click="cancelFavorite(2,item.id,index)">
@@ -74,6 +84,7 @@
                         </div>
                         <div class="deals-item-c-r">
                           <div class="deals-item-c-r-1"
+                               v-if="item.company_info"
                                @click="viewProfile(item.user_id,item.identity, item.company_id)">
                             {{ item.company_info.company_name }}
                           </div>
@@ -87,7 +98,7 @@
                         <div class="deals-item-b-l">
 
                           <template
-                              v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
+                              v-if="item.company_info && item.company_info.category_name_en != '0'">
                             {{ item.company_info.category_name_en }}
                           </template>
                           <template v-else>
@@ -185,6 +196,7 @@ import dealFilterComponent from "@/components/dealFilterComponent";
 
 import featuredDealsPromoted from "@/components/deals/featuredDealsPromoted";
 import adsComponent from "@/components/ads/adsComponent";
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "index",
@@ -262,6 +274,7 @@ export default {
 
   },
   unmounted() {
+    updateWindowHeight()
     window.onresize = null
   },
   mounted() {
@@ -269,9 +282,10 @@ export default {
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
 
-    // if (screenWidthFloor < 768) {
-    //   this.adsHeight = '190px'
-    // }
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+      this.adsHeight = '160px'
+    }
     //
     // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
     //   this.adsHeight = '190px'
@@ -287,10 +301,11 @@ export default {
     }
 
     window.onresize = () => {
-      // if (screenWidthFloor < 768) {
-      //   this.adsHeight = '190px'
-      // }
-      //
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+        this.adsHeight = '160px'
+      }
+
       // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
       //   this.adsHeight = '190px'
       // }
@@ -328,6 +343,7 @@ export default {
     confirmFilterSearch(e) {
       console.log(e)
       this.filterResultData = e;
+      this.dealPage = 1;
       this.getDealsList(this.dealPage, this.dealLimit)
     },
     backToSearchResults() {
@@ -870,101 +886,6 @@ export default {
   margin: 0 auto;
 }
 
-.filter-deal-col {
-  padding-right: 13px;
-}
-
-.deal-detail-col {
-
-}
-
-.deal-detail-bg-container {
-  background-color: #F0F2F5;
-  height: calc(100vh - 200px);
-  padding: 30px;
-}
-
-.deal-detail-background {
-  width: 100%;
-  height: 240px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.deal-detail-background-img {
-  width: 100%;
-}
-
-.deal-detail-c {
-  margin-top: 25px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-.deal-detail-c-l {
-
-}
-
-.deal-detail-c-l-logo {
-  width: 150px;
-  height: 150px;
-  border-radius: 150px;
-
-}
-
-.deal-detail-c-r {
-  padding-left: 25px;
-}
-
-.deal-detail-c-r-1 {
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 45px;
-  color: #262626;
-}
-
-.deal-detail-item-container {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-}
-
-.deal-detail-item {
-  width: 45%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.deal-detail-item-l {
-
-  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 23px;
-  color: #262626;
-}
-
-.deal-detail-item-r {
-  padding-left: 15px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 23px;
-  color: #262626;
-}
-
-.deal-detail-desc {
-  margin-top: 25px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 23px;
-  color: #262626;
-}
-
-.map-container {
-  margin-top: 25px;
-}
 
 #mapContainer {
   height: 300px;
@@ -975,20 +896,6 @@ export default {
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-}
-
-.deals-featured-scroll {
-  height: calc(100vh - 140px);
-}
-
-.deals-featured-container {
-  padding: 25px;
-}
-
-.deals-featured-label {
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
 }
 
 .deals-list-scroll {
@@ -1010,19 +917,8 @@ export default {
 
 }
 
-.deals-featured-item {
-  width: 100%;
-  margin-top: 20px;
-  border-radius: 40px;
-  overflow: hidden;
-
-  background-color: #ffffff;
-  box-shadow: 0px 0px 10px #0000001A;
-}
-
 .deals-item-container {
   width: 50%;
-  /*margin-top: 20px;*/
 }
 
 .deals-item {
@@ -1062,6 +958,19 @@ export default {
 
 .deals-item-background-img {
   width: 100%;
+  height: 100%;
+}
+
+.img-slot-background{
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  /*background-color: #F0F2F5;*/
+  border: 1px solid #F0F2F5;
 }
 
 .deals-item-c {
@@ -1168,6 +1077,49 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+  .deals-list-scroll{
+    width: 100%;
+    height: calc( var(--i-window-height) - 180px);
+  }
+
+  .xll-ads-container{
+    padding: 15px;
+  }
+
+  .deals-bg-container{
+    padding: 0;
+
+  }
+
+  .deals-container{
+    flex-direction: column;
+
+  }
+
+  .deals-item-container{
+    width: 100%;
+  }
+
+  .deals-item-bg{
+    height: 160px;
+  }
+
+
+  .deals-logo{
+    width:40px;
+    height: 40px;
+    border-radius: 40px;
+  }
+  .deals-item-c-r-1{
+    font-size: 14px;
+  }
+  .deals-item-c-r-2{
+    font-size: 18px;
+  }
+  .deals-item-b-l{
+    font-size: 12px;
+  }
+
 
 }
 
