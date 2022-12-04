@@ -2731,7 +2731,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0 40px 0;
+  height:60px;
 }
 
 .account-profile-t-l{
@@ -2749,6 +2749,10 @@ export default {
 }
 .account-profile-cancel-btn{
   font-size:20px;
+}
+
+.profile-c-container{
+  height: calc(100vh - 280px);
 }
 
 .account-profile-save-btn{
@@ -4204,8 +4208,8 @@ export default {
   }
 
   .account-profile-t{
-    padding: 15px;
     height: 30px;
+    padding: 0 15px;
   }
 
   .account-profile-cancel-btn{
@@ -4213,7 +4217,7 @@ export default {
   }
 
   .profile-c-container{
-    height: calc( var(--i-window-height) - 220px);
+    height: calc( var(--i-window-height) - 190px);
   }
 
   .profile-1-container{
