@@ -25,11 +25,13 @@ import {encode} from 'js-base64'
 
 export default {
   name: "businessProfileActionWithPreview",
+  props:['info','identity'],
   methods:{
     exitPreview() {
       this.$router.push('/account/home')
     },
     editProfile() {
+
       let companyId = this.info.id;
       let identity = this.identity;
       let str = '';
@@ -80,9 +82,17 @@ export default {
   background-color: #F0F2F5;
   padding: 0 50px;
 }
+.action-exit-preview-btn{
 
+}
 .action-r{
   text-align: right;
+}
+
+@media screen and (min-width: 769px) {
+  .action-exit-preview-btn{
+    display: none;
+  }
 }
 
 @media screen and (max-width: 768px){

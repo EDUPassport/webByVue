@@ -199,6 +199,20 @@
                           </div>
                         </div>
 
+                        <div class="job-detail-c-item" v-if="detailData.Nationality">
+                          <div class="job-detail-c-item-l">Preferred nationality:</div>
+                          <div class="job-detail-c-item-r">
+                            {{ $filters.userObjectFormat(detailData.Nationality)}}
+                          </div>
+                        </div>
+
+                        <div class="job-detail-c-item" v-if="detailData.Acceptable">
+                          <div class="job-detail-c-item-l">Acceptable nationality:</div>
+                          <div class="job-detail-c-item-r">
+                            {{ $filters.userObjectFormat(detailData.Acceptable)}}
+                          </div>
+                        </div>
+
                       </div>
 
                     </div>

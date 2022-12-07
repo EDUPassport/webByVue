@@ -25,10 +25,10 @@
         </el-col>
 
         <el-col  :xs="24" :sm="24" :md="16" :lg="15" :xl="16">
-
-          <div class="business-profile">
-            <businessProfile :canEdit="true" :fromDeal="false" :info="companyInfo" :identity="identity"></businessProfile>
-          </div>
+          <businessProfileActionWithPreview :info="companyInfo" :identity="identity"></businessProfileActionWithPreview>
+          <el-scrollbar class="business-profile">
+            <businessProfile :info="companyInfo" :identity="identity"></businessProfile>
+          </el-scrollbar>
 
         </el-col>
 
@@ -52,13 +52,15 @@ import {
 } from '@/api/api'
 import {decode} from 'js-base64'
 import {updateWindowHeight} from "@/utils/tools";
+import businessProfileActionWithPreview from "@/components/businessProfileActionWithPreview";
 
 export default {
   name: "profile",
   components: {
     meSideMenu,
     businessProfile,
-    dealByListComponent
+    dealByListComponent,
+    businessProfileActionWithPreview
   },
   computed:{
     identity:{
@@ -386,14 +388,11 @@ export default {
 }
 
 .business-profile{
-  margin-left: 100px;
+  margin-left: 50px;
+  height: calc(100vh - 200px);
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1919px){
-  .business-profile{
-    margin-left: 20px;
-  }
-
 
 }
 
@@ -401,6 +400,8 @@ export default {
 @media screen and (max-width: 768px){
   .business-profile{
     margin-left: 0;
+    height: calc( var(--i-window-height) - 220px);
+    background-color: #FFFFFF;
   }
    .business-profile-r{
      width: 100%;

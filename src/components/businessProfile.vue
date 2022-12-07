@@ -27,7 +27,7 @@
               </div>
             </template>
           </el-image>
-
+          <br>
           <span class="info-1-l-company-name">{{ info.company_name }}</span>
 
         </div>
@@ -42,7 +42,7 @@
             </div>
             <div class="info-item" v-if="info.work_phone">
               <div class="info-item-l">Work phone:</div>
-              <div class="info-item-r">{{ info.work_phone }}</div>
+              <div class="info-item-r">{{info.country_code}} {{ info.work_phone }}</div>
             </div>
             <div class="info-item" v-if="info.work_email">
               <div class="info-item-l">Work email:</div>
@@ -750,12 +750,6 @@ export default {
     border-radius: 60px;
   }
 
-  .info-1-l-company-name {
-    margin-left: 15px;
-    font-size: 20px;
-    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  }
-
   .content-bg-container {
     padding: 0 15px 15px 15px;
   }
@@ -771,9 +765,9 @@ export default {
   }
 
   .info-1-l {
-    /*width: 100%;*/
+
     position: absolute;
-    top: -30px;
+    top: -45px;
     left: 15px;
     right: 15px;
 
@@ -781,6 +775,8 @@ export default {
 
   .info-1-l-company-name {
     font-size: 18px;
+    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+
   }
 
   .info-1-r {

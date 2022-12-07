@@ -133,7 +133,7 @@
 <script>
 import eventFilterComponent from "@/components/eventFilterComponent";
 import bannerImg from '../../assets/events/banner.png'
-import {EVENT_APPLICATIONS, EVENTS_CATEGORY, EVENTS_LIST, TAGS_LIST} from "@/api/api";
+import {EVENT_APPLICATIONS, EVENTS_CATEGORY, EVENTS_DETAIL, EVENTS_LIST, TAGS_LIST} from "@/api/api";
 import eventDetailCard from "@/components/eventDetailCard";
 import bookEventForm from "@/components/bookEventForm";
 import BookEventList from "@/components/bookEventList";
@@ -224,6 +224,19 @@ export default {
     showEventDialog(item){
       this.eventDialogVisible = true;
       this.eventDetailData  = item;
+      console.log(item)
+      let params = {
+        event_id: item.id
+      }
+      EVENTS_DETAIL(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.eventData = res.message;
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+
     },
     selectIsOnline(){
       this.filterIsOnlineValue = !this.filterIsOnlineValue

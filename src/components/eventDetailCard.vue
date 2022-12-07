@@ -278,8 +278,8 @@ export default {
   padding-right: 50px;
 
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
 
   position: absolute;
@@ -376,6 +376,8 @@ export default {
     margin-top: 15px;
     padding-left: 0;
     padding-right: 0;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
 }

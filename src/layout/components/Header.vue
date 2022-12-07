@@ -456,7 +456,7 @@
     <el-dialog
         v-model="dialogBusinessAccountVisible"
         title="Create Account"
-        width="30%"
+        :width="dialogBusinessAccountWidth"
         center
     >
       <div class="switch-account-tips">
@@ -561,6 +561,7 @@ import logoImgLogo from '@/assets/newHome/logo/Logo_Transparent.png'
 import {onBeforeRouteUpdate, onBeforeRouteLeave} from 'vue-router'
 import {ref} from 'vue'
 
+
 export default {
   name: "Header",
   setup() {
@@ -592,6 +593,7 @@ export default {
       defaultAvatar,
       menuDrawerStatus: false,
       dialogBusinessAccountVisible: false,
+      dialogBusinessAccountWidth:'30%',
       token: '',
       dialogDiscountCardVisible: false,
       envName: process.env.VUE_APP_ENV_NAME,
@@ -672,7 +674,22 @@ export default {
     }
 
   },
+  unmounted() {
+    window.onresize = null
+  },
   mounted() {
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      this.dialogBusinessAccountWidth = '80%'
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        this.dialogBusinessAccountWidth = '80%'
+      }
+    }
 
     let identity = localStorage.getItem('identity')
     let token = localStorage.getItem('token')

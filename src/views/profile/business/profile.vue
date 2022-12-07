@@ -34,7 +34,7 @@
 
         <el-col class="business-profile-col" :xs="24" :sm="24" :md="16" :lg="15" :xl="16">
 
-          <businessProfileActionWithPreview></businessProfileActionWithPreview>
+          <businessProfileActionWithPreview :info="companyInfo" :identity="identity"></businessProfileActionWithPreview>
 
           <el-scrollbar class="business-profile">
             <businessProfile :info="companyInfo" :identity="identity"></businessProfile>
@@ -428,11 +428,6 @@ export default {
   height: calc(100vh - 200px);
 }
 
-
-.business-profile{
-
-}
-
 @media screen and (min-width: 1200px) and (max-width: 1919px){
 
 }
@@ -446,6 +441,7 @@ export default {
 
   .business-profile{
     margin-left: 0;
+    background-color: #FFFFFF;
     height: calc( var(--i-window-height) - 220px);
   }
 

@@ -44,6 +44,10 @@
                 ></chatButton>
 
               </template>
+              <template v-else>
+
+<!--                <el-button @click="exportPdf()">EXPORT PDF</el-button>-->
+              </template>
 
             </div>
           </div>
@@ -2610,6 +2614,9 @@ export default {
         this.$message.error(err.msg)
       })
 
+    },
+    exportPdf(){
+      window.print()
     },
     async submitEducatorContactForm(contactImageLink, introLink) {
       let userId = localStorage.getItem('uid')
