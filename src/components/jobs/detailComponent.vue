@@ -162,6 +162,15 @@
                     {{ $filters.userObjectFormat(detailData.Acceptable)}}
                   </div>
                 </div>
+                <div class="job-detail-c-item" v-if="detailData.sex">
+                  <div class="job-detail-c-item-l">Gender:</div>
+                  <div class="job-detail-c-item-r">
+                    <template v-if="detailData.sex == 1">Male</template>
+                    <template v-if="detailData.sex == 2">Female</template>
+                    <template v-if="detailData.sex == 3">Non-binary</template>
+                    <template v-if="detailData.sex == 4">No Gender Requirements</template>
+                  </div>
+                </div>
 
               </div>
 

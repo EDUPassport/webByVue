@@ -1031,8 +1031,8 @@ export default {
         },
         {
           value: 4,
-          object_en: 'Undisclosed',
-          object_cn: '未公开'
+          object_en: 'No Gender Requirements',
+          object_cn: '无性别要求'
         }
       ],
       teachingExpList: [],

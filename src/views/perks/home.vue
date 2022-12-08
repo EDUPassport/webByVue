@@ -31,7 +31,7 @@
 
             </div>
 
-            <div class="plain-xll-item-container">
+            <div class="plain-xll-item-container" v-if="identity == 2 || identity == 3 || identity == 4">
               <div class="plain-item-label">
                 Job posts
               </div>
@@ -199,8 +199,9 @@
           </div>
 
           <div class="plain-container">
-            <div class="plain-mask-container"></div>
+
             <div class="plain-item-2-container">
+
               <div class="plain-item-label">
                 10 days of ads
               </div>
@@ -212,6 +213,8 @@
                   MANAGE MY ADS
                 </el-button>
               </div>
+
+              <div class="plain-mask-container"></div>
 
             </div>
 
@@ -229,7 +232,7 @@
                   CONTACT US
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-2-container">
@@ -246,7 +249,7 @@
                   REDEEM
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-2-container">
@@ -264,7 +267,7 @@
                   LET'S DO IT!
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-2-container">
@@ -280,7 +283,7 @@
                   CONTACT US
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-2-container">
@@ -296,7 +299,7 @@
                   REDEEM
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
           </div>
@@ -308,7 +311,7 @@
           </div>
 
           <div class="plain-container">
-            <div class="plain-mask-container"></div>
+
             <div class="plain-item-3-container">
               <div class="plain-item-label">
                 25% off + 15 days of ads
@@ -321,7 +324,7 @@
                   MANAGE MY ADS
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-3-container">
@@ -338,7 +341,7 @@
                   CONTACT US
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-3-container">
@@ -355,7 +358,7 @@
                   REDEEM
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-3-container">
@@ -373,7 +376,7 @@
                   LET'S DO IT!
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-3-container">
@@ -389,7 +392,7 @@
                   CONTACT US
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-3-container">
@@ -405,7 +408,7 @@
                   REDEEM
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
             <div class="plain-item-3-container">
@@ -421,7 +424,7 @@
                   CONTACT US
                 </el-button>
               </div>
-
+              <div class="plain-mask-container"></div>
             </div>
 
 
@@ -465,7 +468,19 @@ export default {
     }
 
   },
-  computed: {},
+  watch:{
+    identity(newValue){
+      console.log(newValue)
+    }
+  },
+  computed:{
+    identity:{
+      get(){
+        return this.$store.state.identity
+      }
+    }
+
+  },
   data() {
     return {
       dividerPosition:'center',
@@ -613,7 +628,7 @@ export default {
   border-radius: 18px;
   margin-top: 50px;
   margin-right: 50px;
-
+  position: relative;
 }
 
 /*.plain-item-2-container:nth-child( 5n ){*/
@@ -636,6 +651,7 @@ export default {
   border-radius: 18px;
   margin-top: 50px;
   margin-right: 50px;
+  position: relative;
 
 }
 
