@@ -23,7 +23,7 @@
             <CloseBold />
           </el-icon>
         </div>
-        <div class="event-dialog-r-bg">
+        <el-scrollbar always class="event-dialog-r-bg">
           <div class="event-dialog-r-1">
             {{info.company_name}}
           </div>
@@ -36,14 +36,14 @@
           <div class="event-dialog-r-4">
             {{info.name}}
           </div>
-          <el-scrollbar class="event-dialog-r-5">
+          <el-scrollbar class="event-dialog-r-5" max-height="70px" always>
             {{info.desc}}
           </el-scrollbar>
-          <div class="event-dialog-r-lc" v-if="info.type_desc">
+          <div class="event-dialog-r-lc" v-if="info.type_desc" >
             <div class="event-dialog-r-lc-label">
               For EDU Passport members
             </div>
-            <el-scrollbar class="event-dialog-r-lc-type-desc">
+            <el-scrollbar class="event-dialog-r-lc-type-desc" max-height="70px" always>
               {{info.type_desc}}
             </el-scrollbar>
           </div>
@@ -53,7 +53,12 @@
               {{info.currency}} {{info.pay_money}}
             </div>
           </div>
-
+          <div class="event-dialog-r-lc" v-if="info.online_url">
+            <div class="event-dialog-r-lc-label">Event Link</div>
+            <div class="event-dialog-r-lc-content">
+              <el-link :href="info.online_url"> {{info.online_url}}</el-link>
+            </div>
+          </div>
           <!--            <div class="event-dialog-r-btn-1-container">-->
           <!--              <el-button class="event-dialog-r-btn" link>-->
           <!--                ADD TO CALENDAR-->
@@ -68,20 +73,21 @@
 
           </div>
 
-          <div class="event-dialog-r-b">
-            <div class="event-dialog-r-b-l">
-              <el-space :size="5" wrap spacer="·">
-                <span v-if="info.company_category_name">{{info.company_category_name}}</span>
-                <span v-if="info.is_online == 1">online</span>
-                <span v-if="info.is_online == 2">offline</span>
-                <span v-if="info.is_online == 3">both</span>
-              </el-space>
-            </div>
-            <div class="event-dialog-r-b-r">
-              Posted by: <span>{{info.company_name}}</span>
-            </div>
-          </div>
 
+        </el-scrollbar>
+
+        <div class="event-dialog-r-b">
+          <div class="event-dialog-r-b-l">
+            <el-space :size="5" wrap spacer="·">
+              <span v-if="info.company_category_name">{{info.company_category_name}}</span>
+              <span v-if="info.is_online == 1">online</span>
+              <span v-if="info.is_online == 2">offline</span>
+              <span v-if="info.is_online == 3">both</span>
+            </el-space>
+          </div>
+          <div class="event-dialog-r-b-r">
+            Posted by: <span>{{info.company_name}}</span>
+          </div>
         </div>
 
       </div>
@@ -148,14 +154,12 @@ export default {
 
 .event-dialog-r{
   width: 558px;
-  padding-bottom: 25px;
   position: relative;
-
 }
 
 .event-dialog-close-container{
   text-align: right;
-  padding: 25px 50px 0 0;
+  padding: 15px 25px 0 0;
 
 }
 
@@ -164,9 +168,10 @@ export default {
 }
 
 .event-dialog-r-bg{
-  /*padding: 50px;*/
   padding-left: 25px;
   padding-right: 25px;
+
+  height: 590px;
 }
 
 .event-dialog-r-1{
@@ -174,11 +179,13 @@ export default {
   font-size: 20px;
   color: #262626;
 }
+
 .event-dialog-r-2{
   font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #262626;
   margin-top: 10px;
+  word-break: break-word;
 }
 
 .event-dialog-r-3{
@@ -190,12 +197,13 @@ export default {
 
 .event-dialog-r-4{
   font-family:BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 35px;
+  font-size: 30px;
   color: #262626;
-  margin-top: 50px;
+  margin-top: 25px;
   word-break: break-word;
 
 }
+
 .event-dialog-r-5{
   font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
@@ -203,15 +211,9 @@ export default {
   margin-top: 10px;
 
   word-break: break-word;
-
-  height: 115px;
-
-  /*overflow: hidden;*/
-  /*text-overflow: ellipsis;*/
-  /*display: -webkit-box;*/
-  /*-webkit-line-clamp: 5;*/
-  /*-webkit-box-orient: vertical;*/
+  /*height: 70px;*/
 }
+
 .event-dialog-r-lc{
   margin-top: 25px;
 }
@@ -228,7 +230,7 @@ export default {
   font-size: 18px;
   color: #262626;
   word-break: break-word;
-  height: 115px;
+  /*height: 70px;*/
 
 }
 
@@ -271,11 +273,13 @@ export default {
 .event-dialog-r-b{
 
   font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 17px;
+  font-size: 16px;
   color: #262626;
+  padding: 15px 25px;
+  height: 50px;
 
-  padding-left: 25px;
-  padding-right: 50px;
+  background-color: #FFFFFF;
+  border-bottom-right-radius: 40px;
 
   display: flex;
   flex-direction: column;
@@ -283,11 +287,9 @@ export default {
   justify-content: space-between;
 
   position: absolute;
-  bottom: 25px;
+  bottom: 0;
   left: 0;
   right: 0;
-  margin:50px auto 0;
-
 }
 
 .event-dialog-r-b-l{
@@ -301,7 +303,6 @@ export default {
   font-size: 20px;
   color: #262626;
 }
-
 
 /deep/ .el-overlay{
   background-color: rgba(0, 0, 0, 0.9);
@@ -320,6 +321,11 @@ export default {
     height: auto;
   }
 
+  .event-dialog-r-bg{
+    height: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
   .event-dialog-l{
     width: 100%;
     height: 140px;
@@ -371,11 +377,10 @@ export default {
 
   .event-dialog-r-b{
     font-size: 12px;
-    bottom: -25px;
+    bottom: 0;
+    padding: 0;
     position: unset;
-    margin-top: 15px;
-    padding-left: 0;
-    padding-right: 0;
+    margin: 15px;
     flex-direction: column;
     align-items: flex-start;
   }

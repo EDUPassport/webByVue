@@ -3,7 +3,6 @@ import layout from "@/layout";
 import {createRouter, createWebHistory} from 'vue-router'
 import appLayout from "@/layout/appLayout";
 // import {isPhone} from "@/utils";
-// const identity = localStorage.getItem('identity')
 
 const routes = [
 
