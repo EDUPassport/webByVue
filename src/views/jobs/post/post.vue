@@ -2300,10 +2300,10 @@ export default {
             this.$loading().close()
 
             if (err.msg) {
-              this.$message.error(err.msg)
+              return this.$message.error(err.msg)
             }
             if (err.message) {
-              this.$message.error(err.message)
+              return this.$message.error(err.message)
             }
           })
 

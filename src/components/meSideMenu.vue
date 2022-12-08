@@ -324,7 +324,7 @@ export default {
     justify-content: space-between;
   }
   .menu-mobile-item {
-
+    position: relative;
   }
   .menu-mobile-item a{
     display: flex;

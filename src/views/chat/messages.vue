@@ -413,6 +413,13 @@ export default {
     }
 
 
+    let chatJsonConversation = localStorage.getItem('chatJsonConversation')
+    if(chatJsonConversation){
+      this.navigateToChat(JSON.parse(chatJsonConversation))
+    }
+
+
+
   },
   unmounted() {
     updateWindowHeight()
@@ -434,6 +441,8 @@ export default {
         updateWindowHeight()
       }
     }
+
+
   },
   methods: {
     topConversation() {
@@ -501,7 +510,11 @@ export default {
       self.activeActionKeyMobile = undefined
     },
     async navigateToChat(conversation) {
+      // let self = this;
       console.log('navigate to chat --------------------')
+      let jsonConversation = JSON.stringify(conversation)
+      localStorage.setItem('chatJsonConversation', jsonConversation)
+
       this.activeConversationKey = conversation.userId + '_' + conversation.data.identity
 
       let id = conversation.userId || conversation.groupId;
@@ -517,7 +530,8 @@ export default {
 
       // 获取的是未读的短消息
       this.messages = this.service.getPrivateMessages(friendId);
-      // this.loadMoreHistoryMessage()
+
+      this.loadMoreHistoryMessage()
 
       this.scrollToBottom();
       this.initialPrivateListeners();
@@ -553,7 +567,6 @@ export default {
         let old = this.messages
         this.messages = []
         this.messages = old
-        // this.messages.unshift(message)
 
         if (friendId === self.friend.uuid) {
           self.markMessageAsRead(friendId);
@@ -579,18 +592,19 @@ export default {
         userId: self.friend.uuid,
         lastTimestamp: lastMessageTimeStamp,
         onSuccess: function (result) {
-          // console.log(result)
           //获取本地记录
           let localHistory = self.service.getPrivateMessages(self.friend.uuid);
           //添加加载的记录到本地记录尾部
-          let messages = result.content;
+          let messages = []
+          messages.push(...result.content)
+
           for (let i = messages.length - 1; i >= 0; i--) {
             localHistory.unshift(messages[i]);
           }
           if (localHistory.length === currentLength) {
             self.allHistoryLoaded = true;
           }
-          // self.messages = {}
+          self.messages = {}
           self.messages = localHistory;
 
         },
@@ -620,8 +634,7 @@ export default {
       this.image.show = true;
     },
     scrollToBottom() {
-      // this.initialPrivateListeners()
-      // this.loadMoreHistoryMessage()
+
       this.$nextTick(() => {
         this.$refs.scrollView.scrollTo(0, 10000000)
       })

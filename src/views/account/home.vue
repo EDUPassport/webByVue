@@ -195,7 +195,9 @@
 
               </div>
 
-              <el-scrollbar class="account-profile-c" max-height="400px">
+              <el-scrollbar class="account-profile-c"
+                            ref="switchAccountScroll"
+                            max-height="400px">
                 <div class="account-profile-c-item"
                      v-for="(item,i) in companyData" :key="i"
                 >
@@ -210,7 +212,7 @@
                           </span>
                         <el-tag type="success"
                                 style="margin-left: 10px;"
-                                v-if="item.id == currentCompanyId">
+                                v-if="item.identity == identity && item.id == currentCompanyId">
                           current
                         </el-tag>
                       </div>
@@ -243,14 +245,14 @@
                               v-if="item.identity == 1"
                               class="account-profile-c-item-r-2-btn"
                               @click="searchJobs()"
-                              :disabled="item.id != currentCompanyId"
+                              :disabled="item.identity != identity || item.id != currentCompanyId"
                               type="primary" round>
                             SEARCH JOBS
                           </el-button>
                           <el-button
                               v-if="item.identity == 2  || item.identity == 3 || item.identity == 4"
                               class="account-profile-c-item-r-2-btn"
-                              :disabled="item.id != currentCompanyId"
+                              :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
                               @click="postJob()"
                               type="primary" round>
                             POST A JOB
@@ -258,7 +260,7 @@
                           <el-button
                               v-if="item.identity == 5"
                               class="account-profile-c-item-r-2-btn"
-                              :disabled="item.id != currentCompanyId"
+                              :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
                               @click="postDeal()"
                               type="primary" round>
                             OFFER A Deal
@@ -267,7 +269,7 @@
                         </div>
                         <div class="account-profile-c-item-r-3">
 
-                          <template v-if="item.id == currentCompanyId">
+                          <template v-if="item.identity == identity && item.id == currentCompanyId">
                             <el-button
                                 class="account-profile-c-item-r-3-btn"
                                 @click="editUserProfile(item.id,item.identity)"
@@ -285,7 +287,8 @@
                           </template>
 
                         </div>
-                        <div class="account-profile-c-item-r-4" v-if="item.id == currentCompanyId">
+                        <div class="account-profile-c-item-r-4"
+                             v-if="item.identity == identity && item.id == currentCompanyId">
                           <el-dropdown :hide-on-click="false" trigger="click">
                           <span class="account-profile-c-item-r-4-btn">
                             MORE
@@ -1144,12 +1147,12 @@ export default {
 
           }
 
-          let index = companyData.findIndex(item=>item.id == currentCompanyId)
+          let index = companyData.findIndex(item=>item.id == currentCompanyId && item.identity == this.identity)
           if(index){
             let first = companyData.splice(index,1)[0];
             companyData.unshift(first)
           }
-          console.log(companyData)
+          // console.log(companyData)
           this.companyData = companyData
 
         }
@@ -1185,6 +1188,9 @@ export default {
           this.$store.commit('menuData', res.message)
           this.getUserAllInfo()
           this.getAllAssignUsers()
+
+          this.$refs.switchAccountScroll.setScrollTop(0)
+
           this.$loading().close()
         }
       }).catch(err => {

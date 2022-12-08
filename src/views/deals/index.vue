@@ -28,7 +28,7 @@
 
         <el-col class="deals-list-col" :xs="24" :sm="24" :md="13" :lg="13" :xl="14">
 
-          <el-scrollbar class="deals-list-scroll">
+          <el-scrollbar ref="dealScroll" class="deals-list-scroll">
 
             <div class="xll-ads-container" v-if="adsDataTop.length>0">
               <adsComponent :height="adsHeight" :adsData="adsDataTop"></adsComponent>
@@ -545,7 +545,7 @@ export default {
       this.showLoadingStatus = true
       this.dealPage = e
       this.getDealsList(e, this.dealLimit)
-
+      this.$refs.dealScroll.scrollTo(0,0)
       this.$router.push({path:'/deals',query:{page:e}})
       // document.documentElement.scrollTop = 200
     },

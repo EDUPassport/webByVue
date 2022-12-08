@@ -15,7 +15,7 @@
 
       <el-col class="events-list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
 
-        <el-scrollbar class="events-list-bg-container">
+        <el-scrollbar ref="eventScroll"  class="events-list-bg-container">
 
           <template v-if="eventsList.length > 0">
             <div class="empty-post-event-btn-container">
@@ -303,6 +303,7 @@ export default {
     eventPageChange(e){
       this.showLoadingStatus=true
       this.eventPage = e
+      this.$refs.eventScroll.scrollTo(0,0)
       this.getEventsList(e, this.eventLimit)
     },
     getEventsList(page,limit){

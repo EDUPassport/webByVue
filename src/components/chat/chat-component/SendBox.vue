@@ -13,6 +13,7 @@
                 :rows="1"
                 placeholder="Type your message here"
                 @focus="messageInputFocusin"
+                @keyup.shift.enter="sendTextMessage"
                 v-model="content">
       </el-input>
     </div>

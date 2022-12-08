@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar class="jobs-list-bg-container">
+  <el-scrollbar ref="jobScroll" class="jobs-list-bg-container">
 
     <div class="back-btn-container" v-if="isOther">
       <el-button class="back-btn" link type="primary"
@@ -478,7 +478,7 @@ export default {
       }else{
         this.$router.push({path:'/jobs',query:{id:this.selectedJobId,page:e}})
       }
-
+      this.$refs.jobScroll.scrollTo(0,0)
       this.$emit('jobPageChange', e)
     },
     addFavorite(id, type, title, url, index) {
