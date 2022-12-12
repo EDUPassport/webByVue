@@ -70,17 +70,50 @@
 
     </el-scrollbar>
 
+    <eventDetailCard :info="eventDetailData"
+                     :visible="eventDialogVisible"
+                     @rsvp="showBookEvent()"
+                     @close="eventDialogVisible=false">
+    </eventDetailCard>
+    <bookEventForm :visible="bookEventDialogVisible"
+                   :info="eventDetailData"
+                   @close="bookEventDialogVisible=false">
+    </bookEventForm>
+
   </div>
 
 </template>
 
 <script>
+import eventDetailCard from "@/components/eventDetailCard";
+import bookEventForm from "@/components/bookEventForm";
+import BookEventList from "@/components/bookEventList";
+
 export default {
   name: "activeEventsDashboard",
   props:['listData'],
-  methods:{
-    showEventDialog(){
+  component:{
+    eventDetailCard,
+    bookEventForm,
+    BookEventList
+  },
+  data(){
+    return {
+      eventDialogVisible:false,
+      eventDetailData:{},
+      bookEventDialogVisible:false,
 
+
+    }
+  },
+  methods:{
+    showEventDialog(item){
+      this.eventDialogVisible = true;
+      this.eventDetailData  = item;
+
+    },
+    showBookEvent(){
+      this.bookEventDialogVisible = true;
     },
     viewAllEvents(){
       this.$router.push('/events/myEvents')

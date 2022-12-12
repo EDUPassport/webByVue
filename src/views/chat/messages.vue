@@ -324,7 +324,7 @@ export default {
   computed: {},
   data() {
     return {
-      conversationsDrawerStatus:false,
+      conversationsDrawerStatus:true,
       defaultAvatar,
       imgLogo,
       chatIcon,

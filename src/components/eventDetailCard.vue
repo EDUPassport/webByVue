@@ -66,10 +66,12 @@
           <!--            </div>-->
           <div class="event-dialog-r-btn-container">
 
-            <el-icon :size="20" >
-              <CollectionTag />
-            </el-icon>
-            <span @click="rsvp()" >RSVP</span>
+            <el-button link @click="rsvp()" >
+              <el-icon :size="20" >
+                <CollectionTag />
+              </el-icon>
+              RSVP
+            </el-button>
 
           </div>
 

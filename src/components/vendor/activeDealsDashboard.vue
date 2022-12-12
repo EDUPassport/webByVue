@@ -69,21 +69,70 @@
 
     </el-scrollbar>
 
+    <dealDetailCard :info="dealDetailData"
+                    :qrcodeValue="qrcodeValue"
+                    @close="dealDetailDialogVisible=false"
+                    @share="shareDeal"
+                    @viewProfile="viewProfile"
+                    :visible="dealDetailDialogVisible">
+    </dealDetailCard>
+
+    <shareCard :visible="shareDialogVisible"
+               :title="shareInfo.title"
+               :description="shareInfo.desc"
+               :quote="shareInfo.desc"
+               :url="shareUrl"
+               @close="shareDialogVisible=false"
+    >
+    </shareCard>
+
   </div>
 
 </template>
 
 <script>
+import dealDetailCard from "@/components/dealDetailCard";
+import shareCard from "@/components/shareCard";
+
 export default {
   name: "activeDealsDashboard",
   props:['listData'],
-  methods:{
-    showDealDetailDialog(){
+  components: {
+    dealDetailCard,
+    shareCard
+  },
+  data(){
+    return {
+      dealDetailData:{},
+      qrcodeValue:'',
+      dealDetailDialogVisible:false,
+      shareDialogVisible:false,
+      shareInfo:{},
+      shareUrl:'',
+      webDomain: process.env.VUE_APP_DOMAIN,
 
+    }
+  },
+  methods:{
+    showDealDetailDialog(item){
+      this.dealDetailData = item;
+      this.dealDetailDialogVisible = true;
+      this.qrcodeValue = this.webDomain + '?id=' + item.id;
     },
     viewAllDeals(){
       this.$router.push('/deals/myDeals')
-    }
+    },
+    shareDeal(e){
+      const locationUrl = window.location.origin;
+
+      this.shareDialogVisible = true;
+      this.shareInfo = e;
+      this.shareUrl = locationUrl + '/deals/detail?id='+e.id;
+    },
+    viewProfile(userId, identity, companyId) {
+      this.$router.push({path: '/deals/vendor/profile', query: {uid: userId, i: identity, cid: companyId}})
+
+    },
 
   }
 
