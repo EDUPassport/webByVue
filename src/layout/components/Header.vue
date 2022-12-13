@@ -17,7 +17,7 @@
                 <el-image class="logo-mobile-new-logo-img" :src="logoImgLogo"></el-image>
               </div>
               <div class="logo-mobile-new-beta">Beta</div>
-              <el-button link @click="showMobileMenu()">menu</el-button>
+              <el-button link @click="showMobileMenu()">Menu</el-button>
             </div>
 
 
@@ -505,17 +505,17 @@
           <router-link to="/events" exact>EDU Events</router-link>
         </div>
 
-        <template v-if="envName === 'development' || envName === 'production'">
-          <div class="nav-link-item" v-if="!identity || identity == 1">
-            <span @click="turnEnvJobs()">China Jobs</span>
-          </div>
-        </template>
+<!--        <template v-if="envName === 'development' || envName === 'production'">-->
+<!--          <div class="nav-link-item" v-if="!identity || identity == 1">-->
+<!--            <span @click="turnEnvJobs()">China Jobs</span>-->
+<!--          </div>-->
+<!--        </template>-->
 
-        <template v-if="envName === 'developmentCN' || envName === 'productionCN'">
-          <div class="nav-link-item" v-if="!identity || identity == 1">
-           <span  @click="turnEnvJobs()">International Jobs</span>
-          </div>
-        </template>
+<!--        <template v-if="envName === 'developmentCN' || envName === 'productionCN'">-->
+<!--          <div class="nav-link-item" v-if="!identity || identity == 1">-->
+<!--           <span  @click="turnEnvJobs()">International Jobs</span>-->
+<!--          </div>-->
+<!--        </template>-->
 
 <!--        <div class="nav-link-item">-->
 <!--          <router-link :to="{path:'/login',query:{}}">Login</router-link>-->
@@ -526,10 +526,10 @@
 
         <div class="mobile-chose-country">
           <div class="mobile-country-china">
-            <el-button link>China</el-button>
+            <el-button link @click="goChinaWebsite()">China</el-button>
           </div>
           <div class="mobile-country-global">
-            <el-button link>Global</el-button>
+            <el-button link @click="goInternationalWebsite()">Global</el-button>
           </div>
         </div>
 
@@ -1405,6 +1405,12 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    goChinaWebsite(){
+      window.open('https://www.edupassport.cn')
+    },
+    goInternationalWebsite(){
+      window.open('https://www.edupassport.io')
     }
 
   }

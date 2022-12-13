@@ -563,6 +563,11 @@ export default {
     margin-top: 15px;
   }
 
+  .jobs-mobile-filter-tabs{
+    overflow-y: scroll;
+    white-space: nowrap;
+  }
+
   .jobs-mobile-filter-expand-location{
     margin-top: 15px;
   }
@@ -601,5 +606,6 @@ export default {
   }
 
 }
+
 
 </style>

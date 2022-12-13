@@ -438,20 +438,53 @@
                               <el-input v-model="workExpForm.location" placeholder="City, Country"></el-input>
                             </el-form-item>
 
+<!--                            <el-form-item class="work-form-item duration-pc" label="Duration" prop="date">-->
+<!--                              <el-date-picker-->
+<!--                                  v-model="workExpForm.date"-->
+<!--                                  size="large"-->
+<!--                                  type="monthrange"-->
+<!--                                  unlink-panels-->
+<!--                                  format="MM/YYYY"-->
+<!--                                  value-format="x"-->
+<!--                                  range-separator="To"-->
+<!--                                  start-placeholder="Start Date"-->
+<!--                                  end-placeholder="End Date"-->
+<!--                                  :disabledDate="birthdayDisabledDate"-->
+<!--                              >-->
+<!--                              </el-date-picker>-->
+<!--                            </el-form-item>-->
+
                             <el-form-item class="work-form-item" label="Duration" prop="date">
-                              <el-date-picker
-                                  v-model="workExpForm.date"
-                                  size="large"
-                                  type="monthrange"
-                                  unlink-panels
-                                  format="MM/YYYY"
-                                  value-format="x"
-                                  range-separator="To"
-                                  start-placeholder="Start Date"
-                                  end-placeholder="End Date"
-                                  :disabledDate="birthdayDisabledDate"
-                              >
-                              </el-date-picker>
+                              <div class="duration-mobile-container">
+                                <div class="duration-mobile-item">
+                                  <el-date-picker
+                                      v-model="workExpForm.work_time_from"
+                                      type="month"
+                                      unlink-panels
+                                      format="MM/YYYY"
+                                      value-format="x"
+                                      placeholder="Start Date"
+                                      :disabled-date="birthdayDisabledDate"
+
+                                  ></el-date-picker>
+                                </div>
+                                <div class="duration-mobile-item-to">
+                                  <span>To</span>
+                                </div>
+                                <div class="duration-mobile-item">
+                                  <el-date-picker
+                                      v-model="workExpForm.work_time_to"
+                                      type="month"
+                                      unlink-panels
+                                      format="MM/YYYY"
+                                      value-format="x"
+                                      placeholder="End Date"
+                                      :disabled-date="birthdayDisabledDate"
+
+                                  ></el-date-picker>
+                                </div>
+                              </div>
+
                             </el-form-item>
 
                             <el-form-item class="work-form-item" label="Responsibilities">
@@ -621,18 +654,51 @@
                         <el-input v-model="educationForm.field_of_study" type="textarea"
                                   placeholder="Chemistry, International Business, Dance, etc..."></el-input>
                       </el-form-item>
+<!--                      <el-form-item label="Duration of Study" prop="date">-->
+<!--                        <el-date-picker-->
+<!--                            v-model="educationForm.date"-->
+<!--                            type="monthrange"-->
+<!--                            unlink-panels-->
+<!--                            format="MM/YYYY"-->
+<!--                            value-format="x"-->
+<!--                            range-separator="To"-->
+<!--                            start-placeholder="Start month"-->
+<!--                            end-placeholder="End month"-->
+<!--                        >-->
+<!--                        </el-date-picker>-->
+<!--                      </el-form-item>-->
+
                       <el-form-item label="Duration of Study" prop="date">
-                        <el-date-picker
-                            v-model="educationForm.date"
-                            type="monthrange"
-                            unlink-panels
-                            format="MM/YYYY"
-                            value-format="x"
-                            range-separator="To"
-                            start-placeholder="Start month"
-                            end-placeholder="End month"
-                        >
-                        </el-date-picker>
+                        <div class="duration-mobile-container">
+                          <div class="duration-mobile-item">
+                            <el-date-picker
+                                v-model="educationForm.start_time"
+                                type="month"
+                                unlink-panels
+                                format="MM/YYYY"
+                                value-format="x"
+                                placeholder="Start month"
+                                :disabled-date="birthdayDisabledDate"
+
+                            ></el-date-picker>
+                          </div>
+                          <div class="duration-mobile-item-to">
+                            <span>To</span>
+                          </div>
+                          <div class="duration-mobile-item">
+                            <el-date-picker
+                                v-model="educationForm.end_time"
+                                type="month"
+                                unlink-panels
+                                format="MM/YYYY"
+                                value-format="x"
+                                placeholder="End month"
+                                :disabled-date="birthdayDisabledDate"
+
+                            ></el-date-picker>
+                          </div>
+                        </div>
+
                       </el-form-item>
 
                     </el-form>
@@ -1091,6 +1157,7 @@ export default {
     }
   },
   data() {
+
     return {
       workExpDialogWidth: '454px',
       educationDialogWidth: '454px',
@@ -1274,7 +1341,24 @@ export default {
         date: [
           {
             required: true,
-            message: "Please select",
+            validator: (rule,value,callback)=>{
+              let workTimeFrom = this.workExpForm.work_time_from;
+              let workTimeTo = this.workExpForm.work_time_to;
+
+              if(!workTimeFrom){
+                return callback(new Error('Please select start date'))
+              }
+
+              if(!workTimeTo){
+                return callback(new Error('Please select end date'))
+              }
+              if(workTimeTo <= workTimeFrom){
+                return callback(new Error('End date is less than start date'))
+              }
+
+              callback()
+
+            },
             trigger: 'change',
           },
         ]
@@ -1316,7 +1400,24 @@ export default {
         date: [
           {
             required: true,
-            message: "Please select",
+            validator: (rule,value,callback)=>{
+              let startTime = this.educationForm.start_time;
+              let endTime = this.educationForm.end_time;
+
+              if(!startTime){
+                return callback(new Error('Please select start month'))
+              }
+
+              if(!endTime){
+                return callback(new Error('Please select end month'))
+              }
+              if(endTime <= startTime){
+                return callback(new Error('End month is less than start month'))
+              }
+
+              callback()
+
+            },
             trigger: 'change',
           },
         ]
@@ -3317,13 +3418,15 @@ export default {
     },
     editWorkExp(item) {
 
-      let obj = Object.assign({}, item)
-      this.workExpForm = obj;
+      this.workExpForm = Object.assign({}, item);
 
       let workTimeFrom = item.work_time_from
       let workTimeTo = item.work_time_to
 
-      this.workExpForm.date = [workTimeFrom * 1000, workTimeTo * 1000]
+      // this.workExpForm.date = [workTimeFrom * 1000, workTimeTo * 1000]
+
+      this.workExpForm.work_time_from = workTimeFrom * 1000;
+      this.workExpForm.work_time_to = workTimeTo * 1000;
       this.workExpForm.work_id = item.id;
       this.editExistWorkExpStatus = true;
       this.workExpDialogVisible = true;
@@ -3336,8 +3439,7 @@ export default {
     },
     editTempWorkExp(item, i) {
       this.editWorkExpIndex = i;
-      let obj = Object.assign({}, item)
-      this.workExpForm = obj;
+      this.workExpForm = Object.assign({}, item);
       this.workExpDialogVisible = true;
     },
     submitWorkExpForm(formName) {
@@ -3345,13 +3447,12 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
-          let dateArr = this.workExpForm.date
-          this.workExpForm.work_time_from = Math.floor(dateArr[0] / 1000)
-          this.workExpForm.work_time_to = Math.floor(dateArr[1] / 1000)
+          this.workExpForm.work_time_from = Math.floor(this.workExpForm.work_time_from / 1000)
+          this.workExpForm.work_time_to = Math.floor(this.workExpForm.work_time_to / 1000)
 
           let params = Object.assign({}, this.workExpForm)
           ADD_USER_WORK_V2(params).then(res => {
-            console.log(res)
+            // console.log(res)
             if (res.code == 200) {
               this.submitLoadingValue = false;
               this.editExistWorkExpStatus = false;
@@ -3371,6 +3472,17 @@ export default {
       })
     },
     showEducationDialog() {
+      this.educationForm = {
+            school_name: '',
+            degree: '',
+            degree_id: '',
+            field_of_study: '',
+            start_time: '',
+            end_time: '',
+            grade: '',
+            token: localStorage.getItem('token')
+      }
+
       this.educationDialogVisible = true;
     },
     saveEducationTemp() {
@@ -3403,8 +3515,10 @@ export default {
 
       let startTime = item.start_time
       let endTime = item.end_time
-      this.educationForm.date = [startTime * 1000, endTime * 1000]
+      // this.educationForm.date = [startTime * 1000, endTime * 1000]
 
+      this.educationForm.start_time = startTime * 1000;
+      this.educationForm.end_time = endTime * 1000;
       this.educationForm.education_id = item.id;
       this.editExistEducationStatus = true;
       this.educationDialogVisible = true;
@@ -3426,9 +3540,8 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
-          let dateArr = this.educationForm.date
-          this.educationForm.start_time = Math.floor(dateArr[0] / 1000)
-          this.educationForm.end_time = Math.floor(dateArr[1] / 1000)
+          this.educationForm.start_time = Math.floor(this.educationForm.start_time / 1000)
+          this.educationForm.end_time = Math.floor(this.educationForm.end_time / 1000)
 
           let params = Object.assign({}, this.educationForm)
           ADD_USER_EDUCATION_V2(params).then(res => {
@@ -3734,6 +3847,7 @@ export default {
   width: 320px;
   /*height: 500px;*/
   /*overflow: auto;*/
+  margin-bottom: 10px;
   margin-right: 20px;
   box-shadow: 0px 3px 23px #00000012;
 
@@ -3834,13 +3948,48 @@ export default {
 
 }
 
+
+.duration-mobile-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+}
+.duration-mobile-item{
+  width: 45%;
+}
+
+.duration-mobile-item-to{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 12px;
+}
+
+/deep/ .el-date-editor{
+  --el-date-editor-width: auto;
+}
+
+
 @media screen and (min-width: 1200px) {
   .basic-container {
 
   }
 }
 
+@media screen and (min-width: 769px) {
+  .duration-pc{
+
+  }
+  .duration-mobile{
+    display: none;
+  }
+
+}
+
 @media screen and (max-width: 768px) {
+  .duration-pc{
+    display: none;
+  }
   .basic-r-container {
     width: 100%;
     height: calc( var(--i-window-height) - 160px);
@@ -3896,6 +4045,21 @@ export default {
     margin-right: 0;
     margin-bottom: 15px;
   }
+
+
+
+}
+
+@media screen and (max-width: 360px) {
+
+
+  .account-profile-t{
+    flex-direction: column;
+  }
+  .account-profile-t-r{
+    margin-top: 10px;
+  }
+
 
 }
 

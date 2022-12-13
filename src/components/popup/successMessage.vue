@@ -138,4 +138,24 @@ export default {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
+@media screen and (max-width: 768px) {
+  .dialog-container{
+
+    width: 90%;
+    height: 175px;
+    border-radius: 16px;
+    margin: 0 auto;
+    padding: 15px;
+  }
+
+  .dialog-t span{
+    font-size: 18px;
+  }
+  .dialog-b p{
+    font-size: 14px;
+  }
+
+
+}
+
 </style>

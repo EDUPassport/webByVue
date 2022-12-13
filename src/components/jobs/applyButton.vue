@@ -38,40 +38,56 @@ export default {
   },
   methods:{
     applyJob() {
-
-      if(this.selectJobId == this.jobInfo.id){
-        this.applyBtnLoading = true;
-      }
-
       let identity = localStorage.getItem('identity')
       let token = localStorage.getItem('token')
 
-      if (identity == 1) {
-        let params = {
-          job_id: this.jobInfo.id,
-          token: token
+      if(token){
+        if(this.selectJobId == this.jobInfo.id){
+          this.applyBtnLoading = true;
         }
 
-        APPLY_JOBS(params).then(res => {
-          if (res.code == 200) {
-            // this.$message.success('Apply Success')
-            this.applyBtnLoading= false;
-            this.applyVisible = true;
-            this.applyTitle = 'Success'
-            this.applyDescription = 'Your Application to ' + this.jobInfo.job_title + ' has been successfully sent.'
-
+        if (identity == 1) {
+          let params = {
+            job_id: this.jobInfo.id,
+            token: token
           }
-        }).catch(err=>{
-          console.log(err)
-          this.$message.error(err.msg)
-          this.applyBtnLoading =false
 
-        })
+          APPLY_JOBS(params).then(res => {
+            if (res.code == 200) {
+              // this.$message.success('Apply Success')
+              this.applyBtnLoading= false;
+              this.applyVisible = true;
+              this.applyTitle = 'Success'
+              this.applyDescription = 'Your Application to ' + this.jobInfo.job_title + ' has been successfully sent.'
 
-      } else {
-        this.$message.warning('Please switch to an educator profile to be able to apply')
-        this.applyBtnLoading =false;
+            }
+          }).catch(err=>{
+            console.log(err)
+            // this.$message.error(err.msg)
+            this.applyVisible = true;
+            this.applyTitle = 'Warning'
+            this.applyDescription = err.msg
 
+            this.applyBtnLoading =false
+
+          })
+
+        } else {
+
+          this.applyVisible = true;
+          this.applyTitle = 'Warning'
+          this.applyDescription = 'Please switch to an educator profile to be able to apply'
+
+          // this.$message.warning('Please switch to an educator profile to be able to apply')
+          this.applyBtnLoading =false;
+
+        }
+
+
+      }else{
+        this.applyVisible = true;
+        this.applyTitle = 'Warning'
+        this.applyDescription = ' Please log in & fill in your profile to be able to apply.'
       }
 
 
@@ -86,4 +102,8 @@ export default {
   --el-dialog-bg-color: none;
   --el-dialog-box-shadow: none;
 }
+
+@media screen and (max-width: 768px){
+
+ }
 </style>

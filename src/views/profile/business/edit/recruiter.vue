@@ -2238,5 +2238,16 @@ export default {
 
 }
 
+@media screen and (max-width: 360px) {
+
+
+  .account-profile-t{
+    flex-direction: column;
+  }
+  .account-profile-t-r{
+    margin-top: 10px;
+  }
+}
+
 
 </style>
