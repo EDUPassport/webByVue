@@ -2,8 +2,32 @@
   <div>
     <div class="e-a">
 
-      <div class="e-a-label">
-        Favorited jobs 
+      <div >
+        <el-dropdown>
+              <span class="e-a-label">
+                <template v-if="type === 1">Favorited jobs</template>
+                <template v-if="type === 2">Favorited deals</template>
+                <template v-if="type === 4">Favorited profiles</template>
+
+                <el-icon class="el-icon--right">
+                   <arrow-down />
+                </el-icon>
+              </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="changeType(1)">
+                <span class="favorites-label-span">Favorited jobs</span>
+              </el-dropdown-item>
+              <el-dropdown-item @click="changeType(2)">
+                <span class="favorites-label-span">Favorited deals</span>
+              </el-dropdown-item>
+              <el-dropdown-item @click="changeType(4)">
+                <span class="favorites-label-span">Favorited profiles</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
         <el-button link primary @click="viewAll()">VIEW ALL</el-button>
       </div>
 
@@ -102,24 +126,36 @@ export default {
   data(){
    return {
      page:1,
-     limit:20,
+     limit: 8,
      favoriteData:[],
-     totalNum:0
+     totalNum:0,
+     type:1
    }
   },
   mounted(){
-    this.getFavoriteList(this.page,this.limit)
+    this.getFavoriteList(1,this.page,this.limit)
   },
   methods:{
-    getFavoriteList(page, limit) {
+    changeType(type){
+      this.type = type;
+      this.favoriteData = [];
+      this.page = 1
+      this.limit = 8
+      this.getFavoriteList(type, this.page, this.limit)
+    },
+    getFavoriteList(type, page, limit) {
       let params = {
-        token: localStorage.getItem('token'),
         page: page,
         limit: limit
       }
+      if(type){
+        params.type = type
+      }
+
       GET_FAVORITE_LIST(params).then(res => {
         console.log(res)
         if (res.code == 200) {
+
           this.favoriteData = res.message.data
           // console.log(res.message.data)
           this.totalNum = res.message.total
@@ -127,10 +163,10 @@ export default {
       }).catch(err => {
         console.log(err)
         if (err.msg) {
-          this.$message.error(err.msg)
+          return this.$message.error(err.msg)
         }
         if (err.message) {
-          this.$message.error(err.message)
+          return this.$message.error(err.message)
         }
       })
 
@@ -156,9 +192,12 @@ export default {
 }
 
 .e-a-label {
+  display: flex;
+  align-items: flex-end;
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 30px;
   color: #262626;
+  cursor: pointer;
 }
 
 .e-a-c {

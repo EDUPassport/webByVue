@@ -72,7 +72,7 @@
                         <!--                      <el-button link>ADD TO CALENDAR</el-button>-->
                       </div>
                       <div class="events-item-action-r">
-                        <el-button link @click="showBookEvent()">
+                        <el-button link @click="showBookEvent(item)">
                           <el-icon :size="20">
                             <CollectionTag/>
                           </el-icon>
@@ -201,7 +201,8 @@ export default {
     this.getEventsList(this.eventPage,this.eventLimit)
   },
   methods:{
-    showBookEvent(){
+    showBookEvent(item){
+      this.eventDetailData = item
       this.bookEventDialogVisible = true;
       // this.eventDialogVisible = false;
     },
@@ -226,8 +227,10 @@ export default {
       this.getEventsList(this.eventPage,this.eventLimit)
     },
     showEventDialog(item){
-      this.eventDialogVisible = true;
+      // console.log(item)
       this.eventDetailData  = item;
+      this.eventDialogVisible = true;
+
       // console.log(item)
       // let params = {
       //   event_id: item.id

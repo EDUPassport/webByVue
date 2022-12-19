@@ -358,7 +358,10 @@ export const SET_READ = (params) => post('user/setRead', params)
 export const SET_READ_ALL = (params) => post('user/setRead/all', params)
 
 // 获取报名【event】人员
-export const EVENT_APPLICATIONS = (params) => get('/home/getEventApplicants',params)
+// export const EVENT_APPLICATIONS = (params) => get('/home/getEventApplicants',params)
+
+// 获取报名【event】人员
+export const EVENT_APPLICATIONS = (params) => get('/home/event/apply/user',params)
 
 // 获取报名【event】人员
 export const USER_ALL_INFO = (params) => get('/home/user/all/info',params)

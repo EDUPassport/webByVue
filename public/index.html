@@ -5,16 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-capable" content="no">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <script src="https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js"></script>
 
-<!--    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>-->
-<!--    <script>-->
-<!--        // VConsole will be exported to `window.VConsole` by default.-->
-<!--        var vConsole = new window.VConsole();-->
-<!--    </script>-->
+    <% if(process.env.VUE_APP_ENV_NAME === 'developmentCN' || process.env.VUE_APP_ENV_NAME === 'productionCN'){%>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQNK56PRQW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-XQNK56PRQW');
+    </script>
+    <% } %>
+    <% if(process.env.VUE_APP_ENV_NAME === 'development' || process.env.VUE_APP_ENV_NAME === 'production'){%>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CGM1B7LH7Z"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-CGM1B7LH7Z');
+    </script>
+    <% } %>
+
 </head>
 <body>
 <noscript>

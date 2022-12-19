@@ -637,7 +637,6 @@ import {
   USER_OBJECT_LIST,
   ADD_PROFILE_V2,
   EDUCATOR_CONTACT_EDIT_V2,
-  ZOHO_SYNC,
   USER_INFO_BY_TOKEN_V2,
   ADD_USER_IMG_V2,
   ADD_LANGUAGE_SCORE_V2,
@@ -2617,96 +2616,6 @@ export default {
     },
     exportPdf(){
       window.print()
-    },
-    async submitEducatorContactForm(contactImageLink, introLink) {
-      let userId = localStorage.getItem('uid')
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {
-          'SingleLine': userId //UserID
-        },
-        {
-          'SingleLine1': this.userContact.first_name // First Name
-        },
-        {
-          'SingleLine2': this.userContact.last_name //  Last Name
-        },
-        {
-          'Dropdown': '' //  Gender
-        },
-        {
-          'Date': '' //   Date of Birth dd-MMM-yyyy
-        },
-        {
-          'SingleLine3': '' //   Title
-        },
-        {
-          'Email': '' //   Email
-        },
-        {
-          'PhoneNumber_countrycode': '' //   Phone
-        },
-        {
-          'SingleLine4': '' //   Nationality
-        },
-        {
-          'Dropdown1': '' //   Membership Type
-        },
-        {
-          'MultiLine': '' //   Languages Spoken
-        },
-        {
-          'Number': '' //   Membership Duration
-        },
-        {
-          'SingleLine5': '' //   City
-        },
-        {
-          'SingleLine6': '' //   Province
-        },
-        {
-          'SingleLine7': '' //   Country
-        },
-        {
-          'Dropdown2': '' //   Educator Type
-        },
-        {
-          'MultiLine1': '' //   Education
-        },
-        {
-          'MultiLine2': '' //    Work History
-        },
-        {
-          'Dropdown3': '' //    Teaching Experience
-        },
-        {
-          'MultiLine3': '' //   Certifications
-        },
-        {
-          'MultiLine4': '' //   Educator Intro
-        },
-        {
-          'Website': contactImageLink //   Contact image Link
-        },
-        {
-          'Website1': introLink //   Intro Video Link
-        }
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-
     }
 
   }

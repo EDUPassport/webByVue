@@ -1,34 +1,47 @@
 <template>
   <div >
-    <el-scrollbar class="menu-xll-bg-container">
+    <div class="menu-xll-bg-container">
 
       <div class="menu-btn-container">
         <el-button class="menu-btn" type="primary" @click="showSideMenu()">Menu</el-button>
       </div>
 
-      <div class="profile-l-container">
+      <el-scrollbar class="l-container">
 
-        <div class="l-container">
+        <div class="l-item l-item-margin" v-for="(item,i) in menuData" :Key="i">
 
-          <div class="l-item l-item-margin" v-for="(item,i) in menuData" :Key="i">
+          <router-link :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' "
+                       :to="{path:item.link}" exact>
 
-            <router-link :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' "
-                         :to="{path:item.link}" exact>
+            <template v-if="selectedKeys === item.link">
+              <el-image  class="xll-icon-image" :src="item.icon_hover"></el-image>
+            </template>
+            <template v-else>
               <el-image  class="xll-icon-image" :src="item.icon"></el-image>
-              <span>{{item.menu_name_en}}</span>
+            </template>
 
-            </router-link>
+            <span>{{item.menu_name_en}}</span>
 
-            <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
-              {{unreadTotal}}
-            </div>
+          </router-link>
 
+          <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
+            {{unreadTotal}}
           </div>
 
         </div>
 
+      </el-scrollbar>
+
+      <div class="contact-us-container">
+        <el-icon :size="45" color="#6648FF" @click="contactUs()">
+          <IconIcBaselineLiveHelp/>
+        </el-icon>
+        <span @click="contactUs()">Contact Us</span>
       </div>
-    </el-scrollbar>
+
+
+
+    </div>
 
     <div class="menu-mobile-bg">
       <div class="menu-mobile-container">
@@ -171,6 +184,10 @@ export default {
      }
   },
   methods:{
+    contactUs() {
+      window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+
+    },
     showSideMenu(){
       this.showSideMenuStatus = !this.showSideMenuStatus;
 
@@ -215,6 +232,7 @@ export default {
 
 .profile-l-container{
   width: 160px;
+  height: calc(100vh - 140px);
 }
 
 
@@ -224,11 +242,15 @@ export default {
 }
 
 .l-container{
-  padding: 50px 25px;
+  width: 160px;
+  padding: 50px 0;
+  /*margin: 50px 25px;*/
+  /*height: calc(100vh - 240px);*/
+  height: calc(100vh - 340px);
 }
 
 .l-item{
-  margin-bottom: 20px;
+  margin: 0 25px 20px 25px;
   position: relative;
 }
 
@@ -265,12 +287,6 @@ export default {
 }
 
 
-.menu-btn-container{
-  display: none;
-}
-.menu-btn{
-  margin:10px 20px;
-}
 
 .xll-icon-image{
   width: 35px;
@@ -289,9 +305,32 @@ export default {
   top: 0;
   right: 0;
 }
+.contact-us-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  /*height: 70px;*/
 
+  background-color: #FFFFFF;
+}
+
+.contact-us-container span{
+  font-family: BCRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+}
 
 @media screen and (min-width: 769px) {
+
+  .menu-btn-container{
+    display: none;
+  }
+  .menu-btn{
+    margin:10px 20px;
+  }
+
   .menu-mobile-bg{
     display: none;
   }

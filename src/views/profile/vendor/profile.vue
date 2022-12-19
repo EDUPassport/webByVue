@@ -27,7 +27,7 @@
         <el-col  :xs="24" :sm="24" :md="16" :lg="15" :xl="16">
           <businessProfileActionWithPreview :info="companyInfo" :identity="identity"></businessProfileActionWithPreview>
           <el-scrollbar class="business-profile">
-            <businessProfile :info="companyInfo" :identity="identity"></businessProfile>
+            <businessProfile :info="companyInfo" :identity="identity" :fromMe="true"></businessProfile>
           </el-scrollbar>
 
         </el-col>

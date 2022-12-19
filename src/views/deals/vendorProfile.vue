@@ -27,6 +27,7 @@
           <el-scrollbar class="deal-business-bg">
             <businessProfile
                 :info="companyInfo"
+                :fromMe="false"
                 :identity="5">
             </businessProfile>
           </el-scrollbar>

@@ -43,6 +43,7 @@
           <businessProfile
               :info="companyInfo"
               :identity="identity"
+              :fromMe="false"
               @back="back()"
           >
           </businessProfile>
