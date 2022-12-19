@@ -20,21 +20,16 @@
               <div :class="editAccountStatus ? 'account-basic-info-c-edit' : 'account-basic-info-c'">
 
                 <div class="account-basic-info-c-l">
-                  <template v-if="identity == 1">
-                    <el-avatar class="account-basic-info-c-avatar"
-                               :src="headImgUrl ? headImgUrl : defaultAvatar "
-                    ></el-avatar>
-                  </template>
-                  <template v-else>
-                    <el-avatar class="account-basic-info-c-avatar"
-                               :src="headImgUrl ? headImgUrl : '' "
-                    ></el-avatar>
-                  </template>
+
+                  <el-avatar class="account-basic-info-c-avatar"
+                             :src="headImgUrl ? headImgUrl : defaultAvatar "
+                  ></el-avatar>
 
                   <el-upload
                       v-if="editAccountStatus"
                       class="profile-uploader"
                       action=""
+                      accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                       :headers="uploadHeaders"
                       :show-file-list="false"
                       :http-request="profilePhotoHttpRequest"
@@ -129,10 +124,10 @@
 
                   <template v-if="!editAccountStatus">
                     <div class="account-basic-info-c-name">
-                      {{userContact.first_name}} {{userContact.last_name}}
+                      {{ userContact.first_name }} {{ userContact.last_name }}
                     </div>
                     <div class="account-basic-info-c-email">
-                      {{userContact.email}}
+                      {{ userContact.email }}
                     </div>
                   </template>
 
@@ -141,24 +136,24 @@
 
             </div>
 
-<!--            <div class="account-refer-container">-->
-<!--              <div class="account-refer-label">-->
-<!--                Refer someone you know & earn credits-->
-<!--              </div>-->
-<!--              <div class="account-refer-c">-->
-<!--                <div class="account-refer-c-l">-->
-<!--                  <el-input class="account-refer-c-l-input" size="default"-->
-<!--                            placeholder="Email address of someone you know"></el-input>-->
-<!--                </div>-->
-<!--                <div class="account-refer-c-r">-->
-<!--                  <el-button class="account-refer-send-btn" link>-->
-<!--                    SEND-->
-<!--                  </el-button>-->
-<!--                </div>-->
+            <!--            <div class="account-refer-container">-->
+            <!--              <div class="account-refer-label">-->
+            <!--                Refer someone you know & earn credits-->
+            <!--              </div>-->
+            <!--              <div class="account-refer-c">-->
+            <!--                <div class="account-refer-c-l">-->
+            <!--                  <el-input class="account-refer-c-l-input" size="default"-->
+            <!--                            placeholder="Email address of someone you know"></el-input>-->
+            <!--                </div>-->
+            <!--                <div class="account-refer-c-r">-->
+            <!--                  <el-button class="account-refer-send-btn" link>-->
+            <!--                    SEND-->
+            <!--                  </el-button>-->
+            <!--                </div>-->
 
-<!--              </div>-->
+            <!--              </div>-->
 
-<!--            </div>-->
+            <!--            </div>-->
 
             <div class="account-perks-container">
               <div class="account-perks-label">
@@ -205,10 +200,10 @@
                     <div class="account-profile-c-item-l">
                       <div class="account-profile-name">
                           <span v-if="item.identity == 1">
-                            {{item.name ? item.name : 'Unknown'}}
+                            {{ item.name ? item.name : 'Unknown' }}
                           </span>
                         <span v-else>
-                            {{item.company_name ? item.company_name : 'Unknown'}}
+                            {{ item.company_name ? item.company_name : 'Unknown' }}
                           </span>
                         <el-tag type="success"
                                 style="margin-left: 10px;"
@@ -293,11 +288,11 @@
                           <span class="account-profile-c-item-r-4-btn">
                             MORE
                             <el-icon class="el-icon--right">
-                              <arrow-down />
+                              <arrow-down/>
                             </el-icon>
                           </span>
                             <template #dropdown>
-                              <el-dropdown-menu >
+                              <el-dropdown-menu>
                                 <el-dropdown-item>
                                   <el-button link @click="viewUserProfile(item.id,item.user_id,item.identity)">
                                     VIEW PROFILE
@@ -308,13 +303,13 @@
                                     ADD A CONTRIBUTOR
                                   </el-button>
                                 </el-dropdown-item>
-<!--                                <el-dropdown-item v-if="item.identity == 3">-->
-<!--                                    &lt;!&ndash;                                  CONVERT TO A RECRUITER&ndash;&gt;-->
-<!--                                  <el-button link @click="schoolConvertToRecruiter(item.id,item.user_id,item.identity)">-->
-<!--                                    COPY AS A RECRUITER-->
-<!--                                  </el-button>-->
-<!--                                </el-dropdown-item>-->
-                                <el-dropdown-item >
+                                <!--                                <el-dropdown-item v-if="item.identity == 3">-->
+                                <!--                                    &lt;!&ndash;                                  CONVERT TO A RECRUITER&ndash;&gt;-->
+                                <!--                                  <el-button link @click="schoolConvertToRecruiter(item.id,item.user_id,item.identity)">-->
+                                <!--                                    COPY AS A RECRUITER-->
+                                <!--                                  </el-button>-->
+                                <!--                                </el-dropdown-item>-->
+                                <el-dropdown-item>
                                   <el-popconfirm
                                       title="Are you sure to delete this?"
                                       @confirm="removeProfile(item.id, item.identity)"
@@ -342,14 +337,14 @@
                   </div>
 
                   <div v-if="i===0">
-                    <el-row :gutter="50" justify="space-between" align="middle"
-                            style="margin-top:15px;"
+                    <el-row :gutter="0" justify="space-between" align="middle"
+                            class="admin-contributor-item-container"
                             v-for="(item,i) in assignUserData" :key="i">
-                      <el-col :span="16">
+                      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
                         <div class="admin-item-container">
                           <div class="admin-item-img-container">
                             <el-avatar class="admin-item-img"
-                                      :src="item.headimgurl ? item.headimgurl : defaultAvatar ">
+                                       :src="item.headimgurl ? item.headimgurl : defaultAvatar ">
                             </el-avatar>
                           </div>
                           <div class="admin-item-r-container">
@@ -365,15 +360,15 @@
 
                         </div>
                       </el-col>
-                      <el-col :span="8" class="admin-item-btn-container">
+                      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="admin-item-btn-container">
                         <el-button plain round class="admin-item-btn"
                                    @click="editAdmin(item)"
                         >
                           EDIT PERMISSIONS
                         </el-button>
-                        <el-button link round class="admin-item-btn">
-                          DELETE
-                        </el-button>
+                        <!--                        <el-button link round class="admin-item-btn">-->
+                        <!--                          DELETE-->
+                        <!--                        </el-button>-->
                       </el-col>
                     </el-row>
                   </div>
@@ -382,7 +377,6 @@
 
               </el-scrollbar>
             </div>
-
 
 
           </div>
@@ -418,19 +412,17 @@
           <div class="xll-contributor-c-r">
             <el-form-item label="Select permissions">
 
-              <template v-if="identity == 3">
-                <div class="qx-checked-container">
-                  <div class="qx-checked-item" v-for="(item,i) in contributorMenuData" :key="i"
-                       @click="menuItemSelected(item)"
-                  >
-                    <div class="qx-checked-square"
-                         :class="sMenuItemData.indexOf(item.id) == -1 ? '' : 'qx-checked-square-active' "
-                    ></div>
-                    <div class="qx-checked-label">{{ item.menu_name_en }}</div>
-                  </div>
-
+              <div class="qx-checked-container" v-if="identity != 1">
+                <div class="qx-checked-item" v-for="(item,i) in contributorMenuData" :key="i"
+                     @click="menuItemSelected(item)"
+                >
+                  <div class="qx-checked-square"
+                       :class="sMenuItemData.indexOf(item.id) == -1 ? '' : 'qx-checked-square-active' "
+                  ></div>
+                  <div class="qx-checked-label">{{ item.menu_name_en }}</div>
                 </div>
-              </template>
+
+              </div>
 
             </el-form-item>
           </div>
@@ -441,7 +433,7 @@
       <template #footer>
       <span class="dialog-footer">
         <el-button plain round @click="contributorDialogVisible = false">Cancel</el-button>
-        <el-button type="primary" round @click="addMenu('contributorForms')" >
+        <el-button type="primary" round @click="addMenu('contributorForms')">
           SEND AN INVITATION
         </el-button>
       </span>
@@ -449,11 +441,11 @@
 
     </el-dialog>
 
-    <el-dialog v-model="contributorUpdateDialogVisible">
+    <el-dialog :width="contributorWidth" v-model="contributorUpdateDialogVisible">
       <template #header="{ titleId, titleClass }">
         <div class="my-header">
           <h3 :id="titleId" :class="titleClass">
-            Edit permissions for {{contributorUpdateItemData.first_name}} {{contributorUpdateItemData.last_name}}
+            Edit permissions for {{ contributorUpdateItemData.first_name }} {{ contributorUpdateItemData.last_name }}
           </h3>
         </div>
       </template>
@@ -478,19 +470,17 @@
 
             <el-form-item label="Select permissions">
 
-              <template v-if="identity == 3">
-                <div class="qx-checked-container">
-                  <div class="qx-checked-item" v-for="(item,i) in contributorMenuData" :key="i"
-                       @click="menuItemSelected(item)"
-                  >
-                    <div class="qx-checked-square"
-                         :class="sMenuItemData.indexOf(item.id) == -1 ? '' : 'qx-checked-square-active' "
-                    ></div>
-                    <div class="qx-checked-label">{{ item.menu_name_en }}</div>
-                  </div>
-
+              <div class="qx-checked-container" v-if="identity != 1">
+                <div class="qx-checked-item" v-for="(item,i) in contributorMenuData" :key="i"
+                     @click="menuItemSelected(item)"
+                >
+                  <div class="qx-checked-square"
+                       :class="sMenuItemData.indexOf(item.id) == -1 ? '' : 'qx-checked-square-active' "
+                  ></div>
+                  <div class="qx-checked-label">{{ item.menu_name_en }}</div>
                 </div>
-              </template>
+
+              </div>
 
             </el-form-item>
 
@@ -503,7 +493,7 @@
       <template #footer>
       <span class="dialog-footer">
         <el-button plain round @click="contributorUpdateDialogVisible = false">Cancel</el-button>
-        <el-button type="primary" round @click="updateMenu('contributorForms')" >
+        <el-button type="primary" round @click="updateMenu('contributorForms')">
           UPDATE
         </el-button>
       </span>
@@ -539,7 +529,7 @@ import {
 import xllLoading from '@/components/xllLoading'
 
 import {useStore} from "vuex";
-import {ref,reactive} from "vue";
+import {ref, reactive} from "vue";
 import ImageCompressor from "compressorjs";
 import {encode} from "js-base64";
 import {randomString} from "@/utils";
@@ -552,12 +542,12 @@ export default {
     xllLoading,
     ForgotPassword
   },
-  setup(){
+  setup() {
 
     const store = useStore()
 
-    const setIdentity = (data)=>{
-      store.commit('identity',data)
+    const setIdentity = (data) => {
+      store.commit('identity', data)
     }
     const submitLoadingValue = ref(false)
 
@@ -567,19 +557,19 @@ export default {
 
     const basicForm = reactive({
       first_name: "",
-      last_name:'',
-      identity:localStorage.getItem('identity'),
+      last_name: '',
+      identity: localStorage.getItem('identity'),
       sex: '',
-      phone:'',
-      email:'',
-      state_id:'',
-      town_id:'',
-      country_id:'',
-      country_info:'',
-      headimgurl:'',
+      phone: '',
+      email: '',
+      state_id: '',
+      town_id: '',
+      country_id: '',
+      country_info: '',
+      headimgurl: '',
       language: 2,
-      birthday:'',
-      area_code:''
+      birthday: '',
+      area_code: ''
     })
 
     const basicRules = reactive({
@@ -615,7 +605,7 @@ export default {
 
     })
 
-    const birthdayDisabledDate = (date)=>{
+    const birthdayDisabledDate = (date) => {
       let myDate = new Date();
       return date.getTime() >= myDate.getTime();
     }
@@ -627,7 +617,7 @@ export default {
     const contributorForms = ref(null)
 
     const contributorForm = reactive({
-      email:''
+      email: ''
     })
 
     const contributorRules = reactive({
@@ -635,7 +625,7 @@ export default {
         {
           required: true,
           message: 'One email per invitation',
-          trigger: 'blur',
+          trigger: 'change',
         }
       ],
     })
@@ -656,25 +646,25 @@ export default {
     }
 
   },
-  watch:{
-    currentCompanyId(newValue){
+  watch: {
+    currentCompanyId(newValue) {
       console.log(newValue)
-      if(newValue){
+      if (newValue) {
         this.getUserAllInfo()
       }
     },
-    identity(newValue){
+    identity(newValue) {
       console.log(newValue)
     }
   },
-  computed:{
-    currentCompanyId:{
-      get(){
+  computed: {
+    currentCompanyId: {
+      get() {
         return this.$store.state.currentCompanyId
       }
     },
-    identity:{
-      get(){
+    identity: {
+      get() {
         return this.$store.state.identity
       }
     }
@@ -683,7 +673,7 @@ export default {
   data() {
     return {
       defaultAvatar,
-      headImgUrl:'',
+      headImgUrl: '',
       sexOptions: [
         {
           value: 1,
@@ -698,7 +688,7 @@ export default {
         {
           value: 3,
           object_en: 'Non-binary',
-          object_cn:'非二元人'
+          object_cn: '非二元人'
         },
         {
           value: 4,
@@ -718,34 +708,34 @@ export default {
       educatorContact: {},
       userContact: {},
 
-      educatorUserData:[],
-      recruiterUserData:[],
-      schoolUserData:[],
-      otherUserData:[],
-      vendorUserData:[],
-      currentProfileData:[],
-      companyData:[],
-      contributorDialogVisible:false,
+      educatorUserData: [],
+      recruiterUserData: [],
+      schoolUserData: [],
+      otherUserData: [],
+      vendorUserData: [],
+      currentProfileData: [],
+      companyData: [],
+      contributorDialogVisible: false,
 
-      contributorMenuData:[],
+      contributorMenuData: [],
       contributorCompanyId: 0,
-      contributorIdentity:0,
-      contributorUserId:0,
+      contributorIdentity: 0,
+      contributorUserId: 0,
 
       sMenuItemData: [],
-      email:'',
-      addLoading:false,
-      action:'',
-      deleteLoading:false,
-      assignUserData:[],
+      email: '',
+      addLoading: false,
+      action: '',
+      deleteLoading: false,
+      assignUserData: [],
 
-      contributorUpdateDialogVisible:false,
-      contributorUpdateItemData:{},
-      versionTime:randomString(),
+      contributorUpdateDialogVisible: false,
+      contributorUpdateItemData: {},
+      versionTime: randomString(),
 
-      forgotDialogVisible:false,
+      forgotDialogVisible: false,
 
-      contributorWidth:'50%',
+      contributorWidth: '50%',
 
     }
   },
@@ -776,23 +766,23 @@ export default {
 
   },
   methods: {
-    resetPassword(){
+    resetPassword() {
       this.forgotDialogVisible = true;
     },
     closeForgotDialog() {
       this.forgotDialogVisible = false
     },
-    upgrade(){
+    upgrade() {
       this.$router.push('/perks/home')
     },
-    searchJobs(){
+    searchJobs() {
       this.$router.push('/jobs')
     },
-    postJob(){
-      this.$router.push({path:'/jobs/post',query:{version_time:this.versionTime}})
+    postJob() {
+      this.$router.push({path: '/jobs/post', query: {version_time: this.versionTime}})
     },
-    postDeal(){
-      this.$router.push({path:'/deals/offer',query:{}})
+    postDeal() {
+      this.$router.push({path: '/deals/offer', query: {}})
     },
     getAllAssignUsers() {
       let params = {}
@@ -805,22 +795,22 @@ export default {
         console.log(err)
       })
     },
-    editAccount(){
+    editAccount() {
       let userContact = this.userContact;
       this.editAccountStatus = true;
       this.basicForm.first_name = userContact.first_name;
       this.basicForm.last_name = userContact.last_name;
       this.basicForm.email = userContact.email;
       this.basicForm.birthday = userContact.birthday;
-      if(userContact.sex){
+      if (userContact.sex) {
         this.basicForm.sex = userContact.sex;
       }
 
     },
-    discardAccount(){
+    discardAccount() {
       this.editAccountStatus = false;
     },
-    saveAccount(formName){
+    saveAccount(formName) {
       this.submitLoadingValue = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -831,16 +821,16 @@ export default {
             if (res.code == 200) {
               this.editAccountStatus = false;
               this.getUserInfo();
-              this.submitLoadingValue=false
+              this.submitLoadingValue = false
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$message.error(err.msg)
-            this.submitLoadingValue=false
+            this.submitLoadingValue = false
           })
         } else {
           console.log('error submit!!')
-          this.submitLoadingValue=false
+          this.submitLoadingValue = false
           return false
 
         }
@@ -865,14 +855,13 @@ export default {
             this.userContact = userContact
           }
 
-          if(userContact.headimgurl){
+          if (userContact.headimgurl) {
             this.headImgUrl = userContact.headimgurl
           }
 
           if (educatorContact) {
             this.educatorContact = educatorContact;
           }
-
 
 
         }
@@ -884,53 +873,53 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    profilePhotoHttpRequest(options){
+    profilePhotoHttpRequest(options) {
       let self = this;
       // console.log(options)
-      new ImageCompressor(options.file,{
-        quality:0.6,
+      new ImageCompressor(options.file, {
+        quality: 0.6,
         success(file) {
           // console.log(file)
           const formData = new FormData();
 
-          formData.append('token',localStorage.getItem('token'))
+          formData.append('token', localStorage.getItem('token'))
           // console.log(file)
           let isInChina = process.env.VUE_APP_CHINA
-          if(isInChina === 'yes'){
-            formData.append('file[]',file,file.name)
-            UPLOAD_BY_ALI_OSS(formData).then(res=>{
+          if (isInChina === 'yes') {
+            formData.append('file[]', file, file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.data[0]['file_url'];
                 self.uploadLoadingStatus = false;
                 self.headImgUrl = myFileUrl
                 self.basicForm.headimgurl = myFileUrl
 
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
-          if(isInChina === 'no'){
-            formData.append('file',file,file.name)
-            UPLOAD_BY_SERVICE(formData).then(res=>{
+          if (isInChina === 'no') {
+            formData.append('file', file, file.name)
+            UPLOAD_BY_SERVICE(formData).then(res => {
               // console.log(res)
-              if(res.code == 200){
+              if (res.code == 200) {
                 let myFileUrl = res.message.file_path;
                 self.uploadLoadingStatus = false;
                 self.headImgUrl = myFileUrl
                 self.basicForm.headimgurl = myFileUrl
               }
-            }).catch(err=>{
+            }).catch(err => {
               console.log(err)
             })
 
           }
 
         },
-        error(err){
+        error(err) {
           console.log(err.message)
         }
 
@@ -938,6 +927,7 @@ export default {
 
     },
     beforeProfilePhotoUpload(file) {
+
       this.uploadLoadingStatus = true;
       const isLt2M = file.size / 1024 / 1024 < 20
 
@@ -950,148 +940,148 @@ export default {
     cancelUpload() {
       this.uploadLoadingStatus = false;
     },
-    turnAddProfile(){
+    turnAddProfile() {
 
       let identity = localStorage.getItem('identity')
 
       let strObj = {
-        i:identity,
-        action:'add'
+        i: identity,
+        action: 'add'
       }
 
       let str = encode(JSON.stringify(strObj))
 
-      if(identity == 1){
-        this.$router.push({path:'/educator/edit/home',query:{s:str}})
+      if (identity == 1) {
+        this.$router.push({path: '/educator/edit/home', query: {s: str}})
       }
 
-      if(identity == 2 ){
-        this.$router.push({path:'/business/edit/recruiter',query:{s:str}})
+      if (identity == 2) {
+        this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
       }
-      if(identity == 3 ){
-        this.$router.push({path:'/business/edit/school',query:{s:str}})
+      if (identity == 3) {
+        this.$router.push({path: '/business/edit/school', query: {s: str}})
       }
-      if(identity == 4 ){
-        this.$router.push({path:'/business/edit/other',query:{s:str}})
+      if (identity == 4) {
+        this.$router.push({path: '/business/edit/other', query: {s: str}})
       }
-      if(identity == 5 ){
-        this.$router.push({path:'/vendor/edit/vendor',query:{s:str}})
+      if (identity == 5) {
+        this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
       }
 
     },
-    editUserProfile(companyId,roleValue){
-      if(roleValue == 1){
+    editUserProfile(companyId, roleValue) {
+      if (roleValue == 1) {
         let strObj = {
-          i:1,
-          action:'edit'
+          i: 1,
+          action: 'edit'
         }
         let str = encode(JSON.stringify(strObj))
-        this.$router.push({path:'/educator/edit/home',query:{s:str}})
+        this.$router.push({path: '/educator/edit/home', query: {s: str}})
       }
-      if(roleValue == 2){
+      if (roleValue == 2) {
         let strObj = {
-          cid:companyId,
-          action:'edit'
+          cid: companyId,
+          action: 'edit'
         }
         let str = encode(JSON.stringify(strObj))
-        this.$router.push({path:'/business/edit/recruiter',query:{s:str}})
+        this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
       }
-      if(roleValue == 3){
+      if (roleValue == 3) {
         let strObj = {
-          cid:companyId,
-          action:'edit'
+          cid: companyId,
+          action: 'edit'
         }
         let str = encode(JSON.stringify(strObj))
-        this.$router.push({path:'/business/edit/school',query:{s:str}})
+        this.$router.push({path: '/business/edit/school', query: {s: str}})
       }
-      if(roleValue == 4){
+      if (roleValue == 4) {
         let strObj = {
-          cid:companyId,
-          action:'edit'
+          cid: companyId,
+          action: 'edit'
         }
         let str = encode(JSON.stringify(strObj))
-        this.$router.push({path:'/business/edit/other',query:{s:str}})
+        this.$router.push({path: '/business/edit/other', query: {s: str}})
       }
-      if(roleValue == 5){
+      if (roleValue == 5) {
         let strObj = {
-          cid:companyId,
-          action:'edit'
+          cid: companyId,
+          action: 'edit'
         }
         let str = encode(JSON.stringify(strObj))
-        this.$router.push({path:'/vendor/edit/vendor',query:{s:str}})
+        this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
 
       }
     },
-    removeProfile(companyId, identity){
+    removeProfile(companyId, identity) {
       let params = {
         company_id: companyId,
         identity: identity
       }
-      DELETE_USER_PROFILE(params).then(res=>{
+      DELETE_USER_PROFILE(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.getUserAllInfo()
-          this.$store.commit('allIdentityChanged',true )
+          this.$store.commit('allIdentityChanged', true)
           this.getAllAssignUsers()
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    viewUserProfile(companyId,userId,roleValue){
-      if(roleValue == 1){
+    viewUserProfile(companyId, userId, roleValue) {
+      if (roleValue == 1) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:1
+          cid: companyId,
+          uid: userId,
+          identity: 1
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/educator/profile',query:{str:str}})
+        this.$router.push({path: '/educator/profile', query: {str: str}})
       }
-      if(roleValue == 2){
+      if (roleValue == 2) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:2
+          cid: companyId,
+          uid: userId,
+          identity: 2
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/business/profile',query:{str:str}})
+        this.$router.push({path: '/business/profile', query: {str: str}})
       }
-      if(roleValue == 3){
+      if (roleValue == 3) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:3
+          cid: companyId,
+          uid: userId,
+          identity: 3
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/business/profile',query:{str:str}})
+        this.$router.push({path: '/business/profile', query: {str: str}})
       }
-      if(roleValue == 4){
+      if (roleValue == 4) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:4
+          cid: companyId,
+          uid: userId,
+          identity: 4
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/business/profile',query:{str:str}})
+        this.$router.push({path: '/business/profile', query: {str: str}})
       }
-      if(roleValue == 5){
+      if (roleValue == 5) {
         let obj = {
-          cid:companyId,
-          uid:userId,
-          identity:5
+          cid: companyId,
+          uid: userId,
+          identity: 5
         }
         let str = encode(JSON.stringify(obj))
-        this.$router.push({path:'/vendor/profile',query:{str:str}})
+        this.$router.push({path: '/vendor/profile', query: {str: str}})
       }
     },
-    getUserAllInfo(){
+    getUserAllInfo() {
 
       let params = {}
 
-      USER_ALL_INFO(params).then(res=>{
+      USER_ALL_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let educator = res.message.educator;
           let recruiter = res.message.recruiting;
           let school = res.message.school;
@@ -1101,29 +1091,28 @@ export default {
           let currentCompanyId = this.currentCompanyId;
           let companyData = []
 
-          if(educator){
+          if (educator) {
 
-            for (let i=0;i<educator.length;i++)
-            {
-               educator[i]['identity'] = 1
+            for (let i = 0; i < educator.length; i++) {
+              educator[i]['identity'] = 1
             }
 
             companyData = companyData.concat(educator)
 
           }
 
-          if(recruiter){
+          if (recruiter) {
 
-            for(let i=0;i<recruiter.length;i++){
-               recruiter[i]['identity'] = 2
+            for (let i = 0; i < recruiter.length; i++) {
+              recruiter[i]['identity'] = 2
             }
             companyData = companyData.concat(recruiter)
 
           }
 
-          if(school){
+          if (school) {
 
-            for(let i=0;i<school.length;i++){
+            for (let i = 0; i < school.length; i++) {
               school[i]['identity'] = 3
             }
 
@@ -1131,25 +1120,25 @@ export default {
 
           }
 
-          if(other){
-            for(let i=0;i<other.length;i++){
+          if (other) {
+            for (let i = 0; i < other.length; i++) {
               other[i]['identity'] = 4
             }
 
             companyData = companyData.concat(other)
 
           }
-          if(vendor){
-            for(let i=0;i<vendor.length;i++){
+          if (vendor) {
+            for (let i = 0; i < vendor.length; i++) {
               vendor[i]['identity'] = 5
             }
             companyData = companyData.concat(vendor)
 
           }
 
-          let index = companyData.findIndex(item=>item.id == currentCompanyId && item.identity == this.identity)
-          if(index){
-            let first = companyData.splice(index,1)[0];
+          let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
+          if (index) {
+            let first = companyData.splice(index, 1)[0];
             companyData.unshift(first)
           }
           // console.log(companyData)
@@ -1157,12 +1146,12 @@ export default {
 
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
-    makeCurrent(companyId,identity,language){
+    makeCurrent(companyId, identity, language) {
       let params = {
         company_id: companyId,
         language: language,
@@ -1175,17 +1164,31 @@ export default {
 
           this.currentCompanyId = companyId;
 
-          this.$store.commit('currentCompanyId',companyId )
-          this.$store.commit('allIdentityChanged',true )
+          this.$store.commit('currentCompanyId', companyId)
+          this.$store.commit('allIdentityChanged', true)
 
-          localStorage.setItem('company_id',companyId)
+          localStorage.setItem('company_id', companyId)
           localStorage.setItem('identity', identity)
 
           let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData',str)
+          localStorage.setItem('menuData', str)
 
           this.$store.commit('identity', identity)
           this.$store.commit('menuData', res.message)
+
+          if (this.goEasy.getConnectionStatus() === 'connected') {
+            this.goEasy.disconnect({
+              onSuccess: function () {
+                console.log("GoEasy disconnect successfully.")
+              },
+              onFailed: function (error) {
+                console.log("Failed to disconnect GoEasy, code:" + error.code + ",error:" + error.content);
+              }
+            });
+          }
+
+          localStorage.removeItem('chatJsonConversation')
+
           this.getUserAllInfo()
           this.getAllAssignUsers()
 
@@ -1199,47 +1202,47 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    deleteUserMenu(){
+    deleteUserMenu() {
       let self = this;
       this.deleteLoading = true;
       let uid = this.$route.query.uid
       let companyId = this.$route.query.cId
 
       let params = {
-        user_id:uid,
-        identity:self.identity,
-        company_id:companyId
+        user_id: uid,
+        identity: self.identity,
+        company_id: companyId
       }
 
-      USER_ADMIN_DELETE(params).then(res=>{
+      USER_ADMIN_DELETE(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.deleteLoading = false;
-          this.$router.push({path:'/overview',query:{identity:self.identity}})
+          this.$router.push({path: '/overview', query: {identity: self.identity}})
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
-    async getUserAdminMenuList(uid,identity,companyId){
+    async getUserAdminMenuList(uid, identity, companyId) {
       let params = {
-        user_id:uid,
-        identity:identity,
-        company_id:companyId
+        user_id: uid,
+        identity: identity,
+        company_id: companyId
       }
 
-      await USER_ADMIN_MENU_INFO(params).then(res=>{
+      await USER_ADMIN_MENU_INFO(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           let resData = res.message;
-          resData.forEach(item=>{
-            this.sMenuItemData.push( Number(item.menu_id) )
+          resData.forEach(item => {
+            this.sMenuItemData.push(Number(item.menu_id))
           })
 
           // console.log(this.sMenuItemData)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
@@ -1250,7 +1253,7 @@ export default {
       let companyId = this.contributorCompanyId;
       let sMenuData = this.sMenuItemData;
 
-      if(sMenuData.length<=0){
+      if (sMenuData.length <= 0) {
         this.$message.warning('Choose what the added user will have access to')
         return;
       }
@@ -1262,22 +1265,22 @@ export default {
         if (valid) {
 
           let params = Object.assign({
-            identity:identity,
+            identity: identity,
             company_id: companyId,
-            menu_id:sMenuData.join(',')
-          },this.contributorForm)
+            menu_id: sMenuData.join(',')
+          }, this.contributorForm)
 
-          USER_ADD_MENU(params).then(res=>{
+          USER_ADD_MENU(params).then(res => {
             console.log(res)
-            if(res.code == 200){
-              this.addLoading =false;
+            if (res.code == 200) {
+              this.addLoading = false;
               this.contributorDialogVisible = false;
               this.getAllAssignUsers()
 
               this.$message.success('Success ')
               // this.$router.push({path:'/overview',query:{identity:identity}})
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$message.error(err.msg)
 
@@ -1294,14 +1297,14 @@ export default {
       })
 
     },
-    updateMenu(formName){
+    updateMenu(formName) {
 
       let sMenuData = this.sMenuItemData;
       let identity = this.identity;
       let currentCompanyId = this.currentCompanyId;
       let userId = this.contributorUserId;
 
-      if(sMenuData.length<=0){
+      if (sMenuData.length <= 0) {
         this.$message.warning('Choose what the added user will have access to')
         return;
       }
@@ -1312,43 +1315,43 @@ export default {
 
         if (valid) {
 
-          let params = Object.assign( {
+          let params = Object.assign({
             user_id: userId,
-            identity:identity,
+            identity: identity,
             company_id: currentCompanyId,
-            menu_id:sMenuData.join(',')
+            menu_id: sMenuData.join(',')
           }, this.contributorForm)
 
           USER_MENU_DELETE({
             user_id: Number(userId),
             company_id: Number(currentCompanyId)
-          }).then(res=>{
+          }).then(res => {
             console.log(res)
-            if(res.code == 200){
-              params =  {
-                user_id:userId,
-                identity:identity,
+            if (res.code == 200) {
+              params = {
+                user_id: userId,
+                identity: identity,
                 company_id: currentCompanyId,
-                menu_id:sMenuData.join(',')
+                menu_id: sMenuData.join(',')
               }
 
-              USER_ADD_MENU(params).then(res=>{
+              USER_ADD_MENU(params).then(res => {
                 console.log(res)
-                if(res.code == 200){
-                  this.addLoading =false;
+                if (res.code == 200) {
+                  this.addLoading = false;
                   this.contributorUpdateDialogVisible = false;
                   this.getAllAssignUsers()
 
                   this.$message.success('Success ')
 
                 }
-              }).catch(err=>{
+              }).catch(err => {
                 console.log(err)
                 this.addLoading = false;
               })
 
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
           })
 
@@ -1373,67 +1376,67 @@ export default {
       }
       console.log(this.sMenuItemData)
     },
-    getUserMenuList(){
+    getUserMenuList() {
       let self = this;
       let params = {
-        user_id:localStorage.getItem('uid'),
-        identity:self.identity,
-        company_id:localStorage.getItem('company_id'),
+        user_id: localStorage.getItem('uid'),
+        identity: self.identity,
+        company_id: localStorage.getItem('company_id'),
         create_user_id: localStorage.getItem('uid'),
-        page:1,
-        limit:1000
+        page: 1,
+        limit: 1000
       }
-      USER_MENU_LIST(params).then(res=>{
+      USER_MENU_LIST(params).then(res => {
         // console.log(res)
-        if(res.code === 200){
+        if (res.code === 200) {
           let pcAllData = res.message.pc;
-          if(self.identity == 1){
+          if (self.identity == 1) {
             this.educatorMenuData = pcAllData
 
           }
-          if(self.identity == 2){
+          if (self.identity == 2) {
             this.recruiterMenuData = pcAllData
 
           }
-          if(self.identity == 3){
+          if (self.identity == 3) {
             this.schoolMenuData = pcAllData
 
           }
-          if(self.identity == 4){
+          if (self.identity == 4) {
             this.otherMenuData = pcAllData
 
           }
 
-          if(self.identity == 5){
+          if (self.identity == 5) {
             this.vendorMenuData = pcAllData
           }
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    schoolConvertToRecruiter(id,uid,identity){
+    schoolConvertToRecruiter(id, uid, identity) {
 
       let params = {
-        school_id:id,
+        school_id: id,
         user_id: uid,
         identity: identity
 
       }
 
-      SCHOOL_CONVERT_TO_RECRUITER(params).then(res=>{
+      SCHOOL_CONVERT_TO_RECRUITER(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           this.getUserAllInfo()
           this.$message.success('Success')
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
-    showContributorDialog(companyId,userId,i){
+    showContributorDialog(companyId, userId, i) {
       this.contributorDialogVisible = true;
       this.contributorCompanyId = companyId;
       this.contributorIdentity = i;
@@ -1453,19 +1456,19 @@ export default {
           let otherMenuData = resData.other
           let vendorMenuData = resData.vendor
 
-          if(i == 1){
+          if (i == 1) {
             this.contributorMenuData = educatorMenuData
           }
-          if(i == 2){
+          if (i == 2) {
             this.contributorMenuData = recruiterMenuData
           }
-          if(i == 3){
+          if (i == 3) {
             this.contributorMenuData = schoolMenuData
           }
-          if(i == 4){
+          if (i == 4) {
             this.contributorMenuData = otherMenuData
           }
-          if(i == 5){
+          if (i == 5) {
             this.contributorMenuData = vendorMenuData
           }
 
@@ -1474,7 +1477,7 @@ export default {
         console.log(err)
       })
     },
-    editAdmin(item){
+    editAdmin(item) {
       this.contributorUpdateItemData = item;
       this.contributorUpdateDialogVisible = true;
       this.contributorForm.email = item.email;
@@ -1496,19 +1499,19 @@ export default {
           let otherMenuData = resData.other
           let vendorMenuData = resData.vendor
 
-          if(i == 1){
+          if (i == 1) {
             this.contributorMenuData = educatorMenuData
           }
-          if(i == 2){
+          if (i == 2) {
             this.contributorMenuData = recruiterMenuData
           }
-          if(i == 3){
+          if (i == 3) {
             this.contributorMenuData = schoolMenuData
           }
-          if(i == 4){
+          if (i == 4) {
             this.contributorMenuData = otherMenuData
           }
-          if(i == 5){
+          if (i == 5) {
             this.contributorMenuData = vendorMenuData
           }
 
@@ -1518,17 +1521,17 @@ export default {
             company_id: currentCompanyId
           }
 
-          USER_ADMIN_MENU_INFO(params).then(res=>{
+          USER_ADMIN_MENU_INFO(params).then(res => {
             console.log(res)
-            if(res.code == 200){
+            if (res.code == 200) {
               let resData = res.message;
-              resData.forEach(item=>{
-                this.sMenuItemData.push( Number(item.menu_id) )
+              resData.forEach(item => {
+                this.sMenuItemData.push(Number(item.menu_id))
               })
 
               // console.log(this.sMenuItemData)
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
           })
 
@@ -1557,17 +1560,17 @@ export default {
   justify-content: flex-start;
 }
 
-.account-l-container{
+.account-l-container {
 
 }
 
-.account-r-container{
-  width:calc(100% - 160px);
+.account-r-container {
+  width: calc(100% - 160px);
   height: calc(100vh - 140px);
 }
 
-.account-r-container-bg{
-  padding:30px 50px 50px 50px;
+.account-r-container-bg {
+  padding: 30px 50px 50px 50px;
 }
 
 .account-container-1 {
@@ -1600,6 +1603,7 @@ export default {
   color: #6650B3;
   margin-left: 15px;
 }
+
 .account-basic-info-c-edit {
 
   display: flex;
@@ -1630,10 +1634,12 @@ export default {
   height: 100px;
   border-radius: 100px;
 }
-.account-basic-info-c-change-btn{
+
+.account-basic-info-c-change-btn {
   font-size: 20px;
-  color:#6650B3;
+  color: #6650B3;
 }
+
 .account-basic-info-c-r {
   margin-left: 15px;
 }
@@ -1735,16 +1741,17 @@ export default {
 
 .account-profile-container {
   background-color: #ffffff;
-  padding: 40px;
+  padding: 40px 0;
   border-radius: 18px;
 
 }
 
-.account-profile-t{
+.account-profile-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding: 0 40px;
 }
 
 .account-profile-label {
@@ -1764,14 +1771,11 @@ export default {
 
 
 .account-profile-c {
-  margin-top: 15px;
-
-  /*height: 800px;*/
-  /*overflow: auto;*/
+  margin: 15px  0 0 0;
 }
 
 .account-profile-c-item {
-  margin: 30px 0;
+  margin: 30px 40px;
 }
 
 .account-profile-c-item-t {
@@ -1814,12 +1818,14 @@ export default {
   font-weight: 400;
   color: #262626;
 }
-.account-profile-c-item-r-mobile{
+
+.account-profile-c-item-r-mobile {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
 }
+
 .account-profile-c-item-r-2 {
   margin-left: 25px;
 }
@@ -1835,7 +1841,7 @@ export default {
 .account-profile-c-item-r-4-btn {
   font-size: 20px;
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color:#262626;
+  color: #262626;
   cursor: pointer;
 }
 
@@ -1844,54 +1850,58 @@ export default {
 }
 
 
-.account-first-last-name{
+.account-first-last-name {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-.account-first-name{
-  flex:1;
+.account-first-name {
+  flex: 1;
 }
-.account-last-name{
-  flex:1;
+
+.account-last-name {
+  flex: 1;
   margin-left: 20px;
 }
 
-.save-form-container{
+.save-form-container {
   text-align: right;
 }
-.save-form-discard-btn{
-  font-size:20px;
-  color:#6650B3;
-}
-.save-form-save-btn{
-  font-size:20px;
+
+.save-form-discard-btn {
+  font-size: 20px;
+  color: #6650B3;
 }
 
-.xll-contributor-tips{
+.save-form-save-btn {
+  font-size: 20px;
+}
+
+.xll-contributor-tips {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
-  color:#262626;
+  color: #262626;
 }
-.xll-contributor-c-margin{
+
+.xll-contributor-c-margin {
   margin-top: 25px;
 }
 
-.xll-contributor-c{
+.xll-contributor-c {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
 }
 
-.xll-contributor-c-l{
-  width:45%;
+.xll-contributor-c-l {
+  width: 45%;
 }
 
-.xll-contributor-c-r{
-  width:45%;
+.xll-contributor-c-r {
+  width: 45%;
 }
 
 .qx-container {
@@ -1923,9 +1933,10 @@ export default {
   cursor: pointer;
 }
 
-.qx-checked-label{
+.qx-checked-label {
   text-align: left;
   margin-left: 10px;
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .qx-done-btn-container {
@@ -1946,21 +1957,26 @@ export default {
   cursor: pointer;
 }
 
+.admin-contributor-item-container {
+  margin-top: 15px;
+}
+
 .admin-item-img-container {
-  width:60px;
-  height: 60px;
-  border: 1px solid #EEEEEE;
-  border-radius: 80px;
   overflow: hidden;
 }
 
 .admin-item-img {
-  width: 100%;
+  width: 60px;
+  height: 60px;
+  border: 1px solid #EEEEEE;
+
 }
-.admin-item-r-container{
+
+.admin-item-r-container {
   padding-left: 10px;
   text-align: left;
 }
+
 .admin-item-name {
   font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 20px;
@@ -1973,15 +1989,15 @@ export default {
   color: #262626;
 }
 
-.admin-item-btn-container{
+.admin-item-btn-container {
   text-align: right;
 }
 
-.admin-item-btn{
-  font-size:20px;
+.admin-item-btn {
+  font-size: 20px;
 }
 
-.xll-contributor-c-update-container{
+.xll-contributor-c-update-container {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -1989,145 +2005,146 @@ export default {
 
 }
 
-.xll-contributor-c-avatar{
-  padding:0 20px;
+.xll-contributor-c-avatar {
+  padding: 0 20px;
 }
 
-.xll-contributor-c-form{
-  padding:0 20px;
+.xll-contributor-c-form {
+  padding: 0 20px;
 }
 
-.xll-form-email-tips{
+.xll-form-email-tips {
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
 }
 
 @media screen and (min-width: 769px) {
-  .account-profile-c-item-b-mobile{
+  .account-profile-c-item-b-mobile {
     display: none;
   }
 }
 
 @media screen and (max-width: 768px) {
 
-  .account-profile-c-item-b{
+  .account-profile-c-item-b {
     display: none;
   }
 
-  .account-profile-c-item-b-mobile{
+  .account-profile-c-item-b-mobile {
     width: 100%;
     margin-top: 15px;
   }
 
-  .account-r-container{
+  .account-r-container {
     width: 100%;
-    height: calc( var(--i-window-height) - 160px);
+    height: calc(var(--i-window-height) - 160px);
 
     /*height: calc(100vh - 160px);*/
   }
 
-  .account-r-container-bg{
+  .account-r-container-bg {
     padding: 0;
   }
 
-  .account-basic-info-c-edit{
+  .account-basic-info-c-edit {
     min-width: 300px;
   }
 
-  .save-form-discard-btn{
+  .save-form-discard-btn {
     font-size: 12px;
   }
 
-  .save-form-save-btn{
+  .save-form-save-btn {
     font-size: 12px;
   }
 
-  .account-basic-info{
+  .account-basic-info {
     margin: 15px;
     padding: 15px;
   }
 
-  .account-basic-info-label{
+  .account-basic-info-label {
     font-size: 18px;
   }
 
-  .account-basic-info-c{
+  .account-basic-info-c {
     margin-top: 15px;
   }
 
-  .account-basic-info-edit-btn{
+  .account-basic-info-edit-btn {
     font-size: 12px;
   }
-  .account-basic-info-c-avatar{
+
+  .account-basic-info-c-avatar {
     width: 40px;
     height: 40px;
     border-radius: 40px;
   }
 
-  .account-basic-info-c-name{
+  .account-basic-info-c-name {
     font-size: 16px;
   }
 
-  .account-basic-info-c-email{
+  .account-basic-info-c-email {
     font-size: 16px;
   }
 
-  .account-container-1{
+  .account-container-1 {
     flex-wrap: nowrap;
     overflow: scroll;
   }
 
-  .account-perks-container{
+  .account-perks-container {
     flex-shrink: 0;
     margin: 15px;
     padding: 15px;
   }
 
-  .account-perks-label{
+  .account-perks-label {
     font-size: 18px;
   }
 
-  .account-perks-tips{
+  .account-perks-tips {
     font-size: 16px;
   }
 
-  .account-container-2{
+  .account-container-2 {
     margin-top: 15px;
   }
 
-  .account-profile-label{
+  .account-profile-label {
     font-size: 20px;
   }
 
-  .account-profile-container{
+  .account-profile-container {
     padding: 0;
     background-color: #F0F2F5;
   }
 
-  .account-profile-t{
-    padding: 0 15px ;
+  .account-profile-t {
+    padding: 0 15px;
   }
 
-  .account-add-profile{
+  .account-add-profile {
     /*display: none;*/
   }
 
-  .account-add-profile-btn{
+  .account-add-profile-btn {
     font-size: 12px;
   }
 
-  .account-profile-c-item{
+  .account-profile-c-item {
     background-color: #FFFFFF;
     padding: 15px;
     border-radius: 18px;
     margin: 15px;
   }
 
-  .account-profile-c-item-t{
+  .account-profile-c-item-t {
     flex-direction: column;
   }
 
-  .account-profile-c-item-l{
+  .account-profile-c-item-l {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -2135,58 +2152,80 @@ export default {
     align-items: center;
   }
 
-  .account-profile-c-item-r{
+  .account-profile-c-item-r {
     flex-direction: column;
   }
 
-  .account-profile-name{
+  .account-profile-name {
     font-size: 18px;
   }
 
-  .account-profile-identity{
+  .account-profile-identity {
     font-size: 12px;
   }
 
-  .account-profile-c-item-r-1{
+  .account-profile-c-item-r-1 {
     font-size: 16px;
     margin-top: 10px;
   }
 
-  .account-profile-c-item-r-mobile{
+  .account-profile-c-item-r-mobile {
     width: 100%;
     margin-top: 10px;
     justify-content: space-between;
   }
 
-  .account-profile-c-item-r-2{
-    margin-left: 0;
-  }
-  .account-profile-c-item-r-3{
+  .account-profile-c-item-r-2 {
     margin-left: 0;
   }
 
-  .account-profile-c-item-r-4{
+  .account-profile-c-item-r-3 {
+    margin-left: 0;
+  }
+
+  .account-profile-c-item-r-4 {
     margin-left: 0;
   }
 
 
-  .xll-contributor-tips{
+  .xll-contributor-tips {
     font-size: 18px;
   }
 
-  .xll-contributor-c{
+  .xll-contributor-c {
     flex-direction: column;
   }
 
-  .xll-contributor-c-l{
-    width: 100%;
-  }
-  .xll-contributor-c-r{
+  .xll-contributor-c-l {
     width: 100%;
   }
 
+  .xll-contributor-c-r {
+    width: 100%;
+  }
 
 
+  .admin-item-btn {
+    font-size: 12px;
+  }
+
+  .account-profile-c-item-r-4-btn {
+    font-size: 12px;
+  }
+
+  .admin-contributor-item-container {
+    border: 1px solid #F0F2F5;
+    padding: 6px;
+    border-radius: 8px;
+  }
+
+  .xll-contributor-c-update-container {
+    flex-direction: column;
+  }
+
+  .qx-checked-label {
+    font-size: 12px;
+  }
 
 }
 

@@ -1,7 +1,8 @@
 import restApi from './restapi';
 
-function Friend(uuid, name, avatar, identity,companyId) {
+function Friend(uuid,uid, name, avatar, identity,companyId) {
     this.uuid = uuid;
+    this.uid = uid;
     this.name = name;
     this.avatar = avatar;
     this.identity = identity;
@@ -66,9 +67,9 @@ IMService.prototype.findGroupById = function (groupId) {
     return new Group(group.uuid, group.name, group.avatar);
 };
 
-IMService.prototype.findFriendById = async function (userId,identity,companyId) {
+IMService.prototype.findFriendById = async function (uuid,userId,identity,companyId) {
     let user = await restApi.findUserById(userId,identity,companyId);
-    return new Friend(user.uuid, user.name, user.avatar,user.identity, user.companyId);
+    return new Friend(uuid, userId, user.name, user.avatar, identity, companyId);
 };
 
 IMService.prototype.getGroupMessages = function (groupId) {
@@ -89,6 +90,7 @@ IMService.prototype.getPrivateMessages = function (friendId) {
 IMService.prototype.connect = function (currentUser) {
     this.currentUser = currentUser;
     let userData = {
+        uid:this.currentUser.uid,
         name:this.currentUser.name,
         avatar: this.currentUser.avatar,
         identity:this.currentUser.identity,

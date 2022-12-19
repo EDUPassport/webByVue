@@ -51,13 +51,26 @@
                             :job-info="detailData">
             </applyJobButton>
 
-            <el-button plain round
-                       @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
-              SAVE
-              <el-icon>
-                <CollectionTag />
-              </el-icon>
-            </el-button>
+            <template v-if="detailData.is_favorite && detailData.is_favorite == 1 && isFavoriteValue == 1">
+              <el-button plain round
+                         @click="cancelSaveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                SAVE
+                <el-icon color="#6650B3" >
+                  <IconFontistoFavorite/>
+                </el-icon>
+              </el-button>
+
+            </template>
+            <template v-else>
+              <el-button plain round
+                         @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                SAVE
+                <el-icon>
+                  <CollectionTag/>
+                </el-icon>
+              </el-button>
+            </template>
+
           </div>
         </div>
 
@@ -237,7 +250,7 @@
 
 import adsComponent from "@/components/ads/adsComponent";
 import shareCard from "@/components/shareCard";
-import {ADD_FAVORITE, APPLY_JOBS} from "@/api/api";
+import {ADD_FAVORITE, APPLY_JOBS, CANCEL_FAVORITE} from "@/api/api";
 import applyJobButton from '@/components/jobs/applyButton'
 import {updateWindowHeight} from "@/utils/tools";
 
@@ -251,6 +264,7 @@ export default {
   props:['detailData','adsData','workingHoursData'],
   data(){
     return {
+      isFavoriteValue: 1,
       shareDialogVisible:false,
       locationUrl:'',
       applyBtnLoading:false,
@@ -365,6 +379,31 @@ export default {
         if (res.code == 200) {
           this.$message.success('Success')
           this.isFavoriteValue = 1
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+      })
+    },
+    cancelSaveJob(id, type, title, url){
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          // this.detailData.is_favorite = 0
+          this.isFavoriteValue = 0;
         }
       }).catch(err=>{
         console.log(err)

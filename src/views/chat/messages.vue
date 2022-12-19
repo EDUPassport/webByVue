@@ -17,7 +17,26 @@
                   Messages
                 </div>
                 <div class="chat-side-search">
-                  <el-input placeholder="Search chats"></el-input>
+<!--                  <el-input placeholder="Search chats"></el-input>-->
+                  <el-select
+                      v-model="chatSearchValue"
+                      filterable
+                      clearable
+                      remote
+                      reserve-keyword
+                      :remote-method="chatSearchRemoteMethod"
+                      :loading="chatSearchLoading"
+                      placeholder="Search chats"
+                      @change="chatSearchChange"
+                  >
+                    <el-option
+                        v-for="conversation in chatSearchConversationData"
+                        :key="conversation.userId"
+                        :label="conversation.data.name"
+                        :value="conversation"
+                    />
+                  </el-select>
+
                 </div>
               </div>
 
@@ -25,7 +44,7 @@
                 <el-scrollbar class="conversations-box">
                   <div v-if="conversationsData.length !==0">
                     <div class="scroll-item" v-for="(conversation, key) in conversationsData" :key="key"
-                         :class="activeConversationKey === conversation.userId+'_'+conversation.data.identity ? 'conversation-active' : ''"
+                         :class="activeConversationKey === conversation.userId ? 'conversation-active' : ''"
                     >
                       <div class="item-head">
                         <el-avatar :src="conversation.data.avatar" class="head-icon"/>
@@ -195,7 +214,7 @@
           <el-scrollbar class="conversations-box">
             <div v-if="conversationsData.length !==0">
               <div class="scroll-item" v-for="(conversation, key) in conversationsData" :key="key"
-                   :class="activeConversationKey === conversation.userId+'_'+conversation.data.identity ? 'conversation-active' : ''"
+                   :class="activeConversationKey === conversation.userId ? 'conversation-active' : ''"
               >
                 <div class="item-head">
                   <el-avatar :src="conversation.data.avatar" class="head-icon"/>
@@ -324,7 +343,7 @@ export default {
   computed: {},
   data() {
     return {
-      conversationsDrawerStatus:true,
+      conversationsDrawerStatus:false,
       defaultAvatar,
       imgLogo,
       chatIcon,
@@ -354,7 +373,12 @@ export default {
       unreadTotal: 0,
       showBottomActionStatus: false,
       activeActionKey: undefined,
-      activeActionKeyMobile: undefined
+      activeActionKeyMobile: undefined,
+
+      chatSearchValue:'',
+      chatSearchLoading:false,
+      chatSearchConversationData:[],
+
 
     }
   },
@@ -395,30 +419,12 @@ export default {
       // console.log(this.conversationsData)
     });
 
-    let nowChatUserInfo = self.nowChatUserInfo
-
-    if (JSON.stringify(nowChatUserInfo) !== '{}') {
-      console.log('now chat user info ----- ')
-      this.type = this.GoEasy.IM_SCENE.PRIVATE;
-      self.messages = self.service.getPrivateMessages(nowChatUserInfo.uuid);
-      self.friend = nowChatUserInfo;
-      self.activeConversationKey = nowChatUserInfo.uuid + '_' + nowChatUserInfo.identity
-      self.scrollToBottom();
-      self.initialPrivateListeners();
-      if (self.messages.length !== 0) {
-        self.markMessageAsRead(nowChatUserInfo.uuid);
-      }
-
-      // console.log(self.friend)
-    }
-
-
     let chatJsonConversation = localStorage.getItem('chatJsonConversation')
     if(chatJsonConversation){
-      this.navigateToChat(JSON.parse(chatJsonConversation))
+      let parseChatJsonConversation = JSON.parse(chatJsonConversation)
+      this.navigateToChat(parseChatJsonConversation)
+      this.activeConversationKey = parseChatJsonConversation.userId;
     }
-
-
 
   },
   unmounted() {
@@ -426,7 +432,7 @@ export default {
     window.onresize = null
 
     this.service.onNewPrivateMessageReceive = function () {
-    };
+    }
   },
   mounted(){
     let screenWidth = document.body.clientWidth
@@ -434,17 +440,70 @@ export default {
 
     if (screenWidthFloor <= 768) {
       updateWindowHeight()
+      this.conversationsDrawerStatus = true;
     }
 
     window.onresize = () => {
       if (screenWidthFloor <= 768) {
         updateWindowHeight()
+        this.conversationsDrawerStatus = true;
       }
     }
 
 
   },
   methods: {
+    chatSearchRemoteMethod(query){
+      console.log(query)
+      if (query) {
+        this.chatSearchLoading = true
+        setTimeout(() => {
+          this.chatSearchLoading = false
+          this.chatSearchConversationData = this.conversationsData.filter((item) => {
+            return item.data.name.toLowerCase().includes(query.toLowerCase())
+          })
+        }, 200)
+      } else {
+        this.chatSearchConversationData  = []
+      }
+
+    },
+    async chatSearchChange(conversation){
+      console.log(conversation)
+      if(conversation){
+        // let self = this;
+        console.log('navigate to chat --------------------')
+
+        let jsonConversation = JSON.stringify(conversation)
+        localStorage.setItem('chatJsonConversation', jsonConversation)
+
+        this.activeConversationKey = conversation.userId
+
+        let id = conversation.userId || conversation.groupId;
+        let identity = conversation.data.identity;
+        let companyId = conversation.data.companyId;
+        let uid = conversation.data.uid;
+        let friendId = id;
+
+        this.type = this.GoEasy.IM_SCENE.PRIVATE;
+        // this.currentUser = this.service.currentUser;
+
+        this.friend = await this.service.findFriendById(id, uid, identity, companyId);
+        // this.friend = this.nowChatUserInfo;
+
+        // 获取的是未读的短消息
+        this.messages = this.service.getPrivateMessages(friendId);
+
+        this.loadMoreHistoryMessage()
+
+        this.scrollToBottom();
+        this.initialPrivateListeners();
+        if (this.messages.length !== 0) {
+          this.markMessageAsRead(friendId);
+        }
+      }
+
+    },
     topConversation() {
       let self = this;
       let conversation = this.action.conversation;
@@ -512,20 +571,22 @@ export default {
     async navigateToChat(conversation) {
       // let self = this;
       console.log('navigate to chat --------------------')
+
       let jsonConversation = JSON.stringify(conversation)
       localStorage.setItem('chatJsonConversation', jsonConversation)
 
-      this.activeConversationKey = conversation.userId + '_' + conversation.data.identity
+      this.activeConversationKey = conversation.userId
 
       let id = conversation.userId || conversation.groupId;
       let identity = conversation.data.identity;
       let companyId = conversation.data.companyId;
+      let uid = conversation.data.uid;
       let friendId = id;
 
       this.type = this.GoEasy.IM_SCENE.PRIVATE;
       // this.currentUser = this.service.currentUser;
 
-      this.friend = await this.service.findFriendById(friendId, identity, companyId);
+      this.friend = await this.service.findFriendById(id, uid, identity, companyId);
       // this.friend = this.nowChatUserInfo;
 
       // 获取的是未读的短消息
@@ -564,9 +625,9 @@ export default {
       //传入监听器，收到一条私聊消息总是滚到到页面底部
       this.service.onNewPrivateMessageReceive = (friendId, message) => {
         console.log('传入监听器，收到一条私聊消息总是滚到到页面底部' + message)
-        let old = this.messages
-        this.messages = []
-        this.messages = old
+        // let old = this.messages
+        // this.messages = []
+        // this.messages = old
 
         if (friendId === self.friend.uuid) {
           self.markMessageAsRead(friendId);
@@ -1051,6 +1112,9 @@ export default {
   color: #B1C452;
 }
 
+.chat-side-search /deep/ .el-select{
+  display: inline;
+}
 
 @media screen and (min-width: 769px) and (max-width: 992px) {
 

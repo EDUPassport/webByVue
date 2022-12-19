@@ -452,7 +452,7 @@ export default {
 .jobs-bg-filter-container {
   background-color: #F0F2F5;
   height: calc(100vh - 200px);
-  padding: 30px;
+  padding: 30px 0;
 }
 
 
@@ -462,6 +462,8 @@ export default {
 
 .jobs-filter-item {
   margin-bottom: 25px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 
 .jobs-filter-label {

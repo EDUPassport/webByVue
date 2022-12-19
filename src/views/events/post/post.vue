@@ -395,8 +395,7 @@ import meSideMenu from "@/components/meSideMenu";
 import {
   EVENTS_ADD_EVENT,
   EVENTS_CATEGORY,
-  EVENTS_TAGS,
-  ZOHO_SYNC, UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, GET_COUNTRY_LIST, USER_OBJECT_LIST
+  EVENTS_TAGS, UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, GET_COUNTRY_LIST, USER_OBJECT_LIST
 } from '@/api/api';
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -834,6 +833,7 @@ export default {
       });
       const nav = new mapboxgl.NavigationControl();
       map.addControl(nav, "top-right");
+      map.addControl(new mapboxgl.FullscreenControl());
 
       const geolocate = new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -846,6 +846,7 @@ export default {
 
       const geocoder = new MapboxGeocoder({
         "accessToken": this.accessToken,
+        "language":'en-US',
         "mapboxgl": mapboxgl
       })
 
@@ -1093,110 +1094,6 @@ export default {
         }
       })
     },
-    async submitEventForm() {
-
-      let params = Object.assign({}, this.basicForm)
-
-      let startTimeStr = this.eventDate + ' ' + this.startTime + ':00';
-      let endTimeStr = this.eventDate + ' ' + this.endTime + ':00'
-
-      let startTimeDate = new Date(startTimeStr)
-      let startHours = startTimeDate.getHours();
-      let startMinutes = startTimeDate.getMinutes();
-      let startTimeampm = startHours >= 12 ? 'PM' : 'AM';
-      startHours = startHours % 12;
-      startHours = startHours ? startHours : 12;
-      startHours = startHours.toString().padStart(2, '0')
-      startMinutes = startMinutes.toString().padStart(2, '0');
-
-      let endTimeDate = new Date(endTimeStr)
-      let endHours = endTimeDate.getHours();
-      let endMinutes = endTimeDate.getMinutes();
-      let endTimeampm = endHours >= 12 ? 'PM' : 'AM';
-      endHours = endHours % 12;
-      endHours = endHours ? endHours : 12;
-      endHours = endHours.toString().padStart(2, '0');
-      endMinutes = endMinutes.toString().padStart(2, '0');
-
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {
-          'SingleLine': params.name  //event name//
-        },
-        {
-          'Dropdown2': params.category_id     // event category
-        },
-        {
-          'SingleLine1': params.pay_money  //  event price
-        },
-        {
-          'SingleLine3': ''  //  event contact
-        },
-        {
-          'SingleLine4': ''  //   Organizing Company
-        },
-        {
-          'Dropdown': params.tags_en  //   event tags
-        },
-        {
-          'Date': this.eventDate //   event date
-        },
-        {
-          'Time_hours': startHours  //   event start time
-        },
-        {
-          'Time_minutes': startMinutes  //   event start time
-        },
-        {
-          'Time_meridiem': startTimeampm  //   am pm
-        },
-        {
-          'Time1_hours': endHours  //  event end time
-        },
-        {
-          'Time1_minutes': endMinutes  //   event end time
-        },
-        {
-          'Time1_meridiem': endTimeampm  //  am pm
-        },
-        {
-          'Email': localStorage.getItem('email')    //  contact email
-        },
-        {
-          'SingleLine6': params.event_place //  event venue
-        },
-        {
-          'SingleLine7': params.location  //  event street address
-        },
-        {
-          'Website': params.file  //  poster url
-        },
-        {
-          'Dropdown1': ''  //   event post status
-        },
-        {
-          'MultiLine': params.desc //  event description
-        },
-        {
-          'MultiLine1': params.type_desc  //  deals for memebers
-        },
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/PostEventform/formperma/Far3vsluPJX_E1n27v0883C-insXpT_m6rJsJz-L5r8/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-
-    }
 
 
   }

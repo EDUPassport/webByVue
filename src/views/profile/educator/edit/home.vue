@@ -939,6 +939,7 @@
                             :limit="6"
                             name="file[]"
                             :multiple="true"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :before-upload="beforeAccountImageUpload"
                             :file-list="accountImageFileList"
                             :on-change="handleAccountImageChange"
@@ -982,6 +983,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".mp4,.MP4"
                             :http-request="videoHttpRequest"
                             :before-upload="beforeIntroVideoUpload"
                         >
@@ -1022,6 +1024,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :http-request="backgroundHttpRequest"
                             :before-upload="beforeBackgroundPhotoUpload"
                         >
@@ -1062,6 +1065,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :http-request="profilePhotoHttpRequest"
                             :before-upload="beforeProfilePhotoUpload"
                         >

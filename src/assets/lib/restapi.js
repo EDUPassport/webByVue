@@ -124,14 +124,10 @@ RestApi.prototype.findUserById = async function (userId, identity, companyId) {
         }
 
         user = {
-            uuid: userId,
             name: name,
-            avatar: avatar,
-            identity: identity,
-            companyId:companyId
+            avatar: avatar
         }
-        // console.log(user)
-        // console.log('from rest api js')
+
     } else {
         console.log('获取用户信息失败')
     }

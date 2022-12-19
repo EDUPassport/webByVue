@@ -143,6 +143,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :http-request="profilePhotoHttpRequest"
                             :before-upload="beforeProfilePhotoUpload"
                         >
@@ -297,6 +298,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :http-request="licenseHttpRequest"
                             :before-upload="beforeLicensePhotoUpload"
                         >
@@ -365,6 +367,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :http-request="logoPhotoHttpRequest"
                             :before-upload="beforeLogoPhotoUpload"
                         >
@@ -399,6 +402,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".mp4,.MP4"
                             :http-request="videoHttpRequest"
                             :before-upload="beforeIntroVideoUpload"
                         >
@@ -438,6 +442,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :http-request="backgroundHttpRequest"
                             :before-upload="beforeBackgroundPhotoUpload"
                         >
@@ -478,6 +483,7 @@
                             :show-file-list="false"
                             :limit="6"
                             :multiple="true"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :before-upload="beforeAccountImageUpload"
                             :file-list="accountImageFileList"
                             :on-change="handleAccountImageChange"
@@ -1193,6 +1199,7 @@ export default {
       });
       const nav = new mapboxgl.NavigationControl();
       map.addControl(nav, "top-right");
+      map.addControl(new mapboxgl.FullscreenControl());
 
       const geolocate = new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -1205,6 +1212,7 @@ export default {
 
       const geocoder = new MapboxGeocoder({
         "accessToken": this.accessToken,
+        "language":'en-US',
         "mapboxgl": mapboxgl
       })
 
@@ -2041,11 +2049,11 @@ export default {
 }
 
 .contact-phone-l {
-  width: 28%;
+  width: 35%;
 }
 
 .contact-phone-r {
-  width: 70%;
+  width: 60%;
 }
 
 .submit-btn-container {

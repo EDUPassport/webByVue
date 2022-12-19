@@ -339,18 +339,10 @@ export default {
     },
     postEventWhenEmpty(){
       let token = localStorage.getItem('token')
-      let identity = localStorage.getItem('identity')
 
       if(token){
 
-        if(identity == 1){
-
-          this.$router.push({path:'/post-event',query:{}})
-
-        }else{
-          this.$router.push({path:'/events/post'})
-        }
-
+        this.$router.push({path:'/events/post'})
 
       }else{
 
@@ -358,9 +350,6 @@ export default {
 
       }
 
-
-      // let url = 'https://forms.zohopublic.com/edupassport/form/PostEventform/formperma/ra89j-hqCt3anrCCYpB0OKGeDeC-XbZuMrb__PmaeBo'
-      // window.open(url,'_blank')
     }
 
   }

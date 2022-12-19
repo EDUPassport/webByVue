@@ -68,7 +68,7 @@
 
             </div>
 
-            <div class="plain-xll-item-container" v-if="identity == 2 || identity == 3 || identity == 4 || identity == 5">
+            <div class="plain-xll-item-container">
               <div class="plain-item-label">
                 Events
               </div>

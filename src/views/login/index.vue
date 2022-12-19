@@ -320,7 +320,6 @@ import {
   EMAIL_REGISTER_V2,
   SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
-  ZOHO_SYNC,
   LOGIN_EMAIL_PWD_V2,
   PHONE_REGISTER_V2,
   LOGIN_PHONE_SMS_V2,
@@ -859,8 +858,11 @@ export default {
 
                 this.$store.commit('identity', resMessage.identity)
 
+                let uuid = resMessage.id + '#' + identity + '#' + companyId
+
                 let currentUser = {
-                  uuid: resMessage.id,
+                  uuid: uuid,
+                  uid: resMessage.id,
                   identity: identity,
                   name: firstName + ' ' + lastName,
                   avatar: currentAvatar,
@@ -962,9 +964,10 @@ export default {
                 localStorage.setItem('last_name', lastName)
 
                 this.$store.commit('identity', resMessage.identity)
-
+                let uuid = resMessage.id + '#' + identity + '#' + companyId
                 let currentUser = {
-                  uuid: resMessage.id,
+                  uuid: uuid,
+                  uid: resMessage.id,
                   identity: identity,
                   name: firstName + ' ' + lastName,
                   avatar: currentAvatar,
@@ -1060,8 +1063,10 @@ export default {
 
                 this.$store.commit('identity', resMessage.identity)
 
+                let uuid = resMessage.id + '#' + identity + '#' + companyId
                 let currentUser = {
-                  uuid: resMessage.id,
+                  uuid: uuid,
+                  uid: resMessage.id,
                   identity: identity,
                   name: firstName + ' ' + lastName,
                   avatar: currentAvatar,
@@ -1135,171 +1140,6 @@ export default {
           localStorage.setItem('menuData', str)
           this.$store.commit('menuData', res.message)
         }
-      }).catch(err => {
-        console.log(err)
-      })
-
-    },
-    async submitEducatorContactForm(userId) {
-
-      let params = Object.assign({}, this.registerForm)
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {
-          'SingleLine': userId //UserID
-        },
-        {
-          'SingleLine1': params.first_name // First Name
-        },
-        {
-          'SingleLine2': params.last_name //  Last Name
-        },
-        {
-          'Dropdown': '' //  Gender
-        },
-        {
-          'Date': '' //   Date of Birth dd-MMM-yyyy
-        },
-        {
-          'SingleLine3': '' //   Title
-        },
-        {
-          'Email': params.email //   Email
-        },
-        {
-          'PhoneNumber_countrycode': '' //   Phone
-        },
-        {
-          'SingleLine4': '' //   Nationality
-        },
-        {
-          'Dropdown1': '' //   Membership Type
-        },
-        {
-          'MultiLine': '' //   Languages Spoken
-        },
-        {
-          'Number': '' //   Membership Duration
-        },
-        {
-          'SingleLine5': '' //   City
-        },
-        {
-          'SingleLine6': '' //   Province
-        },
-        {
-          'SingleLine7': '' //   Country
-        },
-        {
-          'Dropdown2': '' //   Educator Type
-        },
-        {
-          'MultiLine1': '' //   Education
-        },
-        {
-          'MultiLine2': '' //    Work History
-        },
-        {
-          'Dropdown3': '' //    Teaching Experience
-        },
-        {
-          'MultiLine3': '' //   Certifications
-        },
-        {
-          'MultiLine4': '' //   Educator Intro
-        },
-        {
-          'Website': '' //   Contact image Link
-        },
-        {
-          'Website1': '' //   Intro Video Link
-        }
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-    async submitCompanyContactForm(userId) {
-
-      let params = Object.assign({}, this.registerForm)
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {
-          'SingleLine': userId  //UserID
-        },
-        {
-          'SingleLine1': params.first_name  // First Name
-        },
-        {
-          'SingleLine2': params.last_name  //  Last Name
-        },
-        {
-          'Dropdown': '' //  Gender
-        },
-        {
-          'Date': ''  //   Date of Birth dd-MMM-yyyy params.birthday
-        },
-        {
-          'SingleLine3': ''  //   Title
-        },
-        {
-          'Email': params.email  //   Email
-        },
-        {
-          'PhoneNumber_countrycode': ''  //   Phone
-        },
-        {
-          'SingleLine4': ''  //   Nationality
-        },
-        {
-          'Dropdown1': ''  //   Membership Type
-        },
-        {
-          'Number': ''  //   Membership Duration
-        },
-        {
-          'SingleLine5': ''  //   City
-        },
-        {
-          'SingleLine6': ''  //   Province
-        },
-        {
-          'SingleLine7': ''  //   Country
-        },
-        {
-          'Website': '' //   Contact image Link
-        }
-
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
       }).catch(err => {
         console.log(err)
       })

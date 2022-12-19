@@ -219,7 +219,7 @@ export default {
         if(JSON.stringify(nowChatUserInfo) !== '{}'){
           self.messages = self.service.getPrivateMessages(nowChatUserInfo.uuid);
           self.friend = nowChatUserInfo;
-          self.activeConversationKey = nowChatUserInfo.uuid + '_'+nowChatUserInfo.identity
+          self.activeConversationKey = nowChatUserInfo.uuid
           self.scrollToBottom();
           self.initialPrivateListeners();
           if(self.messages.length !== 0) {

@@ -73,6 +73,7 @@ export default {
           id: this.to.uuid,
           type: this.type,
           data: {
+            uid: this.to.uid,
             name: this.to.name,
             avatar: this.to.avatar,
             identity:this.to.identity,
@@ -94,6 +95,7 @@ export default {
           id: this.to.uuid,
           type: this.type,
           data: {
+            uid: this.to.uid,
             name: this.to.name,
             avatar: this.to.avatar,
             identity:this.to.identity,
@@ -115,6 +117,7 @@ export default {
           id: this.to.uuid,
           type: this.type,
           data: {
+            uid: this.to.uid,
             name: this.to.name,
             avatar: this.to.avatar,
             identity:this.to.identity,
@@ -136,6 +139,7 @@ export default {
           id: this.to.uuid,
           type: this.type,
           data: {
+            uid: this.to.uid,
             name: this.to.name,
             avatar: this.to.avatar,
             identity:this.to.identity,
@@ -160,6 +164,7 @@ export default {
             id: this.to.uuid,
             type: this.type,
             data: {
+              uid: this.to.uid,
               name: this.to.name,
               avatar: this.to.avatar,
               identity:this.to.identity,

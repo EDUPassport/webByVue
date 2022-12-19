@@ -866,8 +866,11 @@ export default {
 
           }
 
+          let uuid = userContact.id + '#' + identity + '#' + userContact.company_id
+
           let currentUser = {
-            uuid: userContact.id,
+            uuid: uuid,
+            uid: userContact.id,
             identity: identity,
             name: name,
             avatar: avatar,
@@ -969,11 +972,9 @@ export default {
       })
       let companyId = localStorage.getItem('company_id')
       let identity = localStorage.getItem('identity')
-      // console.log(companyId)
+
       if (companyId && companyId != '0') {
         this.changeIdentity(companyId, identity, 2)
-        // this.$router.push({path: '/account/home', query: {}})
-
         this.$loading().close()
 
       } else {
@@ -984,8 +985,7 @@ export default {
             action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
-          // this.$message.warning('Oops!.. Your profile is incomplete. ')
-          // this.$router.push({path: '/profile/contact/user', query: {s:str}})
+
           this.$router.push({path: '/educator/edit/home', query: {s: str}})
 
         }
@@ -998,8 +998,6 @@ export default {
             action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
-          // this.$message.warning('Oops!.. Your profile is incomplete. ')
-          // this.$router.push({path: '/profile/contact/user', query: {s:str}})
           this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
 
         }
@@ -1012,10 +1010,7 @@ export default {
             action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
-          // this.$message.warning('Oops!.. Your profile is incomplete. ')
-          // this.$router.push({path: '/profile/contact/user', query: {s: str}})
           this.$router.push({path: '/business/edit/school', query: {s: str}})
-
         }
 
         if (identity == 4) {
@@ -1027,9 +1022,6 @@ export default {
             action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
-
-          // this.$message.warning('Oops!.. Your profile is incomplete. ')
-          // this.$router.push({path: '/profile/contact/user', query: {s: str}})
           this.$router.push({path: '/business/edit/other', query: {s: str}})
 
         }
@@ -1044,8 +1036,6 @@ export default {
           }
 
           let str = encode(JSON.stringify(strObj))
-          // this.$message.warning('Oops!.. Your profile is incomplete. ')
-          // this.$router.push({path: '/profile/contact/user', query: {s: str}})
           this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
 
         }
@@ -1068,8 +1058,6 @@ export default {
           action: 'add'
         }
         let str = encode(JSON.stringify(strObj))
-        // this.$message.warning('Oops!.. Your profile is incomplete. ')
-        // this.$router.push({path: '/profile/contact/user', query: {s:str}})
         this.$router.push({path: '/educator/edit/home', query: {s: str}})
 
       }
@@ -1082,8 +1070,6 @@ export default {
           action: 'add'
         }
         let str = encode(JSON.stringify(strObj))
-        // this.$message.warning('Oops!.. Your profile is incomplete. ')
-        // this.$router.push({path: '/profile/contact/user', query: {s:str}})
         this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
 
         this.dialogBusinessAccountVisible = false
@@ -1097,8 +1083,6 @@ export default {
           action: 'add'
         }
         let str = encode(JSON.stringify(strObj))
-        // this.$message.warning('Oops!.. Your profile is incomplete. ')
-        // this.$router.push({path: '/profile/contact/user', query: {s: str}})
         this.$router.push({path: '/business/edit/school', query: {s: str}})
 
         this.dialogBusinessAccountVisible = false
@@ -1115,10 +1099,7 @@ export default {
         }
         let str = encode(JSON.stringify(strObj))
 
-        // this.$message.warning('Oops!.. Your profile is incomplete. ')
-        // this.$router.push({path: '/profile/contact/user', query: {s: str}})
         this.$router.push({path: '/business/edit/other', query: {s: str}})
-
         this.dialogBusinessAccountVisible = false
 
       }
@@ -1133,10 +1114,8 @@ export default {
         }
 
         let str = encode(JSON.stringify(strObj))
-
-        // this.$message.warning('Oops!.. Your profile is incomplete. ')
-        // this.$router.push({path: '/profile/contact/user', query: {s: str}})
         this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
+
       }
 
 
@@ -1172,8 +1151,6 @@ export default {
             this.$loading().close()
           } else {
             this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            // this.$router.push({path: '/profile/contact/user', query: {i: 1}})
             this.$router.push({path: '/educator/edit/home', query: {i: 1}})
 
           }
@@ -1204,12 +1181,9 @@ export default {
             companyInfo = res.message.user_contact.company;
             this.changeIdentity(companyInfo.id, 3, 2)
             this.$router.push({path: '/overview', query: {}})
-            // this.$router.push({path: '/profile/contact/user', query: {i: 3}})
             this.$loading().close()
           } else {
             this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            // this.$router.push({path: '/profile/contact/user', query: {i: 3}})
             this.$router.push({path: '/business/edit/school', query: {i: 3}})
 
             this.dialogBusinessAccountVisible = false
@@ -1227,8 +1201,6 @@ export default {
             this.$loading().close()
           } else {
             this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            // this.$router.push({path: '/profile/contact/user', query: {i: 4}})
             this.$router.push({path: '/business/edit/other', query: {i: 4}})
 
             this.dialogBusinessAccountVisible = false
@@ -1246,8 +1218,6 @@ export default {
             this.$loading().close()
           } else {
             this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            // this.$router.push({path: '/profile/contact/user', query: {i: 5}})
             this.$router.push({path: '/vendor/edit/vendor', query: {i: 5}})
 
           }
@@ -1286,6 +1256,19 @@ export default {
           this.getBasicInfo(identity)
 
           this.$router.push('/account/home')
+
+          if (this.goEasy.getConnectionStatus() === 'connected') {
+            this.goEasy.disconnect({
+              onSuccess: function(){
+                console.log("GoEasy disconnect successfully.")
+              },
+              onFailed: function(error){
+                console.log("Failed to disconnect GoEasy, code:"+error.code+ ",error:"+error.content);
+              }
+            });
+          }
+
+          localStorage.removeItem('chatJsonConversation')
 
           this.$loading().close()
 

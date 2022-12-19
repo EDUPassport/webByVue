@@ -220,6 +220,7 @@
                             class="profile-uploader"
                             action=""
                             :headers="uploadHeaders"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :show-file-list="false"
                             :http-request="businessRegPhotoHttpRequest"
                             :before-upload="beforeBusinessRegPhotoUpload"
@@ -252,6 +253,7 @@
                             class="profile-uploader"
                             action=""
                             :headers="uploadHeaders"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :show-file-list="false"
                             :http-request="licenseHttpRequest"
                             :before-upload="beforeLicensePhotoUpload"
@@ -331,6 +333,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :http-request="logoPhotoHttpRequest"
                             :before-upload="beforeLogoPhotoUpload"
                         >
@@ -362,6 +365,7 @@
                             class="profile-uploader"
                             action=""
                             :headers="uploadHeaders"
+                            accept=".mp4, .MP4"
                             :show-file-list="false"
                             :http-request="videoHttpRequest"
                             :before-upload="beforeIntroVideoUpload"
@@ -396,6 +400,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :http-request="backgroundHttpRequest"
                             :before-upload="beforeBackgroundPhotoUpload"
                         >
@@ -428,6 +433,7 @@
                             action=""
                             :headers="uploadHeaders"
                             :show-file-list="false"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :http-request="profilePhotoHttpRequest"
                             :before-upload="beforeProfilePhotoUpload"
                         >
@@ -470,6 +476,7 @@
                             :show-file-list="false"
                             :limit="6"
                             :multiple="true"
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :before-upload="beforeAccountImageUpload"
                             :file-list="accountImageFileList"
                             :on-change="handleAccountImageChange"
@@ -1181,9 +1188,11 @@ export default {
       });
 
       map.addControl(geolocate, "top-right")
+      map.addControl(new mapboxgl.FullscreenControl());
 
       const geocoder = new MapboxGeocoder({
         "accessToken": this.accessToken,
+        "language":'en-US',
         "mapboxgl": mapboxgl
       })
 
@@ -2009,11 +2018,11 @@ export default {
 }
 
 .contact-phone-l{
-  width:28%;
+  width:35%;
 }
 
 .contact-phone-r{
-  width:70%;
+  width:60%;
 }
 
 

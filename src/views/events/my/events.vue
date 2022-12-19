@@ -408,7 +408,7 @@ export default {
   font-family: BCM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 24px;
   color: #262626;
-  cursor: pointer;
+  /*cursor: pointer;*/
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -417,9 +417,9 @@ export default {
   -webkit-box-orient: vertical;
 }
 
-.events-item-name:hover{
-  color: #000000;
-}
+/*.events-item-name:hover{*/
+/*  color: #000000;*/
+/*}*/
 
 .events-item-action-container{
   margin-top: 25px;

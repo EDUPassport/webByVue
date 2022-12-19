@@ -1710,6 +1710,7 @@ export default {
       });
       const nav = new mapboxgl.NavigationControl();
       map.addControl(nav, "top-right");
+      map.addControl(new mapboxgl.FullscreenControl());
 
       const geolocate = new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -1722,6 +1723,7 @@ export default {
 
       const geocoder = new MapboxGeocoder({
         "accessToken": this.accessToken,
+        "language":'en-US',
         "mapboxgl": mapboxgl
       })
 

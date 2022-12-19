@@ -101,13 +101,27 @@
                                     :job-info="detailData" >
                     </applyJobButton>
 
-                    <el-button plain round
-                               @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
-                      SAVE
-                      <el-icon>
-                        <CollectionTag />
-                      </el-icon>
-                    </el-button>
+                    <template v-if="detailData.is_favorite && detailData.is_favorite == 1">
+                      <el-button plain round
+                                 @click="cancelSaveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                        SAVE
+                        <el-icon color="#6650B3" >
+                          <IconFontistoFavorite/>
+                        </el-icon>
+                      </el-button>
+
+                    </template>
+                    <template v-else>
+                      <el-button plain round
+                                 @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                        SAVE
+                        <el-icon>
+                          <CollectionTag/>
+                        </el-icon>
+                      </el-button>
+                    </template>
+
+
                   </div>
                 </div>
 
@@ -537,6 +551,7 @@ export default {
         // console.log(res)
         if (res.code == 200) {
           let jobData = res.message.data;
+
           let routeJobId = this.$route.query.id;
           if(!routeJobId){
 
@@ -548,7 +563,6 @@ export default {
           }
 
           this.jobListData = res.message.data
-          // console.log(res.message.data)
           this.jobTotalNum = res.message.total
           this.jobLoadingValue = false
         } else {
@@ -1201,7 +1215,31 @@ export default {
         console.log(res)
         if (res.code == 200) {
           this.$message.success('Success')
-          this.isFavoriteValue = 1
+          this.detailData.is_favorite = 1
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+      })
+    },
+    cancelSaveJob(id, type, title, url){
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: id,
+        type_title: title,
+        type_url: url
+      }
+      CANCEL_FAVORITE(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$message.success('Success')
+          this.detailData.is_favorite = 0
         }
       }).catch(err=>{
         console.log(err)

@@ -56,9 +56,11 @@ export default {
       if(userObj.third_company_id){
         localStorage.setItem('thirdCompanyId', userObj.third_company_id)
       }
+      let uuid = userObj.id + '#' + identity + '#' + userObj.company_id
 
       let currentUser = {
-        uuid: userObj.id,
+        uuid: uuid,
+        uid: userObj.id,
         identity: identity,
         name: firstName + ' ' + lastName,
         avatar: currentAvatar,

@@ -4,7 +4,7 @@
                style="color: #6650B3;"
                type="primary"
                @click="chat()"
-               :disabled="targetUser.user_id == currentUser.uuid"
+               :disabled="uuid == currentUser.uuid"
     >
       {{ text }}
     </el-button>
@@ -14,7 +14,7 @@
         round
         type="primary"
         @click="chat()"
-        :disabled="targetUser.user_id == currentUser.uuid"
+        :disabled="uuid == currentUser.uuid"
     >
       {{ text }}
     </el-button>
@@ -23,7 +23,7 @@
     <el-button link
                type="primary"
                @click="chat()"
-               :disabled="targetUser.user_id == currentUser.uuid"
+               :disabled="uuid == currentUser.uuid"
     >
       {{ text }}
     </el-button>
@@ -72,20 +72,21 @@ export default {
 
   },
   data() {
-    return {}
+    const uuid = this.targetUser.user_id + '#' + this.identity + '#' + this.targetUser.id
+    return {
+      uuid: uuid
+    }
   },
   methods: {
     chat() {
-      console.log(this.targetUser)
-      console.log(this.currentUser)
-      console.log(this.identity)
 
       let self = this;
       let targetUser = this.targetUser;
       let user = this.currentUser
       let identity = this.identity;
+      let uuid = targetUser.user_id + '#' + this.identity + '#' + targetUser.id
 
-      if (user.uuid == targetUser.user_id) {
+      if (uuid == targetUser.user_id) {
         return false;
       }
 
@@ -95,7 +96,7 @@ export default {
 
       let token = localStorage.getItem('token')
       if (!token || token === '') {
-        return this.$router.push('/edupassport')
+        return this.$router.push('/login')
       }
 
       let type = this.GoEasy.IM_SCENE.PRIVATE;
@@ -113,7 +114,8 @@ export default {
       }
 
       let nowUserInfo = {
-        uuid: targetUser.user_id,
+        uuid: uuid,
+        uid: targetUser.user_id,
         name: name,
         avatar: avatar,
         identity: identity,
@@ -123,9 +125,10 @@ export default {
       let textMessage = this.goEasy.im.createTextMessage({
         text: 'Hello',
         to: {
-          id: targetUser.user_id,
+          id: uuid,
           type: type,
           data: {
+            uid:targetUser.user_id,
             name: name,
             avatar: avatar,
             identity: identity,
@@ -134,11 +137,11 @@ export default {
         }
       });
 
-      let localHistory;
+      let localHistory = [];
       if (type === this.GoEasy.IM_SCENE.PRIVATE) {
-        localHistory = this.service.getPrivateMessages(targetUser.user_id);
+        localHistory = this.service.getPrivateMessages(uuid);
       } else {
-        localHistory = this.service.getGroupMessages(targetUser.user_id);
+        localHistory = this.service.getGroupMessages(uuid);
       }
       // console.log(localHistory)
       localHistory.push(textMessage)
@@ -155,10 +158,6 @@ export default {
           console.log("发送失败:", error);
         }
       })
-
-
-      // this.setShowChatStatus()
-      // this.turnChatPage()
 
     }
 
