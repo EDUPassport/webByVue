@@ -63,9 +63,9 @@
                       {{item.desc}}
                     </el-scrollbar>
 
-                    <div>
-                      <el-link>{{item.online_url}}</el-link>
-                    </div>
+<!--                    <div>-->
+<!--                      <el-link>{{item.online_url}}</el-link>-->
+<!--                    </div>-->
 
                     <div class="events-item-action-container">
                       <div class="events-item-action-l">
@@ -116,7 +116,7 @@
 
     <eventDetailCard :info="eventDetailData"
                      :visible="eventDialogVisible"
-                     @rsvp="showBookEvent()"
+                     @rsvp="showBookEvent"
                      @close="eventDialogVisible=false">
     </eventDetailCard>
     <bookEventForm :visible="bookEventDialogVisible"
@@ -202,9 +202,14 @@ export default {
   },
   methods:{
     showBookEvent(item){
-      this.eventDetailData = item
-      this.bookEventDialogVisible = true;
-      // this.eventDialogVisible = false;
+      if(item.online_url){
+        window.open(item.online_url,'_blank')
+      }else{
+        this.eventDetailData = item
+        this.bookEventDialogVisible = true;
+        // this.eventDialogVisible = false;
+      }
+
     },
     showBookList(item){
       this.bookListDialogVisible = true;

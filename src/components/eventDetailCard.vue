@@ -36,7 +36,7 @@
           <div class="event-dialog-r-4">
             {{info.name}}
           </div>
-          <el-scrollbar class="event-dialog-r-5" max-height="70px" always>
+          <el-scrollbar class="event-dialog-r-5" max-height="120px" always>
             {{info.desc}}
           </el-scrollbar>
           <div class="event-dialog-r-lc" v-if="info.type_desc" >
@@ -53,12 +53,12 @@
               {{info.currency}} {{info.pay_money}}
             </div>
           </div>
-          <div class="event-dialog-r-lc" v-if="info.online_url">
-            <div class="event-dialog-r-lc-label">Event Link</div>
-            <div class="event-dialog-r-lc-content">
-              <el-link :href="info.online_url"> {{info.online_url}}</el-link>
-            </div>
-          </div>
+<!--          <div class="event-dialog-r-lc" v-if="info.online_url">-->
+<!--            <div class="event-dialog-r-lc-label">Event Link</div>-->
+<!--            <div class="event-dialog-r-lc-content">-->
+<!--              <el-link :href="info.online_url"> {{info.online_url}}</el-link>-->
+<!--            </div>-->
+<!--          </div>-->
           <!--            <div class="event-dialog-r-btn-1-container">-->
           <!--              <el-button class="event-dialog-r-btn" link>-->
           <!--                ADD TO CALENDAR-->
@@ -108,7 +108,7 @@ export default {
       this.$emit('close')
     },
     rsvp(){
-      this.$emit('rsvp')
+      this.$emit('rsvp',this.info)
     },
     beforeClose(done){
       this.$emit('close')
