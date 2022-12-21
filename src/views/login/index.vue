@@ -191,11 +191,11 @@
               </template>
             </template>
 
-            <div class="xll-divider">
+            <div class="xll-divider" v-if="isFromChinaEnv === 'yes' ">
               <el-divider content-position="center">or</el-divider>
             </div>
 
-            <div class="sign-in-btn-container">
+            <div class="sign-in-btn-container" v-if="isFromChinaEnv === 'yes' ">
               <el-button v-if="!loginPhoneStatus" size="large"
                          @click="loginWithPhone()"
                          class="login-option-btn" link round>
@@ -341,6 +341,7 @@ export default {
   name: "index",
   data() {
     return {
+      isFromChinaEnv:process.env.VUE_APP_CHINA,
       loginErrorDialogWidthValue:'50%',
       loginErrorDialogVisible: false,
       imgLogo,

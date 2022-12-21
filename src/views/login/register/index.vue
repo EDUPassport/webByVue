@@ -17,8 +17,9 @@
             <div class="register-step-container">
               <div class="register-step-l">
                 <div class="register-step-circle"
-                :class="stepValue === 1  ? 'register-step-circle-active' : '' "
-                >1</div>
+                     :class="stepValue === 1  ? 'register-step-circle-active' : '' "
+                >1
+                </div>
                 <div class="register-step-tips"
                      :class="stepValue === 1 ? 'register-step-tips-active' : '' "
                 >
@@ -29,7 +30,8 @@
               <div class="register-step-r">
                 <div class="register-step-circle"
                      :class="stepValue === 2 ? 'register-step-circle-active' : '' "
-                >2</div>
+                >2
+                </div>
                 <div class="register-step-tips"
                      :class="stepValue === 2 ? 'register-step-tips-active' : '' "
                 >
@@ -50,14 +52,14 @@
 
                 <template v-if="stepValue === 1">
 
-                  <el-form-item  prop="first_name" required>
+                  <el-form-item prop="first_name" required>
                     <el-input size="large" placeholder="First Name"
                               @change="inputChange"
                               @input="inputChange"
                               v-model="registerForm.first_name">
                     </el-input>
                   </el-form-item>
-                  <el-form-item  prop="last_name" required>
+                  <el-form-item prop="last_name" required>
                     <el-input size="large" placeholder="Last Name"
                               @change="inputChange"
                               @input="inputChange"
@@ -65,7 +67,7 @@
                     </el-input>
                   </el-form-item>
 
-                  <el-form-item  prop="email" required v-if="loginEmailStatus">
+                  <el-form-item prop="email" required v-if="loginEmailStatus">
 
                     <div class="xll-email-input">
                       <el-input size="large" placeholder="Email address"
@@ -80,7 +82,7 @@
 
                   </el-form-item>
 
-                  <el-form-item  prop="phone" required v-if="loginPhoneStatus">
+                  <el-form-item prop="phone" required v-if="loginPhoneStatus">
 
                     <div class="xll-email-input">
                       <el-input size="large" placeholder="Phone number"
@@ -95,7 +97,7 @@
 
                   </el-form-item>
 
-                  <div class="xll-change-phone" @click="loginWithPhone()">
+                  <div class="xll-change-phone" @click="loginWithPhone()" v-if="isFromChinaEnv === 'yes' ">
 
                     <template v-if="loginEmailStatus">
                       SIGN UP WITH A PHONE NUMBER INSTEAD
@@ -106,14 +108,14 @@
 
                   </div>
 
-                  <el-form-item  prop="code" required>
+                  <el-form-item prop="code" required>
                     <el-input size="large" placeholder="Activation code"
                               @change="inputChange"
                               @input="inputChange"
                               v-model="registerForm.code"></el-input>
                   </el-form-item>
 
-                  <el-form-item  prop="password" required>
+                  <el-form-item prop="password" required>
                     <el-input size="large" placeholder="Create password"
                               show-password
                               type="password"
@@ -122,7 +124,7 @@
                               v-model="registerForm.password"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item  prop="c_password" required>
+                  <el-form-item prop="c_password" required>
                     <el-input size="large" type="password" placeholder="Confirm password"
                               show-password
                               @change="inputChange"
@@ -147,7 +149,7 @@
                 <template v-if="stepValue === 2">
                   <div class="identity-container">
                     <div class="identity-label">
-                       Choose your profile <br>
+                      Choose your profile <br>
                       <span>(you can change it later)</span>
                     </div>
 
@@ -185,26 +187,29 @@
 
                     <div class="business-dialog-container" v-if="businessDialogStatus">
 
-<!--                      <div class="identity-business-tips">-->
-<!--                        Please choose the one that fits you best-->
-<!--                      </div>-->
+                      <!--                      <div class="identity-business-tips">-->
+                      <!--                        Please choose the one that fits you best-->
+                      <!--                      </div>-->
 
                       <div class="identity-tabs">
 
                         <div class="identity-tab identity-tab-l"
                              @click="selectedIdentityBusiness(3)"
                              :class="identityValue == 3 ? 'identity-tab-active' : '' "
-                        >School</div>
+                        >School
+                        </div>
 
                         <div class="identity-tab identity-tab-m"
                              @click="selectedIdentityBusiness(2)"
                              :class="identityValue == 2 ? 'identity-tab-active' : '' "
-                        >Recruiter</div>
+                        >Recruiter
+                        </div>
 
                         <div class="identity-tab identity-tab-r"
                              @click="selectedIdentityBusiness(4)"
                              :class="identityValue == 4 ? 'identity-tab-active' : '' "
-                        >Other</div>
+                        >Other
+                        </div>
                       </div>
 
                       <div class="identity-tips">
@@ -217,14 +222,16 @@
                         </template>
                         <template v-if="identityValue == 4">
                           Choose this if you don’t fit into other categories.
-                          You can <el-button link type="primary" @click="contactUs()">CONTACT US</el-button> if you have doubts.
+                          You can
+                          <el-button link type="primary" @click="contactUs()">CONTACT US</el-button>
+                          if you have doubts.
                         </template>
 
                       </div>
 
                       <div class="margin-aaa"></div>
 
-                      <el-form-item  prop="company_name">
+                      <el-form-item prop="company_name">
                         <el-input
                             v-if="identityValue == 2"
                             size="large" placeholder="Displayed name"
@@ -252,7 +259,7 @@
                     </div>
 
                     <div class="margin-aaa"></div>
-                    <el-form-item  prop="company_name"   v-if="identityValue == 5">
+                    <el-form-item prop="company_name" v-if="identityValue == 5">
                       <el-input
                           size="large" placeholder="Name of your store/restaurant/company"
                           @change="companyInputChange"
@@ -293,11 +300,11 @@
         <div class="login-r">
 
           <div class="login-close">
-            <el-button type="primary"  link @click="goHome()" >CLOSE</el-button>
+            <el-button type="primary" link @click="goHome()">CLOSE</el-button>
           </div>
 
           <div class="sign-up">
-            <el-button  plain round @click="turnToLogin()">LOG IN</el-button>
+            <el-button plain round @click="turnToLogin()">LOG IN</el-button>
           </div>
 
         </div>
@@ -312,7 +319,7 @@
 <script>
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
 import imgLogo from '@/assets/logo.png'
-import logoImgLight from  "@/assets/newHome/logo/Logo_Transparent.png"
+import logoImgLight from "@/assets/newHome/logo/Logo_Transparent.png"
 //WEIXIN_SEND_SMS
 import {
   EMAIL_REGISTER_V2,
@@ -334,13 +341,14 @@ export default {
   name: "index",
   data() {
     return {
+      isFromChinaEnv: process.env.VUE_APP_CHINA,
       logoImgLight,
-      completeBtnDisabledStatus:true,
-      companyName:'',
-      createAccountDisabledStatus:true,
-      stepValue:1,
+      completeBtnDisabledStatus: true,
+      companyName: '',
+      createAccountDisabledStatus: true,
+      stepValue: 1,
       imgLogo,
-      identityBusinessCheckedStatus:false,
+      identityBusinessCheckedStatus: false,
 
       submitRegisterLoadingStatus: false,
       humanVerifyStatus: true,
@@ -349,13 +357,11 @@ export default {
       identityValue: 0,
       sendCodeLoading: false,
       showValue: 'login',
-      businessDialogStatus:false
+      businessDialogStatus: false
 
     }
   },
-  components: {
-
-  },
+  components: {},
   setup() {
 
     let router = useRouter()
@@ -429,7 +435,7 @@ export default {
     let registerFormObj = {}
     let registerFormRuleObj = {}
 
-    if(loginPhoneStatus.value){
+    if (loginPhoneStatus.value) {
       registerFormObj = {
         first_name: '',
         last_name: '',
@@ -461,7 +467,7 @@ export default {
       }
     }
 
-    if(loginEmailStatus.value){
+    if (loginEmailStatus.value) {
       registerFormObj = {
         first_name: '',
         last_name: '',
@@ -494,7 +500,7 @@ export default {
 
     const registerForm = reactive(registerFormObj)
 
-    const registerRules = reactive( registerFormRuleObj)
+    const registerRules = reactive(registerFormRuleObj)
 
     const loginWithPhone = () => {
       loginPhoneStatus.value = !loginPhoneStatus.value
@@ -523,32 +529,32 @@ export default {
 
   },
   methods: {
-    test(){
+    test() {
       this.$msgbox({
-        title:"All Set",
-        message:"Let's get you logged in!",
-        dangerouslyUseHTMLString:false,
-        type:"success",
-        center:true,
-        confirmButtonText:"OK",
-        "round-button":true,
-        callback(action){
+        title: "All Set",
+        message: "Let's get you logged in!",
+        dangerouslyUseHTMLString: false,
+        type: "success",
+        center: true,
+        confirmButtonText: "OK",
+        "round-button": true,
+        callback(action) {
           console.log(action)
-          if(action==='confirm'){
-            self.$router.push({path: '/login', query: { phone:self.registerForm.phone}})
+          if (action === 'confirm') {
+            self.$router.push({path: '/login', query: {phone: self.registerForm.phone}})
           }
         }
 
       })
     },
-    turnHome(){
+    turnHome() {
       this.$router.push('/')
     },
-    companyInputChange(e){
+    companyInputChange(e) {
       console.log(e)
       this.completeBtnDisabledStatus = e.length <= 0;
     },
-    inputChange(){
+    inputChange() {
 
       let firstName = this.registerForm.first_name;
       let lastName = this.registerForm.last_name;
@@ -558,19 +564,19 @@ export default {
       let password = this.registerForm.password;
       let confirmPassword = this.registerForm.c_password;
 
-      if(this.loginEmailStatus){
+      if (this.loginEmailStatus) {
         this.createAccountDisabledStatus = !(firstName && lastName && email && code && password && confirmPassword);
       }
-      if(this.loginPhoneStatus){
+      if (this.loginPhoneStatus) {
         this.createAccountDisabledStatus = !(firstName && lastName && phone && code && password && confirmPassword);
       }
     },
-    changeType(e){
+    changeType(e) {
       e.target.type = 'password'
     },
     getCheckCodeForRegister() {
       let phone = this.registerForm.phone;
-      if(phone){
+      if (phone) {
         let params = {
           phone: phone
         }
@@ -583,10 +589,10 @@ export default {
             this.$message.success('Success')
           }
         }).catch(err => {
-          if(err.msg){
+          if (err.msg) {
             this.$message.error(err.msg)
           }
-          if(err.message){
+          if (err.message) {
             this.$message.error(err.message)
           }
         })
@@ -594,7 +600,7 @@ export default {
       }
 
     },
-    turnToLogin(){
+    turnToLogin() {
       this.$router.push('/login')
     },
     goHome() {
@@ -648,48 +654,48 @@ export default {
           if (res.code == 200) {
 
             self.$message({
-              type:'success',
-              message:'Activation Code Sent'
+              type: 'success',
+              message: 'Activation Code Sent'
             })
 
           }
         }).catch(err => {
           console.log(err)
-          if(err.msg){
+          if (err.msg) {
             this.$message.error(err.msg)
           }
-          if(err.message){
+          if (err.message) {
             this.$message.error(err.message)
           }
         })
       }
 
     },
-    selectEducationBusiness(){
+    selectEducationBusiness() {
       this.businessDialogStatus = true
       this.identityBusinessCheckedStatus = false
       this.identityValue = 0
     },
-    submitIdentityBusiness(){
-      if(this.identityValue == 0 ){
+    submitIdentityBusiness() {
+      if (this.identityValue == 0) {
         return;
       }
       this.businessDialogStatus = false;
     },
-    selectedIdentityBusiness(identity){
+    selectedIdentityBusiness(identity) {
       this.businessDialogStatus = true;
 
-      if(identity){
+      if (identity) {
         this.identityBusinessCheckedStatus = true
         this.identityValue = identity
       }
 
     },
-    selectedBusinessAll(){
+    selectedBusinessAll() {
       this.completeBtnDisabledStatus = true;
       this.identityValue = 0;
       this.identityBusinessCheckedStatus = true;
-      this.businessDialogStatus=true
+      this.businessDialogStatus = true
       this.companyName = '';
     },
     selectedIdentity(value) {
@@ -705,14 +711,20 @@ export default {
 
     },
 
-    createAccount(formName){
+    createAccount(formName) {
 
       let self = this;
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // console.log(valid)
-         self.stepValue = 2;
+          let password = this.registerForm.password
+          let confirmPassword = this.registerForm.c_password;
+          if (confirmPassword !== password) {
+            this.$message.warning('The two passwords are inconsistent')
+            return;
+          }
+          self.stepValue = 2;
         } else {
           console.log('error submit!!')
           this.submitRegisterLoadingStatus = false
@@ -721,7 +733,7 @@ export default {
       })
 
     },
-    completeBack(){
+    completeBack() {
       this.stepValue = 1;
     },
     submitRegisterForm(formName) {
@@ -735,16 +747,16 @@ export default {
           let identityValue = self.identityValue;
 
           let aParams = {
-            identity:identityValue
+            identity: identityValue
           }
 
-          if(identityValue == 2 || identityValue == 4 || identityValue == 3 || identityValue == 5){
+          if (identityValue == 2 || identityValue == 4 || identityValue == 3 || identityValue == 5) {
             aParams.company_name = self.companyName
           }
 
           let params = Object.assign(aParams, self.registerForm)
 
-          if(self.loginPhoneStatus){
+          if (self.loginPhoneStatus) {
             PHONE_REGISTER_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
@@ -762,17 +774,17 @@ export default {
                 self.submitRegisterLoadingStatus = false
 
                 this.$msgbox({
-                  title:"All Set",
-                  message:"Let's get you logged in!",
-                  dangerouslyUseHTMLString:false,
-                  type:"success",
-                  center:true,
-                  confirmButtonText:"OK",
-                  "round-button":true,
-                  callback(action){
+                  title: "All Set",
+                  message: "Let's get you logged in!",
+                  dangerouslyUseHTMLString: false,
+                  type: "success",
+                  center: true,
+                  confirmButtonText: "OK",
+                  "round-button": true,
+                  callback(action) {
                     console.log(action)
-                    if(action==='confirm'){
-                      self.$router.push({path: '/login', query: { phone:self.registerForm.phone}})
+                    if (action === 'confirm') {
+                      self.$router.push({path: '/login', query: {phone: self.registerForm.phone}})
                     }
                   }
 
@@ -789,7 +801,7 @@ export default {
 
           }
 
-          if(self.loginEmailStatus){
+          if (self.loginEmailStatus) {
             EMAIL_REGISTER_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
@@ -807,16 +819,16 @@ export default {
                 self.submitRegisterLoadingStatus = false
 
                 this.$msgbox({
-                  title:"All Set",
-                  message:"Let's get you logged in!",
-                  dangerouslyUseHTMLString:false,
-                  type:"success",
-                  center:true,
-                  confirmButtonText:"OK",
-                  "round-button":true,
-                  callback(action){
-                    if(action==='confirm'){
-                      self.$router.push({path: '/login', query: { email:self.registerForm.email}})
+                  title: "All Set",
+                  message: "Let's get you logged in!",
+                  dangerouslyUseHTMLString: false,
+                  type: "success",
+                  center: true,
+                  confirmButtonText: "OK",
+                  "round-button": true,
+                  callback(action) {
+                    if (action === 'confirm') {
+                      self.$router.push({path: '/login', query: {email: self.registerForm.email}})
                     }
                   }
 
@@ -869,17 +881,17 @@ export default {
               self.submitRegisterLoadingStatus = false
 
               this.$msgbox({
-                title:"All Set",
-                message:"Let's get you logged in!",
-                dangerouslyUseHTMLString:false,
-                type:"success",
-                center:true,
-                confirmButtonText:"OK",
-                "round-button":true,
-                callback(action){
+                title: "All Set",
+                message: "Let's get you logged in!",
+                dangerouslyUseHTMLString: false,
+                type: "success",
+                center: true,
+                confirmButtonText: "OK",
+                "round-button": true,
+                callback(action) {
                   console.log(action)
-                  if(action==='confirm'){
-                    self.$router.push({path: '/login', query: {type: 'login',phone:self.registerPhoneForm.phone}})
+                  if (action === 'confirm') {
+                    self.$router.push({path: '/login', query: {type: 'login', phone: self.registerPhoneForm.phone}})
                     self.showValue = 'login'
                   }
                 }
@@ -950,59 +962,82 @@ export default {
           + '&redirect_uri=' + redirect_uri + '&state=' + state + '&scope=' + scope
 
     },
-    async submitEducatorContactForm(userId){
+    async submitEducatorContactForm(userId) {
 
       let params = Object.assign({}, this.registerForm)
 
       let zohoData = [
-        {'zf_referrer_name':''},
-        {'zf_redirect_url':''},
-        {'zc_gad':''},
-        {'SingleLine':userId //UserID
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {
+          'SingleLine': userId //UserID
         },
-        {'SingleLine1':params.first_name // First Name
+        {
+          'SingleLine1': params.first_name // First Name
         },
-        {'SingleLine2':params.last_name //  Last Name
+        {
+          'SingleLine2': params.last_name //  Last Name
         },
-        {'Dropdown':'' //  Gender
+        {
+          'Dropdown': '' //  Gender
         },
-        {'Date':'' //   Date of Birth dd-MMM-yyyy
+        {
+          'Date': '' //   Date of Birth dd-MMM-yyyy
         },
-        {'SingleLine3':'' //   Title
+        {
+          'SingleLine3': '' //   Title
         },
-        {'Email':params.email //   Email
+        {
+          'Email': params.email //   Email
         },
-        {'PhoneNumber_countrycode':'' //   Phone
+        {
+          'PhoneNumber_countrycode': '' //   Phone
         },
-        {'SingleLine4':'' //   Nationality
+        {
+          'SingleLine4': '' //   Nationality
         },
-        {'Dropdown1':'' //   Membership Type
+        {
+          'Dropdown1': '' //   Membership Type
         },
-        {'MultiLine':'' //   Languages Spoken
+        {
+          'MultiLine': '' //   Languages Spoken
         },
-        {'Number':'' //   Membership Duration
+        {
+          'Number': '' //   Membership Duration
         },
-        {'SingleLine5':'' //   City
+        {
+          'SingleLine5': '' //   City
         },
-        {'SingleLine6':'' //   Province
+        {
+          'SingleLine6': '' //   Province
         },
-        {'SingleLine7':'' //   Country
+        {
+          'SingleLine7': '' //   Country
         },
-        {'Dropdown2':'' //   Educator Type
+        {
+          'Dropdown2': '' //   Educator Type
         },
-        {'MultiLine1':'' //   Education
+        {
+          'MultiLine1': '' //   Education
         },
-        {'MultiLine2':'' //    Work History
+        {
+          'MultiLine2': '' //    Work History
         },
-        {'Dropdown3':'' //    Teaching Experience
+        {
+          'Dropdown3': '' //    Teaching Experience
         },
-        {'MultiLine3':'' //   Certifications
+        {
+          'MultiLine3': '' //   Certifications
         },
-        {'MultiLine4':'' //   Educator Intro
+        {
+          'MultiLine4': '' //   Educator Intro
         },
-        {'Website':'' //   Contact image Link
+        {
+          'Website': '' //   Contact image Link
         },
-        {'Website1':'' //   Intro Video Link
+        {
+          'Website1': '' //   Intro Video Link
         }
       ]
 
@@ -1015,52 +1050,67 @@ export default {
         console.log(res)
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           this.$message.error(err.msg)
         }
-        if(err.message){
+        if (err.message) {
           this.$message.error(err.message)
         }
       })
 
     },
-    async submitCompanyContactForm(userId){
+    async submitCompanyContactForm(userId) {
 
       let params = Object.assign({}, this.registerForm)
 
       let zohoData = [
-        {'zf_referrer_name':''},
-        {'zf_redirect_url':''},
-        {'zc_gad':''},
-        {'SingleLine':userId  //UserID
+        {'zf_referrer_name': ''},
+        {'zf_redirect_url': ''},
+        {'zc_gad': ''},
+        {
+          'SingleLine': userId  //UserID
         },
-        {'SingleLine1':params.first_name  // First Name
+        {
+          'SingleLine1': params.first_name  // First Name
         },
-        {'SingleLine2':params.last_name  //  Last Name
+        {
+          'SingleLine2': params.last_name  //  Last Name
         },
-        {'Dropdown':'' //  Gender
+        {
+          'Dropdown': '' //  Gender
         },
-        {'Date':''  //   Date of Birth dd-MMM-yyyy params.birthday
+        {
+          'Date': ''  //   Date of Birth dd-MMM-yyyy params.birthday
         },
-        {'SingleLine3':''  //   Title
+        {
+          'SingleLine3': ''  //   Title
         },
-        {'Email':params.email  //   Email
+        {
+          'Email': params.email  //   Email
         },
-        {'PhoneNumber_countrycode':''  //   Phone
+        {
+          'PhoneNumber_countrycode': ''  //   Phone
         },
-        {'SingleLine4':''  //   Nationality
+        {
+          'SingleLine4': ''  //   Nationality
         },
-        {'Dropdown1':''  //   Membership Type
+        {
+          'Dropdown1': ''  //   Membership Type
         },
-        {'Number':''  //   Membership Duration
+        {
+          'Number': ''  //   Membership Duration
         },
-        {'SingleLine5':''  //   City
+        {
+          'SingleLine5': ''  //   City
         },
-        {'SingleLine6':''  //   Province
+        {
+          'SingleLine6': ''  //   Province
         },
-        {'SingleLine7':''  //   Country
+        {
+          'SingleLine7': ''  //   Country
         },
-        {'Website':'' //   Contact image Link
+        {
+          'Website': '' //   Contact image Link
         }
 
       ]
@@ -1077,7 +1127,7 @@ export default {
       })
 
     },
-    contactUs(){
+    contactUs() {
       window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
     }
 
@@ -1090,49 +1140,48 @@ export default {
 
 <style scoped>
 
-.login-bg{
+.login-bg {
   min-height: 100vh;
   background-color: #F0F2F5;
-  padding-bottom:100px;
+  padding-bottom: 100px;
 }
 
-.login-container{
+.login-container {
   /*max-width:1920px;*/
   padding-top: 50px;
 }
 
-.login-l{
+.login-l {
   padding-left: 50px;
   cursor: pointer;
 }
 
-.login-l-logo{
+.login-l-logo {
   width: 60px;
 }
 
-.login-l-edu{
-  font-family: BCExtraBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size:40px;
+.login-l-edu {
+  font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 40px;
 }
 
-.login-l-passport{
+.login-l-passport {
   font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size:17px;
+  font-size: 17px;
 }
 
 
-
-.login-m{
-  width:576px;
-  margin:0 auto;
+.login-m {
+  width: 576px;
+  margin: 0 auto;
 }
 
-.login-m h1{
+.login-m h1 {
   text-align: center;
 }
 
 
-.login-r{
+.login-r {
 
   padding-right: 50px;
   display: flex;
@@ -1142,22 +1191,22 @@ export default {
 
 }
 
-.sign-up{
+.sign-up {
 
 }
 
-.sign-up-btn{
+.sign-up-btn {
   font-size: 20px;
-  color:#262626;
+  color: #262626;
 }
 
-.login-close{
+.login-close {
   margin-right: 20px;
 }
 
-.login-close-btn{
+.login-close-btn {
   font-size: 20px;
-  color:#262626;
+  color: #262626;
 }
 
 
@@ -1165,15 +1214,15 @@ export default {
 
 }
 
-.register-step-container{
+.register-step-container {
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top:50px;
+  margin-top: 50px;
 }
 
-.register-step-l{
+.register-step-l {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1182,15 +1231,7 @@ export default {
   padding: 20px;
 }
 
-.register-step-m{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-}
-.register-step-r{
+.register-step-m {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1199,8 +1240,17 @@ export default {
   padding: 20px;
 }
 
-.register-step-circle{
-  width:40px;
+.register-step-r {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.register-step-circle {
+  width: 40px;
   height: 40px;
   border-radius: 40px;
   line-height: 40px;
@@ -1209,61 +1259,62 @@ export default {
 
 }
 
-.register-step-tips{
+.register-step-tips {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   margin-top: 15px;
-  color:#262626;
+  color: #262626;
 }
 
-.register-step-circle-active{
-  font-family: Assistant-SemiBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+.register-step-circle-active {
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   background-color: #59EDF7;
 }
 
-.register-step-tips-active{
-  font-family: Assistant-SemiBold , "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+.register-step-tips-active {
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .xll-register-form-container {
 
 }
 
-.margin-aaa{
-  margin-top: 25px ;
+.margin-aaa {
+  margin-top: 25px;
 }
 
 
-.identity-tips{
+.identity-tips {
   text-align: center;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size:18px;
-  color:#262626;
-  margin-top:15px;
+  font-size: 18px;
+  color: #262626;
+  margin-top: 15px;
 }
 
 
-.business-dialog-container{
+.business-dialog-container {
 
-  width:100%;
+  width: 100%;
   text-align: center;
-  margin-top:25px;
+  margin-top: 25px;
 
 }
 
-.identity-business-tips{
-  font-size:26px;
+.identity-business-tips {
+  font-size: 26px;
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   text-align: center;
 
 }
 
-.business-dialog-container h3{
+.business-dialog-container h3 {
 
 }
-.business-dialog-container span{
+
+.business-dialog-container span {
   font-size: 14px;
-  color:#808080;
+  color: #808080;
   line-height: 30px;
 }
 
@@ -1275,16 +1326,16 @@ export default {
   font-size: 30px;
   text-align: center;
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  margin-top:10px;
+  margin-top: 10px;
 }
 
-.identity-label span{
+.identity-label span {
   font-size: 23px;
   text-align: center;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.identity-tabs{
+.identity-tabs {
 
   display: flex;
   flex-direction: row;
@@ -1293,47 +1344,48 @@ export default {
 
 }
 
-.identity-tabs-margin{
+.identity-tabs-margin {
   margin-top: 50px;
 }
 
-.identity-tab{
+.identity-tab {
   padding: 10px 25px;
   font-size: 20px;
   text-align: center;
   color: #262626;
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  cursor:pointer;
+  cursor: pointer;
 
 }
 
-.identity-tab:hover{
+.identity-tab:hover {
   background-color: #988CF5;
   color: #FFFFFF;
 }
 
-.identity-tab-l{
+.identity-tab-l {
   border: 2px solid #262626;
   border-radius: 22px 0px 0px 22px;;
 }
-.identity-tab-m{
+
+.identity-tab-m {
   border-top: 2px solid #262626;
   border-bottom: 2px solid #262626;
 }
 
-.identity-tab-r{
+.identity-tab-r {
   border: 2px solid #262626;
   border-radius: 0px 22px 22px 0px;
 }
 
-.identity-tab-active{
+.identity-tab-active {
   background-color: #988CF5;
   color: #FFFFFF;
 }
 
 
-.xll-email-input{
-  width:100%;
+.xll-email-input {
+  width: 100%;
   position: relative;
 }
 
@@ -1341,48 +1393,48 @@ export default {
   position: absolute;
   right: 20px;
   top: 0px;
-  bottom:0;
-  margin:auto;
+  bottom: 0;
+  margin: auto;
 
   font-size: 24px;
   font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  z-index:100;
-  cursor:pointer;
+  z-index: 100;
+  cursor: pointer;
 
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.send-code-btn:hover{
+.send-code-btn:hover {
   text-decoration: underline;
 }
 
-.xll-change-phone{
+.xll-change-phone {
   font-size: 20px;
-  color:#262626;
+  color: #262626;
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   text-indent: 20px;
-  padding-bottom:20px;
-  cursor:pointer;
+  padding-bottom: 20px;
+  cursor: pointer;
 }
 
-.xll-change-phone:hover{
+.xll-change-phone:hover {
   font-weight: bold;
-  color:#000000;
+  color: #000000;
   text-decoration: underline;
 }
 
-.xll-create-account{
+.xll-create-account {
   text-align: center;
-  margin-top:50px;
+  margin-top: 50px;
 }
 
-.xll-create-account-btn{
+.xll-create-account-btn {
   font-size: 20px;
 }
 
-.complete-btn-container{
+.complete-btn-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1390,14 +1442,14 @@ export default {
   margin-top: 50px;
 }
 
-.complete-btn{
+.complete-btn {
   font-size: 20px;
 }
 
-.complete-back-btn{
+.complete-back-btn {
   margin-top: 25px;
   font-size: 24px;
-  color:#262626;
+  color: #262626;
 }
 
 @media screen and (min-width: 1200px) {
@@ -1405,8 +1457,8 @@ export default {
 
 }
 
-@media screen and (max-width: 768px){
-  .login-bg{
+@media screen and (max-width: 768px) {
+  .login-bg {
     padding-bottom: 0;
   }
 
@@ -1439,41 +1491,43 @@ export default {
     padding-right: 15px;
   }
 
-  .login-l-logo{
+  .login-l-logo {
     width: 30px;
   }
 
-  .register-step-tips{
+  .register-step-tips {
     font-size: 12px;
   }
 
-  .send-code-btn{
+  .send-code-btn {
     font-size: 12px;
   }
 
-  .xll-change-phone{
+  .xll-change-phone {
     font-size: 12px;
   }
 
-  .identity-label{
+  .identity-label {
     font-size: 18px;
   }
 
-  .identity-label span{
+  .identity-label span {
     font-size: 14px;
   }
-  .identity-tab{
-    font-size: 12px;
-  }
-  .identity-tips{
+
+  .identity-tab {
     font-size: 12px;
   }
 
-  .complete-btn{
+  .identity-tips {
     font-size: 12px;
   }
 
-  .complete-back-btn{
+  .complete-btn {
+    font-size: 12px;
+  }
+
+  .complete-back-btn {
     font-size: 12px;
   }
 

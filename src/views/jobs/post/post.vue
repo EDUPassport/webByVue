@@ -89,6 +89,7 @@
 
                             <template v-if="envName==='developmentCN' || envName==='productionCN' ">
                               <el-select v-model="countryObj"
+                                         :teleported="false"
                                          class="job-location-select"
                                          @change="countryChange"
                                          value-key="id"
@@ -100,6 +101,7 @@
 
                               <template v-if="provinceOptions.length>0">
                                 <el-select v-model="provinceObj"
+                                           :teleported="false"
                                            class="job-location-select"
                                            value-key="id"
                                            filterable
@@ -111,6 +113,7 @@
                               </template>
                               <template v-if="cityOptions.length>0">
                                 <el-select v-model="cityObj"
+                                           :teleported="false"
                                            class="job-location-select"
                                            value-key="id"
                                            filterable
@@ -150,6 +153,7 @@
                           <div class="job-location-content" v-if="jobFromInternational">
 
                             <el-select v-model="countryObj"
+                                       :teleported="false"
                                        class="job-location-select"
                                        @change="countryChange"
                                        value-key="id"
@@ -161,6 +165,7 @@
 
                             <template v-if="provinceOptions.length>0">
                               <el-select v-model="provinceObj"
+                                         :teleported="false"
                                          class="job-location-select"
                                          value-key="id"
                                          filterable
@@ -172,6 +177,7 @@
                             </template>
                             <template v-if="cityOptions.length>0">
                               <el-select v-model="cityObj"
+                                         :teleported="false"
                                          class="job-location-select"
                                          value-key="id"
                                          filterable
@@ -277,6 +283,7 @@
 
                         <el-select
                             v-model="selectEmploymentTypeList"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -328,6 +335,7 @@
                         <div class="xll-salary-container">
                           <el-select
                               v-model="jobForm.currency"
+                              :teleported="false"
                               class="xll-currency-select"
                               value-key="object_en"
                               placeholder="Select" >
@@ -343,6 +351,7 @@
                           <div class="xll-salary-line">-</div>
                           <el-input class="xll-max-salary" v-model="jobForm.salary_max" placeholder="max"></el-input>
                           <el-select class="xll-payment-select"
+                                     :teleported="false"
                                      v-model="jobForm.payment_period"
                                      filterable
                                      value-key="id"
@@ -363,6 +372,7 @@
 
                         <el-select
                             v-model="selectBenefitsList"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -406,6 +416,7 @@
 
                         <el-select
                             v-model="selectSubjectList"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -437,6 +448,7 @@
 
                         <el-select
                             v-model="selectAgeToTeachList"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -479,6 +491,7 @@
 
                             <el-select
                                 v-model="selectPnationalityList"
+                                :teleported="false"
                                 multiple
                                 collapse-tags
                                 collapse-tags-tooltip
@@ -504,6 +517,7 @@
 
                             <el-select
                                 v-model="selectAnationalityList"
+                                :teleported="false"
                                 multiple
                                 collapse-tags
                                 collapse-tags-tooltip
@@ -538,6 +552,7 @@
 
                         <el-select
                             v-model="selectTeachingCertificateList"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -561,7 +576,7 @@
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
 
                       <el-form-item label="Minimum degree">
-                        <el-select v-model="jobForm.education" placeholder="Minimum degree">
+                        <el-select v-model="jobForm.education" :teleported="false" placeholder="Minimum degree">
                           <el-option v-for="(item,i) in educationList" :key="i" :label="item.object_en"
                                      :value="item.id"></el-option>
                         </el-select>
@@ -574,6 +589,7 @@
 
                         <el-select
                             v-model="selectLanguagesList"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -619,7 +635,7 @@
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Gender">
                         <el-select v-model="jobForm.sex"
-                                   :popper-append-to-body="false"
+                                   :teleported="false"
                                    placeholder="Select your gender">
                           <el-option v-for="(item,i) in sexOptions" :key="i" :label="item.object_en"
                                      :value="item.value"></el-option>
@@ -632,6 +648,7 @@
 
                         <el-select
                             v-model="selectWorkTypeList"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip

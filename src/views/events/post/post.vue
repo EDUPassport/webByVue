@@ -93,6 +93,7 @@
                       <el-form-item label="Location">
                         <div class="deals-location-select-container">
                           <el-select v-model="countryObj"
+                                     :teleported="false"
                                      @change="countryChange"
                                      value-key="id"
                                      filterable
@@ -103,6 +104,7 @@
 
                           <template v-if="provinceOptions.length>0">
                             <el-select v-model="provinceObj"
+                                       :teleported="false"
                                        value-key="id"
                                        filterable
                                        @change="provinceChange"
@@ -113,6 +115,7 @@
                           </template>
                           <template v-if="cityOptions.length>0">
                             <el-select v-model="cityObj"
+                                       :teleported="false"
                                        value-key="id"
                                        filterable
                                        @change="cityChange"
@@ -136,6 +139,7 @@
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Category" prop="category_id">
                         <el-select v-model="basicForm.category_id"
+                                   :teleported="false"
                                    placeholder="Select category"
                         >
                           <el-option
@@ -239,6 +243,7 @@
                         <el-row :gutter="10">
                           <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
                             <el-select v-model="basicForm.currency"
+                                       :teleported="false"
                                        placeholder="currency"
                             >
                               <el-option
@@ -271,6 +276,7 @@
 
                         <el-select
                             v-model="selectTagsValue"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip

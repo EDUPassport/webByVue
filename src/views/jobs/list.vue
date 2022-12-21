@@ -74,211 +74,217 @@
                 </adsComponent>
               </div>
 
-              <div class="job-detail-container">
+              <template v-if="JSON.stringify(detailData) !== '{}'">
+                <div class="job-detail-container">
 
-                <div class="job-detail-t">
-                  <div class="job-detail-t-l">
-                    <div class="job-detail-t-l-1"
-                         v-if="detailData.company"
-                         @click="turnBusinessProfile(detailData)"
-                    >
-                      {{detailData.company.company_name}}
+                  <div class="job-detail-t">
+                    <div class="job-detail-t-l">
+                      <div class="job-detail-t-l-1"
+                           v-if="detailData.company"
+                           @click="turnBusinessProfile(detailData)"
+                      >
+                        {{detailData.company.company_name}}
+                      </div>
+                      <div class="job-detail-t-l-2">
+                        {{detailData.job_title}}
+                      </div>
+                      <div class="job-detail-t-l-3">
+                        {{detailData.job_location}}
+                      </div>
                     </div>
-                    <div class="job-detail-t-l-2">
-                      {{detailData.job_title}}
-                    </div>
-                    <div class="job-detail-t-l-3">
-                      {{detailData.job_location}}
-                    </div>
-                  </div>
-                  <div class="job-detail-t-r">
-                    <el-button link @click="shareJob(detailData)">
-                      SHARE
-                    </el-button>
-
-                    <applyJobButton :selectJobId="detailData.id"
-                                    btn-text="QUICK APPLY"
-                                    :job-info="detailData" >
-                    </applyJobButton>
-
-                    <template v-if="detailData.is_favorite && detailData.is_favorite == 1">
-                      <el-button plain round
-                                 @click="cancelSaveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
-                        SAVE
-                        <el-icon color="#6650B3" >
-                          <IconFontistoFavorite/>
-                        </el-icon>
+                    <div class="job-detail-t-r">
+                      <el-button link @click="shareJob(detailData)">
+                        SHARE
                       </el-button>
 
-                    </template>
-                    <template v-else>
-                      <el-button plain round
-                                 @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
-                        SAVE
-                        <el-icon>
-                          <CollectionTag/>
-                        </el-icon>
-                      </el-button>
-                    </template>
+                      <applyJobButton :selectJobId="detailData.id"
+                                      btn-text="QUICK APPLY"
+                                      :job-info="detailData" >
+                      </applyJobButton>
+
+                      <template v-if="detailData.is_favorite && detailData.is_favorite == 1">
+                        <el-button plain round
+                                   @click="cancelSaveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                          SAVE
+                          <el-icon color="#6650B3" >
+                            <IconFontistoFavorite/>
+                          </el-icon>
+                        </el-button>
+
+                      </template>
+                      <template v-else>
+                        <el-button plain round
+                                   @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                          SAVE
+                          <el-icon>
+                            <CollectionTag/>
+                          </el-icon>
+                        </el-button>
+                      </template>
 
 
+                    </div>
                   </div>
+
+                  <el-scrollbar class="job-detail-c">
+
+                    <div class="job-detail-c-1">
+                      <div class="job-detail-c-item" v-if="detailData.entry_date">
+                        <div class="job-detail-c-item-l">Start date:</div>
+                        <div class="job-detail-c-item-r">{{detailData.entry_date}}</div>
+                      </div>
+
+                      <div class="job-detail-c-item" v-if="detailData.age_to_teach">
+                        <div class="job-detail-c-item-l">Student's age:</div>
+                        <div class="job-detail-c-item-r">
+                          {{ $filters.userObjectFormat(detailData.age_to_teach)}}
+                        </div>
+                      </div>
+
+                      <div class="job-detail-c-item" v-if="detailData.subject">
+                        <div class="job-detail-c-item-l">Subjects:</div>
+                        <div class="job-detail-c-item-r">
+                          {{ $filters.userObjectFormat(detailData.subject)}}
+                        </div>
+                      </div>
+
+                      <div class="job-detail-c-item" v-if="workingHoursData.length>0">
+                        <div class="job-detail-c-item-l">Hours:</div>
+                        <div class="job-detail-c-item-r">
+                          <div class="working-hours">
+                            <div class="working-hours-item" v-for="(item,index) in workingHoursData" :key="index">
+                              <el-tag class="working-hours-week" v-for="(week,i) in item.week" :key="i">
+                                <span v-if="week==1">M</span>
+                                <span v-if="week==2">T</span>
+                                <span v-if="week==3">W</span>
+                                <span v-if="week==4">Th</span>
+                                <span v-if="week==5">F</span>
+                                <span v-if="week==6">Sa</span>
+                                <span v-if="week==7">Su</span>
+                              </el-tag>
+                              <span class="working-hours-hours">{{item.hours}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="job-detail-c-2">
+                      <div class="job-detail-c-2-l">
+                        <div class="job-detail-c-item-label">Requirements:</div>
+                        <div class="job-detail-c-item-c">
+                          <div class="job-detail-c-item" v-if="detailData.teaching_times_en">
+                            <div class="job-detail-c-item-l">Teaching experience:</div>
+                            <div class="job-detail-c-item-r">
+                              {{detailData.teaching_times_en}}
+                            </div>
+                          </div>
+                          <div class="job-detail-c-item" v-if="detailData.education_en">
+                            <div class="job-detail-c-item-l">Minimum education:</div>
+                            <div class="job-detail-c-item-r">
+                              {{detailData.education_en}}
+                            </div>
+                          </div>
+                          <div class="job-detail-c-item" v-if="detailData.class_size">
+                            <div class="job-detail-c-item-l">Class size:</div>
+                            <div class="job-detail-c-item-r">
+                              {{detailData.class_size}}
+                            </div>
+                          </div>
+                          <div class="job-detail-c-item" v-if="detailData.numbers">
+                            <div class="job-detail-c-item-l">Number of Vacancies:</div>
+                            <div class="job-detail-c-item-r">
+                              {{detailData.numbers}}
+                            </div>
+                          </div>
+                          <div class="job-detail-c-item"
+                               v-if="detailData.apply_due_date && detailData.apply_due_date !='0000-00-00'"
+                          >
+                            <div class="job-detail-c-item-l">Application:</div>
+                            <div class="job-detail-c-item-r">
+                              {{detailData.apply_due_date}}
+                            </div>
+                          </div>
+
+                          <div class="job-detail-c-item" v-if="detailData.Teaching_certificate">
+                            <div class="job-detail-c-item-l">Teaching certificates:</div>
+                            <div class="job-detail-c-item-r">
+                              {{ $filters.userObjectFormat(detailData.Teaching_certificate)}}
+                            </div>
+                          </div>
+
+                          <div class="job-detail-c-item" v-if="detailData.Nationality">
+                            <div class="job-detail-c-item-l">Preferred nationality:</div>
+                            <div class="job-detail-c-item-r">
+                              {{ $filters.userObjectFormat(detailData.Nationality)}}
+                            </div>
+                          </div>
+
+                          <div class="job-detail-c-item" v-if="detailData.Acceptable">
+                            <div class="job-detail-c-item-l">Acceptable nationality:</div>
+                            <div class="job-detail-c-item-r">
+                              {{ $filters.userObjectFormat(detailData.Acceptable)}}
+                            </div>
+                          </div>
+                          <div class="job-detail-c-item" v-if="detailData.sex">
+                            <div class="job-detail-c-item-l">Gender:</div>
+                            <div class="job-detail-c-item-r">
+                              <template v-if="detailData.sex == 1">Male</template>
+                              <template v-if="detailData.sex == 2">Female</template>
+                              <template v-if="detailData.sex == 3">Non-binary</template>
+                              <template v-if="detailData.sex == 4">No Gender Requirements</template>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                      <div class="job-detail-c-2-r">
+                        <div class="job-detail-c-item-label">Compensation:</div>
+                        <div class="job-detail-c-item-c">
+                          <div class="job-detail-c-item">
+                            <div class="job-detail-c-item-l">Salary range:</div>
+                            <div class="job-detail-c-item-r">
+                              {{ detailData.currency }} {{ detailData.salary_min }} - {{ detailData.salary_max }} /
+                              <span v-if="detailData.payment_period == 112">hourly</span>
+                              <span v-if="detailData.payment_period == 113">daily</span>
+                              <span v-if="detailData.payment_period == 114">weekly</span>
+                              <span v-if="detailData.payment_period == 115">monthly</span>
+                              <span v-if="detailData.payment_period == 116">annually</span>
+                            </div>
+                          </div>
+                          <div class="job-detail-c-item" v-if="detailData.benefits">
+                            <div class="job-detail-c-item-l">Benefits:</div>
+                            <div class="job-detail-c-item-r">
+                              {{ $filters.userObjectFormat(detailData.benefits)}}
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="job-detail-desc">
+                      <div class="job-detail-desc-label">Job details:</div>
+                      <div class="job-detail-desc-content" v-html="detailData.desc"></div>
+                    </div>
+
+                    <div class="map-container">
+                      <div id="mapContainer" class="basemap"></div>
+                    </div>
+
+                  </el-scrollbar>
+
                 </div>
 
-                <el-scrollbar class="job-detail-c">
-
-                  <div class="job-detail-c-1">
-                    <div class="job-detail-c-item" v-if="detailData.entry_date">
-                      <div class="job-detail-c-item-l">Start date:</div>
-                      <div class="job-detail-c-item-r">{{detailData.entry_date}}</div>
-                    </div>
-
-                    <div class="job-detail-c-item" v-if="detailData.age_to_teach">
-                      <div class="job-detail-c-item-l">Student's age:</div>
-                      <div class="job-detail-c-item-r">
-                        {{ $filters.userObjectFormat(detailData.age_to_teach)}}
-                      </div>
-                    </div>
-
-                    <div class="job-detail-c-item" v-if="detailData.subject">
-                      <div class="job-detail-c-item-l">Subjects:</div>
-                      <div class="job-detail-c-item-r">
-                        {{ $filters.userObjectFormat(detailData.subject)}}
-                      </div>
-                    </div>
-
-                    <div class="job-detail-c-item" v-if="workingHoursData.length>0">
-                      <div class="job-detail-c-item-l">Hours:</div>
-                      <div class="job-detail-c-item-r">
-                        <div class="working-hours">
-                          <div class="working-hours-item" v-for="(item,index) in workingHoursData" :key="index">
-                            <el-tag class="working-hours-week" v-for="(week,i) in item.week" :key="i">
-                              <span v-if="week==1">M</span>
-                              <span v-if="week==2">T</span>
-                              <span v-if="week==3">W</span>
-                              <span v-if="week==4">Th</span>
-                              <span v-if="week==5">F</span>
-                              <span v-if="week==6">Sa</span>
-                              <span v-if="week==7">Su</span>
-                            </el-tag>
-                            <span class="working-hours-hours">{{item.hours}}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div class="job-detail-c-2">
-                    <div class="job-detail-c-2-l">
-                      <div class="job-detail-c-item-label">Requirements:</div>
-                      <div class="job-detail-c-item-c">
-                        <div class="job-detail-c-item" v-if="detailData.teaching_times_en">
-                          <div class="job-detail-c-item-l">Teaching experience:</div>
-                          <div class="job-detail-c-item-r">
-                            {{detailData.teaching_times_en}}
-                          </div>
-                        </div>
-                        <div class="job-detail-c-item" v-if="detailData.education_en">
-                          <div class="job-detail-c-item-l">Minimum education:</div>
-                          <div class="job-detail-c-item-r">
-                            {{detailData.education_en}}
-                          </div>
-                        </div>
-                        <div class="job-detail-c-item" v-if="detailData.class_size">
-                          <div class="job-detail-c-item-l">Class size:</div>
-                          <div class="job-detail-c-item-r">
-                            {{detailData.class_size}}
-                          </div>
-                        </div>
-                        <div class="job-detail-c-item" v-if="detailData.numbers">
-                          <div class="job-detail-c-item-l">Number of Vacancies:</div>
-                          <div class="job-detail-c-item-r">
-                            {{detailData.numbers}}
-                          </div>
-                        </div>
-                        <div class="job-detail-c-item"
-                             v-if="detailData.apply_due_date && detailData.apply_due_date !='0000-00-00'"
-                        >
-                          <div class="job-detail-c-item-l">Application:</div>
-                          <div class="job-detail-c-item-r">
-                            {{detailData.apply_due_date}}
-                          </div>
-                        </div>
-
-                        <div class="job-detail-c-item" v-if="detailData.Teaching_certificate">
-                          <div class="job-detail-c-item-l">Teaching certificates:</div>
-                          <div class="job-detail-c-item-r">
-                            {{ $filters.userObjectFormat(detailData.Teaching_certificate)}}
-                          </div>
-                        </div>
-
-                        <div class="job-detail-c-item" v-if="detailData.Nationality">
-                          <div class="job-detail-c-item-l">Preferred nationality:</div>
-                          <div class="job-detail-c-item-r">
-                            {{ $filters.userObjectFormat(detailData.Nationality)}}
-                          </div>
-                        </div>
-
-                        <div class="job-detail-c-item" v-if="detailData.Acceptable">
-                          <div class="job-detail-c-item-l">Acceptable nationality:</div>
-                          <div class="job-detail-c-item-r">
-                            {{ $filters.userObjectFormat(detailData.Acceptable)}}
-                          </div>
-                        </div>
-                        <div class="job-detail-c-item" v-if="detailData.sex">
-                          <div class="job-detail-c-item-l">Gender:</div>
-                          <div class="job-detail-c-item-r">
-                             <template v-if="detailData.sex == 1">Male</template>
-                             <template v-if="detailData.sex == 2">Female</template>
-                             <template v-if="detailData.sex == 3">Non-binary</template>
-                             <template v-if="detailData.sex == 4">No Gender Requirements</template>
-                          </div>
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                    <div class="job-detail-c-2-r">
-                      <div class="job-detail-c-item-label">Compensation:</div>
-                      <div class="job-detail-c-item-c">
-                        <div class="job-detail-c-item">
-                          <div class="job-detail-c-item-l">Salary range:</div>
-                          <div class="job-detail-c-item-r">
-                            {{ detailData.currency }} {{ detailData.salary_min }} - {{ detailData.salary_max }} /
-                            <span v-if="detailData.payment_period == 112">hourly</span>
-                            <span v-if="detailData.payment_period == 113">daily</span>
-                            <span v-if="detailData.payment_period == 114">weekly</span>
-                            <span v-if="detailData.payment_period == 115">monthly</span>
-                            <span v-if="detailData.payment_period == 116">annually</span>
-                          </div>
-                        </div>
-                        <div class="job-detail-c-item" v-if="detailData.benefits">
-                          <div class="job-detail-c-item-l">Benefits:</div>
-                          <div class="job-detail-c-item-r">
-                            {{ $filters.userObjectFormat(detailData.benefits)}}
-                          </div>
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                  <div class="job-detail-desc">
-                    <div class="job-detail-desc-label">Job details:</div>
-                    <div class="job-detail-desc-content" v-html="detailData.desc"></div>
-                  </div>
-
-                  <div class="map-container">
-                    <div id="mapContainer" class="basemap"></div>
-                  </div>
-
-                </el-scrollbar>
-
-              </div>
+              </template>
+              <template v-else>
+                <el-empty description="..."></el-empty>
+              </template>
 
             </div>
 
@@ -552,22 +558,18 @@ export default {
         if (res.code == 200) {
           let jobData = res.message.data;
 
-          let routeJobId = this.$route.query.id;
-          if(!routeJobId){
-
-            if(jobData.length>0){
-              this.selectedJobId = jobData[0]['id']
-              this.getJobDetail(jobData[0]['id'])
-            }
-
+          if(jobData.length>0){
+            this.selectedJobId = jobData[0]['id']
+            this.getJobDetail(jobData[0]['id'])
+          }else{
+            this.detailData = {}
           }
 
           this.jobListData = res.message.data
           this.jobTotalNum = res.message.total
           this.jobLoadingValue = false
-        } else {
-          console.log(res.msg)
         }
+
       }).catch(err => {
         console.log(err)
         this.jobLoadingValue = false
@@ -581,6 +583,7 @@ export default {
 
     },
     getJobDetail(id) {
+      let self = this;
       let params = {
         job_id: id
       }
@@ -595,14 +598,18 @@ export default {
             // this.jobForm.working_hours = JSON.parse(workHours)
             this.workingHoursData = JSON.parse(workHours)
           }
-
-          this.initMap(res.message.lng,res.message.lat)
           this.showLoadingStatus = false;
+
+          setTimeout(function () {
+            self.initMap(res.message.lng,res.message.lat)
+          }, 3000)
+
           // let userId = res.message.user_id
           // this.getCompanyJobList(userId)
         }
       }).catch(err=>{
         console.log(err)
+        this.showLoadingStatus = false;
         // if(err.msg){
         //   this.$message.error(err.msg)
         // }
@@ -813,10 +820,10 @@ export default {
         console.log(err)
         this.jobLoadingValue = false
         if (err.msg) {
-          this.$message.error(err.msg)
+          return this.$message.error(err.msg)
         }
         if (err.message) {
-          this.$message.error(err.message)
+          return this.$message.error(err.message)
         }
       })
 

@@ -53,6 +53,7 @@
                       <el-form-item label="Nationality" prop="nationality">
                         <el-select v-model="basicForm.nationality"
                                    filterable
+                                   :teleported="false"
                                    placeholder="Select your nationality">
                           <el-option v-for="(item,i) in nationalityOptions" :key="i" :label="item.name"
                                      :value="item.name"></el-option>
@@ -94,20 +95,44 @@
                         <el-input v-model="basicForm.email" placeholder="Your email address"></el-input>
                       </el-form-item>
                     </el-col>
+
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Phone number" prop="phone">
-                        <el-input v-model="basicForm.phone" placeholder="Phone #"></el-input>
+                      <el-form-item label="Phone number"  >
+                        <div class="contact-phone-container">
+                          <div class="contact-phone-l">
+                            <!--                    @onChange="onDefaultChange"-->
+                            <el-select v-model="countryCode" :teleported="false" filterable class="m-2" placeholder="Select" >
+                              <el-option
+                                  v-for="item in phoneCodeData"
+                                  :key="item.phone_code"
+                                  :label="item.phone_code"
+                                  :value="item.phone_code"
+                              >
+                                <span style="float: left">{{ item.en }}</span>
+                                <span style=" float: right;font-size: 13px;">
+                          {{ item.phone_code }}
+                        </span>
+                              </el-option>
+                            </el-select>
+                          </div>
+                          <div class="contact-phone-r">
+                            <el-input type="number" v-model="phoneNumber" maxlength="25" placeholder="Phone #"></el-input>
+                          </div>
+                        </div>
                       </el-form-item>
+
                     </el-col>
+
+<!--                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">-->
+<!--                      <el-form-item label="Phone number" prop="phone">-->
+<!--                        <el-input v-model="basicForm.phone" type="number" maxlength="25" placeholder="Phone #"></el-input>-->
+<!--                      </el-form-item>-->
+<!--                    </el-col>-->
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Current Address" prop="address">
                         <el-input v-model="basicForm.address" placeholder="Current Address"></el-input>
                       </el-form-item>
                     </el-col>
-
-                    <!--                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">-->
-
-                    <!--                    </el-col>-->
 
                   </el-row>
                 </div>
@@ -140,6 +165,7 @@
 
                         <el-select
                             v-model="selectHobbyInfoList"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -186,7 +212,7 @@
                     </el-col>
 
 
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="Languages & Proficiency">
 
                         <div class="language-add-container">
@@ -236,7 +262,7 @@
                               class="demo-ruleForm"
                           >
                             <el-form-item label="Language">
-                              <el-select v-model="languageValue" value-key="id">
+                              <el-select v-model="languageValue"  :teleported="false" value-key="id">
                                 <el-option v-for="(item,i) in languageOptionsData" :key="i"
                                            :label="item.object_en"
                                            :value="item"
@@ -248,7 +274,7 @@
                             </el-form-item>
 
                             <el-form-item class="work-form-item" label="Proficiency">
-                              <el-select v-model="languageLevelValue" value-key="value">
+                              <el-select v-model="languageLevelValue" :teleported="false" value-key="value">
                                 <el-option
                                     v-for="(level,ii) in languageLevelOptionsData" :key="ii"
                                     :label="level.label"
@@ -312,6 +338,7 @@
 
                         <el-select v-model="checkedYearExpValue"
                                    filterable
+                                   :teleported="false"
                                    placeholder="Years of experience"
                                    value-key="id"
                         >
@@ -525,6 +552,7 @@
 
                         <el-select
                             filterable
+                            :teleported="false"
                             v-model="selectCountriesTraveledList"
                             multiple
                             collapse-tags
@@ -548,6 +576,7 @@
 
                         <el-select
                             filterable
+                            :teleported="false"
                             v-model="selectCountriesLivedList"
                             multiple
                             collapse-tags
@@ -642,6 +671,7 @@
                       </el-form-item>
                       <el-form-item label="Degree" prop="degree">
                         <el-select v-model="educationForm.degree_id"
+                                   :teleported="false"
                                    placeholder="Doctorate, Master's, Bachelor's, etc...">
                           <el-option v-for="(degree,i) in degreeOptionsData" :key="i"
                                      :value-key="degree.id"
@@ -735,6 +765,7 @@
 
                         <el-select
                             filterable
+                            :teleported="false"
                             v-model="selectWorkDestinationList"
                             multiple
                             collapse-tags
@@ -759,6 +790,7 @@
 
                         <el-select
                             filterable
+                            :teleported="false"
                             multiple
                             v-model="selectJobTypeList"
                             collapse-tags
@@ -781,6 +813,7 @@
                       <el-form-item label="Work schedule type">
 
                         <el-select v-model="checkedWorkScheduleTypeValue"
+                                   :teleported="false"
                                    filterable
                                    collapse-tags
                                    placeholder="Select work schedule type"
@@ -801,6 +834,7 @@
 
                         <el-select
                             v-model="selectBenefitsList"
+                            :teleported="false"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -829,6 +863,7 @@
                       <el-form-item label="Subject(s) to teach">
 
                         <el-select
+                            :teleported="false"
                             v-model="selectSubjectList"
                             multiple
                             collapse-tags
@@ -854,6 +889,7 @@
                       <el-form-item label=" Preferred Age To Teach">
 
                         <el-select
+                            :teleported="false"
                             v-model="selectAgeToTeachList"
                             multiple
                             collapse-tags
@@ -879,6 +915,7 @@
                       <el-form-item label="Certifications">
 
                         <el-select
+                            :teleported="false"
                             v-model="selectCertificationsList"
                             multiple
                             collapse-tags
@@ -1003,11 +1040,11 @@
                                   <zoom-in/>
                                 </el-icon>
                               </span>
-                              <!--                              <span @click="handleVideoRemove(introVideoUrl)">-->
-                              <!--                                <el-icon color="#ffffff" :size="45">-->
-                              <!--                                  <Delete />-->
-                              <!--                                </el-icon>-->
-                              <!--                              </span>-->
+                              <span @click="handleVideoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -1048,6 +1085,11 @@
                                   <zoom-in/>
                                 </el-icon>
                               </span>
+                              <span @click="handleBackgroundPhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -1086,6 +1128,12 @@
                                   <zoom-in/>
                                 </el-icon>
                               </span>
+                              <span @click="handleProfilePhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
+
                             </div>
                           </div>
                         </div>
@@ -1123,7 +1171,6 @@ import meSideMenu from "@/components/meSideMenu";
 import {
   SUB_CATE_LIST,
   EDUCATOR_CONTACT_EDIT_V2,
-  ZOHO_SYNC,
   USER_INFO_BY_TOKEN_V2,
   SWITCH_IDENTITY_V2,
   USER_MENU_LIST,
@@ -1144,6 +1191,7 @@ import {countriesData} from "@/utils/data";
 import {encode, decode} from "js-base64";
 import ImageCompressor from "compressorjs";
 import {updateWindowHeight} from "@/utils/tools";
+import {phoneCodeData} from "@/utils/phoneCode";
 
 export default {
   name: "editEducatorHome",
@@ -1163,6 +1211,7 @@ export default {
   data() {
 
     return {
+      phoneCodeData:phoneCodeData,
       workExpDialogWidth: '454px',
       educationDialogWidth: '454px',
       uploadLoadingStatus: false,
@@ -1184,10 +1233,13 @@ export default {
       introVideoUrl: '',
       backgroundPhotoUrl: '',
 
+      countryCode:'+86',
+      phoneNumber:'',
       basicForm: {
         name: '',
         resume_pdf: '',
         video_url: '',
+        country_code:'+86',
         phone: '',
         email: '',
         address: '',
@@ -1615,6 +1667,8 @@ export default {
             this.basicForm.hobbies = this.selectHobbyInfoList.join(',');
           }
 
+          this.basicForm.phone = this.countryCode + '#' + this.phoneNumber
+
           let params = Object.assign({}, this.basicForm);
           EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
             // console.log(res)
@@ -1963,6 +2017,15 @@ export default {
           }
 
           if (educatorContact.phone) {
+            let phone = educatorContact.phone;
+            let phoneArr = phone.split('#')
+            // console.log(phoneArr)
+            if(phoneArr.length>1){
+              this.countryCode = phoneArr[0]
+              this.phoneNumber = phoneArr[1]
+            }else{
+              this.phoneNumber = phoneArr[0]
+            }
             this.basicForm.phone = educatorContact.phone
           }
 
@@ -2604,184 +2667,6 @@ export default {
       }
       return isLt2M
     },
-    async submitEducatorContactForm() {
-
-      let params = Object.assign({}, this.basicForm)
-      let userId = localStorage.getItem('uid')
-
-      let selectTypeList = this.selectEducatorTypeList;
-      let educatorTypeIdArr = [];
-      selectTypeList.forEach(item => {
-        educatorTypeIdArr.push(item.identity_name)
-      })
-
-      let sexStr = ''
-      if (params.sex == 1) {
-        sexStr = 'Male'
-      }
-      if (params.sex == 2) {
-        sexStr = 'Female'
-      }
-      if (params.sex == 3) {
-        sexStr = 'Undisclosed'
-      }
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {
-          'SingleLine': userId //UserID
-        },
-        {
-          'SingleLine1': params.first_name // First Name
-        },
-        {
-          'SingleLine2': params.last_name //  Last Name
-        },
-        {
-          'Dropdown': sexStr //  Gender
-        },
-        {
-          'Date': '' //   Date of Birth dd-MMM-yyyy
-        },
-        {
-          'SingleLine3': '' //   Title
-        },
-        {
-          'Email': params.email //   Email
-        },
-        {
-          'PhoneNumber_countrycode': '' //   Phone
-        },
-        {
-          'SingleLine4': params.nationality //   Nationality
-        },
-        {
-          'Dropdown1': '' //   Membership Type
-        },
-        {
-          'MultiLine': '' //   Languages Spoken
-        },
-        {
-          'Number': '' //   Membership Duration
-        },
-        {
-          'SingleLine5': '' //   City
-        },
-        {
-          'SingleLine6': '' //   Province
-        },
-        {
-          'SingleLine7': '' //   Country
-        },
-        {
-          'Dropdown2': educatorTypeIdArr.join(',') //   Educator Type
-        },
-        {
-          'MultiLine1': '' //   Education
-        },
-        {
-          'MultiLine2': '' //    Work History
-        },
-        {
-          'Dropdown3': '' //    Teaching Experience
-        },
-        {
-          'MultiLine3': '' //   Certifications
-        },
-        {
-          'MultiLine4': '' //   Educator Intro
-        },
-        {
-          'Website': this.educatorInfo.profile_photo //   Contact image Link
-        },
-        {
-          'Website1': '' //   Intro Video Link
-        }
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-
-    },
-    async submitCompanyContactForm() {
-
-      let params = Object.assign({}, this.basicForm)
-      let userId = localStorage.getItem('uid')
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {
-          'SingleLine': userId  //UserID
-        },
-        {
-          'SingleLine1': params.first_name  // First Name
-        },
-        {
-          'SingleLine2': params.last_name  //  Last Name
-        },
-        {
-          'Dropdown': params.sex  //  Gender
-        },
-        {
-          'Date': ''  //   Date of Birth dd-MMM-yyyy params.birthday
-        },
-        {
-          'SingleLine3': ''  //   Title
-        },
-        {
-          'Email': params.email  //   Email
-        },
-        {
-          'PhoneNumber_countrycode': ''  //   Phone
-        },
-        {
-          'SingleLine4': params.nationality  //   Nationality
-        },
-        {
-          'Dropdown1': ''  //   Membership Type
-        },
-        {
-          'Number': ''  //   Membership Duration
-        },
-        {
-          'SingleLine5': ''  //   City
-        },
-        {
-          'SingleLine6': ''  //   Province
-        },
-        {
-          'SingleLine7': ''  //   Country
-        },
-        {
-          'Website': this.educatorInfo.profile_photo //   Contact image Link
-        }
-
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-
-    },
     certificationsConfirm() {
 
       let expand = [];
@@ -2989,9 +2874,21 @@ export default {
       this.dialogVideoVisible = true
 
     },
+    handleVideoRemove(){
+      this.introVideoUrl = ''
+      this.basicForm.video_url = ''
+    },
     handleSingleImagePreview(file) {
       this.dialogSingleImageUrl = file
       this.dialogSingleImageVisible = true;
+    },
+    handleBackgroundPhotoRemove(){
+      this.backgroundPhotoUrl = ''
+      this.basicForm.background_image = ''
+    },
+    handleProfilePhotoRemove(){
+      this.profilePhotoUrl = ''
+      this.basicForm.profile_photo = ''
     },
     beforeAccountImageUpload(file) {
       this.uploadLoadingStatus = true;
@@ -3927,9 +3824,10 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding-right: 10px;
-
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #EEEEEE;
 
 }
@@ -3938,18 +3836,20 @@ export default {
 .language-checkbox-item-l {
   font-size: 20px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  margin-right: 10px;
 }
 
 .language-checkbox-item-r {
   font-size: 20px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  margin-right: 10px;
 }
 
 .language-add-icon {
   position: absolute;
   right: 0;
   top: 0;
-
+  cursor: pointer;
 }
 
 
@@ -3972,6 +3872,22 @@ export default {
 /deep/ .el-date-editor{
   --el-date-editor-width: auto;
 }
+
+.contact-phone-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contact-phone-l{
+  width:35%;
+}
+
+.contact-phone-r{
+  width:60%;
+}
+
 
 
 @media screen and (min-width: 1200px) {

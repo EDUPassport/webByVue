@@ -74,6 +74,7 @@
 
                             <template v-else>
                               <el-select v-model="countryObj"
+                                         :teleported="false"
                                          @change="countryChange"
                                          value-key="id"
                                          filterable
@@ -84,6 +85,7 @@
 
                               <template v-if="provinceOptions.length>0">
                                 <el-select v-model="provinceObj"
+                                           :teleported="false"
                                            value-key="id"
                                            filterable
                                            class="account-location-select"
@@ -95,6 +97,7 @@
                               </template>
                               <template v-if="cityOptions.length>0">
                                 <el-select v-model="cityObj"
+                                           :teleported="false"
                                            value-key="id"
                                            filterable
                                            class="account-location-select"
@@ -163,6 +166,12 @@
                                   <zoom-in/>
                                 </el-icon>
                               </span>
+                              <span @click="handleProfilePhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
+
                             </div>
                           </div>
                         </div>
@@ -203,7 +212,9 @@
                         <div class="contact-phone-container">
                           <div class="contact-phone-l">
                             <!--                    @onChange="onDefaultChange"-->
-                            <el-select v-model="basicForm.country_code" filterable class="m-2" placeholder="Select">
+                            <el-select v-model="basicForm.country_code"
+                                       :teleported="false"
+                                       filterable class="m-2" placeholder="Select">
                               <el-option
                                   v-for="item in phoneCodeData"
                                   :key="item.phone_code"
@@ -218,7 +229,7 @@
                             </el-select>
                           </div>
                           <div class="contact-phone-r">
-                            <el-input v-model="basicForm.work_phone" placeholder="Phone #"></el-input>
+                            <el-input v-model="basicForm.work_phone" type="number" maxlength="25" placeholder="Phone #"></el-input>
                           </div>
                         </div>
                       </el-form-item>
@@ -318,6 +329,11 @@
                                   <zoom-in/>
                                 </el-icon>
                               </span>
+                              <span @click="handleLicensePhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -387,6 +403,11 @@
                                   <zoom-in/>
                                 </el-icon>
                               </span>
+                              <span @click="handleLogoPhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -422,11 +443,12 @@
                                   <zoom-in/>
                                 </el-icon>
                               </span>
-                              <!--                              <span @click="handleVideoRemove(introVideoUrl)">-->
-                              <!--                                <el-icon color="#ffffff" :size="45">-->
-                              <!--                                  <Delete />-->
-                              <!--                                </el-icon>-->
-                              <!--                              </span>-->
+                              <span @click="handleVideoUrlRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
+
                             </div>
                           </div>
                         </div>
@@ -461,6 +483,11 @@
                                 <el-icon color="#ffffff" :size="45">
                                   <zoom-in/>
                                 </el-icon>
+                              </span>
+                              <span @click="handleBackgroundPhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
                               </span>
                             </div>
                           </div>
@@ -651,7 +678,8 @@ export default {
         category_name_en: '',
         category_name_cn: '',
         profile_photo: '',
-        business_reg_img: ''
+        business_reg_img: '',
+        background_image: ''
 
       },
       basicRules: {
@@ -763,6 +791,26 @@ export default {
     handleSingleImagePreview(file) {
       this.dialogSingleImageUrl = file
       this.dialogSingleImageVisible = true;
+    },
+    handleProfilePhotoRemove(){
+      this.profilePhotoUrl = ''
+      this.basicForm.profile_photo = ''
+    },
+    handleLicensePhotoRemove(){
+      this.licensePhotoUrl = ''
+      this.basicForm.license = ''
+    },
+    handleLogoPhotoRemove(){
+      this.logoPhotoUrl = ''
+      this.basicForm.logo = ''
+    },
+    handleVideoUrlRemove(){
+      this.introVideoUrl = ''
+      this.basicForm.video_url = ''
+    },
+    handleBackgroundPhotoRemove(){
+      this.backgroundPhotoUrl = ''
+      this.basicForm.background_image = ''
     },
     changeEditLocation() {
       this.haveLocationStatus = false;

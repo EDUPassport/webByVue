@@ -67,7 +67,7 @@
 
                             <template v-else>
                               <el-select v-model="countryObj"
-                                         :popper-append-to-body="false"
+                                         :teleported="false"
                                          @change="countryChange"
                                          value-key="id"
                                          filterable
@@ -78,6 +78,7 @@
 
                               <template v-if="provinceOptions.length>0">
                                 <el-select v-model="provinceObj"
+                                           :teleported="false"
                                            value-key="id"
                                            filterable
                                            class="account-location-select"
@@ -89,6 +90,7 @@
                               </template>
                               <template v-if="cityOptions.length>0">
                                 <el-select v-model="cityObj"
+                                           :teleported="false"
                                            value-key="id"
                                            filterable
                                            class="account-location-select"
@@ -157,7 +159,9 @@
                         <div class="contact-phone-container">
                           <div class="contact-phone-l">
                             <!--                    @onChange="onDefaultChange"-->
-                            <el-select v-model="basicForm.country_code" filterable class="m-2" placeholder="Select" >
+                            <el-select v-model="basicForm.country_code"
+                                       :teleported="false"
+                                       filterable class="m-2" placeholder="Select" >
                               <el-option
                                   v-for="item in phoneCodeData"
                                   :key="item.phone_code"
@@ -172,7 +176,7 @@
                             </el-select>
                           </div>
                           <div class="contact-phone-r">
-                            <el-input v-model="basicForm.work_phone" placeholder="Phone #"></el-input>
+                            <el-input type="number" v-model="basicForm.work_phone" maxlength="25" placeholder="Phone #"></el-input>
                           </div>
                         </div>
                       </el-form-item>
@@ -238,6 +242,12 @@
                                   <zoom-in />
                                 </el-icon>
                               </span>
+                              <span @click="handleBusinessRegPhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
+
                             </div>
                           </div>
                         </div>
@@ -270,6 +280,11 @@
                                 <el-icon color="#ffffff" :size="45">
                                   <zoom-in />
                                 </el-icon>
+                              </span>
+                              <span @click="handleLicensePhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
                               </span>
                             </div>
                           </div>
@@ -340,6 +355,11 @@
                                   <zoom-in />
                                 </el-icon>
                               </span>
+                              <span @click="handleLogoPhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -374,6 +394,11 @@
                                   <zoom-in/>
                                 </el-icon>
                               </span>
+                              <span @click="handleVideoUrlRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -407,6 +432,11 @@
                                   <zoom-in />
                                 </el-icon>
                               </span>
+                              <span @click="handleBackgroundPhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -439,6 +469,11 @@
                                 <el-icon color="#ffffff" :size="45">
                                   <zoom-in />
                                 </el-icon>
+                              </span>
+                              <span @click="handleProfilePhotoRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
                               </span>
                             </div>
                           </div>
@@ -627,7 +662,8 @@ export default {
         profile_photo:'',
         business_reg_img:'',
         technology_available: '',
-        website:''
+        website:'',
+        background_image:''
       },
       basicRules: {
         company_name: [
@@ -1863,6 +1899,30 @@ export default {
     handleSingleImagePreview(file){
       this.dialogSingleImageUrl = file
       this.dialogSingleImageVisible = true;
+    },
+    handleBusinessRegPhotoRemove(){
+      this.businessRegPhotoUrl = ''
+      this.basicForm.business_reg_img = ''
+    },
+    handleLicensePhotoRemove(){
+      this.licensePhotoUrl = ''
+      this.basicForm.license = ''
+    },
+    handleLogoPhotoRemove(){
+      this.logoPhotoUrl = ''
+      this.basicForm.logo = ''
+    },
+    handleVideoUrlRemove(){
+      this.introVideoUrl = ''
+      this.basicForm.video_url = ''
+    },
+    handleBackgroundPhotoRemove(){
+      this.backgroundPhotoUrl = ''
+      this.basicForm.background_image = ''
+    },
+    handleProfilePhotoRemove(){
+      this.profilePhotoUrl = ''
+      this.basicForm.profile_photo = ''
     },
     beforeAccountImageUpload(file) {
       const isJpeg = file.type === 'image/png' || file.type === 'image/jpg'

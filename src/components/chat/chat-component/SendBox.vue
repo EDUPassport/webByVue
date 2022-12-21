@@ -3,7 +3,9 @@
 
     <div class="send-box-l">
       <div class="send-box-item" @change="chooseFile">
-        <el-icon><Folder /></el-icon>
+        <el-icon :size="25">
+          <IconIcomoonFreeAttachment />
+        </el-icon>
         <input type="file" @change="chooseFile" class="img-input" ref="fileInput">
       </div>
     </div>

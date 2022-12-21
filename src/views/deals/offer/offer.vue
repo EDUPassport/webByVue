@@ -152,6 +152,7 @@
                           <div class="deals-location-select-container">
 
                             <el-select v-model="countryObj"
+                                       :teleported="false"
                                        @change="countryChange"
                                        value-key="id"
                                        filterable
@@ -162,6 +163,7 @@
 
                             <template v-if="provinceOptions.length>0">
                               <el-select v-model="provinceObj"
+                                         :teleported="false"
                                          value-key="id"
                                          filterable
                                          @change="provinceChange"
@@ -172,6 +174,7 @@
                             </template>
                             <template v-if="cityOptions.length>0">
                               <el-select v-model="cityObj"
+                                         :teleported="false"
                                          value-key="id"
                                          filterable
                                          @change="cityChange"
@@ -199,6 +202,7 @@
                           </div>
                           <div class="deals-location-select-container">
                             <el-select v-model="countryObj"
+                                       :teleported="false"
                                        @change="countryChange"
                                        value-key="id"
                                        filterable
@@ -209,6 +213,7 @@
 
                             <template v-if="provinceOptions.length>0">
                               <el-select v-model="provinceObj"
+                                         :teleported="false"
                                          value-key="id"
                                          filterable
                                          @change="provinceChange"
@@ -219,6 +224,7 @@
                             </template>
                             <template v-if="cityOptions.length>0">
                               <el-select v-model="cityObj"
+                                         :teleported="false"
                                          value-key="id"
                                          filterable
                                          @change="cityChange"
