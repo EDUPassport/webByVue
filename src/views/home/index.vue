@@ -475,7 +475,7 @@
             <div class="footer-contact-us">
               <div class="footer-contact-us-label">Contact us</div>
               <div class="footer-contact-us-c">
-                hello@edupassport.io
+                care@edupassport.io
               </div>
             </div>
           </div>
