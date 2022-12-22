@@ -13,7 +13,7 @@
             </div>
 
             <div class="logo-mobile-new-container">
-              <div class="logo-mobile-new">
+              <div class="logo-mobile-new" @click="turnHome()">
                 <el-image class="logo-mobile-new-logo-img" :src="logoImgLogo"></el-image>
               </div>
               <div class="logo-mobile-new-beta">Beta</div>
