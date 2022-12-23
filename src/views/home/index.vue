@@ -491,6 +491,9 @@
           <div class="footer-b-r">
             Make sure to check back soon as we add more information.
           </div>
+          <div class="footer-b-r-mobile">
+            care@edupassport.io
+          </div>
 
         </div>
       </div>
@@ -498,7 +501,7 @@
 
     <initLoadingComponent :loadingStatus="initLoadingStatus" ></initLoadingComponent>
 
-    <homeDonghua></homeDonghua>
+<!--    <homeDonghua></homeDonghua>-->
 
   </div>
 </template>
@@ -522,11 +525,11 @@ import promotionImg from '@/assets/newHome/landing_promotion.png'
 import supportImg from '@/assets/newHome/landing_support.png'
 import {ADD_SUBSCRIBE_EMAIL} from "@/api/api";
 import initLoadingComponent from "@/components/initLoadingComponent";
-import homeDonghua from "@/components/homeDonghua";
+// import homeDonghua from "@/components/homeDonghua";
 import logoImg from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.png"
 import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
 import logoImgLightH from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
-import landingPageMobileResponsiveImg  from '@/assets/newHome/Landing_Page_Mobile_Responsive.png'
+import landingPageMobileResponsiveImg  from '@/assets/newHome/landing_page_mobile_responsive.png'
 import mobileDrawerMenu from "@/components/mobileDrawerMenu";
 // import {loadJs, removeJs} from "@/utils/tools";
 
@@ -534,7 +537,6 @@ export default {
   name: "index",
   components: {
     initLoadingComponent,
-    homeDonghua,
     mobileDrawerMenu
   },
   data() {
@@ -761,10 +763,6 @@ export default {
 
 .logo-new-logo-img{
   width:260px;
-}
-
-.logo-new-logo-mobile-img{
-  display: none;
 }
 
 .logo-edu {
@@ -1220,7 +1218,7 @@ export default {
   cursor: pointer;
   color: #FFFFFF;
   font-size: 25px;
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   margin-right: 50px;
 }
 
@@ -1320,6 +1318,17 @@ export default {
   }
 }
 
+@media screen and (min-width: 769px) {
+  .footer-b-r-mobile{
+    display: none;
+  }
+
+  .logo-new-logo-mobile-img{
+    display: none;
+  }
+
+}
+
 @media screen and (max-width: 768px){
 
   .logo-new-logo-img{
@@ -1333,10 +1342,8 @@ export default {
   }
 
   .logo-new-logo-mobile-img{
-    display: block;
+    width: 80px;
   }
-
-
   .f-col-container{
     padding: 15px;
   }
@@ -1353,7 +1360,7 @@ export default {
   }
 
   .f-tab {
-
+    font-size: 18px;
     padding: 0 25px;
     cursor: pointer;
     margin-top: 15px;
@@ -1463,7 +1470,7 @@ export default {
   }
 
   .s-tips{
-    font-size: 16px;
+    font-size: 12px;
   }
 
 
@@ -1478,10 +1485,12 @@ export default {
 
   .s-container{
     width: auto;
+    margin: 0 15px;
+    padding: 15px;
   }
 
   .s-label{
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .footer-bg-container{
@@ -1489,8 +1498,8 @@ export default {
   }
 
   .footer-t{
-    flex-direction: column;
     align-items: flex-start;
+    justify-content: space-between;
   }
 
   .footer-t-r{
@@ -1499,15 +1508,31 @@ export default {
 
   }
 
+  .footer-logo{
+    width: 80px;
+  }
+
+  .footer-logo-img{
+    width: 80px;
+  }
+
+
+  .footer-contact-us{
+    display: none;
+  }
+
   .footer-menu{
-    margin-top: 10px;
+    /*margin-top: 10px;*/
     flex-direction: column;
     align-items: flex-start;
   }
 
   .footer-menu-item{
-    font-size: 18px;
-    margin-top: 10px;
+    width: 100%;
+    font-size: 12px;
+    margin-bottom: 20px;
+    margin-right: 0;
+    text-align: right;
   }
 
   .footer-contact-us-label{
@@ -1519,16 +1544,22 @@ export default {
   }
 
   .footer-b{
-    flex-direction: column;
+
   }
   .footer-b-l{
     text-align: left;
     width: 100%;
+    font-size: 12px;
   }
 
   .footer-b-r{
+    display: none;
     margin-top: 10px;
     font-size: 16px;
+  }
+  .footer-b-r-mobile{
+    font-size: 12px;
+    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   }
 
   .t-btn-menu-icon-container{

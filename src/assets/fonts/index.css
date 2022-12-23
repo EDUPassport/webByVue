@@ -82,3 +82,13 @@
     font-family: 'Assistant-Medium';
     src: url("Assistant/static/Assistant-Medium.ttf");
 }
+
+@font-face {
+    font-family: 'Montserrat Medium';
+    src: url("Montserrat/static/Montserrat-Medium.ttf");
+}
+
+@font-face {
+    font-family: 'Cabin SemiBold';
+    src: url("Cabin/static/Cabin/Cabin-SemiBold.ttf");
+}

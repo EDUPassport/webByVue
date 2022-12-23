@@ -1,83 +1,222 @@
 <template>
-  <div class="us-bg">
-    <el-row class="banner-row" :gutter="0" align="middle" justify="center">
-      <el-col class="banner-bg" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <h1>About Us</h1>
-      </el-col>
-    </el-row>
-    <el-row class="about-content-row" :gutter="0" align="middle" justify="center">
-      <el-col class="about-content-l" :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
-        <div class="about-label">
-          About <span>EDU Passport</span>
-        </div>
-        <div class="about-label-underline"></div>
-        <p class="about-desc">
-          Education professionals around the world face the same problems. As businesses grapple with high staff turnover rates, broken contracts, and increasing competition, educators dodge scams, battle with discrimination, and fight for equal pay - it's the same story everywhere.
+  <div class="about-us-bg">
+    <h2>Our story</h2>
+    <h5>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed.</h5>
+    <div class="about-us-pic">
+      <el-image class="about-us-pic-img" :src="aboutUsPicImg"></el-image>
+    </div>
+    <div class="about-us-intro">
+      <p>
+        EDU Passport was created to modernize / standardize the beautiful, adventurous, and rewarding world of global education. Many educators and school leaders, in the industry, can relate to our founders experience and reason for conceptualizing EDU Passport. The beautiful exciting EDU industry is often also filled with trouble, scams, racism, unreliability, and much more. Our team and community are set to right the wrongs as well as pave a new road for how a career in education should be.
+      </p>
+    </div>
 
-          EDU Passport is on a mission to put a stop to practices like these and redefine the international education market. We're the world's first hub of information, resources, and impartial support aimed at anyone and everyone in the industry. Our digital platform sets new standards of transparency and accountability, and our in-person services support your professional growth.
+    <div class="about-us-part-2">
+      <h2> <span>EDU Passport will be the the </span>#1 resource <span>in international education by end of 2023.</span> </h2>
 
-          By shining a light on the good and rebuilding the bad, we're erasing the uncertainty and mistrust that plague the sector and helping everyone - educators, recruiters, and businesses - reach their full potential.
-
-          We're not here to find you a job or send you a teacher. We don't accept commission. And we're not your competition.
-
-          Our aim is simply to make the international education market a more ethical and reliable place for everyone in it.
-        </p>
-        <div class="about-read-more">
-          <el-button type="primary">Read More...</el-button>
-        </div>
-      </el-col>
-      <el-col class="about-content-r" :xs="24" :sm="14" :md="14" :lg="14" :xl="14">
-         <el-image class="about-content-img" :src="aboutTeamImg" fit="fill" ></el-image>
-      </el-col>
-    </el-row>
-
-    <el-row class="we-do-row" :gutter="0" align="middle" justify="center">
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <div class="we-do-label">
-          What <span>we do?</span>
-        </div>
-        <div class="we-do-content">
-          <div class="we-do-item">
-            <div class="we-do-icon-container">
-              <i class="iconfont el-icon-aliconnection xll-icon"></i>
+      <div class="about-us-our-values">
+        <h2>Our Values</h2>
+        <div class="about-us-our-values-items">
+          <div class="about-us-our-values-item">
+            <div class="about-us-our-values-item-t">
+              We champion honesty
             </div>
-            <div class="we-do-item-label">CONNECTION</div>
-            <div class="we-do-item-tips">
-              An education hub connecting professionals <br> to education institutions
+            <div class="about-us-our-values-item-b">
+              We work to bring transparency to the international education industry, making it safer and more reliable.
             </div>
           </div>
-          <div class="we-do-item">
-            <div class="we-do-icon-container">
-              <i class="iconfont el-icon-aliabout-list xll-icon"></i>
+          <div class="about-us-our-values-item">
+            <div class="about-us-our-values-item-t">
+              We celebrate diversity
             </div>
-            <div class="we-do-item-label">LISTINGS</div>
-            <div class="we-do-item-tips">
-              An organized registery of professional <br> opportunities worldwide
+            <div class="about-us-our-values-item-b">
+              We promote and reward fair, inclusive employment opportunities.
             </div>
           </div>
-          <div class="we-do-item">
-            <div class="we-do-icon-container">
-              <i class="iconfont el-icon-alieducation xll-icon"></i>
+          <div class="about-us-our-values-item">
+            <div class="about-us-our-values-item-t">
+              We dare to be different
             </div>
-            <div class="we-do-item-label">EDUCATION</div>
-            <div class="we-do-item-tips">
-              Promoting education every step of the way; <br> and we do it well
+            <div class="about-us-our-values-item-b">
+              We're shaking things up in an industry that's stuck in the past.
+            </div>
+          </div>
+          <div class="about-us-our-values-item">
+            <div class="about-us-our-values-item-t">
+              We’re committed to our community
+            </div>
+            <div class="about-us-our-values-item-b">
+              We empower educators and education businesses worldwide. What matters to them matters to us.
             </div>
           </div>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
+
+    <div class="about-us-part-3">
+      <h2>Our team</h2>
+      <div class="about-us-our-team">
+        <swiper
+            :slidesPerView="4"
+            :spaceBetween="30"
+            :slidesPerGroup="4"
+            :loop="true"
+            :loopFillGroupWithBlank="true"
+            :modules="modules"
+            class="mySwiper"
+        >
+          <swiper-slide>
+            <div class="about-us-our-team-item">
+              <div class="about-us-our-team-item-t">
+                <el-image class="about-us-team-item-t-img" :src="aboutUsPicOne"></el-image>
+              </div>
+              <div class="about-us-our-team-item-b">
+                <div class="about-us-our-team-item-b-t">
+                  Lorem ipsum
+                </div>
+                <div class="about-us-our-team-item-b-b">
+                  Lorem ipsum dolor sit amet
+                </div>
+              </div>
+            </div>
+          </swiper-slide>
+          <swiper-slide>
+            <div class="about-us-our-team-item">
+              <div class="about-us-our-team-item-t">
+                <el-image class="about-us-team-item-t-img" :src="aboutUsPicTwo"></el-image>
+              </div>
+              <div class="about-us-our-team-item-b">
+                <div class="about-us-our-team-item-b-t">
+                  Lorem ipsum
+                </div>
+                <div class="about-us-our-team-item-b-b">
+                  Lorem ipsum dolor sit amet
+                </div>
+              </div>
+            </div>
+          </swiper-slide>
+          <swiper-slide>
+            <div class="about-us-our-team-item">
+              <div class="about-us-our-team-item-t">
+                <el-image class="about-us-team-item-t-img" :src="aboutUsPicThree"></el-image>
+              </div>
+              <div class="about-us-our-team-item-b">
+                <div class="about-us-our-team-item-b-t">
+                  Lorem ipsum
+                </div>
+                <div class="about-us-our-team-item-b-b">
+                  Lorem ipsum dolor sit amet
+                </div>
+              </div>
+            </div>
+          </swiper-slide>
+          <swiper-slide>
+            <div class="about-us-our-team-item">
+              <div class="about-us-our-team-item-t">
+                <el-image class="about-us-team-item-t-img" :src="aboutUsPicFour"></el-image>
+              </div>
+              <div class="about-us-our-team-item-b">
+                <div class="about-us-our-team-item-b-t">
+                  Lorem ipsum
+                </div>
+                <div class="about-us-our-team-item-b-b">
+                  Lorem ipsum dolor sit amet
+                </div>
+              </div>
+            </div>
+          </swiper-slide>
+
+        </swiper>
+      </div>
+    </div>
+
+    <div class="about-us-part-4">
+      <h2>Join Team #EDUPassport</h2>
+      <p>Interested in joining the team? Check out our open roles or contact us & tell us more! (link contact us to contact page)</p>
+      <div class="about-us-join-team">
+        <div class="about-us-join-team-item">
+          <div class="about-us-join-team-item-item">Job Title</div>
+          <div class="about-us-join-team-item-item">Department</div>
+          <div class="about-us-join-team-item-item">Location</div>
+          <div class="about-us-join-team-item-item">
+            <el-button plain round>Apply</el-button>
+          </div>
+        </div>
+        <div class="about-us-join-team-item">
+          <div class="about-us-join-team-item-item">Job Title</div>
+          <div class="about-us-join-team-item-item">Department</div>
+          <div class="about-us-join-team-item-item">Location</div>
+          <div class="about-us-join-team-item-item">
+            <el-button plain round>Apply</el-button>
+          </div>
+        </div>
+        <div class="about-us-join-team-item">
+          <div class="about-us-join-team-item-item">Job Title</div>
+          <div class="about-us-join-team-item-item">Department</div>
+          <div class="about-us-join-team-item-item">Location</div>
+          <div class="about-us-join-team-item-item">
+            <el-button plain round>Apply</el-button>
+          </div>
+        </div>
+        <div class="about-us-join-team-item">
+          <div class="about-us-join-team-item-item">Job Title</div>
+          <div class="about-us-join-team-item-item">Department</div>
+          <div class="about-us-join-team-item-item">Location</div>
+          <div class="about-us-join-team-item-item">
+            <el-button plain round>Apply</el-button>
+          </div>
+        </div>
+        <div class="about-us-join-team-item">
+          <div class="about-us-join-team-item-item">Job Title</div>
+          <div class="about-us-join-team-item-item">Department</div>
+          <div class="about-us-join-team-item-item">Location</div>
+          <div class="about-us-join-team-item-item">
+            <el-button plain round>Apply</el-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <newFooter></newFooter>
 
   </div>
 </template>
 
 <script>
-import aboutTeamImg from '@/assets/about/about-team.png'
+import newFooter from '@/layout/components/newFooter'
+import aboutUsPicOne from '@/assets/about/about-us-team-1.png'
+import aboutUsPicTwo from '@/assets/about/about-us-team-2.png'
+import aboutUsPicThree from '@/assets/about/about-us-team-3.png'
+import aboutUsPicFour from '@/assets/about/about-us-team-4.png'
+import aboutUsPicImg from '@/assets/about/about-us-pic.png'
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+
+// Import Swiper styles
+import "swiper/css";
+
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 export default {
   name: "us",
+  components: {
+    Swiper,
+    SwiperSlide,
+    newFooter
+  },
+  setup() {
+    return {
+      modules: [],
+    };
+  },
   data() {
     return {
-      aboutTeamImg
+      aboutUsPicImg,
+      aboutUsPicOne,
+      aboutUsPicTwo,
+      aboutUsPicThree,
+      aboutUsPicFour,
     }
   },
   mounted() {
@@ -88,159 +227,231 @@ export default {
 </script>
 
 <style scoped>
-.us-bg {
-  background-color: #f5f6f7;
-}
-
-.banner-bg {
-  height: 300px;
-  background-color: #000000;
-  background-image: url("../../assets/about/about-us-bg-1.jpg");
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.banner-bg h1 {
-  height: 100%;
-  background-color: rgba(30, 30, 30, 0.6);
-  font-size: 44px;
-  font-weight: bold;
-  color: #FFFFFF;
-  line-height: 300px;
-  text-align: center;
-}
-
-.about-content-row {
-  /*width: 1100px;*/
-  margin: 40px auto;
+.about-us-bg{
   background-color: #FFFFFF;
-  height: 500px;
-  border-radius: 20px;
-  overflow: hidden;
-  text-align: left;
 }
-
-.about-content-l{
-  padding: 20px;
+h2{
+  font-family: "Montserrat Medium", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  color: #6650B3;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 40px;
 }
-
-.about-label{
-  font-size: 22px;
-  color: #FE2060;
-  font-weight: bold;
-}
-
-.about-label span{
-  font-size: 22px;
-  color: #003B48;
-}
-.about-label-underline{
-  border: 1px solid #00b3d2;
-  width: 50px;
-  margin-top: 4px;
-}
-
-.about-desc{
-  font-size: 14px;
-  line-height: 20px;
-  color: #808080;
-  padding: 10px 0;
-}
-.about-content-r{
-  width: 100%;
-  /*height: 100%;*/
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.about-content-img{
-  border-radius: 10px;
-}
-
-.we-do-row{
-  /*width: 1100px;*/
-  margin: 20px auto;
-}
-.we-do-label{
-  font-size: 20px;
-  color: #FE2060;
-  font-weight: bold;
+h5{
+  font-family: "Cabin SemiBold", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   text-align: center;
 }
 
-.we-do-label span{
-  font-size: 26px;
-  color: #003B48;
+.about-us-pic{
+  margin: 50px auto 0;
+  text-align: center;
 }
-.we-do-content{
+.about-us-pic-img{
+  width: 1000px;
+}
+.about-us-intro{
+  max-width: 810px;
+  margin: 50px auto 0;
+}
+.about-us-intro p{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+}
+
+.about-us-part-2{
+  margin-top: 50px;
+}
+.about-us-part-2 h2{
+  width: 940px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 40px;
+}
+.about-us-part-2 h2 span{
+  color: #262626;
+}
+
+.about-us-our-values{
+  margin-top: 90px;
+}
+
+.about-us-our-values-items{
+  width: 1100px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.about-us-our-values-item{
+  flex: 1;
+  margin: 15px;
+}
+
+.about-us-our-values-item-t{
+  font-family: "Cabin SemiBold", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 26px;
+}
+
+.about-us-our-values-item-b{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  margin-top: 15px;
+}
+
+.about-us-our-team{
+  /*margin-top: 50px;*/
+}
+
+
+.swiper {
+  width: 1100px;
+  height: 360px;
+  margin: 50px auto;
+}
+
+.swiper-slide {
+  height: 360px;
+
+}
+
+.about-us-team-item-t-img{
+  width: 100%;
+}
+
+
+.about-us-our-team-item-b-t{
+  font-family: "Cabin SemiBold", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+}
+
+.about-us-our-team-item-b-b{
+  font-family:AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+}
+
+.about-us-part-4{
+
+}
+
+.about-us-part-4 h2{
+  font-size: 40px;
+}
+
+.about-us-part-4 p{
+  text-align: center;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+}
+
+.about-us-join-team{
+  width: 1100px;
+  margin: 50px auto;
+}
+.about-us-join-team-item{
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  margin-top: 20px;
+  justify-content: space-between;
+  border-bottom: 1px solid #262626;
+  padding: 16px 0;
 }
 
-.we-do-item{
-  background-color: #FFFFFF;
-  margin: 10px;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.we-do-item-label{
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.we-do-item-tips{
-  width:60%;
-  margin:0 auto;
-  font-size: 12px;
-  color: #808080;
-  padding: 10px;
-}
-
-.xll-icon{
-  font-size: 140px;
-}
-
-@media screen and (min-width: 1200px){
-  .about-content-row {
-    width: 1100px;
-  }
-  .we-do-row{
-    width: 1100px;
-  }
+.about-us-join-team-item-item{
+  font-size: 22px;
+  font-family: "Cabin SemiBold", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 
 }
 
 @media screen and (max-width: 768px) {
-  .banner-bg{
-    height: 220px;
+  h2{
+    font-size: 24px;
   }
-  .about-content-row{
-    height: auto;
-    border-radius: 0;
-    padding: 20px;
+  h5{
+    font-size: 18px ;
   }
 
-  .about-content-l{
-    border-radius: 0;
+  .about-us-pic{
+    margin-top: 25px;
+  }
+
+  .about-us-pic-img{
+    width: 100%;
+  }
+
+  .about-us-intro{
+    margin-top: 25px;
+  }
+
+  .about-us-intro p{
+
+    font-size: 16px;
+    padding: 0 15px;
+  }
+
+  .about-us-part-2{
+    margin-top: 25px;
+    background-color: #F0F2F5;
+    padding: 25px;
+  }
+
+  .about-us-part-2 h2{
+    width: 100%;
+    font-size: 24px;
+  }
+
+  .about-us-our-values{
+    margin-top: 25px;
+  }
+  .about-us-our-values-items{
+    width: 100%;
+    margin: 25px auto;
+    flex-direction: column;
+  }
+
+  .about-us-our-values-item-t{
+    font-size: 18px;
+  }
+
+  .about-us-our-values-item-b{
+    font-size: 14px;
+  }
+
+  .about-us-part-3{
+    padding: 25px;
+    overflow: hidden;
+  }
+
+  .swiper{
+    /*width:auto;*/
+  }
+
+  .about-us-part-4{
+    padding: 25px;
+    background-color: #F0F2F5;
+  }
+  .about-us-part-4 h2{
+    font-size: 24px;
+  }
+  .about-us-part-4 p{
+    font-size: 16px;
+  }
+
+  .about-us-join-team{
+    width: 100%;
+  }
+
+  .about-us-join-team-item{
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
 
   }
 
-  .we-do-content{
-    flex-direction:column;
-
+  .about-us-join-team-item-item{
+    font-size: 18px;
   }
-
-  .xll-icon{
-    font-size: 64px;
-  }
-
 
 
 
