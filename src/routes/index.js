@@ -79,6 +79,7 @@ const routes = [
                     activeMenu: '/account/home',
                     titleC: 'Post a Job',
                     titleG: 'Post a Job',
+                    requireAuth:true
                 }
             },
             {
@@ -88,6 +89,7 @@ const routes = [
                 meta: {
                     titleC: 'My Posted Jobs',
                     titleG: 'My Posted Jobs',
+                    requireAuth:true
                 }
             },
             {
@@ -97,33 +99,7 @@ const routes = [
                 meta: {
                     titleC: 'Applications',
                     titleG: 'Applications',
-                    auth: true
-                }
-            },
-
-        ]
-
-    },
-    {
-        path: '/info',
-        component: layout,
-        children: [
-            {
-                path: 'company',
-                name: 'companyInfo',
-                component: () => import('@/views/info/company'),
-                meta: {
-                    titleC: 'Company Info',
-                    titleG: 'Company Info',
-                }
-            },
-            {
-                path: 'personal',
-                name: 'personalInfo',
-                component: () => import('@/views/info/personal'),
-                meta: {
-                    titleC: 'Personal Information',
-                    titleG: 'Personal Information',
+                    requireAuth:true
                 }
             },
 
@@ -172,6 +148,7 @@ const routes = [
                 meta: {
                     titleC: 'Post Event',
                     titleG: 'Post Event',
+                    requireAuth:true
                 }
             },
             {
@@ -182,6 +159,7 @@ const routes = [
                     activeMenu: "/perks/home",
                     titleC: 'My Events',
                     titleG: 'My Events',
+                    requireAuth:true
                 }
             },
 
@@ -209,6 +187,7 @@ const routes = [
                     activeMenu: "/perks/home",
                     titleC: 'Offer a Deal',
                     titleG: 'Offer a Deal',
+                    requireAuth:true
                 }
             },
             {
@@ -219,6 +198,7 @@ const routes = [
                     activeMenu: "/perks/home",
                     titleC: 'My Deals',
                     titleG: 'My Deals',
+                    requireAuth:true
                 }
             },
             {
@@ -254,6 +234,7 @@ const routes = [
                 meta: {
                     titleC: 'Overview',
                     titleG: 'Overview',
+                    requireAuth:true
                 }
             },
 
@@ -271,6 +252,7 @@ const routes = [
                 meta: {
                     titleC: 'Account information',
                     titleG: 'Account information',
+                    requireAuth:true
                 }
             },
 
@@ -288,6 +270,7 @@ const routes = [
                 meta: {
                     titleC: 'jobs and applications',
                     titleG: 'jobs and applications',
+                    requireAuth:true
                 }
             },
 
@@ -305,6 +288,7 @@ const routes = [
                 meta: {
                     titleC: 'Chat Messages',
                     titleG: 'Chat Messages',
+                    requireAuth:true
                 }
             },
 
@@ -321,7 +305,8 @@ const routes = [
                 component: () => import('@/views/me/favorites'),
                 meta: {
                     titleC: 'My Favorites',
-                    titleG: 'My Favorites'
+                    titleG: 'My Favorites',
+                    requireAuth:true
                 }
             },
 
@@ -339,6 +324,7 @@ const routes = [
                 meta: {
                     titleC: 'My Ads',
                     titleG: 'My Ads',
+                    requireAuth:true
                 }
             },
             {
@@ -348,6 +334,7 @@ const routes = [
                 meta: {
                     titleC: 'Platform',
                     titleG: 'Platform',
+                    requireAuth:true
                 }
             },
             {
@@ -357,6 +344,7 @@ const routes = [
                 meta: {
                     titleC: 'Target Audience',
                     titleG: 'Target Audience',
+                    requireAuth:true
                 }
             },
             {
@@ -366,6 +354,7 @@ const routes = [
                 meta: {
                     titleC: 'Ads List',
                     titleG: 'Ads List',
+                    requireAuth:true
                 }
             },
             {
@@ -375,6 +364,7 @@ const routes = [
                 meta: {
                     titleC: 'Ads Detail',
                     titleG: 'Ads Detail',
+                    requireAuth:true
                 }
             },
             {
@@ -384,16 +374,9 @@ const routes = [
                 meta: {
                     titleC: 'Ads Redeem',
                     titleG: 'Ads Redeem',
+                    requireAuth:true
                 }
             },
-
-        ]
-
-    },
-    {
-        path: '/profile',
-        component: layout,
-        children: [
 
         ]
 
@@ -419,6 +402,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Add Profile',
                     titleG: 'Add Profile',
+                    requireAuth:true
                 }
             }
 
@@ -447,6 +431,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Edit Recruiter Info',
                     titleG: 'Edit Recruiter Info',
+                    requireAuth:true
                 }
             },
             {
@@ -457,6 +442,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Edit Other Info',
                     titleG: 'Edit Other Info',
+                    requireAuth:true
                 }
             },
             {
@@ -467,6 +453,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Edit School Info',
                     titleG: 'Edit School Info',
+                    requireAuth:true
                 }
             },
         ]
@@ -493,6 +480,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Edit Vendor Info',
                     titleG: 'Edit Vendor Info',
+                    requireAuth:true
                 }
             },
         ]
@@ -626,6 +614,7 @@ const routes = [
                 meta: {
                     titleC: 'Paypal',
                     titleG: 'Paypal',
+                    requireAuth:true
                 }
             },
 
@@ -643,6 +632,7 @@ const routes = [
                 meta: {
                     titleC: 'Perks',
                     titleG: 'Perks',
+                    requireAuth:true
                 }
             },
 
@@ -794,6 +784,17 @@ router.beforeEach((to, from, next) => {
     if (envName === 'development' || envName === 'production') {
         document.title = to.meta.titleG ? to.meta.titleG : defaultTitle;
     }
+    //判断该路由是否需要登录权限
+    if(to.matched.some(record=>record.meta.requireAuth)){
+        const token = localStorage.getItem('token')
+        if(token){
+            next()
+        }else{
+            next({path:'/login'})
+        }
+    }else{
+        next()
+    }
 
     // if (isPhone()) {
     //     let domain = ''
@@ -816,7 +817,7 @@ router.beforeEach((to, from, next) => {
     //     return window.location.href = domain
     // }
 
-    next();
+    // next();
 
 })
 

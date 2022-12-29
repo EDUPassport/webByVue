@@ -221,6 +221,11 @@ app.config.globalProperties.formatDate = function (t) {
     return str;
 }
 
+app.config.globalProperties.validForbid = function (value) {
+    value = value.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,./;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g, '').replace(/\s/g, "");
+    return value;
+}
+
 app.config.globalProperties.GoEasy = GoEasy
 app.config.globalProperties.goEasy = goEasy
 app.config.globalProperties.service = new IMService(goEasy,GoEasy)

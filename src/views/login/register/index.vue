@@ -56,6 +56,8 @@
                     <el-input size="large" placeholder="First Name"
                               @change="inputChange"
                               @input="inputChange"
+                              :formatter="(value)=> validForbid(value) "
+                              :parser="(value) => value.replace(/[^\u4E00-\u9FA5a-zA-Z0-9]/g, '')"
                               v-model="registerForm.first_name">
                     </el-input>
                   </el-form-item>
@@ -63,6 +65,8 @@
                     <el-input size="large" placeholder="Last Name"
                               @change="inputChange"
                               @input="inputChange"
+                              :formatter="(value)=> validForbid(value) "
+                              :parser="(value) => value.replace(/[^\u4E00-\u9FA5a-zA-Z0-9]/g, '')"
                               v-model="registerForm.last_name">
                     </el-input>
                   </el-form-item>
@@ -325,7 +329,6 @@ import {
   EMAIL_REGISTER_V2,
   SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
-  ZOHO_SYNC,
   PHONE_REGISTER_V2
 } from "@/api/api";
 //LINKEDIN_CODE
@@ -529,6 +532,7 @@ export default {
 
   },
   methods: {
+
     test() {
       this.$msgbox({
         title: "All Set",
@@ -762,14 +766,6 @@ export default {
               if (res.code == 200) {
                 // let userInfo = res.message
                 // localStorage.setItem('uid',res.message.id)
-                if (self.identityValue == 1) {
-                  this.submitEducatorContactForm(res.message.id)
-                }
-                if (self.identityValue == 2 || self.identityValue == 3
-                    || self.identityValue == 4 || self.identityValue == 5
-                ) {
-                  this.submitCompanyContactForm(res.message.id)
-                }
 
                 self.submitRegisterLoadingStatus = false
 
@@ -805,16 +801,6 @@ export default {
             EMAIL_REGISTER_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
-                // let userInfo = res.message
-                // localStorage.setItem('uid',res.message.id)
-                if (self.identityValue == 1) {
-                  this.submitEducatorContactForm(res.message.id)
-                }
-                if (self.identityValue == 2 || self.identityValue == 3
-                    || self.identityValue == 4 || self.identityValue == 5
-                ) {
-                  this.submitCompanyContactForm(res.message.id)
-                }
 
                 self.submitRegisterLoadingStatus = false
 
@@ -869,14 +855,6 @@ export default {
             if (res.code == 200) {
               // let userInfo = res.message
               // localStorage.setItem('uid',res.message.id)
-              if (self.identityValue == 1) {
-                this.submitEducatorContactForm(res.message.id)
-              }
-              if (self.identityValue == 2 || self.identityValue == 3
-                  || self.identityValue == 4 || self.identityValue == 5
-              ) {
-                this.submitCompanyContactForm(res.message.id)
-              }
 
               self.submitRegisterLoadingStatus = false
 
@@ -960,171 +938,6 @@ export default {
 
       window.location.href = 'https://www.linkedin.com/oauth/v2/authorization?response_type=' + response_type + '&client_id=' + client_id
           + '&redirect_uri=' + redirect_uri + '&state=' + state + '&scope=' + scope
-
-    },
-    async submitEducatorContactForm(userId) {
-
-      let params = Object.assign({}, this.registerForm)
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {
-          'SingleLine': userId //UserID
-        },
-        {
-          'SingleLine1': params.first_name // First Name
-        },
-        {
-          'SingleLine2': params.last_name //  Last Name
-        },
-        {
-          'Dropdown': '' //  Gender
-        },
-        {
-          'Date': '' //   Date of Birth dd-MMM-yyyy
-        },
-        {
-          'SingleLine3': '' //   Title
-        },
-        {
-          'Email': params.email //   Email
-        },
-        {
-          'PhoneNumber_countrycode': '' //   Phone
-        },
-        {
-          'SingleLine4': '' //   Nationality
-        },
-        {
-          'Dropdown1': '' //   Membership Type
-        },
-        {
-          'MultiLine': '' //   Languages Spoken
-        },
-        {
-          'Number': '' //   Membership Duration
-        },
-        {
-          'SingleLine5': '' //   City
-        },
-        {
-          'SingleLine6': '' //   Province
-        },
-        {
-          'SingleLine7': '' //   Country
-        },
-        {
-          'Dropdown2': '' //   Educator Type
-        },
-        {
-          'MultiLine1': '' //   Education
-        },
-        {
-          'MultiLine2': '' //    Work History
-        },
-        {
-          'Dropdown3': '' //    Teaching Experience
-        },
-        {
-          'MultiLine3': '' //   Certifications
-        },
-        {
-          'MultiLine4': '' //   Educator Intro
-        },
-        {
-          'Website': '' //   Contact image Link
-        },
-        {
-          'Website1': '' //   Intro Video Link
-        }
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-    async submitCompanyContactForm(userId) {
-
-      let params = Object.assign({}, this.registerForm)
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {
-          'SingleLine': userId  //UserID
-        },
-        {
-          'SingleLine1': params.first_name  // First Name
-        },
-        {
-          'SingleLine2': params.last_name  //  Last Name
-        },
-        {
-          'Dropdown': '' //  Gender
-        },
-        {
-          'Date': ''  //   Date of Birth dd-MMM-yyyy params.birthday
-        },
-        {
-          'SingleLine3': ''  //   Title
-        },
-        {
-          'Email': params.email  //   Email
-        },
-        {
-          'PhoneNumber_countrycode': ''  //   Phone
-        },
-        {
-          'SingleLine4': ''  //   Nationality
-        },
-        {
-          'Dropdown1': ''  //   Membership Type
-        },
-        {
-          'Number': ''  //   Membership Duration
-        },
-        {
-          'SingleLine5': ''  //   City
-        },
-        {
-          'SingleLine6': ''  //   Province
-        },
-        {
-          'SingleLine7': ''  //   Country
-        },
-        {
-          'Website': '' //   Contact image Link
-        }
-
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
 
     },
     contactUs() {

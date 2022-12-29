@@ -347,9 +347,9 @@
                             >
                             </el-option>
                           </el-select>
-                          <el-input class="xll-min-salary" v-model="jobForm.salary_min" placeholder="min"></el-input>
+                          <el-input class="xll-min-salary" type="number" v-model="jobForm.salary_min" placeholder="min"></el-input>
                           <div class="xll-salary-line">-</div>
-                          <el-input class="xll-max-salary" v-model="jobForm.salary_max" placeholder="max"></el-input>
+                          <el-input class="xll-max-salary" type="number" v-model="jobForm.salary_max" placeholder="max"></el-input>
                           <el-select class="xll-payment-select"
                                      :teleported="false"
                                      v-model="jobForm.payment_period"

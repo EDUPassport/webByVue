@@ -570,7 +570,7 @@
     </el-dialog>
 
     <el-dialog width="50%" v-model="dialogVideoVisible" center>
-      <video :src="dialogVideoUrl" controls></video>
+      <video style="width: 100%;" :src="dialogVideoUrl" controls></video>
     </el-dialog>
 
     <el-dialog width="50%" v-model="dialogAccountImageVisible" center>

@@ -23,13 +23,19 @@
 
       </el-col>
 
-      <el-col class="t-btn-container" :xs="12" :sm="12" :md="0" :lg="0" :xl="0">
+      <el-col  :xs="12" :sm="12" :md="0" :lg="0" :xl="0">
 
-        <div class="t-btn-menu-icon-container">
-          <el-icon :size="25" color="#6648FF" @click="menuDrawerStatus=true">
-            <IconMaterialSymbolsMenuRounded />
-          </el-icon>
+        <div class="t-mobile-btn-container">
+          <div class="t-mobile-sign-up-free" v-if="!token">
+            <el-button type="primary" round @click="signUp()">Sign up Free</el-button>
+          </div>
+          <div class="t-btn-menu-icon-container">
+            <el-icon :size="25" color="#6648FF" @click="menuDrawerStatus=true">
+              <IconMaterialSymbolsMenuRounded />
+            </el-icon>
+          </div>
         </div>
+
         <mobileDrawerMenu :visible="menuDrawerStatus" @close="menuDrawerStatus=false"></mobileDrawerMenu>
       </el-col>
 
@@ -799,6 +805,17 @@ export default {
 
 .t-btn-container {
   text-align: right;
+}
+
+.t-mobile-btn-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.t-mobile-sign-up-free{
+  margin-right: 15px;
 }
 
 .home-profile-btn{

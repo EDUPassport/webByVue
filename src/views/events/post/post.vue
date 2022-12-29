@@ -256,6 +256,7 @@
                           </el-col>
                           <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
                             <el-input v-model="basicForm.pay_money"
+                                      type="number"
                                       placeholder="amount per ticket">
                             </el-input>
                           </el-col>

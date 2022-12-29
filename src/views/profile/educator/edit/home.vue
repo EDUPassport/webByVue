@@ -53,6 +53,7 @@
                       <el-form-item label="Nationality" prop="nationality">
                         <el-select v-model="basicForm.nationality"
                                    filterable
+                                   fit-input-width
                                    :teleported="false"
                                    placeholder="Select your nationality">
                           <el-option v-for="(item,i) in nationalityOptions" :key="i" :label="item.name"
@@ -1049,7 +1050,7 @@
                           </div>
                         </div>
                         <el-dialog width="50%" v-model="dialogVideoVisible" center>
-                          <video :src="dialogVideoUrl" controls></video>
+                          <video style="width: 100%;" :src="dialogVideoUrl" controls></video>
                         </el-dialog>
 
                       </el-form-item>
@@ -1572,7 +1573,20 @@ export default {
       languageObj.level = level.value
       languageObj.level_name = level.label
 
-      this.selectedLanguageList.push(languageObj)
+      let selectedLanguageList = this.selectedLanguageList;
+
+      let index = selectedLanguageList.findIndex( (item)=>{
+
+        if(item.id === languageObj.id && item.level === languageObj.level){
+          return true;
+        }else{
+          return false;
+        }
+      } )
+
+      if(index == -1){
+        this.selectedLanguageList.push(languageObj)
+      }
 
       this.languageDialogVisible = false;
 
@@ -3858,7 +3872,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
+  height: 80px;
 }
 .duration-mobile-item{
   width: 45%;

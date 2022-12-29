@@ -111,12 +111,12 @@
                             {{ item.object_en }}
                           </div>
                         </div>
-                        <div class="basic-info-c-hobbies">
-                          <div class="basic-info-c-hobby"
-                               v-for="(item,i) in countriesLivedList" :key="i">
-                            {{ item.object_en }}
-                          </div>
-                        </div>
+<!--                        <div class="basic-info-c-hobbies">-->
+<!--                          <div class="basic-info-c-hobby"-->
+<!--                               v-for="(item,i) in countriesLivedList" :key="i">-->
+<!--                            {{ item.object_en }}-->
+<!--                          </div>-->
+<!--                        </div>-->
                         <div class="basic-info-c-hobbies">
                           <div class="basic-info-c-hobby" v-for="(item,i) in hobbiesList" :key="i">
                             #{{ item }}
@@ -148,7 +148,7 @@
                       <el-avatar class="exp-c-item-l-icon"></el-avatar>
                     </div>
                     <div class="exp-c-item-r">
-                      <div class="exp-c-item-1"  @click="turnEditWorkExperience(work)">
+                      <div class="exp-c-item-1"  >
                         {{ work.title }}
                       </div>
                       <div class="exp-c-item-2">
@@ -185,7 +185,7 @@
                       <el-avatar class="education-c-item-l-icon"></el-avatar>
                     </div>
                     <div class="education-c-item-r">
-                      <div class="education-c-item-r-1" @click="turnEditEducation(education)">
+                      <div class="education-c-item-r-1" >
                         {{ education.school_name }}
                       </div>
                       <div class="education-c-item-r-2">
@@ -244,6 +244,16 @@
                   <el-row :gutter="50" >
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <div class="preferences-c-item">
+                        <div class="preferences-c-item-label">Places lived in</div>
+                        <div class="object-show-container" >
+                          <div class="object-show-item" v-for="(item,i) in countriesLivedList" :key="i">
+                            {{ item.object_en }}
+                          </div>
+                        </div>
+                      </div>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <div class="preferences-c-item">
                         <div class="preferences-c-item-label">Certifications</div>
                         <div class="object-show-container" >
                           <div class="object-show-item" v-for="(cer,i) in certificationsList" :key="i">
@@ -272,6 +282,10 @@
                         </div>
                       </div>
                     </el-col>
+
+                  </el-row>
+
+                  <el-row :gutter="50">
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <div class="preferences-c-item">
                         <div class="preferences-c-item-label"> Preferred Age To Teach</div>
@@ -282,9 +296,6 @@
                         </div>
                       </div>
                     </el-col>
-                  </el-row>
-
-                  <el-row :gutter="50">
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <div class="preferences-c-item">
                         <div class="preferences-c-item-label">Preferred Benefits</div>
@@ -304,204 +315,6 @@
             </div>
 
           </el-scrollbar>
-
-
-
-
-
-<!--          <div class="credentials-container">-->
-<!--            <div class="credentials-label">Credentials</div>-->
-<!--            <div class="credentials-content">-->
-<!--              <div class="languages-container">-->
-<!--                <div class="languages-t">-->
-<!--                  <div class="languages-label">Languages</div>-->
-<!--                  <div class="languages-edit" @click="editLanguages()">Edit</div>-->
-<!--                </div>-->
-<!--                <div class="languages-content" v-if="educatorContact.languages">-->
-<!--                  <div class="languages-item" v-for="(item,i) in educatorContact.languages" :key="i">-->
-<!--                    <div class="languages-item-l">{{ item.object_en }}</div>-->
-<!--                    <div class="languages-item-r">-->
-<!--                      <el-rate-->
-<!--                          v-model="item.object_score"-->
-<!--                          disabled-->
-<!--                          :colors="['#99A9BF', '#F7BA2A', '#FF9900']"-->
-<!--                      >-->
-<!--                      </el-rate>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <div class="media-container">-->
-            <!--              <div class="profile-photo-container">-->
-            <!--                <div class="profile-photo-t">-->
-            <!--                  <div class="profile-photo-t-label">Profile Photo</div>-->
-            <!--                </div>-->
-            <!--                <div class="profile-photo-content">-->
-            <!--                  <el-upload-->
-            <!--                      class="profile-uploader"-->
-            <!--                      :action="uploadActionUrl"-->
-            <!--                      :headers="uploadHeaders"-->
-            <!--                      :data="uploadData"-->
-            <!--                      :show-file-list="false"-->
-            <!--                      name="file[]"-->
-            <!--                      :on-success="handleProfilePhotoSuccess"-->
-            <!--                      :before-upload="beforeProfilePhotoUpload"-->
-            <!--                  >-->
-            <!--                    <el-image v-if="profilePhotoUrl" :src="profilePhotoUrl" class="profile-avatar"></el-image>-->
-            <!--                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-            <!--                  </el-upload>-->
-            <!--                </div>-->
-            <!--              </div>-->
-<!--            <div class="background-banner-container">-->
-<!--              <div class="background-banner-t">-->
-<!--                <div class="background-banner-t-label">Background Banner</div>-->
-<!--              </div>-->
-<!--              <div class="background-banner-content">-->
-<!--                <el-upload-->
-<!--                    class="background-uploader"-->
-<!--                    :action="uploadActionUrl"-->
-<!--                    :headers="uploadHeaders"-->
-<!--                    :data="uploadData"-->
-<!--                    :show-file-list="false"-->
-<!--                    name="file[]"-->
-<!--                    :on-success="handleBackgroundSuccess"-->
-<!--                    :before-upload="beforeBackgroundUpload"-->
-<!--                >-->
-<!--                  <el-image v-if="backgroundUrl" :src="backgroundUrl" class="background-avatar"></el-image>-->
-<!--                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-<!--                </el-upload>-->
-
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="account-images-container">-->
-<!--              <div class="account-images-t">-->
-<!--                <div class="account-images-t-label">Account Images(6 max)</div>-->
-<!--                <div class="account-images-t-edit"-->
-<!--                     v-if="!editAccountImageStatus"-->
-<!--                     @click="editAccountImageStatus=true">-->
-<!--                  Edit-->
-<!--                </div>-->
-<!--                <div class="account-images-t-edit"-->
-<!--                     v-if="editAccountImageStatus"-->
-<!--                     @click="uploadAccountImages()">-->
-<!--                  Save-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="account-images-content">-->
-<!--                <div class="account-images-item-container" v-if="!editAccountImageStatus">-->
-<!--                  <div class="account-images-item" v-for="(item,i) in accountImageFileList" :key="i" >-->
-<!--                    <el-image class="account-images-img" :src="item.url" fit="contain"-->
-<!--                              @click="accountImagePreview(item.url)"-->
-<!--                    ></el-image>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <template v-if="editAccountImageStatus">-->
-<!--                  <el-upload-->
-<!--                      ref="accountImagesUpload"-->
-<!--                      action="#"-->
-<!--                      :headers="uploadHeaders"-->
-<!--                      :data="uploadData"-->
-<!--                      :auto-upload="false"-->
-<!--                      name="file[]"-->
-<!--                      list-type="picture-card"-->
-<!--                      :limit="6"-->
-<!--                      :multiple="true"-->
-<!--                      :before-upload="beforeAccountImageUpload"-->
-<!--                      :file-list="accountImageFileList"-->
-<!--                      :on-change="handleAccountImageChange"-->
-<!--                      :on-preview="handleAccountImagePreview"-->
-<!--                      :on-remove="handleAccountImageRemove"-->
-
-<!--                  >-->
-<!--                    <i class="el-icon-plus"></i>-->
-<!--                  </el-upload>-->
-
-<!--                </template>-->
-<!--                <el-dialog width="50%" v-model="dialogAccountImageVisible" center>-->
-<!--                  <el-image :src="dialogAccountImageUrl"></el-image>-->
-<!--                </el-dialog>-->
-
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="intro-video-container">-->
-<!--              <div class="intro-video-t">-->
-<!--                <div class="intro-video-t-label">Intro Video</div>-->
-<!--                <template v-if="introVideoUrl">-->
-<!--                  <div class="intro-video-t-edit"-->
-<!--                       v-if="editVideoStatus"-->
-<!--                       @click="editVideoStatus=false">Edit</div>-->
-<!--                  <div class="intro-video-t-edit"-->
-<!--                       v-else-->
-<!--                       @click="editVideoStatus=true">Cancel</div>-->
-<!--                </template>-->
-
-<!--              </div>-->
-<!--              <div class="intro-video-content">-->
-
-<!--                <el-upload-->
-<!--                    v-if="!editVideoStatus || !introVideoUrl"-->
-<!--                    class="intro-video-uploader"-->
-<!--                    :action="uploadActionUrl"-->
-<!--                    :headers="uploadHeaders"-->
-<!--                    :data="uploadData"-->
-<!--                    :show-file-list="false"-->
-<!--                    name="file[]"-->
-<!--                    :on-success="handleIntroVideoSuccess"-->
-<!--                    :before-upload="beforeIntroVideoUpload"-->
-<!--                >-->
-<!--                  <i class="el-icon-plus avatar-uploader-icon"></i>-->
-<!--                </el-upload>-->
-<!--                <video v-else :src="introVideoUrl" controls class="intro-video-avatar"/>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="my-resume-container">-->
-<!--              <div class="my-resume-t">-->
-<!--                <div class="my-resume-t-label">Your Resume [PDF]</div>-->
-<!--                <template v-if="resumeUrl">-->
-<!--                  <div class="my-resume-t-edit"-->
-<!--                       v-if="editResumeStatus"-->
-<!--                       @click="editResumeStatus=false">Edit</div>-->
-<!--                  <div class="my-resume-t-edit"-->
-<!--                       v-else-->
-<!--                       @click="editResumeStatus=true">Cancel</div>-->
-<!--                </template>-->
-<!--              </div>-->
-<!--              <div class="my-resume-content">-->
-
-<!--                <el-upload-->
-<!--                    v-if="!editResumeStatus || !resumeUrl"-->
-<!--                    drag-->
-<!--                    class="resume-uploader"-->
-<!--                    :action="uploadActionUrl"-->
-<!--                    :headers="uploadHeaders"-->
-<!--                    :data="uploadData"-->
-<!--                    :show-file-list="false"-->
-<!--                    name="file[]"-->
-<!--                    :on-success="handleResumeSuccess"-->
-<!--                    :before-upload="beforeResumeUpload"-->
-<!--                >-->
-<!--                  <el-icon class="el-icon&#45;&#45;upload" :size="80">-->
-<!--                    <upload-filled/>-->
-<!--                  </el-icon>-->
-<!--                  <div class="el-upload__text">-->
-<!--                    Drop file here or <em>click to upload</em>-->
-<!--                  </div>-->
-<!--                  <template #tip>-->
-<!--                    <div class="el-upload__tip">-->
-
-<!--                    </div>-->
-<!--                  </template>-->
-<!--                  &lt;!&ndash;                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>&ndash;&gt;-->
-<!--                </el-upload>-->
-<!--                <a v-else :href="resumeUrl" target="_blank" class="resume-avatar">-->
-<!--                  [PDF] Click to Preview-->
-<!--                </a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
 
         </div>
 
@@ -2639,7 +2452,9 @@ export default {
 }
 
 .educator-r-container-bg{
-  padding:30px 50px 50px 50px;
+  /*padding:30px 50px 50px 50px;*/
+  /*margin:30px 50px 50px 50px;*/
+  margin:30px 0 50px 0;
 }
 
 .account-profile-t{
@@ -2648,6 +2463,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   height:60px;
+  margin: 0 50px;
 }
 
 .account-profile-t-l{
@@ -2669,6 +2485,7 @@ export default {
 
 .profile-c-container{
   height: calc(100vh - 280px);
+
 }
 
 .account-profile-save-btn{
@@ -3667,7 +3484,8 @@ export default {
   background-color:#FFFFFF;
   box-shadow: 0px 3px 23px #00000012;
   border-radius: 18px;
-  margin-bottom:30px;
+
+  margin: 0 50px 30px 50px;
 }
 
 .profile-background-container{
@@ -3820,6 +3638,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .basic-info-c-hobby{
@@ -3833,7 +3652,7 @@ export default {
   background-color:#FFFFFF;
   box-shadow: 0px 3px 23px #00000012;
   border-radius: 18px;
-  margin-bottom:30px;
+  margin: 0 50px 30px 50px;
 }
 
 .exp-container{
@@ -3909,7 +3728,7 @@ export default {
   background-color:#FFFFFF;
   box-shadow: 0px 3px 23px #00000012;
   border-radius: 18px;
-  margin-bottom:30px;
+  margin: 0 50px 30px 50px;
 }
 
 .education-container{
@@ -3984,7 +3803,7 @@ export default {
   background-color:#FFFFFF;
   box-shadow: 0 3px 23px #00000012;
   border-radius: 18px;
-  margin-bottom:30px;
+  margin: 0 50px 30px 50px;
 }
 
 .languages-container{
@@ -4034,7 +3853,7 @@ export default {
   background-color:#FFFFFF;
   box-shadow: 0px 3px 23px #00000012;
   border-radius: 18px;
-  margin-bottom:30px;
+  margin: 0 50px 30px 50px;
 }
 
 .preferences-container{
@@ -4121,11 +3940,13 @@ export default {
 
   .educator-r-container-bg{
     padding: 0;
+    margin: 0;
   }
 
   .account-profile-t{
-    height: 30px;
+    height: 50px;
     padding: 0 15px;
+    margin: 0;
   }
 
   .account-profile-cancel-btn{
@@ -4133,7 +3954,7 @@ export default {
   }
 
   .profile-c-container{
-    height: calc( var(--i-window-height) - 190px);
+    height: calc( var(--i-window-height) - 210px);
   }
 
   .profile-1-container{
