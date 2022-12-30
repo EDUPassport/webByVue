@@ -332,7 +332,6 @@ export default {
         this.getCheckCodeTimer()
         SEND_EMAIL_CODE(params).then(res => {
           if (res.code == 200) {
-
             self.$message.success('Success')
           }
         }).catch(err => {

@@ -82,6 +82,33 @@
               <template v-if="token && token !='' ">
                 <div class="user-container-1">
 
+                  <div class="user-container-1-earth">
+
+                    <el-popover :width="160" >
+
+                      <template #reference>
+                        <el-icon :size="20" >
+                          <IconFa6SolidEarthAmericas />
+                        </el-icon>
+                      </template>
+                      <template #default>
+
+                        <div class="user-container-1-earth-expand">
+                          <div class="user-container-1-earth-international" @click="goInternationalWebsite()">
+                            <span v-if="envName === 'development' || envName === 'production'"></span>
+                            international
+                          </div>
+                          <div class="user-container-1-earth-china" @click="goChinaWebsite()">
+                            <span v-if="envName === 'developmentCN' || envName === 'productionCN'"></span>
+                            Chinese
+                          </div>
+                        </div>
+
+                      </template>
+                    </el-popover>
+
+                  </div>
+
                   <div class="user-1-r">
                     <div class="user-name"> Welcome back, {{ username }}</div>
                     <div class="user-dropdown">
@@ -505,25 +532,6 @@
           <router-link to="/events" exact>EDU Events</router-link>
         </div>
 
-<!--        <template v-if="envName === 'development' || envName === 'production'">-->
-<!--          <div class="nav-link-item" v-if="!identity || identity == 1">-->
-<!--            <span @click="turnEnvJobs()">China Jobs</span>-->
-<!--          </div>-->
-<!--        </template>-->
-
-<!--        <template v-if="envName === 'developmentCN' || envName === 'productionCN'">-->
-<!--          <div class="nav-link-item" v-if="!identity || identity == 1">-->
-<!--           <span  @click="turnEnvJobs()">International Jobs</span>-->
-<!--          </div>-->
-<!--        </template>-->
-
-<!--        <div class="nav-link-item">-->
-<!--          <router-link :to="{path:'/login',query:{}}">Login</router-link>-->
-<!--        </div>-->
-<!--        <div class="nav-link-item">-->
-<!--          <router-link :to="{path: '/signup', query: {}}">Sign Up</router-link>-->
-<!--        </div>-->
-
         <div class="mobile-chose-country">
           <div class="mobile-country-china">
             <el-button link @click="goChinaWebsite()">China</el-button>
@@ -609,7 +617,9 @@ export default {
       inAppPage: 1,
       inAppLimit: 10,
       inAppLastPage: 0,
-      inAppUnreadTotal: 0
+      inAppUnreadTotal: 0,
+
+      showEarthStatus:false
 
     }
   },
@@ -1472,8 +1482,58 @@ export default {
 .user-container-1 {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.user-container-1-earth{
+  margin: 4px 8px 0 0;
+  cursor: pointer;
+  position: relative;
+}
+
+.user-container-1-earth-expand{
+  padding: 15px;
+}
+
+.user-container-1-earth-international{
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-end;
+  cursor: pointer;
+}
+
+.user-container-1-earth-international span{
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #9173ff;
+  margin-right: 10px;
+}
+
+.user-container-1-earth-china{
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+
+}
+
+.user-container-1-earth-china span{
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #9173ff;
+  margin-right: 10px;
 }
 
 .user-avatar {

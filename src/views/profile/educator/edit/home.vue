@@ -1094,9 +1094,9 @@
                             </div>
                           </div>
                         </div>
-                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
-                          <el-image :src="dialogSingleImageUrl"></el-image>
-                        </el-dialog>
+<!--                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>-->
+<!--                          <el-image :src="dialogSingleImageUrl"></el-image>-->
+<!--                        </el-dialog>-->
 
                       </el-form-item>
                     </el-col>
@@ -1138,9 +1138,55 @@
                             </div>
                           </div>
                         </div>
-                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
-                          <el-image :src="dialogSingleImageUrl"></el-image>
-                        </el-dialog>
+<!--                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>-->
+<!--                          <el-image :src="dialogSingleImageUrl"></el-image>-->
+<!--                        </el-dialog>-->
+
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+
+                  <el-row :gutter="50">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Resume" prop="resume_pdf">
+                        <el-upload
+                            class="profile-uploader"
+                            action=""
+                            :headers="uploadHeaders"
+                            :show-file-list="false"
+                            accept=".pdf,.PDF"
+                            :http-request="resumePdfHttpRequest"
+                            :before-upload="beforeResumePdfUpload"
+                        >
+                          <el-icon :size="45">
+                            <IconBiPlusSquare/>
+                          </el-icon>
+                        </el-upload>
+
+                        <div class="account-xll-images">
+                          <div class="account-xll-image">
+                            <div v-if="resumePdfUrl">
+                              <el-icon :size="45">
+                                <IconCiFilePdf />
+                              </el-icon>
+                            </div>
+                            <div class="account-xll-image-mask">
+                              <span @click="handleResumePreview(resumePdfUrl)">
+                                <el-icon color="#ffffff" :size="45">
+                                  <zoom-in/>
+                                </el-icon>
+                              </span>
+                              <span @click="handleResumeRemove()">
+                                 <el-icon color="#ffffff" :size="45">
+                                    <Delete/>
+                                 </el-icon>
+                              </span>
+
+                            </div>
+                          </div>
+                        </div>
+
 
                       </el-form-item>
                     </el-col>
@@ -1159,6 +1205,9 @@
 
     </div>
 
+    <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
+      <el-image :src="dialogSingleImageUrl"></el-image>
+    </el-dialog>
     <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()"></xllLoading>
 
   </div>
@@ -1336,6 +1385,8 @@ export default {
       dialogAccountImageVisible: false,
       accountImageFileList: [],
       resumeUrl: '',
+      resumePdfUrl:'',
+
       dialogVideoVisible: false,
       dialogVideoUrl: '',
       dialogSingleImageVisible: false,
@@ -2011,7 +2062,7 @@ export default {
           }
 
           if (educatorContact.resume_pdf) {
-            this.resumeUrl = educatorContact.resume_pdf
+            this.resumePdfUrl = educatorContact.resume_pdf
             this.basicForm.resume_pdf = educatorContact.resume_pdf
           }
 
@@ -2617,6 +2668,58 @@ export default {
       }
       return isLt2M
     },
+    resumePdfHttpRequest(options) {
+      let self = this;
+      // console.log(options)
+      const formData = new FormData();
+
+      formData.append('token', localStorage.getItem('token'))
+      // console.log(file)
+      let isInChina = process.env.VUE_APP_CHINA
+      if (isInChina === 'yes') {
+        formData.append('file[]', options.file, options.file.name)
+        UPLOAD_BY_ALI_OSS(formData).then(res => {
+          // console.log(res)
+          if (res.code == 200) {
+            let myFileUrl = res.data[0]['file_url'];
+            self.uploadLoadingStatus = false;
+            self.resumePdfUrl = myFileUrl
+            self.basicForm.resume_pdf = myFileUrl
+
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+
+      }
+
+      if (isInChina === 'no') {
+        formData.append('file', options.file, options.file.name)
+        UPLOAD_BY_SERVICE(formData).then(res => {
+          // console.log(res)
+          if (res.code == 200) {
+            let myFileUrl = res.message.file_path;
+            self.uploadLoadingStatus = false;
+            self.resumePdfUrl = myFileUrl
+            self.basicForm.resume_pdf = myFileUrl
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+
+      }
+
+    },
+    beforeResumePdfUpload(file) {
+      this.uploadLoadingStatus = true;
+
+      const isLt2M = file.size / 1024 / 1024 < 20
+
+      if (!isLt2M) {
+        this.$message.error('Avatar picture size can not exceed 20MB')
+      }
+      return isLt2M
+    },
 
     logoPhotoHttpRequest(options) {
       let self = this;
@@ -2888,6 +2991,9 @@ export default {
       this.dialogVideoVisible = true
 
     },
+    handleResumePreview(file){
+      window.open(file,'_blank')
+    },
     handleVideoRemove(){
       this.introVideoUrl = ''
       this.basicForm.video_url = ''
@@ -2903,6 +3009,10 @@ export default {
     handleProfilePhotoRemove(){
       this.profilePhotoUrl = ''
       this.basicForm.profile_photo = ''
+    },
+    handelResumeRemove(){
+      this.resumePdfUrl = ''
+      this.basicForm.resume_pdf = ''
     },
     beforeAccountImageUpload(file) {
       this.uploadLoadingStatus = true;

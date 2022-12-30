@@ -1,6 +1,10 @@
 <template>
   <div class="login-bg">
 
+    <div class="mobile-banner">
+      <div class="mobile-banner-bg"></div>
+    </div>
+
     <el-row justify="center" align="top" class="login-container">
       <el-col :xs="2" :sm="4" :md="4" :lg="4" :xl="4">
         <div class="login-l" @click="turnHome()">
@@ -957,6 +961,7 @@ export default {
   min-height: 100vh;
   background-color: #F0F2F5;
   padding-bottom: 100px;
+  position: relative;
 }
 
 .login-container {
@@ -1265,25 +1270,53 @@ export default {
   color: #262626;
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 769px) {
 
+  .mobile-banner{
+    display: none;
+  }
+  .mobile-banner-bg{
+    display: none;
+  }
 
 }
 
 @media screen and (max-width: 768px) {
+
+  .mobile-banner{
+    position: relative;
+    width: 100%;
+    height: 130px;
+    overflow: hidden;
+  }
+  .mobile-banner .mobile-banner-bg{
+    position: absolute;
+    left: -15%;
+    width: 130%;
+    height: 130px;
+    background-color: #E7DEFF;
+    border-bottom-left-radius: 100%;
+    border-bottom-right-radius: 100%;
+
+  }
+
   .login-bg {
     padding-bottom: 0;
   }
 
   .login-container {
     padding-top: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
   }
 
   .login-m-col {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    /*height: 100vh;*/
   }
 
   .login-l {
@@ -1293,6 +1326,7 @@ export default {
 
   .login-m {
     width: 100%;
+    margin-top: 80px;
   }
 
   .login-m h1 {
