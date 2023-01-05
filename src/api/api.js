@@ -395,3 +395,6 @@ export const SCHOOL_CONVERT_TO_RECRUITER = (params) => post('/home/school/copy/r
 
 // 未读消息详情
 export const EDUCATOR_MANUAL_MATCH_JOB = (params) => get('/home/educator/manual/match/job',params)
+
+// 发布过event的城市
+export const EVENT_LOCATION_LIST = (params) => get('/home/event/location/list',params)

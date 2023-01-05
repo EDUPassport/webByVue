@@ -4,7 +4,7 @@
                style="color: #6650B3;"
                type="primary"
                @click="chat()"
-               :disabled="uuid == currentUser.uuid"
+               :disabled="targetUser.user_id + '#' + identity + '#' + targetUser.id == currentUser.uuid"
     >
       {{ text }}
     </el-button>
@@ -14,7 +14,7 @@
         round
         type="primary"
         @click="chat()"
-        :disabled="uuid == currentUser.uuid"
+        :disabled="targetUser.user_id + '#' + identity + '#' + targetUser.id == currentUser.uuid"
     >
       {{ text }}
     </el-button>
@@ -23,7 +23,7 @@
     <el-button link
                type="primary"
                @click="chat()"
-               :disabled="uuid == currentUser.uuid"
+               :disabled="targetUser.user_id + '#' + identity + '#' + targetUser.id == currentUser.uuid"
     >
       {{ text }}
     </el-button>
@@ -72,9 +72,8 @@ export default {
 
   },
   data() {
-    const uuid = this.targetUser.user_id + '#' + this.identity + '#' + this.targetUser.id
     return {
-      uuid: uuid
+
     }
   },
   methods: {

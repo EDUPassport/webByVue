@@ -17,7 +17,7 @@
             <el-option
                 v-for="item in locationData"
                 :key="item.id"
-                :label="item.Pinyin"
+                :label="item.name"
                 :value="item.id"
             >
             </el-option>
@@ -256,7 +256,7 @@ export default {
         params.city = location
       }
 
-      if(online){
+      if(online && online !== -1){
         params.is_online = online
       }
 

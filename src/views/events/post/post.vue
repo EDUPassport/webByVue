@@ -234,6 +234,7 @@
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="ESL Passport Members Get" prop="type_desc">
                         <el-input v-model="basicForm.type_desc" type="textarea"
+                                  :rows="4"
                                   placeholder="Enter the deal/discount you will offer our members."></el-input>
                       </el-form-item>
                     </el-col>
@@ -410,7 +411,7 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import ImageCompressor from 'compressorjs'
 import {decode} from 'js-base64'
-import {updateWindowHeight} from "@/utils/tools";
+import {updateWindowHeight, eventStartAndEndTimeFormat} from "@/utils/tools";
 
 export default {
   name: "post",
@@ -436,7 +437,7 @@ export default {
   data() {
 
     const checkEventDate = (rule, value, callback) => {
-      console.log(value)
+
       if (!value) {
         return callback(new Error('Please select date'))
       }
@@ -546,7 +547,7 @@ export default {
           {
             required: true,
             validator: checkEventDate,
-            trigger: 'blur',
+            trigger: 'change',
           },
         ],
         file: [
@@ -611,6 +612,14 @@ export default {
     if(str){
       let editStr = JSON.parse(decode(str) )
       console.log(editStr)
+
+      let startTime = editStr.start_time;
+      let endTime = editStr.end_time;
+
+      this.eventDate = editStr.date;
+      this.startTime = eventStartAndEndTimeFormat(startTime)
+      this.endTime = eventStartAndEndTimeFormat(endTime)
+
       this.basicForm = Object.assign({},editStr)
       this.basicForm.event_id = editStr.id;
       this.flyerPhotoUrl = editStr.file;
@@ -814,19 +823,12 @@ export default {
       this.uploadLoadingStatus = false;
     },
     eventDateChange(e) {
-      // console.log(e)
       this.eventDate = e;
     },
     startTimeChange(e) {
-      console.log(e)
       this.startTime = e;
-      let a = e + ':00'
-      console.log(a)
-      let startTime = this.eventDate + ' ' + a
-      console.log(startTime)
     },
     endTimeChange(e) {
-      console.log(e)
       this.endTime = e;
     },
     initMap() {
@@ -970,7 +972,7 @@ export default {
       })
     },
     countryChange(e) {
-      console.log(e)
+
       this.basicForm.state_id = undefined
       this.basicForm.town_id = undefined
 
@@ -984,7 +986,7 @@ export default {
 
     },
     provinceChange(e) {
-      console.log(e)
+
       this.basicForm.town_id = undefined
       this.cityOptions = []
 
@@ -993,9 +995,10 @@ export default {
       this.provinceNameCn = e.name
 
       this.getAllCitys(this.basicForm.country_id, e.id)
+
     },
     cityChange(e) {
-      console.log(e)
+
       this.basicForm.town_id = e.id
       this.cityName = e.name
       this.cityNameCn = e.name
@@ -1048,7 +1051,6 @@ export default {
             })
           }
 
-          // console.log(this.selectCurrencyList)
           this.basicForm.tag = tagsIdData;
           this.basicForm.tags_cn = tagsNameCn.join(',');
           this.basicForm.tags_en = tagsNameEn.join(',');
@@ -1172,6 +1174,7 @@ export default {
 
 .event-date {
   width:100%;
+  height: 50px;
 }
 
 .event-time {

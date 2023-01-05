@@ -137,7 +137,7 @@
 <script>
 import eventFilterComponent from "@/components/eventFilterComponent";
 import bannerImg from '../../assets/events/banner.png'
-import {EVENT_APPLICATIONS, EVENTS_CATEGORY, EVENTS_LIST, TAGS_LIST} from "@/api/api";
+import {EVENT_APPLICATIONS, EVENT_LOCATION_LIST, EVENTS_CATEGORY, EVENTS_LIST, TAGS_LIST} from "@/api/api";
 import eventDetailCard from "@/components/eventDetailCard";
 import bookEventForm from "@/components/bookEventForm";
 import BookEventList from "@/components/bookEventList";
@@ -195,12 +195,23 @@ export default {
         updateWindowHeight()
       }
     }
-
+    this.getEventLocationList()
     this.getEventCategories()
     this.getEventTags()
     this.getEventsList(this.eventPage,this.eventLimit)
   },
   methods:{
+    getEventLocationList(){
+      let params = {}
+      EVENT_LOCATION_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.locationOptions = res.message;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     showBookEvent(item){
       if(item.online_url){
         window.open(item.online_url,'_blank')

@@ -492,7 +492,7 @@
         <div class="footer-b">
 
           <div class="footer-b-l">
-            © 2022 EDU Passport
+            © 2023 EDU Passport
           </div>
           <div class="footer-b-r">
             Make sure to check back soon as we add more information.
