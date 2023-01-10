@@ -141,7 +141,7 @@ import {ref,reactive} from "vue";
 import {
   SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
-  FIND_PASSWORD_BY_PHONE_V2, FIND_PASSWORD_BY_EMAIL_V2
+  FIND_PASSWORD_BY_PHONE_V2, FIND_PASSWORD_BY_EMAIL_V2, SEND_EMAIL_CODE_REST_PASSWORD
 } from "@/api/api";
 
 export default {
@@ -330,13 +330,13 @@ export default {
           email: email
         }
         this.getCheckCodeTimer()
-        SEND_EMAIL_CODE(params).then(res => {
+        SEND_EMAIL_CODE_REST_PASSWORD(params).then(res => {
           if (res.code == 200) {
             self.$message.success('Success')
           }
         }).catch(err => {
           console.log(err)
-          this.$message.error(err.msg)
+          return this.$message.error(err.msg)
         })
       }
 

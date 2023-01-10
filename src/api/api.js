@@ -14,6 +14,10 @@ export const BUSINESS_LIST = (params) => post('business/list', params)
 
 // 使用邮箱获取验证码
 export const SEND_EMAIL_CODE = (params) => post('email/sendEmailCode', params)
+
+// 忘记密码发送邮件
+export const SEND_EMAIL_CODE_REST_PASSWORD = (params) => post('email/forget/password/sendEmailCode', params)
+
 // 使用邮箱注册
 export const EMAIL_REGISTER = (params) => post('email/register', params)
 // 使用邮箱登录
