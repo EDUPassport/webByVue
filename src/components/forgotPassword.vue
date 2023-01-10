@@ -139,7 +139,6 @@
 import {ref,reactive} from "vue";
 
 import {
-  SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
   FIND_PASSWORD_BY_PHONE_V2, FIND_PASSWORD_BY_EMAIL_V2, SEND_EMAIL_CODE_REST_PASSWORD
 } from "@/api/api";
