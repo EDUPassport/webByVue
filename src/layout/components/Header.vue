@@ -1933,6 +1933,10 @@ export default {
 
 @media screen and  (max-width: 768px) {
 
+  .user-container-1-earth{
+    display: none;
+  }
+
   /deep/ .el-drawer{
     background-color: #F0F2F5;
   }

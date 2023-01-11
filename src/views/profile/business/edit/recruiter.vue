@@ -1622,7 +1622,7 @@ export default {
 
     },
     getBasicInfo() {
-
+      let self = this;
       let params = {
         identity: 2
       }
@@ -1668,7 +1668,9 @@ export default {
             this.mapCenterValue = [recruiterInfo.lng, recruiterInfo.lat]
           }
 
-          this.initMap()
+          setTimeout(function () {
+            self.initMap()
+          }, 2000)
 
           if (recruiterInfo.address) {
             this.basicForm.address = recruiterInfo.address;
@@ -1770,7 +1772,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          return this.$message.error(err.msg)
+        }
+
       })
 
     },

@@ -585,7 +585,6 @@
 import xllLoading from "@/components/xllLoading"
 import meSideMenu from "@/components/meSideMenu";
 import {
-  ZOHO_SYNC,
   SWITCH_IDENTITY_V2,
   GET_COUNTRY_LIST,
   USER_SUB_IDENTITY_V2,
@@ -1593,7 +1592,7 @@ export default {
 
     },
     async getBasicInfo() {
-
+      let self = this;
       let params = {
         identity:4
       }
@@ -1645,7 +1644,9 @@ export default {
             this.mapCenterValue = [companyInfo.lng, companyInfo.lat]
           }
 
-          this.initMap()
+          setTimeout(function () {
+            self.initMap()
+          }, 2000)
 
           if (companyInfo.address) {
             this.basicForm.address = companyInfo.address;
@@ -1750,84 +1751,9 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    async submitEduBusinessCompanyForm() {
-
-      let params = Object.assign({}, this.basicForm)
-      let userId = localStorage.getItem('uid')
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'z_gad': ''},
-        {'SingleLine': params.company_name  // Education Business Name
-        },
-        {'Dropdown2': params.business_type_name  //Education Business Category
-        },
-        {'Dropdown': 'Education Business'  //Company Type
-        },
-        {'Website': ''  //Education Business Website
-        },
-        {'SingleLine1': ''  // Education Business Contact
-        },
-        {'Number2': ''  //  Company Number
-        },
-        {'SingleLine5': userId  //UserID
-        },
-        {'PhoneNumber_countrycode': ''  //Education Business Phone
-        },
-        {'Email': ''  // Education Business Email
-        },
-        {'Number': ''   //Number of Employees
-        },
-        {'Number1': ''   //Membership Duration
-        },
-        {'Dropdown1': ''   //Membership Type
-        },
-        {'Address_AddressLine1': ''   //Street Address
-        },
-        {'Address_City': ''   //City
-        },
-        {'Address_Region': ''   //State/Region/Province
-        },
-        {'Address_Country': ''   //Country
-        },
-        {'SingleLine4': ''   //   Business Registration No.
-        },
-        {'MultiLine': ''   //Company Intro
-        },
-        {'SingleLine3': ''   //WeChat ID
-        },
-        {'Number3': ''  //  Number of Branches
-        },
-        {'Number4': ''  //    Number of Students
-        },
-        {'MultipleChoice': ''  //    Students Ages
-        },
-        {'MultiLine1': ''  //     Curriculum Subjects
-        },
-        {'MultiLine2': ''  //     School Facilities
-        },
-        {'Website1': ''  // Business License Link
-        },
-        {'Website2': ''   //Company Logo Link
-        },
-        {'Website3': ''   //Header Image Link
+        if(err.msg){
+          return this.$message.error(err.msg)
         }
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
       })
 
     },

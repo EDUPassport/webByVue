@@ -1718,7 +1718,7 @@ export default {
 
     },
     async getBasicInfo() {
-
+      let self = this;
       let params = {
         identity:5
       }
@@ -1770,7 +1770,9 @@ export default {
             this.mapCenterValue = [companyInfo.lng, companyInfo.lat]
           }
 
-          this.initMap()
+          setTimeout(function (){
+            self.initMap()
+          }, 2000)
 
           if (companyInfo.address) {
             this.basicForm.address = companyInfo.address;
@@ -1875,7 +1877,10 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+         return this.$message.error(err.msg)
+        }
+
       })
 
     },

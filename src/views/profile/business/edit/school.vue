@@ -1775,7 +1775,7 @@ export default {
 
     },
     async getBasicInfo() {
-
+      let self = this;
       let params = {
         identity:3
       }
@@ -1833,7 +1833,10 @@ export default {
             this.mapCenterValue = [schoolInfo.lng, schoolInfo.lat]
           }
 
-          this.initMap()
+          setTimeout(function () {
+            self.initMap()
+          }, 2000)
+
 
           if (schoolInfo.address) {
             this.basicForm.address = schoolInfo.address;
@@ -2018,7 +2021,9 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          return this.$message.error(err.msg)
+        }
       })
 
     },

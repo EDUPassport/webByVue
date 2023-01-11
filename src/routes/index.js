@@ -7,23 +7,6 @@ import appLayout from "@/layout/appLayout";
 const routes = [
 
     {
-        path: '/services',
-        component: layout,
-        redirect: '/services/price',
-        children: [
-            {
-                path: 'price',
-                name: 'servicesPrice',
-                component: () => import('@/views/services/price'),
-                meta: {
-                    titleC: 'Pricing',
-                    titleG: 'Pricing'
-                },
-            },
-        ]
-
-    },
-    {
         path: '/food4edu',
         component: layout,
         redirect: '/food4edu',
@@ -650,6 +633,23 @@ const routes = [
                 meta: {
                     titleC: 'FAQ',
                     titleG: 'FAQ',
+                }
+            },
+
+        ]
+
+    },
+    {
+        path: '/pricing',
+        component: layout,
+        children: [
+            {
+                path: '/pricing',
+                name: 'edupassportPricing',
+                component: () => import('@/views/services/pricing'),
+                meta: {
+                    titleC: 'Pricing',
+                    titleG: 'Pricing',
                 }
             },
 

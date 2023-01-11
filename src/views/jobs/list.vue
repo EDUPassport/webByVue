@@ -552,6 +552,11 @@ export default {
       if (e.student_age) {
         params.age_to_teach = e.student_age
       }
+
+      if(e.work_type){
+        params.work_type = e.work_type
+      }
+
       this.jobLoadingValue = true;
       JOB_LIST(params).then(res => {
         // console.log(res)
@@ -791,6 +796,9 @@ export default {
         params.age_to_teach = e.student_age
       }
 
+      if(e.work_type){
+        params.work_type = e.work_type
+      }
 
       JOB_LIST(params).then(res => {
         // console.log(res)
@@ -1092,6 +1100,9 @@ export default {
         params.age_to_teach = e.student_age
       }
 
+      if(e.work_type){
+        params.work_type = e.work_type
+      }
 
       COMPANY_JOB_LIST(params).then(res=>{
         console.log(res)

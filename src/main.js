@@ -88,6 +88,11 @@ app.use(VueClipboard)
 
 app.config.globalProperties.$store = store
 app.config.globalProperties.$filters = {
+    formatPriceDescription(value){
+      if(value){
+          return value.split('||')
+      }
+    },
     newsDateFormat(value){
         if(value){
             let eParse = new Date(value.replace(/-/g,"/"))
