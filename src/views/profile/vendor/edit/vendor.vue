@@ -673,30 +673,18 @@ export default {
             trigger: 'blur',
           }
         ],
+        work_email: [
+          {
+            type: 'email',
+            required: false,
+            message: 'Please input email',
+            trigger: 'blur',
+          },
+        ],
         desc: [
           {
             required: true,
             message: 'Please input ',
-            trigger: 'blur',
-          },
-        ],
-        work_email:[
-          {
-            required: true,
-            validator: (rule,value,callback)=>{
-              const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
-              if (!value) {
-                return callback(new Error('Please input email'))
-              }
-              setTimeout(() => {
-                if (mailReg.test(value)) {
-                  callback()
-                } else {
-                  callback(new Error('Please input correct email'))
-                }
-              }, 100)
-
-            },
             trigger: 'blur',
           },
         ]

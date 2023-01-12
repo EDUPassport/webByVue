@@ -112,106 +112,96 @@
                   <div class="user-1-r">
                     <div class="user-name"> Welcome back, {{ username }}</div>
                     <div class="user-dropdown">
-                      <template v-if="isThirdCompanyStatus == 1">
-                         <span class="el-dropdown-link">
-                            <template v-if="identity == 0">Guest</template>
-                            <template v-if="identity == 1">Educator</template>
-                            <template v-if="identity == 2">Edu-Business</template>
-                            <template v-if="identity == 3">Edu-Business</template>
-                            <template v-if="identity == 4">Edu-Business</template>
-                            <template v-if="identity == 5">Vendor</template>
-                          </span>
-                      </template>
-                      <template v-else>
 
-                        <div class="user-dropdown-ll">
-                          <div class="user-dropdown-bell">
-                            <el-popover :width="330">
-                              <template #reference>
-                                <el-icon class="circle-circle" :size="20" color="#6650B3"
-                                         v-if="unreadTotal>0 || inAppUnreadTotal > 0">
-                                  <IconBiBellFill></IconBiBellFill>
-                                  <span class="circle-red"></span>
-                                </el-icon>
-                                <el-icon :size="20" v-else>
-                                  <IconBiBell></IconBiBell>
-                                </el-icon>
+                      <div class="user-dropdown-ll">
 
-                              </template>
-                              <template #default>
+                        <div class="user-dropdown-bell" v-if="isThirdCompanyStatus != 1">
+                          <el-popover :width="330">
+                            <template #reference>
+                              <el-icon class="circle-circle" :size="20" color="#6650B3"
+                                       v-if="unreadTotal>0 || inAppUnreadTotal > 0">
+                                <IconBiBellFill></IconBiBellFill>
+                                <span class="circle-red"></span>
+                              </el-icon>
+                              <el-icon :size="20" v-else>
+                                <IconBiBell></IconBiBell>
+                              </el-icon>
 
-                                <div class="notification-c">
-                                  <div class="notification-all-read"
-                                       @click="setInAppReadAll()"
+                            </template>
+                            <template #default>
+
+                              <div class="notification-c">
+                                <div class="notification-all-read"
+                                     @click="setInAppReadAll()"
+                                >
+                                  Mark all as read
+                                </div>
+
+                                <div class="notification-items"
+                                     v-infinite-scroll="loadUserUnreadMore">
+
+                                  <div class="notification-item"
+                                       v-for="(item,i) in inAppNotificationData" :key="i"
                                   >
-                                    Mark all as read
-                                  </div>
-
-                                  <div class="notification-items"
-                                       v-infinite-scroll="loadUserUnreadMore">
-
-                                    <div class="notification-item"
-                                         v-for="(item,i) in inAppNotificationData" :key="i"
-                                    >
-                                      <div class="notification-item-time">
-                                        {{ $filters.howLongFormat(item.c_time) }}
-                                      </div>
-
-                                      <div class="notification-item-c">
-                                        <div class="notification-item-c-l"
-                                             :class="item.is_read ? '' : 'no-read-1'"
-                                        >
-                                          <template v-if="item.type == 1">
-                                            <el-icon :size="20">
-                                              <IconEduApplicationNofill20/>
-                                            </el-icon>
-                                          </template>
-                                          <template v-else-if="item.type == 2">
-                                            <el-icon :size="20">
-                                              <IconEduPerksNofill20/>
-                                            </el-icon>
-                                          </template>
-                                          <template v-else>
-                                            <el-icon :size="20">
-                                              <IconBiCardText/>
-                                            </el-icon>
-                                          </template>
-
-                                        </div>
-                                        <div class="notification-item-c-r"
-                                             @click="setInAppRead(item.id,item.identity,i)"
-                                             :class="item.is_read ? '' : 'no-read-2' "
-                                        >
-                                          {{ item.desc }}
-                                        </div>
-
-                                      </div>
+                                    <div class="notification-item-time">
+                                      {{ $filters.howLongFormat(item.c_time) }}
                                     </div>
 
-                                  </div>
+                                    <div class="notification-item-c">
+                                      <div class="notification-item-c-l"
+                                           :class="item.is_read ? '' : 'no-read-1'"
+                                      >
+                                        <template v-if="item.type == 1">
+                                          <el-icon :size="20">
+                                            <IconEduApplicationNofill20/>
+                                          </el-icon>
+                                        </template>
+                                        <template v-else-if="item.type == 2">
+                                          <el-icon :size="20">
+                                            <IconEduPerksNofill20/>
+                                          </el-icon>
+                                        </template>
+                                        <template v-else>
+                                          <el-icon :size="20">
+                                            <IconBiCardText/>
+                                          </el-icon>
+                                        </template>
 
-                                  <div class="im-msg-container">
-                                    <el-button class="im-msg-btn" plain round
-                                               @click="turnChatPage()">
-                                      <el-icon :size="20">
-                                        <IconEduChatNofill20/>
-                                      </el-icon>
-                                      <span>{{ unreadTotal }}</span>
-                                    </el-button>
+                                      </div>
+                                      <div class="notification-item-c-r"
+                                           @click="setInAppRead(item.id,item.identity,i)"
+                                           :class="item.is_read ? '' : 'no-read-2' "
+                                      >
+                                        {{ item.desc }}
+                                      </div>
+
+                                    </div>
                                   </div>
 
                                 </div>
 
-                              </template>
-                            </el-popover>
+                                <div class="im-msg-container">
+                                  <el-button class="im-msg-btn" plain round
+                                             @click="turnChatPage()">
+                                    <el-icon :size="20">
+                                      <IconEduChatNofill20/>
+                                    </el-icon>
+                                    <span>{{ unreadTotal }}</span>
+                                  </el-button>
+                                </div>
 
-                          </div>
+                              </div>
 
-                          <el-dropdown size="large"
-                                       trigger="click"
-                                       :hide-on-click="false"
-                                       popper-class="xll-dropdown"
-                          >
+                            </template>
+                          </el-popover>
+
+                        </div>
+
+                        <el-dropdown size="large"
+                                     trigger="click"
+                                     :hide-on-click="false"
+                                     popper-class="xll-dropdown"
+                        >
 
                           <span class="el-dropdown-link">
 
@@ -227,9 +217,28 @@
 
                           </span>
 
-                            <template #dropdown>
-                              <el-dropdown-menu>
+                          <template #dropdown>
+                            <el-dropdown-menu>
+                              <template v-if="isThirdCompanyStatus == 1">
+                                <el-dropdown-item
+                                    @click="turnOverview()"
+                                >
+                                  <el-icon>
+                                    <IconMaterialSymbolsDashboardOutlineRounded/>
+                                  </el-icon>
 
+                                  <span class="el-dropdown-link-1">DASHBOARD</span>
+
+                                </el-dropdown-item>
+                                <el-dropdown-item  @click="returnMySelf()">
+                                  <el-icon>
+                                    <IconAkarIconsArrowBackThick/>
+                                  </el-icon>
+                                  <span class="el-dropdown-link-1"> RETURN TO MY ACCOUNT</span>
+
+                                </el-dropdown-item>
+                              </template>
+                              <template v-else>
                                 <el-dropdown-item
                                     @click="turnOverview()"
                                 >
@@ -407,20 +416,6 @@
 
                                 </el-dropdown-item>
 
-
-                                <!--                                <el-dropdown-item @click="dialogDiscountCardVisible=true">-->
-                                <!--                                  My Discount Card-->
-                                <!--                                </el-dropdown-item>-->
-
-                                <!--                                v-if="isThirdCompanyStatus == 1"-->
-                                <el-dropdown-item v-if="isThirdCompanyStatus == 1" @click="returnMySelf()">
-                                  <el-icon>
-                                    <IconAkarIconsArrowBackThick/>
-                                  </el-icon>
-                                  <span class="el-dropdown-link-1"> RETURN TO MY ACCOUNT</span>
-
-                                </el-dropdown-item>
-
                                 <el-dropdown-item @click="loginOut()">
                                   <el-icon>
                                     <IconIcBaselineLogout/>
@@ -428,17 +423,16 @@
                                   <span class="el-dropdown-link-1">  LOG OUT</span>
 
                                 </el-dropdown-item>
+                              </template>
+
+                            </el-dropdown-menu>
+                          </template>
+
+                        </el-dropdown>
 
 
-                              </el-dropdown-menu>
-                            </template>
+                      </div>
 
-                          </el-dropdown>
-
-
-                        </div>
-
-                      </template>
 
                     </div>
                   </div>

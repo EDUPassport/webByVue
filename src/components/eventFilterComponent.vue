@@ -9,7 +9,9 @@
         <div class="filter-item">
           <div class="filter-label">Location</div>
           <el-select class="filter-select"
-                     v-model="locationValue" clearable
+                     v-model="locationValue"
+                     filterable
+                     clearable
                      placeholder="Filter by location"
                      size="default"
                      @change="locationChange"

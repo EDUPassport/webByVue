@@ -16,6 +16,7 @@
             <el-select class="jobs-filter-select"
                        v-model="locationValue"
                        clearable
+                       filterable
                        :placeholder="locationPlaceholder"
                        @change="locationChange"
                        size="default">

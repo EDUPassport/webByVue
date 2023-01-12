@@ -597,6 +597,7 @@ export default {
 
       email: [
         {
+          type:'email',
           required: true,
           message: 'Please enter your email',
           trigger: 'change',
@@ -623,6 +624,7 @@ export default {
     const contributorRules = reactive({
       email: [
         {
+          type:'email',
           required: true,
           message: 'One email per invitation',
           trigger: 'change',

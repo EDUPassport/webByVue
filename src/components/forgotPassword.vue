@@ -305,12 +305,10 @@ export default {
         let params = {
           phone:phone
         }
-        this.getCheckCodeTimer()
-
         WEIXIN_SEND_SMS(params).then(res=>{
           console.log(res)
           if(res.code === 200){
-
+            this.getCheckCodeTimer()
             this.$message.success('Success')
           }
         }).catch(err=>{
@@ -328,9 +326,10 @@ export default {
         let params = {
           email: email
         }
-        this.getCheckCodeTimer()
+
         SEND_EMAIL_CODE_REST_PASSWORD(params).then(res => {
           if (res.code == 200) {
+            self.getCheckCodeTimer()
             self.$message.success('Success')
           }
         }).catch(err => {

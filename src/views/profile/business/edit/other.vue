@@ -155,7 +155,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item  label="E-mail address">
+                      <el-form-item  label="E-mail address" prop="work_email">
                         <el-input v-model="basicForm.work_email" placeholder="Your email address"></el-input>
                       </el-form-item>
                     </el-col>
@@ -691,6 +691,14 @@ export default {
             message: 'Please input ',
             trigger: 'blur',
           }
+        ],
+        work_email: [
+          {
+            type: 'email',
+            required: false,
+            message: 'Please input email',
+            trigger: 'blur',
+          },
         ],
         desc: [
           {

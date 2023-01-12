@@ -494,7 +494,7 @@ export default {
           {required: true, message: 'Please fill out your code.', trigger: 'blur'}
         ],
         email: [
-          {required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+          {type: 'email' , required: true, message: 'Please fill out your email address.', trigger: 'blur'}
         ],
         password: [
           {required: true, message: 'Please enter your password', trigger: 'blur'}
@@ -676,6 +676,8 @@ export default {
             this.$message.error(err.message)
           }
         })
+      }else{
+        this.$message.error('Please fill out your email address')
       }
 
     },

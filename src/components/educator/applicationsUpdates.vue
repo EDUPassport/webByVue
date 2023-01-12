@@ -11,7 +11,13 @@
         <div class="e-a-item-bg" v-for="(item,i) in myApplyJobData" :key="i">
           <div class="e-a-item">
             <div class="e-a-item-l">
-              <el-avatar class="e-a-item-avatar"></el-avatar>
+              <template v-if="item.job">
+                <el-avatar class="e-a-item-avatar" :src="item.job.company.logo"></el-avatar>
+              </template>
+              <template v-else>
+                <el-avatar class="e-a-item-avatar" ></el-avatar>
+              </template>
+
             </div>
             <div class="e-a-item-m">
               <div class="e-a-item-m-1">{{item.job.company_name}}</div>
