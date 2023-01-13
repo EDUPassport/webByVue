@@ -37,7 +37,7 @@
               </el-icon>
             </div>
             <div class="jobs-favorite" v-else
-                 @click="addFavoriteForFeatured(item.id,1,item.job_title,item.logo,i)">
+                 @click="addFavoriteForFeatured(item.id,1,item.job_title,item.company_logo,i)">
               <el-icon :size="30">
                 <CollectionTag />
               </el-icon>
@@ -81,9 +81,9 @@
                 <div class="jobs-list-item-b-l">
                   <view class="jobs-list-item-work-type">
                     <i class="iconfont el-icon-alishijian"></i>
-                    <span v-if="item.employment_type==1">FT</span>
-                    <span v-if="item.employment_type==2">PT</span>
-                    <span v-if="item.employment_type==3">S</span>
+                    <span v-if="item.employment_type == 1">FT</span>
+                    <span v-if="item.employment_type == 2">PT</span>
+                    <span v-if="item.employment_type == 3">S</span>
                   </view>
 
                 </div>
@@ -126,7 +126,7 @@
               </el-icon>
             </div>
             <div class="jobs-favorite" v-else
-                 @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
+                 @click="addFavorite(item.id,1,item.job_title,item.company_logo,index)">
               <el-icon :size="30">
                 <CollectionTag />
               </el-icon>
@@ -169,9 +169,9 @@
                 <div class="jobs-list-item-b-l">
                   <view class="jobs-list-item-work-type">
                     <i class="iconfont el-icon-alishijian"></i>
-                    <span v-if="item.employment_type==1">FT</span>
-                    <span v-if="item.employment_type==2">PT</span>
-                    <span v-if="item.employment_type==3">S</span>
+                    <span v-if="item.employment_type == 1">FT</span>
+                    <span v-if="item.employment_type == 2">PT</span>
+                    <span v-if="item.employment_type == 3">S</span>
                   </view>
 
                 </div>
@@ -211,7 +211,7 @@
                 </el-icon>
               </div>
               <div class="jobs-favorite" v-else
-                   @click="addFavoriteForFeatured(item.id,1,item.job_title,item.logo,i)">
+                   @click="addFavoriteForFeatured(item.id,1,item.job_title,item.company_logo,i)">
                 <el-icon :size="30">
                   <CollectionTag />
                 </el-icon>
@@ -256,9 +256,9 @@
                   <div class="jobs-list-item-b-l">
                     <view class="jobs-list-item-work-type">
                       <i class="iconfont el-icon-alishijian"></i>
-                      <span v-if="item.employment_type==1">FT</span>
-                      <span v-if="item.employment_type==2">PT</span>
-                      <span v-if="item.employment_type==3">S</span>
+                      <span v-if="item.employment_type == 1">FT</span>
+                      <span v-if="item.employment_type == 2">PT</span>
+                      <span v-if="item.employment_type == 3">S</span>
                     </view>
 
                   </div>
@@ -296,7 +296,7 @@
               </el-icon>
             </div>
             <div class="jobs-favorite" v-else
-                 @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
+                 @click="addFavorite(item.id,1,item.job_title,item.company_logo,index)">
               <el-icon :size="30">
                 <CollectionTag />
               </el-icon>
@@ -340,9 +340,9 @@
                 <div class="jobs-list-item-b-l">
                   <view class="jobs-list-item-work-type">
                     <i class="iconfont el-icon-alishijian"></i>
-                    <span v-if="item.employment_type==1">FT</span>
-                    <span v-if="item.employment_type==2">PT</span>
-                    <span v-if="item.employment_type==3">S</span>
+                    <span v-if="item.employment_type == 1">FT</span>
+                    <span v-if="item.employment_type == 2">PT</span>
+                    <span v-if="item.employment_type == 3">S</span>
                   </view>
 
                 </div>

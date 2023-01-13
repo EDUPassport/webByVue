@@ -912,8 +912,11 @@ export default {
           let uid = localStorage.getItem('uid')
           let identityValue = res.message.return_identity
           let companyIdValue = res.message.return_company_id
+
           this.$store.commit('identity', identityValue)
           this.$store.commit('allIdentityChanged', true)
+
+          this.$store.commit('currentCompanyId', companyIdValue)
 
           localStorage.setItem('identity', identityValue)
           localStorage.setItem('company_id', companyIdValue)

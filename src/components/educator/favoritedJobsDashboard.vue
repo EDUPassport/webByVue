@@ -66,9 +66,13 @@
               </div>
               <div class="e-a-item-r">
                 <div class="e-a-item-r-1">
-                  <!--                <el-button type="primary" round >-->
-                  <!--                  APPLY-->
-                  <!--                </el-button>-->
+                  <el-button v-if="item.type == 1"
+                             type="primary"
+                             round
+                             :loading="selectJobId == item.type_id ? true : false"
+                             @click="applyJob(item.type_id, item.type_title)">
+                    APPLY
+                  </el-button>
                 </div>
               </div>
             </div>
@@ -115,21 +119,40 @@
       </el-scrollbar>
     </div>
 
+    <template v-if="applyVisible">
+      <successMessage :visible="applyVisible"
+                      :title="applyTitle"
+                      :description="applyDescription"
+                      @close="applyVisible=false" >
+      </successMessage>
+    </template>
+
   </div>
 </template>
 
 <script>
-import {GET_FAVORITE_LIST} from "@/api/api";
+import {APPLY_JOBS, GET_FAVORITE_LIST} from "@/api/api";
+import successMessage from "@/components/popup/successMessage";
 
 export default {
   name: "favoritedJobsDashboard",
+  components:{
+    successMessage
+  },
   data(){
    return {
      page:1,
      limit: 8,
      favoriteData:[],
      totalNum:0,
-     type:1
+     type:1,
+
+     selectJobId:0,
+     applyBtnLoading:false,
+     applyVisible:false,
+     applyTitle:'',
+     applyDescription:''
+
    }
   },
   mounted(){
@@ -173,7 +196,62 @@ export default {
     },
     viewAll(){
       this.$router.push({path:'/favorites'})
+    },
+    applyJob(jobId, jobTitle) {
+      let identity = localStorage.getItem('identity')
+      let token = localStorage.getItem('token')
+      this.selectJobId = jobId;
+
+      if(token){
+
+        if (identity == 1) {
+          let params = {
+            job_id: jobId,
+            token: token
+          }
+
+          APPLY_JOBS(params).then(res => {
+            if (res.code == 200) {
+              // this.$message.success('Apply Success')
+              this.selectJobId = 0;
+              this.applyVisible = true;
+              this.applyTitle = 'Success'
+              this.applyDescription = 'Your Application to ' + jobTitle + ' has been successfully sent.'
+
+            }
+          }).catch(err=>{
+            console.log(err)
+            // this.$message.error(err.msg)
+            this.applyVisible = true;
+            this.applyTitle = 'Warning'
+            this.applyDescription = err.msg
+
+            this.selectJobId = 0;
+
+          })
+
+        } else {
+
+          this.applyVisible = true;
+          this.applyTitle = 'Warning'
+          this.applyDescription = 'Please switch to an educator profile to be able to apply'
+
+          // this.$message.warning('Please switch to an educator profile to be able to apply')
+          this.selectJobId = 0;
+
+        }
+
+
+      }else{
+        this.applyVisible = true;
+        this.applyTitle = 'Warning'
+        this.applyDescription = ' Please log in & fill in your profile to be able to apply.'
+      }
+
+
     }
+
+
   }
 
 }
@@ -296,10 +374,10 @@ export default {
     padding: 0;
   }
   .e-a-item{
-    padding: 15px;
+    padding: 15px 15px 50px 15px;
     box-shadow: 0px 0px 10px #00000012;
     border-radius: 18px;
-
+    position: relative;
   }
 
   .e-a-item-l{
@@ -325,7 +403,10 @@ export default {
   }
 
   .e-a-item-r{
-    display: none;
+    width: auto;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
   }
 }
 

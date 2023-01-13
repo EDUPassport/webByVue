@@ -92,8 +92,8 @@
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="E-mail address" prop="email">
-                        <el-input v-model="basicForm.email" placeholder="Your email address"></el-input>
+                      <el-form-item label="E-mail address" prop="educator_email">
+                        <el-input v-model="basicForm.educator_email" placeholder="Your email address"></el-input>
                       </el-form-item>
                     </el-col>
 
@@ -1291,7 +1291,7 @@ export default {
         video_url: '',
         country_code:'+86',
         phone: '',
-        email: '',
+        educator_email: '',
         address: '',
         bio: '',
         is_seeking: 0,
@@ -1332,7 +1332,7 @@ export default {
             trigger: 'change',
           },
         ],
-        email: [
+        educator_email: [
           {
             type: 'email',
             required: true,
@@ -2099,9 +2099,9 @@ export default {
           }
 
           if (educatorContact.email) {
-            this.basicForm.email = educatorContact.email;
+            this.basicForm.educator_email = educatorContact.email;
           } else {
-            this.basicForm.email = userContact.email;
+            this.basicForm.educator_email = userContact.email;
           }
 
           if (educatorContact.address) {
@@ -3013,7 +3013,7 @@ export default {
       this.profilePhotoUrl = ''
       this.basicForm.profile_photo = ''
     },
-    handelResumeRemove(){
+    handleResumeRemove(){
       this.resumePdfUrl = ''
       this.basicForm.resume_pdf = ''
     },
