@@ -188,6 +188,25 @@
                           <el-button plain round @click="editJob(item.id)">
                             EDIT
                           </el-button>
+
+                          <el-dropdown class="da-more-dropdown" :hide-on-click="false" trigger="click">
+                            <el-button link type="primary">
+                              <el-icon :size="20">
+                                <IconIcRoundMoreHoriz />
+                              </el-icon>
+                            </el-button>
+
+                            <template #dropdown>
+                              <el-dropdown-menu>
+                                <el-dropdown-item>
+                                  <el-button link @click="viewUserProfile(item.company_id,item.user_id,item.identity)">
+                                    VIEW PROFILE
+                                  </el-button>
+                                </el-dropdown-item>
+                              </el-dropdown-menu>
+                            </template>
+                          </el-dropdown>
+
                         </el-col>
 
                       </el-row>
@@ -1095,6 +1114,53 @@ export default {
     },
     chatSuccess(){
       this.turnChatPage()
+    },
+    viewUserProfile(companyId, userId, roleValue) {
+      if (roleValue == 1) {
+        let obj = {
+          cid: companyId,
+          uid: userId,
+          identity: 1
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path: '/educator/profile', query: {str: str}})
+      }
+      if (roleValue == 2) {
+        let obj = {
+          cid: companyId,
+          uid: userId,
+          identity: 2
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path: '/business/profile', query: {str: str}})
+      }
+      if (roleValue == 3) {
+        let obj = {
+          cid: companyId,
+          uid: userId,
+          identity: 3
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path: '/business/profile', query: {str: str}})
+      }
+      if (roleValue == 4) {
+        let obj = {
+          cid: companyId,
+          uid: userId,
+          identity: 4
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path: '/business/profile', query: {str: str}})
+      }
+      if (roleValue == 5) {
+        let obj = {
+          cid: companyId,
+          uid: userId,
+          identity: 5
+        }
+        let str = encode(JSON.stringify(obj))
+        this.$router.push({path: '/vendor/profile', query: {str: str}})
+      }
     }
 
 
@@ -1104,6 +1170,10 @@ export default {
 </script>
 
 <style scoped>
+.da-more-dropdown{
+  margin-left: 25px;
+}
+
 .bg {
   background-color: #F0F2F5;
 }

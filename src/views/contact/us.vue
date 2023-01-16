@@ -988,6 +988,77 @@ export default {
 
 @media screen and (max-width: 768px) {
 
+  .contact-us-t-bg{
+    height: 200px;
+  }
+
+  .contact-us-t{
+    padding: 25px;
+    bottom:0;
+  }
+
+  .contact-us-t h1{
+    font-size: 32px;
+  }
+  .contact-us-t p{
+    font-size: 18px;
+  }
+
+  .contact-us-container{
+    margin: 15px;
+    flex-direction: column;
+  }
+
+  .contact-us-l-container{
+    width: auto;
+    padding: 15px;
+    background-color: unset;
+    box-shadow: none;
+  }
+
+  .contact-us-l-label{
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .contact-us-l-tag{
+    font-size: 12px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .contact-us-l-article{
+    font-size: 16px;
+  }
+
+  .contact-us-r-container{
+    padding: 25px;
+    width: calc(100% - 50px);
+  }
+
+  .contact-us-r-label{
+    font-size: 18px;
+  }
+
+  /deep/ .el-collapse-item__header{
+    background-color: unset;
+    line-height: unset;
+    border-bottom: 1px solid #6650B3;
+  }
+
+  /deep/ .el-collapse-item__wrap{
+    background-color: unset;
+
+  }
+
+  .topic-related_q_name{
+    font-size: 16px;
+  }
+
+  .topic-related_q_content{
+    font-size: 14px;
+  }
+
 }
 
 @media screen and (min-width: 769px) and (max-width: 991px) {
