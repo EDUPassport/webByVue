@@ -19,15 +19,20 @@
 
       </template>
       <div class="mobile-menu-drawer-bg">
-
         <div class="nav-link-item">
-          <router-link to="/jobs" exact>EDU Jobs</router-link>
+          <router-link to="/" exact>HOME</router-link>
         </div>
         <div class="nav-link-item">
-          <router-link to="/deals" exact> EDU Deals</router-link>
+          <router-link to="/jobs" exact>EDU JOBS</router-link>
         </div>
         <div class="nav-link-item">
-          <router-link to="/events" exact>EDU Events</router-link>
+          <router-link to="/deals" exact> EDU DEALS</router-link>
+        </div>
+        <div class="nav-link-item">
+          <router-link to="/events" exact>EDU EVENTS</router-link>
+        </div>
+        <div class="nav-link-item">
+          <el-link :underline=false href="https://blogs.edupassport.io/" target="_blank">BLOG</el-link>
         </div>
 
         <template v-if="token">

@@ -116,7 +116,7 @@ export default {
       this.bookEventDialogVisible = true;
     },
     viewAllEvents(){
-      this.$router.push('/events/myEvents')
+      this.$router.push('/events')
     }
 
   }

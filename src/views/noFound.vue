@@ -7,7 +7,13 @@
         <img class="pic-404__child mid" :src="img404Cloud" alt="404" />
         <img class="pic-404__child right" :src="img404Cloud" alt="404" />
       </div>
+
     </div>
+
+    <div class="go-home" >
+      <el-button type="primary" round @click="goHome()">Go Home</el-button>
+    </div>
+
   </div>
 </template>
 
@@ -22,11 +28,20 @@ export default defineComponent({
       img404,
       img404Cloud
     }
+  },
+  methods:{
+    goHome(){
+      this.$router.push({path:'/'})
+    }
   }
 })
 </script>
 
 <style scoped>
+.go-home{
+  text-align: center;
+  margin-top: 50px;
+}
 .wscn-http404-container {
   transform: translate(-50%, -50%);
   position: absolute;

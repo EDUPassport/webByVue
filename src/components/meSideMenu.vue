@@ -270,8 +270,8 @@ export default {
   margin: 0 auto;
   text-align: center;
 
-  font-size: 20px;
-  font-family: BCRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   text-decoration: none;
   color: #262626;
 
@@ -285,8 +285,6 @@ export default {
   background-color: #F0F2F5;
   color: #6650B3 !important;
 }
-
-
 
 .xll-icon-image{
   width: 35px;

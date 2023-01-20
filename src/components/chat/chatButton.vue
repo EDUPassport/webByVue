@@ -31,10 +31,11 @@
 </template>
 
 <script>
-import {ref, computed} from 'vue'
+import {ref, inject, onBeforeMount} from 'vue'
 import {useStore} from 'vuex'
 // import {encode} from 'js-base64'
 import {useRouter} from 'vue-router'
+import {encode } from 'js-base64'
 
 export default {
   name: "chatComponent",
@@ -58,7 +59,38 @@ export default {
       router.push({path: '/chat/messages'})
     }
 
-    const currentUser = computed(() => store.state.currentUser)
+    const currentUser = store.state.currentUser
+
+    const GoEasy = inject('GoEasy');
+    const goEasy = inject('goEasy');
+    let unreadAmount = ref(0);
+
+    function connectGoEasy() {
+      goEasy.connect({
+        id: currentUser.uuid,
+        data: {name: currentUser.name, avatar: currentUser.avatar,companyId: currentUser.companyId, identity: currentUser.identity, uid:currentUser.uid},
+        onSuccess: function () {  //连接成功
+          console.log("GoEasy connect successfully.") //连接成功
+        },
+        onFailed: function (error) { //连接失败
+          console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
+        },
+        onProgress: function (attempts) { //连接或自动重连中
+          console.log("GoEasy is connecting", attempts);
+        }
+      });
+    }
+
+    function setUnreadNumber(content) {
+      unreadAmount.value = content.unreadTotal;
+    }
+
+    onBeforeMount(() => {
+      if (goEasy.getConnectionStatus() === 'disconnected') {
+        connectGoEasy();  //连接goeasy
+      }
+      goEasy.im.on(GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, setUnreadNumber);
+    })
 
     return {
       thumbsSwiper,
@@ -79,9 +111,8 @@ export default {
   methods: {
     chat() {
 
-      let self = this;
       let targetUser = this.targetUser;
-      let user = this.currentUser
+
       let identity = this.identity;
       let uuid = targetUser.user_id + '#' + this.identity + '#' + targetUser.id
 
@@ -89,16 +120,11 @@ export default {
         return false;
       }
 
-      if (this.goEasy.getConnectionStatus() === 'disconnected') {
-        this.service.connect(user);
-      }
-
       let token = localStorage.getItem('token')
       if (!token || token === '') {
         return this.$router.push('/login')
       }
 
-      let type = this.GoEasy.IM_SCENE.PRIVATE;
       let name = '';
       let avatar = '';
 
@@ -112,51 +138,17 @@ export default {
         avatar = targetUser.logo ? targetUser.logo : 'https://oss.esl-passport.cn/educator.png';
       }
 
-      let nowUserInfo = {
+      let obj = {
         uuid: uuid,
-        uid: targetUser.user_id,
         name: name,
-        avatar: avatar,
-        identity: identity,
-        companyId: targetUser.id
+        avatar: avatar
       }
 
-      let textMessage = this.goEasy.im.createTextMessage({
-        text: 'Hello',
-        to: {
-          id: uuid,
-          type: type,
-          data: {
-            uid:targetUser.user_id,
-            name: name,
-            avatar: avatar,
-            identity: identity,
-            companyId: targetUser.id
-          }
-        }
-      });
+      let str = encodeURI(encode(JSON.stringify(obj)));
 
-      let localHistory = [];
-      if (type === this.GoEasy.IM_SCENE.PRIVATE) {
-        localHistory = this.service.getPrivateMessages(uuid);
-      } else {
-        localHistory = this.service.getGroupMessages(uuid);
-      }
-      // console.log(localHistory)
-      localHistory.push(textMessage)
+      let path = '/chat/messages/privatechat/' + targetUser.user_id
 
-      this.goEasy.im.sendMessage({
-        message: textMessage,
-        onSuccess: function (message) {
-          console.log("发送成功.", message);
-          self.setNowChatUserInfo(nowUserInfo)
-          // self.turnChatPage()
-          self.$emit('onSuccess')
-        },
-        onFailed: function (error) {
-          console.log("发送失败:", error);
-        }
-      })
+      this.$router.push({ path: path , query:{str: str  } } )
 
     }
 

@@ -7,8 +7,7 @@
         <div class="price-label-container">
           <div class="price-label-label">We have a plan for you</div>
           <div class="price-label-tips">
-            We have 3 levels of annual memberships with different perks just for you! Start with basic & upgrade at
-            anytime.
+            Whether you are an individual educator or a large business, we have options for you!
           </div>
         </div>
 
@@ -40,10 +39,10 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{ item.money }}/yr
+                    ￥{{ item.money }}
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{ item.dollar }}/yr
+                    ${{ item.dollar }}
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
@@ -96,10 +95,10 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{ item.money }}/yr
+                    ￥{{ item.money }}<span>/annual</span>
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{ item.dollar }}/yr
+                    ${{ item.dollar }}<span>/annual</span>
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
@@ -144,10 +143,10 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{ item.money }}/yr
+                    ￥{{ item.money }}<span>/annual</span>
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{ item.dollar }}/yr
+                    ${{ item.dollar }}<span>/annual</span>
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
@@ -202,10 +201,10 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{ item.money }}/yr
+                    ￥{{ item.money }}
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{ item.dollar }}/yr
+                    ${{ item.dollar }}
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
@@ -252,10 +251,10 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{ item.money }}/yr
+                    ￥{{ item.money }}<span>/annual</span>
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{ item.dollar }}/yr
+                    ${{ item.dollar }}<span>/annual</span>
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
@@ -301,10 +300,10 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{ item.money }}/yr
+                    ￥{{ item.money }}<span>/annual</span>
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{ item.dollar }}/yr
+                    ${{ item.dollar }}<span>/annual</span>
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
@@ -360,10 +359,10 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{ item.money }}/yr
+                    ￥{{ item.money }}
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{ item.dollar }}/yr
+                    ${{ item.dollar }}
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
@@ -410,10 +409,10 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{ item.money }}/yr
+                    ￥{{ item.money }}<span>/annual</span>
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{ item.dollar }}/yr
+                    ${{ item.dollar }}<span>/annual</span>
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
@@ -460,10 +459,10 @@
               <div class="price-item-money-mask">
                 <div class="price-item-money-mask-money">
                   <template v-if="envName==='developmentCN' || envName==='productionCN'">
-                    ￥{{ item.money }}/yr
+                    ￥{{ item.money }}<span>/annual</span>
                   </template>
                   <template v-if="envName==='development' || envName==='production'">
-                    ${{ item.dollar }}/yr
+                    ${{ item.dollar }}<span>/annual</span>
                   </template>
                 </div>
                 <div class="price-item-money-mask-sjx"></div>
@@ -753,7 +752,14 @@ export default {
   font-size: 40px;
 }
 
+.price-item-money-mask-money span{
+  font-family:  "Cabin SemiBold", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 28px;
+  font-weight: bold;
+}
+
 .price-item-actual-money {
+  display: none;
   color: #9173FF;
   font-size: 28px;
   font-family: "Montserrat Regular", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
@@ -887,6 +893,11 @@ export default {
 
   .price-item-money-mask-money{
     font-size: 18px;
+  }
+
+  .price-item-money-mask-money span{
+    font-family:  "Cabin SemiBold", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    font-size: 16px;
   }
 
   .price-item-actual-money{

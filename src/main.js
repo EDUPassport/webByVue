@@ -24,8 +24,6 @@ import VueSocialSharing from 'vue-social-sharing'
 // import gAuthPlugin from 'vue3-google-oauth2'
 // import 'amfe-flexible';
 import GoEasy from "goeasy";
-import IMService from "./assets/lib/imservice"
-
 
 import Vue3CountryIntl from 'vue3-country-intl';
 // 引入css
@@ -53,11 +51,6 @@ const i18n = createI18n({
     // ...
 })
 
-const goEasy = GoEasy.getInstance({
-    host:'hangzhou.goeasy.io',//应用所在的区域地址: [hangzhou.goeasy.io, 新加坡暂不支持IM，敬请期待]
-    appkey: 'BC-875758c621384be0b4072dff74c062fd',// common key
-    modules:["im"]
-});
 
 
 const app = createApp(App)
@@ -231,9 +224,14 @@ app.config.globalProperties.validForbid = function (value) {
     return value;
 }
 
-app.config.globalProperties.GoEasy = GoEasy
-app.config.globalProperties.goEasy = goEasy
-app.config.globalProperties.service = new IMService(goEasy,GoEasy)
+const goEasy = GoEasy.getInstance({
+    host:'hangzhou.goeasy.io',//应用所在的区域地址: [hangzhou.goeasy.io, 新加坡暂不支持IM，敬请期待]
+    appkey: 'BC-875758c621384be0b4072dff74c062fd',// common key
+    modules:["im"]
+})
+
+app.provide('GoEasy', GoEasy)
+app.provide('goEasy', goEasy)
 
 app.config.globalProperties.$cookies = VueCookies
 

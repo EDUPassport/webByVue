@@ -4,9 +4,11 @@
       <el-col :xs="0" :sm="0" :md="7" :lg="7" :xl="7">
         <div class="nav-link-container">
 
-          <router-link to="/jobs" exact>EDU Jobs</router-link>
-          <router-link to="/deals" exact> EDU Deals</router-link>
-          <router-link to="/events" exact>EDU Events</router-link>
+          <router-link to="/" exact>HOME</router-link>
+          <router-link to="/jobs" exact>EDU JOBS</router-link>
+          <router-link to="/deals" exact> EDU DEALS</router-link>
+          <router-link to="/events" exact>EDU EVENTS</router-link>
+          <el-link :underline=false href="https://blogs.edupassport.io/" target="_blank">BLOG</el-link>
 
         </div>
 
@@ -52,10 +54,10 @@
         </template>
         <template v-else>
           <el-button link @click="login()">
-            LOGIN
+            Login
           </el-button>
           <el-button type="primary" round @click="signUp()">
-            SIGN UP
+            Sign up Free
           </el-button>
         </template>
 
@@ -70,7 +72,7 @@
       <el-col class="f-col-container" :span="24">
 
         <div class="f-label">
-          an <span>all-in-one</span> hub for
+          The New <span>Global Go-To</span> Education hub for
         </div>
 
         <div class="f-tabs">
@@ -111,10 +113,10 @@
                  @click="checkedItem(1)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  Matchmaking for you and your ideal job
+                  Job Matchmaking
                 </div>
                 <p>
-                  Being educator-centric allows us to suggest the jobs that match educators’ specific requirements and experience.
+                  We will suggest jobs that best suit you based on your set requirements & preferences.
                 </p>
 
               </div>
@@ -132,10 +134,10 @@
                  @click="checkedItem(2)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  Best educators deserve the best deals
+                  Global Savings
                 </div>
                 <p>
-                  We partner up with local vendors to support educators, promote educator-centric events, and offer exclusive deals to our EDU Passport members.
+                  We partner up with vendors globally to show support for those in education. Members enjoy exclusive events, deals, experiences, & more!
                 </p>
 
               </div>
@@ -153,10 +155,10 @@
                  @click="checkedItem(3)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  Having a personal legal support
+                  Dedicated Support
                 </div>
                 <p>
-                  Living abroad often means facing challenges alone, but it doesn’t have to be that way. Your dedicated account manager is only a click or tap away from providing you legal and visa support.
+                  Being an educator overseas, is often rewarding but can be bumpy. Our members enjoy a unique resources, benefits, a Dedicated Account Manager & multilingual care team.
                 </p>
 
               </div>
@@ -203,11 +205,10 @@
                  @click="checkedItem(1)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  Matchmaking for you and your next hire
+                  Job Matchmaking
                 </div>
                 <p>
-                  Being educator-centric allows us to suggest the right candidates matching your job requirements.
-
+                  We will suggest candidates that best suit each vacancy based on your set requirements & preferences.
                 </p>
 
               </div>
@@ -226,10 +227,10 @@
                  @click="checkedItem(2)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  Tracking all applications with ease
+                  Application Tracking
                 </div>
                 <p>
-                  Whether you have 2 applicants or a 102, you will never get confused who is applying for which job, and who you’re going to interview.
+                  Whether you have 2 or 102 applicants, you will never get confused who is applying for which job, what hiring stage they are at, & more!
                 </p>
 
               </div>
@@ -248,10 +249,10 @@
                  v-if="selectIdentityType !== 3">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-                  A direct line to your candidates
+                  Modern Communication
                 </div>
                 <p>
-                  Hire high-quality candidates faster by contacting them directly to get important questions answered quickly.
+                  High quality applicants prefer fast, modern, safe tools when job seeking in 2023 - we are all of those!
                 </p>
 
               </div>
@@ -361,10 +362,10 @@
       <el-col class="d-col-container" :span="24">
         <div class="d-container">
           <div class="d-label">
-            a <span>transparent</span> hiring process
+            Our <span>Transparent</span> Job process
           </div>
           <div class="d-tips">
-            No more guessing whether your application has been received, viewed, thrown away.
+            Other education job boards just don’t compare! Enjoy searching, applying, & interviewing for global positions with ease.
           </div>
           <div class="d-c-bg">
 
@@ -376,7 +377,7 @@
 
           <div>
             <el-button type="primary" round @click="searchJobs()">
-              SEARCH JOBS
+              See All EDU Jobs
             </el-button>
           </div>
         </div>
@@ -385,20 +386,20 @@
 
     <el-row class="a-row-container" :gutter="0" justify="center" align="middle">
       <el-col :xs="22" :sm="22" :md="12" :lg="12" :xl="12">
-        and so <span>much more</span>
+        Plus, so <span>much more</span>!
       </el-col>
     </el-row>
 
     <el-row class="b-row-container" :gutter="0" justify="center" align="middle">
       <el-col :xs="22" :sm="22" :md="8" :lg="8" :xl="8">
         <div class="s-tips" v-if="selectIdentityType === 1">
-          Search and quickly apply for jobs Receive jobs that match your profile Track your application updates.
+          We are just getting started! By end of 2023 we will be used by 80% of the global EDU industry.
         </div>
         <div class="s-tips" v-if="selectIdentityType === 2">
-          A birds-eye view of all applicants and job posts Contact candidates directly in dashboard Recommended applicants that match your job descriptions
+          We are just getting started! By end of 2023 we will be used by 80% of the global EDU industry.
         </div>
         <div class="s-tips" v-if="selectIdentityType === 3">
-          Promote your business and support educators Review performance metrics of your events and deals
+          We are just getting started! By end of 2023 we will be used by 80% of the global EDU industry.
         </div>
 
       </el-col>
@@ -429,11 +430,10 @@
       <el-col class="s-col-container" :span="24">
         <div class="s-container">
           <div class="s-label">
-            subscribe and join <span>our journey</span>
+            Subscribe to follow <span>our journey</span>
           </div>
           <div class="s-tips">
-            As we are growing rapidly, we work hard adding new features. You will only receive the news and updates for
-            EDU Passport and we will never share your address with anyone else.
+            As we continue to grow rapidly, new updates & releases are coming weekly! Sign up for our newsletter to stay in the loop.
           </div>
 
           <div class="s-input-container">
@@ -441,8 +441,8 @@
               <el-input placeholder="Your email address" v-model="subscribeEmailValue"></el-input>
             </div>
             <div class="s-input-r">
-              <el-button link @click="subscribe()">
-                SUBSCRIBE
+              <el-button type="primary" round @click="subscribe()">
+                Subscribe
               </el-button>
             </div>
           </div>
@@ -460,13 +460,13 @@
           <div class="footer-t-r">
             <div class="footer-menu">
               <div class="footer-menu-item" @click="turnJobs()">
-                JOBS
+                EDU Jobs
               </div>
               <div class="footer-menu-item" @click="turnDeals()">
-                DEALS
+                EDU Deals
               </div>
               <div class="footer-menu-item" @click="turnAboutUs()">
-                ABOUT US
+                About Us
               </div>
               <!--            <div class="footer-menu-item" @click="turnFeatures()">-->
               <!--              FEATURES-->
@@ -651,13 +651,13 @@ export default {
     let screenWidthFloor = Math.floor(screenWidth)
 
     if (screenWidthFloor <= 768) {
-      this.homeArrowRightSize = 30
+      this.homeArrowRightSize = 20
     }
 
 
     window.onresize = () => {
       if (screenWidthFloor <= 768) {
-        this.homeArrowRightSize = 30
+        this.homeArrowRightSize = 20
       }
     }
 
@@ -1086,10 +1086,8 @@ export default {
 }
 
 .f-c-l-item {
-  margin-top: 50px;
-  /*margin-bottom: 50px;*/
+  padding: 25px 10px;
   cursor: pointer;
-  padding-left: 10px;
 
   display: flex;
   flex-direction: row;
@@ -1119,7 +1117,7 @@ export default {
   height: 100%;
   top: 0;
   left: 0;
-  background-color: rgba(255,255,255,.3);
+  background-color: rgba(255,255,255,.2);
 }
 
 .f-c-l-item-active {
@@ -1148,7 +1146,7 @@ export default {
 }
 
 .s-container {
-  width: 610px;
+  width: 710px;
   padding: 25px 50px;
   background-color: #F0F2F5;
   box-shadow: 0px 3px 23px #00000012;
@@ -1182,11 +1180,12 @@ export default {
 }
 
 .s-input-l {
-  width: 80%;
+  width: 65%;
+  margin-right: 5%;
 }
 
 .s-input-r {
-  width: 20%;
+  width: 30%;
   text-align: right;
 }
 
@@ -1285,6 +1284,9 @@ export default {
 
 .nav-link-container {
   text-align: left;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .nav-link-container a {
@@ -1292,9 +1294,9 @@ export default {
   text-decoration: none;
   color: #262626;
 
-  font-size: 24px;
+  font-size: 18px;
   line-height: 30px;
-  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .nav-link-container a:hover {
@@ -1366,7 +1368,7 @@ export default {
   }
 
   .f-label{
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .f-tabs {
@@ -1434,10 +1436,11 @@ export default {
   }
 
   .f-c-l-item{
-    margin-top: 20px;
+    padding: 10px;
   }
   .f-c-l-item-r{
-
+    display: flex;
+    align-items: center;
   }
   .f-c-l-item-label{
     font-size: 16px;

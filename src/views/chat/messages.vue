@@ -17,7 +17,7 @@
                   Messages
                 </div>
                 <div class="chat-side-search">
-<!--                  <el-input placeholder="Search chats"></el-input>-->
+
                   <el-select
                       v-model="chatSearchValue"
                       filterable
@@ -621,10 +621,16 @@ export default {
     },
     initialPrivateListeners() {
       let self = this
-
       //传入监听器，收到一条私聊消息总是滚到到页面底部
       this.service.onNewPrivateMessageReceive = (friendId, message) => {
-        console.log('传入监听器，收到一条私聊消息总是滚到到页面底部' + message)
+        console.log('传入监听器，收到一条私聊消息总是滚到到页面底部')
+        console.log(message)
+
+        let messages = []
+        messages.push(...self.messages)
+
+        self.messages = messages;
+
         // let old = this.messages
         // this.messages = []
         // this.messages = old

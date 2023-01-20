@@ -120,7 +120,7 @@ export default {
       this.qrcodeValue = this.webDomain + '?id=' + item.id;
     },
     viewAllDeals(){
-      this.$router.push('/deals/myDeals')
+      this.$router.push('/deals')
     },
     shareDeal(e){
       const locationUrl = window.location.origin;

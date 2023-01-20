@@ -7,46 +7,35 @@
 </template>
 
 <script>
-// import DevicePixelRatio from '@/assets/devicePixelRatio'
-// onMounted
-// import {ref  } from 'vue'
+
+import {onBeforeUnmount, onMounted} from 'vue'
 
 export default {
   name: 'App',
-  components: {
-
-  },
   setup(){
 
-    // const envName = process.env.VUE_APP_ENV_NAME
-    //
-    // const styleValue = ref('')
-    //
-    // if(envName === 'development' || envName === 'developmentCN' || envName === 'productionCN'){
-    //    styleValue.value = 'max-width:1920px;margin:0 auto;'
-    // }
+    function updateWindowHeight() {
+      let windowHeight = window.innerHeight;
+      let html = document.querySelector(":root");
+      if (windowHeight > 0 && html) {
+        html.style.setProperty("--i-window-height", `${windowHeight}px`);
+      }
+    }
 
-    // const bodyScale = () => {
-    //   let devicewidth = document.documentElement.clientWidth;//获取当前分辨率下的可是区域宽度
-    //   document.body.style.zoom =  devicewidth / 1920; //放大缩小相应倍数
-    // }
-    //
-    // onMounted(()=>{
-    //   new DevicePixelRatio().init()
-    //
-    //   // window.onresize = ()=>{
-    //   //   console.log('resize app')
-    //   //   setTimeout(function () {
-    //   //     bodyScale();
-    //   //   },1000)
-    //   //
-    //   // }
-    //   bodyScale();
-    // })
-    //
-    // return {
-    //   styleValue
-    // }
+    onMounted(() => {
+      updateWindowHeight();
+      window.addEventListener('resize', ()=>{
+        updateWindowHeight();
+      })
+
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', ()=>{
+        updateWindowHeight();
+      })
+
+    });
 
   },
   data(){
@@ -58,9 +47,11 @@ export default {
 </script>
 
 <style>
+
 :root {
   --i-window-height: 100vh;
 }
+
 #app{
   background-color:  #F0F2F5;
 }

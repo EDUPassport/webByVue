@@ -203,8 +203,7 @@ import {
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
 // import {onBeforeRouteUpdate} from "vue-router";
-// import {ref} from "vue";
-import {computed} from "vue";
+import { computed} from "vue";
 import {useStore} from 'vuex'
 
 import NewApplications from "@/components/business/newApplications";
@@ -230,9 +229,8 @@ export default {
   },
   setup() {
     const store = useStore()
-    const currentUser = computed(() => store.state.currentUser)
-    // const identity = ref(localStorage.getItem('identity'))
-    //
+    const currentUser = computed(()=>store.state.currentUser)
+
     return {
       currentUser
     }
@@ -301,16 +299,6 @@ export default {
       versionTime:randomString(),
 
     }
-  },
-  beforeMount() {
-
-    let user = this.currentUser
-
-    if (this.goEasy.getConnectionStatus() === 'disconnected') {
-      this.service.connect(user);
-
-    }
-
   },
   unmounted() {
     updateWindowHeight()

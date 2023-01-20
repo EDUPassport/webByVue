@@ -597,29 +597,7 @@ export default {
     this.showValue = this.showType
   },
   methods: {
-    imUnread(user) {
-      let self = this;
-      if (this.goEasy.getConnectionStatus() === 'disconnected') {
-        this.service.connect(user);
-      }
-      //加载会话列表
-      this.goEasy.im.latestConversations({
-        onSuccess: function (res) {
-          console.log('监听会话列表----- me side menu page')
-          let content = res.content;
-          self.$store.commit('setImUnreadTotal', content.unreadTotal)
-        },
-        onFailed: function (error) {
-          console.log("失败获取最新会话列表, code:" + error.code + " content:" + error.content);
-        }
-      });
 
-      //监听会话列表变化
-      this.goEasy.im.on(this.GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, (conversations) => {
-        console.log('监听会话列表变化 ----- me side menu page')
-        self.$store.commit('setImUnreadTotal', conversations.unreadTotal)
-      });
-    },
     loginErrorOk() {
       this.loginErrorDialogVisible = false
     },
@@ -824,6 +802,20 @@ export default {
 
 
     },
+    handleSetCurrentUser(uid,identity, companyId, firstName, lastName, avatar){
+
+      let uuid = uid + '#' + identity + '#' + companyId
+      let name = firstName + ' ' + lastName
+
+      let currentUser = {
+        uuid: uuid,
+        name: name,
+        avatar: avatar
+      }
+
+      this.setCurrentUser(currentUser)
+
+    },
     submitLoginForm(formName) {
       let self = this;
       if (self.humanVerifyStatus) {
@@ -863,20 +855,8 @@ export default {
 
                 this.$store.commit('identity', resMessage.identity)
 
-                let uuid = resMessage.id + '#' + identity + '#' + companyId
+                this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, currentAvatar)
 
-                let currentUser = {
-                  uuid: uuid,
-                  uid: resMessage.id,
-                  identity: identity,
-                  name: firstName + ' ' + lastName,
-                  avatar: currentAvatar,
-                  companyId: companyId
-                }
-                // // console.log(currentUser)
-                //
-                this.setCurrentUser(currentUser)
-                this.imUnread(currentUser)
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
                 this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
 
@@ -969,18 +949,9 @@ export default {
                 localStorage.setItem('last_name', lastName)
 
                 this.$store.commit('identity', resMessage.identity)
-                let uuid = resMessage.id + '#' + identity + '#' + companyId
-                let currentUser = {
-                  uuid: uuid,
-                  uid: resMessage.id,
-                  identity: identity,
-                  name: firstName + ' ' + lastName,
-                  avatar: currentAvatar,
-                  companyId: companyId
-                }
-                // console.log(currentUser)
 
-                this.setCurrentUser(currentUser)
+                this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, currentAvatar)
+
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
                 this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
 
@@ -1068,18 +1039,8 @@ export default {
 
                 this.$store.commit('identity', resMessage.identity)
 
-                let uuid = resMessage.id + '#' + identity + '#' + companyId
-                let currentUser = {
-                  uuid: uuid,
-                  uid: resMessage.id,
-                  identity: identity,
-                  name: firstName + ' ' + lastName,
-                  avatar: currentAvatar,
-                  companyId: companyId
-                }
-                // console.log(currentUser)
+                this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, currentAvatar)
 
-                this.setCurrentUser(currentUser)
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
                 this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
 
@@ -1165,16 +1126,6 @@ export default {
           EMAIL_REGISTER_V2(params).then(res => {
             console.log(res)
             if (res.code == 200) {
-              // let userInfo = res.message
-              // localStorage.setItem('uid',res.message.id)
-              if (self.identityValue == 1) {
-                this.submitEducatorContactForm(res.message.id)
-              }
-              if (self.identityValue == 2 || self.identityValue == 3
-                  || self.identityValue == 4 || self.identityValue == 5
-              ) {
-                this.submitCompanyContactForm(res.message.id)
-              }
 
               self.submitRegisterLoadingStatus = false
 
@@ -1227,16 +1178,6 @@ export default {
           PHONE_REGISTER_V2(params).then(res => {
             console.log(res)
             if (res.code == 200) {
-              // let userInfo = res.message
-              // localStorage.setItem('uid',res.message.id)
-              if (self.identityValue == 1) {
-                this.submitEducatorContactForm(res.message.id)
-              }
-              if (self.identityValue == 2 || self.identityValue == 3
-                  || self.identityValue == 4 || self.identityValue == 5
-              ) {
-                this.submitCompanyContactForm(res.message.id)
-              }
 
               self.submitRegisterLoadingStatus = false
 

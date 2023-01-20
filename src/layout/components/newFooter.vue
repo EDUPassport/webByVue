@@ -8,13 +8,13 @@
         <div class="footer-t-r">
           <div class="footer-menu">
             <div class="footer-menu-item" @click="turnJobs()">
-              JOBS
+              EDU Jobs
             </div>
             <div class="footer-menu-item" @click="turnDeals()">
-              DEALS
+              EDU Deals
             </div>
             <div class="footer-menu-item" @click="turnAboutUs()">
-              ABOUT US
+              About Us
             </div>
             <!--            <div class="footer-menu-item" @click="turnFeatures()">-->
             <!--              FEATURES-->

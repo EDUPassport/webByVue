@@ -1000,6 +1000,7 @@ export default {
 }
 
 .tags-current-container{
+  width: 100%;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 20px;
 }

@@ -26,6 +26,8 @@
           <el-col :xs="0" :sm="0" :md="0" :lg="14" :xl="14">
             <div class="nav-link-container">
 
+              <router-link to="/" exact> HOME </router-link>
+
               <el-dialog
                   v-model="dialogSwitchJobVisible"
                   title=""
@@ -54,7 +56,7 @@
 
               <el-dropdown size="default">
                     <span class="el-dropdown-link-job">
-                          EDU Jobs
+                          EDU JOBS
                     <el-icon class="el-icon--right">
                       <arrow-down/>
                       </el-icon>
@@ -71,8 +73,9 @@
                 </template>
               </el-dropdown>
 
-              <router-link to="/deals" exact> EDU Deals</router-link>
-              <router-link to="/events" exact>EDU Events</router-link>
+              <router-link to="/deals" exact> EDU DEALS</router-link>
+              <router-link to="/events" exact> EDU EVENTS</router-link>
+              <el-link :underline=false href="https://blogs.edupassport.io/" target="_blank">BLOG</el-link>
 
             </div>
           </el-col>
@@ -96,7 +99,7 @@
                         <div class="user-container-1-earth-expand">
                           <div class="user-container-1-earth-international" @click="goInternationalWebsite()">
                             <span v-if="envName === 'development' || envName === 'production'"></span>
-                            international
+                            International
                           </div>
                           <div class="user-container-1-earth-china" @click="goChinaWebsite()">
                             <span v-if="envName === 'developmentCN' || envName === 'productionCN'"></span>
@@ -515,15 +518,20 @@
 
       </template>
       <div class="mobile-menu-drawer-bg">
-
         <div class="nav-link-item">
-          <router-link to="/jobs" exact>EDU Jobs</router-link>
+          <router-link to="/" exact>HOME</router-link>
         </div>
         <div class="nav-link-item">
-          <router-link to="/deals" exact> EDU Deals</router-link>
+          <router-link to="/jobs" exact>EDU JOBS</router-link>
         </div>
         <div class="nav-link-item">
-          <router-link to="/events" exact>EDU Events</router-link>
+          <router-link to="/deals" exact>EDU DEALS</router-link>
+        </div>
+        <div class="nav-link-item">
+          <router-link to="/events" exact>EDU EVENTS </router-link>
+        </div>
+        <div class="nav-link-item">
+          <el-link :underline=false href="https://blogs.edupassport.io/" target="_blank">BLOG</el-link>
         </div>
 
         <div class="mobile-chose-country">
@@ -561,27 +569,47 @@ import logoImgLight from "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_L
 import logoImgLightH from "@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png"
 import logoImgLogo from '@/assets/newHome/logo/Logo_Transparent.png'
 import {onBeforeRouteUpdate, onBeforeRouteLeave} from 'vue-router'
-import {ref} from 'vue'
-
+import {ref, inject} from 'vue'
+import {useStore} from 'vuex';
 
 export default {
   name: "Header",
   setup() {
     let unreadChanged = ref(0)
 
-    onBeforeRouteUpdate((to) => {
-      console.log('------- header router -------')
-      console.log(to)
+    const store = useStore();
+    const goEasy = inject('goEasy');
+
+    function disconnectIm() {
+
+      //connected
+      if(goEasy.getConnectionStatus() === 'connected'){
+
+        goEasy.disconnect({
+          onSuccess: () => {
+            console.log('Disconnect GoEasy successful')
+            store.commit('setImUnreadTotal', 0)
+          },
+          onFailed: (error) => {
+            console.log("Failed to disconnect GoEasy, code:" + error.code + ",error:" + error.content);
+          }
+        })
+
+      }
+
+    }
+
+    onBeforeRouteUpdate(() => {
       unreadChanged.value++
     })
-    onBeforeRouteLeave((to) => {
-      console.log(to)
-      unreadChanged.value++
 
+    onBeforeRouteLeave(() => {
+      unreadChanged.value++
     })
 
     return {
-      unreadChanged
+      unreadChanged,
+      disconnectIm
     }
 
   },
@@ -837,6 +865,19 @@ export default {
     signUp() {
       this.$router.push({path: '/signup', query: {}})
     },
+    handleSetCurrentUser(uid,identity, companyId, name, avatar){
+
+      let uuid = uid + '#' + identity + '#' + companyId
+
+      let currentUser = {
+        uuid: uuid,
+        name: name,
+        avatar: avatar
+      }
+
+      this.$store.commit('currentUser', currentUser)
+
+    },
     getBasicInfo(identity) {
 
       let params = {
@@ -870,18 +911,7 @@ export default {
 
           }
 
-          let uuid = userContact.id + '#' + identity + '#' + userContact.company_id
-
-          let currentUser = {
-            uuid: uuid,
-            uid: userContact.id,
-            identity: identity,
-            name: name,
-            avatar: avatar,
-            companyId: userContact.company_id
-          }
-
-          this.$store.commit('currentUser', currentUser)
+          this.handleSetCurrentUser(userContact.id, identity, userContact.company_id, name, avatar)
 
           localStorage.setItem('name', name)
           localStorage.setItem('avatar', avatar)
@@ -1248,6 +1278,9 @@ export default {
       SWITCH_IDENTITY_V2(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
+
+          this.disconnectIm()
+
           this.$store.commit('allIdentityChanged', true)
 
           localStorage.setItem('company_id', companyId)
@@ -1263,19 +1296,6 @@ export default {
           this.getBasicInfo(identity)
 
           this.$router.push('/account/home')
-
-          if (this.goEasy.getConnectionStatus() === 'connected') {
-            this.goEasy.disconnect({
-              onSuccess: function(){
-                console.log("GoEasy disconnect successfully.")
-              },
-              onFailed: function(error){
-                console.log("Failed to disconnect GoEasy, code:"+error.code+ ",error:"+error.content);
-              }
-            });
-          }
-
-          localStorage.removeItem('chatJsonConversation')
 
           this.$loading().close()
 
@@ -1424,20 +1444,24 @@ export default {
 
 .nav-link-container {
   text-align: left;
+  display: flex;
+  align-items: center;
 }
 
 .nav-link-container a {
   margin-left: 20px;
   text-decoration: none;
   color: #262626;
-
-  font-size: 24px;
+  font-family: Assistant-SemiBold , Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
   line-height: 30px;
+  font-weight: 600;
 
 }
 
 .nav-link-container a:hover {
   color: #000000;
+  text-decoration: underline;
 }
 
 .zoho-blog-menu {
@@ -1689,7 +1713,6 @@ export default {
   font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
-
 .nav-link-item a {
   /*display: block;*/
   text-decoration: none;
@@ -1700,7 +1723,7 @@ export default {
 }
 
 .el-dropdown-link-job {
-  font-size: 24px;
+  font-size: 18px;
   line-height: 30px;
 
   margin-left: 20px;
@@ -1709,12 +1732,14 @@ export default {
   flex-direction: row;
   align-items: flex-end;
   justify-content: center;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+
 }
 
 .el-dropdown-link-job-1 {
-  font-size: 24px;
+  font-size: 18px;
   line-height: 30px;
-  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .switch-job-container {

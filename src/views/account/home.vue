@@ -507,7 +507,6 @@
 
 <script>
 import defaultAvatar from '@/assets/default/avatar.png'
-
 import meSideMenu from "@/components/meSideMenu";
 import ForgotPassword from '@/components/forgotPassword'
 
@@ -529,7 +528,7 @@ import {
 import xllLoading from '@/components/xllLoading'
 
 import {useStore} from "vuex";
-import {ref, reactive} from "vue";
+import {ref, reactive , inject} from "vue";
 import ImageCompressor from "compressorjs";
 import {encode} from "js-base64";
 import {randomString} from "@/utils";
@@ -611,10 +610,6 @@ export default {
       return date.getTime() >= myDate.getTime();
     }
 
-    // const currentCompanyId = ref( localStorage.getItem('company_id'))
-
-    // const identity = ref(localStorage.getItem('identity'))
-
     const contributorForms = ref(null)
 
     const contributorForm = reactive({
@@ -632,8 +627,30 @@ export default {
       ],
     })
 
+    const goEasy = inject('goEasy');
+
+    function disconnectIm() {
+
+      //connected
+      if(goEasy.getConnectionStatus() === 'connected'){
+
+        goEasy.disconnect({
+          onSuccess: () => {
+            console.log('Disconnect GoEasy successful')
+            store.commit('setImUnreadTotal', 0)
+          },
+          onFailed: (error) => {
+            console.log("Failed to disconnect GoEasy, code:" + error.code + ",error:" + error.content);
+          }
+        })
+
+      }
+
+    }
+
+
     return {
-      // identity,
+
       setIdentity,
       submitLoadingValue,
       basicForm,
@@ -643,7 +660,8 @@ export default {
       editAccountStatus,
       contributorForms,
       contributorForm,
-      contributorRules
+      contributorRules,
+      disconnectIm
 
     }
 
@@ -1178,19 +1196,7 @@ export default {
           this.$store.commit('identity', identity)
           this.$store.commit('menuData', res.message)
 
-          if (this.goEasy.getConnectionStatus() === 'connected') {
-            this.goEasy.disconnect({
-              onSuccess: function () {
-                console.log("GoEasy disconnect successfully.")
-              },
-              onFailed: function (error) {
-                console.log("Failed to disconnect GoEasy, code:" + error.code + ",error:" + error.content);
-              }
-            });
-          }
-
-          localStorage.removeItem('chatJsonConversation')
-
+          this.disconnectIm()
           this.getUserAllInfo()
           this.getAllAssignUsers()
 

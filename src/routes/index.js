@@ -3,6 +3,7 @@ import layout from "@/layout";
 import {createRouter, createWebHistory} from 'vue-router'
 import appLayout from "@/layout/appLayout";
 // import {isPhone} from "@/utils";
+import chatHome from '@/views/chat/chatHome'
 
 const routes = [
 
@@ -62,7 +63,7 @@ const routes = [
                     activeMenu: '/account/home',
                     titleC: 'Post a Job',
                     titleG: 'Post a Job',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -72,7 +73,7 @@ const routes = [
                 meta: {
                     titleC: 'My Posted Jobs',
                     titleG: 'My Posted Jobs',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -82,7 +83,7 @@ const routes = [
                 meta: {
                     titleC: 'Applications',
                     titleG: 'Applications',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
 
@@ -108,9 +109,9 @@ const routes = [
             },
             {
                 path: '/post-event',
-                name:'zohoPostEvent',
-                component:()=>import('@/views/events/postEvent'),
-                meta:{
+                name: 'zohoPostEvent',
+                component: () => import('@/views/events/postEvent'),
+                meta: {
                     titleC: 'Post Event',
                     titleG: 'Post Event',
                 }
@@ -131,7 +132,7 @@ const routes = [
                 meta: {
                     titleC: 'Post Event',
                     titleG: 'Post Event',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -142,7 +143,7 @@ const routes = [
                     activeMenu: "/perks/home",
                     titleC: 'My Events',
                     titleG: 'My Events',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
 
@@ -170,7 +171,7 @@ const routes = [
                     activeMenu: "/perks/home",
                     titleC: 'Offer a Deal',
                     titleG: 'Offer a Deal',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -181,7 +182,7 @@ const routes = [
                     activeMenu: "/perks/home",
                     titleC: 'My Deals',
                     titleG: 'My Deals',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -217,7 +218,7 @@ const routes = [
                 meta: {
                     titleC: 'Overview',
                     titleG: 'Overview',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
 
@@ -235,7 +236,7 @@ const routes = [
                 meta: {
                     titleC: 'Account information',
                     titleG: 'Account information',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
 
@@ -253,7 +254,7 @@ const routes = [
                 meta: {
                     titleC: 'jobs and applications',
                     titleG: 'jobs and applications',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
 
@@ -262,18 +263,49 @@ const routes = [
     },
     {
         path: '/chat',
+        name: 'chat',
         component: layout,
+        redirect: '/chat/messages',
         children: [
             {
-                path: 'messages',
-                name: 'chatMessages',
-                component: () => import('@/views/chat/messages'),
-                meta: {
-                    titleC: 'Chat Messages',
-                    titleG: 'Chat Messages',
-                    requireAuth:true
-                }
+                path: '',
+                name: 'chatHome',
+                component: chatHome,
+                children: [
+                    {
+                        path: 'messages',
+                        name: 'chatMessages',
+                        component: () => import('@/views/chat/Conversations'),
+                        meta: {
+                            titleC: 'Chat Messages',
+                            titleG: 'Chat Messages',
+                            requireAuth: true
+                        },
+                        children: [
+                            {
+                                path: 'privatechat/:id',
+                                component: () => import('@/views/chat/PrivateChat'),
+                                activeMenu:'/chat/messages',
+                                requireAuth: true
+                            },
+                            {
+                                path: 'groupchat/:id',
+                                component: () => import('@/views/chat/GroupChat'),
+                                activeMenu:'/chat/messages',
+                                requireAuth: true
+                            },
+                        ],
+                    },
+                    {
+                        path: 'contacts',
+                        component: () => import('@/views/chat/Contacts'),
+                        activeMenu:'/chat/messages',
+                        requireAuth: true
+                    },
+
+                ]
             },
+
 
         ]
 
@@ -289,7 +321,7 @@ const routes = [
                 meta: {
                     titleC: 'My Favorites',
                     titleG: 'My Favorites',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
 
@@ -307,7 +339,7 @@ const routes = [
                 meta: {
                     titleC: 'My Ads',
                     titleG: 'My Ads',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -317,7 +349,7 @@ const routes = [
                 meta: {
                     titleC: 'Platform',
                     titleG: 'Platform',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -327,7 +359,7 @@ const routes = [
                 meta: {
                     titleC: 'Target Audience',
                     titleG: 'Target Audience',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -337,7 +369,7 @@ const routes = [
                 meta: {
                     titleC: 'Ads List',
                     titleG: 'Ads List',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -347,7 +379,7 @@ const routes = [
                 meta: {
                     titleC: 'Ads Detail',
                     titleG: 'Ads Detail',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -357,7 +389,7 @@ const routes = [
                 meta: {
                     titleC: 'Ads Redeem',
                     titleG: 'Ads Redeem',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
 
@@ -385,7 +417,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Add Profile',
                     titleG: 'Add Profile',
-                    requireAuth:true
+                    requireAuth: true
                 }
             }
 
@@ -414,7 +446,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Edit Recruiter Info',
                     titleG: 'Edit Recruiter Info',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -425,7 +457,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Edit Other Info',
                     titleG: 'Edit Other Info',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
             {
@@ -436,7 +468,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Edit School Info',
                     titleG: 'Edit School Info',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
         ]
@@ -463,7 +495,7 @@ const routes = [
                     activeMenu: "/account/home",
                     titleC: 'Edit Vendor Info',
                     titleG: 'Edit Vendor Info',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
         ]
@@ -597,7 +629,7 @@ const routes = [
                 meta: {
                     titleC: 'Paypal',
                     titleG: 'Paypal',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
 
@@ -615,7 +647,7 @@ const routes = [
                 meta: {
                     titleC: 'Perks',
                     titleG: 'Perks',
-                    requireAuth:true
+                    requireAuth: true
                 }
             },
 
@@ -785,14 +817,14 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.titleG ? to.meta.titleG : defaultTitle;
     }
     //判断该路由是否需要登录权限
-    if(to.matched.some(record=>record.meta.requireAuth)){
+    if (to.matched.some(record => record.meta.requireAuth)) {
         const token = localStorage.getItem('token')
-        if(token){
+        if (token) {
             next()
-        }else{
-            next({path:'/login'})
+        } else {
+            next({path: '/login'})
         }
-    }else{
+    } else {
         next()
     }
 
