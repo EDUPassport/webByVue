@@ -37,17 +37,20 @@
                       </el-icon>
                       <span v-if="unreadAmount" class="menu-unread">{{ unreadAmount }}</span>
                     </router-link>
-<!--                    <router-link tag="div" class="menu-item" to="/chat/contacts" replace>-->
-<!--                      <el-icon :size="25">-->
-<!--                        <IconTypcnContacts />-->
-<!--                      </el-icon>-->
-<!--                    </router-link>-->
+                    <router-link tag="div" class="menu-item" to="/chat/contacts" replace>
+                    <el-icon :size="25">
+                      <IconTypcnContacts />
+                    </el-icon>
+                  </router-link>
                   </div>
 
                 </div>
               </div>
               <div class="home-main">
-                <router-view></router-view>
+                <suspense>
+                  <router-view></router-view>
+                </suspense>
+
               </div>
             </div>
           </div>

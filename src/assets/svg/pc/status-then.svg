@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="75.676" height="75.677" viewBox="0 0 75.676 75.677">
+  <g id="status_-_then" data-name="status - then" transform="translate(697.608 -572.279) rotate(135)">
+    <path id="label_nofill" d="M63.523,39.2a2.875,2.875,0,0,1-2.046-.8,2.557,2.557,0,0,1-.848-1.929V5.933A2.557,2.557,0,0,1,61.477,4a2.875,2.875,0,0,1,2.046-.8l57.212-.188a4.2,4.2,0,0,1,2.046.518,4.788,4.788,0,0,1,1.6,1.412l6.537,14.471a2.5,2.5,0,0,1,.549,1.576,2.7,2.7,0,0,1-.549,1.624l-6.537,14.471a6.069,6.069,0,0,1-1.622,1.388,3.924,3.924,0,0,1-2.021.541Z" transform="translate(801.9 14)" fill="#f8bb63"/>
+    <text id="Then" transform="translate(917.268 28.464) rotate(180)" fill="#fff" font-size="20" font-family="Barlow-Medium, Barlow" font-weight="500"><tspan x="0" y="0">then</tspan></text>
+  </g>
+</svg>

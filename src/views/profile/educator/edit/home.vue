@@ -1,6 +1,6 @@
 <template>
   <div class="bg">
-    <div class="basic-container" v-loading="submitLoadingValue">
+    <div class="basic-container">
       <!--      <profileTitle :i="i" :action="action"></profileTitle>-->
       <div class="basic-l-container">
         <meSideMenu></meSideMenu>
@@ -16,12 +16,14 @@
               <el-button class="account-profile-cancel-btn" plain round @click="cancel()">
                 CANCEL
               </el-button>
-              <el-button class="account-profile-save-btn" type="primary" round
+              <el-button class="account-profile-save-btn" type="primary"
+                         round
                          :loading="submitLoadingValue"
                          @click="submitForm('basicForm', 1)">
                 SAVE
               </el-button>
-              <el-button class="account-profile-save-btn" type="primary" round
+              <el-button class="account-profile-save-btn" type="primary"
+                         round
                          :loading="submitAndViewLoadingValue"
                          @click="submitForm('basicForm', 2)">
                 SAVE & VIEW
@@ -98,11 +100,12 @@
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Phone number"  >
+                      <el-form-item label="Phone number">
                         <div class="contact-phone-container">
                           <div class="contact-phone-l">
                             <!--                    @onChange="onDefaultChange"-->
-                            <el-select v-model="countryCode" :teleported="false" filterable class="m-2" placeholder="Select" >
+                            <el-select v-model="countryCode" :teleported="false" filterable class="m-2"
+                                       placeholder="Select">
                               <el-option
                                   v-for="item in phoneCodeData"
                                   :key="item.phone_code"
@@ -117,18 +120,14 @@
                             </el-select>
                           </div>
                           <div class="contact-phone-r">
-                            <el-input type="number" v-model="phoneNumber" maxlength="25" placeholder="Phone #"></el-input>
+                            <el-input v-model="phoneNumber" oninput="value=value.replace(/[^\d]/g,'')" maxlength="15"
+                                      placeholder="Phone #"></el-input>
                           </div>
                         </div>
                       </el-form-item>
 
                     </el-col>
 
-<!--                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">-->
-<!--                      <el-form-item label="Phone number" prop="phone">-->
-<!--                        <el-input v-model="basicForm.phone" type="number" maxlength="25" placeholder="Phone #"></el-input>-->
-<!--                      </el-form-item>-->
-<!--                    </el-col>-->
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Current Address" prop="address">
                         <el-input v-model="basicForm.address" placeholder="Current Address"></el-input>
@@ -263,7 +262,7 @@
                               class="demo-ruleForm"
                           >
                             <el-form-item label="Language">
-                              <el-select v-model="languageValue"  :teleported="false" value-key="id">
+                              <el-select v-model="languageValue" :teleported="false" value-key="id">
                                 <el-option v-for="(item,i) in languageOptionsData" :key="i"
                                            :label="item.object_en"
                                            :value="item"
@@ -466,21 +465,21 @@
                               <el-input v-model="workExpForm.location" placeholder="City, Country"></el-input>
                             </el-form-item>
 
-<!--                            <el-form-item class="work-form-item duration-pc" label="Duration" prop="date">-->
-<!--                              <el-date-picker-->
-<!--                                  v-model="workExpForm.date"-->
-<!--                                  size="large"-->
-<!--                                  type="monthrange"-->
-<!--                                  unlink-panels-->
-<!--                                  format="MM/YYYY"-->
-<!--                                  value-format="x"-->
-<!--                                  range-separator="To"-->
-<!--                                  start-placeholder="Start Date"-->
-<!--                                  end-placeholder="End Date"-->
-<!--                                  :disabledDate="birthdayDisabledDate"-->
-<!--                              >-->
-<!--                              </el-date-picker>-->
-<!--                            </el-form-item>-->
+                            <!--                            <el-form-item class="work-form-item duration-pc" label="Duration" prop="date">-->
+                            <!--                              <el-date-picker-->
+                            <!--                                  v-model="workExpForm.date"-->
+                            <!--                                  size="large"-->
+                            <!--                                  type="monthrange"-->
+                            <!--                                  unlink-panels-->
+                            <!--                                  format="MM/YYYY"-->
+                            <!--                                  value-format="x"-->
+                            <!--                                  range-separator="To"-->
+                            <!--                                  start-placeholder="Start Date"-->
+                            <!--                                  end-placeholder="End Date"-->
+                            <!--                                  :disabledDate="birthdayDisabledDate"-->
+                            <!--                              >-->
+                            <!--                              </el-date-picker>-->
+                            <!--                            </el-form-item>-->
 
                             <el-form-item class="work-form-item" label="Duration" prop="date">
                               <div class="duration-mobile-container">
@@ -671,13 +670,13 @@
                         <el-input v-model="educationForm.school_name" placeholder="University"></el-input>
                       </el-form-item>
                       <el-form-item label="Degree" prop="degree">
-                        <el-select v-model="educationForm.degree_id"
+                        <el-select v-model="educationDegreeObj"
                                    :teleported="false"
+                                   value-key="id"
                                    placeholder="Doctorate, Master's, Bachelor's, etc...">
                           <el-option v-for="(degree,i) in degreeOptionsData" :key="i"
-                                     :value-key="degree.id"
                                      :label="degree.object_en"
-                                     :value="degree.id"
+                                     :value="degree"
                           ></el-option>
                         </el-select>
                       </el-form-item>
@@ -685,19 +684,19 @@
                         <el-input v-model="educationForm.field_of_study" type="textarea"
                                   placeholder="Chemistry, International Business, Dance, etc..."></el-input>
                       </el-form-item>
-<!--                      <el-form-item label="Duration of Study" prop="date">-->
-<!--                        <el-date-picker-->
-<!--                            v-model="educationForm.date"-->
-<!--                            type="monthrange"-->
-<!--                            unlink-panels-->
-<!--                            format="MM/YYYY"-->
-<!--                            value-format="x"-->
-<!--                            range-separator="To"-->
-<!--                            start-placeholder="Start month"-->
-<!--                            end-placeholder="End month"-->
-<!--                        >-->
-<!--                        </el-date-picker>-->
-<!--                      </el-form-item>-->
+                      <!--                      <el-form-item label="Duration of Study" prop="date">-->
+                      <!--                        <el-date-picker-->
+                      <!--                            v-model="educationForm.date"-->
+                      <!--                            type="monthrange"-->
+                      <!--                            unlink-panels-->
+                      <!--                            format="MM/YYYY"-->
+                      <!--                            value-format="x"-->
+                      <!--                            range-separator="To"-->
+                      <!--                            start-placeholder="Start month"-->
+                      <!--                            end-placeholder="End month"-->
+                      <!--                        >-->
+                      <!--                        </el-date-picker>-->
+                      <!--                      </el-form-item>-->
 
                       <el-form-item label="Duration of Study" prop="date">
                         <div class="duration-mobile-container">
@@ -1094,9 +1093,9 @@
                             </div>
                           </div>
                         </div>
-<!--                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>-->
-<!--                          <el-image :src="dialogSingleImageUrl"></el-image>-->
-<!--                        </el-dialog>-->
+                        <!--                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>-->
+                        <!--                          <el-image :src="dialogSingleImageUrl"></el-image>-->
+                        <!--                        </el-dialog>-->
 
                       </el-form-item>
                     </el-col>
@@ -1138,9 +1137,9 @@
                             </div>
                           </div>
                         </div>
-<!--                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>-->
-<!--                          <el-image :src="dialogSingleImageUrl"></el-image>-->
-<!--                        </el-dialog>-->
+                        <!--                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>-->
+                        <!--                          <el-image :src="dialogSingleImageUrl"></el-image>-->
+                        <!--                        </el-dialog>-->
 
                       </el-form-item>
                     </el-col>
@@ -1168,7 +1167,7 @@
                           <div class="account-xll-image">
                             <div v-if="resumePdfUrl">
                               <el-icon :size="45">
-                                <IconCiFilePdf />
+                                <IconCiFilePdf/>
                               </el-icon>
                             </div>
                             <div class="account-xll-image-mask">
@@ -1235,7 +1234,7 @@ import {
   ADD_USER_EDUCATION_V2,
   ADD_LANGUAGE_SCORE_V2,
   EDUCATOR_PERCENTAGE_V2,
-  USER_CONTACT_EDIT_V2, UPLOAD_BY_SERVICE_MORE
+  USER_CONTACT_EDIT_V2, UPLOAD_BY_SERVICE_MORE, EDUCATOR_DELETE_WORK_ITEM, EDUCATOR_DELETE_EDUCATION_ITEM
 } from '@/api/api'
 import {countriesData} from "@/utils/data";
 import {encode, decode} from "js-base64";
@@ -1261,7 +1260,7 @@ export default {
   data() {
 
     return {
-      phoneCodeData:phoneCodeData,
+      phoneCodeData: phoneCodeData,
       workExpDialogWidth: '454px',
       educationDialogWidth: '454px',
       uploadLoadingStatus: false,
@@ -1283,13 +1282,13 @@ export default {
       introVideoUrl: '',
       backgroundPhotoUrl: '',
 
-      countryCode:'+86',
-      phoneNumber:'',
+      countryCode: '+86',
+      phoneNumber: '',
       basicForm: {
         name: '',
         resume_pdf: '',
         video_url: '',
-        country_code:'+86',
+        country_code: '+86',
         phone: '',
         educator_email: '',
         address: '',
@@ -1385,7 +1384,7 @@ export default {
       dialogAccountImageVisible: false,
       accountImageFileList: [],
       resumeUrl: '',
-      resumePdfUrl:'',
+      resumePdfUrl: '',
 
       dialogVideoVisible: false,
       dialogVideoUrl: '',
@@ -1449,18 +1448,18 @@ export default {
         date: [
           {
             required: true,
-            validator: (rule,value,callback)=>{
+            validator: (rule, value, callback) => {
               let workTimeFrom = this.workExpForm.work_time_from;
               let workTimeTo = this.workExpForm.work_time_to;
 
-              if(!workTimeFrom){
+              if (!workTimeFrom) {
                 return callback(new Error('Please select start date'))
               }
 
-              if(!workTimeTo){
+              if (!workTimeTo) {
                 return callback(new Error('Please select end date'))
               }
-              if(workTimeTo <= workTimeFrom){
+              if (workTimeTo <= workTimeFrom) {
                 return callback(new Error('End date is less than start date'))
               }
 
@@ -1490,6 +1489,7 @@ export default {
         grade: '',
         token: localStorage.getItem('token')
       },
+      educationDegreeObj:{},
       educationRules: {
         school_name: [
           {
@@ -1500,7 +1500,7 @@ export default {
         ],
         degree_id: [
           {
-            required: true,
+            required: false,
             message: "Doctorate, Master's, Bachelor's, etc...",
             trigger: 'blur',
           },
@@ -1508,18 +1508,18 @@ export default {
         date: [
           {
             required: true,
-            validator: (rule,value,callback)=>{
+            validator: (rule, value, callback) => {
               let startTime = this.educationForm.start_time;
               let endTime = this.educationForm.end_time;
 
-              if(!startTime){
+              if (!startTime) {
                 return callback(new Error('Please select start month'))
               }
 
-              if(!endTime){
+              if (!endTime) {
                 return callback(new Error('Please select end month'))
               }
-              if(endTime <= startTime){
+              if (endTime <= startTime) {
                 return callback(new Error('End month is less than start month'))
               }
 
@@ -1626,16 +1626,16 @@ export default {
 
       let selectedLanguageList = this.selectedLanguageList;
 
-      let index = selectedLanguageList.findIndex( (item)=>{
+      let index = selectedLanguageList.findIndex((item) => {
 
-        if(item.id === languageObj.id && item.level === languageObj.level){
+        if (item.id === languageObj.id && item.level === languageObj.level) {
           return true;
-        }else{
+        } else {
           return false;
         }
-      } )
+      })
 
-      if(index == -1){
+      if (index == -1) {
         this.selectedLanguageList.push(languageObj)
       }
 
@@ -1687,17 +1687,18 @@ export default {
       })
     },
     submitForm(formName, typeValue) {
+      let self = this;
+      if (typeValue === 1) {
+        this.submitLoadingValue = true;
+      }
+
+      if (typeValue === 2) {
+        this.submitAndViewLoadingValue = true;
+      }
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
-          if (typeValue === 1) {
-            this.submitLoadingValue = true;
-          }
-
-          if (typeValue === 2) {
-            this.submitAndViewLoadingValue = true;
-          }
 
           let selectTypeList = this.selectEducatorTypeList;
           // console.log(selectTypeList)
@@ -1853,12 +1854,31 @@ export default {
             }
           }).catch(err => {
             console.log(err)
+            if (typeValue === 1) {
+              this.submitLoadingValue = false;
+            }
+
+            if (typeValue === 2) {
+              this.submitAndViewLoadingValue = false;
+            }
+
             // this.submitLoadingValue = false;
             // this.$message.error(err.msg)
           })
 
         } else {
           this.$message.warning('Please complete all required fields')
+
+          setTimeout(function () {
+            if (typeValue === 1) {
+              self.submitLoadingValue = false;
+            }
+
+            if (typeValue === 2) {
+              self.submitAndViewLoadingValue = false;
+            }
+          }, 2000)
+
           console.log('error submit!!')
           return false
         }
@@ -2085,10 +2105,10 @@ export default {
             let phone = educatorContact.phone;
             let phoneArr = phone.split('#')
             // console.log(phoneArr)
-            if(phoneArr.length>1){
+            if (phoneArr.length > 1) {
               this.countryCode = phoneArr[0]
               this.phoneNumber = phoneArr[1]
-            }else{
+            } else {
               this.phoneNumber = phoneArr[0]
             }
             this.basicForm.phone = educatorContact.phone
@@ -2474,7 +2494,7 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        if(err.msg){
+        if (err.msg) {
           return this.$message.error(err.msg)
         }
 
@@ -2994,10 +3014,10 @@ export default {
       this.dialogVideoVisible = true
 
     },
-    handleResumePreview(file){
-      window.open(file,'_blank')
+    handleResumePreview(file) {
+      window.open(file, '_blank')
     },
-    handleVideoRemove(){
+    handleVideoRemove() {
       this.introVideoUrl = ''
       this.basicForm.video_url = ''
     },
@@ -3005,15 +3025,15 @@ export default {
       this.dialogSingleImageUrl = file
       this.dialogSingleImageVisible = true;
     },
-    handleBackgroundPhotoRemove(){
+    handleBackgroundPhotoRemove() {
       this.backgroundPhotoUrl = ''
       this.basicForm.background_image = ''
     },
-    handleProfilePhotoRemove(){
+    handleProfilePhotoRemove() {
       this.profilePhotoUrl = ''
       this.basicForm.profile_photo = ''
     },
-    handleResumeRemove(){
+    handleResumeRemove() {
       this.resumePdfUrl = ''
       this.basicForm.resume_pdf = ''
     },
@@ -3400,6 +3420,17 @@ export default {
 
     },
     showWorkExpDialog() {
+      this.workExpForm = {
+        company_name: '',
+        title: '',
+        location: '',
+        teaching_times: '',
+        teaching_experience: '',
+        work_time_from: '',
+        work_time_to: '',
+        date: '',
+        token: localStorage.getItem('token')
+      }
       this.workExpDialogVisible = true;
     },
     saveWorkExpTemp() {
@@ -3427,19 +3458,15 @@ export default {
     deleteWorkExp(item) {
 
       let params = {
-        work_id: item.id,
-        is_delete: 1
+        id: item.id
       }
-      ADD_USER_WORK_V2(params).then(res => {
+      EDUCATOR_DELETE_WORK_ITEM(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.submitLoadingValue = false;
-          this.workExpDialogVisible = false;
           this.getBasicInfo()
         }
       }).catch(err => {
         console.log(err)
-        this.submitLoadingValue = false;
         this.$message.error(err.msg)
       })
 
@@ -3501,16 +3528,16 @@ export default {
     },
     showEducationDialog() {
       this.educationForm = {
-            school_name: '',
-            degree: '',
-            degree_id: '',
-            field_of_study: '',
-            start_time: '',
-            end_time: '',
-            grade: '',
-            token: localStorage.getItem('token')
+        school_name: '',
+        degree: '',
+        degree_id: '',
+        field_of_study: '',
+        start_time: '',
+        end_time: '',
+        grade: '',
+        token: localStorage.getItem('token')
       }
-
+      this.educationDegreeObj = {}
       this.educationDialogVisible = true;
     },
     saveEducationTemp() {
@@ -3519,27 +3546,29 @@ export default {
     deleteEducation(item) {
 
       let params = {
-        education_id: item.id,
-        is_delete: 1
+        id: item.id
       }
-      ADD_USER_EDUCATION_V2(params).then(res => {
+      EDUCATOR_DELETE_EDUCATION_ITEM(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.submitLoadingValue = false;
-          this.educationDialogVisible = false;
           this.getBasicInfo()
         }
       }).catch(err => {
         console.log(err)
-        this.submitLoadingValue = false;
         this.$message.error(err.msg)
       })
 
     },
     editEducation(item) {
 
-      let obj = Object.assign({}, item)
-      this.educationForm = obj;
+      if(item.degree && item.degree_id){
+        this.educationDegreeObj = {
+          id:item.degree_id,
+          object_en: item.degree
+        }
+      }
+
+      this.educationForm = Object.assign({}, item);
 
       let startTime = item.start_time
       let endTime = item.end_time
@@ -3559,6 +3588,7 @@ export default {
     },
     editTempEducation(item, i) {
       this.editEducationIndex = i;
+
       let obj = Object.assign({}, item)
       this.educationForm = obj;
       this.educationDialogVisible = true;
@@ -3570,6 +3600,9 @@ export default {
 
           this.educationForm.start_time = Math.floor(this.educationForm.start_time / 1000)
           this.educationForm.end_time = Math.floor(this.educationForm.end_time / 1000)
+
+          this.educationForm.degree = this.educationDegreeObj.object_en;
+          this.educationForm.degree_id = this.educationDegreeObj.id;
 
           let params = Object.assign({}, this.educationForm)
           ADD_USER_EDUCATION_V2(params).then(res => {
@@ -3980,41 +4013,41 @@ export default {
 }
 
 
-.duration-mobile-container{
+.duration-mobile-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   height: 80px;
 }
-.duration-mobile-item{
+
+.duration-mobile-item {
   width: 45%;
 }
 
-.duration-mobile-item-to{
+.duration-mobile-item-to {
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 12px;
 }
 
-/deep/ .el-date-editor{
+/deep/ .el-date-editor {
   --el-date-editor-width: auto;
 }
 
-.contact-phone-container{
+.contact-phone-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-.contact-phone-l{
-  width:35%;
+.contact-phone-l {
+  width: 35%;
 }
 
-.contact-phone-r{
-  width:60%;
+.contact-phone-r {
+  width: 60%;
 }
-
 
 
 @media screen and (min-width: 1200px) {
@@ -4024,69 +4057,72 @@ export default {
 }
 
 @media screen and (min-width: 769px) {
-  .duration-pc{
+  .duration-pc {
 
   }
-  .duration-mobile{
+
+  .duration-mobile {
     display: none;
   }
 
 }
 
 @media screen and (max-width: 768px) {
-  .duration-pc{
+  .duration-pc {
     display: none;
   }
+
   .basic-r-container {
     width: 100%;
-    height: calc( var(--i-window-height) - 160px);
+    height: calc(var(--i-window-height) - 160px);
   }
 
-  .basic-r-container-bg{
+  .basic-r-container-bg {
     padding: 15px;
   }
 
-  .account-profile-t{
+  .account-profile-t {
     padding-bottom: 15px;
+    overflow: scroll;
   }
 
-  .account-profile-t-l{
-    font-size: 20px;
+  .account-profile-t-l {
+    font-size: 16px;
   }
 
-  .account-profile-item-container{
+  .account-profile-item-container {
     padding: 15px;
     margin-bottom: 15px;
   }
 
-  .account-profile-item-label{
+  .account-profile-item-label {
     font-size: 18px;
   }
 
-  .account-profile-item-label span{
+  .account-profile-item-label span {
     font-size: 14px;
   }
 
-  .categories-tags{
+  .categories-tags {
     padding-bottom: 0px;
   }
 
-  .categories-tags-item{
+  .categories-tags-item {
     font-size: 12px;
     padding: 0 8px;
   }
 
-  .work-experience{
+  .work-experience {
     flex-direction: column;
     width: 100%;
   }
 
-  .work-exp-temp-container{
+  .work-exp-temp-container {
     flex-direction: column;
     width: 100%;
   }
 
-  .work-exp-temp-item{
+  .work-exp-temp-item {
     width: calc(100% - 30px);
     padding: 15px;
     margin-right: 0;
@@ -4094,16 +4130,16 @@ export default {
   }
 
 
-
 }
 
 @media screen and (max-width: 360px) {
 
 
-  .account-profile-t{
+  .account-profile-t {
     flex-direction: column;
   }
-  .account-profile-t-r{
+
+  .account-profile-t-r {
     margin-top: 10px;
   }
 

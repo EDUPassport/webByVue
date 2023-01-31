@@ -67,7 +67,7 @@ module.exports = {
                             system: 'system-uicons'
                         },
                         // 标识自定义图标集
-                        customCollections: ['login','edu']
+                        customCollections: ['login','edu','pc','mobile']
                     })
                 ]
             }),
@@ -77,7 +77,9 @@ module.exports = {
                   autoInstall:true,
                   customCollections:{
                       login:FileSystemIconLoader('src/assets/svg/login',svg=>svg.replace(/^<svg /, '<svg fill="currentColor" ')),
-                      edu:FileSystemIconLoader('src/assets/svg/edu',svg=>svg.replace(/^<svg /, '<svg fill="currentColor" '))
+                      edu:FileSystemIconLoader('src/assets/svg/edu',svg=>svg.replace(/^<svg /, '<svg fill="currentColor" ')),
+                      pc:FileSystemIconLoader('src/assets/svg/pc',svg=>svg.replace(/^<svg /, '<svg fill="currentColor" ')),
+                      mobile:FileSystemIconLoader('src/assets/svg/mobile',svg=>svg.replace(/^<svg /, '<svg fill="currentColor" ')),
                   }
               }
           )

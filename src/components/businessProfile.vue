@@ -41,14 +41,14 @@
               <div class="info-item-r">{{ info.website }}</div>
             </div>
             <template v-if="fromMe">
-              <div class="info-item" v-if="info.work_phone">
-                <div class="info-item-l">Work phone:</div>
-                <div class="info-item-r">{{info.country_code}} {{ info.work_phone }}</div>
-              </div>
-              <div class="info-item" v-if="info.work_email">
-                <div class="info-item-l">Work email:</div>
-                <div class="info-item-r">{{ info.work_email }}</div>
-              </div>
+<!--              <div class="info-item" v-if="info.work_phone">-->
+<!--                <div class="info-item-l">Work phone:</div>-->
+<!--                <div class="info-item-r">{{info.country_code}} {{ info.work_phone }}</div>-->
+<!--              </div>-->
+<!--              <div class="info-item" v-if="info.work_email">-->
+<!--                <div class="info-item-l">Work email:</div>-->
+<!--                <div class="info-item-r">{{ info.work_email }}</div>-->
+<!--              </div>-->
             </template>
 
             <div class="info-item" v-if="info.country_info && $filters.countryInfoFormat(info.country_info)">

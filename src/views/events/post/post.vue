@@ -257,7 +257,7 @@
                           </el-col>
                           <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
                             <el-input v-model="basicForm.pay_money"
-                                      type="number"
+                                      oninput ="value=value.replace(/[^\d]/g,'')"
                                       placeholder="amount per ticket">
                             </el-input>
                           </el-col>
@@ -1099,6 +1099,7 @@ export default {
 
         } else {
           console.log('error submit!!')
+          this.$message.warning('Please complete all required fields')
           return false
         }
       })

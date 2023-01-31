@@ -315,7 +315,7 @@ export default {
 }
 
 .contact-us-container span{
-  font-family: BCRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 20px;
   color: #262626;
 }

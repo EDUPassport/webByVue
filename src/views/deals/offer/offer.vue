@@ -763,8 +763,9 @@ export default {
           })
 
         } else {
-          this.$loading().close()
+          // this.$loading().close()
           console.log('error submit!!')
+          this.$message.warning('Please complete all required fields')
           return false
         }
       })

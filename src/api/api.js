@@ -402,3 +402,15 @@ export const EDUCATOR_MANUAL_MATCH_JOB = (params) => get('/home/educator/manual/
 
 // 发布过event的城市
 export const EVENT_LOCATION_LIST = (params) => get('/home/event/location/list',params)
+
+// 增加聊天
+export const ADD_CHAT_TO_DATABASE = (params) => post('/chat/addChat', params)
+
+// 聊天列表
+export const CHAT_LIST_FROM_DATABASE = (params) => get('/chat/list',params)
+
+//教育工作者 删除工作经历
+export const EDUCATOR_DELETE_WORK_ITEM = (params) => post('/home/educator/work/delete', params)
+
+//教育工作者 删除教育经历
+export const EDUCATOR_DELETE_EDUCATION_ITEM = (params) => post('/home/education/delete', params)

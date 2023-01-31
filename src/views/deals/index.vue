@@ -43,12 +43,12 @@
                   >
                     <div class="deals-item">
                       <div class="deals-item-bg">
+                        <!--@click="viewProfile(item.user_id, item.identity, item.company_id)"-->
                         <el-image
                             v-if="item.company_info"
                             class="deals-item-background-img"
                             :src="item.company_info.background_image ? item.company_info.background_image : ''"
                             fit="cover"
-                            @click="viewProfile(item.user_id, item.identity, item.company_id)"
                         >
                           <template #error>
                           <div class="img-slot-background">
@@ -943,7 +943,7 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  cursor: pointer;
+  //cursor: pointer;
   overflow: hidden;
 
   position: relative;
@@ -953,6 +953,7 @@ export default {
   position: absolute;
   right: 20px;
   top: 20px;
+  cursor: pointer;
 
 }
 

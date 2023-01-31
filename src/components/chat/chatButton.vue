@@ -36,6 +36,7 @@ import {useStore} from 'vuex'
 // import {encode} from 'js-base64'
 import {useRouter} from 'vue-router'
 import {encode } from 'js-base64'
+import {ADD_CHAT_TO_DATABASE} from "@/api/api";
 
 export default {
   name: "chatComponent",
@@ -147,8 +148,23 @@ export default {
       let str = encodeURI(encode(JSON.stringify(obj)));
 
       let path = '/chat/messages/privatechat/' + targetUser.user_id
+      this.addChatToDatabase(targetUser.user_id, this.identity, targetUser.id)
 
       this.$router.push({ path: path , query:{str: str  } } )
+
+    },
+    addChatToDatabase(userId, identity, companyId){
+      let params = {
+        to_user_id: userId,
+        to_identity: identity,
+        to_company_id: companyId
+      }
+
+      ADD_CHAT_TO_DATABASE(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
 
     }
 

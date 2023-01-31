@@ -347,9 +347,17 @@
                             >
                             </el-option>
                           </el-select>
-                          <el-input class="xll-min-salary" type="number" v-model="jobForm.salary_min" placeholder="min"></el-input>
+                          <el-input class="xll-min-salary"
+                                    oninput ="value=value.replace(/[^\d]/g,'')"
+                                    v-model="jobForm.salary_min"
+                                    placeholder="min">
+                          </el-input>
                           <div class="xll-salary-line">-</div>
-                          <el-input class="xll-max-salary" type="number" v-model="jobForm.salary_max" placeholder="max"></el-input>
+                          <el-input class="xll-max-salary"
+                                    oninput ="value=value.replace(/[^\d]/g,'')"
+                                    v-model="jobForm.salary_max"
+                                    placeholder="max">
+                          </el-input>
                           <el-select class="xll-payment-select"
                                      :teleported="false"
                                      v-model="jobForm.payment_period"
@@ -395,7 +403,7 @@
 
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item label="Number of Vacancies">
-                        <el-input v-model="jobForm.numbers" type="number" placeholder="Number of Vacancies"></el-input>
+                        <el-input v-model="jobForm.numbers" oninput ="value=value.replace(/[^\d]/g,'')" placeholder="Number of Vacancies"></el-input>
                       </el-form-item>
                     </el-col>
 
@@ -2254,12 +2262,13 @@ export default {
         that.jobForm.job_id = jobIdFrom
       }
 
-      this.$loading({
-        text: 'Loading...'
-      })
-
       this.$refs[formName].validate((valid) => {
         if (valid) {
+
+          this.$loading({
+            text: 'Loading...'
+          })
+
           let data = Object.assign({}, that.jobForm);
           ADD_JOB(data).then(res => {
             // //console.log(res);
@@ -2327,8 +2336,9 @@ export default {
           })
 
         } else {
-          this.$loading().close()
+          // this.$loading().close()
           console.log('error submit!!')
+          this.$message.warning('Please complete all required fields')
           return false
         }
       })

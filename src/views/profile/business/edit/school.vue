@@ -140,7 +140,7 @@
 
               <div class="account-profile-item-container">
                 <div class="account-profile-item-label">
-                  2.Contact information <span>(Information that Educators will see when they visit you profile)</span>
+                  2.Contact information <span>(information that users will see when they visit your profile)</span>
                 </div>
                 <div class="account-profile-item-c">
 
@@ -186,7 +186,7 @@
                             </el-select>
                           </div>
                           <div class="contact-phone-r">
-                            <el-input v-model="basicForm.work_phone" type="number" maxlength="25" placeholder="Phone #"></el-input>
+                            <el-input v-model="basicForm.work_phone" oninput ="value=value.replace(/[^\d]/g,'')"  maxlength="15" placeholder="Phone #"></el-input>
                           </div>
                         </div>
                       </el-form-item>
@@ -383,7 +383,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Average class size">
-                        <el-input v-model="basicForm.class_size" type="number" placeholder="Number of students per class"></el-input>
+                        <el-input v-model="basicForm.class_size" oninput ="value=value.replace(/[^\d]/g,'')"  placeholder="Number of students per class"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
@@ -435,7 +435,7 @@
 
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Tuition">
-                        <el-input v-model="tuitionValue" type="number" placeholder="amount per year">
+                        <el-input v-model="tuitionValue" oninput ="value=value.replace(/[^\d]/g,'')"  placeholder="amount per year">
                           <template #prepend>
                             <el-select v-model="currencyValue" :teleported="false" placeholder="Currency" style="width: 115px">
                               <el-option :label="item.object_en" :value="item.id" v-for="(item,i) in currencyList" :key="i"/>

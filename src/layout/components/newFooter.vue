@@ -13,9 +13,9 @@
             <div class="footer-menu-item" @click="turnDeals()">
               EDU Deals
             </div>
-            <div class="footer-menu-item" @click="turnAboutUs()">
-              About Us
-            </div>
+<!--            <div class="footer-menu-item" @click="turnAboutUs()">-->
+<!--              About Us-->
+<!--            </div>-->
             <!--            <div class="footer-menu-item" @click="turnFeatures()">-->
             <!--              FEATURES-->
             <!--            </div>-->

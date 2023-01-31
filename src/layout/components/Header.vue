@@ -85,35 +85,41 @@
               <template v-if="token && token !='' ">
                 <div class="user-container-1">
 
-                  <div class="user-container-1-earth">
-
-                    <el-popover :width="160" >
-
-                      <template #reference>
-                        <el-icon :size="20" >
-                          <IconFa6SolidEarthAmericas />
-                        </el-icon>
-                      </template>
-                      <template #default>
-
-                        <div class="user-container-1-earth-expand">
-                          <div class="user-container-1-earth-international" @click="goInternationalWebsite()">
-                            <span v-if="envName === 'development' || envName === 'production'"></span>
-                            International
-                          </div>
-                          <div class="user-container-1-earth-china" @click="goChinaWebsite()">
-                            <span v-if="envName === 'developmentCN' || envName === 'productionCN'"></span>
-                            Chinese
-                          </div>
-                        </div>
-
-                      </template>
-                    </el-popover>
-
-                  </div>
-
                   <div class="user-1-r">
-                    <div class="user-name"> Welcome back, {{ username }}</div>
+                    <div class="user-1-r-container">
+                      <div class="user-container-1-earth">
+
+                        <el-popover :width="160" >
+
+                          <template #reference>
+                            <el-icon :size="20" >
+                              <IconFa6SolidEarthAmericas />
+                            </el-icon>
+                          </template>
+                          <template #default>
+
+                            <div class="user-container-1-earth-expand">
+                              <div class="user-container-1-earth-international" @click="goInternationalWebsite()">
+                                <span v-if="envName === 'development' || envName === 'production'"></span>
+                                International
+                              </div>
+                              <div class="user-container-1-earth-china" @click="goChinaWebsite()">
+                                <span v-if="envName === 'developmentCN' || envName === 'productionCN'"></span>
+                                Chinese
+                              </div>
+                            </div>
+
+                          </template>
+                        </el-popover>
+
+                      </div>
+
+                      <div class="user-name">
+                        Welcome back, {{ username }}
+                      </div>
+
+                    </div>
+
                     <div class="user-dropdown">
 
                       <div class="user-dropdown-ll">
@@ -206,19 +212,26 @@
                                      popper-class="xll-dropdown"
                         >
 
-                          <span class="el-dropdown-link">
+                          <div class="el-dropdown-link-container">
+                            <span class="el-dropdown-link" v-if="identity == 0">Guest</span>
+                            <span class="el-dropdown-link" v-else>
 
-                            <template v-if="identity == 0">Guest</template>
-                            <template v-if="identity == 1">Educator</template>
-                            <template v-if="identity == 2">Edu-Business</template>
-                            <template v-if="identity == 3">Edu-Business</template>
-                            <template v-if="identity == 4">Edu-Business</template>
-                            <template v-if="identity == 5">Vendor</template>
-                            <el-icon :size="24" style="margin-left: 5px;">
+<!--                              <template v-if="identity == 1">Educator</template>-->
+
+<!--                              <template v-if="identity == 2">Edu-Business</template>-->
+
+<!--                              <template v-if="identity == 3">Edu-Business</template>-->
+
+<!--                              <template v-if="identity == 4">Edu-Business</template>-->
+
+<!--                              <template v-if="identity == 5">Vendor</template>-->
+
+                              {{companyName}}
+                            </span>
+                            <el-icon :size="24" style="cursor:pointer;margin-left: 5px;">
                               <IconIcBaselineExpandMore/>
                             </el-icon>
-
-                          </span>
+                          </div>
 
                           <template #dropdown>
                             <el-dropdown-menu>
@@ -689,6 +702,11 @@ export default {
       }
 
     },
+    companyName:{
+      get(){
+        return this.$store.state.companyName
+      }
+    },
     identity: {
       get() {
         return this.$store.state.identity
@@ -891,14 +909,13 @@ export default {
           let userContact = res.message.user_contact;
 
           let companyInfo = {};
-
-          let defaultName = userContact.first_name + ' ' + userContact.last_name
-          let name = defaultName;
-
+          let name = userContact.first_name + ' ' + userContact.last_name;
+          let companyName = ''
           let avatar = 'https://oss.esl-passport.cn/educator.png';
 
           if (identity == 1) {
             avatar = userContact.headimgurl;
+            companyName = name;
           }
 
           if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
@@ -906,7 +923,8 @@ export default {
             if (userContact.company) {
               companyInfo = userContact.company;
               avatar = companyInfo.logo;
-              name = companyInfo.company_name;
+              // name = companyInfo.company_name;
+              companyName = companyInfo.company_name;
             }
 
           }
@@ -919,6 +937,7 @@ export default {
 
           this.$store.commit('username', name)
           this.$store.commit('userAvatar', avatar)
+          this.$store.commit('companyName', companyName)
           this.$store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
 
 
@@ -1577,15 +1596,22 @@ export default {
 }
 
 .user-1-r {
-  margin-left: 10px;
+  margin: 0 10px;
 }
-
+.user-1-r-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
 .user-name {
+
+  margin-left: 25px;
 
   font-size: 23px;
   line-height: 30px;
 
-  text-align: left;
+  text-align: right;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -1600,9 +1626,17 @@ export default {
   border-radius: 4px;
 }
 
-.el-dropdown-link {
+.el-dropdown-link-container{
   display: flex;
   align-items: center;
+}
+
+.el-dropdown-link {
+
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   color: #262626;
   font-size: 25px;
@@ -1969,6 +2003,7 @@ export default {
 
   .el-dropdown-link {
     font-size: 12px;
+    max-width: 100px;
   }
 
   .user-avatar {

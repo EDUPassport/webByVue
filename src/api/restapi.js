@@ -1,4 +1,4 @@
-import {USER_INFO_VISITOR_V2} from '@/api/api'
+import {CHAT_LIST_FROM_DATABASE, USER_INFO_VISITOR_V2} from '@/api/api'
 
 class RestApi {
     //用户数据示例
@@ -95,8 +95,14 @@ class RestApi {
         return this.users;
     }
 
-    findFriends(user) {
-        return this.users.filter((v) => v.id !== user.id);
+    async findFriends() {
+
+        let params = {
+            identity: 1
+        }
+        let users = await CHAT_LIST_FROM_DATABASE(params)
+        return users.message;
+        // return this.users.filter((v) => v.id !== user.id);
     }
 
     findGroups(user) {

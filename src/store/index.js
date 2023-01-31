@@ -11,6 +11,7 @@ const store = createStore({
         return {
             username: localStorage.getItem('name'),
             userAvatar: localStorage.getItem('avatar'),
+            companyName: '',
             identity: localStorage.getItem('identity'),
             thirdCompanyId:localStorage.getItem('third_company_id'),
             currentUser:currentUserStr ?  JSON.parse(currentUserStr) : '',
@@ -31,6 +32,9 @@ const store = createStore({
         },
         userAvatar(state, data) {
             state.userAvatar = data
+        },
+        companyName(state, data) {
+            state.companyName = data
         },
         identity(state, data) {
             state.identity = data
