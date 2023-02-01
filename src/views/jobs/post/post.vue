@@ -685,13 +685,13 @@
 
                     <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="Applicant's age">
-                        <el-slider v-model="ageValue" range show-stops :max="100"></el-slider>
+                        <el-slider v-model="ageValue" range show-stops :min="1" :max="100"></el-slider>
                       </el-form-item>
                     </el-col>
 
                     <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="Years of Experience Required">
-                        <el-slider v-model="yearOfExpValue" range show-stops :max="40"></el-slider>
+                        <el-slider v-model="yearOfExpValue" range show-stops  :max="40"></el-slider>
                       </el-form-item>
                     </el-col>
 
@@ -699,8 +699,6 @@
                   </el-row>
 
                   <el-row :gutter="50">
-
-
 
                     <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                       <el-form-item label="Working Hours">

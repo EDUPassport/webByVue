@@ -89,7 +89,7 @@
 
               <div class="account-profile-item-container">
                 <div class="account-profile-item-label">
-                  2.Contact information <span>(Information that Recruiters will see when they visit you profile)</span>
+                  2.Contact information
                 </div>
                 <div class="account-profile-item-c">
                   <el-row :gutter="50">

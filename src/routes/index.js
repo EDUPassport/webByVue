@@ -302,6 +302,12 @@ const routes = [
                         activeMenu:'/chat/messages',
                         requireAuth: true
                     },
+                    {
+                        path: 'history',
+                        component: () => import('@/views/chat/History'),
+                        activeMenu:'/chat/messages',
+                        requireAuth: true
+                    },
 
                 ]
             },

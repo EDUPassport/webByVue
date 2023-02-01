@@ -102,26 +102,27 @@
                                       :job-info="detailData" >
                       </applyJobButton>
 
-                      <template v-if="detailData.is_favorite && detailData.is_favorite == 1">
-                        <el-button plain round
-                                   @click="cancelSaveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                      <template v-if="currentIdentity != 5">
+                        <el-button
+                            v-if="detailData.is_favorite && detailData.is_favorite == 1"
+                            plain round
+                            @click="cancelSaveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
                           SAVE
                           <el-icon color="#6650B3" >
                             <IconFontistoFavorite/>
                           </el-icon>
                         </el-button>
-
-                      </template>
-                      <template v-else>
-                        <el-button plain round
-                                   @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
+                        <el-button
+                            v-else
+                            plain round
+                            @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
                           SAVE
                           <el-icon>
                             <CollectionTag/>
                           </el-icon>
                         </el-button>
-                      </template>
 
+                      </template>
 
                     </div>
                   </div>
@@ -409,12 +410,17 @@ export default {
         query: query
       })
     }
+
+    const currentIdentity = localStorage.getItem('identity')
+
     return {
       onSwiper,
       onSlideChange,
       skipJobsList,
+      currentIdentity,
       exchangeAccountInfo
-    };
+    }
+
   },
   beforeRouteUpdate(to){
     console.log(to)

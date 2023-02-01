@@ -30,18 +30,20 @@
         >
           <div  class="jobs-list-item-featured ">
 
-            <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                 @click="cancelFavoriteForFeatured(1,item.id,index)">
-              <el-icon :size="30" color="#9173ff">
-                <CollectionTag />
-              </el-icon>
-            </div>
-            <div class="jobs-favorite" v-else
-                 @click="addFavoriteForFeatured(item.id,1,item.job_title,item.company_logo,i)">
-              <el-icon :size="30">
-                <CollectionTag />
-              </el-icon>
-            </div>
+            <template v-if="currentIdentity != 5">
+              <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                   @click="cancelFavoriteForFeatured(1,item.id,index)">
+                <el-icon :size="30" color="#9173ff">
+                  <CollectionTag />
+                </el-icon>
+              </div>
+              <div class="jobs-favorite" v-else
+                   @click="addFavoriteForFeatured(item.id,1,item.job_title,item.company_logo,i)">
+                <el-icon :size="30">
+                  <CollectionTag />
+                </el-icon>
+              </div>
+            </template>
 
             <div class="jobs-list-item-l">
               <el-image class="jobs-item-logo"
@@ -119,18 +121,21 @@
                 v-for="(item,index) in jobListData" :key="index"
                 :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' ">
 
-            <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                 @click="cancelFavorite(1,item.id,index)">
-              <el-icon :size="30" color="#9173ff">
-                <CollectionTag />
-              </el-icon>
-            </div>
-            <div class="jobs-favorite" v-else
-                 @click="addFavorite(item.id,1,item.job_title,item.company_logo,index)">
-              <el-icon :size="30">
-                <CollectionTag />
-              </el-icon>
-            </div>
+            <template v-if="currentIdentity != 5">
+              <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                   @click="cancelFavorite(1,item.id,index)">
+                <el-icon :size="30" color="#9173ff">
+                  <CollectionTag />
+                </el-icon>
+              </div>
+              <div class="jobs-favorite" v-else
+                   @click="addFavorite(item.id,1,item.job_title,item.company_logo,index)">
+                <el-icon :size="30">
+                  <CollectionTag />
+                </el-icon>
+              </div>
+            </template>
+
             <div class="jobs-list-item-l">
               <el-image class="jobs-item-logo"
                         :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
@@ -204,18 +209,21 @@
           >
             <div  class="jobs-list-item-featured ">
 
-              <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                   @click="cancelFavoriteForFeatured(1,item.id,index)">
-                <el-icon :size="30" color="#9173ff">
-                  <CollectionTag />
-                </el-icon>
-              </div>
-              <div class="jobs-favorite" v-else
-                   @click="addFavoriteForFeatured(item.id,1,item.job_title,item.company_logo,i)">
-                <el-icon :size="30">
-                  <CollectionTag />
-                </el-icon>
-              </div>
+              <template v-if="currentIdentity != 5">
+                <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1 "
+                     @click="cancelFavoriteForFeatured(1,item.id,index)">
+                  <el-icon :size="30" color="#9173ff">
+                    <CollectionTag />
+                  </el-icon>
+                </div>
+                <div class="jobs-favorite" v-else
+                     @click="addFavoriteForFeatured(item.id,1,item.job_title,item.company_logo,i)">
+                  <el-icon :size="30">
+                    <CollectionTag />
+                  </el-icon>
+                </div>
+
+              </template>
 
               <div class="jobs-list-item-l">
                 <el-image class="jobs-item-logo"
@@ -289,18 +297,21 @@
                 v-for="(item,index) in jobListData" :key="index"
                 :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' ">
 
-            <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                 @click="cancelFavorite(1,item.id,index)">
-              <el-icon :size="30" color="#9173ff">
-                <CollectionTag />
-              </el-icon>
-            </div>
-            <div class="jobs-favorite" v-else
-                 @click="addFavorite(item.id,1,item.job_title,item.company_logo,index)">
-              <el-icon :size="30">
-                <CollectionTag />
-              </el-icon>
-            </div>
+            <template v-if="currentIdentity != 5">
+              <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
+                   @click="cancelFavorite(1,item.id,index)">
+                <el-icon :size="30" color="#9173ff">
+                  <CollectionTag />
+                </el-icon>
+              </div>
+              <div class="jobs-favorite" v-else
+                   @click="addFavorite(item.id,1,item.job_title,item.company_logo,index)">
+                <el-icon :size="30">
+                  <CollectionTag />
+                </el-icon>
+              </div>
+            </template>
+
             <div class="jobs-list-item-l" >
               <el-image class="jobs-item-logo"
                         @click="turnJobDetailFromMobile(item.id)"
@@ -430,6 +441,13 @@ export default {
   name: "jobsListComponent",
   props:['jobListData','loading','loadingFeatured',
     'adsData', 'jobPage','jobLimit','jobTotalNum','selectedJobId','isOther','companyInfo','fromBusinessProfile'],
+  setup(){
+    const currentIdentity = localStorage.getItem('identity')
+
+    return {
+      currentIdentity
+    }
+  },
   data(){
     return {
       jobHeight: 140,

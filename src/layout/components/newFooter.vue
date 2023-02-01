@@ -7,12 +7,19 @@
         </div>
         <div class="footer-t-r">
           <div class="footer-menu">
+            <div class="footer-menu-item" @click="turnHome()">
+              Home
+            </div>
             <div class="footer-menu-item" @click="turnJobs()">
               EDU Jobs
             </div>
             <div class="footer-menu-item" @click="turnDeals()">
               EDU Deals
             </div>
+            <div class="footer-menu-item" @click="turnEvents()">
+              EDU Events
+            </div>
+
 <!--            <div class="footer-menu-item" @click="turnAboutUs()">-->
 <!--              About Us-->
 <!--            </div>-->
@@ -43,7 +50,7 @@
           © 2023 EDU Passport
         </div>
         <div class="footer-b-r">
-          Make sure to check back soon as we add more information.
+          We are change-makers in global education.
         </div>
         <div class="footer-b-r-mobile">
           care@edupassport.io
@@ -97,11 +104,17 @@ export default {
   },
   methods: {
 
+    turnHome(){
+      this.$router.push('/')
+    },
     turnJobs(){
       this.$router.push('/jobs')
     },
     turnDeals(){
       this.$router.push('/deals')
+    },
+    turnEvents(){
+      this.$router.push('/events')
     },
     turnAboutUs() {
       this.$router.push('/about/us')
@@ -140,7 +153,7 @@ export default {
 }
 
 .footer-logo-img{
-  width: 120px;
+  width: 110px;
 }
 
 .footer-t-r{
@@ -157,7 +170,7 @@ export default {
 .footer-menu-item {
   cursor: pointer;
   color: #FFFFFF;
-  font-size: 25px;
+  font-size: 18px;
   font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   margin-right: 50px;
 }

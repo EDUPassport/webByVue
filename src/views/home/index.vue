@@ -1,9 +1,20 @@
 <template>
   <div class="bg">
     <el-row class="t-container" :gutter="0" align="middle" justify="center">
-      <el-col :xs="0" :sm="0" :md="9" :lg="9" :xl="9">
-        <div class="nav-link-container">
+      <el-col :xs="12" :sm="2" :md="2" :lg="1" :xl="1">
 
+        <div class="logo-new-container">
+          <div class="logo-new">
+            <el-image class="logo-new-logo-img" :src="logoTransparentImg" fit="contain"></el-image>
+            <el-image class="logo-new-logo-mobile-img" :src="logoImgLight" fit="contain"></el-image>
+          </div>
+        </div>
+
+      </el-col>
+
+      <el-col :xs="0" :sm="0" :md="16" :lg="17" :xl="17">
+
+        <div class="nav-link-container">
           <router-link to="/" exact>HOME</router-link>
           <router-link to="/jobs" exact>EDU JOBS</router-link>
           <router-link to="/deals" exact> EDU DEALS</router-link>
@@ -13,18 +24,7 @@
 
       </el-col>
 
-      <el-col :xs="12" :sm="12" :md="4" :lg="4" :xl="4">
-
-        <div class="logo-new-container">
-          <div class="logo-new">
-            <el-image class="logo-new-logo-img" :src="logoImgLightH" fit="contain"></el-image>
-            <el-image class="logo-new-logo-mobile-img" :src="logoImgLight" fit="contain"></el-image>
-          </div>
-        </div>
-
-      </el-col>
-
-      <el-col  :xs="12" :sm="12" :md="0" :lg="0" :xl="0">
+      <el-col  :xs="12" :sm="20" :md="0" :lg="0" :xl="0">
 
         <div class="t-mobile-btn-container">
           <div class="t-mobile-sign-up-free" v-if="!token">
@@ -40,8 +40,7 @@
         <mobileDrawerMenu :visible="menuDrawerStatus" @close="menuDrawerStatus=false"></mobileDrawerMenu>
       </el-col>
 
-
-      <el-col class="t-btn-container" :xs="0" :sm="0" :md="9" :lg="9" :xl="9">
+      <el-col class="t-btn-container" :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
 
         <template v-if="token">
           <el-button class="home-profile-btn" type="primary" link @click="turnDashboard()">
@@ -406,7 +405,7 @@
             Subscribe to follow <span>our journey</span>
           </div>
           <div class="s-tips">
-            As we continue to grow rapidly, we often add new features to impress all in the education industry! You will receive EDU Passport news / updates with this email.
+            As we continue to grow rapidly, new updates & releases are coming weekly! Sign up for our newsletter to stay in the loop.
           </div>
 
           <div class="s-input-container">
@@ -414,8 +413,8 @@
               <el-input placeholder="Your email address" v-model="subscribeEmailValue"></el-input>
             </div>
             <div class="s-input-r">
-              <el-button link type="primary" round @click="subscribe()">
-                subscribe
+              <el-button type="primary" round @click="subscribe()">
+                Subscribe
               </el-button>
             </div>
           </div>
@@ -424,59 +423,7 @@
       </el-col>
     </el-row>
 
-    <div class="footer-bg-container">
-      <div class="footer-container">
-        <div class="footer-t">
-          <div class="footer-logo">
-            <el-image class="footer-logo-img" :src="logoImg"></el-image>
-          </div>
-          <div class="footer-t-r">
-            <div class="footer-menu">
-              <div class="footer-menu-item" @click="turnJobs()">
-                EDU Jobs
-              </div>
-              <div class="footer-menu-item" @click="turnDeals()">
-                EDU Deals
-              </div>
-<!--              <div class="footer-menu-item" @click="turnAboutUs()">-->
-<!--                About Us-->
-<!--              </div>-->
-              <!--            <div class="footer-menu-item" @click="turnFeatures()">-->
-              <!--              FEATURES-->
-              <!--            </div>-->
-              <!--            <div class="footer-menu-item" @click="turnPricing()">-->
-              <!--              PRICING-->
-              <!--            </div>-->
-              <!--            <div class="footer-menu-item" @click="turnContactUs()">-->
-              <!--              CONTACT US-->
-              <!--            </div>-->
-            </div>
-            <div class="footer-contact-us">
-              <div class="footer-contact-us-label">Contact us</div>
-              <div class="footer-contact-us-c">
-                care@edupassport.io
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="footer-m">
-
-        </div>
-        <div class="footer-b">
-
-          <div class="footer-b-l">
-            © 2023 EDU Passport
-          </div>
-          <div class="footer-b-r">
-            Make sure to check back soon as we add more information.
-          </div>
-          <div class="footer-b-r-mobile">
-            care@edupassport.io
-          </div>
-
-        </div>
-      </div>
-    </div>
+    <newFooter></newFooter>
 
     <initLoadingComponent :loadingStatus="initLoadingStatus" ></initLoadingComponent>
 
@@ -509,16 +456,19 @@ import logoImg from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.
 import logoImgLight from  "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
 import logoImgLightH from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
 import landingPageMobileResponsiveImg  from '@/assets/newHome/landing_page_mobile_responsive.png'
+import logoTransparentImg from '@/assets/newHome/logo/Logo_Transparent.png'
 import mobileDrawerMenu from "@/components/mobileDrawerMenu";
 // import {loadJs, removeJs} from "@/utils/tools";
 import jobProcessComponent from "@/components/landing/home/jobProcess.vue";
+import newFooter from '@/layout/components/newFooter.vue'
 
 export default {
   name: "index",
   components: {
     initLoadingComponent,
     mobileDrawerMenu,
-    jobProcessComponent
+    jobProcessComponent,
+    newFooter
   },
   data() {
     return {
@@ -526,6 +476,7 @@ export default {
       logoImgLight,
       logoImgLightH,
       landingPageMobileResponsiveImg,
+      logoTransparentImg,
       imgLogo,
       imgOne,
       dealsDemoImg,
@@ -575,11 +526,11 @@ export default {
 
               tabSliderEvent(false);
 
-            }, 1500)
+            }, 3000)
 
-          }, 1500)
+          }, 3000)
 
-        }, 1500)
+        }, 3000)
 
       }
     }
@@ -740,7 +691,7 @@ export default {
 }
 
 .logo-new-logo-img{
-  width:260px;
+  width:50px;
 }
 
 .logo-edu {
@@ -935,7 +886,7 @@ export default {
 
 .f-tab-bg-t-3{
   width: 130px;
-  transform: translateX(517px);
+  transform: translateX(522px);
   animation-name: slide-in-left-v;
   animation-duration: .8s;
  }
@@ -1046,13 +997,6 @@ export default {
   background-color: rgba(255,255,255,.2);
 }
 
-.f-c-l-item-active {
-  /*opacity: 1;*/
-  /*border-left: 7px solid #6650B3;*/
-  /*border-top-left-radius: 7px;*/
-  /*border-bottom-left-radius: 7px;*/
-}
-
 .f-c-l-item-label {
   color: #262626;
   font-size: 30px;
@@ -1072,7 +1016,7 @@ export default {
 }
 
 .s-container {
-  width: 710px;
+  width: 650px;
   padding: 25px 50px;
   background-color: #F0F2F5;
   box-shadow: 0px 3px 23px #00000012;
@@ -1091,14 +1035,16 @@ export default {
 }
 
 .s-tips {
-  margin-top: 15px;
+  margin: 15px 25px;
   color: #262626;
   font-size: 23px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .s-input-container {
-  margin-top: 25px;
+
+  margin: 25px 25px 0 25px;
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1107,102 +1053,16 @@ export default {
 
 .s-input-l {
   width: calc(100% - 120px);
+
+}
+.s-input-l /deep/ .el-input__wrapper{
+  box-shadow: none;
+  border-radius: 50px;
 }
 
 .s-input-r {
   width: 100px;
   text-align: right;
-}
-
-.footer-bg-container {
-  background-color: #262626;
-  padding: 50px 100px;
-}
-
-.footer-container {
-
-}
-
-.footer-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.footer-logo {
-
-  text-align: left;
-  position: relative;
-
-  cursor: pointer;
-  width: 220px;
-}
-
-.footer-logo-img{
-  width: 120px;
-}
-
-.footer-t-r{
-
-}
-
-.footer-menu {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.footer-menu-item {
-  cursor: pointer;
-  color: #FFFFFF;
-  font-size: 25px;
-  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  margin-right: 50px;
-}
-
-.footer-menu-item:hover {
-  text-decoration: underline;
-}
-
-.footer-contact-us{
-  margin-top: 50px;
-}
-
-.footer-contact-us-label{
-  font-family: BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #FFFFFF;
-}
-.footer-contact-us-c{
-  font-family: BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #FFFFFF;
-}
-
-.footer-m {
-  margin-top: 40px;
-
-}
-
-.footer-b {
-  margin-top: 10px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #FFFFFF;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: flex-start;
-}
-
-.footer-b-l{
-  width: 220px;
-  font-size: 16px;
-}
-
-.footer-b-r{
-  font-size: 23px;
 }
 
 
@@ -1252,7 +1112,7 @@ export default {
 @keyframes slide-in-left-v {
 
   0% {
-    transform: translateX(340px);
+    transform: translateX(360px);
     opacity: 0;
   }
   100% {
@@ -1342,8 +1202,6 @@ export default {
     display: none;
   }
 
-
-
   .f-c{
     flex-direction: column;
     padding-left: 0;
@@ -1386,15 +1244,11 @@ export default {
   }
   .b-row-container{
     padding-top: 10px;
-
   }
 
   .s-tips{
     font-size: 12px;
   }
-
-
-
 
   .c-row-container{
     padding-top: 15px;
@@ -1411,75 +1265,6 @@ export default {
 
   .s-label{
     font-size: 20px;
-  }
-
-  .footer-bg-container{
-    padding: 15px;
-  }
-
-  .footer-t{
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-
-  .footer-t-r{
-    display: flex;
-    flex-direction: row;
-
-  }
-
-  .footer-logo{
-    width: 80px;
-  }
-
-  .footer-logo-img{
-    width: 80px;
-  }
-
-
-  .footer-contact-us{
-    display: none;
-  }
-
-  .footer-menu{
-    /*margin-top: 10px;*/
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .footer-menu-item{
-    width: 100%;
-    font-size: 12px;
-    margin-bottom: 20px;
-    margin-right: 0;
-    text-align: right;
-  }
-
-  .footer-contact-us-label{
-    font-size: 16px;
-  }
-
-  .footer-contact-us-c{
-    font-size: 16px;
-  }
-
-  .footer-b{
-
-  }
-  .footer-b-l{
-    text-align: left;
-    width: 100%;
-    font-size: 12px;
-  }
-
-  .footer-b-r{
-    display: none;
-    margin-top: 10px;
-    font-size: 16px;
-  }
-  .footer-b-r-mobile{
-    font-size: 12px;
-    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   }
 
   .t-btn-menu-icon-container{

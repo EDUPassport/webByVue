@@ -3,7 +3,12 @@
     <div class="conversation-list">
       <div class="conversation-list-container">
         <div class="conversation-list-top">
-          <div class="conversation-list-top-label">Messages</div>
+          <div class="conversation-list-top-label">
+            <span>Recent Messages</span>
+            <el-button type="primary" round @click="turnHistory()">
+              History
+            </el-button>
+          </div>
           <div class="conversation-list-top-search">
 
             <el-select
@@ -81,7 +86,9 @@
               </div>
             </router-link>
           </div>
-          <div v-else class="no-conversation">- No Chat Currently -</div>
+          <div v-else class="no-conversation">
+            <el-empty description="No Recent Messages"></el-empty>
+          </div>
         </div>
       </div>
       <div v-if="rightClickMenu.visible" :style="{'left': rightClickMenu.x + 'px', 'top': rightClickMenu.y + 'px'}"
@@ -125,6 +132,9 @@ export default {
     let chatSearchLoading = ref(false)
     let chatSearchConversationData = ref([])
 
+    function turnHistory(){
+      return router.push('/chat/history')
+    }
     function chatSearchRemoteMethod(query){
       if(query){
         chatSearchLoading.value = true;
@@ -292,7 +302,8 @@ export default {
       topConversation,
       deleteConversation,
       chatLocation,
-      chatLocationChange
+      chatLocationChange,
+      turnHistory
     }
 
   }
@@ -330,6 +341,13 @@ export default {
   }
 
   .conversation-list-top-label{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .conversation-list-top-label span{
     color: #262626;
     font-size: 24px;
     font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
@@ -504,7 +522,7 @@ export default {
       padding: 15px 15px 0 15px;
     }
 
-    .conversation-list-top-label{
+    .conversation-list-top-label span{
       font-size: 18px;
     }
     .conversation-list-top-search{

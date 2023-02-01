@@ -40,7 +40,7 @@
                 <el-image class="image-pc" :src="pcImageThree"></el-image>
                 <br>
                 <span>
-                    Successful applicants will <br> invited for an interview.
+                    Successful applicants will be<br> invited for an interview.
                   </span>
               </div>
 

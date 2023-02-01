@@ -37,9 +37,9 @@
                       </el-icon>
                       <span v-if="unreadAmount" class="menu-unread">{{ unreadAmount }}</span>
                     </router-link>
-                    <router-link tag="div" class="menu-item" to="/chat/contacts" replace>
+                    <router-link tag="div" class="menu-item" to="/chat/history" replace>
                     <el-icon :size="25">
-                      <IconTypcnContacts />
+                      <IconRiChatHistoryLine />
                     </el-icon>
                   </router-link>
                   </div>

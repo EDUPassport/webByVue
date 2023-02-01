@@ -97,6 +97,10 @@
                     {{ detailData.desc }}
                   </p>
 
+<!--                  <div class="dialog-desc">-->
+<!--                    {{ detailData.tags_en }}-->
+<!--                  </div>-->
+
                   <template v-if="detailData.is_online == 2 || detailData.is_online == 3">
                     <mapComponent :lng="detailData.lng" :lat="detailData.lat"></mapComponent>
                   </template>

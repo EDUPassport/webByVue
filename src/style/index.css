@@ -32,10 +32,8 @@
 
 .el-button--default{
     --el-button-border-color:transparent;
-    /*--el-button-text-color:#9173ff;*/
     --el-button-font-size: 20px;
-    /*--el-button-hover-bg-color: #9173ff;*/
-    /*--el-button-hover-text-color: #ffffff;*/
+    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 
@@ -170,7 +168,9 @@
     font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-
+.el-empty__description p{
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
 
 @media screen and (max-width: 768px){
 
