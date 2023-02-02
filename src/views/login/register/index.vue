@@ -333,7 +333,7 @@ import {
   EMAIL_REGISTER_V2,
   SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
-  PHONE_REGISTER_V2
+  PHONE_REGISTER_V2, REGISTER_EMAIL_CHECK
 } from "@/api/api";
 //LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
@@ -728,13 +728,33 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // console.log(valid)
+          let email = this.registerForm.email;
+          let emailCode = this.registerForm.code;
           let password = this.registerForm.password
           let confirmPassword = this.registerForm.c_password;
-          if (confirmPassword !== password) {
-            this.$message.warning('The two passwords are inconsistent')
-            return;
+
+          let params = {
+            email:email,
+            code:emailCode
           }
-          self.stepValue = 2;
+
+          REGISTER_EMAIL_CHECK(params).then(res=>{
+            if(res.code == 200){
+              // console.log(res)
+              if (confirmPassword !== password) {
+                this.$message.warning('The two passwords are inconsistent')
+                return;
+              }
+              self.stepValue = 2;
+
+            }
+
+          }).catch(err=>{
+            console.log(err)
+            return this.$message.warning('Incorrect verification code')
+          })
+
+
         } else {
           console.log('error submit!!')
           this.submitRegisterLoadingStatus = false

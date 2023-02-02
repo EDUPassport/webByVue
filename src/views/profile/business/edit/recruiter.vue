@@ -1337,7 +1337,8 @@ export default {
       })
     },
     cancel(){
-      this.$router.push('/account/home')
+      this.$router.go(-1)
+      // this.$router.push('/account/home')
     },
     updateUserProfilePercentage(){
 

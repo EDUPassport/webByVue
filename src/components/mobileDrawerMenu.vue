@@ -18,37 +18,36 @@
         </div>
 
       </template>
+
       <div class="mobile-menu-drawer-bg">
-        <div class="nav-link-item">
-          <router-link to="/" exact>HOME</router-link>
+        <div class="nav-link-item"  @click="turnHome()">
+          <span :class="sMenuPath === '/' ? 'nav-link-item-active' : '' ">HOME</span>
         </div>
-        <div class="nav-link-item">
-          <router-link to="/jobs" exact>EDU JOBS</router-link>
+        <div class="nav-link-item" @click="turnJobs()">
+          <span :class="sMenuPath === '/jobs' ? 'nav-link-item-active' : '' ">EDU JOBS</span>
         </div>
-        <div class="nav-link-item">
-          <router-link to="/deals" exact> EDU DEALS</router-link>
+        <div class="nav-link-item" @click="turnDeals()">
+          <span :class="sMenuPath === '/deals' ? 'nav-link-item-active' : '' ">EDU DEALS</span>
         </div>
-        <div class="nav-link-item">
-          <router-link to="/events" exact>EDU EVENTS</router-link>
+        <div class="nav-link-item" @click="turnEvents()">
+          <span :class="sMenuPath === '/events' ? 'nav-link-item-active' : '' ">EDU EVENTS</span>
         </div>
-        <div class="nav-link-item">
-          <el-link :underline=false href="https://blogs.edupassport.io/" target="_blank">BLOG</el-link>
+        <div class="nav-link-item" @click="turnBlog()">
+          <span>BLOG</span>
         </div>
 
         <template v-if="token">
-          <div class="nav-link-item">
-            <router-link to="/overview" exact>PROFILE</router-link>
+          <div class="nav-link-item" @click="turnProfile()">
+            <span :class="sMenuPath === '/overview' ? 'nav-link-item-active' : '' ">PROFILE</span>
           </div>
         </template>
         <template v-else>
-          <div class="nav-link-item">
-            <router-link to="/login" exact>LOGIN</router-link>
+          <div class="nav-link-item" @click="turnLogin()">
+            <span :class="sMenuPath === '/login' ? 'nav-link-item-active' : '' ">LOGIN</span>
           </div>
-
-          <div class="nav-link-item">
-            <router-link to="/signUp" exact>SIGN UP</router-link>
+          <div class="nav-link-item" @click="turnSignUp()">
+            <span :class="sMenuPath === '/signup' ? 'nav-link-item-active' : '' ">SIGN UP</span>
           </div>
-
         </template>
 
         <div class="mobile-chose-country">
@@ -62,7 +61,6 @@
 
       </div>
 
-
     </el-drawer>
 
   </div>
@@ -71,15 +69,95 @@
 
 <script>
 import logoImgLogo from '@/assets/newHome/logo/Logo_Transparent.png'
+import {useRouter} from 'vue-router'
+import {ref} from 'vue'
 
 export default {
   name: "mobileDrawerMenu",
-  props:['visible'],
-  data(){
+  props: ['visible'],
+  setup(props, context) {
+    const router = useRouter();
+    console.log(props)
+    // const visible = props.visible
+    const sMenuPath = ref(window.location.pathname)
+
+    function turnHome() {
+      context.emit('close')
+      sMenuPath.value = '/'
+      return router.push('/')
+    }
+
+    function turnJobs() {
+      context.emit('close')
+      sMenuPath.value = '/jobs'
+      return router.push('/jobs')
+    }
+
+    function turnDeals() {
+      context.emit('close')
+      sMenuPath.value = '/deals'
+      return router.push('/deals')
+    }
+
+    function turnEvents() {
+      context.emit('close')
+      sMenuPath.value = '/events'
+      return router.push('/events')
+    }
+
+    function turnProfile() {
+      context.emit('close')
+      sMenuPath.value = '/overview'
+      return router.push('/overview')
+    }
+
+    function turnLogin() {
+      context.emit('close')
+      sMenuPath.value = '/login'
+      return router.push('/login')
+    }
+
+    function turnSignUp() {
+      context.emit('close')
+      sMenuPath.value = '/signup'
+      return router.push('/signup')
+    }
+
+    function turnChinaWebsite() {
+      context.emit('close')
+      return window.open('https://www.edupassport.cn')
+    }
+
+    function turnGlobalWebsite() {
+      context.emit('close')
+      return window.open('https://www.edupassport.io')
+    }
+
+    function turnBlog() {
+      context.emit('close')
+      return window.open('https://blogs.edupassport.io/')
+    }
+
+    return {
+      sMenuPath,
+      turnHome,
+      turnJobs,
+      turnDeals,
+      turnEvents,
+      turnProfile,
+      turnLogin,
+      turnSignUp,
+      turnChinaWebsite,
+      turnGlobalWebsite,
+      turnBlog
+    }
+
+  },
+  data() {
     return {
       logoImgLogo,
       envName: process.env.VUE_APP_ENV_NAME,
-      menuDrawerStatus:false
+      menuDrawerStatus: false
     }
   },
   computed: {
@@ -88,30 +166,25 @@ export default {
         return this.$store.state.identity
       }
     },
-    token:{
-      get(){
+    token: {
+      get() {
         return localStorage.getItem('token')
       }
     }
 
   },
-  methods:{
-    closeMobileMenu(){
+  methods: {
+    closeMobileMenu() {
       this.$emit('close')
-    },
-    turnChinaWebsite(){
-      window.open('https://www.edupassport.cn')
-    },
-    turnGlobalWebsite(){
-      window.open('https://www.edupassport.io')
     }
+
   }
 
 }
 </script>
 
 <style scoped>
-/deep/ .el-drawer{
+/deep/ .el-drawer {
   background-color: #F0F2F5;
 }
 
@@ -143,10 +216,9 @@ export default {
 .nav-link-item {
   cursor: pointer;
   padding: 10px;
-  /*border-bottom: 1px solid #EEEEEE;*/
 }
 
-.nav-link-item span{
+.nav-link-item span {
   font-size: 16px;
   color: #262626;
   line-height: 20px;
@@ -163,6 +235,9 @@ export default {
   font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
+.nav-link-item-active{
+  text-decoration: underline;
+}
 
 .logo-mobile-new-container {
   display: none;
@@ -201,15 +276,15 @@ export default {
     font-size: 12px;
   }
 
-  .mobile-menu-drawer-bg{
+  .mobile-menu-drawer-bg {
     background-color: #F0F2F5;
-    height: calc(100% - 100px);
+    height: 100%;
     position: relative;
   }
 
-  .mobile-chose-country{
+  .mobile-chose-country {
     position: absolute;
-    bottom: 10px;
+    bottom: 0;
     left: 0;
     right: 0;
     margin: auto;

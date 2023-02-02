@@ -513,54 +513,7 @@
     </el-dialog>
 
 
-    <el-drawer
-        v-model="menuDrawerStatus"
-        direction="ltr"
-        size="50%"
-    >
-      <template #header>
-        <div style="width: 30px;">
-          <div class="logo-mobile-new-container">
-            <div class="logo-mobile-new">
-              <el-image class="logo-mobile-new-logo-img" :src="logoImgLogo"></el-image>
-            </div>
-            <div class="logo-mobile-new-beta">Beta</div>
-            <el-button link @click="closeMobileMenu()">close</el-button>
-          </div>
-        </div>
-
-      </template>
-      <div class="mobile-menu-drawer-bg">
-        <div class="nav-link-item">
-          <router-link to="/" exact>HOME</router-link>
-        </div>
-        <div class="nav-link-item">
-          <router-link to="/jobs" exact>EDU JOBS</router-link>
-        </div>
-        <div class="nav-link-item">
-          <router-link to="/deals" exact>EDU DEALS</router-link>
-        </div>
-        <div class="nav-link-item">
-          <router-link to="/events" exact>EDU EVENTS </router-link>
-        </div>
-        <div class="nav-link-item">
-          <el-link :underline=false href="https://blogs.edupassport.io/" target="_blank">BLOG</el-link>
-        </div>
-
-        <div class="mobile-chose-country">
-          <div class="mobile-country-china">
-            <el-button link @click="goChinaWebsite()">China</el-button>
-          </div>
-          <div class="mobile-country-global">
-            <el-button link @click="goInternationalWebsite()">Global</el-button>
-          </div>
-        </div>
-
-      </div>
-
-
-    </el-drawer>
-
+    <MobileDrawerMenu :visible="menuDrawerStatus" @close="menuDrawerStatus=false"></MobileDrawerMenu>
 
   </div>
 
@@ -584,9 +537,13 @@ import logoImgLogo from '@/assets/newHome/logo/Logo_Transparent.png'
 import {onBeforeRouteUpdate, onBeforeRouteLeave} from 'vue-router'
 import {ref, inject} from 'vue'
 import {useStore} from 'vuex';
+import MobileDrawerMenu from "@/components/mobileDrawerMenu.vue";
 
 export default {
   name: "Header",
+  components:{
+    MobileDrawerMenu
+  },
   setup() {
     let unreadChanged = ref(0)
 
@@ -753,6 +710,9 @@ export default {
 
   },
   methods: {
+    navigate(e){
+      console.log(e)
+    },
     showMobileMenu(){
       this.menuDrawerStatus = true;
     },
@@ -2060,20 +2020,6 @@ export default {
     font-size: 12px;
   }
 
-  .mobile-menu-drawer-bg{
-    background-color: #F0F2F5;
-    height: calc(100% - 100px);
-    position: relative;
-  }
-
-  .mobile-chose-country{
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    margin: auto;
-
-  }
 
 }
 

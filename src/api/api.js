@@ -414,3 +414,13 @@ export const EDUCATOR_DELETE_WORK_ITEM = (params) => post('/home/educator/work/d
 
 //教育工作者 删除教育经历
 export const EDUCATOR_DELETE_EDUCATION_ITEM = (params) => post('/home/education/delete', params)
+
+//单独验证注册验证码是否正确
+export const REGISTER_EMAIL_CHECK = (params) => post('/home/register/email/check', params)
+
+// 用户修改profile邮箱 获取验证码
+export const USER_CONTACT_SEND_EMAIL_CODE = (params) => get('/home/send/user/contact/email/code',params)
+
+// 用户修改profile邮箱 获取验证码【验证码验证】
+export const USER_CONTACT_EMAIL_CHECK = (params) => post('/home/user/contact/email/check', params)
+
