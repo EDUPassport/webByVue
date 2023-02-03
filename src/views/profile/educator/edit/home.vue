@@ -1489,7 +1489,7 @@ export default {
         grade: '',
         token: localStorage.getItem('token')
       },
-      educationDegreeObj:{},
+      educationDegreeObj: {},
       educationRules: {
         school_name: [
           {
@@ -1621,21 +1621,24 @@ export default {
       let languageObj = this.languageValue
       let level = this.languageLevelValue
 
-      languageObj.level = level.value
-      languageObj.level_name = level.label
-
       let selectedLanguageList = this.selectedLanguageList;
 
-      let index = selectedLanguageList.findIndex((item) => {
+      let aa = selectedLanguageList.filter(item => item.id === languageObj.id)
 
-        if (item.id === languageObj.id && item.level === languageObj.level) {
-          return true;
+      // 说明存在
+      if (aa.length > 0) {
+
+        if (aa[0].level === level.value) {
+          return this.$message.warning('language and proficiency already added')
         } else {
-          return false;
+          aa[0]['level'] = level.value
+          aa[0]['level_name'] = level.label
         }
-      })
 
-      if (index == -1) {
+      } else {
+        languageObj.level = level.value
+        languageObj.level_name = level.label
+
         this.selectedLanguageList.push(languageObj)
       }
 
@@ -3562,9 +3565,9 @@ export default {
     },
     editEducation(item) {
 
-      if(item.degree && item.degree_id){
+      if (item.degree && item.degree_id) {
         this.educationDegreeObj = {
-          id:item.degree_id,
+          id: item.degree_id,
           object_en: item.degree
         }
       }

@@ -7,12 +7,14 @@
 
     <div class="switch-container">
       <div class="switch-item"
+           v-if="showEmail"
            :class="switchValue === 1 ? 'switch-item-active' : '' "
            @click="handleSwitch(1)"
       >
         By Email
       </div>
       <div class="switch-item"
+           v-if="showPhone"
            :class="switchValue === 2 ? 'switch-item-active' : '' "
            @click="handleSwitch(2)"
       >
@@ -145,7 +147,29 @@ import {
 
 export default {
   name: "forgotPassword",
-  props:['isShow'],
+  props:{
+    isShow:{
+      type:Boolean,
+      default:false
+    },
+    showEmail:{
+      type:Boolean,
+      default: true
+    },
+    showPhone:{
+      type:Boolean,
+      default:true
+    },
+    emailValue:{
+      type:String,
+      default:''
+    },
+    phoneValue:{
+      type:String,
+      default:''
+    }
+
+  },
   setup(props,ctx){
     const handleClose = ()=>{
       ctx.emit('close',false)

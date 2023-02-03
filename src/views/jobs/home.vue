@@ -25,7 +25,7 @@
                      <template v-if="identity == 1 || identity == 5">
                        <div class="da-filter">
                          <el-icon>
-                           <IconEpMenu/>
+                           <IconIcBaselineFilterList/>
                          </el-icon>
                          <span>VIEW BY: JOBS</span>
                          <el-icon>
@@ -36,7 +36,7 @@
                     <template v-if="identity == 2 || identity == 3 || identity == 4">
                       <div class="da-filter"  @click="filterByApplicants()">
                         <el-icon>
-                          <IconEpMenu/>
+                          <IconIcBaselineFilterList/>
                         </el-icon>
                         <span>VIEW BY: JOBS</span>
                         <el-icon>
@@ -51,7 +51,7 @@
                     <template v-if="identity == 2 || identity == 3 || identity == 4">
                       <div class="da-filter" @click="filterByJobs()">
                         <el-icon>
-                          <IconEpMenu/>
+                          <IconIcBaselineFilterList/>
                         </el-icon>
                         <span>VIEW BY: APPLICATIONS</span>
 
@@ -63,7 +63,7 @@
                     <template v-if="identity == 1 || identity == 5">
                       <div class="da-filter">
                         <el-icon>
-                          <IconEpMenu/>
+                          <IconIcBaselineFilterList/>
                         </el-icon>
                         <span>VIEW BY: APPLICATIONS</span>
 
@@ -95,17 +95,35 @@
               <div class="da-item-container">
 
                 <el-row :gutter="0" v-if="filterByJobStatus">
-                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Job title</el-col>
-                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Total applicants</el-col>
-                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Posted/Deadline</el-col>
-                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Action</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">
+                    <span>Job title</span>
+                  </el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">
+                    <span>Total applicants</span>
+                  </el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">
+                    <span>Posted/Deadline</span>
+                  </el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">
+                    <span>Action</span>
+                  </el-col>
                 </el-row>
 
                 <el-row :gutter="0" v-if="filterByApplicantStatus">
-                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Applicant</el-col>
-                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Position applied for</el-col>
-                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Status</el-col>
-                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">Action</el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">
+                    <span v-if="identity == 1">Job position</span>
+                    <span v-else>Applicant</span>
+                  </el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">
+                    <span v-if="identity == 1">Date applied</span>
+                    <span v-else>Position applied for</span>
+                  </el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">
+                    <span>Status</span>
+                  </el-col>
+                  <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="da-item-t-item">
+                    <span>Action</span>
+                  </el-col>
                 </el-row>
 
                 <template v-if="filterByJobStatus">
@@ -406,53 +424,113 @@
                         <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" >
                           <div class="da-item-basic">
                             <div class="da-item-basic-l-a">
-                              <el-avatar class="da-item-avatar-img"
-                                         v-if="item.user_contact"
-                                         :src="item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
-                              </el-avatar>
+
+                              <template v-if="identity == 1">
+                                <el-avatar class="da-item-avatar-img"
+                                           :src="item.job && item.job.company && item.job.company.logo ? item.job.company.logo : defaultAvatar ">
+                                </el-avatar>
+                              </template>
+                              <template v-else>
+                                <el-avatar class="da-item-avatar-img"
+                                           :src="item.user_contact && item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
+                                </el-avatar>
+                              </template>
+
                             </div>
-                            <div class="da-item-basic-r">
-                              <div class="da-item-name" v-if="item.user_contact">
-                                {{ item.user_contact.educator_contact.name }}
-                              </div>
-                              <div class="da-item-n">
-                                <div class="da-item-n-1" v-if="item.user_contact">
-                                  {{ item.user_contact.educator_contact.nationality }}
+                            <template v-if="identity == 1">
+                              <div class="da-item-basic-r">
+                                <div class="da-item-company-name" v-if="item.job">
+                                  {{ item.job.company_name }}
                                 </div>
-                                <div class="da-item-n-1"
-                                     v-if="item.user_contact.educator_contact.Teaching_experience">
+                                <div class="da-item-job-title" v-if="item.job">
+                                  {{item.job.job_title}}
+                                </div>
+                                <div class="da-item-n-educator">
+                                  <div class="da-item-n-1" v-if="item.job">
+                                    {{ item.job.currency }} {{ item.job.salary_min }} - {{ item.job.salary_max }}
+                                    <span v-if="item.job.payment_period == 112">hourly</span>
+                                    <span v-if="item.job.payment_period == 113">daily</span>
+                                    <span v-if="item.job.payment_period == 114">weekly</span>
+                                    <span v-if="item.job.payment_period == 115">monthly</span>
+                                    <span v-if="item.job.payment_period == 116">annually</span>
+                                  </div>
+                                  <div class="da-item-n-1" v-if="item.job">
+                                    <span>{{item.job.job_location}}</span>
+                                  </div>
+                                  <div class="da-item-n-1" v-if="item.job">
+                                    <span v-if="item.job.employment_type==1">Full time</span>
+                                    <span v-if="item.job.employment_type==2">Part time</span>
+                                    <span v-if="item.job.employment_type==3">Seasonal</span>
+                                  </div>
+
+                                </div>
+                              </div>
+
+                            </template>
+                            <template v-else>
+                              <div class="da-item-basic-r">
+                                <div class="da-item-name" v-if="item.user_contact">
+                                  {{ item.user_contact.educator_contact.name }}
+                                </div>
+                                <div class="da-item-n">
+                                  <div class="da-item-n-1" v-if="item.user_contact">
+                                    {{ item.user_contact.educator_contact.nationality }}
+                                  </div>
+                                  <div class="da-item-n-1"
+                                       v-if="item.user_contact.educator_contact.Teaching_experience">
                                   <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience"
                                         :key="i"
                                   >{{ exp.object_en }}</span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+
+                            </template>
 
                           </div>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-item-a-job-title-col" >
-                          <span class="da-item-a-job-title" v-if="item.job">{{ item.job.job_title }}</span>
+                          <template v-if="identity == 1">
+                            <span class="da-item-a-job-title">
+                            {{ $filters.howLongFormat(item.c_time) }}
+                            </span>
+                          </template>
+                          <template v-else>
+                            <span class="da-item-a-job-title" v-if="item.job">
+                            {{ item.job.job_title }}
+                            </span>
+                          </template>
+
                         </el-col>
 
                         <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" >
 
                           <template v-if="identity == 1">
-                            <el-tag type="info" round  effect="plain"
-                                    v-if="item.status == 1">
-                              Submitted
-                            </el-tag>
-                            <el-tag type="warning" round effect="plain"
-                                    v-if="item.status == 2">
-                              Shortlisted
-                            </el-tag>
-                            <el-tag type="danger" round effect="plain"
-                                    v-if="item.status == 3">
-                             Not Selected
-                            </el-tag>
-                            <el-tag type="success" round effect="plain"
-                                    v-if="item.status == 4">
-                             Accepted
-                            </el-tag>
+
+                            <div class="xll-status-tag-container">
+                              <div class="xll-status-tag xll-status-tag-no-fill xll-status-tag-1" v-if="item.status == 1">
+                                <span>Submitted</span>
+                              </div>
+                            </div>
+
+                            <div class="xll-status-tag-container">
+                              <div class="xll-status-tag xll-status-tag-fill xll-status-tag-2" v-if="item.status == 2">
+                                <span>Shortlisted</span>
+                              </div>
+                            </div>
+
+                            <div class="xll-status-tag-container">
+                              <div class="xll-status-tag xll-status-tag-fill xll-status-tag-3" v-if="item.status == 3">
+                                <span>Not Selected</span>
+                              </div>
+                            </div>
+
+                            <div class="xll-status-tag-container">
+                              <div class="xll-status-tag xll-status-tag-fill xll-status-tag-4" v-if="item.status == 4">
+                                <span>Accepted</span>
+                              </div>
+                            </div>
+
                           </template>
 
                           <template v-if="identity == 2 || identity == 3 || identity == 4">
@@ -461,22 +539,27 @@
                               <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF"/>
                             </div>
                             <div style="margin-top: 10px;">
-                              <el-tag type="info" round  effect="plain"
-                                      v-if="item.status == 1">
-                                Submitted
-                              </el-tag>
-                              <el-tag type="warning" round effect="plain"
-                                      v-if="item.status == 2">
-                                Shortlisted
-                              </el-tag>
-                              <el-tag type="danger" round effect="plain"
-                                      v-if="item.status == 3">
-                                Not interested
-                              </el-tag>
-                              <el-tag type="success" round effect="plain"
-                                      v-if="item.status == 4">
-                                Interested
-                              </el-tag>
+                              <div class="xll-status-tag-container">
+                                <div class="xll-status-tag xll-status-tag-no-fill xll-status-tag-1" v-if="item.status == 1">
+                                  <span>Submitted</span>
+                                </div>
+                              </div>
+                              <div class="xll-status-tag-container">
+                                <div class="xll-status-tag xll-status-tag-fill xll-status-tag-2" v-if="item.status == 2">
+                                  <span>Shortlisted</span>
+                                </div>
+                              </div>
+                              <div class="xll-status-tag-container">
+                                <div class="xll-status-tag xll-status-tag-fill xll-status-tag-3" v-if="item.status == 3">
+                                  <span>Not interested</span>
+                                </div>
+                              </div>
+                              <div class="xll-status-tag-container">
+                                <div class="xll-status-tag xll-status-tag-fill xll-status-tag-4" v-if="item.status == 4">
+                                  <span>Interested</span>
+                                </div>
+                              </div>
+
                             </div>
 
                           </template>
@@ -487,7 +570,7 @@
                         <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" >
                           <div class="dashboard-view-application">
 
-                            <template v-if="identity == 1 && item.job.company">
+                            <template v-if="identity == 1 && item.job && item.job.company">
                               <chatButton text="SEND A MESSAGE"
                                           :target-user="item.job.company"
                                           @onSuccess="chatSuccess"
@@ -783,7 +866,6 @@ export default {
       applyJobStatusVisible:false,
       applyJobStatusId: 0,
       applyJobAlwaysValue:false
-
     }
 
 
@@ -1238,8 +1320,8 @@ export default {
 }
 
 .da-filter {
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
   margin-left: 50px;
   cursor: pointer;
   display: flex;
@@ -1379,17 +1461,16 @@ export default {
 .da-item {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 20px 0;
-  /*border-bottom: 2px solid #f0f2f5;*/
-}
 
+}
 
 .da-item-basic {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: row;
   justify-content: flex-start;
 }
@@ -1414,8 +1495,18 @@ export default {
 }
 
 .da-item-name {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-family: "Cabin Medium", "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
+.da-item-company-name{
+  font-size: 18px;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
+.da-item-job-title{
+  font-size: 24px;
+  font-family: "Cabin Medium", "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -1423,6 +1514,13 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-start;
+  margin-top: 15px;
+}
+.da-item-n-educator{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: flex-start;
   margin-top: 15px;
 }
@@ -1435,8 +1533,8 @@ export default {
 }
 
 .da-item-a-job-title {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-family: "Cabin Medium", "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -1580,8 +1678,116 @@ export default {
   padding-top: 20px;
   border-top: 1px solid #eeeeee;
 }
+.xll-status-tag-container{
+  display: flex;
+  overflow: hidden;
+}
+.xll-status-tag{
+  width:auto;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 35px 0 15px;
+
+  font-size:20px;
+  font-family: BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  position: relative;
+
+}
+
+.xll-status-tag-no-fill:before{
+  content: '';
+  width:40px;
+  height: 20px;
+  transform: rotate(60deg);
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #262626;
+  position: absolute;
+  right: -20px;
+  top: -13px;
+}
+
+.xll-status-tag-no-fill:after{
+  content: '';
+  width: 40px;
+  height: 20px;
+  transform: rotate(-60deg);
+  background-color: #ffffff;
+  position: absolute;
+  right: -20px;
+  bottom: -13px;
+  border-top: 1px solid #262626;
+}
+
+.xll-status-tag-fill:before{
+  content: '';
+  width:40px;
+  height: 20px;
+  transform: rotate(60deg);
+  background-color: #ffffff;
+  position: absolute;
+  right: -20px;
+  top: -10px;
+}
+
+.xll-status-tag-fill:after{
+  content: '';
+  width: 40px;
+  height: 20px;
+  transform: rotate(-60deg);
+  background-color: #ffffff;
+  position: absolute;
+  right: -20px;
+  bottom: -10px;
+}
+
+.xll-status-tag-1{
+  border: 1px solid #262626;
+}
+.xll-status-tag-2{
+  background-color: #B3B3B3;
+}
+.xll-status-tag-3{
+  color: #FFFFFF;
+  background-color: #42B0B8;
+}
+.xll-status-tag-4{
+  color: #FFFFFF;
+  background-color: #6650B3;
+}
+
+
 
 @media screen and (max-width: 768px){
+  .xll-status-tag{
+    font-size: 14px;
+    height: 28px;
+    line-height: 28px;
+  }
+
+  .xll-status-tag-no-fill:before{
+    content: '';
+    width:40px;
+    height: 20px;
+    transform: rotate(60deg);
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #262626;
+    position: absolute;
+    right: -20px;
+    top: -18px;
+  }
+
+  .xll-status-tag-no-fill:after{
+    content: '';
+    width: 40px;
+    height: 20px;
+    transform: rotate(-60deg);
+    background-color: #ffffff;
+    position: absolute;
+    right: -20px;
+    bottom: -18px;
+    border-top: 1px solid #262626;
+  }
+
   .ja-r-container{
     width: 100%;
     height: calc( var(--i-window-height) - 160px);
@@ -1678,6 +1884,14 @@ export default {
     margin-top: 10px;
   }
 
+  .da-item-company-name{
+    font-size: 12px;
+  }
+
+  .da-item-job-title{
+    font-size: 16px;
+  }
+
   .da-item-n-1{
     font-size: 12px;
   }
@@ -1755,7 +1969,7 @@ export default {
   }
 
   .da-item-a-job-title{
-    font-size: 18px;
+    font-size: 14px;
   }
 
   .da-item-a-job-title-col{

@@ -32,9 +32,12 @@
         <div class="nav-link-item" @click="turnEvents()">
           <span :class="sMenuPath === '/events' ? 'nav-link-item-active' : '' ">EDU EVENTS</span>
         </div>
-        <div class="nav-link-item" @click="turnBlog()">
-          <span>BLOG</span>
-        </div>
+        <template v-if="envBlog ==='yes'">
+          <div class="nav-link-item" @click="turnBlog()">
+            <span>EDU BLOG</span>
+          </div>
+
+        </template>
 
         <template v-if="token">
           <div class="nav-link-item" @click="turnProfile()">
@@ -157,6 +160,7 @@ export default {
     return {
       logoImgLogo,
       envName: process.env.VUE_APP_ENV_NAME,
+      envBlog: process.env.VUE_APP_BLOG,
       menuDrawerStatus: false
     }
   },

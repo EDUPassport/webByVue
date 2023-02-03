@@ -18,7 +18,7 @@
               </div>
             </div>
 
-            <div class="events-list-container">
+            <div class="events-list-container" v-if="eventsList.length > 0">
 
               <div class="events-item-bg"
                    v-for="(item,i) in eventsList" :key="i">
@@ -85,13 +85,17 @@
               </div>
 
             </div>
+            <div class="events-list-container-empty" v-else>
+              <el-empty description="-"></el-empty>
+            </div>
 
-            <div class="events-pagination">
+            <div class="events-pagination" v-if="eventsList.length>0">
               <el-pagination layout="prev, pager, next" :default-current-page="1"
                              @size-change="eventPageSizeChange"
                              @current-change="eventPageChange"
                              :current-page="eventPage" :page-size="eventLimit"
-                             :total="eventTotalNum"></el-pagination>
+                             :total="eventTotalNum">
+              </el-pagination>
             </div>
 
 
@@ -350,7 +354,9 @@ export default {
   justify-content: flex-start;
   flex-wrap:wrap;
 }
-
+.events-list-container-empty{
+  text-align: center;
+}
 .events-item-bg{
   width:31%;
   padding: 1%;

@@ -110,7 +110,10 @@
                         </el-button>
                       </el-form-item>
 
-                      <ForgotPassword :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
+                      <ForgotPassword :isShow="forgotDialogVisible"
+                                      :showPhone="false"
+                                      @close="closeForgotDialog()">
+                      </ForgotPassword>
 
                       <div class="save-form-container">
                         <el-button class="save-form-discard-btn" link

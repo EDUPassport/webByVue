@@ -704,8 +704,8 @@ const routes = [
                 component: () => import('@/views/home/index'),
                 meta: {
                     layout: 'app-layout',
-                    titleC: 'Global Education Hub - Career opportunities to teach abroad.',
-                    titleG: 'Global Education Hub - Career opportunities to teach abroad.'
+                    titleC: 'Global Education Hub - Career opportunities to teach abroad ',
+                    titleG: 'Global Education Hub - Career opportunities to teach abroad '
                 },
             },
 

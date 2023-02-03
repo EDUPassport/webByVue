@@ -22,7 +22,7 @@
               </div>
             </div>
 
-            <div class="deals-list-content">
+            <div class="deals-list-content" v-if="dealsListData.length > 0">
 
               <div class="deals-item-container"
                    v-for="(item,index) in dealsListData" :key="index"
@@ -32,7 +32,7 @@
                   <div class="deals-item-bg">
                     <el-image
                         class="deals-item-background-img"
-                        :src="item.company_info.background_image ? item.company_info.background_image : ''"
+                        :src="item.company_info && item.company_info.background_image ? item.company_info.background_image : ''"
                         fit="cover"
                     >
                       <template #error>
@@ -72,7 +72,7 @@
                   <div class="deals-item-b">
                     <div class="deals-item-b-l">
 
-                      <template v-if="item.company_info.category_name_en && item.company_info.category_name_en != '0'">
+                      <template v-if="item.company_info && item.company_info.category_name_en && item.company_info.category_name_en != '0'">
                         {{ item.company_info.category_name_en }}
                       </template>
                       <template v-else>
@@ -95,14 +95,19 @@
               </div>
 
             </div>
+            <div class="deals-list-content-empty" v-else>
+              <el-empty description="-"></el-empty>
+            </div>
 
           </div>
-          <div class="deals-pagination">
+
+          <div class="deals-pagination" v-if="dealsListData.length > 0">
             <el-pagination layout="prev, pager, next" :default-current-page="1"
                            @size-change="dealPageSizeChange"
                            @current-change="dealPageChange"
                            :current-page="dealPage" :page-size="dealLimit"
-                           :total="dealTotalNum"></el-pagination>
+                           :total="dealTotalNum">
+            </el-pagination>
           </div>
 
         </el-scrollbar>
@@ -271,7 +276,9 @@ export default {
   justify-content: flex-start;
   flex-wrap: wrap;
 }
-
+.deals-list-content-empty{
+  text-align: center;
+}
 .deals-item-container {
   width: 33%;
   margin-top: 25px;
