@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div class="menu-xll-bg-container">
 
       <div class="menu-btn-container">
@@ -10,22 +10,19 @@
 
         <div class="l-item l-item-margin" v-for="(item,i) in menuData" :Key="i">
 
-          <router-link :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' "
-                       :to="{path:item.link}" exact>
+          <router-link :to="{path:item.link}" exact>
 
-            <template v-if="selectedKeys === item.link">
-              <el-image  class="xll-icon-image" :src="item.icon_hover"></el-image>
-            </template>
-            <template v-else>
-              <el-image  class="xll-icon-image" :src="item.icon"></el-image>
-            </template>
+            <el-image class="xll-icon-image"
+                      :class="selectedKeys === item.link  ? 'router-img-active' : '' "
+                      :src="selectedKeys === item.link ? item.icon_hover : item.icon">
+            </el-image>
 
-            <span>{{item.menu_name_en}}</span>
+            <span :class="selectedKeys === item.link  ? 'router-txt-active' : '' ">{{ item.menu_name_en }}</span>
 
           </router-link>
 
           <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
-            {{unreadTotal}}
+            {{ unreadTotal }}
           </div>
 
         </div>
@@ -40,7 +37,6 @@
       </div>
 
 
-
     </div>
 
     <div class="menu-mobile-bg">
@@ -48,15 +44,18 @@
 
         <div class="menu-mobile-item" v-for="(item,i) in menuData" :Key="i">
 
-          <router-link :class="selectedKeys === item.link  ? 'router-link-exact-active' : '' "
-                       :to="{path:item.link}" exact>
-            <el-image  class="xll-icon-image" :src="item.icon"></el-image>
-            <span>{{item.menu_name_en}}</span>
+          <router-link :to="{path:item.link}" exact>
+            <el-image class="xll-icon-image"
+                      :class="selectedKeys === item.link  ? 'router-img-active' : '' "
+                      :src="selectedKeys === item.link ? item.icon_hover : item.icon">
+            </el-image>
+
+            <span :class="selectedKeys === item.link  ? 'router-txt-active' : '' ">{{ item.menu_name_en }}</span>
 
           </router-link>
 
           <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
-            {{unreadTotal}}
+            {{ unreadTotal }}
           </div>
 
         </div>
@@ -80,10 +79,10 @@ import {ref, computed} from 'vue'
 
 export default {
   name: "meSideMenu",
-  setup(){
+  setup() {
     const store = useStore()
 
-    const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo',data)
+    const setNowChatUserInfo = (data) => store.commit('nowChatUserInfo', data)
     const setShowChatStatus = () => store.commit('showChatStatus', true)
     const currentRoute = useRoute()
     const activeMenuStr = currentRoute.meta.activeMenu;
@@ -99,51 +98,51 @@ export default {
     }
 
   },
-  data(){
+  data() {
     return {
       defaultAvatar,
-      accountInfo:{},
-      accountPhotoValue:'',
-      versionTime:randomString(),
-      activeMsg:false,
-      showSideMenuStatus:true,
+      accountInfo: {},
+      accountPhotoValue: '',
+      versionTime: randomString(),
+      activeMsg: false,
+      showSideMenuStatus: true,
 
     }
   },
-  watch:{
-    menuData(newValue){
+  watch: {
+    menuData(newValue) {
       console.log(newValue)
     },
-    unreadTotal(newValue){
+    unreadTotal(newValue) {
       console.log(newValue)
     }
 
 
   },
-  computed:{
-    username:{
-      get(){
+  computed: {
+    username: {
+      get() {
         return this.$store.state.username
       }
     },
-    userAvatar:{
-      get(){
+    userAvatar: {
+      get() {
         return this.$store.state.userAvatar
       }
 
     },
-    identity:{
-      get(){
+    identity: {
+      get() {
         return this.$store.state.identity
       }
     },
-    menuData:{
-      get(){
+    menuData: {
+      get() {
         return this.$store.state.menuData
       }
     },
-    unreadTotal:{
-      get(){
+    unreadTotal: {
+      get() {
         return this.$store.state.imUnreadTotal
       }
     }
@@ -181,40 +180,40 @@ export default {
       if (Math.floor(screenWidth2) >= 1200) {
         this.showSideMenuStatus = true;
       }
-     }
+    }
   },
-  methods:{
+  methods: {
     contactUs() {
       window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
 
     },
-    showSideMenu(){
+    showSideMenu() {
       this.showSideMenuStatus = !this.showSideMenuStatus;
 
     },
-    getUserMenuList(){
+    getUserMenuList() {
       let self = this;
       let params = {
-        user_id:localStorage.getItem('uid'),
-        identity:self.identity,
-        company_id:localStorage.getItem('company_id'),
-        create_user_id:localStorage.getItem('c_uid'),
-        page:1,
-        limit:1000
+        user_id: localStorage.getItem('uid'),
+        identity: self.identity,
+        company_id: localStorage.getItem('company_id'),
+        create_user_id: localStorage.getItem('c_uid'),
+        page: 1,
+        limit: 1000
       }
-      USER_MENU_LIST(params).then(res=>{
+      USER_MENU_LIST(params).then(res => {
         // console.log(res)
-        if(res.code === 200){
+        if (res.code === 200) {
           let pcAllData = res.message.pc;
-          let sData = pcAllData.filter(item=>item.identity == self.identity)
+          let sData = pcAllData.filter(item => item.identity == self.identity)
           this.$store.commit('menuData', sData)
           // localStorage.setItem('menuData',res.message.pc)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     },
-    turnMyMessages(){
+    turnMyMessages() {
       // this.activeMsg = true
       this.setShowChatStatus()
     }
@@ -225,70 +224,72 @@ export default {
 
 <style scoped>
 
-.menu-xll-bg-container{
+.menu-xll-bg-container {
   background-color: #ffffff;
   height: calc(100vh - 140px);
 }
 
-.profile-l-container{
+.profile-l-container {
   width: 160px;
   height: calc(100vh - 140px);
 }
 
 
-.profile-xll-username span{
+.profile-xll-username span {
   font-size: 14px;
   color: #ffffff;
 }
 
-.l-container{
+.l-container {
   width: 160px;
   padding: 50px 0;
-  /*margin: 50px 25px;*/
-  /*height: calc(100vh - 240px);*/
   height: calc(100vh - 340px);
 }
 
-.l-item{
-  margin: 0 25px 20px 25px;
+.l-item {
+  margin: 0 25px 40px 25px;
   position: relative;
 }
 
-.l-item-margin{
+.l-item-margin {
 
 }
 
-.l-item a{
+.l-item a {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction:column;
-
-  padding:15px;
-  border-radius: 15px;
+  flex-direction: column;
 
   margin: 0 auto;
   text-align: center;
 
-  font-size: 18px;
+  font-size: 16px;
   font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   text-decoration: none;
   color: #262626;
 
 }
 
-.l-item a span{
-  margin-top:15px;
+.l-item a span {
+  margin-top: 15px;
 }
 
-.router-link-exact-active {
+
+.router-img-active{
   background-color: #F0F2F5;
+}
+
+.router-txt-active{
   color: #6650B3 !important;
 }
 
-.xll-icon-image{
+.xll-icon-image {
   width: 35px;
   height: 35px;
+  padding: 4px 20px;
+  border-radius: 43px;
+
 }
 
 .item-head_unread {
@@ -303,7 +304,8 @@ export default {
   top: 0;
   right: 0;
 }
-.contact-us-container{
+
+.contact-us-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -314,7 +316,7 @@ export default {
   background-color: #FFFFFF;
 }
 
-.contact-us-container span{
+.contact-us-container span {
   font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 20px;
   color: #262626;
@@ -322,24 +324,25 @@ export default {
 
 @media screen and (min-width: 769px) {
 
-  .menu-btn-container{
+  .menu-btn-container {
     display: none;
   }
-  .menu-btn{
-    margin:10px 20px;
+
+  .menu-btn {
+    margin: 10px 20px;
   }
 
-  .menu-mobile-bg{
+  .menu-mobile-bg {
     display: none;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .menu-xll-bg-container{
+  .menu-xll-bg-container {
     display: none;
   }
 
-  .menu-mobile-bg{
+  .menu-mobile-bg {
     /*display: none;*/
     position: fixed;
     bottom: 0;
@@ -354,22 +357,24 @@ export default {
     overflow: scroll;
   }
 
-  .menu-mobile-container{
+  .menu-mobile-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
   }
+
   .menu-mobile-item {
     position: relative;
   }
-  .menu-mobile-item a{
+
+  .menu-mobile-item a {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction:column;
+    flex-direction: column;
 
-    padding:10px;
+    padding: 10px;
     border-radius: 15px;
 
     margin: 0 auto;
@@ -381,7 +386,6 @@ export default {
     color: #262626;
 
   }
-
 
 }
 

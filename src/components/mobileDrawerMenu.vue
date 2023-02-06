@@ -34,7 +34,7 @@
         </div>
         <template v-if="envBlog ==='yes'">
           <div class="nav-link-item" @click="turnBlog()">
-            <span>EDU BLOG</span>
+            <span>EDU BLOGS</span>
           </div>
 
         </template>

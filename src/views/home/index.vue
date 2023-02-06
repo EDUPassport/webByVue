@@ -19,7 +19,10 @@
           <router-link to="/jobs" exact>EDU JOBS</router-link>
           <router-link to="/deals" exact> EDU DEALS</router-link>
           <router-link to="/events" exact>EDU EVENTS</router-link>
-          <el-link :underline=false href="https://blogs.edupassport.io/" target="_blank">BLOG</el-link>
+          <template v-if="envBlog === 'yes'">
+            <el-link :underline=false href="https://blogs.edupassport.io/" target="_blank">EDU BLOGS</el-link>
+          </template>
+
         </div>
 
       </el-col>
@@ -472,6 +475,7 @@ export default {
   },
   data() {
     return {
+      envBlog:process.env.VUE_APP_BLOG,
       logoImg,
       logoImgLight,
       logoImgLightH,

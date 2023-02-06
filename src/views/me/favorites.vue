@@ -60,6 +60,35 @@
               </template>
             </el-dropdown>
 
+            <el-dropdown style="margin-left: 25px;">
+
+               <span class="favorites-label-sort">
+                <el-icon style="margin-right: 4px;" :size="14">
+                <IconIconParkSortTwo />
+                </el-icon>
+                Sort By Date:
+                 <template v-if="favoritedSortValue === 'desc' ">
+                 New First
+                 </template>
+                 <template v-if="favoritedSortValue === 'asc' ">
+                   Old First
+                 </template>
+
+                <el-icon class="el-icon--right">
+                   <arrow-down />
+                </el-icon>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="changeFavoritedSort('desc')">
+                    <span class="favorites-label-sort-span">New First</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item @click="changeFavoritedSort('asc')">
+                    <span class="favorites-label-sort-span">Old First</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
 
           </div>
 
@@ -165,7 +194,7 @@
                 <div v-for="(item,i) in favoriteData" :key="i">
                   <el-row class="da-item">
 
-                    <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
+                    <el-col :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
                       <div class="da-item-basic">
                         <div class="da-item-basic-l-a">
                           <el-avatar class="da-item-avatar-img"
@@ -175,7 +204,7 @@
                         <div class="da-item-basic-r">
                           <div class="da-item-name">{{ item.job_info.company_name }}</div>
                           <div class="da-item-n">
-                            <el-button link @click="turnBusinessProfile(item.job_info)">
+                            <el-button class="da-item-n-btn-profile" link @click="turnBusinessProfile(item.job_info)">
                               Click to view profile
                             </el-button>
                           </div>
@@ -183,7 +212,7 @@
 
                       </div>
                     </el-col>
-                    <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
+                    <el-col class="favorited-jobs-col" :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
 
                       <div class="da-item-a-job-title">{{ item.job_info.job_title }}</div>
                       <div class="da-item-a-job-other">
@@ -204,14 +233,10 @@
 
                     <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
 
-                      <el-tag type="info" round  effect="plain"
-                              v-if="item.job_info.is_open == 1">
-                        Open
-                      </el-tag>
-                      <el-tag type="warning" round effect="plain"
-                              v-else>
-                        Position closed
-                      </el-tag>
+                      <div class="da-item-a-job-status-tag" >
+                        <span v-if="item.job_info.is_open == 1">Open</span>
+                        <span v-else>Position closed</span>
+                      </div>
 
                     </el-col>
 
@@ -283,7 +308,8 @@ export default {
       type:0,
       identity:0,
       applyBtnLoading:false,
-      applyJobId:0
+      applyJobId:0,
+      favoritedSortValue: 'desc'
     }
   },
   unmounted() {
@@ -330,6 +356,10 @@ export default {
     // this.getAdsList()
   },
   methods: {
+    changeFavoritedSort(value){
+      this.favoritedSortValue = value;
+      this.getFavoriteList(this.type, 1, this.limit)
+    },
     turnDealDetail(id){
       let obj = {id:id}
       let { href } = this.$router.resolve({
@@ -474,6 +504,10 @@ export default {
         params.type = type
       }
 
+      if(this.favoritedSortValue){
+        params.order_by = this.favoritedSortValue
+      }
+
       GET_FAVORITE_LIST(params).then(res => {
         console.log(res)
         if (res.code == 200) {
@@ -558,11 +592,16 @@ export default {
   border-radius: 18px;
 }
 .favorites-label-container{
-
+  display: flex;
+  align-items: center;
 }
 .favorites-label{
-  font-family: BSemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  font-family: "Cabin SemiBold", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 28px;
   color: #262626;
   cursor: pointer;
 }
@@ -572,6 +611,21 @@ export default {
   font-size: 22px;
   color: #262626;
   cursor: pointer;
+}
+
+.favorites-label-sort{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  cursor: pointer;
+  font-size: 18px;
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
+.favorites-label-sort-span{
+  font-size: 14px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .list-container {
@@ -827,9 +881,13 @@ export default {
 }
 
 .da-item-name {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
+}
+
+.da-item-n-btn-profile{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .da-item-n {
@@ -848,8 +906,8 @@ export default {
 }
 
 .da-item-a-job-title {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-family: "Cabin SemiBold", "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
@@ -857,6 +915,12 @@ export default {
   font-size: 18px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
+}
+
+.da-item-a-job-status-tag{
+  font-family: "Cabin SemiBold", Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 24px;
+
 }
 
 .dashboard-view-application {
@@ -887,8 +951,23 @@ export default {
     margin: 15px;
   }
   .favorites-label{
-    font-size: 20px;
+    font-size: 14px;
+  }
+  .favorites-label-span{
+    font-size: 12px;
+  }
 
+  .favorites-label-sort{
+    font-size: 14px;
+  }
+
+  .favorites-label-sort-span{
+    font-size: 12px;
+  }
+
+  .favorited-jobs-col{
+    text-align: center;
+    margin-top: 10px;
   }
 
   .empty-tips{
@@ -940,7 +1019,7 @@ export default {
   }
 
   .da-item-name{
-    font-size: 18px;
+    font-size: 14px;
   }
 
   .da-item-n{
@@ -952,6 +1031,9 @@ export default {
   }
 
   .da-item-a-job-other{
+    font-size: 12px;
+  }
+  .da-item-a-job-status-tag{
     font-size: 12px;
   }
 
