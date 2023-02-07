@@ -9,14 +9,14 @@
     <meta name= facebook-domain-verification content= izxabln/obcag9hvohg1sd7fwnmntc/>
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <meta name="description" content="EDU Passport is a Global Education Hub that helps educators find job opportunities abroad through a matchmaking service.">
-    <script src="https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js"></script>
-    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
 <!--    <script>-->
 <!--        // VConsole will be exported to `window.VConsole` by default.-->
 <!--        var vConsole = new window.VConsole();-->
 <!--    </script>-->
+    <meta name="p:domain_verify" content="e81c41339f784f8a7c633228dc4f2acc"/>
     <% if(process.env.VUE_APP_ENV_NAME === 'developmentCN' || process.env.VUE_APP_ENV_NAME === 'productionCN'){%>
+    <meta name="description" content="We partner up with local vendors to support educators, promote educator-centric events, and offer exclusive deals to our EDU Passport members.">
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQNK56PRQW"></script>
     <script>
@@ -28,6 +28,7 @@
     </script>
     <% } %>
     <% if(process.env.VUE_APP_ENV_NAME === 'development' || process.env.VUE_APP_ENV_NAME === 'production'){%>
+    <meta name="description" content="EDU Passport is a Global Education Hub that helps educators find job opportunities abroad through a matchmaking service.">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CGM1B7LH7Z"></script>
     <script>
@@ -38,6 +39,11 @@
         gtag('config', 'G-CGM1B7LH7Z');
     </script>
     <% } %>
+
+
+    <script src="https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js"></script>
+    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+
 
 </head>
 <body>

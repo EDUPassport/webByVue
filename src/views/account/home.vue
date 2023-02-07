@@ -650,8 +650,8 @@ export default {
         {
           type:'email',
           required: true,
-          message: 'One email per invitation',
-          trigger: 'change',
+          message: 'Please enter a valid email',
+          trigger: ['change','blur'],
         }
       ],
     })
@@ -1353,16 +1353,15 @@ export default {
       let companyId = this.contributorCompanyId;
       let sMenuData = this.sMenuItemData;
 
-      if (sMenuData.length <= 0) {
-        this.$message.warning('Choose what the added user will have access to')
-        return;
-      }
-
       this.addLoading = true;
 
       this.$refs[formName].validate((valid) => {
 
         if (valid) {
+
+          if (sMenuData.length <= 0) {
+            return this.$message.warning('Choose what the added user will have access to');
+          }
 
           let params = Object.assign({
             identity: identity,
@@ -1391,6 +1390,7 @@ export default {
         } else {
           this.addLoading = false;
           // this.contributorDialogVisible = false;
+          this.$message.warning('Please complete all required fields')
           console.log('error submit!!')
           return false
         }
@@ -1404,16 +1404,17 @@ export default {
       let currentCompanyId = this.currentCompanyId;
       let userId = this.contributorUserId;
 
-      if (sMenuData.length <= 0) {
-        this.$message.warning('Choose what the added user will have access to')
-        return;
-      }
 
       this.addLoading = true;
 
       this.$refs[formName].validate((valid) => {
 
         if (valid) {
+
+          if (sMenuData.length <= 0) {
+            this.$message.warning('Choose what the added user will have access to')
+            return;
+          }
 
           let params = Object.assign({
             user_id: userId,
@@ -1447,6 +1448,8 @@ export default {
                 }
               }).catch(err => {
                 console.log(err)
+                this.$message.error(err.msg)
+
                 this.addLoading = false;
               })
 
@@ -1458,8 +1461,9 @@ export default {
         } else {
           this.addLoading = false;
           // this.contributorDialogVisible = false;
+          this.$message.warning('Please complete all required fields')
           console.log('error submit!!')
-          return false
+          return false;
         }
       })
 

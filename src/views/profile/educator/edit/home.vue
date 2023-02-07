@@ -1691,18 +1691,17 @@ export default {
       })
     },
     submitForm(formName, typeValue) {
-      let self = this;
-      if (typeValue === 1) {
-        this.submitLoadingValue = true;
-      }
-
-      if (typeValue === 2) {
-        this.submitAndViewLoadingValue = true;
-      }
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
+          if (typeValue === 1) {
+            this.submitLoadingValue = true;
+          }
+
+          if (typeValue === 2) {
+            this.submitAndViewLoadingValue = true;
+          }
 
           let selectTypeList = this.selectEducatorTypeList;
           // console.log(selectTypeList)
@@ -1871,17 +1870,11 @@ export default {
           })
 
         } else {
-          this.$message.warning('Please complete all required fields')
-
-          setTimeout(function () {
-            if (typeValue === 1) {
-              self.submitLoadingValue = false;
-            }
-
-            if (typeValue === 2) {
-              self.submitAndViewLoadingValue = false;
-            }
-          }, 2000)
+          this.$message({
+            type:'warning',
+            message:'Please complete all required fields',
+            grouping:true
+          })
 
           console.log('error submit!!')
           return false
@@ -4091,7 +4084,7 @@ export default {
   }
 
   .account-profile-t-l {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .account-profile-item-container {

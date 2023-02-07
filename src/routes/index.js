@@ -704,7 +704,7 @@ const routes = [
                 component: () => import('@/views/home/index'),
                 meta: {
                     layout: 'app-layout',
-                    titleC: 'Global Education Hub - EDU Passport',
+                    titleC: 'Educational Businesses - EDU Passport',
                     titleG: 'Global Education Hub - EDU Passport'
                 },
             },

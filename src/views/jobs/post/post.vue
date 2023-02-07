@@ -2336,7 +2336,11 @@ export default {
         } else {
           // this.$loading().close()
           console.log('error submit!!')
-          this.$message.warning('Please complete all required fields')
+          this.$message({
+            type:'warning',
+            message:'Please complete all required fields',
+            grouping:true
+          })
           return false
         }
       })

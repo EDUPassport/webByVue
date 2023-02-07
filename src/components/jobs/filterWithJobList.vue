@@ -144,7 +144,7 @@
       </div>
       <div class="jobs-mobile-filter-1">
         <el-icon :size="25" @click="showJobsMobileExpand()">
-          <IconTablerMenu2/>
+          <IconSystemUiconsFiltering />
         </el-icon>
 
         <el-input v-model="jobTitleValue"

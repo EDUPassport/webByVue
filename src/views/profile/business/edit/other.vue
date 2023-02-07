@@ -1478,7 +1478,11 @@ export default {
           })
 
         } else {
-          this.$message.warning('Please complete all required fields')
+          this.$message({
+            type:'warning',
+            message:'Please complete all required fields',
+            grouping:true
+          })
           console.log('error submit!!')
           return false
         }
@@ -2125,7 +2129,7 @@ export default {
   }
 
   .account-profile-t-l{
-    font-size: 20px;
+    font-size: 14px;
   }
 
   .account-profile-item-container{
