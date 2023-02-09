@@ -47,7 +47,7 @@
               <el-button class="xll-input-btn" type="primary" round
                          :loading="checkCodeBtn.loading"
                          :disabled="checkCodeBtn.disabled"
-                         @click="sendEmailCode()"
+                         @click="sendEmailCode('forgotForm1')"
               >{{checkCodeBtn.text}}</el-button>
             </div>
           </el-form-item>
@@ -243,7 +243,7 @@ export default {
           {required: true, message: 'Please fill out your code.', trigger: 'blur'}
         ],
         email: [
-          {required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+          {type:'email',required: true, message: 'Please fill out your email address.', trigger: 'blur'}
         ],
         password: [
           {required: true, message: 'Please enter your password', trigger: 'blur'}
@@ -341,26 +341,42 @@ export default {
       }
 
     },
-    sendEmailCode() {
+    sendEmailCode(formName) {
 
       let self = this;
       let email = this.forgotForm1.email
-      if (email) {
 
-        let params = {
-          email: email
-        }
+      this.$refs[formName].validateField('email',(valid) => {
+        if (valid) {
 
-        SEND_EMAIL_CODE_REST_PASSWORD(params).then(res => {
-          if (res.code == 200) {
-            self.getCheckCodeTimer()
-            self.$message.success('Success')
+          if (email) {
+
+            let params = {
+              email: email
+            }
+
+            SEND_EMAIL_CODE_REST_PASSWORD(params).then(res => {
+              if (res.code == 200) {
+                self.getCheckCodeTimer()
+                self.$message.success('Success')
+              }
+            }).catch(err => {
+              console.log(err)
+              return this.$message.error(err.msg)
+            })
           }
-        }).catch(err => {
-          console.log(err)
-          return this.$message.error(err.msg)
-        })
-      }
+
+        } else {
+          console.log('error submit!!')
+          return this.$message({
+            type:'warning',
+            message:'Please enter a valid email address',
+            grouping:true
+          })
+        }
+      })
+
+
 
     },
     submitForm1(formName){

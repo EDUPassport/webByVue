@@ -221,7 +221,29 @@
 
           <div class="job-detail-desc">
             <div class="job-detail-desc-label">Job details:</div>
+
             <div class="job-detail-desc-content" v-html="detailData.desc"></div>
+
+            <div class="job-detail-desc-content-mobile"
+                 :class="showMoreVisible ? 'job-detail-desc-content-mobile-more' : ''"
+                 v-html="detailData.desc">
+            </div>
+
+            <div class="job-detail-desc-content-mobile-btn-container" >
+              <el-button class="job-detail-desc-content-mobile-btn"
+                         v-if="showMoreVisible"
+                         link
+                         @click="showMoreVisible=false" >
+                SHOW MORE
+              </el-button>
+              <el-button class="job-detail-desc-content-mobile-btn"
+                         v-else
+                         link
+                         @click="showMoreVisible=true" >
+                SHOW LESS
+              </el-button>
+            </div>
+
           </div>
 
           <div class="map-container">
@@ -256,7 +278,7 @@ import shareCard from "@/components/shareCard";
 import {ADD_FAVORITE, APPLY_JOBS, CANCEL_FAVORITE} from "@/api/api";
 import applyJobButton from '@/components/jobs/applyButton'
 import {updateWindowHeight} from "@/utils/tools";
-
+import {ref} from 'vue'
 export default {
   name: "detailComponent",
   components: {
@@ -267,8 +289,16 @@ export default {
   props:['detailData','adsData','workingHoursData'],
   setup(){
     const currentIdentity = localStorage.getItem('identity')
+    const showMoreVisible = ref(true)
+
+    const showMoreAboutJobDetails = ()=>{
+      showMoreVisible.value = true
+    }
+
     return {
-      currentIdentity
+      showMoreVisible,
+      currentIdentity,
+      showMoreAboutJobDetails
     }
   },
   data(){
@@ -634,6 +664,14 @@ export default {
     display: none;
   }
 
+  .job-detail-desc-content-mobile{
+    display: none;
+  }
+
+  .job-detail-desc-content-mobile-btn-container{
+    display: none;
+  }
+
 }
 
 @media screen and (max-width: 768px) {
@@ -726,8 +764,32 @@ export default {
   }
 
   .job-detail-desc-content{
+    display: none;
+  }
+
+  .job-detail-desc-content-mobile{
+
     margin-top: 10px;
     margin-left: 15px;
+
+    font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color:#262626;
+    font-size: 16px;
+  }
+  .job-detail-desc-content-mobile-more{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+  }
+
+  .job-detail-desc-content-mobile-btn-container{
+
+  }
+
+  .job-detail-desc-content-mobile-btn{
+    color:#6650B3;
   }
 
   .back-btn-container{

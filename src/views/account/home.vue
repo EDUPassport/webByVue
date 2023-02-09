@@ -55,34 +55,89 @@
                       <div class="account-first-last-name">
 
                         <div class="account-first-name">
-                          <el-form-item label="First name" prop="first_name">
+                          <el-form-item label="FIRST NAME" prop="first_name">
                             <el-input size="small" v-model="basicForm.first_name" placeholder="First name"></el-input>
                           </el-form-item>
                         </div>
 
                         <div class="account-last-name">
-                          <el-form-item label="Last name" prop="last_name">
+                          <el-form-item label="LAST NAME" prop="last_name">
                             <el-input size="small" v-model="basicForm.last_name" placeholder="Last name"></el-input>
                           </el-form-item>
                         </div>
 
                       </div>
 
-                      <el-form-item label="E-mail address" prop="email">
-                        <div class="xll-form-email-tips">(Editing this will change your login email)</div>
-                        <div class="xll-email-input">
-                          <el-input size="small" v-model="basicForm.email" placeholder="E-mail address"></el-input>
-                          <div class="send-code-btn" @click="sendEmailCode()">
-                            {{ checkCodeBtn.text }}
+                      <div class="account-change-email-container">
+                        <div class="account-change-email-t">
+                          <div class="account-change-email-t-t">
+                            <div class="account-change-email-t-t-l">
+                              <span>E-MAIL ADDRESS</span>
+                            </div>
+                            <div class="account-change-email-t-t-r">
+                              <el-button class="account-change-email-edit-btn"
+                                         type="primary"
+                                         link
+                                         @click="editAccountEmail()">
+                                Edit
+                              </el-button>
+                            </div>
+                          </div>
+                          <div class="account-change-email-t-b">
+
                           </div>
                         </div>
-                      </el-form-item>
+                        <div class="account-change-email-b">
+                          <el-input size="small" disabled v-model="basicForm.email"
+                                    placeholder="E-mail address"></el-input>
+                        </div>
+                      </div>
 
-                      <el-form-item label="E-mail code" prop="code" required>
-                        <el-input size="small" v-model="basicForm.code" placeholder="Activation code"></el-input>
-                      </el-form-item>
+                      <el-dialog class="dialog-custom-css" :width="accountEmailWith" v-model="accountEmailDialogVisible">
+                        <template #header="{ titleId, titleClass }">
+                          <div class="my-header">
+                            <h3 :id="titleId" :class="titleClass">
+                              Editing this will change your login email
+                            </h3>
+                          </div>
+                        </template>
 
-                      <el-form-item label="Birth date" prop="birthday">
+                        <el-form
+                            ref="accountEmailForms"
+                            :model="accountEmailForm"
+                            :rules="accountEmailRules"
+                            label-width="120px"
+                            label-position="top"
+                            class="demo-ruleForm"
+                        >
+                          <el-form-item label="E-MAIL ADDRESS" prop="email">
+                            <div class="xll-form-email-tips"></div>
+                            <div class="xll-email-input">
+                              <el-input v-model="accountEmailForm.email" placeholder="E-mail address"></el-input>
+                              <div class="send-code-btn" @click="sendEmailCode('accountEmailForms')">
+                                {{ checkCodeBtn.text }}
+                              </div>
+                            </div>
+                          </el-form-item>
+
+                          <el-form-item label="VERIFICATION CODE" prop="code" required>
+                            <el-input  v-model="accountEmailForm.code" placeholder="Activation code"></el-input>
+                          </el-form-item>
+
+                        </el-form>
+
+                        <template #footer>
+                            <span class="dialog-footer">
+                              <el-button plain round @click="accountEmailDialogVisible = false">Cancel</el-button>
+                              <el-button type="primary" round @click="saveEmailChange('accountEmailForms')">
+                                Save
+                              </el-button>
+                            </span>
+                        </template>
+
+                      </el-dialog>
+
+                      <el-form-item label="BIRTH DATE" prop="birthday">
                         <el-date-picker
                             size="small"
                             v-model="basicForm.birthday"
@@ -95,7 +150,7 @@
                         ></el-date-picker>
                       </el-form-item>
 
-                      <el-form-item label="Gender" prop="sex">
+                      <el-form-item label="GENDER" prop="sex">
                         <el-select v-model="basicForm.sex" size="small" placeholder="Select one">
                           <el-option v-for="(item,i) in sexOptions" :key="i"
                                      :label="item.object_en"
@@ -104,7 +159,7 @@
                         </el-select>
                       </el-form-item>
 
-                      <el-form-item label="Password">
+                      <el-form-item label="PASSWORD">
                         <el-button plain round @click="resetPassword()">
                           RESET PASSWORD
                         </el-button>
@@ -311,7 +366,8 @@
                                     </el-button>
                                   </el-dropdown-item>
                                   <el-dropdown-item v-if="item.identity != 1">
-                                    <el-button link @click="showContributorDialog(item.id,item.user_id,item.identity,item.company_name)">
+                                    <el-button link
+                                               @click="showContributorDialog(item.id,item.user_id,item.identity,item.company_name)">
                                       ADD A CONTRIBUTOR
                                     </el-button>
                                   </el-dropdown-item>
@@ -407,7 +463,7 @@
     <el-dialog :width="contributorWidth" v-model="contributorDialogVisible">
       <template #header="{ titleId, titleClass }">
         <div class="my-header">
-          <h3 :id="titleId" :class="titleClass">Add a contributor for {{contributorCompanyName}}</h3>
+          <h3 :id="titleId" :class="titleClass">Add a contributor for {{ contributorCompanyName }}</h3>
         </div>
       </template>
       <div class="xll-contributor-tips">
@@ -518,6 +574,7 @@
 
     </el-dialog>
 
+
     <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
   </div>
 </template>
@@ -549,7 +606,7 @@ import {
 import xllLoading from '@/components/xllLoading'
 
 import {useStore} from "vuex";
-import {ref, reactive , inject} from "vue";
+import {ref, reactive, inject} from "vue";
 import ImageCompressor from "compressorjs";
 import {encode} from "js-base64";
 import {randomString} from "@/utils";
@@ -575,6 +632,8 @@ export default {
 
     const basicForms = ref(null)
 
+    const accountEmailForms = ref(null)
+
     const basicForm = reactive({
       first_name: "",
       last_name: '',
@@ -582,7 +641,6 @@ export default {
       sex: '',
       phone: '',
       email: '',
-      code:'',
       state_id: '',
       town_id: '',
       country_id: '',
@@ -614,11 +672,19 @@ export default {
           message: 'Select your gender',
           trigger: 'change',
         }
-      ],
+      ]
 
+    })
+
+    const accountEmailForm = reactive({
+      email: '',
+      code: '',
+    })
+
+    const accountEmailRules = reactive({
       email: [
         {
-          type:'email',
+          type: 'email',
           required: true,
           message: 'Please input your email',
           trigger: 'change',
@@ -648,10 +714,10 @@ export default {
     const contributorRules = reactive({
       email: [
         {
-          type:'email',
+          type: 'email',
           required: true,
           message: 'Please enter a valid email',
-          trigger: ['change','blur'],
+          trigger: ['change', 'blur'],
         }
       ],
     })
@@ -661,7 +727,7 @@ export default {
     function disconnectIm() {
 
       //connected
-      if(goEasy.getConnectionStatus() === 'connected'){
+      if (goEasy.getConnectionStatus() === 'connected') {
 
         goEasy.disconnect({
           onSuccess: () => {
@@ -715,7 +781,6 @@ export default {
     }
 
 
-
     return {
       checkCodeBtn,
       getCheckCodeTimer,
@@ -729,7 +794,10 @@ export default {
       contributorForms,
       contributorForm,
       contributorRules,
-      disconnectIm
+      disconnectIm,
+      accountEmailForms,
+      accountEmailForm,
+      accountEmailRules
 
     }
 
@@ -807,7 +875,7 @@ export default {
 
       contributorMenuData: [],
       contributorCompanyId: 0,
-      contributorCompanyName:'',
+      contributorCompanyName: '',
       contributorIdentity: 0,
       contributorUserId: 0,
 
@@ -825,6 +893,9 @@ export default {
       forgotDialogVisible: false,
 
       contributorWidth: '50%',
+      accountEmailWith:'600px',
+      accountEmailDialogVisible: false,
+
 
     }
   },
@@ -840,12 +911,14 @@ export default {
     if (screenWidthFloor <= 768) {
       updateWindowHeight()
       this.contributorWidth = '80%'
+      this.accountEmailWith = '80%'
     }
 
     window.onresize = () => {
       if (screenWidthFloor <= 768) {
         updateWindowHeight()
         this.contributorWidth = '80%'
+        this.accountEmailWith = '80%'
       }
     }
 
@@ -884,6 +957,13 @@ export default {
         console.log(err)
       })
     },
+    editAccountEmail() {
+      this.accountEmailDialogVisible = true;
+      // this.accountEmailForm.email = this.basicForm.email;
+      this.accountEmailForm.email = '';
+      this.accountEmailForm.code = '';
+
+    },
     editAccount() {
       let userContact = this.userContact;
       this.editAccountStatus = true;
@@ -904,41 +984,27 @@ export default {
       this.submitLoadingValue = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let emailParams = {
-            email:this.basicForm.email,
-            code:this.basicForm.code
-          }
-          USER_CONTACT_EMAIL_CHECK(emailParams).then(res=>{
-            if(res.code == 200){
 
-              let params = Object.assign({}, self.basicForm)
-              USER_CONTACT_EDIT_V2(params).then(res => {
-                // console.log(res)
-                if (res.code == 200) {
-                  self.editAccountStatus = false;
-                  self.getUserInfo();
-                  self.submitLoadingValue = false
-                }
-              }).catch(err => {
-                console.log(err)
-                self.submitLoadingValue = false
-
-                if(err.msg){
-                  return self.$message.error(err.msg)
-                }
-
-                if(err.message){
-                  return self.$message.error(err.message)
-                }
-
-              })
-
+          let params = Object.assign({}, self.basicForm)
+          USER_CONTACT_EDIT_V2(params).then(res => {
+            // console.log(res)
+            if (res.code == 200) {
+              self.editAccountStatus = false;
+              self.getUserInfo();
+              self.submitLoadingValue = false
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             self.submitLoadingValue = false
 
-            return self.$message.error('Incorrect verification code')
+            if (err.msg) {
+              return self.$message.error(err.msg)
+            }
+
+            if (err.message) {
+              return self.$message.error(err.message)
+            }
+
           })
 
         } else {
@@ -973,6 +1039,13 @@ export default {
 
           if (educatorContact) {
             this.educatorContact = educatorContact;
+          }
+
+          if(identity == 1){
+            let username = userContact.first_name + ' ' + userContact.last_name;
+            this.$store.commit('username', username)
+            this.$store.commit('companyName', username)
+            this.$store.commit('userAvatar', userContact.headimgurl)
           }
 
 
@@ -1360,7 +1433,12 @@ export default {
         if (valid) {
 
           if (sMenuData.length <= 0) {
-            return this.$message.warning('Choose what the added user will have access to');
+            return  this.$message({
+              type:'warning',
+              message:'Choose what the added user will have access to',
+              grouping:true
+            })
+
           }
 
           let params = Object.assign({
@@ -1390,7 +1468,11 @@ export default {
         } else {
           this.addLoading = false;
           // this.contributorDialogVisible = false;
-          this.$message.warning('Please complete all required fields')
+          this.$message({
+            type:'warning',
+            message:'Please complete all required fields',
+            grouping:true
+          })
           console.log('error submit!!')
           return false
         }
@@ -1412,8 +1494,11 @@ export default {
         if (valid) {
 
           if (sMenuData.length <= 0) {
-            this.$message.warning('Choose what the added user will have access to')
-            return;
+            return  this.$message({
+              type:'warning',
+              message:'Choose what the added user will have access to',
+              grouping:true
+            })
           }
 
           let params = Object.assign({
@@ -1461,7 +1546,11 @@ export default {
         } else {
           this.addLoading = false;
           // this.contributorDialogVisible = false;
-          this.$message.warning('Please complete all required fields')
+          this.$message({
+            type:'warning',
+            message:'Please complete all required fields',
+            grouping:true
+          })
           console.log('error submit!!')
           return false;
         }
@@ -1540,7 +1629,7 @@ export default {
       })
 
     },
-    showContributorDialog(companyId, userId, i,companyName) {
+    showContributorDialog(companyId, userId, i, companyName) {
       this.contributorDialogVisible = true;
       this.contributorCompanyId = companyId;
       this.contributorIdentity = i;
@@ -1648,38 +1737,86 @@ export default {
 
 
     },
-    sendEmailCode() {
+    sendEmailCode(formName) {
       let self = this;
-      let email = this.basicForm.email
+      let email = this.accountEmailForm.email
 
-      if (email) {
+      this.$refs[formName].validateField('email',(valid) => {
+        if (valid) {
 
-        let params = {
-          email: email
-        }
-        this.getCheckCodeTimer()
+          if (email) {
 
-        USER_CONTACT_SEND_EMAIL_CODE(params).then(res => {
-          if (res.code == 200) {
+            let params = {
+              email: email
+            }
+            this.getCheckCodeTimer()
 
-            self.$message({
-              type: 'success',
-              message: 'Activation Code Sent'
+            USER_CONTACT_SEND_EMAIL_CODE(params).then(res => {
+              if (res.code == 200) {
+
+                self.$message({
+                  type: 'success',
+                  message: 'Activation Code Sent'
+                })
+
+              }
+            }).catch(err => {
+              console.log(err)
+              if (err.msg) {
+                return this.$message.error(err.msg)
+              }
+              if (err.message) {
+                return this.$message.error(err.message)
+              }
+            })
+          } else {
+
+            return this.$message({
+              type:'warning',
+              message:'Please enter a valid email address',
+              grouping:true
             })
 
           }
-        }).catch(err => {
-          console.log(err)
-          if (err.msg) {
-            return this.$message.error(err.msg)
+
+        } else {
+          console.log('error submit!!')
+          return this.$message({
+            type:'warning',
+            message:'Please enter a valid email address',
+            grouping:true
+          })
+        }
+      })
+
+
+    },
+    saveEmailChange(formName) {
+      let self = this;
+
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let emailParams = {
+            email: this.accountEmailForm.email,
+            code: this.accountEmailForm.code
           }
-          if (err.message) {
-            return this.$message.error(err.message)
-          }
-        })
-      }else{
-        return this.$message.error('Please fill out your email address')
-      }
+          USER_CONTACT_EMAIL_CHECK(emailParams).then(res => {
+            if (res.code == 200) {
+              this.basicForm.email = this.accountEmailForm.email
+              this.accountEmailDialogVisible = false;
+            }
+          }).catch(err => {
+            console.log(err)
+
+            return self.$message.error('Incorrect verification code')
+          })
+
+        } else {
+          console.log('error submit!!')
+
+          return false
+        }
+      })
 
     }
 
@@ -1910,7 +2047,7 @@ export default {
 
 
 .account-profile-c {
-  margin: 15px  0 0 0;
+  margin: 15px 0 0 0;
 }
 
 .account-profile-c-item {
@@ -2011,6 +2148,9 @@ export default {
 
 .save-form-discard-btn {
   font-size: 20px;
+  color: #6650B3;
+}
+.account-change-email-edit-btn{
   color: #6650B3;
 }
 
@@ -2157,7 +2297,8 @@ export default {
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
 }
-.my-header h3{
+
+.my-header h3 {
   word-break: break-word;
 }
 
@@ -2172,11 +2313,9 @@ export default {
   right: 2px;
   top: 6px;
   bottom: 6px;
-  //margin: auto;
-  padding: 0 20px;
+//margin: auto; padding: 0 20px;
   border-radius: 4px;
-  //height: 20px;
-  background-color: #ffffff;
+//height: 20px; background-color: #ffffff;
   font-size: 14px;
   font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   z-index: 100;
@@ -2191,6 +2330,33 @@ export default {
   text-decoration: underline;
 }
 
+.account-change-email-container {
+
+}
+
+.account-change-email-t {
+
+}
+
+.account-change-email-t-t {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-change-email-t-t-l {
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+}
+
+.account-change-email-t-t-r {
+
+}
+
+.account-change-email-b {
+  margin: 12px 0;
+}
 
 @media screen and (min-width: 769px) {
   .account-profile-c-item-b-mobile {

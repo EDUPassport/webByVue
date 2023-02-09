@@ -14,63 +14,37 @@
               <div class="da-t">
                 <div class="da-t-l">
                   <div class="da-label">
-                    <template v-if="filterByJobStatus">
-                      Jobs
-                    </template>
-                    <template v-if="filterByApplicantStatus">
-                      Applications
-                    </template>
+                    <span v-if="filterByJobStatus">Jobs</span>
+                    <span v-if="filterByApplicantStatus">Applications</span>
                   </div>
-                  <template v-if="filterByJobStatus">
-                     <template v-if="identity == 1 || identity == 5">
-                       <div class="da-filter">
-                         <el-icon>
+
+                  <el-dropdown class="da-filter">
+                      <span class="da-dropdown-span">
+                         <el-icon style="margin-right: 4px;">
                            <IconIcBaselineFilterList/>
                          </el-icon>
-                         <span>VIEW BY: JOBS</span>
-                         <el-icon>
+                         VIEW BY:
+                        <template v-if="filterByJobStatus">
+                          JOBS
+                        </template>
+                        <template v-if="filterByApplicantStatus">
+                          APPLICATIONS
+                        </template>
+                         <el-icon style="margin-left: 2px;">
                            <ArrowDownBold/>
                          </el-icon>
-                       </div>
-                     </template>
-                    <template v-if="identity == 2 || identity == 3 || identity == 4">
-                      <div class="da-filter"  @click="filterByApplicants()">
-                        <el-icon>
-                          <IconIcBaselineFilterList/>
-                        </el-icon>
-                        <span>VIEW BY: JOBS</span>
-                        <el-icon>
-                          <ArrowDownBold/>
-                        </el-icon>
-                      </div>
+                      </span>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <el-dropdown-item v-if="identity == 2 || identity == 3 || identity == 4"  @click="filterByJobs()">
+                          <span class="da-dropdown-item-span">JOBS</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item   @click="filterByApplicants()" >
+                          <span class="da-dropdown-item-span">APPLICATIONS</span>
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
                     </template>
-
-                  </template>
-
-                  <template v-if="filterByApplicantStatus">
-                    <template v-if="identity == 2 || identity == 3 || identity == 4">
-                      <div class="da-filter" @click="filterByJobs()">
-                        <el-icon>
-                          <IconIcBaselineFilterList/>
-                        </el-icon>
-                        <span>VIEW BY: APPLICATIONS</span>
-
-                        <el-icon>
-                          <ArrowDownBold/>
-                        </el-icon>
-                      </div>
-                    </template>
-                    <template v-if="identity == 1 || identity == 5">
-                      <div class="da-filter">
-                        <el-icon>
-                          <IconIcBaselineFilterList/>
-                        </el-icon>
-                        <span>VIEW BY: APPLICATIONS</span>
-
-                      </div>
-                    </template>
-
-                  </template>
+                  </el-dropdown>
 
                 </div>
                 <div class="da-t-r" v-if="filterByJobStatus">
@@ -127,611 +101,623 @@
                 </el-row>
 
                 <template v-if="filterByJobStatus">
-                  <div class="da-item-container-height">
-                    <div v-for="(item,i) in myJobsData" :key="i">
+                  <template v-if="myJobsData.length > 0">
+                    <div class="da-item-container-height">
+                      <div v-for="(item,i) in myJobsData" :key="i">
 
-                      <el-row :gutter="0" class="da-da-item">
+                        <el-row :gutter="0" class="da-da-item">
 
-                        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-job-title">
+                          <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-job-title">
 
-                          <div class="da-job-title-l">
-                            <el-popover
-                                v-if="item.status == 0"
-                                placement="top-start"
-                                title="Pending"
-                                :width="300"
-                                trigger="hover"
-                                content="Your job post is pending approval. Please give us 2-3 business days to review."
-                            >
-                              <template #reference>
-                                <el-icon :size="20" color="#F9B019">
-                                  <IconIcBaselinePendingActions/>
-                                </el-icon>
-                              </template>
-                            </el-popover>
+                            <div class="da-job-title-l">
+                              <el-popover
+                                  v-if="item.status == 0"
+                                  placement="top-start"
+                                  title="Pending"
+                                  :width="300"
+                                  trigger="hover"
+                                  content="Your job post is pending approval. Please give us 2-3 business days to review."
+                              >
+                                <template #reference>
+                                  <el-icon :size="20" color="#F9B019">
+                                    <IconIcBaselinePendingActions/>
+                                  </el-icon>
+                                </template>
+                              </el-popover>
 
-                            <el-popover
-                                v-if="item.status == 2"
-                                placement="top-start"
-                                title="Rejected"
-                                :width="300"
-                                trigger="hover"
-                                content="Please contact us for more information"
-                            >
-                              <template #reference>
-                                <el-icon :size="20" color="#FF4D4D">
-                                  <IconCiError/>
-                                </el-icon>
-                              </template>
-                            </el-popover>
-                          </div>
+                              <el-popover
+                                  v-if="item.status == 2"
+                                  placement="top-start"
+                                  title="Rejected"
+                                  :width="300"
+                                  trigger="hover"
+                                  content="Please contact us for more information"
+                              >
+                                <template #reference>
+                                  <el-icon :size="20" color="#FF4D4D">
+                                    <IconCiError/>
+                                  </el-icon>
+                                </template>
+                              </el-popover>
+                            </div>
 
-                          <div class="da-job-title-r">
-                            <el-tooltip
-                                class="box-item"
-                                effect="dark"
-                                :content="item.job_title"
-                                placement="top"
-                            >
-                              {{ item.job_title }}
-                            </el-tooltip>
-                          </div>
-                        </el-col>
+                            <div class="da-job-title-r">
+                              <el-tooltip
+                                  class="box-item"
+                                  effect="dark"
+                                  :content="item.job_title"
+                                  placement="top"
+                              >
+                                {{ item.job_title }}
+                              </el-tooltip>
+                            </div>
+                          </el-col>
 
-                        <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" class="da-total-applicants">
-                          <div class="da-total-applicants-l-circle" v-if="item.unread_status"></div>
-                          <span>{{ item.resume_count }}</span>
-                        </el-col>
+                          <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" class="da-total-applicants">
+                            <div class="da-total-applicants-l-circle" v-if="item.unread_status"></div>
+                            <span>{{ item.resume_count }}</span>
+                          </el-col>
 
-                        <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" class="da-posted-deadline">
-                          <template v-if="item.refresh_time">
-                            {{ $filters.howLongFormat(item.refresh_time) }}
-                          </template>
-                          <template v-else>-</template>
-                          /
-                          <template v-if="item.job_due_time">
-                            {{ $filters.ymdFormatEvent(item.job_due_time) }}
-                          </template>
-                          <template v-else>
-                            -
-                          </template>
+                          <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" class="da-posted-deadline">
+                            <template v-if="item.refresh_time">
+                              {{ $filters.howLongFormat(item.refresh_time) }}
+                            </template>
+                            <template v-else>-</template>
+                            /
+                            <template v-if="item.job_due_time">
+                              {{ $filters.ymdFormatEvent(item.job_due_time) }}
+                            </template>
+                            <template v-else>
+                              -
+                            </template>
 
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-action-btn-container" >
-                          <el-button class="da-action-btn"
-                                     @click="viewAllApplicants(item.id,item.unread_id,item.unread_status)"
-                                     plain round>
-                            VIEW APPLICANTS
-                          </el-button>
-                          <el-button plain round @click="editJob(item.id)">
-                            EDIT
-                          </el-button>
-
-                          <el-dropdown class="da-more-dropdown" :hide-on-click="false" trigger="click">
-                            <el-button link type="primary">
-                              <el-icon :size="20">
-                                <IconIcRoundMoreHoriz />
-                              </el-icon>
+                          </el-col>
+                          <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-action-btn-container" >
+                            <el-button class="da-action-btn"
+                                       @click="viewAllApplicants(item.id,item.unread_id,item.unread_status)"
+                                       plain round>
+                              VIEW APPLICANTS
+                            </el-button>
+                            <el-button plain round @click="editJob(item.id)">
+                              EDIT
                             </el-button>
 
-                            <template #dropdown>
-                              <el-dropdown-menu>
-                                <el-dropdown-item>
-                                  <el-button link @click="viewUserProfile(item.company_id,item.user_id,item.identity)">
-                                    VIEW PROFILE
-                                  </el-button>
-                                </el-dropdown-item>
-                              </el-dropdown-menu>
-                            </template>
-                          </el-dropdown>
+                            <el-dropdown class="da-more-dropdown" :hide-on-click="false" trigger="click">
+                              <el-button link type="primary">
+                                <el-icon :size="20">
+                                  <IconIcRoundMoreHoriz />
+                                </el-icon>
+                              </el-button>
 
-                        </el-col>
+                              <template #dropdown>
+                                <el-dropdown-menu>
+                                  <el-dropdown-item>
+                                    <el-button link @click="viewUserProfile(item.company_id,item.user_id,item.identity)">
+                                      VIEW PROFILE
+                                    </el-button>
+                                  </el-dropdown-item>
+                                </el-dropdown-menu>
+                              </template>
+                            </el-dropdown>
 
-                      </el-row>
+                          </el-col>
 
-                      <div v-if="item.id == selectedJobId">
+                        </el-row>
 
-                        <template v-for="(item,i) in sApplicantsData" :key="i">
+                        <div v-if="item.id == selectedJobId">
 
-                          <el-row :gutter="50" class="da-item-jobs">
-                            <el-col :span="18">
-                              <div class="da-item-basic">
-                                <div class="da-item-basic-l">
-                                  <el-avatar class="da-item-avatar-img"
-                                             v-if="item.user_contact"
-                                             :src="item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
-                                  </el-avatar>
+                          <template v-for="(item,i) in sApplicantsData" :key="i">
+
+                            <el-row :gutter="50" class="da-item-jobs">
+                              <el-col :span="18">
+                                <div class="da-item-basic">
+                                  <div class="da-item-basic-l">
+                                    <el-avatar class="da-item-avatar-img"
+                                               v-if="item.user_contact"
+                                               :src="item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
+                                    </el-avatar>
+                                  </div>
+                                  <div class="da-item-basic-r">
+                                    <div class="da-item-name" v-if="item.user_contact">
+                                      {{ item.user_contact.educator_contact.name }}
+                                    </div>
+                                    <div class="da-item-n">
+                                      <div class="da-item-n-1" v-if="item.user_contact">
+                                        {{ item.user_contact.educator_contact.job_title }}
+                                      </div>
+                                      <div class="da-item-n-1" v-if="item.user_contact">
+                                        {{ item.user_contact.educator_contact.nationality }}
+                                      </div>
+                                      <div class="da-item-n-1"
+                                           v-if="item.user_contact.educator_contact.Teaching_experience">
+                                      <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience"
+                                            :key="i">
+                                        {{ exp.object_en }}
+                                      </span>
+                                      </div>
+                                    </div>
+                                  </div>
+
                                 </div>
+                              </el-col>
+                              <el-col :span="6">
+                                <div class="dashboard-view-application">
+                                  <el-button class="dashboard-view-application-btn"
+                                             plain round
+                                             @click="viewApplicationEvent(item.id)">
+                                    VIEW
+                                  </el-button>
+                                </div>
+                              </el-col>
+
+                            </el-row>
+
+                            <div class="da-item-expand" v-if="viewApplicantsChecked.indexOf(item.id) != -1">
+                              <div class="dashboard-work-exp">
+                                <div class="dashboard-work-exp-label">
+                                  <span>Working experience</span>
+                                  <el-button class="dashboard-view-detail-btn" link
+                                             @click="viewEducatorDetail(item)">
+                                    VIEW DETAILS
+                                  </el-button>
+                                </div>
+                                <div class="dashboard-work-exp-c" v-if="item.user_contact">
+
+                                  <template v-for="(work,i) in item.user_contact.educator_contact.work_info"
+                                            :key="i">
+                                    <div class="dashboard-work-exp-c-item"
+                                         v-if="i<=2"
+                                    >
+                                      <div class="dashboard-work-exp-c-item-label">
+                                        {{ work.title }}
+                                      </div>
+                                      <div class="dashboard-work-exp-c-item-text">
+                                        {{ work.company_name }}, {{ work.location }}
+                                      </div>
+                                      <div class="dashboard-work-exp-c-item-text">
+                                        {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
+                                          $filters.ymdFormatTimestamp(work.work_time_to)
+                                        }}
+                                      </div>
+                                    </div>
+                                  </template>
+
+                                  <div class="dashboard-work-exp-c-item">
+                                    <!--                                  <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>-->
+                                  </div>
+
+
+                                </div>
+                              </div>
+
+                              <div class="dashboard-education-cer">
+                                <div class="dashboard-education-cer-label">
+                                  Education & Certifications
+                                </div>
+                                <div class="dashboard-education-cer-c" v-if="item.user_contact">
+                                  <template v-for="(education,i) in item.user_contact.educator_contact.education_info"
+                                            :key="i"
+                                  >
+                                    <div class="dashboard-education-cer-c-item">
+                                      <div class="dashboard-education-cer-c-label">
+                                        {{ education.school_name }}
+                                      </div>
+                                      <div class="dashboard-education-cer-c-text">
+                                        {{ education.degree }}
+                                      </div>
+                                      <div class="dashboard-education-cer-c-text">
+                                        {{
+                                          $filters.ymdFormatTimestamp(education.start_time)
+                                        }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
+                                      </div>
+                                    </div>
+                                  </template>
+
+                                  <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.certification">
+                                    <div class="dashboard-education-cer-c-label">
+                                      Certificates and Diplomas
+                                    </div>
+                                    <div class="dashboard-education-cer-c-text">
+                                      {{ $filters.userObjectFormat(item.user_contact.educator_contact.certification) }}
+                                    </div>
+                                  </div>
+
+                                  <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.languages">
+                                    <div class="dashboard-education-cer-c-label">
+                                      Languages
+                                    </div>
+                                    <div class="dashboard-education-cer-c-text"
+                                         v-for="(language,i) in item.user_contact.educator_contact.languages"
+                                         :key="i"
+                                    >
+                                      {{ language.object_en }}
+                                      <span v-if="language.object_score == 1">(Native)</span>
+                                      <span v-if="language.object_score == 2">(Fluent)</span>
+                                      <span v-if="language.object_score == 3">(Conversational)</span>
+                                      <span v-if="language.object_score == 4">(Beginner)</span>
+                                    </div>
+
+                                  </div>
+
+                                </div>
+                              </div>
+
+                              <div class="da-item-b">
+                                <div class="da-item-b-l">
+
+                                </div>
+                                <div class="da-item-b-r">
+                                  <el-button class="da-item-b-l-btn-1" link round
+                                             :disabled="item.status == 3"
+                                             @click="showApplyJobStatusDialog(item,3, i)"
+                                  >
+                                    NOT INTERESTED
+                                  </el-button>
+                                  <!--                                <el-button class="da-item-b-l-btn-1" round>-->
+                                  <!--                                  ARCHIVE-->
+                                  <!--                                </el-button>-->
+                                  <el-button class="da-item-b-l-btn-2" type="primary" round
+                                             :disabled="item.status == 4"
+                                             @click="showApplyJobStatusDialog(item,4, i)"
+                                  >
+                                    INTERESTED
+                                  </el-button>
+                                </div>
+                              </div>
+
+                            </div>
+
+                          </template>
+
+
+                        </div>
+
+
+                      </div>
+
+                    </div>
+                    <div class="xll-pagination-container">
+                      <el-pagination layout="prev, pager, next"
+                                     :default-current-page="myJobPage"
+                                     @size-change="myJobPageSizeChange"
+                                     @current-change="myJobPageChange"
+                                     :current-page="myJobPage"
+                                     :page-size="myJobLimit"
+                                     :total="myJobTotalNum">
+                      </el-pagination>
+                    </div>
+
+                  </template>
+                  <template v-else>
+                    <el-empty description="-"></el-empty>
+                  </template>
+
+                </template>
+
+                <template v-if="filterByApplicantStatus">
+
+                  <template v-if="myApplicationsData.length>0">
+                    <div class="da-item-container-height">
+
+                      <div v-for="(item,i) in myApplicationsData" :key="i">
+                        <el-row class="da-item">
+
+                          <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" >
+                            <div class="da-item-basic">
+                              <div class="da-item-basic-l-a">
+
+                                <template v-if="identity == 1">
+                                  <el-avatar class="da-item-avatar-img"
+                                             :src="item.job && item.job.company && item.job.company.logo ? item.job.company.logo : defaultAvatar ">
+                                  </el-avatar>
+                                </template>
+                                <template v-else>
+                                  <el-avatar class="da-item-avatar-img"
+                                             :src="item.user_contact && item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
+                                  </el-avatar>
+                                </template>
+
+                              </div>
+                              <template v-if="identity == 1">
+                                <div class="da-item-basic-r">
+                                  <div class="da-item-company-name" v-if="item.job">
+                                    {{ item.job.company_name }}
+                                  </div>
+                                  <div class="da-item-job-title" v-if="item.job">
+                                    {{item.job.job_title}}
+                                  </div>
+                                  <div class="da-item-n-educator">
+                                    <div class="da-item-n-1" v-if="item.job">
+                                      {{ item.job.currency }} {{ item.job.salary_min }} - {{ item.job.salary_max }}
+                                      <span v-if="item.job.payment_period == 112">hourly</span>
+                                      <span v-if="item.job.payment_period == 113">daily</span>
+                                      <span v-if="item.job.payment_period == 114">weekly</span>
+                                      <span v-if="item.job.payment_period == 115">monthly</span>
+                                      <span v-if="item.job.payment_period == 116">annually</span>
+                                    </div>
+                                    <div class="da-item-n-1" v-if="item.job">
+                                      <span>{{item.job.job_location}}</span>
+                                    </div>
+                                    <div class="da-item-n-1" v-if="item.job">
+                                      <span v-if="item.job.employment_type==1">Full time</span>
+                                      <span v-if="item.job.employment_type==2">Part time</span>
+                                      <span v-if="item.job.employment_type==3">Seasonal</span>
+                                    </div>
+
+                                  </div>
+                                </div>
+
+                              </template>
+                              <template v-else>
                                 <div class="da-item-basic-r">
                                   <div class="da-item-name" v-if="item.user_contact">
                                     {{ item.user_contact.educator_contact.name }}
                                   </div>
                                   <div class="da-item-n">
                                     <div class="da-item-n-1" v-if="item.user_contact">
-                                      {{ item.user_contact.educator_contact.job_title }}
-                                    </div>
-                                    <div class="da-item-n-1" v-if="item.user_contact">
                                       {{ item.user_contact.educator_contact.nationality }}
                                     </div>
                                     <div class="da-item-n-1"
                                          v-if="item.user_contact.educator_contact.Teaching_experience">
-                                      <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience"
-                                            :key="i">
-                                        {{ exp.object_en }}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-
-                              </div>
-                            </el-col>
-                            <el-col :span="6">
-                              <div class="dashboard-view-application">
-                                <el-button class="dashboard-view-application-btn"
-                                           plain round
-                                           @click="viewApplicationEvent(item.id)">
-                                  VIEW
-                                </el-button>
-                              </div>
-                            </el-col>
-
-                          </el-row>
-
-                          <div class="da-item-expand" v-if="viewApplicantsChecked.indexOf(item.id) != -1">
-                            <div class="dashboard-work-exp">
-                              <div class="dashboard-work-exp-label">
-                                <span>Working experience</span>
-                                <el-button class="dashboard-view-detail-btn" link
-                                           @click="viewEducatorDetail(item)">
-                                  VIEW DETAILS
-                                </el-button>
-                              </div>
-                              <div class="dashboard-work-exp-c" v-if="item.user_contact">
-
-                                <template v-for="(work,i) in item.user_contact.educator_contact.work_info"
-                                          :key="i">
-                                  <div class="dashboard-work-exp-c-item"
-                                       v-if="i<=2"
-                                  >
-                                    <div class="dashboard-work-exp-c-item-label">
-                                      {{ work.title }}
-                                    </div>
-                                    <div class="dashboard-work-exp-c-item-text">
-                                      {{ work.company_name }}, {{ work.location }}
-                                    </div>
-                                    <div class="dashboard-work-exp-c-item-text">
-                                      {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
-                                        $filters.ymdFormatTimestamp(work.work_time_to)
-                                      }}
-                                    </div>
-                                  </div>
-                                </template>
-
-                                <div class="dashboard-work-exp-c-item">
-                                  <!--                                  <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>-->
-                                </div>
-
-
-                              </div>
-                            </div>
-
-                            <div class="dashboard-education-cer">
-                              <div class="dashboard-education-cer-label">
-                                Education & Certifications
-                              </div>
-                              <div class="dashboard-education-cer-c" v-if="item.user_contact">
-                                <template v-for="(education,i) in item.user_contact.educator_contact.education_info"
-                                          :key="i"
-                                >
-                                  <div class="dashboard-education-cer-c-item">
-                                    <div class="dashboard-education-cer-c-label">
-                                      {{ education.school_name }}
-                                    </div>
-                                    <div class="dashboard-education-cer-c-text">
-                                      {{ education.degree }}
-                                    </div>
-                                    <div class="dashboard-education-cer-c-text">
-                                      {{
-                                        $filters.ymdFormatTimestamp(education.start_time)
-                                      }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
-                                    </div>
-                                  </div>
-                                </template>
-
-                                <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.certification">
-                                  <div class="dashboard-education-cer-c-label">
-                                    Certificates and Diplomas
-                                  </div>
-                                  <div class="dashboard-education-cer-c-text">
-                                    {{ $filters.userObjectFormat(item.user_contact.educator_contact.certification) }}
-                                  </div>
-                                </div>
-
-                                <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.languages">
-                                  <div class="dashboard-education-cer-c-label">
-                                    Languages
-                                  </div>
-                                  <div class="dashboard-education-cer-c-text"
-                                       v-for="(language,i) in item.user_contact.educator_contact.languages"
-                                       :key="i"
-                                  >
-                                    {{ language.object_en }}
-                                    <span v-if="language.object_score == 1">(Native)</span>
-                                    <span v-if="language.object_score == 2">(Fluent)</span>
-                                    <span v-if="language.object_score == 3">(Conversational)</span>
-                                    <span v-if="language.object_score == 4">(Beginner)</span>
-                                  </div>
-
-                                </div>
-
-                              </div>
-                            </div>
-
-                            <div class="da-item-b">
-                              <div class="da-item-b-l">
-
-                              </div>
-                              <div class="da-item-b-r">
-                                <el-button class="da-item-b-l-btn-1" link round
-                                           :disabled="item.status == 3"
-                                           @click="showApplyJobStatusDialog(item,3, i)"
-                                >
-                                  NOT INTERESTED
-                                </el-button>
-<!--                                <el-button class="da-item-b-l-btn-1" round>-->
-<!--                                  ARCHIVE-->
-<!--                                </el-button>-->
-                                <el-button class="da-item-b-l-btn-2" type="primary" round
-                                           :disabled="item.status == 4"
-                                           @click="showApplyJobStatusDialog(item,4, i)"
-                                >
-                                  INTERESTED
-                                </el-button>
-                              </div>
-                            </div>
-
-                          </div>
-
-                        </template>
-
-
-                      </div>
-
-
-                    </div>
-
-                  </div>
-
-                  <div class="xll-pagination-container">
-                    <el-pagination layout="prev, pager, next"
-                                   :default-current-page="myJobPage"
-                                   @size-change="myJobPageSizeChange"
-                                   @current-change="myJobPageChange"
-                                   :current-page="myJobPage"
-                                   :page-size="myJobLimit"
-                                   :total="myJobTotalNum">
-                    </el-pagination>
-                  </div>
-
-                </template>
-
-                <template v-if="filterByApplicantStatus">
-                  <div class="da-item-container-height">
-
-                    <div v-for="(item,i) in myApplicationsData" :key="i">
-                      <el-row class="da-item">
-
-                        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" >
-                          <div class="da-item-basic">
-                            <div class="da-item-basic-l-a">
-
-                              <template v-if="identity == 1">
-                                <el-avatar class="da-item-avatar-img"
-                                           :src="item.job && item.job.company && item.job.company.logo ? item.job.company.logo : defaultAvatar ">
-                                </el-avatar>
-                              </template>
-                              <template v-else>
-                                <el-avatar class="da-item-avatar-img"
-                                           :src="item.user_contact && item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
-                                </el-avatar>
-                              </template>
-
-                            </div>
-                            <template v-if="identity == 1">
-                              <div class="da-item-basic-r">
-                                <div class="da-item-company-name" v-if="item.job">
-                                  {{ item.job.company_name }}
-                                </div>
-                                <div class="da-item-job-title" v-if="item.job">
-                                  {{item.job.job_title}}
-                                </div>
-                                <div class="da-item-n-educator">
-                                  <div class="da-item-n-1" v-if="item.job">
-                                    {{ item.job.currency }} {{ item.job.salary_min }} - {{ item.job.salary_max }}
-                                    <span v-if="item.job.payment_period == 112">hourly</span>
-                                    <span v-if="item.job.payment_period == 113">daily</span>
-                                    <span v-if="item.job.payment_period == 114">weekly</span>
-                                    <span v-if="item.job.payment_period == 115">monthly</span>
-                                    <span v-if="item.job.payment_period == 116">annually</span>
-                                  </div>
-                                  <div class="da-item-n-1" v-if="item.job">
-                                    <span>{{item.job.job_location}}</span>
-                                  </div>
-                                  <div class="da-item-n-1" v-if="item.job">
-                                    <span v-if="item.job.employment_type==1">Full time</span>
-                                    <span v-if="item.job.employment_type==2">Part time</span>
-                                    <span v-if="item.job.employment_type==3">Seasonal</span>
-                                  </div>
-
-                                </div>
-                              </div>
-
-                            </template>
-                            <template v-else>
-                              <div class="da-item-basic-r">
-                                <div class="da-item-name" v-if="item.user_contact">
-                                  {{ item.user_contact.educator_contact.name }}
-                                </div>
-                                <div class="da-item-n">
-                                  <div class="da-item-n-1" v-if="item.user_contact">
-                                    {{ item.user_contact.educator_contact.nationality }}
-                                  </div>
-                                  <div class="da-item-n-1"
-                                       v-if="item.user_contact.educator_contact.Teaching_experience">
                                   <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience"
                                         :key="i"
                                   >{{ exp.object_en }}</span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                            </template>
+                              </template>
 
-                          </div>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-item-a-job-title-col" >
-                          <template v-if="identity == 1">
+                            </div>
+                          </el-col>
+                          <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="da-item-a-job-title-col" >
+                            <template v-if="identity == 1">
                             <span class="da-item-a-job-title">
                             {{ $filters.howLongFormat(item.c_time) }}
                             </span>
-                          </template>
-                          <template v-else>
+                            </template>
+                            <template v-else>
                             <span class="da-item-a-job-title" v-if="item.job">
                             {{ item.job.job_title }}
                             </span>
-                          </template>
+                            </template>
 
-                        </el-col>
+                          </el-col>
 
-                        <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" >
+                          <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" >
 
-                          <template v-if="identity == 1">
+                            <template v-if="identity == 1">
 
-                            <div class="xll-status-tag-container">
-                              <div class="xll-status-tag xll-status-tag-no-fill xll-status-tag-1" v-if="item.status == 1">
-                                <span>Submitted</span>
-                              </div>
-                            </div>
-
-                            <div class="xll-status-tag-container">
-                              <div class="xll-status-tag xll-status-tag-fill xll-status-tag-2" v-if="item.status == 2">
-                                <span>Shortlisted</span>
-                              </div>
-                            </div>
-
-                            <div class="xll-status-tag-container">
-                              <div class="xll-status-tag xll-status-tag-fill xll-status-tag-3" v-if="item.status == 3">
-                                <span>Not Selected</span>
-                              </div>
-                            </div>
-
-                            <div class="xll-status-tag-container">
-                              <div class="xll-status-tag xll-status-tag-fill xll-status-tag-4" v-if="item.status == 4">
-                                <span>Accepted</span>
-                              </div>
-                            </div>
-
-                          </template>
-
-                          <template v-if="identity == 2 || identity == 3 || identity == 4">
-
-                            <div style="width: 100px;" >
-                              <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF"/>
-                            </div>
-                            <div style="margin-top: 10px;">
                               <div class="xll-status-tag-container">
                                 <div class="xll-status-tag xll-status-tag-no-fill xll-status-tag-1" v-if="item.status == 1">
                                   <span>Submitted</span>
                                 </div>
                               </div>
+
                               <div class="xll-status-tag-container">
                                 <div class="xll-status-tag xll-status-tag-fill xll-status-tag-2" v-if="item.status == 2">
                                   <span>Shortlisted</span>
                                 </div>
                               </div>
+
                               <div class="xll-status-tag-container">
                                 <div class="xll-status-tag xll-status-tag-fill xll-status-tag-3" v-if="item.status == 3">
-                                  <span>Not interested</span>
+                                  <span>Not Selected</span>
                                 </div>
                               </div>
+
                               <div class="xll-status-tag-container">
                                 <div class="xll-status-tag xll-status-tag-fill xll-status-tag-4" v-if="item.status == 4">
-                                  <span>Interested</span>
+                                  <span>Accepted</span>
                                 </div>
                               </div>
 
-                            </div>
-
-                          </template>
-
-                          <!--                          {{item.match_meter}}-->
-                        </el-col>
-
-                        <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" >
-                          <div class="dashboard-view-application">
-
-                            <template v-if="identity == 1 && item.job && item.job.company">
-                              <chatButton text="SEND A MESSAGE"
-                                          :target-user="item.job.company"
-                                          @onSuccess="chatSuccess"
-                                          btn-style="primary"
-                                          :identity="item.job.identity">
-
-                              </chatButton>
                             </template>
+
                             <template v-if="identity == 2 || identity == 3 || identity == 4">
-                              <el-button class="dashboard-view-application-btn"
-                                         plain round
-                                         @click="viewApplicationIdWithCompany(item.id)">
-                                VIEW APPLICATION
-                              </el-button>
-                              <template v-if="item.user_contact.educator_contact">
+
+                              <div style="width: 100px;" >
+                                <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF"/>
+                              </div>
+                              <div style="margin-top: 10px;">
+                                <div class="xll-status-tag-container">
+                                  <div class="xll-status-tag xll-status-tag-no-fill xll-status-tag-1" v-if="item.status == 1">
+                                    <span>Submitted</span>
+                                  </div>
+                                </div>
+                                <div class="xll-status-tag-container">
+                                  <div class="xll-status-tag xll-status-tag-fill xll-status-tag-2" v-if="item.status == 2">
+                                    <span>Shortlisted</span>
+                                  </div>
+                                </div>
+                                <div class="xll-status-tag-container">
+                                  <div class="xll-status-tag xll-status-tag-fill xll-status-tag-3" v-if="item.status == 3">
+                                    <span>Not interested</span>
+                                  </div>
+                                </div>
+                                <div class="xll-status-tag-container">
+                                  <div class="xll-status-tag xll-status-tag-fill xll-status-tag-4" v-if="item.status == 4">
+                                    <span>Interested</span>
+                                  </div>
+                                </div>
+
+                              </div>
+
+                            </template>
+
+                            <!--                          {{item.match_meter}}-->
+                          </el-col>
+
+                          <el-col :xs="12" :sm="12" :md="6" :lg="6" :xl="6" >
+                            <div class="dashboard-view-application">
+
+                              <template v-if="identity == 1 && item.job && item.job.company">
                                 <chatButton text="SEND A MESSAGE"
-                                            :target-user="item.user_contact.educator_contact"
+                                            :target-user="item.job.company"
                                             @onSuccess="chatSuccess"
                                             btn-style="primary"
-                                            :identity="1">
+                                            :identity="item.job.identity">
 
                                 </chatButton>
                               </template>
+                              <template v-if="identity == 2 || identity == 3 || identity == 4">
+                                <el-button class="dashboard-view-application-btn"
+                                           plain round
+                                           @click="viewApplicationIdWithCompany(item.id)">
+                                  VIEW APPLICATION
+                                </el-button>
+                                <template v-if="item.user_contact.educator_contact">
+                                  <chatButton text="SEND A MESSAGE"
+                                              :target-user="item.user_contact.educator_contact"
+                                              @onSuccess="chatSuccess"
+                                              btn-style="primary"
+                                              :identity="1">
 
-                            </template>
+                                  </chatButton>
+                                </template>
 
-                          </div>
-                        </el-col>
+                              </template>
 
-                      </el-row>
-
-                      <div class="da-item-expand" v-if="item.id == selectedApplicationIdWithCompany">
-                        <div class="dashboard-work-exp">
-                          <div class="dashboard-work-exp-label">
-                            <span>Working experience</span>
-                            <el-button class="dashboard-view-detail-btn" link
-                                       @click="viewEducatorDetail(item)">
-                              VIEW DETAILS
-                            </el-button>
-                          </div>
-                          <div class="dashboard-work-exp-c" v-if="item.user_contact">
-
-                            <template v-for="(work,i) in item.user_contact.educator_contact.work_info" :key="i">
-                              <div class="dashboard-work-exp-c-item"
-                                   v-if="i<=2"
-                              >
-                                <div class="dashboard-work-exp-c-item-label">
-                                  {{ work.title }}
-                                </div>
-                                <div class="dashboard-work-exp-c-item-text">
-                                  {{ work.company_name }}, {{ work.location }}
-                                </div>
-                                <div class="dashboard-work-exp-c-item-text">
-                                  {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
-                                    $filters.ymdFormatTimestamp(work.work_time_to)
-                                  }}
-                                </div>
-                              </div>
-                            </template>
-
-                            <div class="dashboard-work-exp-c-item">
-<!--                              <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>-->
                             </div>
+                          </el-col>
+
+                        </el-row>
+
+                        <div class="da-item-expand" v-if="item.id == selectedApplicationIdWithCompany">
+                          <div class="dashboard-work-exp">
+                            <div class="dashboard-work-exp-label">
+                              <span>Working experience</span>
+                              <el-button class="dashboard-view-detail-btn" link
+                                         @click="viewEducatorDetail(item)">
+                                VIEW DETAILS
+                              </el-button>
+                            </div>
+                            <div class="dashboard-work-exp-c" v-if="item.user_contact">
+
+                              <template v-for="(work,i) in item.user_contact.educator_contact.work_info" :key="i">
+                                <div class="dashboard-work-exp-c-item"
+                                     v-if="i<=2"
+                                >
+                                  <div class="dashboard-work-exp-c-item-label">
+                                    {{ work.title }}
+                                  </div>
+                                  <div class="dashboard-work-exp-c-item-text">
+                                    {{ work.company_name }}, {{ work.location }}
+                                  </div>
+                                  <div class="dashboard-work-exp-c-item-text">
+                                    {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
+                                      $filters.ymdFormatTimestamp(work.work_time_to)
+                                    }}
+                                  </div>
+                                </div>
+                              </template>
+
+                              <div class="dashboard-work-exp-c-item">
+                                <!--                              <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>-->
+                              </div>
 
 
+                            </div>
                           </div>
-                        </div>
 
-                        <div class="dashboard-education-cer">
-                          <div class="dashboard-education-cer-label">
-                            Education & Certifications
-                          </div>
-                          <div class="dashboard-education-cer-c" v-if="item.user_contact">
+                          <div class="dashboard-education-cer">
+                            <div class="dashboard-education-cer-label">
+                              Education & Certifications
+                            </div>
+                            <div class="dashboard-education-cer-c" v-if="item.user_contact">
 
-                            <template v-for="(education,i) in item.user_contact.educator_contact.education_info"
-                                      :key="i"
-                            >
-                              <div class="dashboard-education-cer-c-item">
+                              <template v-for="(education,i) in item.user_contact.educator_contact.education_info"
+                                        :key="i"
+                              >
+                                <div class="dashboard-education-cer-c-item">
+                                  <div class="dashboard-education-cer-c-label">
+                                    {{ education.school_name }}
+                                  </div>
+                                  <div class="dashboard-education-cer-c-text">
+                                    {{ education.degree }}
+                                  </div>
+                                  <div class="dashboard-education-cer-c-text">
+                                    {{
+                                      $filters.ymdFormatTimestamp(education.start_time)
+                                    }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
+                                  </div>
+                                </div>
+                              </template>
+
+                              <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.certification">
                                 <div class="dashboard-education-cer-c-label">
-                                  {{ education.school_name }}
+                                  Certificates and Diplomas
                                 </div>
                                 <div class="dashboard-education-cer-c-text">
-                                  {{ education.degree }}
-                                </div>
-                                <div class="dashboard-education-cer-c-text">
-                                  {{
-                                    $filters.ymdFormatTimestamp(education.start_time)
-                                  }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
+                                  {{ $filters.userObjectFormat(item.user_contact.educator_contact.certification) }}
                                 </div>
                               </div>
-                            </template>
 
-                            <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.certification">
-                              <div class="dashboard-education-cer-c-label">
-                                Certificates and Diplomas
+                              <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.languages">
+                                <div class="dashboard-education-cer-c-label">
+                                  Languages
+                                </div>
+                                <div class="dashboard-education-cer-c-text"
+                                     v-for="(language,i) in item.user_contact.educator_contact.languages"
+                                     :key="i"
+                                >
+                                  {{ language.object_en }}
+                                  <span v-if="language.object_score == 1">(Native)</span>
+                                  <span v-if="language.object_score == 2">(Fluent)</span>
+                                  <span v-if="language.object_score == 3">(Conversational)</span>
+                                  <span v-if="language.object_score == 4">(Beginner)</span>
+                                </div>
+
                               </div>
-                              <div class="dashboard-education-cer-c-text">
-                                {{ $filters.userObjectFormat(item.user_contact.educator_contact.certification) }}
-                              </div>
+
                             </div>
+                          </div>
 
-                            <div class="dashboard-education-cer-c-item" v-if="item.user_contact.educator_contact.languages">
-                              <div class="dashboard-education-cer-c-label">
-                                Languages
-                              </div>
-                              <div class="dashboard-education-cer-c-text"
-                                   v-for="(language,i) in item.user_contact.educator_contact.languages"
-                                   :key="i"
+                          <div class="da-item-b">
+                            <div class="da-item-b-l">
+
+                            </div>
+                            <div class="da-item-b-r">
+                              <el-button class="da-item-b-l-btn-1" link round
+                                         :disabled="item.status == 3"
+                                         @click="showApplyJobStatusDialog(item,3,i)"
                               >
-                                {{ language.object_en }}
-                                <span v-if="language.object_score == 1">(Native)</span>
-                                <span v-if="language.object_score == 2">(Fluent)</span>
-                                <span v-if="language.object_score == 3">(Conversational)</span>
-                                <span v-if="language.object_score == 4">(Beginner)</span>
-                              </div>
+                                NOT INTERESTED
+                              </el-button>
+                              <!--                            <el-button class="da-item-b-l-btn-1" round>-->
+                              <!--                              ARCHIVE-->
+                              <!--                            </el-button>-->
+                              <el-button class="da-item-b-l-btn-2" type="primary" round
+                                         :disabled="item.status == 4"
+                                         @click="showApplyJobStatusDialog(item,4,i)"
+                              >
+                                INTERESTED
+                              </el-button>
 
                             </div>
-
                           </div>
-                        </div>
 
-                        <div class="da-item-b">
-                          <div class="da-item-b-l">
-
-                          </div>
-                          <div class="da-item-b-r">
-                            <el-button class="da-item-b-l-btn-1" link round
-                                       :disabled="item.status == 3"
-                                       @click="showApplyJobStatusDialog(item,3,i)"
-                            >
-                              NOT INTERESTED
-                            </el-button>
-<!--                            <el-button class="da-item-b-l-btn-1" round>-->
-<!--                              ARCHIVE-->
-<!--                            </el-button>-->
-                            <el-button class="da-item-b-l-btn-2" type="primary" round
-                                       :disabled="item.status == 4"
-                                       @click="showApplyJobStatusDialog(item,4,i)"
-                            >
-                              INTERESTED
-                            </el-button>
-
-                          </div>
                         </div>
 
                       </div>
 
                     </div>
+                    <div class="xll-pagination-container">
+                      <el-pagination layout="prev, pager, next"
+                                     :default-current-page="myApplicationsPage"
+                                     @size-change="myApplicationsPageSizeChange"
+                                     @current-change="myApplicationsPageChange"
+                                     :current-page="myApplicationsPage"
+                                     :page-size="myApplicationsLimit"
+                                     :total="myApplicationsTotalNum">
+                      </el-pagination>
+                    </div>
 
-                  </div>
+                  </template>
+                  <template v-else>
+                    <el-empty description="-"></el-empty>
+                  </template>
 
-                  <div class="xll-pagination-container">
-                    <el-pagination layout="prev, pager, next"
-                                   :default-current-page="myApplicationsPage"
-                                   @size-change="myApplicationsPageSizeChange"
-                                   @current-change="myApplicationsPageChange"
-                                   :current-page="myApplicationsPage"
-                                   :page-size="myApplicationsLimit"
-                                   :total="myApplicationsTotalNum">
-                    </el-pagination>
-                  </div>
 
                 </template>
 
@@ -1091,9 +1077,22 @@ export default {
       })
     },
     filterByApplicants() {
+
+      let currentIdentity = this.identity
       this.filterByJobStatus = false;
       this.filterByApplicantStatus = true;
-      this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
+
+      if (currentIdentity == 1) {
+        this.getMyApplyJobs(this.myApplicationsPage,this.myApplicationsLimit);
+      }
+
+      if(currentIdentity == 2 || currentIdentity == 3 || currentIdentity == 4){
+        this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
+      }
+
+      // this.filterByJobStatus = false;
+      // this.filterByApplicantStatus = true;
+      // this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
     },
     filterByJobs() {
       this.filterByJobStatus = true;
@@ -1312,7 +1311,7 @@ export default {
   justify-content: flex-start;
 }
 
-.da-label {
+.da-label span{
   font-size: 30px;
   font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
@@ -1320,21 +1319,22 @@ export default {
 }
 
 .da-filter {
-  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  margin-left: 50px;
+   margin-left: 45px;
+}
+
+.da-dropdown-span{
+  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 18px;
   cursor: pointer;
+
   display: flex;
   align-items: center;
-  flex-direction: row;
+
 }
 
-.da-filter span {
-  margin: 0 10px 0 10px;
-}
-
-.da-filter:hover {
-  border-bottom: 1px solid #262626;
+.da-dropdown-item-span{
+  font-size: 14px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .da-t-r-btn {
@@ -1811,12 +1811,12 @@ export default {
     height: 30px;
   }
 
-  .da-label{
+  .da-label span{
     font-size: 18px;
 
   }
   .da-filter{
-    font-size: 12px;
+    margin-left: 15px;
   }
 
   .da-item-container{

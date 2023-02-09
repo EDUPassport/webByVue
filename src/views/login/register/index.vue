@@ -83,7 +83,7 @@
                                 @input="inputChange"
                                 v-model="registerForm.email">
                       </el-input>
-                      <div class="send-code-btn" @click="sendEmailCode()">
+                      <div class="send-code-btn" @click="sendEmailCode('registerForms')">
                         {{ checkCodeBtn.text }}
                       </div>
                     </div>
@@ -647,38 +647,56 @@ export default {
       })
 
     },
-    sendEmailCode() {
+    sendEmailCode(formName) {
       let self = this;
       let email = this.registerForm.email
 
-      if (email) {
+      this.$refs[formName].validateField('email',(valid) => {
+        if (valid) {
 
-        let params = {
-          email: email
-        }
-        this.getCheckCodeTimer()
+          if (email) {
 
-        SEND_EMAIL_CODE(params).then(res => {
-          if (res.code == 200) {
+            let params = {
+              email: email
+            }
+            this.getCheckCodeTimer()
 
-            self.$message({
-              type: 'success',
-              message: 'Activation Code Sent'
+            SEND_EMAIL_CODE(params).then(res => {
+              if (res.code == 200) {
+
+                self.$message({
+                  type: 'success',
+                  message: 'Activation Code Sent'
+                })
+
+              }
+            }).catch(err => {
+              console.log(err)
+              if (err.msg) {
+                this.$message.error(err.msg)
+              }
+              if (err.message) {
+                this.$message.error(err.message)
+              }
             })
+          }else{
+            return this.$message({
+              type:'warning',
+              message:'Please enter a valid email address',
+              grouping:true
+            })
+          }
 
-          }
-        }).catch(err => {
-          console.log(err)
-          if (err.msg) {
-            this.$message.error(err.msg)
-          }
-          if (err.message) {
-            this.$message.error(err.message)
-          }
-        })
-      }else{
-        this.$message.error('Please fill out your email address')
-      }
+        } else {
+          console.log('error submit!!')
+          return this.$message({
+            type:'warning',
+            message:'Please enter a valid email address',
+            grouping:true
+          })
+        }
+      })
+
 
     },
     selectEducationBusiness() {

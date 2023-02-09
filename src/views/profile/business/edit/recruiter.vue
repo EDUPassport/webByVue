@@ -1463,7 +1463,7 @@ export default {
             // console.log(res)
             if (res.code == 200) {
 
-              this.$store.commit('username', this.basicForm.company_name)
+              this.$store.commit('companyName', this.basicForm.company_name)
               this.$store.commit('userAvatar', this.basicForm.logo)
 
               if (action == 'edit') {
