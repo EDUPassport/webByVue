@@ -54,7 +54,7 @@
 
           <div class="filter-checkbox-container">
 
-            <el-checkbox-group v-model="checkedCateData"  :max="1">
+            <el-checkbox-group @change="dealCategoryChange" v-model="checkedCateData"  :max="1">
 
               <el-checkbox v-for="(item,i) in subCateData" :key="i"
                            :label="item.id"
@@ -103,7 +103,8 @@
       </el-icon>
 
       <el-select class="filter-select filter-mobile-1-input"
-                 v-model="locationValue" clearable
+                 v-model="locationValue"
+                 clearable
                  placeholder="Location"
                  size="default"
                  @change="locationChange"
@@ -251,7 +252,7 @@ export default {
       self.$router.push({path: '/deals/offer', query: {}})
     },
     locationChange(){
-
+      this.search()
     },
     selectIsOnline(e){
       console.log(e)
@@ -261,9 +262,14 @@ export default {
         this.onlineValue = 0
       }
 
+      this.search()
+
     },
     tagChange(){
-
+      this.search()
+    },
+    dealCategoryChange(){
+      this.search()
     },
     selectSubCate(){
 
@@ -310,6 +316,8 @@ export default {
       }else{
         this.tagValue.splice(index,1)
       }
+
+      this.search()
     },
     selectedSubCate(item){
       let index = this.checkedCateData.indexOf(item.id)
@@ -318,6 +326,9 @@ export default {
       }else{
         this.checkedCateData.splice(index,1)
       }
+
+      this.search()
+
     }
 
   }

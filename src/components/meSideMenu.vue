@@ -42,7 +42,7 @@
     <div class="menu-mobile-bg">
       <div class="menu-mobile-container">
 
-        <div class="menu-mobile-item" v-for="(item,i) in menuData" :Key="i">
+        <div class="menu-mobile-item" v-for="(item,i) in menuData.slice(0,4)" :Key="i">
 
           <router-link :to="{path:item.link}" exact>
             <el-image class="xll-icon-image"
@@ -56,6 +56,46 @@
 
           <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
             {{ unreadTotal }}
+          </div>
+
+        </div>
+
+        <div class="menu-mobile-item-more-container" @click="showMoreMenuItemsWithMobile()">
+
+          <template v-if="showMoreMenuItemsVisible">
+            <el-icon class="menu-mobile-item-more-icon" :size="30">
+              <IconIcBaselineClose />
+            </el-icon>
+            <span>Close</span>
+          </template>
+          <template v-else>
+            <el-icon class="menu-mobile-item-more-icon" :size="30">
+              <IconIcRoundMoreVert />
+            </el-icon>
+            <span>More</span>
+          </template>
+
+          <div  class="menu-mobile-more-show-container" v-if="showMoreMenuItemsVisible">
+
+            <div class="menu-mobile-item menu-mobile-item-circle"
+                 v-for="(item,i) in menuData.slice(4)" :Key="i">
+
+              <router-link :to="{path:item.link}" exact>
+                <el-image class="xll-icon-image"
+                          :class="selectedKeys === item.link  ? 'router-img-active' : '' "
+                          :src="selectedKeys === item.link ? item.icon_hover : item.icon">
+                </el-image>
+
+                <span :class="selectedKeys === item.link  ? 'router-txt-active' : '' ">{{ item.menu_name_en }}</span>
+
+              </router-link>
+
+              <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
+                {{ unreadTotal }}
+              </div>
+
+            </div>
+
           </div>
 
         </div>
@@ -89,7 +129,15 @@ export default {
     const selectedKeys = ref(activeMenuStr ? activeMenuStr : currentRoute.path)
     const currentUser = computed(() => store.state.currentUser)
 
+    const showMoreMenuItemsVisible = ref(false)
+
+    function showMoreMenuItemsWithMobile(){
+      showMoreMenuItemsVisible.value = !showMoreMenuItemsVisible.value
+    }
+
     return {
+      showMoreMenuItemsVisible,
+      showMoreMenuItemsWithMobile,
       setNowChatUserInfo,
       setShowChatStatus,
       selectedKeys,
@@ -343,7 +391,6 @@ export default {
   }
 
   .menu-mobile-bg {
-    /*display: none;*/
     position: fixed;
     bottom: 0;
     left: 0;
@@ -351,10 +398,9 @@ export default {
 
     background-color: #FFFFFF;
     z-index: 1000;
-    padding: 10px 20px;
+    padding: 10px 0 10px 20px;
     height: 60px;
 
-    overflow: scroll;
   }
 
   .menu-mobile-container {
@@ -366,6 +412,20 @@ export default {
 
   .menu-mobile-item {
     position: relative;
+    flex: 1;
+  }
+
+  .menu-mobile-item-circle{
+    width:70px;
+    height: 70px;
+    background-color: #FFFFFF;
+    margin: 10px;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   }
 
   .menu-mobile-item a {
@@ -374,7 +434,6 @@ export default {
     justify-content: center;
     flex-direction: column;
 
-    padding: 10px;
     border-radius: 15px;
 
     margin: 0 auto;
@@ -384,6 +443,42 @@ export default {
     font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
     text-decoration: none;
     color: #262626;
+
+  }
+
+  .menu-mobile-item-more-container{
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+  }
+  .menu-mobile-item-more-icon{
+    padding: 4px 15px;
+  }
+
+  .xll-icon-image{
+    width:30px;
+    height: 30px;
+    padding: 4px 15px;
+
+  }
+  .menu-mobile-item-more-container span{
+    font-size: 12px;
+    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    color: #262626;
+  }
+
+  .menu-mobile-more-show-container{
+    z-index: 2100;
+    position: absolute;
+    bottom: 60px;
+    right: 0;
 
   }
 

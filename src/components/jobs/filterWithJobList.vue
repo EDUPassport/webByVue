@@ -18,7 +18,7 @@
                        clearable
                        filterable
                        :placeholder="locationPlaceholder"
-                       @change="locationChange"
+                       @change="search()"
                        size="default">
               <el-option
                   v-for="item in locationOptions"
@@ -45,7 +45,10 @@
         </template>
         <template v-if="showMore">
           <div class="jobs-filter-item">
-            <div class="jobs-filter-label">Salary(USD)</div>
+            <div class="jobs-filter-label">
+              Salary (USD)
+              <el-button link @click="resetSalary()">reset</el-button>
+            </div>
             <div class="jobs-filter-c">
               <el-slider v-model="salaryValue" range :max="50"
                          :marks="salaryMarks"
@@ -53,7 +56,22 @@
                          :format-tooltip="formatToolTip"
               ></el-slider>
             </div>
-            <div class="jobs-filter-c">
+            <div class="jobs-filter-c" style="margin-top: 25px;">
+              <el-select class="jobs-filter-select"
+                         v-model="paymentPeriodValue"
+                         clearable
+                         @change="paymentPeriodChange"
+                         value-key="id"
+                         placeholder="Pay period"
+              >
+                <el-option
+                    v-for="item in paymentPeriodOptions"
+                    :key="item.id"
+                    :label="item.object_en"
+                    :value="item.id"
+                >
+                </el-option>
+              </el-select>
 
             </div>
           </div>
@@ -82,7 +100,7 @@
           <div class="jobs-filter-item">
             <div class="jobs-filter-label">Students' age</div>
             <div class="jobs-filter-c">
-              <el-checkbox-group v-model="studentAgeValue">
+              <el-checkbox-group @change="studentAgeChange" v-model="studentAgeValue">
 
                 <el-checkbox v-for="(item,i) in ageToTeachOptions" :key="i"
                              :label="item.id"
@@ -98,7 +116,7 @@
             <div class="jobs-filter-label">Work schedule</div>
             <div class="jobs-filter-c">
 
-              <el-checkbox-group v-model="workTypeValue">
+              <el-checkbox-group @change="workTypeChange" v-model="workTypeValue">
 
                 <el-checkbox v-for="(item,i) in workTypeOptions" :key="i"
                              :label="item.id"
@@ -157,28 +175,34 @@
       </div>
 
       <div class="jobs-mobile-filter-2" v-if="showJobsMobileExpandStatus">
+
         <div class="jobs-mobile-filter-tabs">
           <el-button link type="primary"
+                     class="jobs-mobile-filter-tab"
                      :class="filterType == 1 ? 'mobile-tab-active' : ''"
                      @click="chooseFilterType(1)">
             LOCATION
           </el-button>
           <el-button link type="primary"
+                     class="jobs-mobile-filter-tab"
                      :class="filterType == 2 ? 'mobile-tab-active' : ''"
                      @click="chooseFilterType(2)">
             SALARY
           </el-button>
           <el-button link type="primary"
+                     class="jobs-mobile-filter-tab"
                      :class="filterType == 3 ? 'mobile-tab-active' : ''"
                      @click="chooseFilterType(3)">
             TYPE
           </el-button>
           <el-button link type="primary"
+                     class="jobs-mobile-filter-tab"
                      :class="filterType == 4 ? 'mobile-tab-active' : ''"
                      @click="chooseFilterType(4)">
             STUDENT'S AGE
           </el-button>
           <el-button link type="primary"
+                     class="jobs-mobile-filter-tab"
                      :class="filterType == 5 ? 'mobile-tab-active' : ''"
                      @click="chooseFilterType(5)">
             WORK SCHEDULE
@@ -192,7 +216,7 @@
                        v-model="locationValue"
                        clearable
                        :placeholder="locationPlaceholder"
-                       @change="locationChange"
+                       @change="search()"
                        size="default">
               <el-option
                   v-for="item in locationOptions"
@@ -210,6 +234,24 @@
                        @change="salaryChange"
                        :format-tooltip="formatToolTip"
             ></el-slider>
+            <div style="margin-top: 25px;">
+              <el-select class="jobs-filter-select"
+                         v-model="paymentPeriodValue"
+                         clearable
+                         @change="paymentPeriodChange"
+                         value-key="id"
+                         placeholder="Pay period"
+              >
+                <el-option
+                    v-for="item in paymentPeriodOptions"
+                    :key="item.id"
+                    :label="item.object_en"
+                    :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </div>
+
           </div>
           <div class="jobs-mobile-filter-expand-tags" v-if="filterType == 3">
             <div class="jobs-mobile-filter-expand-tag"
@@ -269,6 +311,7 @@ export default {
       salaryValue: [3, 13],
       salaryMarks: {3: '3K', 13: '13k'},
 
+      paymentPeriodValue:undefined,
       employmentTypeValue: undefined,
       studentAgeValue: [],
       workTypeValue: [],
@@ -330,6 +373,7 @@ export default {
       }else{
         this.employmentTypeValue = id
       }
+      this.search()
 
     },
     selectedAgeToTeach(item){
@@ -340,6 +384,8 @@ export default {
         this.studentAgeValue.splice(index,1)
       }
 
+      this.search()
+
     },
     selectedWorkType(item){
       let index = this.workTypeValue.indexOf(item.id)
@@ -348,6 +394,7 @@ export default {
       }else{
         this.workTypeValue.splice(index, 1)
       }
+      this.search()
     },
     contactUs() {
       window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
@@ -360,7 +407,8 @@ export default {
         location: this.locationValue,
         employment_type: this.employmentTypeValue,
         student_age: this.studentAgeValue,
-        work_type: this.workTypeValue
+        work_type: this.workTypeValue,
+        payment_period: this.paymentPeriodValue
       }
 
       if (this.isSalaryChange) {
@@ -429,18 +477,25 @@ export default {
     },
     salaryChange() {
       this.isSalaryChange = true
+      this.search()
     },
-    genderChange() {
-
+    resetSalary(){
+      this.salaryValue = [3, 13]
+      this.salaryMarks = {3: '3K', 13: '13k'}
+      this.isSalaryChange = false
+      this.search()
+    },
+    paymentPeriodChange(){
+      this.search()
     },
     jobTypeChange() {
-
+      this.search()
     },
     studentAgeChange() {
-
+     this.search()
     },
-    onlineChange() {
-
+    workTypeChange() {
+      this.search()
     }
 
   }
@@ -570,13 +625,16 @@ export default {
     overflow-y: scroll;
     white-space: nowrap;
   }
+  .jobs-mobile-filter-tab{
+    margin-bottom: 10px;
+  }
 
   .jobs-mobile-filter-expand-location{
-    margin-top: 15px;
+    margin-top: 5px;
   }
 
   .jobs-mobile-filter-expand-salary{
-    margin-top: 15px;
+    margin-top: 5px;
   }
 
   .jobs-mobile-filter-expand-tags{
@@ -585,7 +643,7 @@ export default {
     align-items: center;
     justify-content: flex-start;
     flex-wrap: wrap;
-    margin-top: 15px;
+    margin-top: 5px;
   }
 
   .jobs-mobile-filter-expand-tag{

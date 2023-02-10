@@ -114,6 +114,25 @@
       <div class="about-container">
         <div class="about-label">About {{ info.company_name }}</div>
         <div class="about-desc" v-html="info.desc"></div>
+        <div class="about-desc-mobile"
+             :class="descMoreVisible ? 'about-desc-more' : ''"
+             v-html="info.desc">
+        </div>
+        <div class="about-desc-more-container">
+          <el-button v-if="descMoreVisible"
+                     class="about-desc-more-btn"
+                     link
+                     @click="descMoreVisible = false">
+            SHOW MORE
+          </el-button>
+          <el-button v-else
+                     link
+                     class="about-desc-more-btn"
+                     @click="descMoreVisible = true">
+            SHOW LESS
+          </el-button>
+        </div>
+
       </div>
 
       <div class="video-container" v-if="info.video_url">
@@ -309,7 +328,7 @@ export default {
   setup() {
 
     let thumbsSwiper = ref(null);
-
+    const descMoreVisible = ref(true)
     const setThumbsSwiper = (swiper) => {
       thumbsSwiper.value = swiper;
     }
@@ -324,6 +343,7 @@ export default {
     const currentUser = computed(() => store.state.currentUser)
 
     return {
+      descMoreVisible,
       thumbsSwiper,
       setThumbsSwiper,
       currentUser,
@@ -733,9 +753,40 @@ export default {
     display: none;
   }
 
+  .about-desc-mobile{
+    display: none;
+  }
+
+  .about-desc-more-container{
+    display: none;
+  }
+
 }
 
 @media screen and (max-width: 768px) {
+
+  .about-desc{
+    display: none;
+  }
+
+  .about-desc-mobile{
+    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color: #262626;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  .about-desc-more{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+  }
+
+  .about-desc-more-btn{
+    color:#6650B3;
+  }
 
   .profile-container {
     background-color: #FFFFFF;
@@ -843,10 +894,6 @@ export default {
     font-size: 18px;
   }
 
-  .about-desc {
-    margin-top: 10px;
-    font-size: 18px;
-  }
 
   .video-container {
     margin-top: 15px;

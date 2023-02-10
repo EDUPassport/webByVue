@@ -54,7 +54,7 @@
 
           <div class="filter-checkbox-container">
 
-            <el-checkbox-group v-model="checkedCateData"  :max="1">
+            <el-checkbox-group @change="eventTypeChange" v-model="checkedCateData"  :max="1">
 
               <el-checkbox v-for="(item,i) in categoryData" :key="i"
                            :label="item.id"
@@ -228,7 +228,7 @@ export default {
       }
     },
     locationChange(){
-
+      this.search()
     },
     selectIsOnline(e){
       console.log(e)
@@ -237,10 +237,13 @@ export default {
       }else{
         this.onlineValue = 0
       }
-
+      this.search()
     },
     tagChange(){
-
+      this.search()
+    },
+    eventTypeChange(){
+      this.search()
     },
     selectSubCate(){
 
@@ -287,6 +290,9 @@ export default {
       }else{
         this.tagValue.splice(index,1)
       }
+
+      this.search()
+
     },
     selectedCategory(item){
       // this.checkedCateData = [item.id]
@@ -296,6 +302,9 @@ export default {
       }else{
         this.checkedCateData.splice(0,1)
       }
+
+      this.search()
+
     }
 
   }

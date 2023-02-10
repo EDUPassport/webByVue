@@ -21,14 +21,14 @@
                   <el-dropdown class="da-filter">
                       <span class="da-dropdown-span">
                          <el-icon style="margin-right: 4px;">
-                           <IconIcBaselineFilterList/>
+                           <IconSubwayFourBox/>
                          </el-icon>
-                         VIEW BY:
+                         View By:
                         <template v-if="filterByJobStatus">
-                          JOBS
+                          Jobs
                         </template>
                         <template v-if="filterByApplicantStatus">
-                          APPLICATIONS
+                          Applications
                         </template>
                          <el-icon style="margin-left: 2px;">
                            <ArrowDownBold/>
@@ -37,11 +37,55 @@
                     <template #dropdown>
                       <el-dropdown-menu>
                         <el-dropdown-item v-if="identity == 2 || identity == 3 || identity == 4"  @click="filterByJobs()">
-                          <span class="da-dropdown-item-span">JOBS</span>
+                          <span class="da-dropdown-item-span">Jobs</span>
                         </el-dropdown-item>
                         <el-dropdown-item   @click="filterByApplicants()" >
-                          <span class="da-dropdown-item-span">APPLICATIONS</span>
+                          <span class="da-dropdown-item-span">Applications</span>
                         </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
+
+                  <el-dropdown class="da-filter" v-if="filterByApplicantStatus">
+                      <span class="da-dropdown-span">
+                         <el-icon style="margin-right: 4px;">
+                           <IconIcBaselineFilterList/>
+                         </el-icon>
+                         Filter By Status:
+                        <template v-if="identity == 1">
+                          <template v-if="statusValue==0">All</template>
+                          <template v-if="statusValue==1">Submitted</template>
+                          <template v-if="statusValue==2">Shortlisted</template>
+                          <template v-if="statusValue==3">Not Selected</template>
+                          <template v-if="statusValue==4">Accepted</template>
+                        </template>
+                        <template v-else>
+                          <template v-if="statusValue==0">All</template>
+                          <template v-if="statusValue==1">Submitted</template>
+                          <template v-if="statusValue==2">Shortlisted</template>
+                          <template v-if="statusValue==3">Not Interested</template>
+                          <template v-if="statusValue==4">Interested</template>
+                        </template>
+
+                         <el-icon style="margin-left: 2px;">
+                           <ArrowDownBold/>
+                         </el-icon>
+                      </span>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <template v-if="identity == 1">
+                          <el-dropdown-item v-for="(item,i) in educatorStatusOptions" :key="i"
+                                            @click="filterApplicantsByStatusWithEducator(item.id)">
+                            <span class="da-dropdown-item-span">{{item.name}}</span>
+                          </el-dropdown-item>
+                        </template>
+                        <template v-else>
+                          <el-dropdown-item v-for="(item,i) in businessStatusOptions" :key="i"
+                                            @click="filterApplicantsByStatusWithEducator(item.id)">
+                            <span class="da-dropdown-item-span">{{item.name}}</span>
+                          </el-dropdown-item>
+                        </template>
+
                       </el-dropdown-menu>
                     </template>
                   </el-dropdown>
@@ -344,6 +388,19 @@
 
                               <div class="da-item-b">
                                 <div class="da-item-b-l">
+
+                                  <el-button class="dashboard-application-b-l-btn-1" plain round @click="viewEducatorDetail(item)">
+                                    View Profile
+                                    <el-icon style="margin-left: 4px;">
+                                      <IconIconParkShare />
+                                    </el-icon>
+                                  </el-button>
+                                  <el-button class="dashboard-application-b-l-btn-1" plain round @click="viewEducatorResume(item)">
+                                    Resume
+                                    <el-icon style="margin-left: 4px;">
+                                      <IconIconParkShare />
+                                    </el-icon>
+                                  </el-button>
 
                                 </div>
                                 <div class="da-item-b-r">
@@ -675,7 +732,18 @@
 
                           <div class="da-item-b">
                             <div class="da-item-b-l">
-
+                              <el-button class="dashboard-application-b-l-btn-1" plain round @click="viewEducatorDetail(item)">
+                                View Profile
+                                <el-icon style="margin-left: 4px;">
+                                  <IconIconParkShare />
+                                </el-icon>
+                              </el-button>
+                              <el-button class="dashboard-application-b-l-btn-1" plain round @click="viewEducatorResume(item)">
+                                Resume
+                                <el-icon style="margin-left: 4px;">
+                                  <IconIconParkShare />
+                                </el-icon>
+                              </el-button>
                             </div>
                             <div class="da-item-b-r">
                               <el-button class="da-item-b-l-btn-1" link round
@@ -851,7 +919,54 @@ export default {
       applyJobStatusValue: 0,
       applyJobStatusVisible:false,
       applyJobStatusId: 0,
-      applyJobAlwaysValue:false
+      applyJobAlwaysValue:false,
+
+      statusValue:0,
+      educatorStatusOptions:[
+        {
+          name:'All',
+          id:0
+        },
+        {
+          name:'Submitted',
+          id:1
+        },
+        {
+          name:'Shortlisted',
+          id:2
+        },
+        {
+          name:'Not Selected',
+          id:3
+        },
+        {
+          name:'Accepted',
+          id:4
+        }
+      ],
+      businessStatusOptions:[
+        {
+          name:'All',
+          id:0
+        },
+        {
+          name:'Submitted',
+          id:1
+        },
+        {
+          name:'Shortlisted',
+          id:2
+        },
+        {
+          name:'Not Interested',
+          id:3
+        },
+        {
+          name:'Interested',
+          id:4
+        }
+      ]
+
     }
 
 
@@ -917,6 +1032,21 @@ export default {
       // this.$router.push({path: '/educator/profile', query: {str: str}})
 
     },
+    viewEducatorResume(info) {
+      console.log(info)
+      let resumePdf = info.user_contact.educator_contact.resume_pdf
+
+      if(resumePdf){
+        window.open(resumePdf,'_blank')
+      }else{
+        this.$message({
+          type:'warning',
+          message:'The user does not have a resume in pdf format',
+          grouping:true
+        })
+      }
+
+    },
     viewApplicationIdWithCompany(id) {
       this.selectedApplicationIdWithCompany = id
     },
@@ -926,6 +1056,10 @@ export default {
         page: page,
         limit: limit
       }
+      if(this.statusValue){
+        params.status = this.statusValue
+      }
+
       ALL_JOB_RESUME(params).then(res => {
         console.log(res)
         if (res.code == 200) {
@@ -949,6 +1083,11 @@ export default {
         page:page,
         limit:limit
       }
+
+      if(this.statusValue){
+        params.status = this.statusValue
+      }
+
       MY_APPLY_JOBS(params).then(res=>{
         console.log(res)
         if(res.code == 200){
@@ -1075,6 +1214,22 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    filterApplicantsByStatusWithEducator(value){
+      this.statusValue = value
+
+      let currentIdentity = this.identity
+      this.filterByJobStatus = false;
+      this.filterByApplicantStatus = true;
+
+      if (currentIdentity == 1) {
+        this.getMyApplyJobs(this.myApplicationsPage,this.myApplicationsLimit);
+      }
+
+      if(currentIdentity == 2 || currentIdentity == 3 || currentIdentity == 4){
+        this.getAllJobResumeList(this.myApplicationsPage, this.myApplicationsLimit)
+      }
+
     },
     filterByApplicants() {
 
@@ -1758,6 +1913,7 @@ export default {
 
 
 @media screen and (max-width: 768px){
+
   .xll-status-tag{
     font-size: 14px;
     height: 28px;
@@ -1827,6 +1983,18 @@ export default {
   .da-item-container-height{
     height: auto;
   }
+
+  .da-item-b{
+    flex-direction: column;
+  }
+
+  .da-item-b-l{
+
+  }
+  .da-item-b-r{
+    margin-top: 10px;
+  }
+
   .da-da-item{
     padding: 15px;
     margin: 15px;
@@ -1982,6 +2150,10 @@ export default {
   }
   .dashboard-view-application-btn{
     margin: 0 0 15px 0;
+  }
+
+  .da-dropdown-span{
+    font-size: 12px;
   }
 
 

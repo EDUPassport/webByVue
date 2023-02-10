@@ -147,12 +147,18 @@
 
             <div class="dashboard-application-b">
               <div class="dashboard-application-b-l">
-                <!--              <el-button class="dashboard-application-b-l-btn-1" plain round>-->
-                <!--                VIEW PROFILE-->
-                <!--              </el-button>-->
-                <!--              <el-button class="dashboard-application-b-l-btn-1" plain round>-->
-                <!--                RESUME-->
-                <!--              </el-button>-->
+                <el-button class="dashboard-application-b-l-btn-1" plain round @click="viewEducatorDetail(item)">
+                  View Profile
+                  <el-icon style="margin-left: 4px;">
+                    <IconIconParkShare />
+                  </el-icon>
+                </el-button>
+                <el-button class="dashboard-application-b-l-btn-1" plain round @click="viewEducatorResume(item)">
+                  Resume
+                  <el-icon style="margin-left: 4px;">
+                    <IconIconParkShare />
+                  </el-icon>
+                </el-button>
               </div>
               <div class="dashboard-application-b-r">
                 <el-button class="dashboard-application-b-l-btn-1" link round
@@ -302,6 +308,21 @@ export default {
       // this.$router.push({path: '/educator/profile', query: {str: str}})
 
     },
+    viewEducatorResume(info) {
+      console.log(info)
+      let resumePdf = info.user_contact.educator_contact.resume_pdf
+
+      if(resumePdf){
+        window.open(resumePdf,'_blank')
+      }else{
+        this.$message({
+          type:'warning',
+          message:'The user does not have a resume in pdf format',
+          grouping:true
+        })
+      }
+
+    }
 
 
   }
@@ -701,8 +722,15 @@ export default {
 
   .dashboard-application-b{
     margin-top: 15px;
+    flex-direction: column;
   }
 
+  .dashboard-application-b-l{
+
+  }
+  .dashboard-application-b-r{
+    margin-top: 10px;
+  }
   .dashboard-application-b-l-btn-1{
     font-size: 12px;
   }
