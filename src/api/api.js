@@ -424,3 +424,6 @@ export const USER_CONTACT_SEND_EMAIL_CODE = (params) => get('/home/send/user/con
 // 用户修改profile邮箱 获取验证码【验证码验证】
 export const USER_CONTACT_EMAIL_CHECK = (params) => post('/home/user/contact/email/check', params)
 
+// 职位增加浏览次数
+export const ADD_JOBS_VIEWS = (params) => post('/job/jobViews', params)
+

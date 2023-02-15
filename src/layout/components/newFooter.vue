@@ -19,6 +19,12 @@
             <div class="footer-menu-item" @click="turnEvents()">
               EDU Events
             </div>
+            <div class="footer-menu-item" @click="turnBlogs()">
+              EDU Blogs
+            </div>
+            <div class="footer-menu-item" @click="turnSupport()">
+              EDU Support
+            </div>
 
 <!--            <div class="footer-menu-item" @click="turnAboutUs()">-->
 <!--              About Us-->
@@ -119,6 +125,12 @@ export default {
     turnAboutUs() {
       this.$router.push('/about/us')
     },
+    turnSupport(){
+      window.open('https://support.edupassport.io', '_blank')
+    },
+    turnBlogs(){
+      window.open('https://blogs.edupassport.io','_blank')
+    }
 
   }
 

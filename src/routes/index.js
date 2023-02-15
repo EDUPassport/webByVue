@@ -25,72 +25,6 @@ const routes = [
 
     },
     {
-        path: '/jobs',
-        component: layout,
-        children: [
-            {
-                path: '/jobs',
-                name: 'jobs',
-                component: () => import('@/views/jobs/list'),
-                meta: {
-                    titleC: 'Jobs Lists',
-                    titleG: 'Jobs Lists'
-                }
-            },
-            {
-                path: 'detail',
-                name: 'jobsDetail',
-                component: () => import('@/views/jobs/detail'),
-                meta: {
-                    titleC: 'Jobs Detail',
-                    titleG: 'Jobs Detail'
-                }
-            },
-            {
-                path: 'business/profile',
-                name: 'jobsBusinessProfile',
-                component: () => import('@/views/jobs/businessProfile'),
-                meta: {
-                    titleC: 'Jobs Business Profile',
-                    titleG: 'Jobs Business Profile'
-                }
-            },
-            {
-                path: 'post',
-                name: 'postJob',
-                component: () => import('@/views/jobs/post/post'),
-                meta: {
-                    activeMenu: '/account/home',
-                    titleC: 'Post a Job',
-                    titleG: 'Post a Job',
-                    requireAuth: true
-                }
-            },
-            {
-                path: 'myJobs',
-                name: 'myJobs',
-                component: () => import('@/views/jobs/my/jobs'),
-                meta: {
-                    titleC: 'My Posted Jobs',
-                    titleG: 'My Posted Jobs',
-                    requireAuth: true
-                }
-            },
-            {
-                path: 'applications',
-                name: 'jobApplications',
-                component: () => import('@/views/jobs/applications'),
-                meta: {
-                    titleC: 'Applications',
-                    titleG: 'Applications',
-                    requireAuth: true
-                }
-            },
-
-        ]
-
-    },
-    {
         path: '/events',
         component: layout,
         children: [
@@ -248,6 +182,77 @@ const routes = [
         component: layout,
         children: [
             {
+                path: '',
+                name: 'jobs',
+                component: () => import('@/views/jobs/list'),
+                meta: {
+                    titleC: 'Jobs Lists',
+                    titleG: 'Jobs Lists'
+                },
+                children: [
+                    {
+                        path: '/jobs',
+                        name: 'jobsList',
+                        component: () => import('@/views/jobs/empty.vue'),
+                        meta: {
+                            titleC: 'Jobs Lists',
+                            titleG: 'Jobs Lists'
+                        }
+                    },
+                    {
+                        path: 'detail/:id/:page',
+                        name: 'jobsDetail',
+                        component: () => import('@/views/jobs/detailComponent.vue'),
+                        meta: {
+                            titleC: 'Jobs Detail',
+                            titleG: 'Jobs Detail'
+                        }
+                    },
+                    {
+                        path: 'business/profile',
+                        name: 'jobsBusinessProfile',
+                        component: () => import('@/views/jobs/businessProfile'),
+                        meta: {
+                            titleC: 'Jobs Business Profile',
+                            titleG: 'Jobs Business Profile'
+                        }
+                    },
+
+
+                ]
+            },
+            {
+                path: 'post',
+                name: 'postJob',
+                component: () => import('@/views/jobs/post/post'),
+                meta: {
+                    activeMenu: '/account/home',
+                    titleC: 'Post a Job',
+                    titleG: 'Post a Job',
+                    requireAuth: true
+                }
+            },
+            {
+                path: 'myJobs',
+                name: 'myJobs',
+                component: () => import('@/views/jobs/my/jobs'),
+                meta: {
+                    titleC: 'My Posted Jobs',
+                    titleG: 'My Posted Jobs',
+                    requireAuth: true
+                }
+            },
+            {
+                path: 'applications',
+                name: 'jobApplications',
+                component: () => import('@/views/jobs/applications'),
+                meta: {
+                    titleC: 'Applications',
+                    titleG: 'Applications',
+                    requireAuth: true
+                }
+            },
+            {
                 path: 'home',
                 name: 'jobsHome',
                 component: () => import('@/views/jobs/home'),
@@ -256,7 +261,7 @@ const routes = [
                     titleG: 'jobs and applications',
                     requireAuth: true
                 }
-            },
+            }
 
         ]
 
@@ -813,6 +818,7 @@ const defaultTitle = 'Home';
 
 router.beforeEach((to, from, next) => {
 
+
     let envName = process.env.VUE_APP_ENV_NAME
 
     if (envName === 'developmentCN' || envName === 'productionCN') {
@@ -822,6 +828,14 @@ router.beforeEach((to, from, next) => {
     if (envName === 'development' || envName === 'production') {
         document.title = to.meta.titleG ? to.meta.titleG : defaultTitle;
     }
+
+    if(to.path === '/jobs/detail'){
+
+        let nPath = '/jobs/detail/' + to.query.id + '/' + 1
+        next({path:nPath})
+
+    }
+
     //判断该路由是否需要登录权限
     if (to.matched.some(record => record.meta.requireAuth)) {
         const token = localStorage.getItem('token')

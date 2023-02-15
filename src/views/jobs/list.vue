@@ -53,255 +53,11 @@
 
       </el-col>
 
-      <el-col class="job-detail-col" :xs="0" :sm="0" :md="12" :lg="12" :xl="12">
-        <template v-if="showCompanyStatus">
-          <businessProfile :canEdit="false"
-                           :fromDeal="false"
-                           :info="companyInfo"
-                           :identity="detailData.identity"
-          >
-          </businessProfile>
-        </template>
+      <el-col class="job-detail-col" :xs="24" :sm="0" :md="12" :lg="12" :xl="12">
 
-        <template v-else>
-
-          <el-scrollbar class="xll-job-detail"  v-loading="showLoadingStatus">
-
-            <div class="job-detail-bg-container">
-
-              <div class="xll-ads-container" v-if="jobsAdsListTop.length>0">
-                <adsComponent :height="jobAdsHeight" :adsData="jobsAdsListTop">
-                </adsComponent>
-              </div>
-
-              <template v-if="JSON.stringify(detailData) !== '{}'">
-                <div class="job-detail-container">
-
-                  <div class="job-detail-t">
-                    <div class="job-detail-t-l">
-                      <div class="job-detail-t-l-1"
-                           v-if="detailData.company"
-                           @click="turnBusinessProfile(detailData)"
-                      >
-                        {{detailData.company.company_name}}
-                      </div>
-                      <div class="job-detail-t-l-2">
-                        {{detailData.job_title}}
-                      </div>
-                      <div class="job-detail-t-l-3">
-                        {{detailData.job_location}}
-                      </div>
-                    </div>
-                    <div class="job-detail-t-r">
-                      <el-button link @click="shareJob(detailData)">
-                        SHARE
-                      </el-button>
-
-                      <applyJobButton :selectJobId="detailData.id"
-                                      btn-text="QUICK APPLY"
-                                      :job-info="detailData" >
-                      </applyJobButton>
-
-                      <template v-if="currentIdentity != 5">
-                        <el-button
-                            v-if="detailData.is_favorite && detailData.is_favorite == 1"
-                            plain round
-                            @click="cancelSaveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
-                          SAVE
-                          <el-icon color="#6650B3" >
-                            <IconFontistoFavorite/>
-                          </el-icon>
-                        </el-button>
-                        <el-button
-                            v-else
-                            plain round
-                            @click="saveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
-                          SAVE
-                          <el-icon>
-                            <CollectionTag/>
-                          </el-icon>
-                        </el-button>
-
-                      </template>
-
-                    </div>
-                  </div>
-
-                  <el-scrollbar class="job-detail-c">
-
-                    <div class="job-detail-c-1">
-                      <div class="job-detail-c-item" v-if="detailData.entry_date">
-                        <div class="job-detail-c-item-l">Start date:</div>
-                        <div class="job-detail-c-item-r">{{detailData.entry_date}}</div>
-                      </div>
-
-                      <div class="job-detail-c-item" v-if="detailData.age_to_teach">
-                        <div class="job-detail-c-item-l">Student's age:</div>
-                        <div class="job-detail-c-item-r">
-                          {{ $filters.userObjectFormat(detailData.age_to_teach)}}
-                        </div>
-                      </div>
-
-                      <div class="job-detail-c-item" v-if="detailData.subject">
-                        <div class="job-detail-c-item-l">Subjects:</div>
-                        <div class="job-detail-c-item-r">
-                          {{ $filters.userObjectFormat(detailData.subject)}}
-                        </div>
-                      </div>
-
-                      <div class="job-detail-c-item" v-if="workingHoursData.length>0">
-                        <div class="job-detail-c-item-l">Hours:</div>
-                        <div class="job-detail-c-item-r">
-                          <div class="working-hours">
-                            <div class="working-hours-item" v-for="(item,index) in workingHoursData" :key="index">
-                              <el-tag class="working-hours-week" v-for="(week,i) in item.week" :key="i">
-                                <span v-if="week==1">M</span>
-                                <span v-if="week==2">T</span>
-                                <span v-if="week==3">W</span>
-                                <span v-if="week==4">Th</span>
-                                <span v-if="week==5">F</span>
-                                <span v-if="week==6">Sa</span>
-                                <span v-if="week==7">Su</span>
-                              </el-tag>
-                              <span class="working-hours-hours">{{item.hours}}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <div class="job-detail-c-2">
-                      <div class="job-detail-c-2-l">
-                        <div class="job-detail-c-item-label">Requirements:</div>
-                        <div class="job-detail-c-item-c">
-                          <div class="job-detail-c-item" v-if="detailData.teaching_times_en">
-                            <div class="job-detail-c-item-l">Teaching experience:</div>
-                            <div class="job-detail-c-item-r">
-                              {{detailData.teaching_times_en}}
-                            </div>
-                          </div>
-                          <div class="job-detail-c-item" v-if="detailData.education_en">
-                            <div class="job-detail-c-item-l">Minimum education:</div>
-                            <div class="job-detail-c-item-r">
-                              {{detailData.education_en}}
-                            </div>
-                          </div>
-                          <div class="job-detail-c-item" v-if="detailData.class_size">
-                            <div class="job-detail-c-item-l">Class size:</div>
-                            <div class="job-detail-c-item-r">
-                              {{detailData.class_size}}
-                            </div>
-                          </div>
-                          <div class="job-detail-c-item" v-if="detailData.numbers">
-                            <div class="job-detail-c-item-l">Number of Vacancies:</div>
-                            <div class="job-detail-c-item-r">
-                              {{detailData.numbers}}
-                            </div>
-                          </div>
-                          <div class="job-detail-c-item"
-                               v-if="detailData.apply_due_date && detailData.apply_due_date !='0000-00-00'"
-                          >
-                            <div class="job-detail-c-item-l">Application:</div>
-                            <div class="job-detail-c-item-r">
-                              {{detailData.apply_due_date}}
-                            </div>
-                          </div>
-
-                          <div class="job-detail-c-item" v-if="detailData.Teaching_certificate">
-                            <div class="job-detail-c-item-l">Teaching certificates:</div>
-                            <div class="job-detail-c-item-r">
-                              {{ $filters.userObjectFormat(detailData.Teaching_certificate)}}
-                            </div>
-                          </div>
-
-                          <div class="job-detail-c-item" v-if="detailData.Nationality">
-                            <div class="job-detail-c-item-l">Preferred nationality:</div>
-                            <div class="job-detail-c-item-r">
-                              {{ $filters.userObjectFormat(detailData.Nationality)}}
-                            </div>
-                          </div>
-
-                          <div class="job-detail-c-item" v-if="detailData.Acceptable">
-                            <div class="job-detail-c-item-l">Acceptable nationality:</div>
-                            <div class="job-detail-c-item-r">
-                              {{ $filters.userObjectFormat(detailData.Acceptable)}}
-                            </div>
-                          </div>
-                          <div class="job-detail-c-item" v-if="detailData.sex">
-                            <div class="job-detail-c-item-l">Gender:</div>
-                            <div class="job-detail-c-item-r">
-                              <template v-if="detailData.sex == 1">Male</template>
-                              <template v-if="detailData.sex == 2">Female</template>
-                              <template v-if="detailData.sex == 3">Non-binary</template>
-                              <template v-if="detailData.sex == 4">No Gender Requirements</template>
-                            </div>
-                          </div>
-
-                        </div>
-
-                      </div>
-
-                      <div class="job-detail-c-2-r">
-                        <div class="job-detail-c-item-label">Compensation:</div>
-                        <div class="job-detail-c-item-c">
-                          <div class="job-detail-c-item">
-                            <div class="job-detail-c-item-l">Salary range:</div>
-                            <div class="job-detail-c-item-r">
-                              {{ detailData.currency }} {{ detailData.salary_min }} - {{ detailData.salary_max }} /
-                              <span v-if="detailData.payment_period == 112">hourly</span>
-                              <span v-if="detailData.payment_period == 113">daily</span>
-                              <span v-if="detailData.payment_period == 114">weekly</span>
-                              <span v-if="detailData.payment_period == 115">monthly</span>
-                              <span v-if="detailData.payment_period == 116">annually</span>
-                            </div>
-                          </div>
-                          <div class="job-detail-c-item" v-if="detailData.benefits">
-                            <div class="job-detail-c-item-l">Benefits:</div>
-                            <div class="job-detail-c-item-r">
-                              {{ $filters.userObjectFormat(detailData.benefits)}}
-                            </div>
-                          </div>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                    <div class="job-detail-desc">
-                      <div class="job-detail-desc-label">Job details:</div>
-                      <div class="job-detail-desc-content" v-html="detailData.desc"></div>
-                    </div>
-
-                    <div class="map-container">
-                      <div id="mapContainer" class="basemap"></div>
-                    </div>
-
-                  </el-scrollbar>
-
-                </div>
-
-              </template>
-              <template v-else>
-                <el-empty description="..."></el-empty>
-              </template>
-
-            </div>
-
-          </el-scrollbar>
-
-        </template>
-
-        <shareCard :visible="shareDialogVisible"
-                   :title="shareInfo.title"
-                   :description ="shareInfo.desc"
-                   :quote = "shareInfo.desc"
-                   :url="locationUrl"
-                   @close="shareDialogVisible=false"
-        >
-        </shareCard>
-
+        <suspense>
+          <router-view :key="$route.params"></router-view>
+        </suspense>
 
       </el-col>
     </el-row>
@@ -310,30 +66,22 @@
 </template>
 
 <script>
-import applyJobButton from '@/components/jobs/applyButton'
-import shareCard from "@/components/shareCard";
+
 import filterWithJobList from "@/components/jobs/filterWithJobList";
 import jobsListComponent from "@/components/jobsListComponent";
-import ads22Img from '@/assets/ads/22.png'
+
 import {useRouter, useRoute} from "vue-router";
 import {
-  ADS_LIST,
   JOB_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2, JOB_DETAIL, COMPANY_JOB_LIST, JOB_FEATURED_LIST, APPLY_JOBS
+   COMPANY_JOB_LIST,
+  ADS_LIST
 } from "@/api/api";
-import BusinessProfile from "@/components/businessProfile";
+
 import ExchangeAccountInfo from '@/components/jobs/exchangeInfo';
 import {encode} from "js-base64";
 import {randomString} from "@/utils";
-
-import mapboxgl from "mapbox-gl";
-import 'mapbox-gl/dist/mapbox-gl.css'
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-
-import adsComponent from "@/components/ads/adsComponent";
 
 export default {
   name: "list",
@@ -342,20 +90,11 @@ export default {
       jobLoadingValue:false,
       jobFeaturedLoadingValue:false,
 
-      shareDialogVisible:false,
-      shareInfo:{},
-      locationUrl: '',
-
-      applyBtnLoading:false,
-      showCompanyStatus:false,
-
       isOther:false,
       companyInfo:{},
-      ads22Img,
 
-      jobFeaturedListData: [],
       jobListData: [],
-      articleListData: [],
+
       jobPage: 1,
       jobLimit: 10,
       jobTotalNum: 0,
@@ -367,30 +106,21 @@ export default {
 
       detailData:{},
       selectedJobId:0,
-      accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
-      mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
-      workingHoursData:[],
 
-      selectedOtherJobId:0,
       otherJobPage:1,
-      otherJobLimit:1,
+      otherJobLimit:5,
       otherJobTotalNum:0,
       otherJobListData:[],
       jobDetailHeight:0,
 
-      searchFilterParams:{}
+      searchFilterParams:{},
 
     }
   },
   components: {
     ExchangeAccountInfo,
     jobsListComponent,
-    BusinessProfile,
     filterWithJobList,
-    shareCard,
-    adsComponent,
-    applyJobButton
-
   },
   setup() {
     let router = useRouter()
@@ -424,104 +154,122 @@ export default {
   },
   beforeRouteUpdate(to){
     console.log(to)
-    let jobId = to.query.id;
-    let page = to.query.page;
-    let fromValue = to.query.from;
+    console.log('------- before route update -----------');
 
-    if(jobId){
-      this.selectedJobId = jobId
-      if(!this.showCompanyStatus){
-        this.getJobDetail(jobId)
+    let jobId = to.params.id;
+    let page = to.params.page;
+
+    let userId = to.query.uid;
+    let fullPath = to.fullPath;
+
+    if(userId){
+      this.isOther = true;
+
+      if(jobId){
+        this.selectedJobId = jobId
+      }else{
+        this.selectedJobId = 0
       }
 
-    }
-
-    if(page){
-
-      if(fromValue == 1){
+      if(page){
         this.otherJobPage = Number(page)
+      }
+      // this.getCompanyJobList(userId, this.otherJobPage, this.otherJobLimit)
+
+    }else{
+
+      this.isOther = false;
+
+      if(jobId){
+        this.selectedJobId = jobId
       }else{
+        this.selectedJobId = 0
+      }
+
+      if(page){
         this.jobPage = Number(page);
       }
 
+      if(fullPath === '/jobs'){
+        console.log('------- before route update jobs -----------');
+
+        this.selectedJobId = 0
+        this.jobPage = 1
+        this.getJobList(1, this.jobLimit)
+      }
+
+
     }
 
-
-  },
-  unmounted() {
-    window.onresize = null
   },
   mounted() {
 
-    let screenWidth = document.body.clientWidth
-    let screenWidthFloor = Math.floor(screenWidth)
+    let path = this.$route.path;
+    let userId = this.$route.query.uid;
+    let jobId = this.$route.params.id;
+    let page = this.$route.params.page;
+    let qPage = this.$route.query.page;
 
-    // if (screenWidthFloor < 768) {
-    //   this.jobAdsHeight = '190px'
-    // }
-    //
-    // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
-    //   this.jobAdsHeight = '190px'
-    // }
-    if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
-      this.jobAdsHeight = '120px'
-    }
-    if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
-      this.jobAdsHeight = '140px'
-    }
-    if(screenWidthFloor >= 1920){
-      this.jobAdsHeight = "190px"
-    }
+    if(userId){
+      this.isOther = true;
 
-    window.onresize = () =>{
-      // if (screenWidthFloor < 768) {
-      //   this.jobAdsHeight = '190px'
-      // }
-      //
-      // if (screenWidthFloor >= 768 && screenWidthFloor < 992) {
-      //   this.jobAdsHeight = '190px'
-      // }
-      if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
-        this.jobAdsHeight = '120px'
-      }
-      if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
-        this.jobAdsHeight = '140px'
-      }
-      if(screenWidthFloor >= 1920){
-        this.jobAdsHeight = "190px"
-      }
+      if(path === '/jobs'){
 
-    }
+        if(qPage){
+          this.otherJobPage = Number(qPage)
+        }
+        this.getCompanyJobList(userId, page, this.otherJobLimit)
 
-    let jobId = this.$route.query.id;
-    let page = this.$route.query.page;
-    let fromValue = this.$route.query.from;
-
-    if(jobId){
-      this.selectedJobId = jobId
-      this.getJobDetail(jobId)
-    }
-
-    if(page){
-
-      if(fromValue == 1){
-        this.otherJobPage = Number(page)
       }else{
-        this.jobPage = Number(page);
+
+        if(jobId){
+          this.selectedJobId = jobId
+        }else{
+          this.selectedJobId = 0
+        }
+        if(page){
+          this.otherJobPage = Number(page)
+        }
+        this.getCompanyJobList(userId, page, this.otherJobLimit)
+
       }
+
+    }else{
+
+      this.isOther = false;
+
+      if(path === '/jobs'){
+        if(qPage){
+          this.jobPage = Number(qPage);
+        }
+
+      }else{
+        if(jobId){
+          this.selectedJobId = jobId
+        }else{
+          this.selectedJobId = 0
+        }
+
+        if(page){
+          this.jobPage = Number(page);
+        }
+
+      }
+
+      this.getJobList(this.jobPage, this.jobLimit)
 
     }
 
-    // this.getJobFeaturedList()
-    this.getJobList(this.jobPage, this.jobLimit)
     this.getAdsList()
 
   },
   methods: {
     searchByFilter(e){
-      console.log(e)
+
       this.searchFilterParams = e;
+
       this.jobPage = 1;
+      this.selectedJobId = 0;
 
       let params = {
         page: this.jobPage,
@@ -563,22 +311,20 @@ export default {
         params.work_type = e.work_type
       }
 
+      if(e.payment_period){
+        params.payment_period = e.payment_period
+      }
+
       this.jobLoadingValue = true;
       JOB_LIST(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
-          let jobData = res.message.data;
-
-          if(jobData.length>0){
-            this.selectedJobId = jobData[0]['id']
-            this.getJobDetail(jobData[0]['id'])
-          }else{
-            this.detailData = {}
-          }
 
           this.jobListData = res.message.data
           this.jobTotalNum = res.message.total
           this.jobLoadingValue = false
+
+          this.$router.replace({path:'/jobs',query:{page:1}})
         }
 
       }).catch(err => {
@@ -593,76 +339,8 @@ export default {
       })
 
     },
-    getJobDetail(id) {
-      let self = this;
-      let params = {
-        job_id: id
-      }
-      this.showLoadingStatus = true;
-      JOB_DETAIL(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.detailData = res.message
-
-          const workHours = res.message.working_hours
-          if (workHours) {
-            // this.jobForm.working_hours = JSON.parse(workHours)
-            this.workingHoursData = JSON.parse(workHours)
-          }
-          this.showLoadingStatus = false;
-
-          setTimeout(function () {
-            self.initMap(res.message.lng,res.message.lat)
-          }, 3000)
-
-          // let userId = res.message.user_id
-          // this.getCompanyJobList(userId)
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.showLoadingStatus = false;
-        // if(err.msg){
-        //   this.$message.error(err.msg)
-        // }
-        // if(err.message){
-        //   this.$message.error(err.message)
-        // }
-      })
-
-    },
-    initMap(lng,lat){
-      mapboxgl.accessToken = this.accessToken;
-
-      const map = new mapboxgl.Map({
-        container: "mapContainer",
-        center: [lng, lat],
-        style: this.mapStyle,
-        zoom: 12
-      });
-      const nav = new mapboxgl.NavigationControl();
-      map.addControl(nav, "top-right");
-
-      const geolocate = new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      });
-
-      map.addControl(geolocate, "top-right")
-
-      const geocoder = new MapboxGeocoder({
-        "accessToken": this.accessToken,
-        "mapboxgl": mapboxgl
-      })
-
-      map.addControl(geocoder, 'top-left')
-      const marker = new mapboxgl.Marker()
-      marker.setLngLat([lng,lat]).addTo(map)
-
-    },
     turnBanner(link) {
-      console.log(link)
+
       if (link != '') {
         window.location.href = link
       } else {
@@ -754,11 +432,18 @@ export default {
     },
     jobPageChange(e) {
       console.log(e)
-      this.showLoadingStatus = true;
       this.jobPage = e
+      this.selectedJobId = 0
+      let userId = this.$route.query.uid;
+
       this.getJobList(e, this.jobLimit)
-      // console.log(e)
-      // document.documentElement.scrollTop = 120
+
+      if(this.isOther){
+        this.$router.push({path:'/jobs',query:{page:e,uid:userId}})
+      }else{
+        this.$router.push({path:'/jobs',query:{page:e}})
+      }
+
     },
     getJobList(page, limit) {
       this.jobLoadingValue = true;
@@ -806,25 +491,39 @@ export default {
         params.work_type = e.work_type
       }
 
+      if(e.payment_period){
+        params.payment_period = e.payment_period
+      }
+
       JOB_LIST(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
           let jobData = res.message.data;
-          let routeJobId = this.$route.query.id;
-          if(!routeJobId){
 
-            if(jobData.length>0){
-              this.selectedJobId = jobData[0]['id']
-              this.getJobDetail(jobData[0]['id'])
-            }
-
-          }
-
-          this.jobListData = res.message.data
+          this.jobListData = jobData
           // console.log(res.message.data)
           this.jobTotalNum = res.message.total
-
           this.jobLoadingValue = false
+
+          let screenWidth = document.body.clientWidth
+          let screenWidthFloor = Math.floor(screenWidth)
+
+          if(screenWidthFloor > 768){
+
+            let routeJobId = this.$route.params.id;
+
+            if(!routeJobId){
+
+              if(jobData.length>0){
+                this.selectedJobId = jobData[0]['id']
+              }
+
+            }
+
+            let path = '/jobs/detail/' + this.selectedJobId + '/' + page;
+
+            this.$router.replace({path:path})
+          }
 
 
         } else {
@@ -901,166 +600,6 @@ export default {
       self.$router.push({path: '/jobs/post', query: {version_time: self.versionTime}})
 
     },
-    selectRole(e) {
-      this.$loading({
-        text: 'Loading...'
-      })
-
-      let params = {
-        user_id: localStorage.getItem('uid'),
-        identity: e
-      }
-
-      USER_INFO_VISITOR_V2(params).then(res => {
-        let userContact = res.message.user_contact;
-        let educatorContact = {};
-
-        let companyInfo = {};
-
-        let isEducator = userContact.is_educator;
-        let isRecruiting = userContact.is_recruiting;
-        let isSchool = userContact.is_school;
-        let isOther = userContact.is_other;
-        let isVendor = userContact.is_vendor;
-        let identity = e;
-
-        if (identity == 1) {
-          if (isEducator > 10) {
-            educatorContact = res.message.user_contact.educator_contact;
-            this.changeIdentity(educatorContact.id, 1, 2)
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 1}})
-
-          }
-
-        }
-
-        if (identity == 2) {
-
-          if (isRecruiting > 10) {
-
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id, 2, 2)
-            // this.$router.push({path: '/overview', query: {identity: identity}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
-
-            this.dialogBusinessAccountVisible = false
-          }
-        }
-
-        if (identity == 3) {
-
-          if (isSchool > 10) {
-
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id, 3, 2)
-            // this.$router.push({path: '/overview', query: {identity: identity}})
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
-
-            this.dialogBusinessAccountVisible = false
-          }
-
-        }
-
-        if (identity == 4) {
-
-          if (isOther > 10) {
-            companyInfo = res.message.user_contact.company;
-
-            this.changeIdentity(companyInfo.id, 4, 2)
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            this.$router.push({path: '/profile/contact/user', query: {i: 4}})
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.dialogBusinessAccountVisible = false
-          }
-
-        }
-
-        if (identity == 5) {
-
-          if (isVendor > 10) {
-
-            companyInfo = res.message.user_contact.company;
-            this.changeIdentity(companyInfo.id, 5, 2)
-            this.$loading().close()
-          } else {
-            this.$loading().close()
-            // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 5}})
-
-          }
-
-        }
-
-
-      }).catch(err => {
-        console.log(err)
-        this.$loading().close()
-        this.$message.error(err.msg)
-      })
-    },
-    changeIdentity(companyId, identity, language) {
-      let params = {
-        company_id: companyId,
-        language: language,
-        identity: identity
-      }
-
-      SWITCH_IDENTITY_V2(params).then(res => {
-        // console.log(res)
-        if (res.code == 200) {
-          this.$store.commit('allIdentityChanged', true)
-
-          localStorage.setItem('company_id', companyId)
-          localStorage.setItem('identity', identity)
-
-          let str = JSON.stringify(res.message)
-          localStorage.setItem('menuData', str)
-
-          this.$store.commit('identity', identity)
-          this.$store.commit('menuData', res.message)
-
-          this.$loading().close()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$loading().close()
-        this.$message.error(err.msg)
-      })
-
-    },
-    turnBusinessProfile(info){
-
-      let obj = {
-        jobId:info.id,
-        uid:info.user_id,
-        i:info.identity,
-        cid:info.company_id
-      }
-
-      this.$router.push({path:'/jobs/business/profile',query:obj})
-
-      // console.log(info)
-      // this.showCompanyStatus = true;
-      // this.isOther = true;
-      //
-      // this.companyInfo = info;
-      // this.getCompanyJobList(info.user_id,this.otherJobPage,this.otherJobLimit);
-
-    },
     getCompanyJobList(userId,page,limit){
       this.jobLoadingValue = true;
 
@@ -1110,6 +649,10 @@ export default {
         params.work_type = e.work_type
       }
 
+      if(e.payment_period){
+        params.payment_period = e.payment_period
+      }
+
       COMPANY_JOB_LIST(params).then(res=>{
         console.log(res)
         if(res.code == 200){
@@ -1134,147 +677,42 @@ export default {
       console.log(e)
       // this.showLoadingStatus = true;
       this.otherJobPage = e
-      this.getCompanyJobList(this.companyInfo.user_id,e, this.otherJobLimit)
+      this.selectedJobId = 0
+      let userId = this.$route.query.uid;
+
+      if(this.isOther){
+        this.$router.push({path:'/jobs',query:{page:e,uid:userId}})
+      }else{
+        this.$router.push({path:'/jobs',query:{page:e}})
+      }
+
+      this.getCompanyJobList(userId ,e, this.otherJobLimit)
 
     },
     backToResults(){
-      this.showCompanyStatus = false;
+
       this.isOther = false;
-      this.$router.push({path:'/jobs',query:{id:this.selectedJobId,page:this.jobPage}})
+      this.selectedJobId = 0;
+
+      this.$router.push({path:'/jobs',query:{page:this.jobPage}})
+
+      this.getJobList(this.jobPage, this.jobLimit)
 
     },
     turnJobDetail(id,page,isOther){
 
-      this.showCompanyStatus = false;
+      let path = '/jobs/detail/' + id + '/' + page;
+      let fromUid = this.$route.query.uid;
+
+      this.selectedJobId = id;
+
       if(isOther){
-        this.$router.push({path:'/jobs',query:{id:id,page:page,from:1}})
-
+        this.$router.push({path:path,query:{uid:fromUid}})
       }else{
-        this.$router.push({path:'/jobs',query:{id:id,page:page}})
-
+        this.$router.push({path:path,query:{}})
       }
 
     },
-    getJobFeaturedList() {
-      let params = {
-        ad_type: 2
-      }
-      this.jobFeaturedLoadingValue = true;
-
-      JOB_FEATURED_LIST(params).then(res => {
-        console.log(res)
-        if (res.code === 200) {
-          this.jobFeaturedListData = res.message;
-          this.jobFeaturedLoadingValue = false;
-        } else {
-          console.log(res.msg)
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.jobFeaturedLoadingValue = false;
-        // this.$message.error(err.msg)
-      })
-
-    },
-    shareJob(data){
-      this.shareInfo = {
-        title:data.job_title,
-        desc:data.desc,
-        id:data.id
-      }
-      let origin  = window.location.origin
-      this.locationUrl = origin + '/jobs/detail?id='+data.id;
-
-      this.shareDialogVisible = true;
-    },
-    applyJob(id) {
-      this.applyBtnLoading = true;
-      let identity = localStorage.getItem('identity')
-      let token = localStorage.getItem('token')
-      if (identity == 1) {
-        let params = {
-          job_id: id,
-          token: token
-        }
-        APPLY_JOBS(params).then(res => {
-          if (res.code == 200) {
-            this.$message.success('Apply Success')
-            this.applyBtnLoading = false;
-          }
-        }).catch(err=>{
-          console.log(err)
-          this.$message.error(err.msg)
-
-          // if(err.code === 400){
-          //   this.$message.error('Please complete your profile in order to apply')
-          // }else{
-          //   if(err.msg){
-          //     this.$message.error(err.msg)
-          //   }
-          //   if(err.message){
-          //     this.$message.error(err.message)
-          //   }
-          // }
-
-          this.applyBtnLoading = false;
-
-        })
-
-      } else {
-        this.$message.warning('Please switch to an educator profile to be able to apply')
-        this.applyBtnLoading = false;
-      }
-
-
-    },
-    saveJob(id, type, title, url){
-      let params = {
-        token: localStorage.getItem('token'),
-        type: type,
-        type_id: id,
-        type_title: title,
-        type_url: url
-      }
-      ADD_FAVORITE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.detailData.is_favorite = 1
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    },
-    cancelSaveJob(id, type, title, url){
-      let params = {
-        token: localStorage.getItem('token'),
-        type: type,
-        type_id: id,
-        type_title: title,
-        type_url: url
-      }
-      CANCEL_FAVORITE(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.detailData.is_favorite = 0
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
-        }
-      })
-    }
 
 
   }

@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-drawer
+        :z-index="3100"
         :model-value="visible"
         direction="ltr"
         size="50%"

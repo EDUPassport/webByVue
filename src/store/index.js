@@ -12,6 +12,7 @@ const store = createStore({
             username: localStorage.getItem('name'),
             userAvatar: localStorage.getItem('avatar'),
             companyName: '',
+            jobCompanyName:'',
             identity: localStorage.getItem('identity'),
             thirdCompanyId:localStorage.getItem('third_company_id'),
             currentUser:currentUserStr ?  JSON.parse(currentUserStr) : '',
@@ -35,6 +36,9 @@ const store = createStore({
         },
         companyName(state, data) {
             state.companyName = data
+        },
+        jobCompanyName(state, data) {
+            state.jobCompanyName = data
         },
         identity(state, data) {
             state.identity = data

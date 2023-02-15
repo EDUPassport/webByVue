@@ -86,11 +86,17 @@ export default {
       unreadAmount.value = content.unreadTotal;
     }
 
+    let token = localStorage.getItem('token')
+
     onBeforeMount(() => {
-      if (goEasy.getConnectionStatus() === 'disconnected') {
-        connectGoEasy();  //连接goeasy
+
+      if(token){
+        if (goEasy.getConnectionStatus() === 'disconnected') {
+          connectGoEasy();  //连接goeasy
+        }
+        goEasy.im.on(GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, setUnreadNumber);
       }
-      goEasy.im.on(GoEasy.IM_EVENT.CONVERSATIONS_UPDATED, setUnreadNumber);
+
     })
 
     return {

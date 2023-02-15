@@ -8,7 +8,7 @@
 
       <el-scrollbar class="basic-r-container">
 
-        <div class="basic-r-container-bg">
+        <div class="basic-r-container-bg" v-loading="initProfileLoadingStatus">
 
           <div class="account-profile-t">
             <div class="account-profile-t-l">Your profile</div>
@@ -605,150 +605,186 @@
                 </div>
                 <div class="account-profile-item-c">
 
-                  <div class="work-experience">
-                    <div class="work-exp-temp-container">
-                      <div class="work-exp-temp-container">
+                  <el-row :gutter="50">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                      <el-form-item>
+                        <div class="work-experience">
+                          <div class="work-exp-temp-container">
+                            <div class="work-exp-temp-container">
 
-                        <div class="work-exp-temp-item"
-                             v-for="(item,i) in educationData" :key="i">
+                              <div class="work-exp-temp-item"
+                                   v-for="(item,i) in educationData" :key="i">
 
-                          <el-form-item label="School" prop="school_name">
-                            {{ item.school_name }}
-                          </el-form-item>
-                          <el-form-item label="Degree" prop="degree">
-                            {{ item.degree }}
-                          </el-form-item>
-                          <el-form-item label="Field of Study">
-                            {{ item.field_of_study }}
-                          </el-form-item>
+                                <el-form-item label="School" prop="school_name">
+                                  {{ item.school_name }}
+                                </el-form-item>
+                                <el-form-item label="Degree" prop="degree">
+                                  {{ item.degree }}
+                                </el-form-item>
+                                <el-form-item label="Field of Study">
+                                  {{ item.field_of_study }}
+                                </el-form-item>
 
-                          <el-form-item label="Duration of Study" prop="date">
-                            {{
-                              $filters.ymdFormatTimestamp(item.start_time)
-                            }}-{{ $filters.ymdFormatTimestamp(item.end_time) }}
-                          </el-form-item>
+                                <el-form-item label="Duration of Study" prop="date">
+                                  {{
+                                    $filters.ymdFormatTimestamp(item.start_time)
+                                  }}-{{ $filters.ymdFormatTimestamp(item.end_time) }}
+                                </el-form-item>
 
-                          <div class="work-exp-temp-btn-container">
-                            <el-button class="work-exp-temp-btn" link type="primary"
-                                       @click="deleteEducation(item)"
+                                <div class="work-exp-temp-btn-container">
+                                  <el-button class="work-exp-temp-btn" link type="primary"
+                                             @click="deleteEducation(item)"
+                                  >
+                                    DELETE
+                                  </el-button>
+                                  <el-button class="work-exp-temp-btn" plain round
+                                             @click="editEducation(item)"
+                                  >
+                                    EDIT
+                                  </el-button>
+                                </div>
+                              </div>
+
+                            </div>
+
+                          </div>
+                          <el-button class="work-exp-temp-btn"
+                                     plain
+                                     round
+                                     @click="showEducationDialog()">
+                            ADD EDUCATION
+                          </el-button>
+                        </div>
+                        <el-dialog
+                            v-model="educationDialogVisible"
+                            title="Education"
+                            :width="educationDialogWidth"
+                        >
+                          <el-form
+                              ref="educationForm"
+                              :model="educationForm"
+                              :rules="educationRules"
+                              label-width="120px"
+                              label-position="top"
+                              class="demo-ruleForm"
+                          >
+                            <el-form-item label="School" prop="school_name">
+                              <el-input v-model="educationForm.school_name" placeholder="University"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Degree" prop="degree">
+                              <el-select v-model="educationDegreeObj"
+                                         :teleported="false"
+                                         value-key="id"
+                                         placeholder="Doctorate, Master's, Bachelor's, etc...">
+                                <el-option v-for="(degree,i) in degreeOptionsData" :key="i"
+                                           :label="degree.object_en"
+                                           :value="degree"
+                                ></el-option>
+                              </el-select>
+                            </el-form-item>
+                            <el-form-item label="Field of Study">
+                              <el-input v-model="educationForm.field_of_study" type="textarea"
+                                        placeholder="Chemistry, International Business, Dance, etc..."></el-input>
+                            </el-form-item>
+                            <!--                      <el-form-item label="Duration of Study" prop="date">-->
+                            <!--                        <el-date-picker-->
+                            <!--                            v-model="educationForm.date"-->
+                            <!--                            type="monthrange"-->
+                            <!--                            unlink-panels-->
+                            <!--                            format="MM/YYYY"-->
+                            <!--                            value-format="x"-->
+                            <!--                            range-separator="To"-->
+                            <!--                            start-placeholder="Start month"-->
+                            <!--                            end-placeholder="End month"-->
+                            <!--                        >-->
+                            <!--                        </el-date-picker>-->
+                            <!--                      </el-form-item>-->
+
+                            <el-form-item label="Duration of Study" prop="date">
+                              <div class="duration-mobile-container">
+                                <div class="duration-mobile-item">
+                                  <el-date-picker
+                                      v-model="educationForm.start_time"
+                                      type="month"
+                                      unlink-panels
+                                      format="MM/YYYY"
+                                      value-format="x"
+                                      placeholder="Start month"
+                                      :disabled-date="birthdayDisabledDate"
+
+                                  ></el-date-picker>
+                                </div>
+                                <div class="duration-mobile-item-to">
+                                  <span>To</span>
+                                </div>
+                                <div class="duration-mobile-item">
+                                  <el-date-picker
+                                      v-model="educationForm.end_time"
+                                      type="month"
+                                      unlink-panels
+                                      format="MM/YYYY"
+                                      value-format="x"
+                                      placeholder="End month"
+                                      :disabled-date="birthdayDisabledDate"
+
+                                  ></el-date-picker>
+                                </div>
+                              </div>
+
+                            </el-form-item>
+
+                          </el-form>
+
+                          <div class="work-exp-btn-container">
+                            <el-button type="primary"
+                                       link
+                                       @click="educationDialogVisible=false"
                             >
-                              DELETE
+                              CANCEL
                             </el-button>
-                            <el-button class="work-exp-temp-btn" plain round
-                                       @click="editEducation(item)"
-                            >
-                              EDIT
+                            <el-button type="primary"
+                                       round
+                                       :loading="submitEducationLoadingValue"
+                                       @click="saveEducationTemp()">
+                              SAVE
                             </el-button>
                           </div>
-                        </div>
 
-                      </div>
+                        </el-dialog>
 
-                    </div>
-                    <el-button class="work-exp-temp-btn"
-                               plain
-                               round
-                               @click="showEducationDialog()">
-                      ADD EDUCATION
-                    </el-button>
-                  </div>
-
-                  <el-dialog
-                      v-model="educationDialogVisible"
-                      title="Education"
-                      :width="educationDialogWidth"
-                  >
-                    <el-form
-                        ref="educationForm"
-                        :model="educationForm"
-                        :rules="educationRules"
-                        label-width="120px"
-                        label-position="top"
-                        class="demo-ruleForm"
-                    >
-                      <el-form-item label="School" prop="school_name">
-                        <el-input v-model="educationForm.school_name" placeholder="University"></el-input>
                       </el-form-item>
-                      <el-form-item label="Degree" prop="degree">
-                        <el-select v-model="educationDegreeObj"
-                                   :teleported="false"
-                                   value-key="id"
-                                   placeholder="Doctorate, Master's, Bachelor's, etc...">
-                          <el-option v-for="(degree,i) in degreeOptionsData" :key="i"
-                                     :label="degree.object_en"
-                                     :value="degree"
-                          ></el-option>
+
+                    </el-col>
+                  </el-row>
+
+                  <el-row :gutter="50" >
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Certifications">
+
+                        <el-select
+                            :teleported="false"
+                            v-model="selectCertificationsList"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select certifications"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editCertificationsList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
                         </el-select>
-                      </el-form-item>
-                      <el-form-item label="Field of Study">
-                        <el-input v-model="educationForm.field_of_study" type="textarea"
-                                  placeholder="Chemistry, International Business, Dance, etc..."></el-input>
-                      </el-form-item>
-                      <!--                      <el-form-item label="Duration of Study" prop="date">-->
-                      <!--                        <el-date-picker-->
-                      <!--                            v-model="educationForm.date"-->
-                      <!--                            type="monthrange"-->
-                      <!--                            unlink-panels-->
-                      <!--                            format="MM/YYYY"-->
-                      <!--                            value-format="x"-->
-                      <!--                            range-separator="To"-->
-                      <!--                            start-placeholder="Start month"-->
-                      <!--                            end-placeholder="End month"-->
-                      <!--                        >-->
-                      <!--                        </el-date-picker>-->
-                      <!--                      </el-form-item>-->
-
-                      <el-form-item label="Duration of Study" prop="date">
-                        <div class="duration-mobile-container">
-                          <div class="duration-mobile-item">
-                            <el-date-picker
-                                v-model="educationForm.start_time"
-                                type="month"
-                                unlink-panels
-                                format="MM/YYYY"
-                                value-format="x"
-                                placeholder="Start month"
-                                :disabled-date="birthdayDisabledDate"
-
-                            ></el-date-picker>
-                          </div>
-                          <div class="duration-mobile-item-to">
-                            <span>To</span>
-                          </div>
-                          <div class="duration-mobile-item">
-                            <el-date-picker
-                                v-model="educationForm.end_time"
-                                type="month"
-                                unlink-panels
-                                format="MM/YYYY"
-                                value-format="x"
-                                placeholder="End month"
-                                :disabled-date="birthdayDisabledDate"
-
-                            ></el-date-picker>
-                          </div>
-                        </div>
 
                       </el-form-item>
+                    </el-col>
 
-                    </el-form>
-
-                    <div class="work-exp-btn-container">
-                      <el-button type="primary"
-                                 link
-                                 @click="educationDialogVisible=false"
-                      >
-                        CANCEL
-                      </el-button>
-                      <el-button type="primary"
-                                 round
-                                 :loading="submitEducationLoadingValue"
-                                 @click="saveEducationTemp()">
-                        SAVE
-                      </el-button>
-                    </div>
-
-                  </el-dialog>
+                  </el-row>
 
                 </div>
               </div>
@@ -911,31 +947,6 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Certifications">
-
-                        <el-select
-                            :teleported="false"
-                            v-model="selectCertificationsList"
-                            multiple
-                            collapse-tags
-                            collapse-tags-tooltip
-                            placeholder="Select certifications"
-                            filterable
-                            allow-create
-                            value-key="id"
-                        >
-                          <el-option
-                              v-for="(item,index) in editCertificationsList"
-                              :key="index"
-                              :label="item.object_en"
-                              :value="item"
-                          />
-
-                        </el-select>
-
-                      </el-form-item>
-                    </el-col>
 
 
                   </el-row>
@@ -1260,6 +1271,7 @@ export default {
   data() {
 
     return {
+      initProfileLoadingStatus:false,
       phoneCodeData: phoneCodeData,
       workExpDialogWidth: '454px',
       educationDialogWidth: '454px',
@@ -1603,6 +1615,7 @@ export default {
       }
 
       if (strObj.action == 'edit') {
+        this.initProfileLoadingStatus = true;
         await this.getBasicInfo(strObj.i)
       }
 
@@ -2487,10 +2500,12 @@ export default {
 
           }
 
+          this.initProfileLoadingStatus = false;
 
         }
       }).catch(err => {
         console.log(err)
+
         if (err.msg) {
           return this.$message.error(err.msg)
         }

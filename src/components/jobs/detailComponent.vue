@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-scrollbar class="xll-job-detail">
+  <el-scrollbar v-loading="loading" class="xll-job-detail">
 
     <div class="job-detail-bg-container">
 
@@ -10,7 +10,9 @@
       </div>
 
       <div class="back-btn-container">
-        <el-button class="back-btn" link type="primary"
+        <el-button class="back-btn"
+                   link
+                   type="primary"
                    @click="backToSearchResults()"
         >
           <el-icon>
@@ -20,7 +22,8 @@
         </el-button>
       </div>
 
-      <div class="job-detail-container">
+      <div class="job-detail-container"
+           v-if="JSON.stringify(detailData) !== '{}'">
 
         <div class="job-detail-t">
           <div class="job-detail-t-l">
@@ -38,14 +41,10 @@
             </div>
           </div>
           <div class="job-detail-t-r">
-            <el-button link @click="shareJob(detailData)">
+            <el-button link @click="shareJob()">
               SHARE
             </el-button>
-<!--            <el-button type="primary" round-->
-<!--                       :loading="applyBtnLoading"-->
-<!--                       @click="applyJob(detailData.id)">-->
-<!--              QUICK APPLY-->
-<!--            </el-button>-->
+
             <applyJobButton btn-text="QUICK APPLY"
                             :selectJobId="detailData.id"
                             :job-info="detailData">
@@ -53,7 +52,7 @@
 
             <template v-if="currentIdentity != 5">
               <el-button
-                  v-if="detailData.is_favorite && detailData.is_favorite == 1 && isFavoriteValue == 1"
+                  v-if="isFavorite == 1"
                   plain round
                   @click="cancelSaveJob(detailData.id,1,detailData.job_title,detailData.company_logo)">
                 SAVE
@@ -253,6 +252,9 @@
         </div>
 
       </div>
+      <div class="empty-container" v-else>
+        <el-empty description="..."></el-empty>
+      </div>
 
     </div>
 
@@ -275,10 +277,19 @@
 
 import adsComponent from "@/components/ads/adsComponent";
 import shareCard from "@/components/shareCard";
-import {ADD_FAVORITE, APPLY_JOBS, CANCEL_FAVORITE} from "@/api/api";
+import {ADD_FAVORITE, APPLY_JOBS, CANCEL_FAVORITE,ADD_JOBS_VIEWS} from "@/api/api";
 import applyJobButton from '@/components/jobs/applyButton'
 import {updateWindowHeight} from "@/utils/tools";
-import {ref} from 'vue'
+import {ref, onMounted, onUnmounted} from 'vue'
+import {useStore} from 'vuex'
+import {useRouter, useRoute} from 'vue-router'
+
+import mapboxgl from "mapbox-gl";
+import 'mapbox-gl/dist/mapbox-gl.css'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import {ElMessage} from 'element-plus'
+
 export default {
   name: "detailComponent",
   components: {
@@ -286,90 +297,67 @@ export default {
     shareCard,
     applyJobButton
   },
-  props:['detailData','adsData','workingHoursData'],
-  setup(){
+  props:['detailData','adsData','workingHoursData','adsHeight','loading','isFavorite'],
+  setup(props,context){
     const currentIdentity = localStorage.getItem('identity')
     const showMoreVisible = ref(true)
+    const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
 
     const showMoreAboutJobDetails = ()=>{
       showMoreVisible.value = true
     }
 
-    return {
-      showMoreVisible,
-      currentIdentity,
-      showMoreAboutJobDetails
-    }
-  },
-  data(){
-    return {
-      isFavoriteValue: 1,
-      shareDialogVisible:false,
-      locationUrl:'',
-      applyBtnLoading:false,
-      adsHeight:'190px',
+    const accessToken = process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN
+    const mapStyle = process.env.VUE_APP_MAP_BOX_STYLE
+    function initMap(lng,lat){
+      mapboxgl.accessToken = accessToken;
+
+      const map = new mapboxgl.Map({
+        container: "mapContainer",
+        center: [lng, lat],
+        style: mapStyle,
+        zoom: 12
+      });
+      const nav = new mapboxgl.NavigationControl();
+      map.addControl(nav, "top-right");
+
+      const geolocate = new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      });
+
+      map.addControl(geolocate, "top-right")
+
+      const geocoder = new MapboxGeocoder({
+        "accessToken": accessToken,
+        "mapboxgl": mapboxgl
+      })
+
+      map.addControl(geocoder, 'top-left')
+      const marker = new mapboxgl.Marker()
+      marker.setLngLat([lng,lat]).addTo(map)
 
     }
-  },
-  unmounted() {
-    updateWindowHeight()
-    window.onresize = null
-  },
-  mounted(){
-    let screenWidth = document.body.clientWidth
-    let screenWidthFloor = Math.floor(screenWidth)
 
-    if (screenWidthFloor <= 768) {
-      updateWindowHeight()
-      this.adsHeight = '120px'
+    const shareDialogVisible =ref(false)
+    const locationUrl = ref('')
+    const applyBtnLoading = ref(false)
+
+    function shareJob(){
+      locationUrl.value = window.location.href;
+      shareDialogVisible.value = true;
     }
 
-    if (screenWidthFloor > 768 && screenWidthFloor < 992) {
-      this.adsHeight = '120px'
-    }
-
-    if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
-      this.adsHeight = '120px'
-    }
-    if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
-      this.adsHeight = '140px'
-    }
-    if(screenWidthFloor >= 1920){
-      this.adsHeight = "190px"
-    }
-
-    window.onresize = () =>{
-      if (screenWidthFloor <= 768) {
-        updateWindowHeight()
-        this.adsHeight = '120px'
-      }
-
-      if (screenWidthFloor > 768 && screenWidthFloor < 992) {
-        this.adsHeight = '120px'
-      }
-      if (screenWidthFloor >= 992 && screenWidthFloor < 1200) {
-        this.adsHeight = '120px'
-      }
-      if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
-        this.adsHeight = '140px'
-      }
-      if(screenWidthFloor >= 1920){
-        this.adsHeight = "190px"
-      }
-
-    }
-  },
-  methods:{
-    shareJob(data){
-      let origin = window.location.origin;
-      let locationUrl = origin + '/jobs/detail?id='+data.id;
-      this.locationUrl = locationUrl;
-      this.shareDialogVisible = true;
-    },
-    applyJob(id) {
-      this.applyBtnLoading = true;
+    function applyJob(id) {
+      applyBtnLoading.value = true;
+      
       let identity = localStorage.getItem('identity')
       let token = localStorage.getItem('token')
+     
       if (identity == 1) {
         let params = {
           job_id: id,
@@ -377,35 +365,28 @@ export default {
         }
         APPLY_JOBS(params).then(res => {
           if (res.code == 200) {
-            this.$message.success('Apply Success')
-            this.applyBtnLoading = false;
+            ElMessage.success('Apply Success')
+            applyBtnLoading.value = false;
           }
+
         }).catch(err=>{
           console.log(err)
-          this.$message.error(err.msg)
-          // if(err.code === 400){
-          //   this.$message.error('Please complete your profile in order to apply')
-          // }else{
-          //   if(err.msg){
-          //     this.$message.error(err.msg)
-          //   }
-          //   if(err.message){
-          //     this.$message.error(err.message)
-          //   }
-          // }
-
-          this.applyBtnLoading = false;
-
+          ElMessage.error(err.msg)
+          applyBtnLoading.value = false;
         })
 
       } else {
-        this.$message.warning('Please switch to an educator profile to be able to apply')
-        this.applyBtnLoading = false;
+        ElMessage({
+          type:'warning',
+          message:'Please switch to an educator profile to be able to apply',
+          grouping:true
+        })
+        applyBtnLoading.value = false;
       }
 
+    }
 
-    },
-    saveJob(id, type, title, url){
+    function saveJob(id, type, title, url){
       let params = {
         token: localStorage.getItem('token'),
         type: type,
@@ -416,20 +397,22 @@ export default {
       ADD_FAVORITE(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.$message.success('Success')
-          this.isFavoriteValue = 1
+          // ElMessage.success('Success')
+          context.emit('favoriteEvent', 1)
+
         }
       }).catch(err=>{
-        console.log(err)
+
         if(err.msg){
-          this.$message.error(err.msg)
+          return ElMessage.error(err.msg)
         }
         if(err.message){
-          this.$message.error(err.message)
+          return ElMessage.error(err.message)
         }
       })
-    },
-    cancelSaveJob(id, type, title, url){
+    }
+
+    function cancelSaveJob(id, type, title, url){
       let params = {
         token: localStorage.getItem('token'),
         type: type,
@@ -440,34 +423,32 @@ export default {
       CANCEL_FAVORITE(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.$message.success('Success')
-          // this.detailData.is_favorite = 0
-          this.isFavoriteValue = 0;
+          context.emit('favoriteEvent', 0)
+          // ElMessage.success('Success')
         }
       }).catch(err=>{
         console.log(err)
         if(err.msg){
-          this.$message.error(err.msg)
+          return ElMessage.error(err.msg)
         }
         if(err.message){
-          this.$message.error(err.message)
+          return ElMessage.error(err.message)
         }
       })
-    },
-    turnBusinessProfile(info){
+    }
 
-      let obj = {
-        jobId:info.id,
-        uid:info.user_id,
-        i:info.identity,
-        cid:info.company_id
-      }
+    function turnBusinessProfile(info){
 
-      this.$router.push({path:'/jobs/business/profile',query:obj})
+      let path = '/jobs/business/profile'
 
-    },
-    turnBanner(link) {
-      console.log(link)
+      store.commit('jobCompanyName', info.company_name)
+
+      router.push({path:path,query:{uid:info.user_id,i:info.identity, cid:info.company_id}})
+
+    }
+
+    function turnBanner(link) {
+
       if (link != '') {
         window.location.href = link
       } else {
@@ -476,14 +457,66 @@ export default {
           window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
           return;
         }
-        this.$router.push('/me/ads/platform')
+        router.push('/me/ads/platform')
       }
-    },
-    backToSearchResults(){
-      this.$router.go(-1)
+    }
+
+    function backToSearchResults(){
+       router.go(-1)
+    }
+
+    function addJobViews(id){
+      let params = {
+        job_id:id
+      }
+      ADD_JOBS_VIEWS(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+    
+    onMounted(()=>{
+
+      setTimeout(function (){
+        initMap(props.detailData.lng, props.detailData.lat)
+      },3000)
+
+      let jobId = route.params.id;
+
+      let token = localStorage.getItem('token')
+      if(token){
+        addJobViews(jobId)
+      }
+
+    })
+
+    onUnmounted(()=>{
+      updateWindowHeight()
+      window.onresize = null
+    })
+   
+    return {
+      shareDialogVisible,
+      locationUrl,
+      applyBtnLoading,
+      accessToken,
+      mapStyle,
+      showMoreVisible,
+      currentIdentity,
+      showMoreAboutJobDetails,
+      shareJob,
+      applyJob,
+      saveJob,
+      cancelSaveJob,
+      turnBusinessProfile,
+      turnBanner,
+      backToSearchResults
+
     }
 
   }
+
 }
 </script>
 
@@ -497,11 +530,16 @@ export default {
   height: calc(100vh - 140px);
   background-color: #F0F2F5;
 }
+.empty-container{
+  height: calc(100vh - 170px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .job-detail-bg-container{
   padding: 30px;
 }
-
 
 .job-detail-t{
   display: flex;
@@ -675,10 +713,20 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+
   .xll-job-detail{
     height: calc( var(--i-window-height) - 80px);
     background-color: #FFFFFF;
+    position: fixed;
+    z-index: 2000;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top:80px;
+    width:100%;
+
   }
+
   .job-detail-bg-container{
     padding: 15px;
   }

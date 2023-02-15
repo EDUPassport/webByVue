@@ -56,7 +56,6 @@ import jobsListComponent from "@/components/jobsListComponent";
 import businessProfileActionWithPreview from "@/components/businessProfileActionWithPreview";
 
 import {
-  ZOHO_SYNC,
   USER_INFO_BY_TOKEN_V2,
   RECRUITER_PERCENTAGE_V2,
   OTHER_PERCENTAGE_V2, SCHOOL_PERCENTAGE_V2, COMPANY_JOB_LIST, ADD_FAVORITE, CANCEL_FAVORITE
@@ -90,7 +89,7 @@ export default {
 
       otherJobsData:[],
       otherJobTotalNum:0,
-      otherJobLimit:10000,
+      otherJobLimit:10,
       otherJobPage:1
 
     }
@@ -185,6 +184,8 @@ export default {
           if(companyInfo){
             this.companyInfo = companyInfo;
 
+            this.$store.commit('jobCompanyName', companyInfo.company_name)
+
             if (companyInfo.benefits) {
               let benefitsArr = companyInfo.benefits;
               benefitsArr.forEach((item,i)=>{
@@ -249,27 +250,26 @@ export default {
       })
 
     },
-    turnJobDetail(id,page,isOther){
+    turnJobDetail(id,page){
 
-      this.showCompanyStatus = false;
-      if(isOther){
-        this.$router.push({path:'/jobs',query:{id:id,page:page,from:1}})
+      let path = '/jobs/detail/' + id + '/' + page;
+      let fromUid = localStorage.getItem('uid')
 
-      }else{
-        this.$router.push({path:'/jobs',query:{id:id,page:page}})
+      this.selectedJobId = id;
 
-      }
+      this.$router.push({path:path,query:{uid:fromUid}})
 
     },
     otherJobPageChange(e) {
       console.log(e)
       // this.showLoadingStatus = true;
       this.otherJobPage = e
+      this.selectedJobId = 0
       this.getCompanyJobList(this.companyInfo.user_id,e, this.otherJobLimit)
 
     },
     backToResults(){
-      this.showCompanyStatus = false;
+
       this.isOther = false;
       this.$router.push({path:'/jobs',query:{id:this.selectedJobId,page:this.jobPage}})
 
@@ -320,85 +320,8 @@ export default {
           this.$message.error(err.message)
         }
       })
-    },
-
-    async submitEduBusinessCompanyForm() {
-
-      let userId = localStorage.getItem('uid')
-
-      let zohoData = [
-        {'zf_referrer_name': ''},
-        {'zf_redirect_url': ''},
-        {'zc_gad': ''},
-        {'SingleLine': this.companyInfo.company_name  // Education Business Name
-        },
-        {'Dropdown2': ''  //Education Business Category
-        },
-        {'Dropdown': 'Education Business'  //Company Type
-        },
-        {'Website': ''  //Education Business Website
-        },
-        {'SingleLine1': ''  // Education Business Contact
-        },
-        {'Number2': ''  //  Company Number
-        },
-        {'SingleLine5': userId  //UserID
-        },
-        {'PhoneNumber_countrycode': ''  //Education Business Phone
-        },
-        {'Email': ''  // Education Business Email
-        },
-        {'Number': ''   //Number of Employees
-        },
-        {'Number1': ''   //Membership Duration
-        },
-        {'Dropdown1': ''   //Membership Type
-        },
-        {'Address_AddressLine1': ''   //Street Address
-        },
-        {'Address_City': ''   //City
-        },
-        {'Address_Region': ''   //State/Region/Province
-        },
-        {'Address_Country': ''   //Country
-        },
-        {'SingleLine4': ''   //   Business Registration No.
-        },
-        {'MultiLine': ''   //Company Intro
-        },
-        {'SingleLine3': ''   //WeChat ID
-        },
-        {'Number3': ''  //  Number of Branches
-        },
-        {'Number4': ''  //    Number of Students
-        },
-        {'MultipleChoice': ''  //    Students Ages
-        },
-        {'MultiLine1': ''  //     Curriculum Subjects
-        },
-        {'MultiLine2': ''  //     School Facilities
-        },
-        {'Website1': ''  // Business License Link
-        },
-        {'Website2': this.companyInfo.logo   //Company Logo Link
-        },
-        {'Website3': this.companyInfo.background_image   //Header Image Link
-        }
-
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EduBusinessCompanyForm/formperma/2gsVgXjDNmE5niOKVzRmwT2tlYNWWCTD2kCDHv_CAV8/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-
     }
+
 
   }
 }

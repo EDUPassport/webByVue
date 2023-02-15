@@ -197,7 +197,6 @@
         </swiper>
       </div>
 
-
       <div class="expect-container" v-if="identity == 3">
         <div class="expect-label">What to expect</div>
         <div class="expect-c">
@@ -308,7 +307,7 @@ import "swiper/css/navigation";
 import SwiperCore, {Autoplay, Pagination, Navigation} from 'swiper';
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
-import {ref, computed} from 'vue'
+import {ref, computed, onMounted, onUnmounted} from 'vue'
 import {useStore} from 'vuex'
 
 import {useRouter} from 'vue-router'
@@ -325,7 +324,7 @@ export default {
     mapComponent,
     chatButton
   },
-  setup() {
+  setup(props,context) {
 
     let thumbsSwiper = ref(null);
     const descMoreVisible = ref(true)
@@ -342,48 +341,50 @@ export default {
 
     const currentUser = computed(() => store.state.currentUser)
 
+    function backToSearchResults() {
+      context.emit('back')
+    }
+
+    function chatSuccess() {
+      turnChatPage()
+    }
+
+    onMounted(()=>{
+
+      let screenWidth = document.body.clientWidth
+      let screenWidthFloor = Math.floor(screenWidth)
+
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+
+      window.onresize = () => {
+        if (screenWidthFloor <= 768) {
+          updateWindowHeight()
+        }
+      }
+
+    })
+
+    onUnmounted(()=>{
+      updateWindowHeight()
+      window.onresize = null
+    })
+
     return {
       descMoreVisible,
       thumbsSwiper,
       setThumbsSwiper,
       currentUser,
-      turnChatPage
+      turnChatPage,
+      backToSearchResults,
+      chatSuccess
 
     }
-
-
-  },
-  unmounted() {
-    updateWindowHeight()
-    window.onresize = null
-  },
-  mounted() {
-
-    let screenWidth = document.body.clientWidth
-    let screenWidthFloor = Math.floor(screenWidth)
-
-    if (screenWidthFloor <= 768) {
-      updateWindowHeight()
-    }
-
-    window.onresize = () => {
-      if (screenWidthFloor <= 768) {
-        updateWindowHeight()
-      }
-    }
-
-  },
-  methods: {
-
-    backToSearchResults() {
-      this.$emit('back')
-    },
-    chatSuccess() {
-      this.turnChatPage()
-    },
 
 
   }
+
 
 }
 </script>

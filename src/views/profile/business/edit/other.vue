@@ -6,7 +6,7 @@
       </div>
 
       <el-scrollbar class="basic-r-container">
-        <div class="basic-r-container-bg">
+        <div class="basic-r-container-bg" v-loading="initProfileLoadingStatus">
 
           <div class="account-profile-t">
             <div class="account-profile-t-l">Your profile</div>
@@ -623,6 +623,7 @@ export default {
   },
   data() {
     return {
+      initProfileLoadingStatus:false,
       dialogAccountImageUrl: '',
       dialogAccountImageVisible: false,
       accountImageFileList: [],
@@ -786,7 +787,8 @@ export default {
       }
 
       if(strObj.action == 'edit'){
-        this.getBasicInfo(strObj.i)
+        this.initProfileLoadingStatus = true;
+        await this.getBasicInfo(strObj.i)
       }
 
     }
@@ -1760,6 +1762,8 @@ export default {
             }
 
           }
+
+          this.initProfileLoadingStatus = false;
 
         }
       }).catch(err => {

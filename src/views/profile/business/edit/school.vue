@@ -8,7 +8,7 @@
 
       <el-scrollbar class="basic-r-container">
 
-        <div class="basic-r-container-bg">
+        <div class="basic-r-container-bg" v-loading="initProfileLoadingStatus">
 
           <div class="account-profile-t">
             <div class="account-profile-t-l">Your profile</div>
@@ -756,6 +756,7 @@ export default {
   },
   data() {
     return {
+      initProfileLoadingStatus:false,
       dialogAccountImageUrl: '',
       dialogAccountImageVisible: false,
       accountImageFileList: [],
@@ -921,9 +922,9 @@ export default {
 
     await this.getSubIdentityList()
 
-    this.getAllCountry()
+    await this.getAllCountry()
 
-    this.getUserObjectList()
+    await this.getUserObjectList()
 
     let str = this.$route.query.s;
 
@@ -939,11 +940,11 @@ export default {
       if(strObj.action == 'add'){
         // this.getBasicInfo()
         this.initMap()
-
       }
 
       if(strObj.action == 'edit'){
-        this.getBasicInfo()
+        this.initProfileLoadingStatus = true;
+        await this.getBasicInfo()
       }
 
     }
@@ -1703,10 +1704,10 @@ export default {
     handleChange(e) {
       console.log(e)
     },
-    getAllCountry(){
+    async getAllCountry(){
       let params = {
       }
-      GET_COUNTRY_LIST(params).then(res=>{
+      await GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
         if(res.code == 200){
           this.countryOptions = res.message;
@@ -2029,6 +2030,7 @@ export default {
 
           }
 
+          this.initProfileLoadingStatus = false;
 
         }
       }).catch(err => {
@@ -2043,7 +2045,7 @@ export default {
       let data = {
 
       }
-      USER_OBJECT_LIST(data).then(res => {
+      await USER_OBJECT_LIST(data).then(res => {
         if (res.code == 200) {
 
           this.editStudentAgeList = res.message.filter(item => item.pid === 73)

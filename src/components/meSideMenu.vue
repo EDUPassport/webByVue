@@ -396,10 +396,12 @@ export default {
     left: 0;
     right: 0;
 
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     z-index: 1000;
     padding: 10px 0 10px 20px;
     height: 60px;
+
+    border-top: 1px solid #F0F2F5;
 
   }
 

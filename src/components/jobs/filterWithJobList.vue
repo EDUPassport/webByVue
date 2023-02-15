@@ -411,6 +411,8 @@ export default {
         payment_period: this.paymentPeriodValue
       }
 
+      console.log(data)
+
       if (this.isSalaryChange) {
         data.salary = this.salaryValue
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-affix :offset="0" :z-index="1000">
+    <el-affix :offset="0" :z-index="3000">
       <el-header class="header-container" height="auto">
         <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
           <el-col :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
@@ -19,7 +19,6 @@
               <div class="logo-mobile-new-beta">Beta</div>
               <el-button link @click="showMobileMenu()">Menu</el-button>
             </div>
-
 
           </el-col>
 
