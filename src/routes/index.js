@@ -8,23 +8,6 @@ import chatHome from '@/views/chat/chatHome'
 const routes = [
 
     {
-        path: '/food4edu',
-        component: layout,
-        redirect: '/food4edu',
-        children: [
-            {
-                path: '/food4edu',
-                name: 'consultingFoodEducation',
-                component: () => import('@/views/consulting/foodEducation'),
-                meta: {
-                    titleC: 'Partners',
-                    titleG: 'Partners'
-                },
-            }
-        ]
-
-    },
-    {
         path: '/events',
         component: layout,
         children: [
@@ -596,32 +579,6 @@ const routes = [
                 meta: {
                     titleC: 'Industry News Detail',
                     titleG: 'Industry News Detail'
-                }
-            },
-
-        ]
-
-    },
-    {
-        path: '/blog',
-        component: layout,
-        children: [
-            {
-                path: 'list',
-                name: 'blogList',
-                component: () => import('@/views/blog/list'),
-                meta: {
-                    titleC: 'Blog List',
-                    titleG: 'Blog List',
-                }
-            },
-            {
-                path: 'detail',
-                name: 'blogDetail',
-                component: () => import('@/views/blog/detail'),
-                meta: {
-                    titleC: 'Blog Detail',
-                    titleG: 'Blog Detail',
                 }
             },
 
