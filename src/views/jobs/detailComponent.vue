@@ -15,10 +15,11 @@
 import jobDetailComponent from '@/components/jobs/detailComponent'
 import {useRoute} from "vue-router";
 import {
+  ADD_JOBS_VIEWS,
   ADS_LIST,
   JOB_DETAIL
 } from "@/api/api";
-import {ref, onMounted} from 'vue'
+import {ref, onMounted,onUnmounted} from 'vue'
 import {ElMessage} from 'element-plus'
 import {updateWindowHeight} from "@/utils/tools";
 
@@ -44,6 +45,8 @@ export default {
       let params = {
         job_id: id
       }
+      let token = localStorage.getItem('token')
+
       JOB_DETAIL(params).then(res => {
         console.log(res)
         if (res.code == 200) {
@@ -62,6 +65,10 @@ export default {
             workingHoursData.value = JSON.parse(workHours)
           }
           showLoadingStatus.value = false
+
+          if(token){
+            addJobViews(id)
+          }
 
         }
       }).catch(err=>{
@@ -128,6 +135,17 @@ export default {
       isFavorite.value = e;
     }
 
+    function addJobViews(id){
+      let params = {
+        job_id:id
+      }
+      ADD_JOBS_VIEWS(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+
     onMounted(()=>{
 
       let screenWidth = document.body.clientWidth
@@ -182,6 +200,12 @@ export default {
       getAdsList()
 
     })
+
+    onUnmounted(()=>{
+      updateWindowHeight()
+      window.onresize = null
+    })
+
 
     return {
       showLoadingStatus,

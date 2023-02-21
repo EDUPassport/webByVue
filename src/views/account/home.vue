@@ -1267,65 +1267,87 @@ export default {
       USER_ALL_INFO(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let educator = res.message.educator;
-          let recruiter = res.message.recruiting;
-          let school = res.message.school;
-          let other = res.message.other;
-          let vendor = res.message.vendor;
 
-          let currentCompanyId = this.currentCompanyId;
           let companyData = []
 
-          if (educator) {
+            let educator = res.message.educator;
+            let recruiter = res.message.recruiting;
+            let school = res.message.school;
+            let other = res.message.other;
+            let vendor = res.message.vendor;
 
-            for (let i = 0; i < educator.length; i++) {
-              educator[i]['identity'] = 1
+            let currentCompanyId = this.currentCompanyId;
+
+            if (educator) {
+
+              for (let i = 0; i < educator.length; i++) {
+                educator[i]['identity'] = 1
+              }
+
+              companyData = companyData.concat(educator)
+              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
+              if (index) {
+                let first = companyData.splice(index, 1)[0];
+                companyData.unshift(first)
+              }
+
             }
 
-            companyData = companyData.concat(educator)
+            if (recruiter) {
 
-          }
+              for (let i = 0; i < recruiter.length; i++) {
+                recruiter[i]['identity'] = 2
+              }
+              companyData = companyData.concat(recruiter)
+              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
+              if (index) {
+                let first = companyData.splice(index, 1)[0];
+                companyData.unshift(first)
+              }
 
-          if (recruiter) {
-
-            for (let i = 0; i < recruiter.length; i++) {
-              recruiter[i]['identity'] = 2
-            }
-            companyData = companyData.concat(recruiter)
-
-          }
-
-          if (school) {
-
-            for (let i = 0; i < school.length; i++) {
-              school[i]['identity'] = 3
             }
 
-            companyData = companyData.concat(school)
+            if (school) {
 
-          }
+              for (let i = 0; i < school.length; i++) {
+                school[i]['identity'] = 3
+              }
 
-          if (other) {
-            for (let i = 0; i < other.length; i++) {
-              other[i]['identity'] = 4
+              companyData = companyData.concat(school)
+              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
+              if (index) {
+                let first = companyData.splice(index, 1)[0];
+                companyData.unshift(first)
+              }
+
             }
 
-            companyData = companyData.concat(other)
+            if (other) {
+              for (let i = 0; i < other.length; i++) {
+                other[i]['identity'] = 4
+              }
 
-          }
-          if (vendor) {
-            for (let i = 0; i < vendor.length; i++) {
-              vendor[i]['identity'] = 5
+              companyData = companyData.concat(other)
+              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
+              if (index) {
+                let first = companyData.splice(index, 1)[0];
+                companyData.unshift(first)
+              }
+
             }
-            companyData = companyData.concat(vendor)
+            if (vendor) {
+              for (let i = 0; i < vendor.length; i++) {
+                vendor[i]['identity'] = 5
+              }
+              companyData = companyData.concat(vendor)
+              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
+              if (index) {
+                let first = companyData.splice(index, 1)[0];
+                companyData.unshift(first)
+              }
 
-          }
+            }
 
-          let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
-          if (index) {
-            let first = companyData.splice(index, 1)[0];
-            companyData.unshift(first)
-          }
           // console.log(companyData)
           this.companyData = companyData
 
@@ -1362,6 +1384,8 @@ export default {
           this.$store.commit('menuData', res.message)
 
           this.disconnectIm()
+
+          this.assignUserData = []
           this.getUserAllInfo()
           this.getAllAssignUsers()
 

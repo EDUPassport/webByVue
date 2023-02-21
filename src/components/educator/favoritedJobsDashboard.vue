@@ -111,10 +111,10 @@
         </template>
 
         <template v-else>
-          <el-empty description="..."></el-empty>
+          <el-empty description="You haven't saved any jobs yet">
+            <el-button type="primary" round @click="searchJobs()">Search jobs</el-button>
+          </el-empty>
         </template>
-
-
 
       </el-scrollbar>
     </div>
@@ -159,6 +159,9 @@ export default {
     this.getFavoriteList(1,this.page,this.limit)
   },
   methods:{
+    searchJobs(){
+      this.$router.push('/jobs')
+    },
     changeType(type){
       this.type = type;
       this.favoriteData = [];

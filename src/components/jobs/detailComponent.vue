@@ -187,6 +187,39 @@
                   </div>
                 </div>
 
+                <div class="job-detail-c-item" v-if="detailData.age_min && detailData.age_max">
+                  <div class="job-detail-c-item-l">Applicant's age:</div>
+                  <div class="job-detail-c-item-r">
+                    {{detailData.age_min}} - {{detailData.age_max}}
+                  </div>
+                </div>
+
+                <div class="job-detail-c-item" v-if="detailData.employment_type_en">
+                  <div class="job-detail-c-item-l">Employment type:</div>
+                  <div class="job-detail-c-item-r">
+                    {{ detailData.employment_type_en }}
+                  </div>
+                </div>
+
+                <div class="job-detail-c-item" v-if="detailData.Prefered_Work_Schedule_Type">
+                  <div class="job-detail-c-item-l">Work schedule:</div>
+                  <div class="job-detail-c-item-r">
+                    {{ $filters.userObjectFormat(detailData.Prefered_Work_Schedule_Type)}}
+                  </div>
+                </div>
+                <div class="job-detail-c-item" v-if="detailData.languages">
+                  <div class="job-detail-c-item-l">Languages:</div>
+                  <div class="job-detail-c-item-r">
+                    {{ $filters.userObjectFormat(detailData.languages)}}
+                  </div>
+                </div>
+                <div class="job-detail-c-item" v-if=" detailData.working_nums_end">
+                  <div class="job-detail-c-item-l">Years of Experience Required:</div>
+                  <div class="job-detail-c-item-r">
+                    {{ detailData.working_nums_start }} - {{detailData.working_nums_end}}
+                  </div>
+                </div>
+
               </div>
 
             </div>
@@ -277,12 +310,11 @@
 
 import adsComponent from "@/components/ads/adsComponent";
 import shareCard from "@/components/shareCard";
-import {ADD_FAVORITE, APPLY_JOBS, CANCEL_FAVORITE,ADD_JOBS_VIEWS} from "@/api/api";
+import {ADD_FAVORITE, APPLY_JOBS, CANCEL_FAVORITE} from "@/api/api";
 import applyJobButton from '@/components/jobs/applyButton'
-import {updateWindowHeight} from "@/utils/tools";
-import {ref, onMounted, onUnmounted} from 'vue'
+import {ref} from 'vue'
 import {useStore} from 'vuex'
-import {useRouter, useRoute} from 'vue-router'
+import {useRouter} from 'vue-router'
 
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -303,14 +335,13 @@ export default {
     const showMoreVisible = ref(true)
     const store = useStore()
     const router = useRouter()
-    const route = useRoute()
 
     const showMoreAboutJobDetails = ()=>{
       showMoreVisible.value = true
     }
-
     const accessToken = process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN
     const mapStyle = process.env.VUE_APP_MAP_BOX_STYLE
+
     function initMap(lng,lat){
       mapboxgl.accessToken = accessToken;
 
@@ -465,37 +496,10 @@ export default {
        router.go(-1)
     }
 
-    function addJobViews(id){
-      let params = {
-        job_id:id
-      }
-      ADD_JOBS_VIEWS(params).then(res=>{
-        console.log(res)
-      }).catch(err=>{
-        console.log(err)
-      })
-    }
-    
-    onMounted(()=>{
+    setTimeout(function (){
+      initMap(props.detailData.lng, props.detailData.lat)
+    },6000)
 
-      setTimeout(function (){
-        initMap(props.detailData.lng, props.detailData.lat)
-      },3000)
-
-      let jobId = route.params.id;
-
-      let token = localStorage.getItem('token')
-      if(token){
-        addJobViews(jobId)
-      }
-
-    })
-
-    onUnmounted(()=>{
-      updateWindowHeight()
-      window.onresize = null
-    })
-   
     return {
       shareDialogVisible,
       locationUrl,

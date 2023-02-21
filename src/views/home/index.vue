@@ -173,7 +173,7 @@
 
             </div>
 
-            <div class="f-c-btn-container">
+            <div class="f-c-btn-container" v-if="!token">
               <el-button type="primary" size="large" round @click="signUp()">
                 SIGN UP
               </el-button>
@@ -267,7 +267,7 @@
 
             </div>
 
-            <div class="f-c-btn-container">
+            <div class="f-c-btn-container" v-if="!token">
               <el-button type="primary" size="large" round @click="signUp()">SIGN UP</el-button>
             </div>
 
@@ -336,7 +336,7 @@
 
             </div>
 
-            <div class="f-c-btn-container">
+            <div class="f-c-btn-container" v-if="!token">
               <el-button type="primary" size="large" round @click="signUp()">SIGN UP</el-button>
             </div>
 

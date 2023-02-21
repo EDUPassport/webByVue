@@ -106,9 +106,11 @@
                       </p>
                       <div class="basic-info-c-r-b">
                         <div class="basic-info-c-hobbies">
-                          <div class="basic-info-c-hobby"
-                               v-for="(item,i) in countriesTraveledList" :key="i">
-                            {{ item.object_en }}
+                          <div class="basic-info-c-hobby">
+                            <el-icon color="#6648ff">
+                              <IconEpLocationInformation />
+                            </el-icon>
+                             {{educatorContact.address}}
                           </div>
                         </div>
 <!--                        <div class="basic-info-c-hobbies">-->
@@ -244,9 +246,19 @@
                   <el-row :gutter="50" >
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <div class="preferences-c-item">
-                        <div class="preferences-c-item-label">Places lived in</div>
+                        <div class="preferences-c-item-label">Places lived</div>
                         <div class="object-show-container" >
                           <div class="object-show-item" v-for="(item,i) in countriesLivedList" :key="i">
+                            {{ item.object_en }}
+                          </div>
+                        </div>
+                      </div>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <div class="preferences-c-item">
+                        <div class="preferences-c-item-label">Places traveled</div>
+                        <div class="object-show-container" >
+                          <div class="object-show-item" v-for="(item,i) in countriesTraveledList" :key="i">
                             {{ item.object_en }}
                           </div>
                         </div>
@@ -272,6 +284,10 @@
                         </div>
                       </div>
                     </el-col>
+
+                  </el-row>
+
+                  <el-row :gutter="50">
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <div class="preferences-c-item">
                         <div class="preferences-c-item-label">Preferred Job Type</div>
@@ -282,10 +298,6 @@
                         </div>
                       </div>
                     </el-col>
-
-                  </el-row>
-
-                  <el-row :gutter="50">
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <div class="preferences-c-item">
                         <div class="preferences-c-item-label"> Preferred Age To Teach</div>
@@ -328,7 +340,7 @@
         title="Languages"
         direction="rtl"
         :before-close="handleLanguagesClose"
-        custom-class="languages-drawer"
+        class="languages-drawer"
     >
       <div class="add-languages-drawer-container">
         <el-form
@@ -3642,6 +3654,9 @@ export default {
 }
 
 .basic-info-c-hobby{
+  display: flex;
+  align-items: center;
+
   margin-right: 15px;
   font-size: 23px;
   font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;

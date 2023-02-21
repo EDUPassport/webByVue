@@ -1117,12 +1117,10 @@ export default {
     },
     viewAllApplicants(jobId, unreadId, unreadStatus) {
 
-      // this.selectedApplicantStatus = !this.selectedApplicantStatus;
       this.selectedJobId = jobId;
 
-      // if (this.selectedApplicantStatus) {
-      //
-      // }
+      this.sApplicantsData = [];
+
       if(unreadStatus){
         let data = {
           id: unreadId,

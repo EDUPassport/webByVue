@@ -41,6 +41,8 @@
             :workingHoursData="workingHoursData"
             :adsData="jobsAdsListTop"
             :adsHeight="jobAdsHeight"
+            :lng="jobLngValue"
+            :lat="jobLatValue"
 
         ></jobDetailComponent>
 
@@ -112,7 +114,9 @@ export default {
       otherJobLimit:10,
       otherJobTotalNum:0,
       otherJobListData:[],
-      jobDetailHeight:0
+      jobDetailHeight:0,
+      jobLngValue:0,
+      jobLatValue:0
 
     }
   },
@@ -264,21 +268,18 @@ export default {
             this.workingHoursData = JSON.parse(workHours)
           }
 
-          setTimeout(function () {
-            self.initMap(res.message.lng,res.message.lat)
-          },3000)
+          this.jobLngValue = res.message.lng;
+          this.jobLatValue = res.message.lat;
+
+          // setTimeout(function () {
+          //   self.initMap(res.message.lng,res.message.lat)
+          // },3000)
 
           this.showLoadingStatus = false
         }
       }).catch(err=>{
         console.log(err)
         this.showLoadingStatus = false
-        // if(err.msg){
-        //   this.$message.error(err.msg)
-        // }
-        // if(err.message){
-        //   this.$message.error(err.message)
-        // }
       })
 
     },
@@ -486,33 +487,14 @@ export default {
 
     },
     otherJobPageChange(e) {
-      console.log(e)
-      // this.showLoadingStatus = true;
       this.otherJobPage = e
       this.getCompanyJobList(this.companyInfo.user_id,e, this.otherJobLimit)
-
     },
     backToResults(){
       this.$router.push('/jobs')
-      // this.$router.go(-1)
-      // this.showCompanyStatus = false;
-      // this.isOther = false;
-      // this.$router.push({path:'/jobs',query:{id:this.selectedJobId,page:this.jobPage}})
-
     },
     turnJobDetail(id){
-
       this.$router.push({path:'/jobs/detail',query:{id:id}})
-
-      // this.showCompanyStatus = false;
-      // if(isOther){
-      //   this.$router.push({path:'/jobs',query:{id:id,page:page,from:1}})
-      //
-      // }else{
-      //   this.$router.push({path:'/jobs',query:{id:id,page:page}})
-      //
-      // }
-
     }
 
 

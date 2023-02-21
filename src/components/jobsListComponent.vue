@@ -66,7 +66,7 @@
               <div class="jobs-list-item-title" @click="turnJobDetail(item.id)">
                 {{ item.job_title }}
               </div>
-              <view class="jobs-list-item-salary">
+              <div class="jobs-list-item-salary">
                 <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
                 {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
                 <span v-if="item.payment_period == 112">hourly</span>
@@ -74,29 +74,26 @@
                 <span v-if="item.payment_period == 114">weekly</span>
                 <span v-if="item.payment_period == 115">monthly</span>
                 <span v-if="item.payment_period == 116">annually</span>
-              </view>
+              </div>
               <div class="jobs-list-item-address">
                 {{ item.address }}
               </div>
 
               <div class="jobs-list-item-b">
                 <div class="jobs-list-item-b-l">
-                  <view class="jobs-list-item-work-type">
-                    <i class="iconfont el-icon-alishijian"></i>
-                    <span v-if="item.employment_type == 1">FT</span>
-                    <span v-if="item.employment_type == 2">PT</span>
-                    <span v-if="item.employment_type == 3">S</span>
-                  </view>
+                  <div class="jobs-list-item-work-type">
+                    <span>{{item.employment_type_en}}</span>
+                  </div>
 
                 </div>
 
                 <div class="jobs-list-item-b-r">
-                  <view class="jobs-list-item-date">
+                  <div class="jobs-list-item-date">
                     <el-icon>
                       <Calendar/>
                     </el-icon>&nbsp;
                     {{ $filters.howLongFormat(item.refresh_time) }}
-                  </view>
+                  </div>
 
                 </div>
               </div>
@@ -157,7 +154,7 @@
               <div class="jobs-list-item-title" @click="turnJobDetail(item.id)">
                 {{ item.job_title }}
               </div>
-              <view class="jobs-list-item-salary">
+              <div class="jobs-list-item-salary">
                 <!--    Hourly:112 Daily:113 Weekly:114 Monthly:115 Annually:116                -->
                 {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
                 <span v-if="item.payment_period == 112">hourly</span>
@@ -165,29 +162,34 @@
                 <span v-if="item.payment_period == 114">weekly</span>
                 <span v-if="item.payment_period == 115">monthly</span>
                 <span v-if="item.payment_period == 116">annually</span>
-              </view>
+              </div>
               <div class="jobs-list-item-address">
                 {{ item.address }}
               </div>
 
               <div class="jobs-list-item-b">
                 <div class="jobs-list-item-b-l">
-                  <view class="jobs-list-item-work-type">
-                    <i class="iconfont el-icon-alishijian"></i>
-                    <span v-if="item.employment_type == 1">FT</span>
-                    <span v-if="item.employment_type == 2">PT</span>
-                    <span v-if="item.employment_type == 3">S</span>
-                  </view>
+                  <div class="jobs-list-item-work-type" v-if="item.employment_type_en">
 
+                    <el-tooltip
+                        class="box-item"
+                        effect="light"
+                        :content="item.employment_type_en"
+                        placement="bottom-start"
+                    >
+                      <span>{{item.employment_type_en}}</span>
+                    </el-tooltip>
+
+                  </div>
                 </div>
 
                 <div class="jobs-list-item-b-r">
-                  <view class="jobs-list-item-date">
-                    <el-icon>
+                  <div class="jobs-list-item-date">
+                    <el-icon :size="12">
                       <Calendar/>
-                    </el-icon>&nbsp;
-                    {{ $filters.howLongFormat(item.refresh_time) }}
-                  </view>
+                    </el-icon>
+                    <span>{{ $filters.howLongFormat(item.refresh_time) }}</span>
+                  </div>
 
                 </div>
               </div>
@@ -561,34 +563,37 @@ export default {
 }
 
 .jobs-list-item-work-type {
+  width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jobs-list-item-work-type span {
   font-size: 16px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
-.jobs-list-item-work-type span {
-  margin-left: 4px;
+.jobs-list-item-b-l{
+  width: 60%;
 }
 
-.jobs-list-item-gender {
-  margin-left: 5px;
-  font-size: 12px;
-}
-
-.jobs-list-item-gender span {
-  margin-left: 4px;
-}
-
-.jobs-list-item-work-exp {
-  margin-left: 5px;
-  font-size: 12px;
-}
-
-.jobs-list-item-work-exp span {
-  margin-left: 4px;
+.jobs-list-item-b-r{
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .jobs-list-item-date {
+  display: flex;
+  align-items: center;
+}
+
+.jobs-list-item-date span{
+  margin-left: 4px;
   font-size: 16px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
@@ -607,24 +612,20 @@ export default {
 }
 
 .xll-ads-container{
-  /*padding: 0 25px 25px 25px;*/
   margin-bottom: 50px;
   margin-top: 50px;
 }
 
 .xll-ads-swiper-item{
-  /*background-color: #FFFFFF;*/
   width: 100%;
-
 }
 
 .xll-ads{
-  /*width: 90%;*/
   overflow: hidden;
   border-radius: 14px;
   width: calc(100% - 50px);
   margin: 0 auto;
-  box-shadow: 0px 0px 10px #0000001A;
+  box-shadow: 0 0 10px #0000001A;
 }
 
 .xll-ads-img{

@@ -4,7 +4,7 @@
 
     <div class="e-a-label">
       Your applications updates
-      <el-button link primary @click="turnMyApplications()">SEE ALL UPDATES</el-button>
+      <el-button link primary @click="turnMyApplications()">see all updates</el-button>
     </div>
     <el-scrollbar max-height="320px" class="e-a-c">
       <template v-if="myApplyJobData.length>0">
@@ -60,45 +60,14 @@
           </div>
 
         </div>
-        <!--      <div class="e-a-item-bg">-->
-        <!--        <div class="e-a-item">-->
-        <!--          <div class="e-a-item-l">-->
-        <!--            <el-avatar class="e-a-item-avatar"></el-avatar>-->
-        <!--          </div>-->
-        <!--          <div class="e-a-item-m">-->
-        <!--            <div class="e-a-item-m-1">Columbia University</div>-->
-        <!--            <div class="e-a-item-m-2">-->
-        <!--              Art History Teacher-->
-        <!--            </div>-->
-        <!--            <div class="e-a-item-m-3">-->
-        <!--              Salary: $90,000-120,000-->
-        <!--            </div>-->
-        <!--            <div class="e-a-item-m-3">-->
-        <!--              Paris, France-->
-        <!--            </div>-->
-        <!--            <div class="e-a-item-m-3">-->
-        <!--              Seasonal-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--          <div class="e-a-item-r">-->
-        <!--            <div class="e-a-item-r-1">-->
-        <!--              Position closed-->
-        <!--            </div>-->
-        <!--            <div class="e-a-item-r-3">-->
-        <!--              Updated: June 19, 2022-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </div>-->
-
-        <!--      </div>-->
 
       </template>
 
       <template v-else>
-        <el-empty description="..."></el-empty>
+        <el-empty description="You haven't applied for any jobs yet">
+          <el-button type="primary" round @click="searchJobs()">Search jobs</el-button>
+        </el-empty>
       </template>
-
-
 
     </el-scrollbar>
   </div>
@@ -133,7 +102,12 @@ export default {
 
     const currentUser = computed(()=>store.state.currentUser)
 
+    function searchJobs(){
+      router.push({path:'/jobs'})
+    }
+
     return {
+      searchJobs,
       setNowChatUserInfo,
       setShowChatStatus,
       currentUser,

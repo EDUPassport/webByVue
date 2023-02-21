@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-affix :offset="0" :z-index="3000">
+    <el-affix :offset="0">
       <el-header class="header-container" height="auto">
         <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
           <el-col :xs="4" :sm="4" :md="2" :lg="2" :xl="2">
@@ -53,25 +53,26 @@
 
               </el-dialog>
 
-              <el-dropdown size="default">
-                    <span class="el-dropdown-link-job">
-                          EDU JOBS
-                    <el-icon class="el-icon--right">
-                      <arrow-down/>
-                      </el-icon>
-                    </span>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item @click="goChinaJob()">
-                      <span class="el-dropdown-link-job-1">China</span>
-                    </el-dropdown-item>
-                    <el-dropdown-item @click="goInternationalJob()">
-                      <span class="el-dropdown-link-job-1">International</span>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+<!--              <el-dropdown size="default">-->
+<!--                    <span class="el-dropdown-link-job">-->
+<!--                          EDU JOBS-->
+<!--                    <el-icon class="el-icon&#45;&#45;right">-->
+<!--                      <arrow-down/>-->
+<!--                      </el-icon>-->
+<!--                    </span>-->
+<!--                <template #dropdown>-->
+<!--                  <el-dropdown-menu>-->
+<!--                    <el-dropdown-item @click="goChinaJob()">-->
+<!--                      <span class="el-dropdown-link-job-1">China</span>-->
+<!--                    </el-dropdown-item>-->
+<!--                    <el-dropdown-item @click="goInternationalJob()">-->
+<!--                      <span class="el-dropdown-link-job-1">International</span>-->
+<!--                    </el-dropdown-item>-->
+<!--                  </el-dropdown-menu>-->
+<!--                </template>-->
+<!--              </el-dropdown>-->
 
+              <router-link to="/jobs" exact> EDU JOBS</router-link>
               <router-link to="/deals" exact> EDU DEALS</router-link>
               <router-link to="/events" exact> EDU EVENTS</router-link>
               <template v-if="envBlog === 'yes'">
@@ -125,7 +126,7 @@
 
                       <div class="user-dropdown-ll">
 
-                        <div class="user-dropdown-bell" v-if="isThirdCompanyStatus != 1">
+                        <div class="user-dropdown-bell">
                           <el-popover :width="330">
                             <template #reference>
                               <el-icon class="circle-circle" :size="20" color="#6650B3"
@@ -209,24 +210,12 @@
 
                         <el-dropdown size="large"
                                      trigger="click"
-                                     :hide-on-click="false"
+                                     :hide-on-click="true"
                                      popper-class="xll-dropdown"
                         >
-
                           <div class="el-dropdown-link-container">
                             <span class="el-dropdown-link" v-if="identity == 0">Guest</span>
                             <span class="el-dropdown-link" v-else>
-
-<!--                              <template v-if="identity == 1">Educator</template>-->
-
-<!--                              <template v-if="identity == 2">Edu-Business</template>-->
-
-<!--                              <template v-if="identity == 3">Edu-Business</template>-->
-
-<!--                              <template v-if="identity == 4">Edu-Business</template>-->
-
-<!--                              <template v-if="identity == 5">Vendor</template>-->
-
                               {{companyName}}
                             </span>
                             <el-icon :size="24" style="cursor:pointer;margin-left: 5px;">
@@ -447,9 +436,7 @@
 
                         </el-dropdown>
 
-
                       </div>
-
 
                     </div>
                   </div>
@@ -902,7 +889,6 @@ export default {
           this.$store.commit('companyName', companyName)
           this.$store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
 
-
         }
       }).catch(err => {
         console.log(err)
@@ -936,11 +922,12 @@ export default {
           this.getAllIdentity()
           this.getUserMenuList(uid, identityValue, companyIdValue, uid)
 
-          setTimeout(function () {
+          setTimeout(function (){
             self.$router.push({path: '/overview', query: {}})
             self.$loading().close()
-          }, 1200)
-          // window.location.reload()
+          }, 3000)
+
+
         }
       }).catch(err => {
         console.log(err)
@@ -1274,9 +1261,58 @@ export default {
           this.$store.commit('currentCompanyId', companyId)
           this.$store.commit('menuData', res.message)
 
-          this.getBasicInfo(identity)
+          // this.getBasicInfo(identity)
+          USER_INFO_BY_TOKEN_V2({
+            identity: identity
+          }).then(res => {
+            // console.log(res)
+            if (res.code == 200) {
 
-          this.$router.push('/account/home')
+              let userContact = res.message.user_contact;
+
+              let companyInfo = {};
+              let name = userContact.first_name + ' ' + userContact.last_name;
+              let companyName = ''
+              let avatar = 'https://oss.esl-passport.cn/educator.png';
+
+              if (identity == 1) {
+                avatar = userContact.headimgurl;
+                companyName = name;
+              }
+
+              if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
+
+                if (userContact.company) {
+                  companyInfo = userContact.company;
+                  avatar = companyInfo.logo;
+                  // name = companyInfo.company_name;
+                  companyName = companyInfo.company_name;
+                }
+
+              }
+
+              this.handleSetCurrentUser(userContact.id, identity, userContact.company_id, name, avatar)
+
+              localStorage.setItem('name', name)
+              localStorage.setItem('avatar', avatar)
+              localStorage.setItem('is_third_company', res.message.user_contact.is_third_company)
+
+              this.$store.commit('username', name)
+              this.$store.commit('userAvatar', avatar)
+              this.$store.commit('companyName', companyName)
+              this.$store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
+
+              if(res.message.user_contact.is_third_company){
+                this.$router.push('/')
+              }else{
+                this.$router.push('/account/home')
+              }
+
+            }
+          }).catch(err => {
+            console.log(err)
+            // this.$message.error(err.msg)
+          })
 
           this.$loading().close()
 
