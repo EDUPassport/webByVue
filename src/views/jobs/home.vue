@@ -18,7 +18,7 @@
                     <span v-if="filterByApplicantStatus">Applications</span>
                   </div>
 
-                  <el-dropdown class="da-filter">
+                  <el-dropdown class="da-filter" v-if="identity == 2 || identity == 3 || identity == 4">
                       <span class="da-dropdown-span">
                          <el-icon style="margin-right: 4px;">
                            <IconSubwayFourBox/>
@@ -36,7 +36,7 @@
                       </span>
                     <template #dropdown>
                       <el-dropdown-menu>
-                        <el-dropdown-item v-if="identity == 2 || identity == 3 || identity == 4"  @click="filterByJobs()">
+                        <el-dropdown-item   @click="filterByJobs()">
                           <span class="da-dropdown-item-span">Jobs</span>
                         </el-dropdown-item>
                         <el-dropdown-item   @click="filterByApplicants()" >
