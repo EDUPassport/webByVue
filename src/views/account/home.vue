@@ -93,7 +93,8 @@
                         </div>
                       </div>
 
-                      <el-dialog class="dialog-custom-css" :width="accountEmailWith" v-model="accountEmailDialogVisible">
+                      <el-dialog class="dialog-custom-css" :width="accountEmailWith"
+                                 v-model="accountEmailDialogVisible">
                         <template #header="{ titleId, titleClass }">
                           <div class="my-header">
                             <h3 :id="titleId" :class="titleClass">
@@ -121,7 +122,7 @@
                           </el-form-item>
 
                           <el-form-item label="VERIFICATION CODE" prop="code" required>
-                            <el-input  v-model="accountEmailForm.code" placeholder="Activation code"></el-input>
+                            <el-input v-model="accountEmailForm.code" placeholder="Activation code"></el-input>
                           </el-form-item>
 
                         </el-form>
@@ -893,7 +894,7 @@ export default {
       forgotDialogVisible: false,
 
       contributorWidth: '50%',
-      accountEmailWith:'600px',
+      accountEmailWith: '600px',
       accountEmailDialogVisible: false,
 
 
@@ -1041,7 +1042,7 @@ export default {
             this.educatorContact = educatorContact;
           }
 
-          if(identity == 1){
+          if (identity == 1) {
             let username = userContact.first_name + ' ' + userContact.last_name;
             this.$store.commit('username', username)
             this.$store.commit('companyName', username)
@@ -1270,85 +1271,66 @@ export default {
 
           let companyData = []
 
-            let educator = res.message.educator;
-            let recruiter = res.message.recruiting;
-            let school = res.message.school;
-            let other = res.message.other;
-            let vendor = res.message.vendor;
+          let educator = res.message.educator;
+          let recruiter = res.message.recruiting;
+          let school = res.message.school;
+          let other = res.message.other;
+          let vendor = res.message.vendor;
 
-            let currentCompanyId = this.currentCompanyId;
+          let currentCompanyId = this.currentCompanyId;
 
-            if (educator) {
+          if (educator) {
 
-              for (let i = 0; i < educator.length; i++) {
-                educator[i]['identity'] = 1
-              }
-
-              companyData = companyData.concat(educator)
-              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
-              if (index) {
-                let first = companyData.splice(index, 1)[0];
-                companyData.unshift(first)
-              }
-
+            for (let i = 0; i < educator.length; i++) {
+              educator[i]['identity'] = 1
             }
 
-            if (recruiter) {
+            companyData = companyData.concat(educator)
 
-              for (let i = 0; i < recruiter.length; i++) {
-                recruiter[i]['identity'] = 2
-              }
-              companyData = companyData.concat(recruiter)
-              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
-              if (index) {
-                let first = companyData.splice(index, 1)[0];
-                companyData.unshift(first)
-              }
 
+          }
+
+          if (recruiter) {
+
+            for (let i = 0; i < recruiter.length; i++) {
+              recruiter[i]['identity'] = 2
+            }
+            companyData = companyData.concat(recruiter)
+          }
+
+          if (school) {
+
+            for (let i = 0; i < school.length; i++) {
+              school[i]['identity'] = 3
             }
 
-            if (school) {
+            companyData = companyData.concat(school)
 
-              for (let i = 0; i < school.length; i++) {
-                school[i]['identity'] = 3
-              }
+          }
 
-              companyData = companyData.concat(school)
-              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
-              if (index) {
-                let first = companyData.splice(index, 1)[0];
-                companyData.unshift(first)
-              }
-
+          if (other) {
+            for (let i = 0; i < other.length; i++) {
+              other[i]['identity'] = 4
             }
 
-            if (other) {
-              for (let i = 0; i < other.length; i++) {
-                other[i]['identity'] = 4
-              }
+            companyData = companyData.concat(other)
 
-              companyData = companyData.concat(other)
-              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
-              if (index) {
-                let first = companyData.splice(index, 1)[0];
-                companyData.unshift(first)
-              }
-
+          }
+          if (vendor) {
+            for (let i = 0; i < vendor.length; i++) {
+              vendor[i]['identity'] = 5
             }
-            if (vendor) {
-              for (let i = 0; i < vendor.length; i++) {
-                vendor[i]['identity'] = 5
-              }
-              companyData = companyData.concat(vendor)
-              let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
-              if (index) {
-                let first = companyData.splice(index, 1)[0];
-                companyData.unshift(first)
-              }
+            companyData = companyData.concat(vendor)
+          }
 
+          if(this.identity){
+            let index = companyData.findIndex(item => item.id == currentCompanyId && item.identity == this.identity)
+            if (index) {
+              let first = companyData.splice(index, 1)[0];
+              companyData.unshift(first)
             }
 
-          // console.log(companyData)
+          }
           this.companyData = companyData
 
         }
@@ -1457,10 +1439,10 @@ export default {
         if (valid) {
 
           if (sMenuData.length <= 0) {
-            return  this.$message({
-              type:'warning',
-              message:'Choose what the added user will have access to',
-              grouping:true
+            return this.$message({
+              type: 'warning',
+              message: 'Choose what the added user will have access to',
+              grouping: true
             })
 
           }
@@ -1493,9 +1475,9 @@ export default {
           this.addLoading = false;
           // this.contributorDialogVisible = false;
           this.$message({
-            type:'warning',
-            message:'Please complete all required fields',
-            grouping:true
+            type: 'warning',
+            message: 'Please complete all required fields',
+            grouping: true
           })
           console.log('error submit!!')
           return false
@@ -1518,10 +1500,10 @@ export default {
         if (valid) {
 
           if (sMenuData.length <= 0) {
-            return  this.$message({
-              type:'warning',
-              message:'Choose what the added user will have access to',
-              grouping:true
+            return this.$message({
+              type: 'warning',
+              message: 'Choose what the added user will have access to',
+              grouping: true
             })
           }
 
@@ -1571,9 +1553,9 @@ export default {
           this.addLoading = false;
           // this.contributorDialogVisible = false;
           this.$message({
-            type:'warning',
-            message:'Please complete all required fields',
-            grouping:true
+            type: 'warning',
+            message: 'Please complete all required fields',
+            grouping: true
           })
           console.log('error submit!!')
           return false;
@@ -1765,7 +1747,7 @@ export default {
       let self = this;
       let email = this.accountEmailForm.email
 
-      this.$refs[formName].validateField('email',(valid) => {
+      this.$refs[formName].validateField('email', (valid) => {
         if (valid) {
 
           if (email) {
@@ -1796,9 +1778,9 @@ export default {
           } else {
 
             return this.$message({
-              type:'warning',
-              message:'Please enter a valid email address',
-              grouping:true
+              type: 'warning',
+              message: 'Please enter a valid email address',
+              grouping: true
             })
 
           }
@@ -1806,9 +1788,9 @@ export default {
         } else {
           console.log('error submit!!')
           return this.$message({
-            type:'warning',
-            message:'Please enter a valid email address',
-            grouping:true
+            type: 'warning',
+            message: 'Please enter a valid email address',
+            grouping: true
           })
         }
       })
@@ -2174,7 +2156,8 @@ export default {
   font-size: 20px;
   color: #6650B3;
 }
-.account-change-email-edit-btn{
+
+.account-change-email-edit-btn {
   color: #6650B3;
 }
 
@@ -2337,10 +2320,8 @@ export default {
   right: 2px;
   top: 6px;
   bottom: 6px;
-//margin: auto; padding: 0 20px;
-  border-radius: 4px;
-//height: 20px; background-color: #ffffff;
-  font-size: 14px;
+//margin: auto; padding: 0 20px; border-radius: 4px;
+//height: 20px; background-color: #ffffff; font-size: 14px;
   font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   z-index: 100;
   cursor: pointer;

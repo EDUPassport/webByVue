@@ -174,7 +174,7 @@ export default {
       if(page){
         this.otherJobPage = Number(page)
       }
-      // this.getCompanyJobList(userId, this.otherJobPage, this.otherJobLimit)
+      this.getCompanyJobList(userId, this.otherJobPage, this.otherJobLimit)
 
     }else{
 

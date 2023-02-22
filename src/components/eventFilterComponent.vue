@@ -110,7 +110,7 @@
         <el-option
             v-for="item in locationData"
             :key="item.id"
-            :label="item.Pinyin"
+            :label="item.name"
             :value="item.id"
         >
         </el-option>

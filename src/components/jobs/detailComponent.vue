@@ -151,7 +151,7 @@
                 <div class="job-detail-c-item"
                      v-if="detailData.apply_due_date && detailData.apply_due_date !='0000-00-00'"
                 >
-                  <div class="job-detail-c-item-l">Application:</div>
+                  <div class="job-detail-c-item-l">Application deadline:</div>
                   <div class="job-detail-c-item-r">
                     {{detailData.apply_due_date}}
                   </div>

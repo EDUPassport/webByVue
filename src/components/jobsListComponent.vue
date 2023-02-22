@@ -81,18 +81,26 @@
 
               <div class="jobs-list-item-b">
                 <div class="jobs-list-item-b-l">
-                  <div class="jobs-list-item-work-type">
-                    <span>{{item.employment_type_en}}</span>
+                  <div class="jobs-list-item-work-type" v-if="item.employment_type_en">
+                    <el-tooltip
+                        class="box-item"
+                        effect="light"
+                        :content="item.employment_type_en"
+                        placement="bottom-start"
+                    >
+                      <span>{{item.employment_type_en}}</span>
+                    </el-tooltip>
+
                   </div>
 
                 </div>
 
                 <div class="jobs-list-item-b-r">
                   <div class="jobs-list-item-date">
-                    <el-icon>
+                    <el-icon :size="12">
                       <Calendar/>
                     </el-icon>&nbsp;
-                    {{ $filters.howLongFormat(item.refresh_time) }}
+                    <span>{{ $filters.howLongFormat(item.refresh_time) }}</span>
                   </div>
 
                 </div>

@@ -1575,39 +1575,38 @@ export default {
 }
 
 .user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 80px;
   height: 80px;
   border-radius: 80px;
-
-  margin-left: 10px;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.4);
-  overflow: hidden;
   padding: 4px;
 }
 
 .user-avatar-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 80px;
-
-  cursor: pointer;
+  width: 100%;
+  height: 100%;
 }
 
 .user-1-r {
-  margin: 0 10px;
+  margin: 0 20px 0 0;
 }
+
 .user-1-r-container{
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
 }
+
 .user-name {
 
+  max-width: 500px;
   margin-left: 25px;
-
-  font-size: 23px;
-  line-height: 30px;
+  font-size: 22px;
 
   text-align: right;
   white-space: nowrap;
@@ -1996,6 +1995,7 @@ export default {
   }
 
   .user-name {
+    max-width:160px;
     font-size: 14px;
   }
 
