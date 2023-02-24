@@ -1622,10 +1622,7 @@ export default {
 
 
               if(action == 'edit'){
-                if (this.accountImageFileList.length > 0) {
-                  this.uploadAccountImages(this.cid)
-                }
-
+                this.uploadAccountImages(this.cid)
                 this.updateUserProfilePercentage()
 
                 if(typeValue === 1){
@@ -2244,10 +2241,14 @@ export default {
     },
     uploadAccountImages(companyId) {
       let oldData = []
-      this.accountImageFileList.forEach(file => {
-        oldData.push(file.url)
-      })
 
+      let accountImagesData = this.accountImageFileList
+
+      if(accountImagesData.length > 0){
+        accountImagesData.forEach(file => {
+          oldData.push(file.url)
+        })
+      }
       let params = {
         token: localStorage.getItem('token'),
         identity: 3,

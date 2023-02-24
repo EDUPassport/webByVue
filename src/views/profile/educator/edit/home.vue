@@ -1830,9 +1830,7 @@ export default {
 
               if (action == 'edit') {
                 // this.$router.go(-1)
-                if (this.accountImageFileList.length > 0) {
-                  this.uploadAccountImages(this.cid)
-                }
+                this.uploadAccountImages(this.cid)
 
                 this.updateUserProfilePercentage()
                 this.$store.commit('username', this.basicForm.name)
@@ -3093,9 +3091,13 @@ export default {
 
       let oldData = []
 
-      this.accountImageFileList.forEach(file => {
-        oldData.push(file.url)
-      })
+      let accountImagesData = this.accountImageFileList
+
+      if(accountImagesData.length > 0){
+        accountImagesData.forEach(file => {
+          oldData.push(file.url)
+        })
+      }
 
       let params = {
         token: localStorage.getItem('token'),

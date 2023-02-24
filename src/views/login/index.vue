@@ -816,6 +816,72 @@ export default {
       this.setCurrentUser(currentUser)
 
     },
+    storageLoginUserInfo(resMessage){
+
+      let self = this;
+
+      let identity = resMessage.identity;
+      let firstName = resMessage.first_name;
+      let lastName = resMessage.last_name;
+      let avatar = 'https://oss.esl-passport.cn/educator.png'
+      let companyId = resMessage.company_id;
+
+      let name = firstName + ' ' + lastName
+      let companyName = ''
+
+      localStorage.setItem('token', resMessage.token)
+      localStorage.setItem('uid', resMessage.id)
+      localStorage.setItem('identity', resMessage.identity)
+      localStorage.setItem('language', resMessage.language)
+      localStorage.setItem('email', resMessage.email)
+      localStorage.setItem('company_id', resMessage.company_id)
+      localStorage.setItem('name', name)
+      localStorage.setItem('first_name', firstName)
+      localStorage.setItem('last_name', lastName)
+
+      if (identity == 1) {
+        avatar = resMessage.headimgurl;
+        companyName = firstName + ' ' + lastName;
+      }
+      if(identity == 2){
+        avatar = resMessage.recruiting_info.logo;
+        companyName = resMessage.recruiting_info.company_name;
+      }
+      if(identity == 3){
+        avatar = resMessage.school_info.logo;
+        companyName = resMessage.school_info.company_name;
+      }
+      if(identity == 4){
+        avatar = resMessage.other_info.logo;
+        companyName = resMessage.other_info.company_name;
+      }
+      if(identity == 5){
+        avatar = resMessage.vendor_info.logo;
+        companyName = resMessage.vendor_info.company_name;
+      }
+
+      this.$store.commit('currentCompanyId', resMessage.company_id)
+
+      if (resMessage.third_company_id) {
+        localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
+        this.$store.commit('thirdCompanyId', resMessage.third_company_id)
+      }
+
+      this.$store.commit('username', name)
+      this.$store.commit('userAvatar', avatar)
+      this.$store.commit('identity', resMessage.identity)
+      this.$store.commit('companyName', companyName)
+      this.$store.commit('changeThirdCompanyStatus', resMessage.is_third_company)
+
+      this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, avatar)
+      this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
+
+      setTimeout(function () {
+        self.skipHomePage()
+        self.submitLoginLoadingStatus = false
+      }, 1500)
+
+    },
     submitLoginForm(formName) {
       let self = this;
       if (self.humanVerifyStatus) {
@@ -829,41 +895,8 @@ export default {
                 this.rememberMeAction(params, 1)
 
                 let resMessage = res.message;
-                // console.log(resMessage.company_id)
-                localStorage.setItem('token', resMessage.token)
-                localStorage.setItem('uid', resMessage.id)
-                localStorage.setItem('identity', resMessage.identity)
-                localStorage.setItem('language', resMessage.language)
-                localStorage.setItem('email', resMessage.email)
-                localStorage.setItem('company_id', resMessage.company_id)
-                this.$store.commit('currentCompanyId', resMessage.company_id)
 
-                if (resMessage.third_company_id) {
-                  localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
-                  this.$store.commit('thirdCompanyId', resMessage.third_company_id)
-                }
-
-                let identity = resMessage.identity;
-                let firstName = resMessage.first_name;
-                let lastName = resMessage.last_name;
-                let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
-                let companyId = resMessage.company_id;
-
-                localStorage.setItem('name', firstName + ' ' + lastName)
-                localStorage.setItem('first_name', firstName)
-                localStorage.setItem('last_name', lastName)
-
-                this.$store.commit('identity', resMessage.identity)
-
-                this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, currentAvatar)
-
-                // localStorage.setItem('currentUser',JSON.stringify(currentUser));
-                this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
-
-                setTimeout(function () {
-                  self.skipHomePage()
-                  self.submitLoginLoadingStatus = false
-                }, 1500)
+                this.storageLoginUserInfo(resMessage)
 
               }
             }).catch(err => {
@@ -891,8 +924,7 @@ export default {
                 })
 
               } else {
-                // this.$message.error(err.msg)
-                // this.sendPrivatePassword(params.email)
+
                 this.loginErrorDialogVisible = true;
 
               }

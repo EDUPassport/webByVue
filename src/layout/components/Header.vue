@@ -600,7 +600,8 @@ export default {
       inAppLastPage: 0,
       inAppUnreadTotal: 0,
 
-      showEarthStatus:false
+      showEarthStatus:false,
+      nowMenuData:[]
 
     }
   },
@@ -1261,6 +1262,8 @@ export default {
           this.$store.commit('currentCompanyId', companyId)
           this.$store.commit('menuData', res.message)
 
+          let nowMenuData = res.message;
+
           // this.getBasicInfo(identity)
           USER_INFO_BY_TOKEN_V2({
             identity: identity
@@ -1303,7 +1306,8 @@ export default {
               this.$store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
 
               if(res.message.user_contact.is_third_company){
-                this.$router.push('/')
+                let nowPath = nowMenuData[0]['link']
+                this.$router.push({path:nowPath})
               }else{
                 this.$router.push('/account/home')
               }

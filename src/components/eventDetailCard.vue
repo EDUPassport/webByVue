@@ -85,6 +85,11 @@
               <span v-if="info.is_online == 1">online</span>
               <span v-if="info.is_online == 2">offline</span>
               <span v-if="info.is_online == 3">both</span>
+              <span v-if="info.is_online == 2 || info.is_online == 3">
+               <el-icon :size="20" style="cursor: pointer" color="#9173ff" @click="showMap(info.lng, info.lat)">
+                      <IconMaterialSymbolsMap />
+               </el-icon>
+              </span>
             </el-space>
           </div>
           <div class="event-dialog-r-b-r">
@@ -96,13 +101,100 @@
     </div>
   </el-dialog>
 
+  <el-dialog v-model="mapDialogVisible"
+             width="auto"
+             center
+             :show-close="false"
+             :before-close="beforeMapDialogClose"
+  >
+    <div class="map-container" v-loading="mapDialogLoading">
+      <div class="event-dialog-close-container">
+        <el-icon class="event-dialog-close-icon"
+                 @click="beforeMapDialogClose()"
+                 :size="20">
+          <CloseBold />
+        </el-icon>
+      </div>
+      <div id="mapContainer" class="basemap"></div>
+    </div>
+
+  </el-dialog>
+
 </div>
 </template>
 
 <script>
+import {ref} from 'vue'
+
+import mapboxgl from "mapbox-gl";
+import 'mapbox-gl/dist/mapbox-gl.css'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+
 export default {
   name: "eventDetailCard",
   props:['visible','info'],
+  setup(){
+    const mapDialogVisible = ref(false)
+    const mapDialogLoading = ref(false)
+    const accessToken = process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN
+    const mapStyle = process.env.VUE_APP_MAP_BOX_STYLE
+
+    function initMap(lng,lat){
+      mapboxgl.accessToken = accessToken;
+
+      const map = new mapboxgl.Map({
+        container: "mapContainer",
+        center: [lng, lat],
+        style: mapStyle,
+        zoom: 12
+      });
+      const nav = new mapboxgl.NavigationControl();
+      map.addControl(nav, "top-right");
+
+      const geolocate = new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      });
+
+      map.addControl(geolocate, "top-right")
+
+      const geocoder = new MapboxGeocoder({
+        "accessToken": accessToken,
+        "mapboxgl": mapboxgl
+      })
+
+      map.addControl(geocoder, 'top-left')
+      const marker = new mapboxgl.Marker()
+      marker.setLngLat([lng,lat]).addTo(map)
+
+    }
+
+    function showMap(lng,lat){
+      mapDialogVisible.value = true;
+      mapDialogLoading.value = true;
+      setTimeout(function (){
+        initMap(lng,lat)
+        mapDialogLoading.value = false;
+      }, 2000)
+
+    }
+
+    function beforeMapDialogClose(){
+      mapDialogVisible.value = false;
+      mapDialogLoading.value =false;
+    }
+
+
+    return {
+      mapDialogLoading,
+      mapDialogVisible,
+      showMap,
+      beforeMapDialogClose
+    }
+  },
   methods:{
     close(){
       this.$emit('close')
@@ -310,7 +402,28 @@ export default {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
+.map-container{
+  width: 1038px;
+  height: 720px;
+  margin: 0 auto;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+}
+
+#mapContainer{
+  height: 720px;
+}
+
 @media screen and (max-width: 768px) {
+  .map-container{
+    width: 100%;
+    height: auto;
+  }
+
+  #mapContainer{
+    height: 400px;
+  }
+
   .event-dialog-container{
     width: 100%;
     flex-direction: column;
