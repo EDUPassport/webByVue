@@ -5,16 +5,28 @@
         <meSideMenu></meSideMenu>
       </div>
       <div class="post-r-container">
-        <div class="post-r-container-bg">
+        <div class="post-r-container-bg" v-loading="postJobLoadingValue">
 
           <div class="account-profile-t">
 
             <div class="account-profile-t-l">New job post</div>
             <div class="account-profile-t-r">
 
-              <el-button class="account-profile-discard-btn" link round @click="discardJobPost()">
-                DISCARD
-              </el-button>
+              <el-popconfirm
+                  width="320"
+                  confirm-button-text="OK"
+                  cancel-button-text="No, Thanks"
+                  icon-color="#626AEF"
+                  title="Are you sure to discard this?"
+                  @confirm="discardJobPost()"
+              >
+                <template #reference>
+                  <el-button class="account-profile-discard-btn" link round  >
+                    DISCARD
+                  </el-button>
+                </template>
+              </el-popconfirm>
+
 <!--              <el-button class="account-profile-draft-btn" plain round>-->
 <!--                SAVE AS DRAFT-->
 <!--              </el-button>-->
@@ -1082,7 +1094,8 @@ export default {
 
       jobSuccessTitle:'',
       jobSuccessDesc:'',
-      jobSuccessVisible:false
+      jobSuccessVisible:false,
+      postJobLoadingValue:true
 
 
     }
@@ -1099,7 +1112,7 @@ export default {
     window.onresize = null
   },
   mounted() {
-
+    let self =this;
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
 
@@ -1126,6 +1139,10 @@ export default {
     }else {
       this.initMap(this.mapCenterValue)
     }
+
+    setTimeout(function (){
+      self.postJobLoadingValue = false
+    }, 3000)
 
 
   },

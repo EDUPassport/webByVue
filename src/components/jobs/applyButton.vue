@@ -40,8 +40,17 @@ export default {
     applyJob() {
       let identity = localStorage.getItem('identity')
       let token = localStorage.getItem('token')
+      let userId = localStorage.getItem('uid')
 
       if(token){
+
+        if(userId == this.jobInfo.user_id){
+          this.applyVisible = true;
+          this.applyTitle = 'Warning'
+          this.applyDescription = 'Users cannot apply for jobs posted by themselves'
+          return;
+        }
+
         if(this.selectJobId == this.jobInfo.id){
           this.applyBtnLoading = true;
         }

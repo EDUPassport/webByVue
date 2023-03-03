@@ -17,9 +17,7 @@
 <!--                  <h1>18 <span>times this week</span></h1>-->
 <!--                </div>-->
                 <div class="dashboard-1">
-                  <h1> <span>
-                    More awesome widgets are coming soon...
-                  </span></h1>
+                   <span>More awesome widgets are coming soon...</span>
                 </div>
               </div>
 
@@ -103,9 +101,9 @@
 
               <div class="dashboard-1-container">
                 <div class="dashboard-1">
-                  <h1> <span>
+                  <span>
                     More awesome widgets are coming soon...
-                  </span></h1>
+                  </span>
                 </div>
               </div>
 
@@ -159,9 +157,9 @@
 
               <div class="dashboard-1-container">
                 <div class="dashboard-1">
-                  <h1> <span>
+                  <span>
                     More awesome widgets are coming soon...
-                  </span></h1>
+                  </span>
                 </div>
               </div>
 
@@ -197,7 +195,7 @@
 import defaultAvatar from '@/assets/default/avatar.png'
 import meSideMenu from "@/components/meSideMenu";
 import {
-  ADS_LIST, ALL_ASSIGN_USERS, ALL_JOB_RESUME, DEALS_LIST, EVENTS_LIST, USER_INFO_BY_TOKEN_V2,
+  ADS_LIST, ALL_ASSIGN_USERS, ALL_JOB_RESUME, EVENTS_MY_EVENT, MY_DEALS, USER_INFO_BY_TOKEN_V2,
   USER_INFO_VISITOR_V2, USER_MENU_COMPANY
 } from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
@@ -340,8 +338,8 @@ export default {
     }
 
     if(this.identity == 5){
-      this.getDealsList(1,5)
-      this.getEventsList(1,5)
+      this.getDealsList(1,1000)
+      this.getEventsList(1,1000)
     }
 
   },
@@ -532,16 +530,13 @@ export default {
     },
     getDealsList(page, limit) {
 
-      let filterResult = this.filterResultData;
-
-      let paramsA = {
+      let params = {
+        status:1,
         page: page,
         limit: limit
       }
 
-      let params = Object.assign(paramsA,filterResult)
-
-      DEALS_LIST(params).then(res => {
+      MY_DEALS(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.dealsListData = res.message.data;
@@ -555,16 +550,13 @@ export default {
     },
     getEventsList(page,limit){
 
-      let filterResult = this.filterResultData;
-
-      let paramsA = {
+      let params = {
+        status:1,
         page: page,
         limit: limit
       }
 
-      let params = Object.assign(paramsA,filterResult)
-
-      EVENTS_LIST(params).then(res=>{
+      EVENTS_MY_EVENT(params).then(res=>{
         console.log(res)
         if(res.code == 200){
           this.eventsListData = res.message.data;
@@ -673,7 +665,7 @@ export default {
   align-items: flex-end;
 }
 
-.dashboard-1 h1 span{
+.dashboard-1 span{
   margin-left: 15px;
   font-size: 20px;
   font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;

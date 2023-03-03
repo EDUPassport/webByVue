@@ -1476,8 +1476,6 @@ export default {
   font-family: Assistant-SemiBold , Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 18px;
   line-height: 30px;
-  font-weight: 600;
-
 }
 
 .nav-link-container a:hover {

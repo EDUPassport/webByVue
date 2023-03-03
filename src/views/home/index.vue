@@ -411,16 +411,31 @@
             As we continue to grow rapidly, new updates & releases are coming weekly! Sign up for our newsletter to stay in the loop.
           </div>
 
-          <div class="s-input-container">
-            <div class="s-input-l">
-              <el-input placeholder="Your email address" v-model="subscribeEmailValue"></el-input>
+          <el-form
+              ref="subscribeForm"
+              :model="subscribeForm"
+              :rules="subscribeRules"
+              label-width="120px"
+              label-position="top"
+              class="demo-ruleForm"
+          >
+            <div class="s-input-container">
+
+              <div class="s-input-l">
+                <el-form-item prop='email'>
+                  <el-input placeholder="Your email address" v-model="subscribeForm.email"></el-input>
+                </el-form-item>
+              </div>
+              <div class="s-input-r">
+                <el-form-item>
+                  <el-button type="primary" round @click="subscribe('subscribeForm')">
+                    Subscribe
+                  </el-button>
+                </el-form-item>
+              </div>
+
             </div>
-            <div class="s-input-r">
-              <el-button type="primary" round @click="subscribe()">
-                Subscribe
-              </el-button>
-            </div>
-          </div>
+          </el-form>
 
         </div>
       </el-col>
@@ -498,7 +513,20 @@ export default {
       initLoadingStatus: false,
       token: localStorage.getItem('token'),
       homeArrowRightSize:80,
-      menuDrawerStatus:false
+      menuDrawerStatus:false,
+      subscribeForm:{
+        email:''
+      },
+      subscribeRules:{
+        email: [
+          {
+            type: 'email',
+            required: true,
+            message: 'please enter your valid email',
+            trigger: 'blur',
+          },
+        ],
+      }
 
     }
   },
@@ -604,20 +632,35 @@ export default {
     window.onresize = null
   },
   methods: {
-    subscribe() {
-      let params = {
-        email: this.subscribeEmailValue
-      }
-      ADD_SUBSCRIBE_EMAIL(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Subscribe Success')
-          this.subscribeEmailValue = ''
+    subscribe(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let params = Object.assign({}, this.subscribeForm);
+
+          ADD_SUBSCRIBE_EMAIL(params).then(res => {
+            console.log(res)
+            if (res.code == 200) {
+              this.$message.success('Subscribe Success')
+              this.subscribeForm.email = ''
+            }
+          }).catch(err => {
+            console.log(err)
+            this.$message.error(err.msg)
+          })
+
+        } else {
+          this.$message({
+            type:'warning',
+            message:'please enter your valid email',
+            grouping:true
+          })
+
+          console.log('error submit!!')
+          return false
         }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
       })
+
+
     },
     turnJobs(){
       this.$router.push('/jobs')

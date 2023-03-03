@@ -329,7 +329,12 @@ import {
   LOGIN_PHONE_SMS_V2,
   LOGIN_PHONE_PWD_V2,
   USER_MENU_LIST,
-  SEND_USER_PRIVATE_PASSWORD
+  SEND_USER_PRIVATE_PASSWORD,
+  EDUCATOR_PERCENTAGE_V2,
+  RECRUITER_PERCENTAGE_V2,
+  SCHOOL_PERCENTAGE_V2,
+  OTHER_PERCENTAGE_V2,
+  VENDOR_PERCENTAGE_V2
 } from "@/api/api";
 //LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
@@ -842,22 +847,27 @@ export default {
       if (identity == 1) {
         avatar = resMessage.headimgurl;
         companyName = firstName + ' ' + lastName;
+        this.updateEducatorPercentage()
       }
       if(identity == 2){
         avatar = resMessage.recruiting_info.logo;
         companyName = resMessage.recruiting_info.company_name;
+        this.updateRecruiterPercentage()
       }
       if(identity == 3){
         avatar = resMessage.school_info.logo;
         companyName = resMessage.school_info.company_name;
+        this.updateSchoolPercentage()
       }
       if(identity == 4){
         avatar = resMessage.other_info.logo;
         companyName = resMessage.other_info.company_name;
+        this.updateOtherPercentage()
       }
       if(identity == 5){
         avatar = resMessage.vendor_info.logo;
         companyName = resMessage.vendor_info.company_name;
+        this.updateVendorPercentage()
       }
 
       this.$store.commit('currentCompanyId', resMessage.company_id)
@@ -881,6 +891,62 @@ export default {
         self.submitLoginLoadingStatus = false
       }, 1500)
 
+    },
+    updateEducatorPercentage() {
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      EDUCATOR_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    updateRecruiterPercentage(){
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      RECRUITER_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    updateSchoolPercentage(){
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      SCHOOL_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    updateOtherPercentage(){
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      OTHER_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    updateVendorPercentage(){
+      let params = {
+        token: localStorage.getItem('token')
+      }
+
+      VENDOR_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
     },
     submitLoginForm(formName) {
       let self = this;

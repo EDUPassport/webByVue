@@ -100,10 +100,27 @@
 <!--                      </div>-->
                     </div>
                     <div class="basic-info-c-r">
+
                       <p>
-                        {{educatorContact.bio}}
-<!--                        <span>READ MORE</span>-->
+                        {{ $filters.textEllipsis(educatorContact.bio, bioTextLength) }}
+                        <template v-if="$filters.textEllipsisStatus(educatorContact.bio, bioTextLength)">
+                          <el-button v-if="bioTextLength===-1"
+                                     class="readmore-btn"
+                                     link
+                                     type="primary"
+                                     @click="closeMoreForBio()">
+                            close
+                          </el-button>
+                          <el-button v-else
+                                     class="readmore-btn"
+                                     link
+                                     type="primary"
+                                     @click="readMoreForBio()">
+                            read more
+                          </el-button>
+                        </template>
                       </p>
+
                       <div class="basic-info-c-r-b">
                         <div class="basic-info-c-hobbies">
                           <div class="basic-info-c-hobby">
@@ -165,9 +182,24 @@
                         {{ work.location }}
                       </div>
                       <div class="exp-c-item-4">
-                        {{ work.teaching_experience }}
+                        {{ $filters.textEllipsis(work.teaching_experience, work.len) }}
+                        <template v-if="$filters.textEllipsisStatus(work.teaching_experience, work.len)">
+                          <el-button v-if=" work.len === -1"
+                                     class="readmore-btn"
+                                     link
+                                     type="primary"
+                                     @click="closeMoreForWorkExp(i)">
+                            close
+                          </el-button>
+                          <el-button v-else
+                                     class="readmore-btn"
+                                     link
+                                     type="primary"
+                                     @click="readMoreForWorkExp(i)">
+                            read more
+                          </el-button>
+                        </template>
                       </div>
-                      <!--                    <div class="exp-c-item-readmore">READ MORE</div>-->
                     </div>
                   </div>
 
@@ -199,7 +231,24 @@
                         }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
                       </div>
                       <div class="education-c-item-r-4">
-                        {{ education.field_of_study }}
+                        {{ $filters.textEllipsis(education.field_of_study, education.len) }}
+                        <template v-if="$filters.textEllipsisStatus(education.field_of_study, education.len)">
+                          <el-button v-if=" education.len === -1"
+                                     class="readmore-btn"
+                                     link
+                                     type="primary"
+                                     @click="closeMoreForEducation(i)">
+                            close
+                          </el-button>
+                          <el-button v-else
+                                     class="readmore-btn"
+                                     link
+                                     type="primary"
+                                     @click="readMoreForEducation(i)">
+                            read more
+                          </el-button>
+                        </template>
+
                       </div>
                     </div>
                   </div>
@@ -333,75 +382,6 @@
       </div>
 
     </div>
-    <!--    languages -->
-    <el-drawer
-        :size="languagesDrawerSize"
-        v-model="languagesDrawer"
-        title="Languages"
-        direction="rtl"
-        :before-close="handleLanguagesClose"
-        class="languages-drawer"
-    >
-      <div class="add-languages-drawer-container">
-        <el-form
-            ref="languagesForm"
-            :model="languagesForm"
-            :rules="languagesRules"
-            label-width="120px"
-            label-position="top"
-            class="demo-ruleForm"
-        >
-          <el-form-item prop="languageValue">
-            <el-input v-model="languagesForm.languageValue" placeholder="Add your language"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="addCustomLanguage('languagesForm')">
-              Add
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="languages-drawer-container-bg">
-        <div class="languages-drawer-container">
-          <div>
-            <div class="languages-d-item" v-for="(item,i) in languagesCustomData" :key="i">
-              <div class="languages-d-item-l">
-                {{ item.object_en }}
-              </div>
-              <div class="languages-d-item-r">
-                <el-rate
-                    v-model="item.score"
-                    @change="languagesCustomScoreChange($event,item)"
-                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                >
-                </el-rate>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div class="languages-d-item" v-for="(item,i) in languagesData" :key="i">
-              <div class="languages-d-item-l">
-                {{ item.object_en }}
-              </div>
-              <div class="languages-d-item-r">
-                <el-rate
-                    v-model="item.score"
-                    @change="languagesScoreChange($event,item)"
-                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                >
-                </el-rate>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="languages-d-btn">
-          <el-button type="primary" @click="updateLanguagesScore()">Update</el-button>
-        </div>
-
-      </div>
-
-
-    </el-drawer>
 
     <el-dialog v-model="imagesDialogVisible" fullscreen>
       <swiper
@@ -433,7 +413,6 @@
       </swiper>
     </el-dialog>
 
-    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
   </div>
 </template>
 
@@ -459,16 +438,11 @@ import meSideMenu from "@/components/meSideMenu";
 import {ref} from 'vue'
 
 import {
-  USER_OBJECT_LIST,
-  ADD_PROFILE_V2,
-  EDUCATOR_CONTACT_EDIT_V2,
   USER_INFO_BY_TOKEN_V2,
-  ADD_USER_IMG_V2,
-  ADD_LANGUAGE_SCORE_V2,
-  EDUCATOR_PERCENTAGE_V2, UPLOAD_IMG, USER_INFO_VISITOR_V2, ADD_FAVORITE, CANCEL_FAVORITE
+  EDUCATOR_PERCENTAGE_V2,USER_INFO_VISITOR_V2, ADD_FAVORITE, CANCEL_FAVORITE
 } from '@/api/api'
-import {encode, decode} from 'js-base64'
-import xllLoading from '@/components/xllLoading'
+import {decode} from 'js-base64'
+
 import chatButton from "@/components/chat/chatButton";
 import {updateWindowHeight} from "@/utils/tools";
 
@@ -476,7 +450,6 @@ export default {
   name: "profile",
   components: {
     meSideMenu,
-    xllLoading,
     Swiper,
     SwiperSlide,
     chatButton
@@ -498,61 +471,11 @@ export default {
   data() {
     return {
       imagesDialogVisible:false,
-      uploadLoadingStatus:false,
-      editAccountImageStatus:false,
-      uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
-      uploadHeaders: {
-        platform: 4
-      },
-      uploadData: {
-        token: localStorage.getItem('token')
-      },
       educatorContact: {},
       userContact: {},
-      languagesDrawerSize:"30%",
-      languagesDrawer: false,
-      languagesData: [],
-      languagesCustomData: [],
-      languagesIconClasses: [
-        'icon-rate-face-1',
-        'icon-rate-face-2',
-        'icon-rate-face-3',
-      ],
-      languagesForm: {
-        languageValue: ''
-      },
-      languagesRules: {
-        languageValue: [
-          {
-            required: true,
-            message: 'Add your language',
-            trigger: 'blur',
-          }
-        ],
-      },
-      languagesObjArr: [],
-
       certificationsList: [],
-      canEditCertifications: false,
-      editCertificationsList: [],
-      addCertificationsStatus: false,
-      ownCertificationsValue: '',
-      ownCertificationsList: [],
-      selectCertificationsList: [],
-      selectCertificationsArr: [],
       educationInfo: [],
-      educationNum: 1,
-      showMoreEducationStatus: true,
-
       teachExpList: [],
-      canEditTeachExp: false,
-      editTeachExpList: [],
-      addTeachExpStatus: false,
-      ownTeachExpValue: '',
-      ownTeachExpList: [],
-      selectTeachExpList: [],
-      selectTeachExpArr: [],
-
       countriesLivedList: [],
       countriesTraveledList: [],
       languagesList: [],
@@ -565,95 +488,15 @@ export default {
       userImagesList: [],
       workInfo: [],
       hobbiesList: [],
-
-      canEditCountriesTraveled: false,
-      editCountriesTraveledList: [],
-      addCountriesTraveledStatus: false,
-      ownCountriesTraveledValue: '',
-      ownCountriesTraveledList: [],
-      selectCountriesTraveledList: [],
-      selectCountriesTraveledArr: [],
-
-      canEditCountriesLived: false,
-      editCountriesLivedList: [],
-      addCountriesLivedStatus: false,
-      ownCountriesLivedValue: '',
-      ownCountriesLivedList: [],
-      selectCountriesLivedList: [],
-      selectCountriesLivedArr: [],
-
-      workExpNum: 1,
-      showMoreWorkExpStatus: true,
-
-      canEditHobby: false,
-      editHobbyInfoList: ['Fitness', 'Photography', 'Travel'],
-      addHobbyInfoStatus: false,
-      ownHobbyInfoValue: '',
-      ownHobbyInfoList: [],
-      selectHobbyInfoList: [],
-      selectHobbyInfoArr: [],
-
       profilePhotoUrl: '',
       backgroundUrl: '',
-      dialogAccountImageUrl: '',
-      dialogAccountImageVisible: false,
       accountImageFileList: [],
       introVideoUrl: '',
       resumeUrl: '',
-
-      canEditSubject: false,
-      editSubjectList: [],
-      addSubjectStatus: false,
-      ownSubjectValue: '',
-      ownSubjectList: [],
-      selectSubjectList: [],
-      selectSubjectArr: [],
-
-      canEditLocation: false,
-      editLocationList: [],
-      addLocationStatus: false,
-      ownLocationValue: '',
-      ownLocationList: [],
-      selectLocationList: [],
-      selectLocationArr: [],
-
-      canEditJobType: false,
-      editJobTypeList: [],
-      addJobTypeStatus: false,
-      ownJobTypeValue: '',
-      ownJobTypeList: [],
-      selectJobTypeList: [],
-      selectJobTypeArr: [],
-
-      canEditAgeToTeach: false,
-      editAgeToTeachList: [],
-      addAgeToTeachStatus: false,
-      ownAgeToTeachValue: '',
-      ownAgeToTeachList: [],
-      selectAgeToTeachList: [],
-      selectAgeToTeachArr: [],
-
-      canEditRegion: false,
-      editRegionList: [],
-      addRegionStatus: false,
-      ownRegionValue: '',
-      ownRegionList: [],
-      selectRegionList: [],
-      selectRegionArr: [],
-
-      canEditBenefits: false,
-      editBenefitsList: [],
-      addBenefitsStatus: false,
-      ownBenefitsValue: '',
-      ownBenefitsList: [],
-      selectBenefitsList: [],
-      selectBenefitsArr: [],
-
-      editVideoStatus:false,
-      editResumeStatus:false,
-
       isFromOther:false,
-      isFavorite:false
+      isFavorite:false,
+      bioTextLength:140,
+
 
     }
   },
@@ -699,6 +542,24 @@ export default {
 
   },
   methods: {
+    readMoreForBio(){
+      this.bioTextLength = -1
+    },
+    closeMoreForBio(){
+      this.bioTextLength = 140
+    },
+    readMoreForWorkExp(i){
+      this.workInfo[i]['len'] = -1
+    },
+    closeMoreForWorkExp(i){
+      this.workInfo[i]['len'] = 240
+    },
+    readMoreForEducation(i){
+      this.educationInfo[i]['len'] = -1
+    },
+    closeMoreForEducation(i){
+      this.educationInfo[i]['len'] = 240
+    },
     chatSuccess(){
       this.$router.push({path:'/chat/messages'})
     },
@@ -752,27 +613,6 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    editBasicInfo() {
-      let strObj = {
-        i:1,
-        action:'edit'
-      }
-      let str = encode(JSON.stringify(strObj))
-
-      this.$router.push({path:'/profile/contact/user',query:{s:str}})
-    },
-    editEducatorContactInfo(){
-      let strObj = {
-        i:1,
-        action:'edit'
-      }
-      let str = encode(JSON.stringify(strObj))
-      this.$router.push({path:'/educator/edit/basic',query:{s:str}})
-    },
-    editLanguages() {
-      this.getUserObjectList()
-      this.languagesDrawer = true
-    },
     getUserInfoForVisitor(userId,companyId) {
       let params = {
         user_id:userId,
@@ -799,9 +639,6 @@ export default {
             this.certificationsList = educatorContact.Teaching_certificate;
           }
 
-          if (educatorContact.education_info) {
-            this.educationInfo = educatorContact.education_info;
-          }
 
           if (educatorContact.places_lived) {
             this.countriesLivedList = educatorContact.places_lived;
@@ -832,8 +669,6 @@ export default {
             this.subjectList = educatorContact.subject;
           }
           if (educatorContact.images) {
-            console.log(educatorContact.images)
-
             let userImages = educatorContact.images
             if (userImages.length>0) {
               let userImagesArr = []
@@ -852,8 +687,21 @@ export default {
           }
 
           if (educatorContact.work_info) {
-            this.workInfo = educatorContact.work_info;
+            let workInfo = educatorContact.work_info;
+            workInfo.forEach(item=>{
+              item.len = 240
+            })
+            this.workInfo = workInfo;
           }
+
+          if (educatorContact.education_info) {
+            let educationInfo = educatorContact.education_info;
+            educationInfo.forEach(item=>{
+              item.len = 240
+            })
+            this.educationInfo = educationInfo
+          }
+
 
           if (educatorContact.Teaching_experience) {
             this.teachExpList = educatorContact.Teaching_experience;
@@ -875,11 +723,10 @@ export default {
           let videoUrl = educatorContact.video_url
           let resumePdf = educatorContact.resume_pdf
           if (videoUrl) {
-            this.editVideoStatus = true;
             this.introVideoUrl = videoUrl
           }
           if (resumePdf) {
-            this.editResumeStatus = true;
+
             this.resumeUrl = resumePdf
           }
 
@@ -914,10 +761,6 @@ export default {
             this.certificationsList = educatorContact.Teaching_certificate;
           }
 
-          if (educatorContact.education_info) {
-            this.educationInfo = educatorContact.education_info;
-          }
-
           if (educatorContact.places_lived) {
             this.countriesLivedList = educatorContact.places_lived;
           }
@@ -947,8 +790,6 @@ export default {
             this.subjectList = educatorContact.subject;
           }
           if (educatorContact.images) {
-            console.log(educatorContact.images)
-
             let userImages = educatorContact.images
             if (userImages.length>0) {
               let userImagesArr = []
@@ -960,15 +801,27 @@ export default {
                userImagesArr.push(userImageObj)
               })
               this.accountImageFileList = userImagesArr
-              console.log(this.accountImageFileList)
 
             }
 
           }
 
           if (educatorContact.work_info) {
-            this.workInfo = educatorContact.work_info;
+            let workInfo = educatorContact.work_info;
+            workInfo.forEach(item=>{
+              item.len = 240
+            })
+            this.workInfo = workInfo;
           }
+
+          if (educatorContact.education_info) {
+            let educationInfo = educatorContact.education_info;
+            educationInfo.forEach(item=>{
+              item.len = 240
+            })
+            this.educationInfo = educationInfo
+          }
+
 
           if (educatorContact.Teaching_experience) {
             this.teachExpList = educatorContact.Teaching_experience;
@@ -990,11 +843,10 @@ export default {
           let videoUrl = educatorContact.video_url
           let resumePdf = educatorContact.resume_pdf
           if (videoUrl) {
-            this.editVideoStatus = true;
             this.introVideoUrl = videoUrl
           }
           if (resumePdf) {
-            this.editResumeStatus = true;
+
             this.resumeUrl = resumePdf
           }
 
@@ -1004,1440 +856,6 @@ export default {
         console.log(err)
         this.$message.error(err.msg)
       })
-    },
-
-    handleLanguagesClose(e) {
-      console.log(e)
-      this.languagesDrawer = false
-    },
-    getUserObjectList() {
-      let params = {
-        pid: 2
-      }
-      USER_OBJECT_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.languagesData = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    addCustomLanguage(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          let ownLanguageValue = this.languagesForm.languageValue;
-          let obj = {
-            id: 0,
-            object_cn: ownLanguageValue,
-            object_en: ownLanguageValue,
-            p_name_cn: '语言',
-            p_name_en: 'languages',
-            pid: 2
-          }
-
-          this.languagesCustomData.push(obj)
-          this.languagesForm.languageValue = ''
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-    },
-    languagesScoreChange(e, value) {
-      // console.log(e)
-      // console.log(value)
-      let obj = {
-
-        object_id: value.id,
-        score: e,
-        object_name: value.object_en,
-        object_pid: value.pid
-      }
-      let indexKey = this.languagesObjArr.findIndex(item => item.object_id == value.id)
-
-      if (e > 0) {
-        if (this.languagesObjArr.length > 9) {
-          this.$message.warning('Choose up to 10 tags')
-        } else {
-          if (indexKey == -1) {
-            this.languagesObjArr.push(obj)
-          } else {
-            this.languagesObjArr[indexKey]['score'] = e
-          }
-        }
-
-      } else {
-        let arr = [];
-        this.languagesObjArr.forEach(item => {
-          if (item.object_id != value.id) {
-            arr.push(item)
-          }
-        })
-        this.languagesObjArr = arr;
-      }
-      // console.log(this.languagesObjArr)
-    },
-    languagesCustomScoreChange(e, value) {
-
-      let indexKey = this.languagesObjArr.findIndex(item => item.object_name == value.object_en)
-
-      let obj = {
-        object_id: value.id,
-        score: e,
-        object_name: value.object_en,
-        object_pid: value.pid
-      }
-
-      if (e > 0) {
-        if (this.languagesObjArr.length > 9) {
-          this.$message.warning('Choose up to 10 tags')
-        } else {
-          if (indexKey == -1) {
-            this.languagesObjArr.push(obj)
-          } else {
-            this.languagesObjArr[indexKey]['score'] = e
-          }
-
-        }
-
-      } else {
-        let arr = [];
-        this.languagesObjArr.forEach(item => {
-          if (item.object_name != value.object_en) {
-            arr.push(item)
-          }
-        })
-        this.languagesObjArr = arr;
-      }
-      // console.log(this.languagesObjArr)
-    },
-    updateLanguagesScore() {
-      let params = {
-        company_id:this.educatorContact.id,
-        object_arr: this.languagesObjArr,
-        token: localStorage.getItem('token')
-      }
-      ADD_LANGUAGE_SCORE_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.languagesDrawer = false
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    turnIndexList(type) {
-      let data = {
-        token: localStorage.getItem('token'),
-        pid: type
-      }
-      this.selectSubjectList = [];
-      this.ownSubjectList = [];
-      this.selectLocationList = [];
-      this.ownLocationList = [];
-      this.selectCertificationsList = [];
-      this.ownCertificationsList = [];
-      this.selectCountriesTraveledList = [];
-      this.ownCountriesTraveledList = [];
-      this.selectCountriesLivedList = [];
-      this.ownCountriesLivedList = [];
-      this.selectTeachExpList = [];
-      this.ownTeachExpList = [];
-
-      USER_OBJECT_LIST(data).then(res => {
-        console.log(res)
-        if (type == 120) {
-          this.editTeachExpList = res.message;
-          let len = this.teachExpList.length;
-          let teachExpList = this.teachExpList;
-          for (let i = 0; i < len; i++) {
-
-            if (teachExpList[i].object_id == 0) {
-              let obj = {
-                id: teachExpList[i].object_id,
-                object_pid: teachExpList[i].object_pid,
-                object_name: teachExpList[i].object_en
-              }
-              this.ownTeachExpList.push(obj);
-              this.selectTeachExpList.push(obj)
-            } else {
-              let obj = {
-                id: teachExpList[i].object_id,
-                pid: teachExpList[i].object_pid,
-                object_en: teachExpList[i].object_en,
-                object_cn: teachExpList[i].object_cn
-              }
-              this.selectTeachExpList.push(obj)
-            }
-          }
-
-          this.canEditTeachExp = true;
-        }
-        if (type == 1) {
-          this.editSubjectList = res.message;
-          let len = this.subjectList.length;
-          let subjectList = this.subjectList;
-          for (let i = 0; i < len; i++) {
-            console.log(subjectList[i].object_id);
-            if (subjectList[i].object_id == 0) {
-              let obj = {
-                id: subjectList[i].object_id,
-                object_pid: subjectList[i].object_pid,
-                object_name: subjectList[i].object_en
-              }
-              this.ownSubjectList.push(obj);
-              this.selectSubjectList.push(obj)
-            } else {
-              let obj = {
-                id: subjectList[i].object_id,
-                pid: subjectList[i].object_pid,
-                object_en: subjectList[i].object_en,
-                object_cn: subjectList[i].object_cn
-              }
-              this.selectSubjectList.push(obj)
-            }
-          }
-
-          this.canEditSubject = true;
-        }
-        // location
-        if (type == 71) {
-          this.editLocationList = res.message;
-          console.log(this.locationList);
-          let len = this.locationList.length;
-          let locationList = this.locationList;
-          console.log(len);
-          for (let i = 0; i < len; i++) {
-            console.log(locationList[i].object_id);
-            if (locationList[i].object_id == 0) {
-              let obj = {
-                id: locationList[i].object_id,
-                object_pid: locationList[i].object_pid,
-                object_name: locationList[i].object_en
-              }
-              this.ownLocationList.push(obj);
-              this.selectLocationList.push(obj)
-            } else {
-              let obj = {
-                id: locationList[i].object_id,
-                pid: locationList[i].object_pid,
-                object_en: locationList[i].object_en,
-                object_cn: locationList[i].object_cn
-              }
-              this.selectLocationList.push(obj)
-            }
-          }
-
-          this.canEditLocation = true;
-        }
-        // job type
-        if (type == 3) {
-          this.editJobTypeList = res.message;
-          console.log(this.jobTypeList);
-          let len = this.jobTypeList.length;
-          let jobTypeList = this.jobTypeList;
-          console.log(len);
-          for (let i = 0; i < len; i++) {
-            console.log(jobTypeList[i].object_id);
-            if (jobTypeList[i].object_id == 0) {
-              let obj = {
-                id: jobTypeList[i].object_id,
-                object_pid: jobTypeList[i].object_pid,
-                object_name: jobTypeList[i].object_en
-              }
-              this.ownJobTypeList.push(obj);
-              this.selectJobTypeList.push(obj)
-            } else {
-              let obj = {
-                id: jobTypeList[i].object_id,
-                pid: jobTypeList[i].object_pid,
-                object_en: jobTypeList[i].object_en,
-                object_cn: jobTypeList[i].object_cn
-              }
-              this.selectJobTypeList.push(obj)
-            }
-          }
-
-          this.canEditJobType = true;
-        }
-        // age to teach
-        if (type == 4) {
-          this.editAgeToTeachList = res.message;
-          console.log(this.ageToTeachList);
-          let len = this.ageToTeachList.length;
-          let ageToTeachList = this.ageToTeachList;
-          console.log(len);
-          for (let i = 0; i < len; i++) {
-            console.log(ageToTeachList[i].object_id);
-            if (ageToTeachList[i].object_id == 0) {
-              let obj = {
-                id: ageToTeachList[i].object_id,
-                object_pid: ageToTeachList[i].object_pid,
-                object_name: ageToTeachList[i].object_en
-              }
-              this.ownAgeToTeachList.push(obj);
-              this.selectAgeToTeachList.push(obj)
-            } else {
-              let obj = {
-                id: ageToTeachList[i].object_id,
-                pid: ageToTeachList[i].object_pid,
-                object_en: ageToTeachList[i].object_en,
-                object_cn: ageToTeachList[i].object_cn
-              }
-              this.selectAgeToTeachList.push(obj)
-            }
-          }
-
-          this.canEditAgeToTeach = true;
-        }
-        // region
-        if (type == 5) {
-          this.editRegionList = res.message;
-          console.log(this.regionList);
-          let len = this.regionList.length;
-          let regionList = this.regionList;
-          console.log(len);
-          for (let i = 0; i < len; i++) {
-            console.log(regionList[i].object_id);
-            if (regionList[i].object_id == 0) {
-              let obj = {
-                id: regionList[i].object_id,
-                object_pid: regionList[i].object_pid,
-                object_name: regionList[i].object_en
-              }
-              this.ownRegionList.push(obj);
-              this.selectRegionList.push(obj)
-            } else {
-              let obj = {
-                id: regionList[i].object_id,
-                pid: regionList[i].object_pid,
-                object_en: regionList[i].object_en,
-                object_cn: regionList[i].object_cn
-              }
-              this.selectRegionList.push(obj)
-            }
-          }
-
-          this.canEditRegion = true;
-        }
-
-        // benefits
-        if (type == 6) {
-          this.editBenefitsList = res.message;
-          console.log(this.benefitsList);
-          let len = this.benefitsList.length;
-          let benefitsList = this.benefitsList;
-          console.log(len);
-          for (let i = 0; i < len; i++) {
-            console.log(benefitsList[i].object_id);
-            if (benefitsList[i].object_id == 0) {
-              let obj = {
-                id: benefitsList[i].object_id,
-                object_pid: benefitsList[i].object_pid,
-                object_name: benefitsList[i].object_en
-              }
-              this.ownBenefitsList.push(obj);
-              this.selectBenefitsList.push(obj)
-            } else {
-              let obj = {
-                id: benefitsList[i].object_id,
-                pid: benefitsList[i].object_pid,
-                object_en: benefitsList[i].object_en,
-                object_cn: benefitsList[i].object_cn
-              }
-              this.selectBenefitsList.push(obj)
-            }
-          }
-
-          this.canEditBenefits = true;
-        }
-
-        if (type == 7) {
-          this.editCertificationsList = res.message;
-          let len = this.certificationsList.length;
-          let certificationsList = this.certificationsList;
-
-          for (let i = 0; i < len; i++) {
-            console.log(certificationsList[i].object_id);
-            if (certificationsList[i].object_id == 0) {
-              let obj = {
-                id: certificationsList[i].object_id,
-                object_pid: certificationsList[i].object_pid,
-                object_name: certificationsList[i].object_en
-              }
-              this.ownCertificationsList.push(obj);
-              this.selectCertificationsList.push(obj)
-            } else {
-              let obj = {
-                id: certificationsList[i].object_id,
-                pid: certificationsList[i].object_pid,
-                object_en: certificationsList[i].object_en,
-                object_cn: certificationsList[i].object_cn
-              }
-              this.selectCertificationsList.push(obj)
-            }
-          }
-
-          this.canEditCertifications = true;
-        }
-        if (type == 8) {
-          this.editCountriesTraveledList = res.message;
-          let len = this.countriesTraveledList.length;
-          let countriesTraveledList = this.countriesTraveledList;
-          console.log(len);
-          for (let i = 0; i < len; i++) {
-            console.log(countriesTraveledList[i].object_id);
-            if (countriesTraveledList[i].object_id == 0) {
-              let obj = {
-                id: countriesTraveledList[i].object_id,
-                object_pid: countriesTraveledList[i].object_pid,
-                object_name: countriesTraveledList[i].object_en
-              }
-              this.ownCountriesTraveledList.push(obj);
-              this.selectCountriesTraveledList.push(obj)
-            } else {
-              let obj = {
-                id: countriesTraveledList[i].object_id,
-                pid: countriesTraveledList[i].object_pid,
-                object_en: countriesTraveledList[i].object_en,
-                object_cn: countriesTraveledList[i].object_cn
-              }
-              this.selectCountriesTraveledList.push(obj)
-            }
-          }
-
-          this.canEditCountriesTraveled = true;
-        }
-        if (type == 9) {
-          this.editCountriesLivedList = res.message;
-          let len = this.countriesLivedList.length;
-          let countriesLivedList = this.countriesLivedList;
-
-          for (let i = 0; i < len; i++) {
-            console.log(countriesLivedList[i].object_id);
-            if (countriesLivedList[i].object_id == 0) {
-              let obj = {
-                id: countriesLivedList[i].object_id,
-                object_pid: countriesLivedList[i].object_pid,
-                object_name: countriesLivedList[i].object_en
-              }
-              this.ownCountriesLivedList.push(obj);
-              this.selectCountriesLivedList.push(obj)
-            } else {
-              let obj = {
-                id: countriesLivedList[i].object_id,
-                pid: countriesLivedList[i].object_pid,
-                object_en: countriesLivedList[i].object_en,
-                object_cn: countriesLivedList[i].object_cn
-              }
-              this.selectCountriesLivedList.push(obj)
-            }
-          }
-
-          this.canEditCountriesLived = true;
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    addOwnCertifications() {
-      this.addCertificationsStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownCertificationsValue,
-        object_pid: 7
-      }
-
-      let index = this.selectCertificationsList.findIndex((element) => element === obj);
-      if (index == -1) {
-        // if (this.selectCertificationsList.length > 4) {
-        // 	return false;
-        // }
-        this.ownCertificationsList.push(obj);
-        this.selectCertificationsList.push(obj);
-        this.ownCertificationsValue = '';
-      } else {
-        this.selectCertificationsList.splice(index, 1);
-      }
-      console.log(this.selectCertificationsList);
-    },
-    selectCertifications(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectCertificationsList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectCertificationsList.findIndex((element) => element === value);
-      }
-      // console.log(index);
-      if (index == -1) {
-        // if (this.selectCertificationsList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCertificationsList.push(value);
-
-      } else {
-        this.selectCertificationsList.splice(index, 1);
-      }
-      console.log(this.selectCertificationsList)
-    },
-    certificationsConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectCertificationsList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 7,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('certifications--submit--' + res.data);
-          this.canEditCertifications = false;
-          this.getUserInfo()
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-
-    },
-    addUserEducation() {
-      this.$router.push('/educator/edit/education')
-    },
-    showMoreEducation() {
-      this.educationNum = this.educationInfo.length;
-      this.showMoreEducationStatus = false;
-    },
-    turnEditEducation(education) {
-      this.$router.push({path: '/educator/edit/education', query: {educationId: education.id, type: 2}})
-    },
-    addOwnTeachExp() {
-      this.addTeachExpStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownTeachExpValue,
-        object_pid: 120
-      }
-      let index = this.selectTeachExpList.findIndex((element) => element === obj);
-      // if (index == -1) {
-      // 	this.selectTeachExpList.push(obj);
-      // 	this.ownTeachExpList.push(obj);
-      // 	this.ownTeachExpValue = '';
-      // } else {
-      // 	this.selectTeachExpList.splice(index, 1);
-      // }
-
-      this.selectTeachExpList.splice(index, 1, obj);
-      this.ownTeachExpList.push(obj);
-      this.ownTeachExpValue = '';
-    },
-    selectTeachExp(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectTeachExpList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectTeachExpList.findIndex((element) => element === value);
-      }
-
-      // if (index == -1) {
-      // 	this.selectTeachExpList.push(value);
-
-      // } else {
-      // 	this.selectTeachExpList.splice(index, 1);
-      // }
-
-      this.selectTeachExpList.splice(index, 1, value);
-
-      console.log(this.selectTeachExpList)
-    },
-    teachExpConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectTeachExpList.forEach(item => {
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 120,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          this.canEditTeachExp = false;
-          this.getUserInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-
-    },
-    addOwnCountriesTraveled() {
-      this.addCountriesTraveledStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownCountriesTraveledValue,
-        object_pid: 8
-      }
-      let index = this.selectCountriesTraveledList.findIndex((element) => element === obj);
-      if (index == -1) {
-        // if (this.selectCountriesTraveledList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCountriesTraveledList.push(obj);
-        this.ownCountriesTraveledList.push(obj);
-        this.ownCountriesTraveledValue = '';
-      } else {
-        this.selectCountriesTraveledList.splice(index, 1);
-      }
-
-    },
-    selectCountriesTraveled(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectCountriesTraveledList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectCountriesTraveledList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        // if (this.selectCountriesTraveledList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCountriesTraveledList.push(value);
-
-      } else {
-        this.selectCountriesTraveledList.splice(index, 1);
-      }
-      console.log(this.selectCountriesTraveledList)
-    },
-    countriesTraveledConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectCountriesTraveledList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 8,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('travel--submit--' + res.data);
-          this.canEditCountriesTraveled = false;
-          this.getUserInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-
-    },
-    addOwnCountriesLived() {
-      this.addCountriesLivedStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownCountriesLivedValue,
-        object_pid: 9
-      }
-      let index = this.selectCountriesLivedList.findIndex((element) => element === obj);
-      if (index == -1) {
-        // if (this.selectCountriesLivedList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCountriesLivedList.push(obj);
-        this.ownCountriesLivedList.push(obj);
-        this.ownCountriesLivedValue = '';
-      } else {
-        this.selectCountriesLivedList.splice(index, 1);
-      }
-
-    },
-    selectCountriesLived(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectCountriesLivedList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectCountriesLivedList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        // if (this.selectCountriesLivedList.length > 4) {
-        // 	return false;
-        // }
-        this.selectCountriesLivedList.push(value);
-
-      } else {
-        this.selectCountriesLivedList.splice(index, 1);
-      }
-      console.log(this.selectCountriesLivedList)
-    },
-    countriesLivedConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectCountriesLivedList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 9,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('lived--submit--' + res.data);
-          this.canEditCountriesLived = false;
-          this.getUserInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    addEducationWork() {
-      this.$router.push('/educator/edit/work')
-    },
-    showMoreWorkExp() {
-      this.workExpNum = this.workInfo.length;
-      this.showMoreWorkExpStatus = false;
-    },
-    turnEditWorkExperience(work) {
-      this.$router.push({path: '/educator/edit/work', query: {workId: work.id, type: 2}})
-    },
-    addOwnHobby() {
-      this.addHobbyInfoStatus = false;
-      let obj = this.ownHobbyInfoValue;
-      let index = this.selectHobbyInfoList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectHobbyInfoList.push(obj);
-        this.ownHobbyInfoList.push(obj);
-        this.ownHobbyInfoValue = '';
-      } else {
-        this.selectHobbyInfoList.splice(index, 1);
-      }
-
-    },
-    selectHobby(value) {
-      let index = this.selectHobbyInfoList.findIndex((element) => element === value);
-
-      if (index == -1) {
-        this.selectHobbyInfoList.push(value);
-
-      } else {
-        this.selectHobbyInfoList.splice(index, 1);
-      }
-    },
-    hobbyConfirm() {
-
-      let hobbiesStr = this.selectHobbyInfoList.join(',');
-      let data = {
-        hobbies: hobbiesStr
-      }
-      EDUCATOR_CONTACT_EDIT_V2(data).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.canEditHobby = false;
-          this.hobbiesList = this.selectHobbyInfoList;
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    handleProfilePhotoSuccess(res, file) {
-      this.$loading().close()
-
-      // console.log(res.data[0]['file_url'])
-      this.profilePhotoUrl = URL.createObjectURL(file.raw)
-      let profileLink = res.data[0]['file_url']
-      let params = {
-        profile_photo: res.data[0]['file_url']
-      }
-      // console.log(params)
-      EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.submitEducatorContactForm(profileLink, '')
-          this.$message.success('Success')
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    beforeProfilePhotoUpload(file) {
-      this.$loading({
-        text:'Uploading...'
-      })
-      const isLt2M = file.size / 1024 / 1024 < 20
-
-      if (!isLt2M) {
-        this.$message.error('Avatar picture size can not exceed 20MB')
-      }
-      return isLt2M
-    },
-    cancelUpload(){
-      this.uploadLoadingStatus = false;
-    },
-    handleBackgroundSuccess(res, file) {
-      this.uploadLoadingStatus = false;
-
-      this.backgroundUrl = URL.createObjectURL(file.raw)
-      let params = {
-        background_image: res.data[0]['file_url']
-      }
-      // console.log(params)
-      EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    beforeBackgroundUpload(file) {
-      console.log(file)
-      this.uploadLoadingStatus = true;
-    },
-    handleAccountImageRemove(file, fileList) {
-      console.log(file, fileList)
-      this.accountImageFileList = fileList
-    },
-    handleAccountImagePreview(file) {
-      // console.log(file)
-      this.dialogAccountImageUrl = file.url
-      this.dialogAccountImageVisible = true
-    },
-    beforeAccountImageUpload(file){
-      const isJpeg = file.type === 'image/png' || file.type === 'image/jpg'
-      if(!isJpeg){
-        return this.$message.error('Please select the correct file format to upload')
-      }
-      return isJpeg
-    },
-    handleAccountImageChange(fileList){
-      this.accountImageFileList.push(fileList)
-    },
-    uploadAccountImages(){
-      this.$loading({
-        text:'Uploading'
-      })
-      console.log(this.accountImageFileList)
-
-      if(this.accountImageFileList.length === 0){
-        this.$loading().close()
-        return this.$message.warning('Select File')
-      }
-
-      let imgParams = new FormData();
-      let oldData = []
-
-      let token = localStorage.getItem('token')
-      imgParams.append('token' , token)
-      imgParams.append('platform',4)
-
-      this.accountImageFileList.forEach(file=>{
-        if(file.name == ''){
-          oldData.push(file.url)
-        }else{
-          imgParams.append('file[]',file.raw)
-        }
-
-      })
-
-      if(imgParams.get('file[]')){
-
-        UPLOAD_IMG(imgParams).then(res=>{
-          console.log(res)
-          if(res.code == 200){
-            let imgData = res.data;
-            // let imgArr = [];
-            imgData.forEach(item=>{
-              oldData.push(item.file_url)
-            })
-            let params = {
-              token: localStorage.getItem('token'),
-              identity: 1,
-              company_id:this.educatorContact.id,
-              img: oldData
-            }
-            ADD_USER_IMG_V2(params).then(res => {
-              console.log(res)
-              if (res.code == 200) {
-                this.getUserInfo()
-                this.editAccountImageStatus = false;
-                this.$loading().close()
-              }
-            }).catch(err => {
-              console.log(err)
-              this.$loading().close()
-              this.$message.error(err.msg)
-            })
-          }
-
-        }).catch(err=>{
-          this.$loading().close()
-          console.log(err.code)
-        })
-
-      }else{
-
-        let params = {
-          token: localStorage.getItem('token'),
-          identity: 1,
-          company_id:this.educatorContact.id,
-          img: oldData
-        }
-
-        ADD_USER_IMG_V2(params).then(res => {
-          console.log(res)
-          if (res.code == 200) {
-            this.getUserInfo()
-            this.editAccountImageStatus = false;
-            this.$loading().close()
-          }
-        }).catch(err => {
-          console.log(err)
-          this.$loading().close()
-          this.$message.error(err.msg)
-        })
-      }
-    },
-
-    accountImagePreview(url){
-      this.dialogAccountImageVisible = true;
-      this.dialogAccountImageUrl = url;
-    },
-    handleIntroVideoSuccess(res, file) {
-      // console.log(res)
-      this.$loading().close()
-
-      this.introVideoUrl = URL.createObjectURL(file.raw)
-      let introLink = res.data[0]['file_url']
-      let params = {
-        video_url: res.data[0]['file_url']
-      }
-      // console.log(params)
-      EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.editVideoStatus = true;
-          this.submitEducatorContactForm('', introLink)
-          this.$message.success('Success')
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    beforeIntroVideoUpload(file) {
-      console.log(file)
-      this.$loading({
-        text:'Uploading...'
-      })
-    },
-    handleResumeSuccess(res, file) {
-      // this.$loading().close()
-      this.uploadLoadingStatus = false;
-
-      this.resumeUrl = URL.createObjectURL(file.raw)
-      let params = {
-        resume_pdf: res.data[0]['file_url']
-      }
-      // console.log(params)
-      EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Success')
-          this.editResumeStatus = true;
-          this.getUserInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    beforeResumeUpload(file) {
-      console.log(file)
-      this.uploadLoadingStatus = true;
-      // this.$loading({
-      //   text:'Uploading...'
-      // })
-    },
-    addOwnSubject() {
-      this.addSubjectStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownSubjectValue,
-        object_pid: 1
-      }
-      let index = this.selectSubjectList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectSubjectList.push(obj);
-        this.ownSubjectList.push(obj);
-        this.ownSubjectValue = '';
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-
-    },
-    selectSubject(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectSubjectList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectSubjectList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectSubjectList.push(value);
-
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-      // console.log(this.selectSubjectList)
-    },
-    subjectConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectSubjectList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 1,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('subject--submit--' + res.data);
-          this.canEditSubject = false;
-          this.getUserInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    addOwnLocation() {
-      this.addLocationStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownLocationValue,
-        object_pid: 71
-      }
-      let index = this.selectLocationList.findIndex((element) => element === obj)
-      if (index == -1) {
-        this.selectLocationList.push(obj);
-        this.ownLocationList.push(obj);
-        this.ownLocationValue = '';
-
-      } else {
-        this.selectLocationList.splice(index, 1);
-      }
-
-    },
-    selectLocation(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectLocationList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectLocationList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectLocationList.push(value);
-
-      } else {
-        this.selectLocationList.splice(index, 1);
-      }
-      // console.log(this.selectLocationList)
-    },
-    locationConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectLocationList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 71,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('location--submit--' + res.data);
-          this.canEditLocation = false;
-          this.getUserInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    addOwnJobType() {
-      this.addJobTypeStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownJobTypeValue,
-        object_pid: 3
-      }
-      let index = this.selectJobTypeList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectJobTypeList.push(obj);
-        this.ownJobTypeList.push(obj);
-        this.ownJobTypeValue = '';
-      } else {
-        this.selectJobTypeList.splice(index, 1);
-      }
-
-    },
-    selectJobType(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectJobTypeList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectJobTypeList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectJobTypeList.push(value);
-
-      } else {
-        this.selectJobTypeList.splice(index, 1);
-      }
-      // console.log(this.selectJobTypeList)
-    },
-    jobTypeConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectJobTypeList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 3,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('jobtype--submit--' + res.data);
-          this.canEditJobType = false;
-          this.getUserInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    addOwnAgeToTeach() {
-      this.addAgeToTeachStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownAgeToTeachValue,
-        object_pid: 4
-      }
-      let index = this.selectAgeToTeachList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectAgeToTeachList.push(obj);
-        this.ownAgeToTeachList.push(obj);
-        this.ownAgeToTeachValue = '';
-      } else {
-        this.selectAgeToTeachList.splice(index, 1);
-      }
-
-    },
-    selectAgeToTeach(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectAgeToTeachList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectAgeToTeachList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectAgeToTeachList.push(value);
-
-      } else {
-        this.selectAgeToTeachList.splice(index, 1);
-      }
-      // console.log(this.selectAgeToTeachList)
-    },
-    ageToTeachConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectAgeToTeachList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 4,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('agetoteach--submit--' + res.data);
-          this.canEditAgeToTeach = false;
-          this.getUserInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    addOwnRegion() {
-      this.addRegionStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownRegionValue,
-        object_pid: 5
-      }
-      let index = this.selectRegionList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectRegionList.push(obj);
-        this.ownRegionList.push(obj);
-        this.ownRegionValue = '';
-      } else {
-        this.selectRegionList.splice(index, 1);
-      }
-
-    },
-    selectRegion(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectRegionList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectRegionList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectRegionList.push(value);
-
-      } else {
-        this.selectRegionList.splice(index, 1);
-      }
-      // console.log(this.selectRegionList)
-    },
-    regionConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectRegionList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 5,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('region--submit--' + res.data);
-          this.canEditRegion = false;
-          this.getUserInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    addOwnBenefits() {
-      this.addBenefitsStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownBenefitsValue,
-        object_pid: 6
-      }
-      let index = this.selectBenefitsList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectBenefitsList.push(obj);
-        this.ownBenefitsList.push(obj);
-        this.ownBenefitsValue = '';
-      } else {
-        this.selectBenefitsList.splice(index, 1);
-      }
-
-    },
-    selectBenefits(value, type) {
-      let index;
-      if (type == 1) {
-        index = this.selectBenefitsList.findIndex((element) => element.id === value.id);
-      }
-      if (type == 2) {
-        index = this.selectBenefitsList.findIndex((element) => element === value);
-      }
-
-      if (index == -1) {
-        this.selectBenefitsList.push(value);
-
-      } else {
-        this.selectBenefitsList.splice(index, 1);
-      }
-      // console.log(this.selectBenefitsList)
-    },
-    benefitsConfirm() {
-
-      let expand = [];
-      let objectArr = [];
-      this.selectBenefitsList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
-          objectArr.push(item.id);
-        }
-      })
-
-      let data = {
-        token: localStorage.getItem('token'),
-        object_pid: 6,
-        object_id: objectArr,
-        expand: expand,
-        company_id:this.educatorContact.id
-      }
-
-      ADD_PROFILE_V2(data).then(res => {
-        if (res.code == 200) {
-          console.log('benefits--submit--' + res.data);
-          this.canEditBenefits = false;
-          this.getUserInfo();
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
     },
     exportPdf(){
       window.print()
@@ -2452,6 +870,10 @@ export default {
   background-color: #f5f6f7;
 }
 
+.readmore-btn{
+  color: #9173ff;
+}
+
 .educator-container {
   display: flex;
   flex-direction: row;
@@ -2464,8 +886,6 @@ export default {
 }
 
 .educator-r-container-bg{
-  /*padding:30px 50px 50px 50px;*/
-  /*margin:30px 50px 50px 50px;*/
   margin:30px 0 50px 0;
 }
 
@@ -2504,111 +924,10 @@ export default {
   font-size:20px;
 }
 
-.basic-info-margin{
-  margin-top: 20px;
-}
-.basic-info-container {
-
-  padding: 20px;
-  text-align: left;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-.basic-info-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.basic-info-label {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.basic-info-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.basic-info-edit:hover {
-  color: #00b3d2;
-}
-
-.basic-info-content {
-  margin-top: 10px;
-  border-radius:10px;
-}
-
-.basic-info-item {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: space-between;
-  border-bottom:1px solid #FFFFFF;
-}
-
-.basic-info-item-l{
-
-  width:20%;
-  text-align: left;
-  background-color: #f4f5f6;
-  padding:10px 0 10px 20px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  line-height: 24px;
-  min-height:24px;
-  font-size: 14px;
-  color:#333333;
-}
-
-.basic-info-item-r{
-  font-size:14px;
-  width:80%;
-  text-align: left;
-  background-color: #eeeeee;
-  padding:10px;
-
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  line-height: 24px;
-  min-height:24px;
-}
-
-
-.credentials-container {
-  margin-top: 20px;
-  padding: 20px;
-  text-align: left;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-.credentials-label {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.credentials-content {
-  padding: 10px 0;
-}
-
 .languages-container {
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
-}
-
-.languages-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
 }
 
 .languages-label {
@@ -2616,618 +935,11 @@ export default {
   font-weight: bold;
 }
 
-.languages-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.languages-content {
-
-}
-
-.languages-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 10px;
-}
-
-.languages-item-l {
-  font-size: 14px;
-}
-
-.languages-item-r {
-  margin-left: 10px;
-}
-
-.certifications-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.certifications-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.certifications-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.certifications-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.certifications-content {
-
-
-}
-
 .education-container {
   margin-top: 10px;
   padding: 10px;
   border: 1px solid #EEEEEE;
   border-radius: 10px;
-}
-
-.education-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.education-t-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.education-t-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.education-content {
-  padding: 10px;
-}
-
-.education-item {
-  padding: 10px;
-  background-color:#f4f5f6;
-  margin-top:10px;
-  border-radius:10px;
-}
-
-.education-school-name {
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  line-height: 30px;
-}
-
-.education-school-name:hover {
-  color: #00b3d2;
-}
-
-.education-item-2 {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.education-field {
-  font-size: 14px;
-  color: #808080;
-  width: 80%;
-  line-height: 28px;
-  /* 这两个在技术上是一样的, 为了兼容了浏览器两个都加上 */
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  -ms-word-break: break-all;
-  /* 这个的使用在web-kit中有些危险，他可能会阶段所有东西 */
-  word-break: break-all;
-  /* Instead use this non-standard one: */
-  word-break: break-word;
-  /* 如果浏览器支持的话增加一个连接符(Blink不支持) */
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
-.education-degree {
-  font-size: 14px;
-  color: #000000;
-}
-
-.education-date {
-  font-size: 14px;
-  color: #808080;
-}
-
-.education-item-3 {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 10px;
-}
-
-.show-more {
-  padding: 10px;
-  text-align: center;
-  font-size: 14px;
-  color: #00b3d2;
-  cursor: pointer;
-}
-
-.experience-container {
-  margin-top: 20px;
-  padding: 20px;
-  text-align: left;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-.experience-label {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.experience-content {
-  padding: 10px 0;
-}
-
-.teaching-experience {
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.teaching-exp-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.teaching-exp-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.teaching-exp-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.teaching-exp-content {
-
-}
-
-.places-traveled {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.places-traveled-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.places-traveled-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.places-traveled-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.places-traveled-content {
-
-}
-
-.places-lived {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.places-lived-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.places-lived-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.places-lived-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.places-lived-content {
-
-}
-
-.work-exp-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.work-exp-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.work-exp-t-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.work-exp-t-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.work-exp-content {
-  padding: 10px;
-}
-
-.work-exp-b-item {
-  padding: 10px;
-  background-color:#f4f5f6;
-  margin-top:10px;
-  border-radius:10px;
-}
-
-.work-exp-item-1 {
-  font-size: 14px;
-  font-weight: 700;
-  word-wrap: break-word;
-}
-
-.work-exp-job-title {
-  font-size: 14px;
-  color: #000000;
-  width: 50%;
-  cursor: pointer;
-  /* 这两个在技术上是一样的, 为了兼容了浏览器两个都加上 */
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-
-  -ms-word-break: break-all;
-  /* 这个的使用在web-kit中有些危险，他可能会阶段所有东西 */
-  word-break: break-all;
-  /* Instead use this non-standard one: */
-  word-break: break-word;
-
-  /* 如果浏览器支持的话增加一个连接符(Blink不支持) */
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
-.work-exp-date {
-  font-size: 14px;
-  color: #808080;
-
-}
-
-.work-exp-item-2 {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  color: #808080;
-  padding: 10px 0;
-}
-
-.work-exp-item-3 {
-  font-size: 14px;
-  color: #808080;
-}
-
-.work-exp-item-4 {
-  margin-top: 10px;
-  font-size: 14px;
-  word-break: break-all;
-  word-wrap: break-word;
-}
-
-.interest-container {
-  margin-top: 20px;
-  padding: 20px;
-  text-align: left;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-.interest-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.interest-label {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.interest-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.interest-content {
-  padding: 10px 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.media-container {
-  margin-top: 20px;
-  padding: 20px;
-  text-align: left;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-.profile-photo-container {
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.profile-photo-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.profile-photo-t-label {
-  font-size: 14px;
-  font-weight: bold;
-
-}
-
-.profile-photo-content {
-  padding: 10px;
-}
-
-.background-banner-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.background-banner-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.background-banner-t-label {
-  font-size: 14px;
-  font-weight: bold;
-
-}
-
-.background-banner-content {
-  padding: 10px;
-}
-
-.background-uploader{
-  text-align: center;
-  padding:10px;
-  border:1px dashed #eeeeee;
-  border-radius:10px;
-}
-
-.background-avatar {
-
-}
-
-.account-images-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.account-images-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.account-images-t-label {
-  font-size: 14px;
-  font-weight: bold;
-
-}
-
-.account-images-content {
-  padding: 10px;
-}
-.account-images-item-container{
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  justify-content: space-between;
-  flex-wrap:wrap;
-
-}
-
-.account-images-item{
-  width:45%;
-  height: 140px;
-  padding:1%;
-  margin:1%;
-  border:1px solid #EEEEEE;
-  border-radius:10px;
-  overflow: hidden;
-  text-align: center;
-  cursor: pointer;
-}
-
-.account-images-img{
-  height: 100%;
-}
-
-.account-images-t-edit{
-  font-size: 14px;
-  font-weight: bold;
-  cursor:pointer;
-}
-
-.intro-video-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.intro-video-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.intro-video-t-label {
-  font-size: 14px;
-  font-weight: bold;
-
-}
-.intro-video-t-edit{
-  font-size: 14px;
-  font-weight: bold;
-  cursor:pointer;
-}
-.intro-video-content {
-  padding: 10px;
-}
-.intro-video-uploader{
-  border:1px dashed #eeeeee;
-  border-radius:10px;
-  text-align: center;
-}
-
-.intro-video-avatar {
-  width: 100%;
-  height: 178px;
-  display: block;
-}
-
-.my-resume-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-
-}
-
-.my-resume-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.my-resume-t-label {
-  font-size: 14px;
-  font-weight: bold;
-
-}
-.my-resume-t-edit{
-  font-size:14px;
-  font-weight: bold;
-  cursor:pointer;
-}
-
-.my-resume-content {
-  padding: 10px;
-  text-align: center;
-}
-
-/deep/ .resume-uploader .el-upload-dragger {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-}
-
-
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-
-.resume-avatar {
-
-  padding:20px;
-  display: block;
-  text-decoration: none;
-  color: #00b3d2;
-  background-color:#f4f5f6;
-  border-radius:10px;
 }
 
 .preferences-container {
@@ -3242,253 +954,6 @@ export default {
 .preferences-label {
   font-size: 16px;
   font-weight: bold;
-}
-
-.preferences-content {
-  padding: 10px 0;
-}
-
-.subject-teach-container {
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.subject-teach-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.subject-teach-t-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.subject-teach-t-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.subject-teach-content {
-
-}
-
-.p-location-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.p-location-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.p-location-t-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.p-location-t-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.p-location-content {
-
-}
-
-.p-job-type-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.p-job-type-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.p-job-type-t-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.p-job-type-t-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.p-job-type-content {
-
-}
-
-.age-teach-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.age-teach-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.age-teach-t-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.age-teach-t-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.age-teach-content {
-
-}
-
-.p-benefits-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #EEEEEE;
-  border-radius: 10px;
-}
-
-.p-benefits-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.p-benefits-t-label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.p-benefits-t-edit {
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.p-benefits-content {
-
-}
-
-
-.languages-drawer {
-  height: 100%;
-}
-
-.add-languages-drawer-container {
-  width: 98%;
-  margin: 0 auto;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #EEEEEE;
-}
-
-.languages-drawer-container-bg {
-  width: 98%;
-  margin: 20px auto 0;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #EEEEEE;
-}
-
-.languages-drawer-container {
-  overflow-y: scroll;
-  height: 400px;
-}
-
-.languages-d-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin: 10px;
-  padding: 10px;
-  border-bottom: 1px solid #EEEEEE;
-}
-
-.languages-d-item-l {
-  font-size: 14px;
-}
-
-.languages-d-item-r {
-
-}
-
-.languages-d-btn {
-  margin-top: 20px;
-}
-
-
-.object-tags-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.object-tags {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-
-}
-
-.object-tags-item {
-  background-color: rgba(0, 179, 210, 0.1);
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin: 10px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.object-tags-add {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.object-tags-item-add {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-
-.tags-active {
-  background-color: #00CE47;
-  color: #FFFFFF;
 }
 
 
@@ -3512,7 +977,7 @@ export default {
 .basic-info-1-container{
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
@@ -3567,10 +1032,12 @@ export default {
 
 .basic-info-c-container{
   width: calc( 100% - 290px );
+  margin-top: 25px;
+  margin-bottom: 25px;
 
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
@@ -3615,18 +1082,12 @@ export default {
   font-size: 23px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
-
-  overflow:hidden;
-  text-overflow:ellipsis;
-  display:-webkit-box;
-  -webkit-line-clamp:3;
--webkit-box-orient:vertical;
-
 }
+
 .basic-info-c-r span{
   color:#6650B3;
-  font-size:20px;
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .basic-info-c-r-b{
@@ -3929,26 +1390,6 @@ export default {
       width:260px;
     }
 
-  .basic-info-item-l{
-    font-size:12px;
-    width:30%;
-  }
-  .basic-info-item-r{
-    font-size: 12px;
-  }
-  .work-exp-content{
-    padding:0;
-  }
-  .work-exp-date{
-    font-size: 12px;
-  }
-  .education-content{
-    padding:0;
-  }
-  .education-date{
-    font-size: 12px;
-  }
-
   .educator-r-container{
     width: 100%;
   }
@@ -3996,6 +1437,7 @@ export default {
 
   .basic-info-c-container{
     width: calc(100% - 91px);
+    margin-top: 0;
   }
 
   .basic-info-six-pic-container{

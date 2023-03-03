@@ -209,7 +209,8 @@
                             <template v-else>-</template>
                             /
                             <template v-if="item.job_due_time">
-                              {{ $filters.ymdFormatEvent(item.job_due_time) }}
+<!--                              {{ $filters.ymdFormatEvent(item.job_due_time) }}-->
+                              {{ $filters.ymdFormatEvent(item.apply_due_date) }}
                             </template>
                             <template v-else>
                               -

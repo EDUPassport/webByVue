@@ -304,37 +304,48 @@
                         </div>
                         <div class="account-profile-c-item-r-mobile">
                           <div class="account-profile-c-item-r-2">
-                            <el-button
-                                v-if="item.identity == 1"
-                                class="account-profile-c-item-r-2-btn"
-                                @click="searchJobs()"
-                                :disabled="item.identity != identity || item.id != currentCompanyId"
-                                type="primary" round>
-                              SEARCH JOBS
-                            </el-button>
-                            <el-button
-                                v-if="item.identity == 2  || item.identity == 3 || item.identity == 4"
-                                class="account-profile-c-item-r-2-btn"
-                                :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
-                                @click="postJob()"
-                                type="primary" round>
-                              POST A JOB
-                            </el-button>
-                            <el-button
-                                v-if="item.identity == 5"
-                                class="account-profile-c-item-r-2-btn"
-                                :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
-                                @click="postDeal()"
-                                type="primary" round>
-                              OFFER A Deal
-                            </el-button>
+
+                            <template v-if="item.identity == identity && item.id == currentCompanyId">
+
+                              <el-button
+                                  v-if="item.identity == 1"
+                                  class="account-profile-c-item-r-2-btn"
+                                  @click="searchJobs()"
+                                  :disabled="item.identity != identity || item.id != currentCompanyId"
+                                  type="primary" round>
+                                SEARCH JOBS
+                              </el-button>
+                              <el-button
+                                  v-if="item.identity == 2  || item.identity == 3 || item.identity == 4"
+                                  class="account-profile-c-item-r-2-btn"
+                                  :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
+                                  @click="postJob()"
+                                  type="primary" round>
+                                POST A JOB
+                              </el-button>
+                              <el-button
+                                  v-if="item.identity == 5"
+                                  class="account-profile-c-item-r-2-btn"
+                                  :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
+                                  @click="postDeal()"
+                                  type="primary" round>
+                                OFFER A Deal
+                              </el-button>
+                              <el-button
+                                  class="account-profile-c-item-r-2-btn"
+                                  :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
+                                  @click="postEvent()"
+                                  type="primary" round>
+                                POST AN EVENT
+                              </el-button>
+                            </template>
 
                           </div>
                           <div class="account-profile-c-item-r-3">
 
                             <template v-if="item.identity == identity && item.id == currentCompanyId">
                               <el-button
-                                  class="account-profile-c-item-r-3-btn"
+                                  class="account-profile-c-item-r-3-btn account-profile-c-item-r-3-btn-mobile"
                                   @click="editUserProfile(item.id,item.identity)"
                                   plain round>
                                 EDIT
@@ -361,11 +372,13 @@
                           </span>
                               <template #dropdown>
                                 <el-dropdown-menu>
+
                                   <el-dropdown-item>
                                     <el-button link @click="viewUserProfile(item.id,item.user_id,item.identity)">
                                       VIEW PROFILE
                                     </el-button>
                                   </el-dropdown-item>
+
                                   <el-dropdown-item v-if="item.identity != 1">
                                     <el-button link
                                                @click="showContributorDialog(item.id,item.user_id,item.identity,item.company_name)">
@@ -378,6 +391,11 @@
                                   <!--                                    COPY AS A RECRUITER-->
                                   <!--                                  </el-button>-->
                                   <!--                                </el-dropdown-item>-->
+                                  <el-dropdown-item>
+                                    <el-button link @click="editUserProfile(item.id,item.identity)">
+                                      EDIT PROFILE
+                                    </el-button>
+                                  </el-dropdown-item>
                                   <el-dropdown-item>
                                     <el-popconfirm
                                         title="Are you sure to delete this?"
@@ -946,6 +964,9 @@ export default {
     },
     postDeal() {
       this.$router.push({path: '/deals/offer', query: {}})
+    },
+    postEvent(){
+      this.$router.push({path: '/events/post', query: {}})
     },
     getAllAssignUsers() {
       let params = {}
@@ -2363,6 +2384,18 @@ export default {
   margin: 12px 0;
 }
 
+@media screen and (max-width: 1330px) {
+  .account-profile-name{
+    font-size: 18px;
+  }
+  .account-profile-identity{
+    font-size: 14px;
+  }
+  .account-profile-c-item-r-1{
+    font-size: 14px;
+  }
+}
+
 @media screen and (min-width: 769px) {
   .account-profile-c-item-b-mobile {
     display: none;
@@ -2526,6 +2559,10 @@ export default {
 
   .account-profile-c-item-r-3 {
     margin-left: 0;
+  }
+
+  .account-profile-c-item-r-3-btn-mobile{
+    display: none;
   }
 
   .account-profile-c-item-r-4 {

@@ -131,7 +131,7 @@ import bookEventForm from "@/components/bookEventForm";
 import BookEventList from "@/components/bookEventList";
 import meSideMenu from "@/components/meSideMenu";
 import {EVENTS_MY_EVENT, EVENTS_CATEGORY, EVENT_APPLICATIONS, EVENTS_ADD_EVENT} from '@/api/api';
-import {encode} from 'js-base64'
+// import {encode} from 'js-base64'
 import {updateWindowHeight} from "@/utils/tools";
 
 export default {
@@ -187,7 +187,6 @@ export default {
   methods: {
     showBookEvent(){
       this.bookEventDialogVisible = true;
-      // this.eventDialogVisible = false;
     },
     deleteEvent(eventId){
       let params = {
@@ -201,9 +200,9 @@ export default {
       })
     },
     editEvent(item){
-      let s = encode(JSON.stringify(item))
-
-      this.$router.push({path:'/events/post',query:{str:s}})
+      this.$router.push({path:'/events/post',query:{id:item.id}})
+      // let s = encode(JSON.stringify(item))
+      // this.$router.push({path:'/events/post',query:{str:s}})
     },
     showBookList(item){
       this.bookListDialogVisible = true;

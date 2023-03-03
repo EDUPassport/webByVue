@@ -15,9 +15,9 @@
               <el-button class="new-deal-btn" link round @click="discard()">
                 DISCARD
               </el-button>
-<!--              <el-button class="new-deal-btn" plain round>-->
-<!--                SAVE AS DRAFT-->
-<!--              </el-button>-->
+              <!--              <el-button class="new-deal-btn" plain round>-->
+              <!--                SAVE AS DRAFT-->
+              <!--              </el-button>-->
               <el-button class="new-deal-btn"
                          type="primary"
                          round
@@ -88,7 +88,8 @@
                     </el-col>
 
 
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" v-if="dealLocationTypeValue === 2 || dealLocationTypeValue === 3">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6"
+                            v-if="dealLocationTypeValue === 2 || dealLocationTypeValue === 3">
 
                       <el-form-item label="Location">
                         <div class="deals-location-select-container">
@@ -105,6 +106,7 @@
                           <template v-if="provinceOptions.length>0">
                             <el-select v-model="provinceObj"
                                        :teleported="false"
+                                       style="margin-top: 10px;"
                                        value-key="id"
                                        filterable
                                        @change="provinceChange"
@@ -116,6 +118,7 @@
                           <template v-if="cityOptions.length>0">
                             <el-select v-model="cityObj"
                                        :teleported="false"
+                                       style="margin-top: 10px;"
                                        value-key="id"
                                        filterable
                                        @change="cityChange"
@@ -151,17 +154,11 @@
                         </el-select>
                       </el-form-item>
 
-
                     </el-col>
 
                   </el-row>
                 </div>
               </div>
-
-<!--              <el-form-item label="Event Type" prop="is_all">-->
-<!--                <el-radio v-model="basicForm.is_all" label="1" size="large">Social</el-radio>-->
-<!--                <el-radio v-model="basicForm.is_all" label="2" size="large">Professional</el-radio>-->
-<!--              </el-form-item>-->
 
               <div class="event-item-container">
                 <div class="event-item-label">
@@ -257,7 +254,7 @@
                           </el-col>
                           <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
                             <el-input v-model="basicForm.pay_money"
-                                      oninput ="value=value.replace(/[^\d]/g,'')"
+                                      oninput="value=value.replace(/[^\d]/g,'')"
                                       placeholder="amount per ticket">
                             </el-input>
                           </el-col>
@@ -267,8 +264,8 @@
 
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Company name" prop="third_company_name">
-                        <el-input v-model="basicForm.third_company_name" type="text"
+                      <el-form-item label="Company name" prop="third_com_name">
+                        <el-input v-model="basicForm.third_com_name" type="text"
                                   placeholder="Company name"
                         ></el-input>
                       </el-form-item>
@@ -308,6 +305,7 @@
                         <el-upload
                             class="profile-uploader"
                             action=""
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :headers="uploadHeaders"
                             :show-file-list="false"
                             :http-request="flyerHttpRequest"
@@ -318,7 +316,7 @@
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
                             <div v-if="flyerPhotoUrl">
                               <el-image
@@ -329,7 +327,7 @@
                             <div class="account-xll-image-mask">
                               <span @click="handleSingleImagePreview(flyerPhotoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                             </div>
@@ -342,10 +340,11 @@
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Company Logo" prop="third_company_logo">
+                      <el-form-item label="Company Logo" prop="third_com_logo">
                         <el-upload
                             class="profile-uploader"
                             action=""
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
                             :headers="uploadHeaders"
                             :show-file-list="false"
                             :http-request="companyLogoHttpRequest"
@@ -356,7 +355,7 @@
                           </el-icon>
                         </el-upload>
 
-                        <div class="account-xll-images" >
+                        <div class="account-xll-images">
                           <div class="account-xll-image">
                             <div v-if="companyLogoPhotoUrl">
                               <el-image
@@ -367,7 +366,7 @@
                             <div class="account-xll-image-mask">
                               <span @click="handleSingleImagePreview(companyLogoPhotoUrl)">
                                 <el-icon color="#ffffff" :size="45">
-                                  <zoom-in />
+                                  <zoom-in/>
                                 </el-icon>
                               </span>
                             </div>
@@ -403,14 +402,15 @@ import meSideMenu from "@/components/meSideMenu";
 import {
   EVENTS_ADD_EVENT,
   EVENTS_CATEGORY,
-  EVENTS_TAGS, UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, GET_COUNTRY_LIST, USER_OBJECT_LIST
+  EVENTS_TAGS, UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, GET_COUNTRY_LIST, USER_OBJECT_LIST, EVENTS_DETAIL
 } from '@/api/api';
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import ImageCompressor from 'compressorjs'
-import {decode} from 'js-base64'
+// import {decode} from 'js-base64'
+// eventStartAndEndTimeFormat
 import {updateWindowHeight, eventStartAndEndTimeFormat} from "@/utils/tools";
 
 export default {
@@ -451,8 +451,8 @@ export default {
     }
 
     return {
-      dialogSingleImageVisible:false,
-      dialogSingleImageUrl:'',
+      dialogSingleImageVisible: false,
+      dialogSingleImageUrl: '',
 
       currencyList: [],
       addCurrencyStatus: false,
@@ -479,7 +479,6 @@ export default {
       userInfo: {},
       basicUserInfo: {},
 
-      sLocationType: 1, //1 国外 2国内
       countryObj: {},
       provinceObj: {},
       cityObj: {},
@@ -502,8 +501,8 @@ export default {
         user_id: localStorage.getItem('uid'),
         name: undefined,
         desc: undefined,
-        third_company_logo: undefined,
-        third_company_name: undefined,
+        third_com_logo: undefined,
+        third_com_name: undefined,
         type_desc: undefined,
         pay_money: undefined,
         date: undefined,
@@ -557,14 +556,14 @@ export default {
             trigger: 'blur',
           },
         ],
-        third_company_logo: [
+        third_com_logo: [
           {
             required: false,
             message: 'Please upload',
             trigger: 'blur',
           },
         ],
-        third_company_name: [
+        third_com_name: [
           {
             required: false,
             message: 'Please input',
@@ -584,7 +583,7 @@ export default {
       tagsEnData: [],
       submitLoadingValue: false,
 
-      selectTagsValue:[]
+      selectTagsValue: []
 
     }
   },
@@ -608,24 +607,32 @@ export default {
       }
     }
 
-    let str = this.$route.query.str;
-    if(str){
-      let editStr = JSON.parse(decode(str) )
-      console.log(editStr)
+    // let str = this.$route.query.str;
+    // if(str){
+    //   let editStr = JSON.parse(decode(str) )
+    //
+    //   let startTime = editStr.start_time;
+    //   let endTime = editStr.end_time;
+    //
+    //   this.dealLocationTypeValue = editStr.is_online;
+    //
+    //   this.eventDate = editStr.date;
+    //   this.startTime = eventStartAndEndTimeFormat(startTime)
+    //   this.endTime = eventStartAndEndTimeFormat(endTime)
+    //
+    //   this.basicForm = Object.assign({},editStr)
+    //   this.basicForm.event_id = editStr.id;
+    //   this.flyerPhotoUrl = editStr.file;
+    //   this.companyLogoPhotoUrl = editStr.third_com_logo;
+    //
+    // }
 
-      let startTime = editStr.start_time;
-      let endTime = editStr.end_time;
+    let eventId = this.$route.query.id;
 
-      this.eventDate = editStr.date;
-      this.startTime = eventStartAndEndTimeFormat(startTime)
-      this.endTime = eventStartAndEndTimeFormat(endTime)
-
-      this.basicForm = Object.assign({},editStr)
-      this.basicForm.event_id = editStr.id;
-      this.flyerPhotoUrl = editStr.file;
-      this.companyLogoPhotoUrl = editStr.third_company_logo;
-
+    if (eventId) {
+      this.getEventDetail(eventId)
     }
+
 
     this.getAllCountry()
     this.getUserObjectList()
@@ -634,8 +641,68 @@ export default {
 
   },
   methods: {
+    getEventDetail(id) {
+      let params = {
+        event_id: id
+      }
+      EVENTS_DETAIL(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          let resMessage = res.message;
 
-    handleSingleImagePreview(file){
+          let obj = {
+            token: localStorage.getItem('token'),
+            user_id: localStorage.getItem('uid'),
+            name: resMessage.name,
+            desc: resMessage.desc,
+            third_com_logo: resMessage.third_com_logo,
+            third_com_name: resMessage.third_com_name,
+            type_desc: resMessage.type_desc,
+            pay_money: resMessage.pay_money,
+            date: resMessage.date,
+            file: resMessage.file,
+            file_name: resMessage.file_name,
+            is_all: '1',
+            event_place: resMessage.event_place,
+            start_time: resMessage.start_time,
+            end_time: resMessage.end_time,
+            is_online: 1,
+            online_url: resMessage.online_url,
+            location: resMessage.location,
+            country_id: resMessage.country_id,
+            state_id: resMessage.state_id,
+            town_id: resMessage.town_id,
+            lat: resMessage.lat,
+            lng: resMessage.lng,
+            category_id: resMessage.category_id,
+            currency: 'USD',
+            tag: [],
+            tags_cn: resMessage.tags_cn,
+            tags_en: resMessage.tags_en
+          }
+
+          let startTime = resMessage.start_time;
+          let endTime = resMessage.end_time;
+
+          this.dealLocationTypeValue = resMessage.is_online;
+
+          this.eventDate = resMessage.date;
+          this.startTime = eventStartAndEndTimeFormat(startTime)
+          this.endTime = eventStartAndEndTimeFormat(endTime)
+
+          this.basicForm = Object.assign({}, obj)
+          this.basicForm.event_id = resMessage.id;
+          this.flyerPhotoUrl = resMessage.file;
+          this.companyLogoPhotoUrl = resMessage.third_com_logo;
+
+
+
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    handleSingleImagePreview(file) {
       this.dialogSingleImageUrl = file
       this.dialogSingleImageVisible = true;
     },
@@ -659,7 +726,7 @@ export default {
                 let myFileUrl = res.data[0]['file_url'];
                 self.uploadLoadingStatus = false;
                 self.companyLogoPhotoUrl = myFileUrl
-                self.basicForm.third_company_logo = myFileUrl
+                self.basicForm.third_com_logo = myFileUrl
 
               }
             }).catch(err => {
@@ -676,7 +743,7 @@ export default {
                 let myFileUrl = res.message.file_path;
                 self.uploadLoadingStatus = false;
                 self.companyLogoPhotoUrl = myFileUrl
-                self.basicForm.third_company_logo = myFileUrl
+                self.basicForm.third_com_logo = myFileUrl
               }
             }).catch(err => {
               console.log(err)
@@ -855,7 +922,7 @@ export default {
 
       const geocoder = new MapboxGeocoder({
         "accessToken": this.accessToken,
-        "language":'en-US',
+        "language": 'en-US',
         "mapboxgl": mapboxgl
       })
 
@@ -1021,7 +1088,7 @@ export default {
         }
       })
     },
-    discard(){
+    discard() {
       this.$router.go(-1)
     },
     submitForm(formName) {
@@ -1033,15 +1100,15 @@ export default {
           let tagsNameEn = []
           let tagsNameCn = []
 
-          if(tagsValue.length>0){
-            tagsValue.forEach(item=>{
+          if (tagsValue.length > 0) {
+            tagsValue.forEach(item => {
 
-              if(typeof item === 'string'){
+              if (typeof item === 'string') {
                 console.log('string')
                 tagsNameCn.push(item)
                 tagsNameEn.push(item)
               }
-              if(typeof item === 'object'){
+              if (typeof item === 'object') {
                 console.log('object')
                 tagsIdData.push(item.id)
                 tagsNameCn.push(item.name_cn)
@@ -1100,9 +1167,9 @@ export default {
         } else {
           console.log('error submit!!')
           this.$message({
-            type:'warning',
-            message:'Please complete all required fields',
-            grouping:true
+            type: 'warning',
+            message: 'Please complete all required fields',
+            grouping: true
           })
           return false
         }
@@ -1178,7 +1245,7 @@ export default {
 }
 
 .event-date {
-  width:100%;
+  width: 100%;
   height: 50px;
 }
 
@@ -1186,7 +1253,8 @@ export default {
   width: 100%;
 
 }
-.event-time-item{
+
+.event-time-item {
   margin-top: 15px;
 }
 
@@ -1320,10 +1388,10 @@ export default {
 }
 
 .event-type {
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 14px;
   color: #262626;
-  padding: 4px 10px;
+  padding: 2px 10px;
   border-radius: 6px;
   border: 1px solid #262626;
   margin-right: 15px;
@@ -1337,31 +1405,31 @@ export default {
 }
 
 
-.account-xll-images{
-  width:90%;
+.account-xll-images {
+  width: 90%;
 }
 
-.account-xll-image{
+.account-xll-image {
   position: relative;
   margin-top: 10px;
 
 }
 
-.account-xll-image-mask{
+.account-xll-image-mask {
   position: absolute;
-  width:100%;
+  width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  margin:auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   display: none;
 
 }
 
-.account-xll-image:hover .account-xll-image-mask{
+.account-xll-image:hover .account-xll-image-mask {
   /*display: inline;*/
   display: flex;
   flex-direction: row;
@@ -1369,12 +1437,12 @@ export default {
   justify-content: center;
 }
 
-.account-xll-image-mask span{
+.account-xll-image-mask span {
   margin-right: 15px;
   cursor: pointer;
 }
 
-.account-xll-image-mask:hover{
+.account-xll-image-mask:hover {
 
 }
 
@@ -1384,38 +1452,41 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-    .profile-r-container{
-      padding: 0;
-      height: calc( var(--i-window-height) - 160px);
-      width: 100%;
-    }
+  .profile-r-container {
+    padding: 0;
+    height: calc(var(--i-window-height) - 160px);
+    width: 100%;
+  }
 
-  .profile-r-bg-container{
-    height: calc( var(--i-window-height) - 160px);
+  .profile-r-bg-container {
+    height: calc(var(--i-window-height) - 160px);
 
   }
 
-  .new-deal-t{
+  .new-deal-t {
     padding: 15px;
     height: 30px;
   }
-  .new-deal-t-l{
+
+  .new-deal-t-l {
     font-size: 18px;
   }
-  .new-deal-btn{
+
+  .new-deal-btn {
     font-size: 12px;
   }
 
-  .basic-form{
-    height: calc( var(--i-window-height) - 220px);
+  .basic-form {
+    height: calc(var(--i-window-height) - 220px);
 
   }
-  .event-item-container{
+
+  .event-item-container {
     margin: 15px;
     padding: 15px;
   }
 
-  .event-type{
+  .event-type {
     font-size: 12px;
   }
 

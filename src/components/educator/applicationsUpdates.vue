@@ -53,7 +53,7 @@
                 </chatButton>
               </div>
               <div class="e-a-item-r-3">
-                {{ $filters.howLongFormat(item.job.refresh_time) }}
+                {{ $filters.howLongFormat(item.c_time) }}
                 <!--              Updated: June 23, 2022-->
               </div>
             </div>

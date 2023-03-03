@@ -418,7 +418,7 @@ export default {
           let oldTagsEnData = []
           let tagsEnStr = resMessage.tags_en;
 
-          if(tags && tags.length>0){
+          if(tags && tags.length>0 && old && old.length > 0){
             tags.forEach(item=>{
               let i = old.filter(value=>value.id == item.tag_name)
               tagsData.push(i[0])

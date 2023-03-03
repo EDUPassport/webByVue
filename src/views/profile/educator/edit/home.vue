@@ -2533,16 +2533,23 @@ export default {
 
           this.editTeachExpList = res.message.filter(item => item.pid === 120)
           this.editSubjectList = res.message.filter(item => item.pid === 1)
-          this.editLocationList = res.message.filter(item => item.pid === 71)  // 71 155
-          this.editWorkDestinationList = res.message.filter(item => item.pid === 155)  // 71 155
+
           this.editJobTypeList = res.message.filter(item => item.pid === 3);
           this.editAgeToTeachList = res.message.filter(item => item.pid === 4);
           this.editRegionList = res.message.filter(item => item.pid === 5);
           this.editBenefitsList = res.message.filter(item => item.pid === 6);
           this.editCertificationsList = res.message.filter(item => item.pid === 7);
+
+          // 原来是8 现在使用nationality的值 pid 203
           this.editCountriesTraveledList = res.message.filter(item => item.pid === 8);
+          // 原来是9 现在使用nationality的值 pid 203
           this.editCountriesLivedList = res.message.filter(item => item.pid === 9);
-          this.editCountriesTraveledList = res.message.filter(item => item.pid === 8);
+
+          // 原来是71 现在使用nationality的值 pid 203
+          this.editLocationList = res.message.filter(item => item.pid === 71)  // 71 155
+          // 原来是155 现在使用nationality的值 pid 203
+          this.editWorkDestinationList = res.message.filter(item => item.pid === 155)  // 71 155
+
           this.editWorkScheduleTypeList = res.message.filter(item => item.pid === 184);
 
           this.profileStatusData = res.message.filter(item => item.pid === 195);

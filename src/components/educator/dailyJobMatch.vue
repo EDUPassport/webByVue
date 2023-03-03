@@ -107,7 +107,8 @@ export default {
       })
     },
     turnJobDetail(id){
-      this.$router.push({path:'/jobs',query:{id:id}})
+      let path = '/jobs/detail/' + id + '/' + 1
+      this.$router.push({path:path,query:{}})
     },
     getJobFeaturedList() {
       let params = {

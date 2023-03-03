@@ -47,8 +47,7 @@ import dealByListComponent from "@/components/dealByListComponent";
 import {
   ZOHO_SYNC,
   USER_INFO_BY_TOKEN_V2,
-  RECRUITER_PERCENTAGE_V2,
-  OTHER_PERCENTAGE_V2, SCHOOL_PERCENTAGE_V2, ADD_FAVORITE, CANCEL_FAVORITE, MY_DEALS
+  ADD_FAVORITE, CANCEL_FAVORITE, MY_DEALS, VENDOR_PERCENTAGE_V2
 } from '@/api/api'
 import {decode} from 'js-base64'
 import {updateWindowHeight} from "@/utils/tools";
@@ -145,32 +144,12 @@ export default {
         token: localStorage.getItem('token')
       }
 
-      if(this.identity == 2){
-        RECRUITER_PERCENTAGE_V2(params).then(res => {
-          console.log(res)
-        }).catch(err => {
-          console.log(err)
-          this.$message.error(err.msg)
-        })
-      }
-
-      if(this.identity == 3){
-        SCHOOL_PERCENTAGE_V2(params).then(res => {
-          console.log(res)
-        }).catch(err => {
-          console.log(err)
-          this.$message.error(err.msg)
-        })
-      }
-
-      if(this.identity == 4){
-        OTHER_PERCENTAGE_V2(params).then(res => {
-          console.log(res)
-        }).catch(err => {
-          console.log(err)
-          this.$message.error(err.msg)
-        })
-      }
+      VENDOR_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
 
     },
     getUserInfo() {

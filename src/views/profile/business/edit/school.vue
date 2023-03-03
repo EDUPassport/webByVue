@@ -402,9 +402,29 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
                       <el-form-item  label="Available technologies" prop="technology_available">
-                        <el-input v-model="basicForm.technology_available" type="textarea"
-                                  placeholder="Computers, Smart screens, 3D Printing, etc...">
-                        </el-input>
+<!--                        <el-input v-model="basicForm.technology_available" type="textarea"-->
+<!--                                  placeholder="Computers, Smart screens, 3D Printing, etc...">-->
+<!--                        </el-input>-->
+                        <el-select
+                            v-model="selectedAvailableTechnologiesList"
+                            :teleported="false"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select available technologies"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in editAvailableTechnologiesList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
                       </el-form-item>
                     </el-col>
 
@@ -884,6 +904,9 @@ export default {
 
       editSchoolFacilitesList: [],
       selectSchoolFacilitesList: [],
+
+      editAvailableTechnologiesList:[],
+      selectedAvailableTechnologiesList:[],
 
       businessInfo: {},
       currencyList:[],
@@ -1609,6 +1632,10 @@ export default {
                 this.schoolFacilitesConfirm(res.message.school_company_id)
               }
 
+              if(this.selectedAvailableTechnologiesList.length > 0){
+                this.availableTechnologiesConfirm(res.message.school_company_id)
+              }
+
               if(this.selectStudentAgeList.length>0){
                 this.studentAgeConfirm(res.message.school_company_id)
               }
@@ -1986,8 +2013,8 @@ export default {
 
           }
 
-          if (schoolInfo.facilities) {
-            let facArr = schoolInfo.facilities
+          if (schoolInfo.Facilities) {
+            let facArr = schoolInfo.Facilities
             facArr.forEach((item)=>{
               if (item.object_id == 0) {
 
@@ -2003,6 +2030,29 @@ export default {
                 }
 
                 this.selectSchoolFacilitesList.push(obj)
+
+              }
+            })
+
+          }
+
+          if (schoolInfo.Available_technologies) {
+            let facArr = schoolInfo.Available_technologies
+            facArr.forEach((item)=>{
+              if (item.object_id == 0) {
+
+                this.selectedAvailableTechnologiesList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+
+                this.selectedAvailableTechnologiesList.push(obj)
 
               }
             })
@@ -2042,12 +2092,15 @@ export default {
       let data = {
 
       }
+
       await USER_OBJECT_LIST(data).then(res => {
         if (res.code == 200) {
 
+          // facilities 1521  avaible technologies 1522
           this.editStudentAgeList = res.message.filter(item => item.pid === 73)
           this.editSubjectList = res.message.filter(item => item.pid === 1)
-          this.editSchoolFacilitesList = res.message.filter(item => item.pid === 147)
+          this.editSchoolFacilitesList = res.message.filter(item => item.pid === 1521)
+          this.editAvailableTechnologiesList = res.message.filter(item => item.pid === 1522)
           this.currencyList = res.message.filter(item => item.pid === 117); // currency
 
         }
@@ -2139,7 +2192,7 @@ export default {
 
       let data = {
         company_id: companyId,
-        object_pid: 147,
+        object_pid: 1521,
         object_id: objectArr,
         expand: expand
       }
@@ -2147,6 +2200,35 @@ export default {
       ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
           console.log('School Facilites --submit--' + res.data);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    availableTechnologiesConfirm(companyId) {
+      let expand = [];
+      let objectArr = [];
+      this.selectedAvailableTechnologiesList.forEach(item => {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
+          objectArr.push(item.id);
+        }
+      })
+
+      let data = {
+        company_id: companyId,
+        object_pid: 1522,
+        object_id: objectArr,
+        expand: expand
+      }
+
+      ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+          console.log('available technologies --submit--' + res.data);
         }
 
       }).catch(err => {

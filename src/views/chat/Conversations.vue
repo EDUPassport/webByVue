@@ -57,22 +57,22 @@
                   <div class="conversation-bottom">
                     <div class="conversation-content" v-if="conversation.lastMessage.recalled">
                       <div v-if="conversation.type === 'private'">
-                        {{ conversation.lastMessage.senderId === currentUser.id ? 'you' : `"${conversation.data.name}"` }} retracted a message
+                        {{ conversation.lastMessage.senderId === currentUser.uuid ? 'you' : `"${conversation.data.name}"` }} retracted a message
                       </div>
                       <div v-if="conversation.type === 'group'">
-                        {{ conversation.lastMessage.senderId === currentUser.id ? 'you' : `"${conversation.lastMessage.senderData.name}"` }} retracted a message
+                        {{ conversation.lastMessage.senderId === currentUser.uuid ? 'you' : `"${conversation.lastMessage.senderData.name}"` }} retracted a message
                       </div>
                     </div>
                     <div class="conversation-content" v-else>
                       <div class="unread-text"
-                           v-if="conversation.lastMessage.read === false && conversation.lastMessage.senderId === currentUser.id">
+                           v-if="conversation.lastMessage.read === false && conversation.lastMessage.senderId === currentUser.uuid">
                         [unread]
                       </div>
                       <div v-if="conversation.type === 'private'">
-                        {{ conversation.lastMessage.senderId === currentUser.id ? 'me' : conversation.data.name }}:
+                        {{ conversation.lastMessage.senderId === currentUser.uuid ? 'me' : conversation.data.name }}:
                       </div>
                       <div v-else>
-                        {{ conversation.lastMessage.senderId === currentUser.id ? 'me' : conversation.lastMessage.senderData.name }}:
+                        {{ conversation.lastMessage.senderId === currentUser.uuid ? 'me' : conversation.lastMessage.senderData.name }}:
                       </div>
                       <span class="text" v-if="conversation.lastMessage.type === 'text'">{{conversation.lastMessage.payload.text}}</span>
                       <span v-else-if="conversation.lastMessage.type === 'video'">[Video messages]</span>
@@ -119,6 +119,7 @@ export default {
     const GoEasy = inject('GoEasy');
     const goEasy = inject('goEasy');
     const currentUser = store.state.currentUser;
+    console.log(currentUser)
 
     let conversations = ref([]);
     let rightClickMenu = reactive({
@@ -461,7 +462,8 @@ export default {
 
   .conversation-bottom .unread-text {
     color: #d02129;
-    width: 35px !important;
+    margin-right: 4px;
+    //width: 35px !important;
   }
 
   .conversation .avatar {

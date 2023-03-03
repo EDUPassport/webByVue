@@ -203,6 +203,26 @@ app.config.globalProperties.$filters = {
         }else{
             return '';
         }
+    },
+    textEllipsis(value,len=180){
+        if(!value){
+            return ''
+        }
+        if(len === -1){
+            return value;
+        }
+
+        if(value.length > len){
+            return value.slice(0,len) + '...'
+        }
+
+        return value;
+    },
+    textEllipsisStatus(value,len){
+        if(value){
+            return value.length > len;
+        }
+
     }
 
 }

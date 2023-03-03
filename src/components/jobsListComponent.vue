@@ -32,7 +32,7 @@
 
             <template v-if="currentIdentity != 5">
               <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                   @click="cancelFavoriteForFeatured(1,item.id,index)">
+                   @click="cancelFavoriteForFeatured(1,item.id,i)">
                 <el-icon :size="30" color="#9173ff">
                   <CollectionTag />
                 </el-icon>
@@ -413,7 +413,7 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        // this.$message.error(err.msg)
       })
     },
     turnAdsDetail(link){
