@@ -5,41 +5,35 @@
     --el-color-primary-light-5:#9173ff;
     --el-color-primary: #49397f;
     --el-bg-color:#ffffff;
-    --el-color-danger: #BA8213;
+    --el-color-danger: #F04438;
     --el-text-color-regular:#262626;
-    /*--el-color-primary-light-9:#9173ff;*/
-    /*--el-overlay-color-lighter:rgba(0, 0 ,0 ,0.8);*/
-    --el-font-family: BCM,AssiRegular,BCRegular,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif
+    --el-font-family: Inter, BCM,AssiRegular,BCRegular,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif
 }
 
 .el-button{
     --el-button-border-color: #000000;
+    --el-button-font-size: 20px;
+    font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .el-button.is-link{
-    --el-button-text-color:#262626;
+    --el-button-text-color:#6941C6;
 }
 
 .el-button.is-plain{
-    --el-button-text-color:#262626;
-    --el-button-border-color: #262626;
-
+    --el-button-text-color:#344054;
+    --el-button-border-color: #D0D5DD;
     --el-button-hover-bg-color: #E7DEFF;
     --el-button-hover-text-color: #49397F;
     --el-button-hover-border-color: #6650B3;
-
 }
 
 .el-button--default{
     --el-button-border-color:transparent;
-    --el-button-font-size: 20px;
-    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
-
 
 .el-button--primary {
     --el-button-hover-text-color: #ffffff;
-    --el-button-font-size: 20px;
 
     --el-button-text-color:#ffffff;
     --el-button-font-color: #ffffff;
@@ -53,12 +47,12 @@
     --el-button-active-border-color: #cdbff;
     --el-button-active-bg-color:#988CF5;
 
-    --el-button-disabled-bg-color: rgba(102, 80, 179, .5);
-    --el-button-disabled-border-color: rgba(102, 80, 179, .5);
+    --el-button-disabled-bg-color: #EAECF0;
+    --el-button-disabled-border-color: #EAECF0;
+    --el-button-disabled-text-color:#98A2B3;
+
     --el-button-hover-bg-color: #9173ff;
     --el-button-hover-border-color:#9173ff;
-
-    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
 .el-input--large{
@@ -95,7 +89,7 @@
 }
 
 .el-input{
-    --el-input-border-color:#262626;
+    --el-input-border-color:#d0d5dd;
     --el-input-hover-border: 1px solid #6650B3;
     --el-input-focus-border: 2px solid #6650B3;
     --el-input-hover-border-color:#E7DEFF;
@@ -115,14 +109,22 @@
     --el-input-hover-border-color:#E7DEFF;
     --el-input-focus-border-color:#6650B3;
 }
+.el-form-item__error{
+    font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+}
 
 .el-radio__label{
     font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
+
 .el-form--default.el-form--label-top .el-form-item .el-form-item__label{
-    font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-    font-size: 18px;
-    color:#262626;
+    font-family: Inter, Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #344054;
+    font-weight: 500;
 }
 
 
@@ -175,6 +177,11 @@
 
 .dialog-custom-css{
     border-radius: 12px;
+}
+
+.el-message__content{
+    font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
 
 @media screen and (max-width: 768px){

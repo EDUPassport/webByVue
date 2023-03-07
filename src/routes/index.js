@@ -728,7 +728,33 @@ const routes = [
             titleG: 'Google Login',
         }
     },
-
+    {
+        path: '/forgot/password',
+        name: 'forgotPassword',
+        component: () => import('@/views/login/forgot/password.vue'),
+        meta: {
+            titleC: 'Forget Password',
+            titleG: 'Forget Password',
+        }
+    },
+    {
+        path: '/forgot/sendCode',
+        name: 'forgotSendCode',
+        component: () => import('@/views/login/forgot/sendCode.vue'),
+        meta: {
+            titleC: 'Verification Code',
+            titleG: 'Verification Code',
+        }
+    },
+    {
+        path: '/forgot/setNewPassword',
+        name: 'forgotSetNewPassword',
+        component: () => import('@/views/login/forgot/setNewPassword.vue'),
+        meta: {
+            titleC: 'Set New Password',
+            titleG: 'Set New Password',
+        }
+    },
     {
         path: '/noFound',
         name: 'noFound',

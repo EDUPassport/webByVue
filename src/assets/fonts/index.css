@@ -1,24 +1,16 @@
 @font-face {
     font-family: 'ArimoBold';
-    src:url('Arimo-Bold.ttf');
+    src: url('Arimo-Bold.ttf');
 }
 
 @font-face {
     font-family: 'ArimoRegular';
-    src:url('Arimo-Regular.ttf');
-}
-@font-face {
-    font-family: 'Henriette';
-    src:url('Henriette Compressed.otf');
-}
-@font-face {
-    font-family: 'Lucida Handwriting';
-    src:url('Lucida Handwriting.ttf');
+    src: url('Arimo-Regular.ttf');
 }
 
 @font-face {
     font-family: 'SourceSansPro-Regular';
-    src:url('SourceSansPro-Regular.ttf');
+    src: url('SourceSansPro-Regular.ttf');
 }
 
 @font-face {
@@ -101,4 +93,19 @@
 @font-face {
     font-family: 'Cabin Medium';
     src: url("Cabin/static/Cabin/Cabin-Medium.ttf");
+}
+
+@font-face {
+    font-family: 'inter';
+    src:url("Inter/Inter-VariableFont_slnt_wght.ttf");
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src:url("Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src:url("Work_Sans/WorkSans-VariableFont_wght.ttf");
 }

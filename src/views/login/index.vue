@@ -1,21 +1,20 @@
 <template>
   <div class="login-bg">
 
-    <div class="mobile-banner">
-      <div class="mobile-banner-bg"></div>
-    </div>
-
     <el-row justify="center" align="top" class="login-container">
-      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-        <div class="login-l" @click="turnHome()">
-          <el-image class="login-l-logo" :src="logoImgLight"></el-image>
+
+      <el-col class="login-l-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+
+        <div class="login-t" @click="turnHome()">
+          <el-image class="login-t-logo" :src="imgLogo"></el-image>
         </div>
-      </el-col>
-      <el-col class="login-m-col" :xs="16" :sm="16" :md="16" :lg="16" :xl="16">
 
         <div class="login-m">
 
-          <h1>Log in</h1>
+          <div class="login-m-label">Welcome back</div>
+          <div class="login-m-tips">
+            Welcome back! Please enter your details
+          </div>
 
           <div class="xll-login-form-container">
             <template v-if="loginEmailStatus">
@@ -27,11 +26,12 @@
                   label-position="top"
                   class="demo-ruleForm"
               >
-                <el-form-item prop="email">
-                  <el-input size="large" placeholder="Email Address" v-model="loginForm.email"></el-input>
+                <el-form-item label="Email" prop="email">
+                  <el-input placeholder="Enter your email" v-model="loginForm.email"></el-input>
                 </el-form-item>
-                <el-form-item style="margin-top:25px;" prop="password">
-                  <el-input size="large" placeholder="Password" type="password"
+                <el-form-item label="Password" prop="password">
+                  <el-input placeholder="Enter your password"
+                            type="password"
                             show-password
                             v-model="loginForm.password"></el-input>
                 </el-form-item>
@@ -50,12 +50,10 @@
 
                 <el-form-item>
                   <el-button class="submit-btn"
-                             round
                              type="primary"
-                             size="large"
                              :loading="submitLoginLoadingStatus"
                              @click="submitLoginForm('loginForm')">
-                    Login
+                    Sign in
                   </el-button>
                 </el-form-item>
               </el-form>
@@ -76,7 +74,7 @@
                       <span class="login-require-star">*</span>
                       <span class="login-label-text">Phone #</span>
                     </template>
-                    <el-input size="large" placeholder="Phone #"
+                    <el-input placeholder="Phone #"
                               v-model="loginPhoneSmsForm.phone"></el-input>
                   </el-form-item>
 
@@ -88,7 +86,7 @@
                           <span class="login-label-text">6 Digit Code</span>
                         </div>
                         <div class="password-r">
-                          <el-button link size="large" @click="switchToPhoneBySms()">
+                          <el-button link @click="switchToPhoneBySms()">
                             Log in via password
                           </el-button>
                         </div>
@@ -96,12 +94,11 @@
                     </template>
                     <div class="xll-input-container">
                       <div class="xll-input-input">
-                        <el-input size="large" placeholder="Code"
+                        <el-input placeholder="Code"
                                   v-model="loginPhoneSmsForm.code">
                         </el-input>
                       </div>
                       <el-button class="xll-input-btn" type="primary" round
-                                 size="large"
                                  :loading="checkCodeBtn.loading"
                                  :disabled="checkCodeBtn.disabled"
                                  @click="getCheckCode()"
@@ -122,11 +119,10 @@
 
                   <el-form-item>
                     <el-button class="submit-btn"
-                               size="large"
-                               round
+
                                type="primary"
                                @click="submitLoginPhoneSmsForm('loginPhoneSmsForm')">
-                      LOGIN
+                      Sign in
                     </el-button>
                   </el-form-item>
                 </el-form>
@@ -147,7 +143,7 @@
                       <span class="login-require-star">*</span>
                       <span class="login-label-text">Phone #</span>
                     </template>
-                    <el-input size="large" placeholder="Phone #"
+                    <el-input placeholder="Phone #"
                               v-model="loginPhonePassForm.phone"></el-input>
                   </el-form-item>
 
@@ -159,13 +155,13 @@
                           <span class="login-label-text">Password</span>
                         </div>
                         <div class="password-r">
-                          <el-button link size="large" @click="switchToPhoneBySms()">
+                          <el-button link @click="switchToPhoneBySms()">
                             Log in via SMS verification code
                           </el-button>
                         </div>
                       </div>
                     </template>
-                    <el-input size="large" placeholder="Password" type="password"
+                    <el-input placeholder="Password" type="password"
                               show-password
                               v-model="loginPhonePassForm.password"></el-input>
                   </el-form-item>
@@ -183,11 +179,10 @@
 
                   <el-form-item>
                     <el-button class="submit-btn"
-                               size="large"
-                               round
+
                                type="primary"
                                @click="submitLoginPhonePassForm('loginPhonePassForm')">
-                      LOGIN
+                      Sign in
                     </el-button>
                   </el-form-item>
 
@@ -196,39 +191,38 @@
             </template>
 
             <div class="xll-divider" v-if="isFromChinaEnv === 'yes' ">
-              <el-divider content-position="center">or</el-divider>
+              <el-divider content-position="center">OR</el-divider>
             </div>
 
             <div class="sign-in-btn-container" v-if="isFromChinaEnv === 'yes' ">
-              <el-button v-if="!loginPhoneStatus" size="large"
+              <el-button v-if="!loginPhoneStatus"
                          @click="loginWithPhone()"
-                         class="login-option-btn" link round>
+                         class="login-option-btn" plain>
                 <template #icon>
                   <el-icon>
                     <IconBytesizeMobile/>
                   </el-icon>
                 </template>
 
-                SIGN IN WITH PHONE NUMBER
+                Sign in with phone number
               </el-button>
               <el-button v-if="!loginEmailStatus"
                          @click="loginWithPhone()"
                          class="login-option-btn"
-                         link round
-                         size="large"
+                         plain
               >
                 <template #icon>
                   <el-icon>
                     <IconCarbonEmail/>
                   </el-icon>
                 </template>
-                SIGN IN WITH EMAIL
+                Sign in with Email
               </el-button>
             </div>
 
             <!--            <div class="sign-in-btn-container">-->
             <!--              <el-button @click="linkedinSignIn()"-->
-            <!--                         size="large"-->
+            <!--                        -->
             <!--                         class="login-option-btn" link round-->
             <!--                         >-->
             <!--                <template #icon>-->
@@ -240,50 +234,52 @@
             <!--              </el-button>-->
             <!--            </div>-->
 
-            <!--            <div class="sign-in-btn-container">-->
-            <!--              <el-button @click="googleSignIn()"-->
-            <!--                         size="large"-->
-            <!--                         class="login-option-btn"-->
-            <!--                         link round-->
-            <!--                        >-->
-            <!--                <template #icon>-->
-            <!--                  <el-icon>-->
-            <!--                    <IconLogosGoogleIcon></IconLogosGoogleIcon>-->
-            <!--                  </el-icon>-->
-            <!--                </template>-->
-            <!--                 SIGN IN WITH GOOGLE-->
-            <!--              </el-button>-->
-            <!--            </div>-->
+            <div class="sign-in-btn-container">
+              <el-button @click="googleSignIn()"
+                         class="login-option-btn"
+                         plain
+              >
+                <template #icon>
+                  <el-icon>
+                    <IconLogosGoogleIcon></IconLogosGoogleIcon>
+                  </el-icon>
+                </template>
+                Sign in with Google
+              </el-button>
+            </div>
 
           </div>
 
+          <div class="login-sign-up-container">
+            Don't have an account?
+            <el-button link @click="signUp()">Sign up</el-button>
+          </div>
 
         </div>
 
+        <div class="login-copyright">
+          © EDU Passport 2023
+        </div>
+
       </el-col>
-      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-        <div class="login-r">
 
-          <div class="login-close">
-            <el-button
-                type="primary"
-                link
-                @click="goHome()"
-            >
-              CLOSE
-            </el-button>
+      <el-col :xs="0" :sm="0" :md="12" :lg="12" :xl="12">
+        <div class="login-r-images">
+          <el-image class="login-r-image" :src="loginRImage" fit="cover"></el-image>
+          <div class="login-r-image-mask">
+            <div class="login-r-image-mask-content">
+              <div class="login-r-image-mask-title">
+                “As an Educator, EDU Passport has been my go-to platform for all things education.”
+              </div>
+              <div class="login-r-image-mask-name">
+                Abigel Dawn
+              </div>
+              <div class="login-r-image-mask-position">
+                English Educator
+              </div>
+            </div>
+
           </div>
-
-          <div class="sign-up">
-            <el-button
-                plain
-                round
-                @click="signUp()"
-            >
-              SIGN UP
-            </el-button>
-          </div>
-
         </div>
       </el-col>
 
@@ -318,7 +314,8 @@
 
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
 import logoImgLight from "@/assets/newHome/logo/Logo_Transparent.png"
-import imgLogo from '@/assets/logo.png'
+import loginRImage from "@/assets/newHome/login/r-image.png"
+import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
 //WEIXIN_SEND_SMS
 import {
   EMAIL_REGISTER_V2,
@@ -350,11 +347,12 @@ export default {
   name: "index",
   data() {
     return {
-      isFromChinaEnv:process.env.VUE_APP_CHINA,
-      loginErrorDialogWidthValue:'50%',
+      isFromChinaEnv: process.env.VUE_APP_CHINA,
+      loginErrorDialogWidthValue: '50%',
       loginErrorDialogVisible: false,
       imgLogo,
       logoImgLight,
+      loginRImage,
       identityBusinessCheckedStatus: false,
       identityBusinessStrBefore: "",
       identityBusinessStr: 'Education-Business',
@@ -370,10 +368,10 @@ export default {
       },
       loginRules: {
         email: [
-          {type:'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+          {type: 'email', required: true, message: 'Enter a valid email address', trigger: 'blur'}
         ],
         password: [
-          {required: true, message: 'Please enter your password', trigger: 'blur'}
+          {required: true, message: 'Invalid password', trigger: 'blur'}
         ]
       },
       loginPhoneSmsForm: {
@@ -424,7 +422,7 @@ export default {
           {required: true, message: 'Please fill out your code.', trigger: 'blur'}
         ],
         email: [
-          {type:'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+          {type: 'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
         ],
         password: [
           {required: true, message: 'Please enter your password', trigger: 'blur'}
@@ -807,7 +805,7 @@ export default {
 
 
     },
-    handleSetCurrentUser(uid,identity, companyId, firstName, lastName, avatar){
+    handleSetCurrentUser(uid, identity, companyId, firstName, lastName, avatar) {
 
       let uuid = uid + '#' + identity + '#' + companyId
       let name = firstName + ' ' + lastName
@@ -821,7 +819,7 @@ export default {
       this.setCurrentUser(currentUser)
 
     },
-    storageLoginUserInfo(resMessage){
+    storageLoginUserInfo(resMessage) {
 
       let self = this;
 
@@ -849,22 +847,22 @@ export default {
         companyName = firstName + ' ' + lastName;
         this.updateEducatorPercentage()
       }
-      if(identity == 2){
+      if (identity == 2) {
         avatar = resMessage.recruiting_info.logo;
         companyName = resMessage.recruiting_info.company_name;
         this.updateRecruiterPercentage()
       }
-      if(identity == 3){
+      if (identity == 3) {
         avatar = resMessage.school_info.logo;
         companyName = resMessage.school_info.company_name;
         this.updateSchoolPercentage()
       }
-      if(identity == 4){
+      if (identity == 4) {
         avatar = resMessage.other_info.logo;
         companyName = resMessage.other_info.company_name;
         this.updateOtherPercentage()
       }
-      if(identity == 5){
+      if (identity == 5) {
         avatar = resMessage.vendor_info.logo;
         companyName = resMessage.vendor_info.company_name;
         this.updateVendorPercentage()
@@ -903,7 +901,7 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    updateRecruiterPercentage(){
+    updateRecruiterPercentage() {
       let params = {
         token: localStorage.getItem('token')
       }
@@ -914,7 +912,7 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    updateSchoolPercentage(){
+    updateSchoolPercentage() {
       let params = {
         token: localStorage.getItem('token')
       }
@@ -925,7 +923,7 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    updateOtherPercentage(){
+    updateOtherPercentage() {
       let params = {
         token: localStorage.getItem('token')
       }
@@ -936,7 +934,7 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    updateVendorPercentage(){
+    updateVendorPercentage() {
       let params = {
         token: localStorage.getItem('token')
       }
@@ -1320,26 +1318,27 @@ export default {
       this.showValue = value
     },
     async googleSignIn() {
-      try {
-        const googleUser = await this.$gAuth.signIn();
-        if (!googleUser) {
-          return null;
-        }
-        console.log("googleUser", googleUser);
-        this.user = googleUser.getBasicProfile().getEmail();
-        console.log("getId", this.user);
-        console.log("getBasicProfile", googleUser.getBasicProfile());
-        console.log("getAuthResponse", googleUser.getAuthResponse());
-        console.log(
-            "getAuthResponse",
-            this.$gAuth.instance.currentUser.get().getAuthResponse()
-        );
-
-      } catch (error) {
-        //on fail do something
-        console.error(error);
-        return null;
-      }
+      console.log('google sign in')
+      // try {
+      //   const googleUser = await this.$gAuth.signIn();
+      //   if (!googleUser) {
+      //     return null;
+      //   }
+      //   console.log("googleUser", googleUser);
+      //   this.user = googleUser.getBasicProfile().getEmail();
+      //   console.log("getId", this.user);
+      //   console.log("getBasicProfile", googleUser.getBasicProfile());
+      //   console.log("getAuthResponse", googleUser.getAuthResponse());
+      //   console.log(
+      //       "getAuthResponse",
+      //       this.$gAuth.instance.currentUser.get().getAuthResponse()
+      //   );
+      //
+      // } catch (error) {
+      //   //on fail do something
+      //   console.error(error);
+      //   return null;
+      // }
     },
     async handleClickGetAuthCode() {
 
@@ -1374,7 +1373,8 @@ export default {
       this.loginByPhoneWithPasswordStatus = !this.loginByPhoneWithPasswordStatus
     },
     forgotPassword() {
-      this.forgotDialogVisible = true
+      this.$router.push({path:'/forgot/password',query:{ }})
+      // this.forgotDialogVisible = true
     },
     closeForgotDialog() {
       this.forgotDialogVisible = false
@@ -1390,42 +1390,154 @@ export default {
 <style scoped>
 
 .login-bg {
-  min-height: 100vh;
-  background-color: #F0F2F5;
+  height: 100vh;
   position: relative;
+  background-color: #FFFFFF;
 }
 
 .login-container {
-  padding-top: 50px;
+  margin: 0 auto;
+  height: 100%;
 }
+.login-l-col{
+  display: flex;
+  flex-direction: column;
 
-.login-l {
-  padding-left: 50px;
+}
+.login-t {
+  margin: 30px 0 0 40px;
   cursor: pointer;
 }
 
-.login-l-logo {
-  width: 60px;
+.login-t-logo {
+  width: 180px;
 }
-
-.login-l-edu {
-  font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 40px;
-}
-
-.login-l-passport {
-  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 17px;
-}
-
 
 .login-m {
-  width: 576px;
-  margin: 0 auto;
+  width: 360px;
+  margin: 100px auto 25px;
 }
 
-.login-m h1 {
+.login-m-label {
   text-align: center;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 32px;
+  color: #101828;
+}
+
+.login-m-tips {
+
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+
+  text-align: center;
+  color: #667085;
+  margin-top: 4px;
+}
+
+.login-sign-up-container {
+  margin-top: 20px;
+
+  font-family: Inter, Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+
+  color: #667085;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-r-images {
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+}
+
+.login-r-image {
+  width: 100%;
+  height: 100%;
+}
+
+.login-r-image-mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+
+  background: linear-gradient(0.7deg, rgba(105, 65, 198, 0.3) 0.59%, rgba(105, 65, 198, 0) 99.39%);
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.login-r-image-mask-content {
+  margin: 60px;
+}
+
+.login-r-image-mask-title {
+
+  font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 56px;
+
+  letter-spacing: -0.02em;
+
+  color: #FFFFFF;
+  margin-bottom: 40px;
+}
+
+.login-r-image-mask-name {
+  font-family: 'Work Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 30px;
+
+  color: #FFFFFF;
+
+  margin-bottom: 10px;
+
+}
+
+.login-r-image-mask-position {
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+
+  color: #EAECF0;
+}
+
+.login-copyright {
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+
+  color: #667085;
+
+  margin-top: auto;
+  margin-left: 40px;
+  margin-bottom: 25px;
 }
 
 .xll-login-form-container {
@@ -1436,62 +1548,28 @@ export default {
   margin-top: 50px;
 }
 
-.sign-in-btn-container {
-
-}
-
-.login-r {
-  padding-right: 50px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-
-}
-
-.sign-up {
-
-}
-
-.sign-up-btn {
-  font-size: 20px;
-  color: #262626;
-}
-
-.login-close {
-  margin-right: 20px;
-}
-
-.login-close-btn {
-  font-size: 20px;
-  color: #262626;
-}
-
-
-.create-account-link a {
-  text-decoration: none;
-  color: #00b3d2;
-  padding: 10px;
-  font-weight: bold;
-}
-
 .forgot-password-container {
   text-align: center;
 }
 
 .forgot-password-btn {
-
+  font-family: 'Poppins', Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 12px;
+  color: #6941C6;
 }
 
 /deep/ .el-checkbox__label {
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
-  font-size: 20px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+  font-size: 14px;
 }
 
 .login-option-btn {
 
   width: 100%;
-  /*font-size: 20px;*/
+
   margin-top: 20px;
   display: flex;
   flex-direction: row;
@@ -1501,7 +1579,7 @@ export default {
 }
 
 .submit-btn {
-  height: 40px;
+  width: 100%;
   margin: 50px auto 0;
 }
 
@@ -1556,9 +1634,10 @@ export default {
 }
 
 /deep/ .el-divider__text {
-  background-color: #F0F2F5;
+  background-color: #FFFFFF;
+  color: #D0D5DD;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
-
 
 .login-error-container {
   text-align: center;
@@ -1581,77 +1660,78 @@ export default {
   width: 100px;
 }
 
-@media screen and (min-width: 769px) {
-  .mobile-banner{
-    display: none;
+
+
+@keyframes gradientBG {
+   0% {
+     background-position: 0% 50%;
+   }
+   50% {
+     background-position: 100% 50%;
+   }
+   100% {
+     background-position: 0% 50%;
+   }
+ }
+
+
+@media screen and (min-width: 992px ) and (max-width: 1399px) {
+  .login-m {
+    width: 360px;
+    margin: 100px auto 25px;
   }
-  .mobile-banner-bg{
-    display: none;
+}
+
+@media screen and (min-width: 1400px) {
+  .login-container {
+    max-width: 1400px;
   }
+
+  .login-m {
+    width: 360px;
+    margin: 100px auto 25px;
+  }
+
+  .login-m-label {
+    font-size: 32px;
+    line-height: 32px;
+  }
+
+  .login-m-tips {
+    margin-top: 4px;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+  }
+
+  .login-sign-up-container {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+
 }
 
 @media screen and (max-width: 768px) {
 
-  .mobile-banner{
-    position: relative;
-    width: 100%;
-    height: 230px;
-    overflow: hidden;
-  }
-  .mobile-banner .mobile-banner-bg{
-    position: absolute;
-    left: -15%;
-    width: 130%;
-    height: 230px;
-    background-color: #E7DEFF;
-    border-bottom-left-radius: 100%;
-    border-bottom-right-radius: 100%;
+   .login-m{
+     width:auto;
+     margin: 100px 25px 0 25px;
+   }
 
+  .xll-login-form-container{
+    margin-top: 40px;
   }
 
-  .login-container {
-    padding-top: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+  .submit-btn{
+    margin-top: 25px;
   }
 
-  .login-m-col {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /*height: 100vh;*/
-
+  .xll-divider{
+    margin-top: 25px;
   }
 
-  .login-l {
-    padding-left: 15px;
-    padding-top: 15px;
-  }
-
-  .login-m {
-    width: 100%;
-    margin-top: 180px;
-  }
-
-  .login-m h1 {
-    font-size: 20px;
-  }
-
-  .login-r {
-    padding-top: 15px;
-    padding-right: 15px;
-  }
-
-  .login-l-logo{
-    width: 30px;
-  }
-
-  /deep/ .el-checkbox__label {
-    font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
-    font-size: 12px;
-  }
 
 }
 </style>
