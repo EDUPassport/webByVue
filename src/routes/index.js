@@ -704,10 +704,28 @@ const routes = [
     {
         path: '/signup',
         name: 'signup',
-        component: () => import('@/views/login/register/index'),
+        component: () => import('@/views/login/register/userType.vue'),
         meta: {
-            titleC: 'EDU Passport Sign Up',
-            titleG: 'EDU Passport Sign Up',
+            titleC: 'EDU Passport Sign Up Select User Type',
+            titleG: 'EDU Passport Sign Up Select User Type',
+        },
+    },
+    {
+        path: '/signup/fillOutInfo',
+        name: 'signupFillOutInfo',
+        component: () => import('@/views/login/register/fillOutInfo.vue'),
+        meta: {
+            titleC: 'EDU Passport Fill Out Info',
+            titleG: 'EDU Passport Fill Out Info',
+        },
+    },
+    {
+        path: '/signup/accountCreation',
+        name: 'accountCreation',
+        component: () => import('@/views/login/register/accountCreation.vue'),
+        meta: {
+            titleC: 'EDU Passport Account Creation',
+            titleG: 'EDU Passport Account Creation',
         },
     },
     {

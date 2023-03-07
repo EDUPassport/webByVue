@@ -49,8 +49,11 @@
               </el-form-item>
 
               <div class="resend-code">
-                <el-button class="resend-code-btn" type="primary" link @click="resendCode()">
-                  Resend Code
+                <el-button class="resend-code-btn" type="primary" link
+                           :loading="checkCodeBtn.loading"
+                           :disabled="checkCodeBtn.disabled"
+                           @click="resendCode()">
+                  {{checkCodeBtn.text}}
                 </el-button>
               </div>
 
@@ -85,7 +88,8 @@ import passwordLockImg from '@/assets/newHome/login/verification-code.png'
 import {useRouter, useRoute} from 'vue-router'
 import {ref,reactive} from 'vue'
 import {ElMessage} from 'element-plus'
-import {REGISTER_EMAIL_CHECK, SEND_EMAIL_CODE_REST_PASSWORD} from "@/api/api";
+import { SEND_EMAIL_CODE_REST_PASSWORD} from "@/api/api";
+import {encode,decode} from 'js-base64'
 
 export default {
   name: "sendCode",
@@ -112,10 +116,49 @@ export default {
 
     const verificationCodeDisabledStatus = ref(true)
 
+    const checkCodeBtn = reactive(
+        {
+          text:'Resend Code',
+          loading:false,
+          disabled:false,
+          duration:60,
+          timer:null
+        }
+    )
+
+    const getCheckCodeTimer = ()=>{
+      if(checkCodeBtn.duration !== 60){
+        checkCodeBtn.disabled = true
+        checkCodeBtn.loading = true
+      }
+      // 清除定时器
+      checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
+      //开启定时器
+      checkCodeBtn.timer = setInterval(()=>{
+        const tmp = checkCodeBtn.duration--
+        checkCodeBtn.text = `00:${tmp} S`
+        checkCodeBtn.loading = true
+        checkCodeBtn.disabled = true
+        if(tmp <= 0){
+          //清除定时器
+          clearInterval(checkCodeBtn.timer)
+          checkCodeBtn.duration = 60
+          checkCodeBtn.text = 'Resend Code'
+          // 设置按钮可以点击
+          checkCodeBtn.disabled = false
+          checkCodeBtn.loading = false
+        }
+        console.log(checkCodeBtn)
+      },1000)
+    }
+
     const passwordForms = ref()
 
+    let str = decodeURIComponent(route.query.str);
+    let decodeStr =JSON.parse( decode(str) )
+
     const passwordForm = reactive({
-      email:route.query.email,
+      email:decodeStr.email,
       email_code:''
     })
 
@@ -130,7 +173,7 @@ export default {
 
     function resendCode(){
 
-      if(!route.query.email){
+      if(!decodeStr.email){
         ElMessage({
           type:'warning',
           message:'Enter a valid email address',
@@ -140,13 +183,16 @@ export default {
         return false
       }
 
+      getCheckCodeTimer()
+
       let params = {
-        email:route.query.email
+        email:decodeStr.email
       }
 
       SEND_EMAIL_CODE_REST_PASSWORD(params).then(res=>{
         console.log(res)
         if(res.code == 200){
+
           ElMessage({
             type:'success',
             message:'Resend Code Successfully',
@@ -156,6 +202,8 @@ export default {
 
       }).catch(err=>{
         console.log(err)
+
+        checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
 
         if(err.msg){
           ElMessage({
@@ -177,44 +225,47 @@ export default {
 
       })
 
-
     }
-
 
     function verificationCodeForEmail(formName){
       if(!formName) return;
-      console.log(formName)
+
       formName.validate((valid) => {
         if (valid) {
           let params = Object.assign({}, passwordForm)
 
-          REGISTER_EMAIL_CHECK(params).then(res=>{
-            console.log(res)
-            if(res.code == 200){
-              router.push({path:'/forgot/setNewPassword',query:params})
-            }
+          console.log(params)
 
-          }).catch(err=>{
-            console.log(err)
-            if(err.msg){
-              ElMessage({
-                type:'error',
-                message: err.msg,
-                grouping:true
-              })
-              return;
-            }
+          let paramsStr = encode(JSON.stringify(params))
+          router.push({path:'/forgot/setNewPassword',query:{str:encodeURIComponent(paramsStr)}})
 
-            if(err.message){
-              ElMessage({
-                type:'error',
-                message: err.message,
-                grouping:true
-              })
-
-            }
-
-          })
+          // REGISTER_EMAIL_CHECK(params).then(res=>{
+          //   console.log(res)
+          //   if(res.code == 200){
+          //     router.push({path:'/forgot/setNewPassword',query:params})
+          //   }
+          //
+          // }).catch(err=>{
+          //   console.log(err)
+          //   if(err.msg){
+          //     ElMessage({
+          //       type:'error',
+          //       message: err.msg,
+          //       grouping:true
+          //     })
+          //     return;
+          //   }
+          //
+          //   if(err.message){
+          //     ElMessage({
+          //       type:'error',
+          //       message: err.message,
+          //       grouping:true
+          //     })
+          //
+          //   }
+          //
+          // })
 
         } else {
           console.log('error submit!!')
@@ -230,6 +281,8 @@ export default {
     }
 
     return {
+      checkCodeBtn,
+      getCheckCodeTimer,
       verificationCodeForEmail,
       passwordForms,
       passwordForm,
@@ -451,6 +504,7 @@ export default {
 }
 
 .password-m{
+  min-width: 380px;
   margin: 100px auto 20px;
 }
 

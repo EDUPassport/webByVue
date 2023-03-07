@@ -71,6 +71,7 @@ import {useRouter} from 'vue-router'
 import {ref,reactive} from 'vue'
 import {ElMessage} from 'element-plus'
 import {SEND_EMAIL_CODE_REST_PASSWORD} from "@/api/api";
+import {encode} from 'js-base64'
 
 export default {
   name: "password",
@@ -119,7 +120,8 @@ export default {
             console.log(res)
             if(res.code == 200){
               passwordLoadingStatus.value = false;
-              router.push({path:'/forgot/sendCode',query:{email:passwordForm.email}})
+              let paramsStr = encode(JSON.stringify(params))
+              router.push({path:'/forgot/sendCode',query:{str:encodeURIComponent(paramsStr)}})
             }
           }).catch(err=>{
             console.log(err)
@@ -197,7 +199,7 @@ export default {
 }
 
 .password-m{
-  width: 380px;
+  min-width: 380px;
   margin: 100px auto 20px;
 }
 

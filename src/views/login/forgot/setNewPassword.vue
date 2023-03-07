@@ -59,9 +59,10 @@
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
 import passwordLockImg from '@/assets/newHome/login/password-unlock.png'
 
-import {useRouter} from 'vue-router'
+import {useRouter, useRoute} from 'vue-router'
 import {ref,reactive} from 'vue'
 import {ElMessage} from 'element-plus'
+import {decode} from 'js-base64'
 
 export default {
   name: "setNewPassword",
@@ -74,6 +75,7 @@ export default {
   setup(){
 
     const router = useRouter()
+    const route = useRoute()
 
     function turnHome(){
       return router.push('/')
@@ -87,12 +89,27 @@ export default {
 
     const passwordForms = ref()
 
+    let str = decodeURIComponent(route.query.str);
+    let decodeStr =JSON.parse( decode(str) )
+
+
     const passwordForm = reactive({
-      email:'',
-      email_code:'',
+      email: decodeStr.email,
+      email_code: decodeStr.email_code,
       password:'',
       confirm_password:''
     })
+
+
+    const checkConfirmPassword = (rule,value,callback)=>{
+      if(value === ''){
+        callback(new Error('Confirm your password'))
+      }else if(value !== passwordForm.password){
+        callback(new Error('password doesn’t match'))
+      }else{
+        callback()
+      }
+    }
 
     const passwordRules = reactive({
       email: [
@@ -105,26 +122,27 @@ export default {
         {required: true, message: 'Enter your password', trigger: 'blur'}
       ],
       confirm_password: [
-        {required: true, message: 'Confirm your password', trigger: 'blur'}
+        {required: true, validator:checkConfirmPassword, trigger: 'blur'}
       ]
     })
 
     function resetPassword(formName){
       if(!formName) return;
-      console.log(formName)
+
       formName.validate((valid) => {
         if (valid) {
           let params = Object.assign({}, passwordForm)
-          router.push({path:'/forgot/sendCode',query:{email:passwordForm.email}})
+
           console.log(params)
           console.log(passwordForm.email)
-        } else {
-          console.log('error submit!!')
           ElMessage({
-            type:'warning',
-            message:'Enter a valid email address',
+            type:'success',
+            message:'Success',
             grouping:true
           })
+
+        } else {
+          console.log('error submit!!')
           return false
         }
       })
@@ -175,6 +193,7 @@ export default {
 }
 
 .password-m{
+  min-width: 380px;
   margin: 100px auto 20px;
 }
 
