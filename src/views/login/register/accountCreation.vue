@@ -6,18 +6,47 @@
           <el-image class="signup-t-logo" :src="imgLogo"></el-image>
         </div>
         <div class="signup-m">
-          <div>
-            <el-button plain>
+
+          <div class="signup-back-btn-container">
+            <el-button plain @click="turnBack()">
               <el-icon style="margin-right: 10px;">
-                <Back />
+                <Back/>
               </el-icon>
               Back
             </el-button>
           </div>
-          <div class="signup-m-label">Let’s get started</div>
-          <div class="signup-m-tips">
-            Just a few more details, we're almost there.
-          </div>
+
+          <template v-if="userType === 'educator' ">
+            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-tips">
+              Just a few more details, we're almost there.
+            </div>
+          </template>
+          <template v-if="userType === 'school' ">
+            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-tips">
+              Tell us about yourself a bit.
+            </div>
+          </template>
+          <template v-if="userType === 'recruiter' ">
+            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-tips">
+              Tell us about yourself a bit.
+            </div>
+          </template>
+          <template v-if="userType === 'other' ">
+            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-tips">
+              Tell us about yourself a bit.
+            </div>
+          </template>
+          <template v-if="userType === 'vendor' ">
+            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-tips">
+              Tell us about yourself a bit.
+            </div>
+
+          </template>
 
           <div class="signup-m-form">
 
@@ -30,22 +59,23 @@
                 class="demo-ruleForm"
             >
               <el-form-item label="Email" prop="email">
-                <el-input placeholder="Enter your email" v-model="signForm.name"></el-input>
+                <el-input placeholder="Enter your email" v-model="signForm.email"></el-input>
               </el-form-item>
               <el-form-item label="Password" prop="password">
                 <el-input show-password placeholder="Enter your password" v-model="signForm.password"></el-input>
               </el-form-item>
-              <el-form-item label="Confirm Password" prop="confirm_password">
-                <el-input show-password placeholder="Confirm your password" v-model="signForm.confirm_password"></el-input>
+              <el-form-item label="Confirm Password" prop="c_password">
+                <el-input show-password placeholder="Confirm your password"
+                          v-model="signForm.c_password"></el-input>
               </el-form-item>
 
               <div class="continue-btn-container">
-                <el-button class="continue-btn" type="primary" @click="continueNextStep()">
+                <el-button class="continue-btn" type="primary" @click="confirmForm(signForms)">
                   Confirm
                 </el-button>
               </div>
 
-              <div class="xll-divider" >
+              <div class="xll-divider">
                 <el-divider content-position="center">OR</el-divider>
               </div>
 
@@ -81,7 +111,7 @@
             Signup Progress
           </div>
 
-          <stepComponent :identity="userIdentity" :step-index="3"></stepComponent>
+          <stepComponent :userType="userType" :step-index="3"></stepComponent>
 
         </div>
 
@@ -106,10 +136,12 @@ import {useRouter, useRoute} from 'vue-router'
 import {ref, reactive} from 'vue'
 import {countriesData} from "@/utils/data";
 import stepComponent from "@/components/register/stepComponent.vue";
+import {encodeByJsBase64,decodeByJsBase64} from "@/utils/utils";
+import {ElMessage} from 'element-plus'
 
 export default {
   name: "accountCreation",
-  components:{
+  components: {
     stepComponent
   },
   data() {
@@ -130,9 +162,8 @@ export default {
 
     const router = useRouter()
     const route = useRoute()
-    const userType = ref(1)
 
-    const userIdentity = route.query.type;
+    const userType = route.query.type;
 
     function turnHome() {
       return router.push('/')
@@ -142,26 +173,72 @@ export default {
       return router.push('/login')
     }
 
-    function continueNextStep(){
-      router.push({path:'/signup/fillOutInfo',query:{type:userType.value}})
-    }
 
     const signForms = ref(null)
     const signForm = reactive({
-
+      email: '',
+      password: '',
+      c_password: ''
     })
+    const checkConfirmPassword = (rule,value,callback)=>{
+      if(value === ''){
+        callback(new Error('Confirm your password'))
+      }else if(value !== signForm.password){
+        callback(new Error('password doesn’t match'))
+      }else{
+        callback()
+      }
+    }
 
     const signRules = reactive({
-
+      email: [
+        {type: 'email' , required: true, message: 'Enter a valid email address', trigger: 'blur'}
+      ],
+      password: [
+        {required: true, message: 'Enter your password', trigger: 'blur'}
+      ],
+      c_password: [
+        {required: true, validator:checkConfirmPassword, trigger: 'blur'}
+      ]
     })
 
+    function turnBack() {
+      router.go(-1)
+    }
+
+    function confirmForm(formName) {
+
+      formName.validate((valid)=>{
+        if(valid){
+          let routeFormInfo = decodeByJsBase64(route.query.formInfo)
+          let formDecode = JSON.parse(routeFormInfo)
+
+          let params = Object.assign(formDecode,signForm)
+          let formInfo = encodeByJsBase64(JSON.stringify(params))
+
+          router.push({path: '/signup/accountVerification', query: { type: userType,formInfo:formInfo}})
+
+        }else{
+          console.log('error submit!!')
+          ElMessage({
+            type:'warning',
+            message:'Please complete all required fields',
+            grouping:true
+          })
+          return false
+        }
+
+      })
+
+    }
+
     return {
-      userIdentity,
       signForms,
       signForm,
       signRules,
       userType,
-      continueNextStep,
+      turnBack,
+      confirmForm,
       turnHome,
       backToLogin
     }
@@ -188,7 +265,6 @@ export default {
 }
 
 
-
 .signup-t {
   margin: 30px 0 0 40px;
   cursor: pointer;
@@ -200,7 +276,16 @@ export default {
 
 .signup-m {
   min-width: 380px;
+
   margin: 40px auto 20px;
+  padding-top: 60px;
+  position: relative;
+}
+
+.signup-back-btn-container {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .signup-m-icon {
@@ -313,16 +398,16 @@ export default {
   overflow: hidden;
 }
 
-.signup-r-container{
+.signup-r-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 
 }
 
-.signup-r-label{
+.signup-r-label {
 
-  font-family: 'Inter',Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-family: 'Inter', Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -350,7 +435,7 @@ export default {
   color: #667085;
 }
 
-.xll-divider{
+.xll-divider {
   margin-top: 20px;
 }
 
@@ -360,12 +445,12 @@ export default {
   font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.sign-in-btn-container{
+.sign-in-btn-container {
   width: 100%;
   margin-top: 20px;
 }
 
-.login-option-btn{
+.login-option-btn {
   width: 100%;
 }
 

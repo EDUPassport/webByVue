@@ -23,44 +23,23 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <el-form-item label="6-Digit-Code" prop="email_code" >
+              <el-form-item label="6-Digit-Code" prop="code" >
 
-                <div class="input-box" @keydown="keydown" @keyup="keyup"  @input="inputEvent">
-
-                  <input maxlength="1" min="0" max="9" data-index="0" oninput ="value=value.replace(/[^\d]/g,'')" v-model.trim.number="input[0]" ref="firstInput" />
-                  <input class="input-box-space" disabled data-index="-1" />
-
-                  <input maxlength="1" min="0" max="9" data-index="1" oninput ="value=value.replace(/[^\d]/g,'')" v-model.trim.number="input[1]"  />
-                  <input class="input-box-space" disabled data-index="-1" />
-
-                  <input maxlength="1" min="0" max="9" data-index="2" oninput ="value=value.replace(/[^\d]/g,'')" v-model.trim.number="input[2]"  />
-                  <input class="input-box-space" disabled data-index="-1" />
-
-                  <input maxlength="1" min="0" max="9" data-index="3" oninput ="value=value.replace(/[^\d]/g,'')" v-model.trim.number="input[3]"  />
-                  <input class="input-box-space" disabled data-index="-1" />
-
-                  <input maxlength="1" min="0" max="9" data-index="4" oninput ="value=value.replace(/[^\d]/g,'')" v-model.trim.number="input[4]"  />
-                  <input class="input-box-space" disabled data-index="-1" />
-
-                  <input maxlength="1" min="0" max="9" data-index="5" oninput ="value=value.replace(/[^\d]/g,'')" v-model.trim.number="input[5]"  />
-
-                </div>
+                <sixInputVerificationCode @disabled="disabledNext" @complete="sixCodeComplete" ></sixInputVerificationCode>
 
               </el-form-item>
 
-              <div class="resend-code">
-                <el-button class="resend-code-btn" type="primary" link
-                           :loading="checkCodeBtn.loading"
-                           :disabled="checkCodeBtn.disabled"
-                           @click="resendCode()">
-                  {{checkCodeBtn.text}}
-                </el-button>
-              </div>
+              <check-code-button
+                  type="email-forgot"
+                  :email="passwordForm.email"
+                  text="Resend Code"
+                  success-text="Resend Code Successfully">
+              </check-code-button>
 
               <el-form-item>
                 <el-button class="reset-btn"
                            type="primary"
-                           :disabled="verificationCodeDisabledStatus"
+                           :disabled="nextDisabledStatus"
                            @click="verificationCodeForEmail(passwordForms)">
                   Next
                 </el-button>
@@ -88,20 +67,23 @@ import passwordLockImg from '@/assets/newHome/login/verification-code.png'
 import {useRouter, useRoute} from 'vue-router'
 import {ref,reactive} from 'vue'
 import {ElMessage} from 'element-plus'
-import { SEND_EMAIL_CODE_REST_PASSWORD} from "@/api/api";
+import {CHECK_EMAIL_CODE_REST_PASSWORD_V3} from "@/api/api";
 import {encode,decode} from 'js-base64'
+import sixInputVerificationCode from "@/components/register/sixInputVerificationCode.vue";
+import checkCodeButton from "@/components/register/checkCodeButton.vue";
 
 export default {
   name: "sendCode",
+  components:{
+    sixInputVerificationCode,
+    checkCodeButton
+  },
   data(){
     return {
       imgLogo,
-      passwordLockImg,
-      pasteResult: [],
-      input:['', '', '', '', '', '']
+      passwordLockImg
     }
   },
-
   setup(){
 
     const router = useRouter()
@@ -114,118 +96,35 @@ export default {
       return router.push('/login')
     }
 
-    const verificationCodeDisabledStatus = ref(true)
-
-    const checkCodeBtn = reactive(
-        {
-          text:'Resend Code',
-          loading:false,
-          disabled:false,
-          duration:60,
-          timer:null
-        }
-    )
-
-    const getCheckCodeTimer = ()=>{
-      if(checkCodeBtn.duration !== 60){
-        checkCodeBtn.disabled = true
-        checkCodeBtn.loading = true
-      }
-      // 清除定时器
-      checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
-      //开启定时器
-      checkCodeBtn.timer = setInterval(()=>{
-        const tmp = checkCodeBtn.duration--
-        checkCodeBtn.text = `00:${tmp} S`
-        checkCodeBtn.loading = true
-        checkCodeBtn.disabled = true
-        if(tmp <= 0){
-          //清除定时器
-          clearInterval(checkCodeBtn.timer)
-          checkCodeBtn.duration = 60
-          checkCodeBtn.text = 'Resend Code'
-          // 设置按钮可以点击
-          checkCodeBtn.disabled = false
-          checkCodeBtn.loading = false
-        }
-        console.log(checkCodeBtn)
-      },1000)
-    }
-
     const passwordForms = ref()
 
     let str = decodeURIComponent(route.query.str);
     let decodeStr =JSON.parse( decode(str) )
+    function sixCodeComplete(e){
+      console.log(e)
+      passwordForm.code = e.join('')
+    }
+
+    const nextDisabledStatus = ref(true)
+
+    function disabledNext(e){
+      console.log(e)
+      nextDisabledStatus.value = e;
+    }
 
     const passwordForm = reactive({
       email:decodeStr.email,
-      email_code:''
+      code:''
     })
 
     const passwordRules = reactive({
       email: [
         {type: 'email', required: true, message: 'Enter a valid email address', trigger: 'blur'}
       ],
-      email_code: [
+      code: [
         {required: true, message: 'Enter verification code', trigger: 'blur'}
       ],
     })
-
-    function resendCode(){
-
-      if(!decodeStr.email){
-        ElMessage({
-          type:'warning',
-          message:'Enter a valid email address',
-          grouping:true
-        })
-
-        return false
-      }
-
-      getCheckCodeTimer()
-
-      let params = {
-        email:decodeStr.email
-      }
-
-      SEND_EMAIL_CODE_REST_PASSWORD(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-
-          ElMessage({
-            type:'success',
-            message:'Resend Code Successfully',
-            grouping:true
-          })
-        }
-
-      }).catch(err=>{
-        console.log(err)
-
-        checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
-
-        if(err.msg){
-          ElMessage({
-            type:'error',
-            message: err.msg,
-            grouping:true
-          })
-          return;
-        }
-
-        if(err.message){
-          ElMessage({
-            type:'error',
-            message: err.message,
-            grouping:true
-          })
-
-        }
-
-      })
-
-    }
 
     function verificationCodeForEmail(formName){
       if(!formName) return;
@@ -234,38 +133,35 @@ export default {
         if (valid) {
           let params = Object.assign({}, passwordForm)
 
-          console.log(params)
-
           let paramsStr = encode(JSON.stringify(params))
-          router.push({path:'/forgot/setNewPassword',query:{str:encodeURIComponent(paramsStr)}})
 
-          // REGISTER_EMAIL_CHECK(params).then(res=>{
-          //   console.log(res)
-          //   if(res.code == 200){
-          //     router.push({path:'/forgot/setNewPassword',query:params})
-          //   }
-          //
-          // }).catch(err=>{
-          //   console.log(err)
-          //   if(err.msg){
-          //     ElMessage({
-          //       type:'error',
-          //       message: err.msg,
-          //       grouping:true
-          //     })
-          //     return;
-          //   }
-          //
-          //   if(err.message){
-          //     ElMessage({
-          //       type:'error',
-          //       message: err.message,
-          //       grouping:true
-          //     })
-          //
-          //   }
-          //
-          // })
+          CHECK_EMAIL_CODE_REST_PASSWORD_V3(params).then(res=>{
+            console.log(res)
+            if(res.code == 200){
+              router.push({path:'/forgot/setNewPassword',query:{str:encodeURIComponent(paramsStr)}})
+            }
+
+          }).catch(err=>{
+            console.log(err)
+            if(err.msg){
+              ElMessage({
+                type:'error',
+                message: err.msg,
+                grouping:true
+              })
+              return;
+            }
+
+            if(err.message){
+              ElMessage({
+                type:'error',
+                message: err.message,
+                grouping:true
+              })
+
+            }
+
+          })
 
         } else {
           console.log('error submit!!')
@@ -281,201 +177,20 @@ export default {
     }
 
     return {
-      checkCodeBtn,
-      getCheckCodeTimer,
+
       verificationCodeForEmail,
       passwordForms,
       passwordForm,
       passwordRules,
-      verificationCodeDisabledStatus,
-      resendCode,
+
+      nextDisabledStatus,
+      sixCodeComplete,
+      disabledNext,
       turnHome,
       backToLogin
     }
-  },
-  mounted(){
-    this.$nextTick(() => {
-      this.$refs.firstInput.focus()
-    })
-  },
-  methods:{
-    // 解决一个输入框输入多个字符
-    inputEvent(e) {
-
-      let index = e.target.dataset.index * 1;
-      let el = e.target;
-      this.input[index] = el.value.slice(0,1)
-    },
-    keydown(e) {
-
-      let index = e.target.dataset.index * 1;
-      let el = e.target;
-      if (e.key === 'Backspace') {
-
-        if (this.input[index].length > 0) {
-          this.input[index] = ''
-
-        } else {
-
-          if(el.previousElementSibling ){
-
-            if(el.previousElementSibling.dataset.index === '-1'){
-              el.previousElementSibling.previousElementSibling.focus()
-            }else{
-              el.previousElementSibling.focus()
-            }
-
-            this.input[index-1] = ''
-
-          }
-
-        }
-
-        this.verificationCodeDisabledStatus =true;
-
-      } else if (e.key === 'Delete') {
-
-        if (this.input[index].length > 0) {
-          this.input[index] = ''
-        } else {
-          if (el.nextElementSibling) {
-            this.input[index = 1] = ''
-          }
-        }
-
-        if(el.nextElementSibling){
-          if( el.nextElementSibling.dataset.index === '-1'){
-            el.nextElementSibling.nextElementSibling.focus()
-          }else{
-            el.nextElementSibling.focus()
-          }
-
-        }
-
-        this.verificationCodeDisabledStatus =true;
-
-
-      } else if (e.key === 'Home') {
-
-        el.parentElement.children[0] && el.parentElement.children[0].focus()
-
-      } else if (e.key === 'End') {
-
-        // el.parentElement.children[this.input.length - 1] && el.parentElement.children[this.input.length - 1].focus()
-        el.parentElement.children[this.input.length +4 ] && el.parentElement.children[this.input.length + 4].focus()
-
-      } else if (e.key === 'ArrowLeft') {
-
-        if (el.previousElementSibling) {
-          if(el.previousElementSibling.dataset.index === '-1'){
-            el.previousElementSibling.previousElementSibling.focus()
-          }else{
-            el.previousElementSibling.focus()
-          }
-
-        }
-
-      } else if (e.key === 'ArrowRight') {
-
-        if (el.nextElementSibling) {
-          if(el.nextElementSibling.dataset.index === '-1'){
-            el.nextElementSibling.nextElementSibling.focus()
-          }else{
-            el.nextElementSibling.focus()
-          }
-
-        }
-
-      } else if (e.key === 'ArrowUp') {
-        if (this.input[index] * 1 < 9) {
-          this.input[index] = (this.input[index] * 1 + 1).toString()
-        }
-      } else if (e.key === 'ArrowDown') {
-        if (this.input[index] * 1 > 0) {
-          this.input[index] = (this.input[index] * 1 - 1).toString()
-        }
-      }
-    },
-    keyup(e) {
-
-      let index = e.target.dataset.index * 1;
-      let el = e.target;
-
-      if(e.key === 'Enter'){
-
-        this.input[index] = ''
-
-      }else{
-
-        if (/Digit|Numpad/i.test(e.code)) {
-          this.input[index] = e.code.replace(/Digit|Numpad/i, '')
-
-          // 如果中间去掉加的东西，需要改这里
-          if(el.nextElementSibling){
-
-            if(el.nextElementSibling.dataset.index === '-1'){
-              el.nextElementSibling.nextElementSibling.focus();
-
-            }else{
-              el.nextElementSibling && el.nextElementSibling.focus();
-            }
-
-          }
-
-          if (index === 5) {
-            if (this.input.join('').length === 6) {
-              document.activeElement.blur();
-              this.passwordForm.email_code = this.input.join('')
-              this.verificationCodeDisabledStatus = false;
-              // this.$emit('complete', this.input);
-            }
-          }
-
-        } else {
-          if (this.input[index] === '') {
-            this.input[index] = ''
-          }
-        }
-
-      }
-
-    },
-    mousewheel(e) {
-      let index = e.target.dataset.index;
-      if (e.wheelDelta > 0) {
-        if (this.input[index] * 1 < 9) {
-          this.input[index] = (this.input[index] * 1 + 1).toString()
-        }
-      } else if (e.wheelDelta < 0) {
-        if (this.input[index] * 1 > 0) {
-          this.input[index] = (this.input[index] * 1 - 1).toString()
-        }
-      } else if (e.key === 'Enter') {
-
-        if (this.input.join('').length === 6) {
-          document.activeElement.blur();
-          this.passwordForm.email_code = this.input.join('')
-          this.verificationCodeDisabledStatus = false;
-          // this.$emit('complete', this.input);
-        }
-      }
-    },
-    paste(e) {
-      console.log(e)
-      // console.log(e.clipboardData)
-      // 当进行粘贴时
-      e.clipboardData.items[0].getAsString(str => {
-        if (str.toString().length === 6) {
-          this.pasteResult = str.split('');
-          document.activeElement.blur();
-          // this.$emit('complete', this.input);
-          this.passwordForm.email_code = this.input.join('')
-          this.verificationCodeDisabledStatus = false;
-        }
-      })
-    }
-
   }
+
 }
 </script>
 
@@ -570,53 +285,6 @@ export default {
   line-height: 18px;
   color: #667085;
 }
-.input-box-container{
-  position: relative;
-}
 
-.input-box{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
-.input-box input{
-  width: 44px;
-  height: 44px;
-  //margin-right: 30px;
-
-  border: 1px solid #98A2B3;
-  border-radius: 6px;
-  text-align: center;
-  font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-weight: 500;
-  font-size: 24px;
-
-  color: #1D2939;
-
-}
-
-
-.input-box-space{
-
-  width: 6px !important;
-  height: 4px !important;
-  background: #D0D5DD;
-  border-radius: 0px !important;
-  margin-right: 7px !important;
-  margin-left: 7px;
-  border: none !important;
-
-}
-
-.resend-code{
-  text-align: right;
-}
-
-.resend-code-btn{
-  font-size: 12px;
-  font-weight: 600;
-}
 
 </style>

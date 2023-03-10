@@ -729,6 +729,15 @@ const routes = [
         },
     },
     {
+        path: '/signup/accountVerification',
+        name: 'accountVerification',
+        component: () => import('@/views/login/register/accountVerification.vue'),
+        meta: {
+            titleC: 'EDU Passport Account Verification',
+            titleG: 'EDU Passport Account Verification',
+        },
+    },
+    {
         path: '/login/linkedin',
         name: 'linkedinLogin',
         component: () => import('@/views/login/linkedin'),

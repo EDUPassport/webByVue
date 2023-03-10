@@ -1,3 +1,4 @@
+import {encode, decode} from 'js-base64'
 /**
  * 格式化日期
  * @prama t 时间戳
@@ -46,4 +47,12 @@ export function formateTime(time) {
     } else {
         return '0秒';
     }
+}
+
+export function encodeByJsBase64(value){
+    return encodeURIComponent(encode(value))
+}
+
+export function decodeByJsBase64(value){
+    return decode(decodeURIComponent(value))
 }

@@ -63,6 +63,7 @@ import {useRouter, useRoute} from 'vue-router'
 import {ref,reactive} from 'vue'
 import {ElMessage} from 'element-plus'
 import {decode} from 'js-base64'
+import {FIND_PASSWORD_BY_EMAIL_V2} from "@/api/api";
 
 export default {
   name: "setNewPassword",
@@ -95,7 +96,7 @@ export default {
 
     const passwordForm = reactive({
       email: decodeStr.email,
-      email_code: decodeStr.email_code,
+      email_code: decodeStr.code,
       password:'',
       confirm_password:''
     })
@@ -132,17 +133,44 @@ export default {
       formName.validate((valid) => {
         if (valid) {
           let params = Object.assign({}, passwordForm)
+          FIND_PASSWORD_BY_EMAIL_V2(params).then(res=>{
+            console.log(res)
+            if(res.code == 200){
 
-          console.log(params)
-          console.log(passwordForm.email)
-          ElMessage({
-            type:'success',
-            message:'Success',
-            grouping:true
+              ElMessage({
+                type:'success',
+                message:'Success',
+                grouping:true
+              })
+
+              router.push('/login')
+
+            }
+          }).catch(err=>{
+            console.log(err)
+            if(err.msg){
+              ElMessage({
+                type:'error',
+                message: err.msg,
+                grouping:true
+              })
+              return;
+            }
+
+            if(err.message){
+              ElMessage({
+                type:'error',
+                message: err.message,
+                grouping:true
+              })
+
+            }
           })
+
 
         } else {
           console.log('error submit!!')
+
           return false
         }
       })

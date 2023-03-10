@@ -5,69 +5,64 @@
         <div class="signup-t" @click="turnHome()">
           <el-image class="signup-t-logo" :src="imgLogo"></el-image>
         </div>
+
         <div class="signup-m">
 
-          <div class="signup-m-label">Let’s get onboarded</div>
-          <div class="signup-m-tips">
-            Don't be shy, introduce yourself!
+          <div class="signup-back-btn-container" v-if="businessStatus">
+            <el-button plain @click="turnBack()">
+              <el-icon style="margin-right: 10px;">
+                <Back />
+              </el-icon>
+              Back
+            </el-button>
           </div>
+
+          <template v-if="userType === 'educator' ">
+            <div class="signup-m-label">Let’s get onboarded</div>
+            <div class="signup-m-tips">
+              Don't be shy, introduce yourself!
+            </div>
+          </template>
+          <template
+              v-if="userType === 'business' || userType === 'recruiter' || userType === 'school' || userType === 'other' ">
+            <div class="signup-m-label">Signup to EDU Passport</div>
+            <div class="signup-m-tips">
+              Tell us about yourself a bit.
+            </div>
+          </template>
+
+          <template v-if="userType === 'vendor' ">
+            <div class="signup-m-label">Let’s get onboarded</div>
+            <div class="signup-m-tips">
+              Don't be shy, introduce yourself!
+            </div>
+          </template>
 
           <div class="signup-m-form">
 
             <div class="user-type-container">
-              <div class="user-type" :class="userType === 1 ? 'user-type-active' : ''" @click="selectEducator()">
+
+              <div class="user-type"
+                   v-for="(item,index) in userTypeData" :key="index"
+                   :class="userType === item.type ? 'user-type-active' : ''"
+                   @click="selectUserType(item.type)">
+
                 <div class="user-type-l">
-                  <template v-if="userType === 1">
-                    <el-image :src="educatorActiveImg" fit="cover"></el-image>
+
+                  <template v-if="userType === item.type ">
+                    <el-image :src="item.icon_active" fit="cover"></el-image>
                   </template>
                   <template v-else>
-                    <el-image :src="educatorImg" fit="cover"></el-image>
+                    <el-image :src="item.icon" fit="cover"></el-image>
                   </template>
 
                 </div>
                 <div class="user-type-r">
                   <div class="user-type-r-label">
-                    I’m an Educator
+                    {{ item.label }}
                   </div>
                   <div class="user-type-r-tips">
-                    I'm looking for work opportunities
-                  </div>
-                </div>
-              </div>
-              <div class="user-type" :class="userType === 2 ? 'user-type-active' : ''" @click="selectBusiness()">
-                <div class="user-type-l">
-                  <template v-if="userType === 2">
-                    <el-image :src="businessActiveImg" fit="cover"></el-image>
-                  </template>
-                  <template v-else>
-                    <el-image :src="businessImg" fit="cover"></el-image>
-                  </template>
-                </div>
-                <div class="user-type-r">
-                  <div class="user-type-r-label">
-                    I’m an Education Business
-                  </div>
-                  <div class="user-type-r-tips">
-                    I want to recruit educators
-                  </div>
-                </div>
-              </div>
-
-              <div class="user-type" :class="userType === 5 ? 'user-type-active' : ''" @click="selectVendor()">
-                <div class="user-type-l">
-                  <template v-if="userType === 5">
-                    <el-image :src="vendorActiveImg" fit="cover"></el-image>
-                  </template>
-                  <template v-else>
-                    <el-image :src="vendorImg" fit="cover"></el-image>
-                  </template>
-                </div>
-                <div class="user-type-r">
-                  <div class="user-type-r-label">
-                    I’m a Vendor
-                  </div>
-                  <div class="user-type-r-tips">
-                    I want to provide deals and increase sales
+                    {{ item.tips }}
                   </div>
                 </div>
               </div>
@@ -95,25 +90,44 @@
         </div>
       </el-col>
       <el-col class="signup-r-col" :xs="0" :sm="0" :md="12" :lg="12" :xl="12">
+
         <div class="signup-r-container">
-          <div class="signup-r-label">
-            <template v-if="userType===1">For Educators</template>
-            <template v-if="userType===2">For Education Business</template>
-            <template v-if="userType===5">For Vendors</template>
-          </div>
 
-          <div class="signup-r-tips">
-            <template v-if="userType===1">Hey, there! 👋 Seeking work opportunities? We're here to connect you with the best options in the business.</template>
-            <template v-if="userType===2">Hey, there! :wave: Looking for top-notch educators? We've made recruiting easy and efficient.</template>
-            <template v-if="userType===5">Hey, there! :wave: Wanting to boost your sales? We'll be showcasing your products and services to educators worldwide.</template>
-          </div>
+          <template v-if="businessStatus">
+            <div class="signup-r-label">
+              Signup Progress
+            </div>
 
-          <div class="signup-r-image-container">
-            <el-image :src="imageDefault"></el-image>
-          </div>
+            <stepComponent :userType="userType"  :step-index="2" ></stepComponent>
+          </template>
+
+          <template v-else>
+
+            <div class="signup-r-label">
+              <template v-if="userType=== 'educator' ">For Educators</template>
+              <template v-if="userType=== 'business' ">For Education Business</template>
+              <template v-if="userType=== 'vendor' ">For Vendors</template>
+            </div>
+
+            <div class="signup-r-tips">
+              <template v-if="userType=== 'educator'">Hey, there! 👋 Seeking work opportunities? We're here to connect
+                you with the best options in the business.
+              </template>
+              <template v-if="userType=== 'business' ">Hey, there! Looking for top-notch educators? We've made
+                recruiting easy and efficient.
+              </template>
+              <template v-if="userType=== 'vendor' ">Hey, there! Wanting to boost your sales? We'll be showcasing your
+                products and services to educators worldwide.
+              </template>
+            </div>
+
+            <div class="signup-r-image-container">
+              <el-image :src="imageDefault"></el-image>
+            </div>
+          </template>
 
         </div>
-        <el-image></el-image>
+
       </el-col>
     </el-row>
   </div>
@@ -129,12 +143,22 @@ import businessActiveImg from '@/assets/newHome/register/business-active.png'
 import vendorImg from '@/assets/newHome/register/vendor.png'
 import vendorActiveImg from '@/assets/newHome/register/vendor-active.png'
 import imageDefault from '@/assets/newHome/register/image-rectangle.png'
+import schoolImg from '@/assets/newHome/register/school-icon.png'
+import schoolActiveImg from '@/assets/newHome/register/school-icon-active.png'
+import recruiterImg from '@/assets/newHome/register/recruiter-icon.png'
+import recruiterActiveImg from '@/assets/newHome/register/recruiter-icon-active.png'
+import otherImg from '@/assets/newHome/register/other-icon.png'
+import otherActiveImg from '@/assets/newHome/register/other-icon-active.png'
 
-import {useRouter} from 'vue-router'
-import {ref} from 'vue'
+import {useRouter, useRoute} from 'vue-router'
+import {ref, onMounted} from 'vue'
+import stepComponent from "@/components/register/stepComponent.vue";
 
 export default {
   name: "selectUserType",
+  components: {
+    stepComponent
+  },
   data() {
     return {
       imgLogo,
@@ -145,13 +169,73 @@ export default {
       businessActiveImg,
       vendorImg,
       vendorActiveImg,
-      imageDefault
+      imageDefault,
+      schoolImg,
+      schoolActiveImg,
+      recruiterImg,
+      recruiterActiveImg,
+      otherImg,
+      otherActiveImg
     }
   },
   setup() {
 
     const router = useRouter()
-    const userType = ref(1)
+    const route = useRoute()
+
+    const userType = ref('educator')
+
+    const businessStatus = ref(false)
+
+    let userTypeDataArr = [
+      {
+        type: 'educator',
+        icon: educatorImg,
+        icon_active: educatorActiveImg,
+        label: 'I’m an Educator',
+        tips: 'I want to find education jobs'
+      },
+      {
+        type: 'business',
+        icon: businessImg,
+        icon_active: businessActiveImg,
+        label: 'I’m an Education Business',
+        tips: 'I want to recruit educators'
+      },
+      {
+        type: 'vendor',
+        icon: vendorImg,
+        icon_active: vendorActiveImg,
+        label: 'I’m a Vendor',
+        tips: 'I want to provide deals and increase sales'
+      }
+    ]
+
+    let userTypeForBusinessData = [
+      {
+        type: 'school',
+        icon: schoolImg,
+        icon_active: schoolActiveImg,
+        label: 'I represent a School',
+        tips: "I'm looking for educators for my school."
+      },
+      {
+        type: 'recruiter',
+        icon: recruiterImg,
+        icon_active: recruiterActiveImg,
+        label: "I’m a Recruiter",
+        tips: 'I want to recruit educators'
+      },
+      {
+        type: 'other',
+        icon: otherImg,
+        icon_active: otherActiveImg,
+        label: 'Other',
+        tips: 'I want to provide deals and increase sales'
+      }
+    ]
+
+    const userTypeData = ref(userTypeDataArr)
 
     function turnHome() {
       return router.push('/')
@@ -161,29 +245,51 @@ export default {
       return router.push('/login')
     }
 
-    function selectEducator() {
-      userType.value = 1
+    function turnBack(){
+      businessStatus.value = false;
+      userTypeData.value = userTypeDataArr
     }
 
-    function selectBusiness() {
-      userType.value = 2
+    function selectUserType(type) {
+      userType.value = type
+      router.replace({path:'/signup',query:{type:type}})
     }
 
-    function selectVendor() {
-      userType.value = 5
+
+    function continueNextStep() {
+      if (userType.value === 'business') {
+        businessStatus.value = true;
+        userTypeData.value = userTypeForBusinessData
+
+      } else {
+        router.push({path: '/signup/fillOutInfo', query: {type: userType.value}})
+      }
+
     }
 
-    function continueNextStep(){
-      router.push({path:'/signup/fillOutInfo',query:{type:userType.value}})
-    }
+    onMounted(()=>{
+
+      let typeValue = route.query.type;
+
+      if(typeValue){
+        userType.value = typeValue
+        if(typeValue === 'school' || typeValue === 'recruiter' || typeValue === 'other'){
+          businessStatus.value = true;
+          userTypeData.value = userTypeForBusinessData
+        }
+
+      }
+
+    })
 
     return {
       userType,
+      userTypeData,
+      businessStatus,
+      selectUserType,
       continueNextStep,
-      selectEducator,
-      selectBusiness,
-      selectVendor,
       turnHome,
+      turnBack,
       backToLogin
     }
 
@@ -209,7 +315,6 @@ export default {
 }
 
 
-
 .signup-t {
   margin: 30px 0 0 40px;
   cursor: pointer;
@@ -219,10 +324,21 @@ export default {
   width: 180px;
 }
 
+
 .signup-m {
   min-width: 380px;
-  margin: 100px auto 20px;
+  //margin: 100px auto 20px;
+  margin: 40px auto 20px;
+  padding-top: 60px;
+  position: relative;
 }
+
+.signup-back-btn-container{
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 
 .signup-m-icon {
   text-align: center;
@@ -334,15 +450,15 @@ export default {
   overflow: hidden;
 }
 
-.signup-r-container{
+.signup-r-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 
 }
 
-.signup-r-label{
-  font-family: 'Inter',Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+.signup-r-label {
+  font-family: 'Inter', Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 32px;
@@ -353,8 +469,8 @@ export default {
 
 }
 
-.signup-r-tips{
-  font-family: 'Inter',Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+.signup-r-tips {
+  font-family: 'Inter', Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -365,7 +481,7 @@ export default {
 
 }
 
-.signup-r-image-container{
+.signup-r-image-container {
   margin-top: auto;
   margin-bottom: 0;
   margin-left: 130px;
@@ -376,6 +492,19 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.signup-r-label {
+
+  font-family: 'Inter', Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  color: #1D2939;
+
+  margin: 60px 0 0 60px;
+
 }
 
 .signup-b {

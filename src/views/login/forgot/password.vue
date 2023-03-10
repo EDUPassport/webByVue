@@ -70,7 +70,7 @@ import passwordLockImg from '@/assets/newHome/login/password-lock.png'
 import {useRouter} from 'vue-router'
 import {ref,reactive} from 'vue'
 import {ElMessage} from 'element-plus'
-import {SEND_EMAIL_CODE_REST_PASSWORD} from "@/api/api";
+import {SEND_EMAIL_CODE_REST_PASSWORD_V3} from "@/api/api";
 import {encode} from 'js-base64'
 
 export default {
@@ -116,7 +116,7 @@ export default {
         if (valid) {
           let params = Object.assign({}, passwordForm)
 
-          SEND_EMAIL_CODE_REST_PASSWORD(params).then(res=>{
+          SEND_EMAIL_CODE_REST_PASSWORD_V3(params).then(res=>{
             console.log(res)
             if(res.code == 200){
               passwordLoadingStatus.value = false;

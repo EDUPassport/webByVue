@@ -1,7 +1,184 @@
 <template>
   <div class="step-container">
 
-    <template v-if="identity == 1">
+    <template v-if="userType === 'educator' ">
+
+      <div class="step-item">
+        <div class="step-item-l">
+          <template v-if="stepIndex>1">
+            <el-image class="step-item-l-img" :src="step1img"></el-image>
+          </template>
+          <template v-if="stepIndex == 1">
+            <el-image class="step-item-l-img" :src="step2img"></el-image>
+          </template>
+          <template v-if="stepIndex < 1">
+            <el-image class="step-item-l-img" :src="step3img"></el-image>
+          </template>
+
+        </div>
+        <div class="step-item-r">
+          <div class="step-item-r-label">Select your profile</div>
+          <div class="step-item-r-tips">Tell us about yourself a bit.</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-item-l">
+          <template v-if="stepIndex>2">
+            <el-image class="step-item-l-img" :src="step1img"></el-image>
+          </template>
+          <template v-if="stepIndex == 2">
+            <el-image class="step-item-l-img" :src="step2img"></el-image>
+          </template>
+          <template v-if="stepIndex < 2">
+            <el-image class="step-item-l-img" :src="step3img"></el-image>
+          </template>
+
+        </div>
+        <div class="step-item-r">
+          <div class="step-item-r-label">Provide your details</div>
+          <div class="step-item-r-tips">Enter your Name, Nationality and Residence</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-item-l">
+          <template v-if="stepIndex>3">
+            <el-image class="step-item-l-img" :src="step1img"></el-image>
+          </template>
+          <template v-if="stepIndex == 3">
+            <el-image class="step-item-l-img" :src="step2img"></el-image>
+          </template>
+          <template v-if="stepIndex < 3">
+            <el-image class="step-item-l-img" :src="step3img"></el-image>
+          </template>
+
+        </div>
+        <div class="step-item-r">
+          <div class="step-item-r-label">Create your account</div>
+          <div class="step-item-r-tips">Enter your email address and setup your password</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-item-l">
+          <template v-if="stepIndex>4">
+            <el-image class="step-item-l-img" :src="step1img"></el-image>
+          </template>
+          <template v-if="stepIndex == 4">
+            <el-image class="step-item-l-img" :src="step2img"></el-image>
+          </template>
+          <template v-if="stepIndex < 4">
+            <el-image class="step-item-l-img" :src="step3img"></el-image>
+          </template>
+
+        </div>
+        <div class="step-item-r">
+          <div class="step-item-r-label">Account Verification</div>
+          <div class="step-item-r-tips">Verify your email address</div>
+        </div>
+      </div>
+    </template>
+
+    <template v-if="userType === 'business' || userType === 'school' || userType === 'recruiter' || userType === 'other' ">
+
+      <div class="step-item">
+        <div class="step-item-l">
+          <template v-if="stepIndex>1">
+            <el-image class="step-item-l-img" :src="step1img"></el-image>
+          </template>
+          <template v-if="stepIndex == 1">
+            <el-image class="step-item-l-img" :src="step2img"></el-image>
+          </template>
+          <template v-if="stepIndex < 1">
+            <el-image class="step-item-l-img" :src="step3img"></el-image>
+          </template>
+
+        </div>
+        <div class="step-item-r">
+          <div class="step-item-r-label">Select your profile</div>
+          <div class="step-item-r-tips">Tell us about yourself a bit.</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-item-l">
+          <template v-if="stepIndex>2">
+            <el-image class="step-item-l-img" :src="step1img"></el-image>
+          </template>
+          <template v-if="stepIndex == 2">
+            <el-image class="step-item-l-img" :src="step2img"></el-image>
+          </template>
+          <template v-if="stepIndex < 2">
+            <el-image class="step-item-l-img" :src="step3img"></el-image>
+          </template>
+
+        </div>
+        <div class="step-item-r">
+          <div class="step-item-r-label">Business Type</div>
+          <div class="step-item-r-tips">Tell us your business type</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-item-l">
+          <template v-if="stepIndex>3">
+            <el-image class="step-item-l-img" :src="step1img"></el-image>
+          </template>
+          <template v-if="stepIndex == 3">
+            <el-image class="step-item-l-img" :src="step2img"></el-image>
+          </template>
+          <template v-if="stepIndex < 3">
+            <el-image class="step-item-l-img" :src="step3img"></el-image>
+          </template>
+
+        </div>
+        <div class="step-item-r">
+          <div class="step-item-r-label">Provide your details</div>
+          <div class="step-item-r-tips">Enter your Name, Nationality and Residence</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-item-l">
+          <template v-if="stepIndex>4">
+            <el-image class="step-item-l-img" :src="step1img"></el-image>
+          </template>
+          <template v-if="stepIndex == 4">
+            <el-image class="step-item-l-img" :src="step2img"></el-image>
+          </template>
+          <template v-if="stepIndex < 4">
+            <el-image class="step-item-l-img" :src="step3img"></el-image>
+          </template>
+
+        </div>
+        <div class="step-item-r">
+          <div class="step-item-r-label">Create your account</div>
+          <div class="step-item-r-tips">Enter your email address and setup your password</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-item-l">
+          <template v-if="stepIndex>5">
+            <el-image class="step-item-l-img" :src="step1img"></el-image>
+          </template>
+          <template v-if="stepIndex == 5">
+            <el-image class="step-item-l-img" :src="step2img"></el-image>
+          </template>
+          <template v-if="stepIndex < 5">
+            <el-image class="step-item-l-img" :src="step3img"></el-image>
+          </template>
+
+        </div>
+        <div class="step-item-r">
+          <div class="step-item-r-label">Account Verification</div>
+          <div class="step-item-r-tips">Verify your email address</div>
+        </div>
+      </div>
+    </template>
+
+    <template v-if="userType === 'vendor' ">
 
       <div class="step-item">
         <div class="step-item-l">
@@ -81,6 +258,7 @@
     </template>
 
 
+
   </div>
 
 </template>
@@ -93,9 +271,9 @@ import step3img from '@/assets/newHome/register/step-3.png'
 export default {
   name: "stepComponent",
   props:{
-    identity:{
-      type:[String,Number],
-      default:1
+    userType:{
+      type:String,
+      default:'educator'
     },
     stepIndex:{
       type:[String,Number],

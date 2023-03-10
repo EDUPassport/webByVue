@@ -18,6 +18,11 @@ export const SEND_EMAIL_CODE = (params) => post('email/sendEmailCode', params)
 // 忘记密码发送邮件
 export const SEND_EMAIL_CODE_REST_PASSWORD = (params) => post('email/forget/password/sendEmailCode', params)
 
+//用户修改【密码】邮箱 获取验证码
+export const SEND_EMAIL_CODE_REST_PASSWORD_V3 = (params) => get('home/send/user/pwd/email/code', params)
+//户修改【密码】邮箱 获取验证码【验证码验证】
+export const CHECK_EMAIL_CODE_REST_PASSWORD_V3 = (params) => post('home/user/pwd/email/check', params)
+
 // 使用邮箱注册
 export const EMAIL_REGISTER = (params) => post('email/register', params)
 // 使用邮箱登录
