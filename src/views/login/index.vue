@@ -579,7 +579,7 @@ export default {
     }
 
     let isAccountCookieExist = this.$cookies.isKey('account')
-    console.log(isAccountCookieExist)
+
     if (isAccountCookieExist) {
       let accountCookie = this.$cookies.get('account')
       this.rememberValue = true;
@@ -594,6 +594,8 @@ export default {
         this.loginPhonePassForm.password = accountCookie.password
       }
     }
+
+
 
   },
   created() {
@@ -1317,30 +1319,31 @@ export default {
     switchLoginRegister(value) {
       this.showValue = value
     },
-    async googleSignIn() {
+    async googleSignIn1() {
       console.log('google sign in')
-      // try {
-      //   const googleUser = await this.$gAuth.signIn();
-      //   if (!googleUser) {
-      //     return null;
-      //   }
-      //   console.log("googleUser", googleUser);
-      //   this.user = googleUser.getBasicProfile().getEmail();
-      //   console.log("getId", this.user);
-      //   console.log("getBasicProfile", googleUser.getBasicProfile());
-      //   console.log("getAuthResponse", googleUser.getAuthResponse());
-      //   console.log(
-      //       "getAuthResponse",
-      //       this.$gAuth.instance.currentUser.get().getAuthResponse()
-      //   );
-      //
-      // } catch (error) {
-      //   //on fail do something
-      //   console.error(error);
-      //   return null;
-      // }
+      try {
+        const googleUser = await this.$gAuth.signIn();
+        if (!googleUser) {
+          return null;
+        }
+        console.log("googleUser", googleUser);
+        this.user = googleUser.getBasicProfile().getEmail();
+        console.log("getId", this.user);
+        console.log("getBasicProfile", googleUser.getBasicProfile());
+        console.log("getAuthResponse", googleUser.getAuthResponse());
+        console.log(
+            "getAuthResponse",
+            this.$gAuth.instance.currentUser.get().getAuthResponse()
+        );
+
+      } catch (error) {
+        //on fail do something
+        console.error(error);
+        return null;
+      }
     },
-    async handleClickGetAuthCode() {
+    // handleClickGetAuthCode
+    async googleSignIn() {
 
       try {
         const authCode = await this.$gAuth.getAuthCode();

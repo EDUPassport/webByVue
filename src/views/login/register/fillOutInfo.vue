@@ -231,7 +231,7 @@
             Signup Progress
           </div>
 
-          <stepComponent :userType="userType" :step-index="2"></stepComponent>
+          <stepComponent :userType="userType" :step-index="userStepIndex"></stepComponent>
 
         </div>
 
@@ -275,7 +275,7 @@ export default {
       vendorImg,
       vendorActiveImg,
       imageDefault,
-      nationalityOptions: countriesData,
+      nationalityOptions: countriesData
     }
   },
   setup() {
@@ -284,6 +284,7 @@ export default {
     const route = useRoute()
 
     const userType = route.query.type;
+    const userStepIndex = ref(2)
 
     function turnHome() {
       return router.push('/')
@@ -483,11 +484,16 @@ export default {
     }
 
     onMounted(()=>{
+      if(userType === 'school' || userType === 'recruiter' || userType === 'other'){
+        userStepIndex.value = 3
+      }
+
       getAllCountry()
+
     })
 
     return {
-
+      userStepIndex,
       educatorForms,
       educatorForm,
       educatorRules,
@@ -530,7 +536,6 @@ export default {
 }
 
 .signup-container {
-  max-width: 1440px;
   margin: 0 auto;
   height: 100vh;
 }
@@ -648,4 +653,17 @@ export default {
 
 
 }
+
+@media screen and (max-width: 1399px) {
+  .signup-container{
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1400px){
+  .signup-container{
+    max-width: 1400px;
+  }
+}
+
 </style>

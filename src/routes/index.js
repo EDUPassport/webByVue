@@ -738,6 +738,15 @@ const routes = [
         },
     },
     {
+        path: '/signup/passwordSetup',
+        name: 'signupPasswordSetup',
+        component: () => import('@/views/login/register/passwordSetup.vue'),
+        meta: {
+            titleC: 'EDU Passport Password Setup',
+            titleG: 'EDU Passport Password Setup',
+        },
+    },
+    {
         path: '/login/linkedin',
         name: 'linkedinLogin',
         component: () => import('@/views/login/linkedin'),

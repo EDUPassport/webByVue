@@ -21,7 +21,8 @@ import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
 import VueSocialSharing from 'vue-social-sharing'
 
-// import gAuthPlugin from 'vue3-google-oauth2'
+import GAuth from 'vue3-google-oauth2'
+
 // import 'amfe-flexible';
 import GoEasy from "goeasy";
 
@@ -55,6 +56,10 @@ const i18n = createI18n({
 
 const app = createApp(App)
 
+
+const gAuthOptions = {clientId:'572731205450-h52vrr9q4ra5tornakcoo57lj0skqcl0.apps.googleusercontent.com', scope:'email',prompt:'consent',fetch_basic_profile:false}
+app.use(GAuth, gAuthOptions)
+
 for(const [key,component] of Object.entries(ElementPlusIconsVue)){
     app.component(key,component)
 }
@@ -74,10 +79,6 @@ app.use(VueSocialSharing)
 VueClipboard.config.autoSetContainer = true // add this line
 
 app.use(VueClipboard)
-
-// let gAuthClientId = '898474067102-m3svsfqjshsqcuv2dde0sbmlb1rsq0ca.apps.googleusercontent.com'
-// const gAuthOptions = {clientId:gAuthClientId,scope:'email',prompt:'consent',fetch_basic_profile:false}
-// app.use(gAuthPlugin,gAuthOptions)
 
 app.config.globalProperties.$store = store
 app.config.globalProperties.$filters = {

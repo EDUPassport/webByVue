@@ -304,7 +304,7 @@ export default {
 }
 
 .signup-container {
-  max-width: 1440px;
+  //max-width: 1440px;
   margin: 0 auto;
   height: 100vh;
 }
@@ -522,7 +522,18 @@ export default {
   line-height: 18px;
 
   color: #667085;
-
-
 }
+
+@media screen and (max-width: 1399px) {
+  .signup-container{
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1400px){
+  .signup-container{
+    max-width: 1400px;
+  }
+}
+
 </style>

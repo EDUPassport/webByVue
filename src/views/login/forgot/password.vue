@@ -179,7 +179,7 @@ export default {
   background-color: #FFFFFF;
 }
 .password-container{
-  max-width: 1440px;
+
   margin: 0 auto;
   height: 100vh;
 }
@@ -269,4 +269,17 @@ export default {
 
 
 }
+
+@media screen and (max-width: 1399px) {
+  .password-container{
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1400px){
+  .password-container{
+    max-width: 1400px;
+  }
+}
+
 </style>

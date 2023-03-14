@@ -201,7 +201,7 @@ export default {
   background-color: #FFFFFF;
 }
 .password-container{
-  max-width: 1440px;
+
   margin: 0 auto;
   height: 100vh;
 }
@@ -287,53 +287,17 @@ export default {
   line-height: 18px;
   color: #667085;
 }
-.input-box-container{
-  position: relative;
+
+@media screen and (max-width: 1399px) {
+  .password-container{
+    width: 100%;
+  }
 }
 
-.input-box{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
-.input-box input{
-  width: 44px;
-  height: 44px;
-//margin-right: 30px;
-
-  border: 1px solid #98A2B3;
-  border-radius: 6px;
-  text-align: center;
-  font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-weight: 500;
-  font-size: 24px;
-
-  color: #1D2939;
-
-}
-
-
-.input-box-space{
-
-  width: 6px !important;
-  height: 4px !important;
-  background: #D0D5DD;
-  border-radius: 0px !important;
-  margin-right: 7px !important;
-  margin-left: 7px;
-  border: none !important;
-
-}
-
-.resend-code{
-  text-align: right;
-}
-
-.resend-code-btn{
-  font-size: 12px;
-  font-weight: 600;
+@media screen and (min-width: 1400px){
+  .password-container{
+    max-width: 1400px;
+  }
 }
 
 </style>

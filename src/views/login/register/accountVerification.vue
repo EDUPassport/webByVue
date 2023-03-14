@@ -65,7 +65,7 @@
             Signup Progress
           </div>
 
-          <stepComponent :userType="userType" :step-index="4"></stepComponent>
+          <stepComponent :userType="userType" :step-index="userStepIndex"></stepComponent>
 
         </div>
 
@@ -87,12 +87,12 @@ import imageDefault from '@/assets/newHome/register/image-rectangle.png'
 
 
 import {useRouter, useRoute} from 'vue-router'
-import {ref, reactive} from 'vue'
+import {ref, reactive,onMounted} from 'vue'
 import {countriesData} from "@/utils/data";
 import stepComponent from "@/components/register/stepComponent.vue";
 import sixInputVerificationCode from "@/components/register/sixInputVerificationCode.vue";
 import checkCodeButton from "@/components/register/checkCodeButton.vue";
-import {decodeByJsBase64} from "@/utils/utils";
+import {decodeByJsBase64, encodeByJsBase64} from "@/utils/utils";
 
 export default {
   name: "accountVerification",
@@ -121,6 +121,7 @@ export default {
     const route = useRoute()
 
     const userType = route.query.type;
+    const userStepIndex = ref(3)
 
     function turnHome() {
       return router.push('/')
@@ -136,6 +137,15 @@ export default {
     function continueNextStep(){
       console.log(formInfoDecode)
       console.log(signForm)
+
+      let routeFormInfo = decodeByJsBase64(route.query.formInfo)
+      let formDecode = JSON.parse(routeFormInfo)
+
+      let params = Object.assign(formDecode,signForm)
+      let formInfo = encodeByJsBase64(JSON.stringify(params))
+
+      router.push({path: '/signup/passwordSetup', query: { type: userType,formInfo:formInfo}})
+
       // router.push({path:'/signup/accountVerification',query:{type:userType.value}})
     }
 
@@ -166,8 +176,14 @@ export default {
     function turnBack(){
       router.go(-1)
     }
+    onMounted(()=>{
+      if(userType === 'school' || userType === 'recruiter' || userType === 'other'){
+        userStepIndex.value = 4
+      }
+    })
 
     return {
+      userStepIndex,
       nextDisabledStatus,
       formInfoDecode,
       signForms,
@@ -193,7 +209,7 @@ export default {
 }
 
 .signup-container {
-  max-width: 1440px;
+
   margin: 0 auto;
   height: 100vh;
 }
@@ -311,23 +327,18 @@ export default {
   color: #667085;
 }
 
-.xll-divider{
-  margin-top: 20px;
+
+
+@media screen and (max-width: 1399px) {
+  .signup-container{
+    width: 100%;
+  }
 }
 
-/deep/ .el-divider__text {
-  background-color: #FFFFFF;
-  color: #D0D5DD;
-  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-}
-
-.sign-in-btn-container{
-  width: 100%;
-  margin-top: 20px;
-}
-
-.login-option-btn{
-  width: 100%;
+@media screen and (min-width: 1400px){
+  .signup-container{
+    max-width: 1400px;
+  }
 }
 
 </style>

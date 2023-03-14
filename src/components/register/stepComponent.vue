@@ -55,8 +55,8 @@
 
         </div>
         <div class="step-item-r">
-          <div class="step-item-r-label">Create your account</div>
-          <div class="step-item-r-tips">Enter your email address and setup your password</div>
+          <div class="step-item-r-label">Email Verification</div>
+          <div class="step-item-r-tips">Enter your email address and complete verification.</div>
         </div>
       </div>
 
@@ -74,10 +74,11 @@
 
         </div>
         <div class="step-item-r">
-          <div class="step-item-r-label">Account Verification</div>
-          <div class="step-item-r-tips">Verify your email address</div>
+          <div class="step-item-r-label">Password Setup</div>
+          <div class="step-item-r-tips">Setup and confirm your password.</div>
         </div>
       </div>
+
     </template>
 
     <template v-if="userType === 'business' || userType === 'school' || userType === 'recruiter' || userType === 'other' ">
@@ -153,8 +154,8 @@
 
         </div>
         <div class="step-item-r">
-          <div class="step-item-r-label">Create your account</div>
-          <div class="step-item-r-tips">Enter your email address and setup your password</div>
+          <div class="step-item-r-label">Email Verification</div>
+          <div class="step-item-r-tips">Enter your email address and complete verification.</div>
         </div>
       </div>
 
@@ -172,8 +173,8 @@
 
         </div>
         <div class="step-item-r">
-          <div class="step-item-r-label">Account Verification</div>
-          <div class="step-item-r-tips">Verify your email address</div>
+          <div class="step-item-r-label">Password Setup</div>
+          <div class="step-item-r-tips">Setup and confirm your password.</div>
         </div>
       </div>
     </template>
@@ -214,7 +215,7 @@
         </div>
         <div class="step-item-r">
           <div class="step-item-r-label">Provide your details</div>
-          <div class="step-item-r-tips">Enter your Name, Nationality and Residence</div>
+          <div class="step-item-r-tips">Enter your Business Name</div>
         </div>
       </div>
 
@@ -232,8 +233,8 @@
 
         </div>
         <div class="step-item-r">
-          <div class="step-item-r-label">Create your account</div>
-          <div class="step-item-r-tips">Enter your email address and setup your password</div>
+          <div class="step-item-r-label">Email Verification</div>
+          <div class="step-item-r-tips">Enter your email address and complete verification.</div>
         </div>
       </div>
 
@@ -251,8 +252,8 @@
 
         </div>
         <div class="step-item-r">
-          <div class="step-item-r-label">Account Verification</div>
-          <div class="step-item-r-tips">Verify your email address</div>
+          <div class="step-item-r-label">Password Setup</div>
+          <div class="step-item-r-tips">Setup and confirm your password.</div>
         </div>
       </div>
     </template>

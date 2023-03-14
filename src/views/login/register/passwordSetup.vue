@@ -17,33 +17,33 @@
           </div>
 
           <template v-if="userType === 'educator' ">
-            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-label">Setup Password</div>
             <div class="signup-m-tips">
-              Just a few more details, we're almost there.
+              Enter and confirm your password.
             </div>
           </template>
           <template v-if="userType === 'school' ">
-            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-label">Setup Password</div>
             <div class="signup-m-tips">
-              Tell us about yourself a bit.
+              Enter and confirm your password.
             </div>
           </template>
           <template v-if="userType === 'recruiter' ">
-            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-label">Setup Password</div>
             <div class="signup-m-tips">
-              Tell us about yourself a bit.
+              Enter and confirm your password.
             </div>
           </template>
           <template v-if="userType === 'other' ">
-            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-label">Setup Password</div>
             <div class="signup-m-tips">
-              Tell us about yourself a bit.
+              Enter and confirm your password.
             </div>
           </template>
           <template v-if="userType === 'vendor' ">
-            <div class="signup-m-label">Let’s get started</div>
+            <div class="signup-m-label">Setup Password</div>
             <div class="signup-m-tips">
-              Tell us about yourself a bit.
+              Enter and confirm your password.
             </div>
 
           </template>
@@ -58,31 +58,18 @@
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <el-form-item label="Email" prop="email">
-                <el-input placeholder="Enter your email" v-model="signForm.email"></el-input>
+
+              <el-form-item label="Password" prop="password">
+                <el-input show-password placeholder="Enter your password" v-model="signForm.password"></el-input>
+              </el-form-item>
+              <el-form-item label="Confirm Password" prop="c_password">
+                <el-input show-password placeholder="Confirm your password"
+                          v-model="signForm.c_password"></el-input>
               </el-form-item>
 
               <div class="continue-btn-container">
                 <el-button class="continue-btn" type="primary" @click="confirmForm(signForms)">
                   Confirm
-                </el-button>
-              </div>
-
-              <div class="xll-divider">
-                <el-divider content-position="center">OR</el-divider>
-              </div>
-
-              <div class="sign-in-btn-container">
-                <el-button
-                    class="login-option-btn"
-                    plain
-                >
-                  <template #icon>
-                    <el-icon>
-                      <IconLogosGoogleIcon></IconLogosGoogleIcon>
-                    </el-icon>
-                  </template>
-                  Sign up with Google
                 </el-button>
               </div>
 
@@ -124,15 +111,16 @@ import vendorImg from '@/assets/newHome/register/vendor.png'
 import vendorActiveImg from '@/assets/newHome/register/vendor-active.png'
 import imageDefault from '@/assets/newHome/register/image-rectangle.png'
 
+
 import {useRouter, useRoute} from 'vue-router'
 import {ref, reactive,onMounted} from 'vue'
 import {countriesData} from "@/utils/data";
 import stepComponent from "@/components/register/stepComponent.vue";
-import {encodeByJsBase64,decodeByJsBase64} from "@/utils/utils";
+import {decodeByJsBase64} from "@/utils/utils";
 import {ElMessage} from 'element-plus'
 
 export default {
-  name: "accountCreation",
+  name: "passwordSetup",
   components: {
     stepComponent
   },
@@ -156,7 +144,7 @@ export default {
     const route = useRoute()
 
     const userType = route.query.type;
-    const userStepIndex = ref(3)
+    const userStepIndex = ref(4)
 
     function turnHome() {
       return router.push('/')
@@ -166,14 +154,29 @@ export default {
       return router.push('/login')
     }
 
+
     const signForms = ref(null)
     const signForm = reactive({
-      email: ''
+      password: '',
+      c_password: ''
     })
 
+    const checkConfirmPassword = (rule,value,callback)=>{
+      if(value === ''){
+        callback(new Error('Confirm your password'))
+      }else if(value !== signForm.password){
+        callback(new Error('password doesn’t match'))
+      }else{
+        callback()
+      }
+    }
+
     const signRules = reactive({
-      email: [
-        {type: 'email' , required: true, message: 'Enter a valid email address', trigger: 'blur'}
+      password: [
+        {required: true, message: 'Enter your password', trigger: 'blur'}
+      ],
+      c_password: [
+        {required: true, validator:checkConfirmPassword, trigger: 'blur'}
       ]
     })
 
@@ -189,9 +192,8 @@ export default {
           let formDecode = JSON.parse(routeFormInfo)
 
           let params = Object.assign(formDecode,signForm)
-          let formInfo = encodeByJsBase64(JSON.stringify(params))
 
-          router.push({path: '/signup/accountVerification', query: { type: userType,formInfo:formInfo}})
+          console.log(params)
 
         }else{
           console.log('error submit!!')
@@ -209,7 +211,7 @@ export default {
 
     onMounted(()=>{
       if(userType === 'school' || userType === 'recruiter' || userType === 'other'){
-        userStepIndex.value = 4
+        userStepIndex.value = 5
       }
     })
 
@@ -227,7 +229,6 @@ export default {
 
   }
 }
-
 </script>
 
 <style scoped>
@@ -418,24 +419,6 @@ export default {
   color: #667085;
 }
 
-.xll-divider {
-  margin-top: 20px;
-}
-
-/deep/ .el-divider__text {
-  background-color: #FFFFFF;
-  color: #D0D5DD;
-  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-}
-
-.sign-in-btn-container {
-  width: 100%;
-  margin-top: 20px;
-}
-
-.login-option-btn {
-  width: 100%;
-}
 
 @media screen and (max-width: 1399px) {
   .signup-container{
@@ -448,5 +431,4 @@ export default {
     max-width: 1400px;
   }
 }
-
 </style>
