@@ -1,204 +1,84 @@
 <template>
-  <div class="bg" v-loading="showLoadingStatus">
+  <div class="bg">
 
     <template v-if="exchangeAccountInfo">
-      <ExchangeAccountInfo :info="exchangeAccountInfo" ></ExchangeAccountInfo>
+      <ExchangeAccountInfo :info="exchangeAccountInfo"></ExchangeAccountInfo>
     </template>
 
-    <el-row class="bg-container" align="top" justify="center" >
-      <el-col :xs="22" :sm="22" :md="8" :lg="8" :xl="8">
-        <div class="jobs-filter-container">
-          <div class="jobs-filter-label">Find a job</div>
-          <div class="jobs-filter-location">
-            <el-select class="jobs-filter-select" v-model="locationValue" clearable placeholder="Location"
-                       @change="locationChange"
-                       size="medium">
-              <el-option
-                  v-for="item in locationOptions"
-                  :key="item.id"
-                  :label="item.CityPinyin"
-                  :value="item.id"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="jobs-filter-salary">
-            <el-select class="jobs-filter-select" v-model="salaryValue" clearable
-                       @change="salaryChange"
-                       placeholder="Salary" size="medium">
-              <el-option
-                  v-for="item in salaryOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="jobs-filter-gender">
-            <el-select class="jobs-filter-select" v-model="genderValue" clearable
-                       @change="genderChange"
-                       placeholder="Gender" size="medium">
-              <el-option
-                  v-for="item in genderOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="jobs-filter-job-type">
-            <el-select class="jobs-filter-select" v-model="jobTypeValue" clearable
-                       @change="jobTypeChange"
-                       placeholder="Job Type" size="medium">
-              <el-option
-                  v-for="item in jobTypeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="jobs-filter-student-age">
-            <el-select class="jobs-filter-select" v-model="studentAgeValue" clearable
-                       @change="studentAgeChange"
-                       placeholder="Student Age"
-                       size="medium">
-              <el-option
-                  v-for="item in studentAgeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-<!--          <div class="jobs-filter-work-exp">-->
-<!--            <el-select class="jobs-filter-select" v-model="workExpValue" clearable placeholder="Work Experience"-->
-<!--                       size="medium">-->
-<!--              <el-option-->
-<!--                  v-for="item in workExpOptions"-->
-<!--                  :key="item.value"-->
-<!--                  :label="item.label"-->
-<!--                  :value="item.value"-->
-<!--              >-->
-<!--              </el-option>-->
-<!--            </el-select>-->
-<!--          </div>-->
+    <el-row class="bg-container" :gutter="0" align="top" justify="center">
 
-        </div>
-        <!--        featuredJobs jobs    -->
-        <featuredJobs></featuredJobs>
-        <!--        latest industry articles-->
-        <latestIndustryNews></latestIndustryNews>
+      <el-col class="jobs-filter-col" :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+        <filterWithJobList @search="searchByFilter"></filterWithJobList>
+      </el-col>
+
+      <el-col class="jobs-list-col" :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+
+        <template v-if="isOther">
+          <jobsListComponent :jobListData="otherJobListData"
+                             :adsData="jobsAdsListMid"
+                             :selectedJobId="selectedJobId"
+                             :jobLimit="otherJobLimit"
+                             :jobTotalNum="otherJobTotalNum"
+                             :jobPage="otherJobPage"
+                             :isOther="true"
+                             :companyInfo="companyInfo"
+                             :loading="jobLoadingValue"
+                             :loadingFeatured="jobFeaturedLoadingValue"
+                             @jobDetailEvent="turnJobDetail"
+                             @backToResults="backToResults"
+                             @jobPageChange="otherJobPageChange"
+                             @addFavorite = "addFavorite"
+                             @cancelFavorite="cancelFavorite"
+          >
+          </jobsListComponent>
+        </template>
+        <template v-else>
+          <jobsListComponent :jobListData="jobListData"
+                             :adsData="jobsAdsListMid"
+                             :selectedJobId="selectedJobId"
+                             :jobLimit="jobLimit"
+                             :jobTotalNum="jobTotalNum"
+                             :jobPage="jobPage"
+                             :isOther="false"
+                             :loading="jobLoadingValue"
+                             :loadingFeatured="jobFeaturedLoadingValue"
+                             @jobDetailEvent="turnJobDetail"
+                             @jobPageChange="jobPageChange"
+                             @addFavorite = "addFavorite"
+                             @cancelFavorite="cancelFavorite"
+
+          >
+          </jobsListComponent>
+        </template>
 
       </el-col>
-      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-        <div class="jobs-list-container" >
-          <div class="jobs-list-label-container">
-            <div class="jobs-list-label">We've found you {{ jobTotalNum }} open jobs</div>
-            <div class="post-a-job">
-              <el-button class="post-a-job-btn" type="primary" round @click="postJob()">Post a Job</el-button>
-            </div>
-          </div>
-          <div class="jobs-list-content">
-            <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
 
-              <div class="jobs-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                   @click="cancelFavorite(1,item.id,index)">
-                <i class="iconfont el-icon-alixll-heart-filled xll-heart-icon"></i>
-              </div>
-              <div class="jobs-favorite" v-else @click="addFavorite(item.id,1,item.job_title,item.logo,index)">
-                <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>
-              </div>
-              <div class="jobs-list-item-l">
-                <el-image class="jobs-item-logo" :src="item.logo" fit="cover"></el-image>
-              </div>
-              <div class="jobs-list-item-r">
-                <div class="jobs-list-item-title">
-                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">{{ item.job_title }}</router-link>
-                </div>
-                <div class="jobs-list-item-name">
-                  {{ item.business_name }}
-                </div>
-                <div class="jobs-list-item-address">
-                  {{ item.address }}
-                </div>
-                <div class="jobs-list-item-desc">
-                  {{ item.desc }}
-                </div>
-                <div class="jobs-list-item-readmore">
-                  <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">Read More...</router-link>
-                </div>
-              </div>
+      <el-col class="job-detail-col" :xs="24" :sm="0" :md="12" :lg="12" :xl="12">
 
-              <div class="jobs-list-item-b">
-                <div class="jobs-list-item-b-l">
-                  <view class="jobs-list-item-work-type">
-                    <i class="iconfont el-icon-alishijian"></i>
-                    <span v-if="item.employment_type==1">FT</span>
-                    <span v-if="item.employment_type==2">PT</span>
-                    <span v-if="item.employment_type==3">S</span>
-                  </view>
-                  <view class="jobs-list-item-gender" v-if="item.sex == 1 || item.sex == 2">
-                    <i class="iconfont el-icon-alimale-female"></i>
-                    <span v-if="item.sex == 1">Male</span>
-                    <span v-if="item.sex == 2">Female</span>
-                  </view>
-<!--                  <view class="jobs-list-item-work-exp">-->
-<!--                    <i class="iconfont el-icon-aligongzuojingyan"></i>-->
-<!--                    1-2 yrs-->
-<!--                  </view>-->
-                </div>
-
-                <div class="jobs-list-item-b-r">
-                  <view class="jobs-list-item-date">
-                    <el-icon>
-                      <Calendar/>
-                    </el-icon>&nbsp;
-                    {{ $filters.howLongFormat(item.c_time) }}
-                  </view>
-                  <view class="jobs-list-item-salary">
-                    {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
-                  </view>
-                </div>
-              </div>
-
-            </div>
-          </div>
-          <div class="jobs-list-pagination">
-            <el-pagination layout="prev, pager, next" :default-current-page="1"
-                           @size-change="jobPageSizeChange"
-                           @current-change="jobPageChange"
-                           :current-page="jobPage" :page-size="jobLimit"
-                           :total="jobTotalNum"></el-pagination>
-          </div>
-
-        </div>
-
+        <suspense>
+          <router-view :key="$route.params"></router-view>
+        </suspense>
 
       </el-col>
     </el-row>
+
   </div>
 </template>
 
 <script>
 
-import {useRouter,useRoute} from "vue-router";
+import filterWithJobList from "@/components/jobs/filterWithJobList";
+import jobsListComponent from "@/components/jobsListComponent";
+
+import {useRouter, useRoute} from "vue-router";
 import {
   JOB_LIST,
-  USER_OBJECT_LIST,
-  JOBS_AREA_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  GET_BASIC_INFO,
-  CHANGE_IDENTITY_LANGUAGE
+   COMPANY_JOB_LIST,
+  ADS_LIST
 } from "@/api/api";
 
-import featuredJobs from "@/components/featuredJobs";
-import latestIndustryNews from "@/components/latestIndustryNews";
 import ExchangeAccountInfo from '@/components/jobs/exchangeInfo';
 import {encode} from "js-base64";
 import {randomString} from "@/utils";
@@ -207,124 +87,321 @@ export default {
   name: "list",
   data() {
     return {
-      locationValue: '',
-      locationOptions: [],
-      salaryValue: '',
-      salaryOptions: [
-        {
-          label: '0-5K',
-          value: 1
-        },
-        {
-          label: '5K-10K',
-          value: 2
-        },
-        {
-          label: '10K-15K',
-          value: 3
-        },
-        {
-          label: '15K+',
-          value: 4
-        }
-      ],
-      genderValue: '',
-      genderOptions: [
-        {
-          label: 'Male',
-          value: 1
-        }, {
-          label: 'Female',
-          value: 2
-        }
-      ],
-      jobTypeValue: '',
-      jobTypeOptions: [
-        {
-          label: 'Full-time',
-          value: 1
-        },
-        {
-          label: 'Part-time',
-          value: 2
-        },
-        {
-          label: 'Seasonal',
-          value: 3
-        }
-      ],
-      studentAgeValue: '',
-      studentAgeOptions: [],
-      workExpValue: '',
-      workExpOptions: [],
-      jobFeaturedListData: [],
+      jobLoadingValue:false,
+      jobFeaturedLoadingValue:false,
+
+      isOther:false,
+      companyInfo:{},
+
       jobListData: [],
-      articleListData: [],
+
       jobPage: 1,
-      jobLimit: 5,
+      jobLimit: 10,
       jobTotalNum: 0,
-      showLoadingStatus:true,
-      versionTime:randomString(),
+      showLoadingStatus: true,
+      versionTime: randomString(),
+      jobsAdsListTop: [],
+      jobsAdsListMid: [],
+      jobAdsHeight:'190px',
+
+      detailData:{},
+      selectedJobId:0,
+
+      otherJobPage:1,
+      otherJobLimit:5,
+      otherJobTotalNum:0,
+      otherJobListData:[],
+      jobDetailHeight:0,
+
+      searchFilterParams:{},
 
     }
   },
   components: {
-    featuredJobs,
-    latestIndustryNews,
-    ExchangeAccountInfo
+    ExchangeAccountInfo,
+    jobsListComponent,
+    filterWithJobList,
   },
   setup() {
     let router = useRouter()
     let route = useRoute()
 
     const exchangeAccountInfo = route.query.exchange_job
-    console.log(exchangeAccountInfo)
+    // console.log(exchangeAccountInfo)
     const onSwiper = (swiper) => {
       console.log(swiper);
     };
     const onSlideChange = () => {
       console.log('slide change');
     };
-    // const getParams = () =>{
-    //   console.log(route.params)
-    // }
     const skipJobsList = (query) => {
       router.push({
         path: '/jobs',
         query: query
       })
     }
+
+    const currentIdentity = localStorage.getItem('identity')
+
     return {
       onSwiper,
       onSlideChange,
       skipJobsList,
+      currentIdentity,
       exchangeAccountInfo
-    };
-  },
-  created() {
-    // this.getJobsAreaList()
-    // this.getUserObjectList()
-    // let cityValue= this.$route.query.city;
-    // if(cityValue && cityValue !=''){
-    //   this.locationValue = Number(cityValue)
-    // }
-    //
-    // this.getJobList(this.jobPage, this.jobLimit)
-    console.log(this.$route.query)
-  },
-  mounted() {
-    this.getJobsAreaList()
-    this.getUserObjectList()
-
-    let cityValue= this.$route.query.city;
-    if(cityValue && cityValue !=''){
-      this.locationValue = Number(cityValue)
     }
 
-    this.getJobList(this.jobPage, this.jobLimit)
+  },
+  beforeRouteUpdate(to){
+    console.log(to)
+    console.log('------- before route update -----------');
+
+    let jobId = to.params.id;
+    let page = to.params.page;
+
+    let userId = to.query.uid;
+    let fullPath = to.fullPath;
+
+    if(userId){
+      this.isOther = true;
+
+      if(jobId){
+        this.selectedJobId = jobId
+      }else{
+        this.selectedJobId = 0
+      }
+
+      if(page){
+        this.otherJobPage = Number(page)
+      }
+      this.getCompanyJobList(userId, this.otherJobPage, this.otherJobLimit)
+
+    }else{
+
+      this.isOther = false;
+
+      if(jobId){
+        this.selectedJobId = jobId
+      }else{
+        this.selectedJobId = 0
+      }
+
+      if(page){
+        this.jobPage = Number(page);
+      }
+
+      if(fullPath === '/jobs'){
+        console.log('------- before route update jobs -----------');
+
+        this.selectedJobId = 0
+        this.jobPage = 1
+        this.getJobList(1, this.jobLimit)
+      }
+
+
+    }
+
+  },
+  mounted() {
+
+    let path = this.$route.path;
+    let userId = this.$route.query.uid;
+    let jobId = this.$route.params.id;
+    let page = this.$route.params.page;
+    let qPage = this.$route.query.page;
+
+    if(userId){
+      this.isOther = true;
+
+      if(path === '/jobs'){
+
+        if(qPage){
+          this.otherJobPage = Number(qPage)
+        }
+        this.getCompanyJobList(userId, page, this.otherJobLimit)
+
+      }else{
+
+        if(jobId){
+          this.selectedJobId = jobId
+        }else{
+          this.selectedJobId = 0
+        }
+        if(page){
+          this.otherJobPage = Number(page)
+        }
+        this.getCompanyJobList(userId, page, this.otherJobLimit)
+
+      }
+
+    }else{
+
+      this.isOther = false;
+
+      if(path === '/jobs'){
+        if(qPage){
+          this.jobPage = Number(qPage);
+        }
+
+      }else{
+        if(jobId){
+          this.selectedJobId = jobId
+        }else{
+          this.selectedJobId = 0
+        }
+
+        if(page){
+          this.jobPage = Number(page);
+        }
+
+      }
+
+      this.getJobList(this.jobPage, this.jobLimit)
+
+    }
+
+    this.getAdsList()
+
   },
   methods: {
-    addFavorite(id, type, title, url,index) {
+    searchByFilter(e){
+
+      this.searchFilterParams = e;
+
+      this.jobPage = 1;
+      this.selectedJobId = 0;
+
+      let params = {
+        page: this.jobPage,
+        limit: this.jobLimit
+      }
+      let jobTitle = e.job_title
+
+      if(jobTitle){
+        params.job_title = jobTitle
+      }
+
+      let salaryValue = e.salary;
+
+      if (salaryValue) {
+        params.salary_begin = salaryValue[0] * 1000
+        params.salary_end = salaryValue[1] * 1000
+      }
+      
+      let envName = process.env.VUE_APP_ENV_NAME
+
+      if (e.location) {
+        if (envName === 'development' || envName === 'production') {
+          params.country = e.location
+        }
+        if (envName === 'developmentCN' || envName === 'productionCN') {
+          params.city = e.location
+        }
+      }
+
+      if (e.employment_type) {
+        params.employment_type = e.employment_type
+      }
+
+      if (e.student_age) {
+        params.age_to_teach = e.student_age
+      }
+
+      if(e.work_type){
+        params.work_type = e.work_type
+      }
+
+      if(e.payment_period){
+        params.payment_period = e.payment_period
+      }
+
+      this.jobLoadingValue = true;
+      JOB_LIST(params).then(res => {
+        // console.log(res)
+        if (res.code == 200) {
+
+          this.jobListData = res.message.data
+          this.jobTotalNum = res.message.total
+          this.jobLoadingValue = false
+
+          this.$router.replace({path:'/jobs',query:{page:1}})
+        }
+
+      }).catch(err => {
+        console.log(err)
+        this.jobLoadingValue = false
+        if (err.msg) {
+          return this.$message.error(err.msg)
+        }
+        if (err.message) {
+          return  this.$message.error(err.message)
+        }
+      })
+
+    },
+    turnBanner(link) {
+
+      if (link != '') {
+        window.location.href = link
+      } else {
+        let token = localStorage.getItem('token')
+        if (!token) {
+          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
+    getAdsList() {
+      let ads_data = {
+        page: 1,
+        limit: 10000
+      }
+      ADS_LIST(ads_data).then(res => {
+        if (res.code == 200) {
+          // console.log(rs.message)
+          let jobsAdsListTop = [];
+          let jobsAdsListMid = [];
+          let identity = localStorage.getItem('identity');
+
+          if (!identity) {
+            jobsAdsListTop = res.message.filter(item => item.name == 'guest_j2');
+            jobsAdsListMid = res.message.filter(item => item.name == 'guest_j3');
+          }
+          if (identity == 1) {
+            jobsAdsListTop = res.message.filter(item => item.name == 'educator_j2');
+            jobsAdsListMid = res.message.filter(item => item.name == 'educator_j3');
+          }
+
+          if (identity == 2 || identity == 3 || identity == 4) {
+            jobsAdsListTop = res.message.filter(item => item.name == 'business_j2');
+            jobsAdsListMid = res.message.filter(item => item.name == 'business_j3');
+          }
+
+          if (identity == 5) {
+            jobsAdsListTop = res.message.filter(item => item.name == 'vendor_j2');
+            jobsAdsListMid = res.message.filter(item => item.name == 'vendor_j3');
+          }
+
+          if (jobsAdsListTop.length > 0) {
+            this.jobsAdsListTop = jobsAdsListTop[0].data;
+          }
+          if (jobsAdsListMid.length > 0) {
+            this.jobsAdsListMid = jobsAdsListMid[0].data;
+          }
+
+        }
+
+      }).catch(err => {
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
+    addFavorite(id, type, title, url, index) {
       let params = {
         token: localStorage.getItem('token'),
         type: type,
@@ -332,193 +409,182 @@ export default {
         type_title: title,
         type_url: url
       }
+      // console.log(params)
       ADD_FAVORITE(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.$message.success('Success')
           this.jobListData[index]['is_favorite'] = 1
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
 
-    },
-    getJobsAreaList(){
-      let params = {}
-      JOBS_AREA_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-          this.locationOptions = res.message;
-        }
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
-      })
     },
     jobPageSizeChange(e) {
       console.log(e)
     },
     jobPageChange(e) {
-      this.showLoadingStatus = true;
-      this.jobPage = e
-      this.getJobList(e, this.jobLimit)
       console.log(e)
+      this.jobPage = e
+      this.selectedJobId = 0
+      let userId = this.$route.query.uid;
+
+      this.getJobList(e, this.jobLimit)
+
+      if(this.isOther){
+        this.$router.push({path:'/jobs',query:{page:e,uid:userId}})
+      }else{
+        this.$router.push({path:'/jobs',query:{page:e}})
+      }
+
     },
     getJobList(page, limit) {
+      this.jobLoadingValue = true;
+      // this.showLoadingStatus = true;
       let params = {
         page: page,
         limit: limit
       }
-      let salaryValue = this.salaryValue
-      if (salaryValue != '') {
-        if (salaryValue == 1) {
-          params.salary_begin = 0
-          params.salary_end = 5000
-        }
-        if (salaryValue == 2) {
-          params.salary_begin = 5000
-          params.salary_end = 10000
-        }
-        if (salaryValue == 3) {
-          params.salary_begin = 10000
-          params.salary_end = 15000
-        }
-        if (salaryValue == 4) {
-          params.salary_begin = 15000
-        }
 
-      }
-      if(this.locationValue != ''){
-        params.city = this.locationValue
-      }
-      if (this.genderValue != '') {
-        params.sex = this.genderValue
+      let e = this.searchFilterParams;
+
+      let jobTitle = e.job_title
+
+      if(jobTitle){
+        params.job_title = jobTitle
       }
 
-      if (this.jobTypeValue != '') {
-        params.employment_type = this.jobTypeValue
+      let salaryValue = e.salary;
+
+      if (salaryValue) {
+        params.salary_begin = salaryValue[0] * 1000
+        params.salary_end = salaryValue[1] * 1000
       }
 
-      if (this.studentAgeValue != '') {
-        params.age_to_teach = this.studentAgeValue
+      let envName = process.env.VUE_APP_ENV_NAME
+
+      if (e.location) {
+        if (envName === 'development' || envName === 'production') {
+          params.country = e.location
+        }
+        if (envName === 'developmentCN' || envName === 'productionCN') {
+          params.city = e.location
+        }
+      }
+
+      if (e.employment_type) {
+        params.employment_type = e.employment_type
+      }
+
+      if (e.student_age) {
+        params.age_to_teach = e.student_age
+      }
+
+      if(e.work_type){
+        params.work_type = e.work_type
+      }
+
+      if(e.payment_period){
+        params.payment_period = e.payment_period
       }
 
       JOB_LIST(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
-          this.jobListData = res.message.data
+          let jobData = res.message.data;
+
+          this.jobListData = jobData
           // console.log(res.message.data)
           this.jobTotalNum = res.message.total
-          this.showLoadingStatus= false
+          this.jobLoadingValue = false
+
+          let screenWidth = document.body.clientWidth
+          let screenWidthFloor = Math.floor(screenWidth)
+
+          if(screenWidthFloor > 768){
+
+            let routeJobId = this.$route.params.id;
+
+            if(!routeJobId){
+
+              if(jobData.length>0){
+                this.selectedJobId = jobData[0]['id']
+              }
+
+            }
+
+            let path = '/jobs/detail/' + this.selectedJobId + '/' + page;
+
+            this.$router.replace({path:path})
+          }
+
+
         } else {
           console.log(res.msg)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        this.jobLoadingValue = false
+        if (err.msg) {
+          return this.$message.error(err.msg)
+        }
+        if (err.message) {
+          return this.$message.error(err.message)
+        }
       })
 
     },
-    getUserObjectList() {
-      let params = {}
-      USER_OBJECT_LIST(params).then(res => {
+    cancelFavorite(type, typeId, index) {
+      let params = {
+        token: localStorage.getItem('token'),
+        type: type,
+        type_id: typeId
+      }
+      CANCEL_FAVORITE(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let ageToTeachList = res.message.filter(item => item.pid == 4)
-          // let lan = localStorage.getItem('language')
-
-          ageToTeachList.forEach(item => {
-            let obj = {
-              label: item.object_en,
-              value: item.id
-            }
-
-            this.studentAgeOptions.push(obj)
-
-          })
-
-        }
-
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    locationChange(e){
-      // console.log(e)
-      this.jobListData = []
-      this.showLoadingStatus = true
-      this.locationValue = e;
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    salaryChange(e) {
-      // console.log(e)
-      this.jobListData = []
-      this.showLoadingStatus = true
-      this.salaryValue = e
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    genderChange(e) {
-      this.jobListData = []
-      this.showLoadingStatus = true
-      // console.log(e)
-      this.genderValue = e
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    jobTypeChange(e) {
-      this.jobListData = []
-      this.showLoadingStatus = true
-      // console.log(e)
-      this.jobTypeValue = e
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    studentAgeChange(e) {
-      this.jobListData = []
-      this.showLoadingStatus = true
-      // console.log(e)
-      this.studentAgeValue = e
-      this.getJobList(this.jobPage, this.jobLimit)
-    },
-    cancelFavorite(type,typeId,index){
-      let params = {
-        token:localStorage.getItem('token'),
-        type:type,
-        type_id:typeId
-      }
-      CANCEL_FAVORITE(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
           this.jobListData[index]['is_favorite'] = 0
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
     },
-    postJob(){
+    postJob() {
       let token = localStorage.getItem('token')
       let self = this
 
-      if(!token || token == ''){
+      if (!token || token == '') {
         return this.$msgbox({
-          title:'Post a Job',
-          message:'Before posting a job, you need to log in',
-          type:'warning',
-          confirmButtonText:'Log in',
-          callback(action){
+          title: 'Post a Job',
+          message: 'Before posting a job, you need to log in',
+          type: 'warning',
+          confirmButtonText: 'Log in',
+          callback(action) {
             console.log(action)
-            if(action==='confirm'){
+            if (action === 'confirm') {
               let redirectParamsObj = {
-                path:'/jobs',
-                query:{
-                  id:self.$route.query.id
+                path: '/jobs',
+                query: {
+                  id: self.$route.query.id
                 }
               }
 
-              let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
+              let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
 
-              self.$router.push({path:'/login',query:{redirect_params:redirectParamsStr}})
+              self.$router.push({path: '/login', query: {redirect_params: redirectParamsStr}})
 
             }
           }
@@ -527,112 +593,126 @@ export default {
 
       let identity = localStorage.getItem('identity')
 
-      if(identity != 2){
-        this.selectRole(2)
+      if (identity == 1) {
+        return this.$message.error('Oops! Your current identity is an educator, please switch to Education Business')
       }
 
-      self.$router.push({path:'/jobs/post',query:{version_time:self.versionTime}})
+      self.$router.push({path: '/jobs/post', query: {version_time: self.versionTime}})
 
     },
-    selectRole(e) {
-      let uid = localStorage.getItem('uid')
+    getCompanyJobList(userId,page,limit){
+      this.jobLoadingValue = true;
+
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
-      }
-      GET_BASIC_INFO(params).then(res => {
-        let isEducator = res.message.is_educator;
-        let isBusiness = res.message.is_business;
-        let isVendor = res.message.is_vendor;
-        // let isOther = res.message.is_other;
-        // let identity = res.message.identity;
-
-        if (e == 1) {
-          if (isEducator >= 10) {
-            let firstName = res.message.educator_info.first_name;
-            let lastName = res.message.educator_info.last_name;
-            let avatar = res.message.educator_info.profile_photo;
-
-            localStorage.setItem('name', firstName + ' ' + lastName)
-            localStorage.setItem('avatar', avatar)
-            localStorage.setItem('first_name', firstName)
-            localStorage.setItem('last_name', lastName)
-
-            this.$store.commit('username', firstName + ' ' + lastName)
-            this.$store.commit('userAvatar', avatar)
-
-            this.changeIdentity(1)
-          } else {
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/educator')
-          }
-
-        }
-        if (e == 2) {
-          if (isBusiness >= 10) {
-            let firstName = res.message.business_info.first_name;
-            let lastName = res.message.business_info.last_name;
-            let avatar = res.message.business_info.profile_photo;
-            localStorage.setItem('name', firstName + ' ' + lastName)
-            localStorage.setItem('avatar', avatar)
-            localStorage.setItem('first_name', firstName)
-            localStorage.setItem('last_name', lastName)
-
-            this.$store.commit('username', firstName + ' ' + lastName)
-            this.$store.commit('userAvatar', avatar)
-
-            this.changeIdentity(2)
-          } else {
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/business')
-          }
-
-        }
-        if (e == 3) {
-          if (isVendor >= 10) {
-            let firstName = res.message.vendor_info.first_name;
-            let lastName = res.message.vendor_info.last_name;
-            let avatar = res.message.vendor_info.profile_photo;
-
-            localStorage.setItem('name', firstName + ' ' + lastName)
-            localStorage.setItem('avatar', avatar)
-            localStorage.setItem('first_name', firstName)
-            localStorage.setItem('last_name', lastName)
-
-            this.$store.commit('username', firstName + ' ' + lastName)
-            this.$store.commit('userAvatar', avatar)
-
-            this.changeIdentity(3)
-          } else {
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/vendor')
-          }
-
-        }
-
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    changeIdentity(identity) {
-      let params = {
-        token: localStorage.getItem('token'),
-        identity: identity
+        user_id: userId,
+        is_open: 1,
+        status:1,
+        page: page,
+        limit: limit
       }
 
-      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
+      let e = this.searchFilterParams;
+
+      let jobTitle = e.job_title
+
+      if(jobTitle){
+        params.job_title = jobTitle
+      }
+
+      let salaryValue = e.salary;
+
+      if (salaryValue) {
+        params.salary_begin = salaryValue[0] * 1000
+        params.salary_end = salaryValue[1] * 1000
+      }
+
+      let envName = process.env.VUE_APP_ENV_NAME
+
+      if (e.location) {
+        if (envName === 'development' || envName === 'production') {
+          params.country = e.location
+        }
+        if (envName === 'developmentCN' || envName === 'productionCN') {
+          params.city = e.location
+        }
+      }
+
+      if (e.employment_type) {
+        params.employment_type = e.employment_type
+      }
+
+      if (e.student_age) {
+        params.age_to_teach = e.student_age
+      }
+
+      if(e.work_type){
+        params.work_type = e.work_type
+      }
+
+      if(e.payment_period){
+        params.payment_period = e.payment_period
+      }
+
+      COMPANY_JOB_LIST(params).then(res=>{
         console.log(res)
-        if (res.code == 200) {
-          localStorage.setItem('identity', identity)
-          this.$store.commit('identity',identity)
+        if(res.code == 200){
+          this.otherJobListData = res.message.data;
+          this.otherJobTotalNum = res.message.total;
+          this.jobLoadingValue = false
         }
-      }).catch(err => {
+
+      }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        this.jobLoadingValue = false
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
-    }
+    },
+    otherJobPageChange(e) {
+      console.log(e)
+      // this.showLoadingStatus = true;
+      this.otherJobPage = e
+      this.selectedJobId = 0
+      let userId = this.$route.query.uid;
+
+      if(this.isOther){
+        this.$router.push({path:'/jobs',query:{page:e,uid:userId}})
+      }else{
+        this.$router.push({path:'/jobs',query:{page:e}})
+      }
+
+      this.getCompanyJobList(userId ,e, this.otherJobLimit)
+
+    },
+    backToResults(){
+
+      this.isOther = false;
+      this.selectedJobId = 0;
+
+      this.$router.push({path:'/jobs',query:{page:this.jobPage}})
+
+      this.getJobList(this.jobPage, this.jobLimit)
+
+    },
+    turnJobDetail(id,page,isOther){
+
+      let path = '/jobs/detail/' + id + '/' + page;
+      let fromUid = this.$route.query.uid;
+
+      this.selectedJobId = id;
+
+      if(isOther){
+        this.$router.push({path:path,query:{uid:fromUid}})
+      }else{
+        this.$router.push({path:path,query:{}})
+      }
+
+    },
 
 
   }
@@ -643,218 +723,243 @@ export default {
 
 <style scoped>
 .bg {
-  background-color: #f5f6f7;
+  background-color: #FFFFFF;
 }
 
 .bg-container {
-  /*width: 1100px;*/
+  width: 100%;
   margin: 0 auto;
-  padding-top: 40px;
 }
 
-.jobs-filter-container {
-  background-color: #ffffff;
-  /*border: 1px solid #eeeeee;*/
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+.jobs-filter-col{
+  padding-right: 13px;
 }
 
-.jobs-filter-label {
-  font-size: 18px;
-  font-weight: bold;
-  text-align: left;
+.jobs-list-col{
+  padding-left: 12px;
+  padding-right: 13px;
 }
 
-.jobs-filter-location {
-  margin-top: 10px;
+.job-detail-col{
+  padding-left: 12px;
 }
 
-.jobs-filter-select {
-  width: 100%;
+.xll-ads-container {
+  /*padding: 0 50px;*/
+  margin-bottom: 50px;
 }
 
-.jobs-filter-salary {
-  margin-top: 10px;
+
+.xll-job-detail{
+  height: calc(100vh - 140px);
+  background-color: #F0F2F5;
 }
 
-.jobs-filter-gender {
-  margin-top: 10px;
+.job-detail-bg-container{
+  height: calc(100vh - 170px);
+  padding: 30px 30px 0 30px;
 }
 
-.jobs-filter-job-type {
-  margin-top: 10px;
-}
+@media screen and (min-width: 1920px) {
+  /*  190 */
+  .job-detail-container{
+    height: calc(100vh - 190px -  220px);
+  }
 
-.jobs-filter-student-age {
-  margin-top: 10px;
-}
-
-.jobs-filter-work-exp {
-  margin-top: 10px;
-}
-
-.jobs-list-container {
-  padding: 20px;
-}
-.jobs-list-label-container{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-}
-.jobs-list-label {
-  font-size: 18px;
-  font-weight: bold;
-  text-align: left;
-}
-
-.jobs-list-content {
-  margin-top: 10px;
-}
-
-.jobs-list-item {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: left;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
-}
-
-.jobs-favorite{
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  cursor: pointer;
+  .job-detail-c{
+    height: calc(100vh - 190px - 340px );
+  }
 
 }
 
-.xll-heart-icon{
-  font-size: 24px;
-}
+@media screen and (max-width: 1919px) and (min-width: 1200px) {
+  /*  140 */
+  .job-detail-container{
+    height: calc(100vh - 140px -  220px);
+  }
 
-.jobs-list-item-l {
-  width: 30%;
-}
-
-.jobs-item-logo {
-  width: 80%;
-  height: 80%;
-  border-radius: 10px;
-  border: 1px solid #EEEEEE;
-}
-
-.jobs-list-item-r {
-  width: 70%;
-}
-
-.jobs-list-item-title a {
-  font-size: 18px;
-  font-weight: bold;
-  color: #000000;
-  text-decoration: none;
-}
-
-.jobs-list-item-title a:hover {
-  text-decoration: underline;
-  font-size: 20px;
-}
-
-.jobs-list-item-name {
-  font-size: 16px;
-  color: #808080;
-  margin-top: 20px;
-}
-
-.jobs-list-item-address {
-  font-size: 14px;
-  color: #808080;
-  margin-top: 10px;
-}
-
-.jobs-list-item-desc {
-  font-size: 12px;
-  color: #808080;
-  margin-top: 10px;
-  overflow: hidden;
-  display: -webkit-box;
--webkit-box-orient: vertical;
--webkit-line-clamp: 4;
-}
-
-.jobs-list-item-readmore {
-  margin-top: 20px;
-}
-.jobs-list-item-readmore a{
-  font-size: 14px;
-  color: #808080;
-  text-decoration: none;
-}
-
-.jobs-list-item-readmore a:hover{
-  font-size: 16px;
-  text-decoration: underline;
-}
-
-.jobs-list-item-b {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-}
-
-.jobs-list-item-work-type {
-  font-size: 12px;
-}
-.jobs-list-item-work-type span{
-  margin-left: 4px;
-}
-
-.jobs-list-item-gender {
-  margin-left: 5px;
-  font-size: 12px;
-}
-.jobs-list-item-gender span{
-  margin-left: 4px;
-}
-
-.jobs-list-item-work-exp {
-  margin-left: 5px;
-  font-size: 12px;
-}
-
-.jobs-list-item-work-exp span{
-  margin-left: 4px;
-}
-
-.jobs-list-item-date {
-  font-size: 12px;
-}
-
-.jobs-list-item-salary {
-  font-size: 12px;
-  margin-left: 10px;
-  color: #00b3d2;
-}
-
-.jobs-list-pagination {
-  margin-top: 20px;
-  text-align: center;
-}
-
-@media screen  and (min-width: 1200px){
-  .bg-container{
-    width:1100px;
+  .job-detail-c{
+    height: calc(100vh - 140px - 340px );
   }
 }
+
+@media screen and (max-width: 1199px) and (min-width: 992px) {
+  /*  120 */
+  .job-detail-container{
+    height: calc(100vh - 120px -  220px);
+  }
+
+  .job-detail-c{
+    height: calc(100vh - 120px - 340px );
+  }
+}
+
+
+.job-detail-t{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 120px;
+}
+
+.job-detail-t-l{
+  width: 50%;
+}
+
+.job-detail-t-r{
+  /*display: flex;*/
+  /*align-items: center;*/
+  /*justify-content: flex-start;*/
+  /*flex-direction: row;*/
+}
+
+.job-detail-t-l-1{
+  cursor: pointer;
+  font-family:BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color:#6650B3;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-detail-t-l-2{
+  font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  color:#262626;
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-detail-t-l-3{
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
+
+.job-detail-c-1{
+
+}
+
+.job-detail-c-item{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.job-detail-c-item-l{
+  /*width: 210px;*/
+  font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+}
+.job-detail-c-item-r{
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  color:#262626;
+  margin-left: 10px;
+}
+
+.job-detail-c-2{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+
+.job-detail-c-2-l{
+  width: 100%;
+}
+.job-detail-c-2-r{
+  width:100%;
+  margin-top: 50px;
+}
+
+.job-detail-c-item-label{
+  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color:#262626;
+}
+.job-detail-c-item-c{
+  margin-top: 25px;
+}
+.job-detail-desc{
+  margin-top: 50px;
+}
+
+.job-detail-desc-label{
+  font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  color:#262626;
+}
+
+.job-detail-desc-content{
+  margin-top: 25px;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color:#262626;
+}
+
+.map-container{
+  margin-top: 25px;
+  margin-bottom: 50px;
+}
+
+#mapContainer{
+  height: 300px;
+}
+
+.working-hours{
+  width: 100%;
+}
+
+.working-hours-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin-bottom: 10px;
+  position: relative;
+}
+.working-hours-week{
+  margin-left: 10px;
+}
+.working-hours-hours{
+  margin-left: 20px;
+}
+
+@media screen  and (min-width: 1200px) {
+
+}
+
+@media screen and (max-width: 768px ) {
+  .jobs-list-col{
+    padding: 0;
+  }
+
+  .jobs-filter-col{
+    padding-right: 0;
+  }
+
+
+
+}
+
+
+
 </style>

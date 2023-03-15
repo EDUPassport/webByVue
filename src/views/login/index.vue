@@ -1,372 +1,346 @@
 <template>
-  <div class="bg">
-    <el-container class="login-container">
-      <el-header class="container-1" height="auto">
-        <el-row justify="center" align="middle">
-          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-            <div class="logo-container">
-              <router-link class="logo-title" to="/">
-                <el-image class="logo-img" :src="imgLogo" fit="contain"></el-image>
-              </router-link>
-            </div>
-          </el-col>
-        </el-row>
-        <div class="go-home-container">
-          <el-button class="go-home-btn" type="primary" round @click="goHome()">Home</el-button>
+  <div class="login-bg">
+
+    <div class="mobile-banner">
+      <div class="mobile-banner-bg"></div>
+    </div>
+
+    <el-row justify="center" align="top" class="login-container">
+      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+        <div class="login-l" @click="turnHome()">
+          <el-image class="login-l-logo" :src="logoImgLight"></el-image>
         </div>
-      </el-header>
-      <el-main>
-        <el-row class="xll-login-row-container" justify="center" align="middle" v-if="showValue == 1">
-          <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
-            <div class="xll-login-container">
-              <div class="login-tabs-container">
-                <div class="login-label"
-                     :class="showValue==1 ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister(1)"
-                >Login
+      </el-col>
+      <el-col class="login-m-col" :xs="16" :sm="16" :md="16" :lg="16" :xl="16">
+
+        <div class="login-m">
+
+          <h1>Log in</h1>
+
+          <div class="xll-login-form-container">
+            <template v-if="loginEmailStatus">
+              <el-form
+                  :model="loginForm"
+                  :rules="loginRules"
+                  ref="loginForm"
+                  label-width="100px"
+                  label-position="top"
+                  class="demo-ruleForm"
+              >
+                <el-form-item prop="email">
+                  <el-input size="large" placeholder="Email Address" v-model="loginForm.email"></el-input>
+                </el-form-item>
+                <el-form-item style="margin-top:25px;" prop="password">
+                  <el-input size="large" placeholder="Password" type="password"
+                            show-password
+                            v-model="loginForm.password"></el-input>
+                </el-form-item>
+
+                <div class="remember-forgot-container">
+                  <div class="remember-container">
+                    <el-checkbox size="large" v-model="rememberValue" label="Remember Me"
+                                 @change="rememberChange"></el-checkbox>
+                  </div>
+                  <div class="forgot-password-container">
+                    <el-button link class="forgot-password-btn" @click="forgotPassword()">
+                      Forgot password?
+                    </el-button>
+                  </div>
                 </div>
-                <div class="register-label"
-                     :class="showValue==2 ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister(2)"
-                >Register
-                </div>
-              </div>
-              <div class="xll-login-form-container">
-                <template v-if="loginEmailStatus">
-                  <el-form
 
-                      :model="loginForm"
-                      :rules="loginRules"
-                      ref="loginForm"
-                      label-width="100px"
-                      label-position="top"
-                      class="demo-ruleForm"
-                  >
-                    <el-form-item label="Email" prop="email">
-                      <el-input size="medium" placeholder="Email" v-model="loginForm.email"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Password" prop="password">
-                      <el-input size="medium" placeholder="Password" type="password"
-                                v-model="loginForm.password"></el-input>
-                    </el-form-item>
-                    <div class="remeber-container">
-                      <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
-                    </div>
-                    <!--                          <div class="hcaptcha-container">-->
-                    <!--                            <hcaptcha-->
-                    <!--                                sitekey="ad946ce8-55f2-4b65-97d5-0c42eccf794d"-->
-                    <!--                                @verify="humanVerify"-->
-                    <!--                            />-->
-                    <!--                          </div>-->
-                    <el-form-item>
-                      <el-button class="submit-btn"
-                                 round
-                                 type="primary"
-                                 :loading="submitLoginLoadingStatus"
-                                 @click="submitLoginForm('loginForm')">
-                        Login
-                      </el-button>
-                    </el-form-item>
-                  </el-form>
-                </template>
-                <template v-if="loginPhoneStatus">
-                  <!--                手机号 验证码登录-->
-                  <template v-if="loginByPhoneWithSmsStatus">
-                    <el-form
-                        :model="loginPhoneSmsForm"
-                        :rules="loginPhoneSmsRules"
-                        ref="loginPhoneSmsForm"
-                        :hide-required-asterisk="true"
-                        label-position="top"
-                        class="demo-ruleForm"
-                    >
-                      <el-form-item label="Phone #" prop="phone">
-                        <template #label>
-                          <span class="login-require-star">*</span>
-                          <span class="login-label-text">Phone #</span>
-                        </template>
-                        <el-input size="medium" placeholder="Phone #"
-                                  v-model.number="loginPhoneSmsForm.phone"></el-input>
-                      </el-form-item>
-
-                      <el-form-item label="6 Digit Code" prop="phone_code">
-                        <template #label>
-                          <div class="password-container">
-                            <div class="password-l">
-                              <span class="login-require-star">*</span>
-                              <span class="login-label-text">6 Digit Code</span>
-                            </div>
-                            <div class="password-r">
-                              <el-button type="text" @click="switchToPhoneBySms()">
-                                Log in via password
-                              </el-button>
-                            </div>
-                          </div>
-                        </template>
-                        <div class="xll-input-container">
-                          <div class="xll-input-input">
-                            <el-input size="medium" placeholder="Code"
-                                      v-model="loginPhoneSmsForm.phone_code">
-                            </el-input>
-                          </div>
-                          <el-button class="xll-input-btn" type="primary" round
-                                     :loading="checkCodeBtn.loading"
-                                     :disabled="checkCodeBtn.disabled"
-                                     @click="getCheckCode()"
-                          >{{ checkCodeBtn.text }}
-                          </el-button>
-                        </div>
-                      </el-form-item>
-
-                      <div class="remeber-container">
-                        <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
-                      </div>
-
-                      <el-form-item>
-                        <el-button class="submit-btn"
-                                   round
-                                   type="primary"
-                                   @click="submitLoginPhoneSmsForm('loginPhoneSmsForm')">
-                          Login
-                        </el-button>
-                      </el-form-item>
-                    </el-form>
-                  </template>
-
-                  <!--               手机号码密码登录-->
-                  <template v-if="loginByPhoneWithPasswordStatus">
-                    <el-form
-                        :model="loginPhonePassForm"
-                        :rules="loginPhonePassRules"
-                        ref="loginPhonePassForm"
-                        :hide-required-asterisk="true"
-                        label-position="top"
-                        class="demo-ruleForm"
-                    >
-                      <el-form-item label="Phone #" prop="phone">
-                        <template #label>
-                          <span class="login-require-star">*</span>
-                          <span class="login-label-text">Phone #</span>
-                        </template>
-                        <el-input size="medium" placeholder="Phone #"
-                                  v-model.number="loginPhonePassForm.phone"></el-input>
-                      </el-form-item>
-
-                      <el-form-item label="Password" prop="password">
-                        <template #label>
-                          <div class="password-container">
-                            <div class="password-l">
-                              <span class="login-require-star">*</span>
-                              <span class="login-label-text">Password</span>
-                            </div>
-                            <div class="password-r">
-                              <el-button type="text" @click="switchToPhoneBySms()">
-                                Log in via SMS verification code
-                              </el-button>
-                            </div>
-                          </div>
-                        </template>
-                        <el-input size="medium" placeholder="Password" type="password"
-                                  v-model="loginPhonePassForm.password"></el-input>
-                      </el-form-item>
-
-                      <div class="remeber-container">
-                        <el-checkbox v-model="remeberValue" label="Remeber Me" @change="remeberChange"></el-checkbox>
-                      </div>
-                      <el-form-item>
-                        <el-button class="submit-btn"
-                                   round
-                                   type="primary"
-                                   @click="submitLoginPhonePassForm('loginPhonePassForm')">
-                          Login
-                        </el-button>
-                      </el-form-item>
-                    </el-form>
-                  </template>
-                </template>
-
-
-                <!--                <div class="facebook-btn-container">-->
-                <!--                  <el-button @click="linkedinSignIn()" class="apple-btn" plain round-->
-                <!--                             icon="iconfont  el-icon-alifacebook">-->
-                <!--                    Facebook Sign in-->
-                <!--                  </el-button>-->
-                <!--                </div>-->
-                <div class="phone-btn-container">
-                  <el-button v-if="!loginPhoneStatus" @click="loginWithPhone()" class="login-option-btn" plain round
-                             icon="iconfont xll-icon el-icon-aliphone">
-                    Login with Phone number
+                <el-form-item>
+                  <el-button class="submit-btn"
+                             round
+                             type="primary"
+                             size="large"
+                             :loading="submitLoginLoadingStatus"
+                             @click="submitLoginForm('loginForm')">
+                    Login
                   </el-button>
-                  <el-button v-if="!loginEmailStatus" @click="loginWithPhone()" class="login-option-btn" plain round
-                             icon="iconfont xll-icon  el-icon-aliemail">
-                    Login with Email
-                  </el-button>
-                </div>
-
-                <div class="facebook-btn-container">
-                  <el-button @click="linkedinSignIn()" class="login-option-btn" plain round
-                             icon="iconfont xll-icon  el-icon-alilinkedin">
-                    Linkedin Sign in
-                  </el-button>
-                </div>
-
-                <div class="google-btn-container">
-                  <el-button @click="googleSignIn()" class="login-option-btn" plain round
-                             icon="iconfont xll-icon  el-icon-aligoogle">
-                    Google Sign in
-                  </el-button>
-                </div>
-
-                <div class="forgot-password-container">
-                  <el-button type="text" class="forgot-password-btn" @click="forgotPassword()">Forgot Password
-                  </el-button>
-                </div>
-              </div>
-            </div>
-          </el-col>
-          <el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">
-            <div class="xll-ads-container">
-              <!--              <el-image :src="shanghaiImg" class="ads-image" ></el-image>-->
-            </div>
-          </el-col>
-        </el-row>
-
-        <el-row class="xll-register-row-container" justify="center" align="middle" v-if="showValue == 2">
-          <el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">
-            <div class="xll-register-container">
-              <div class="login-tabs-container">
-                <div class="login-label"
-                     :class="showValue==1 ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister(1)"
-                >Login
-                </div>
-                <div class="register-label"
-                     :class="showValue==2 ? 'login-tab-active' : ''"
-                     @click="switchLoginRegister(2)"
-                >Register
-                </div>
-              </div>
-              <div class="xll-register-form-container">
+                </el-form-item>
+              </el-form>
+            </template>
+            <template v-if="loginPhoneStatus">
+              <!--                手机号 验证码登录-->
+              <template v-if="loginByPhoneWithSmsStatus">
                 <el-form
-                    :model="registerForm"
-                    :rules="registerRules"
-                    ref="registerForm"
-                    label-width="160px"
+                    :model="loginPhoneSmsForm"
+                    :rules="loginPhoneSmsRules"
+                    ref="loginPhoneSmsForm"
+                    :hide-required-asterisk="true"
                     label-position="top"
                     class="demo-ruleForm"
                 >
-                  <el-form-item label="First Name" prop="first_name" required>
-                    <el-input size="medium" placeholder="First Name" v-model="registerForm.first_name"></el-input>
+                  <el-form-item label="Phone #" prop="phone">
+                    <template #label>
+                      <span class="login-require-star">*</span>
+                      <span class="login-label-text">Phone #</span>
+                    </template>
+                    <el-input size="large" placeholder="Phone #"
+                              v-model="loginPhoneSmsForm.phone"></el-input>
                   </el-form-item>
-                  <el-form-item label="Last Name" prop="last_name" required>
-                    <el-input size="medium" placeholder="Last Name" v-model="registerForm.last_name"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Email" prop="email" required>
-                    <el-input size="medium" placeholder="name@domain.com"
-                              v-model="registerForm.email">
-                      <template #append>
-                        <el-button class="send-code-btn" :loading="sendCodeLoading" @click="sendEmailCode">Send Code
-                        </el-button>
-                      </template>
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item label="Email Activation Code" prop="code" required>
-                    <el-input size="medium" placeholder="6 digit code"
-                              v-model="registerForm.code"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Password" prop="password" required>
-                    <el-input size="medium" type="text" placeholder="Password"
-                              v-model="registerForm.password"
-                              @focus="changeType"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Confirm Password" prop="c_password" required>
-                    <el-input size="medium" type="text" placeholder="Confirm"
-                              v-model="registerForm.c_password"
-                              @focus="changeType"
-                    ></el-input>
-                  </el-form-item>
-                  <div class="identity-container">
-                    <div class="identity-label">I am a/an</div>
-                    <div class="identity-content">
-                      <div class="identity-btn"
-                           :class="identityValue == 1 ? 'identity-educator-active' : '' "
-                           @click="selectedIdentity(1)">Educator
+
+                  <el-form-item label="6 Digit Code" prop="phone_code">
+                    <template #label>
+                      <div class="password-container">
+                        <div class="password-l">
+                          <span class="login-require-star">*</span>
+                          <span class="login-label-text">6 Digit Code</span>
+                        </div>
+                        <div class="password-r">
+                          <el-button link size="large" @click="switchToPhoneBySms()">
+                            Log in via password
+                          </el-button>
+                        </div>
                       </div>
-                      <div class="identity-btn identity-btn-margin"
-                           :class="identityValue == 2 ? 'identity-business-active' : '' "
-                           @click="selectedIdentity(2)">Education-Business
+                    </template>
+                    <div class="xll-input-container">
+                      <div class="xll-input-input">
+                        <el-input size="large" placeholder="Code"
+                                  v-model="loginPhoneSmsForm.code">
+                        </el-input>
                       </div>
-                      <div class="identity-btn identity-btn-margin"
-                           :class="identityValue == 3 ? 'identity-vendor-active' : '' "
-                           @click="selectedIdentity(3)">Vendor
-                      </div>
+                      <el-button class="xll-input-btn" type="primary" round
+                                 size="large"
+                                 :loading="checkCodeBtn.loading"
+                                 :disabled="checkCodeBtn.disabled"
+                                 @click="getCheckCode()"
+                      >{{ checkCodeBtn.text }}
+                      </el-button>
+                    </div>
+                  </el-form-item>
+
+                  <div class="remember-forgot-container">
+                    <div class="remember-container">
+                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>
+                    </div>
+                    <div class="forgot-password-container">
+                      <el-button link class="forgot-password-btn" @click="forgotPassword()">Forgot password?
+                      </el-button>
                     </div>
                   </div>
+
                   <el-form-item>
                     <el-button class="submit-btn"
-                               type="primary"
+                               size="large"
                                round
-                               :loading="submitRegisterLoadingStatus"
-                               @click="submitRegisterForm('registerForm')">
-                      Submit
+                               type="primary"
+                               @click="submitLoginPhoneSmsForm('loginPhoneSmsForm')">
+                      LOGIN
                     </el-button>
                   </el-form-item>
                 </el-form>
-                <!--                <div class="facebook-btn-container">-->
-                <!--                  <el-button class="apple-btn" plain round icon="iconfont  el-icon-alifacebook">-->
-                <!--                    Facebook Sign in-->
-                <!--                  </el-button>-->
-                <!--                </div>-->
-                <!--                <div class="facebook-btn-container">-->
-                <!--                  <el-button @click="linkedinSignIn()" class="linkedin-btn" plain round-->
-                <!--                             icon="iconfont  el-icon-alilinkedin">-->
-                <!--                    Linkedin Sign in-->
-                <!--                  </el-button>-->
-                <!--                </div>-->
-                <!--                <div class="google-btn-container">-->
-                <!--                  <el-button class="google-btn" plain round icon="iconfont  el-icon-aligoogle">-->
-                <!--                    Google Sign in-->
-                <!--                  </el-button>-->
-                <!--                </div>-->
-              </div>
+              </template>
+
+              <!--               手机号码密码登录-->
+              <template v-if="loginByPhoneWithPasswordStatus">
+                <el-form
+                    :model="loginPhonePassForm"
+                    :rules="loginPhonePassRules"
+                    ref="loginPhonePassForm"
+                    :hide-required-asterisk="true"
+                    label-position="top"
+                    class="demo-ruleForm"
+                >
+                  <el-form-item label="Phone #" prop="phone">
+                    <template #label>
+                      <span class="login-require-star">*</span>
+                      <span class="login-label-text">Phone #</span>
+                    </template>
+                    <el-input size="large" placeholder="Phone #"
+                              v-model="loginPhonePassForm.phone"></el-input>
+                  </el-form-item>
+
+                  <el-form-item label="Password" prop="password">
+                    <template #label>
+                      <div class="password-container">
+                        <div class="password-l">
+                          <span class="login-require-star">*</span>
+                          <span class="login-label-text">Password</span>
+                        </div>
+                        <div class="password-r">
+                          <el-button link size="large" @click="switchToPhoneBySms()">
+                            Log in via SMS verification code
+                          </el-button>
+                        </div>
+                      </div>
+                    </template>
+                    <el-input size="large" placeholder="Password" type="password"
+                              show-password
+                              v-model="loginPhonePassForm.password"></el-input>
+                  </el-form-item>
+
+                  <div class="remember-forgot-container">
+                    <div class="remember-container">
+                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>
+                    </div>
+                    <div class="forgot-password-container">
+                      <el-button link class="forgot-password-btn" @click="forgotPassword()">
+                        Forgot password?
+                      </el-button>
+                    </div>
+                  </div>
+
+                  <el-form-item>
+                    <el-button class="submit-btn"
+                               size="large"
+                               round
+                               type="primary"
+                               @click="submitLoginPhonePassForm('loginPhonePassForm')">
+                      LOGIN
+                    </el-button>
+                  </el-form-item>
+
+                </el-form>
+              </template>
+            </template>
+
+            <div class="xll-divider" v-if="isFromChinaEnv === 'yes' ">
+              <el-divider content-position="center">or</el-divider>
             </div>
 
-          </el-col>
-        </el-row>
+            <div class="sign-in-btn-container" v-if="isFromChinaEnv === 'yes' ">
+              <el-button v-if="!loginPhoneStatus" size="large"
+                         @click="loginWithPhone()"
+                         class="login-option-btn" link round>
+                <template #icon>
+                  <el-icon>
+                    <IconBytesizeMobile/>
+                  </el-icon>
+                </template>
 
-      </el-main>
-
-      <el-footer class="footer-container" height="auto">
-
-        <el-row justify="center" align="middle">
-          <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="6">
-            <div class="footer-content">
-              <!--                <router-link to="/privacy">Privacy & terms</router-link>-->
+                SIGN IN WITH PHONE NUMBER
+              </el-button>
+              <el-button v-if="!loginEmailStatus"
+                         @click="loginWithPhone()"
+                         class="login-option-btn"
+                         link round
+                         size="large"
+              >
+                <template #icon>
+                  <el-icon>
+                    <IconCarbonEmail/>
+                  </el-icon>
+                </template>
+                SIGN IN WITH EMAIL
+              </el-button>
             </div>
-          </el-col>
-        </el-row>
-      </el-footer>
-    </el-container>
+
+            <!--            <div class="sign-in-btn-container">-->
+            <!--              <el-button @click="linkedinSignIn()"-->
+            <!--                         size="large"-->
+            <!--                         class="login-option-btn" link round-->
+            <!--                         >-->
+            <!--                <template #icon>-->
+            <!--                  <el-icon>-->
+            <!--                    <IconLogosLinkedinIcon />-->
+            <!--                  </el-icon>-->
+            <!--                </template>-->
+            <!--                 SIGN IN WITH LINKEDIN-->
+            <!--              </el-button>-->
+            <!--            </div>-->
+
+            <!--            <div class="sign-in-btn-container">-->
+            <!--              <el-button @click="googleSignIn()"-->
+            <!--                         size="large"-->
+            <!--                         class="login-option-btn"-->
+            <!--                         link round-->
+            <!--                        >-->
+            <!--                <template #icon>-->
+            <!--                  <el-icon>-->
+            <!--                    <IconLogosGoogleIcon></IconLogosGoogleIcon>-->
+            <!--                  </el-icon>-->
+            <!--                </template>-->
+            <!--                 SIGN IN WITH GOOGLE-->
+            <!--              </el-button>-->
+            <!--            </div>-->
+
+          </div>
+
+
+        </div>
+
+      </el-col>
+      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+        <div class="login-r">
+
+          <div class="login-close">
+            <el-button
+                type="primary"
+                link
+                @click="goHome()"
+            >
+              CLOSE
+            </el-button>
+          </div>
+
+          <div class="sign-up">
+            <el-button
+                plain
+                round
+                @click="signUp()"
+            >
+              SIGN UP
+            </el-button>
+          </div>
+
+        </div>
+      </el-col>
+
+    </el-row>
 
     <ForgotPassword :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
 
+    <el-dialog v-model="loginErrorDialogVisible" :width="loginErrorDialogWidthValue">
+      <div class="login-error-container">
+        <h4>
+          Welcome Back!
+        </h4>
+        <p>
+          Oops, your username or password is wrong
 
+        </p>
+
+        <div class="login-error-ok-container">
+          <el-button plain round @click="loginErrorHelp()">GET HELP</el-button>
+          <el-button type="primary" round @click="loginErrorOk()">OK</el-button>
+        </div>
+
+      </div>
+
+    </el-dialog>
 
   </div>
 
 </template>
 
 <script>
+
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
+import logoImgLight from "@/assets/newHome/logo/Logo_Transparent.png"
 import imgLogo from '@/assets/logo.png'
 //WEIXIN_SEND_SMS
-import {EMAIL_LOGIN, EMAIL_REGISTER, SEND_EMAIL_CODE, H5_LOGIN, WEIXIN_SEND_SMS, ZOHO_SYNC} from "@/api/api";
+import {
+  EMAIL_REGISTER_V2,
+  SEND_EMAIL_CODE,
+  WEIXIN_SEND_SMS,
+  LOGIN_EMAIL_PWD_V2,
+  PHONE_REGISTER_V2,
+  LOGIN_PHONE_SMS_V2,
+  LOGIN_PHONE_PWD_V2,
+  USER_MENU_LIST,
+  SEND_USER_PRIVATE_PASSWORD,
+  EDUCATOR_PERCENTAGE_V2,
+  RECRUITER_PERCENTAGE_V2,
+  SCHOOL_PERCENTAGE_V2,
+  OTHER_PERCENTAGE_V2,
+  VENDOR_PERCENTAGE_V2
+} from "@/api/api";
 //LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
 import axios from "axios";
-import shanghaiImg from '@/assets/bg/bg-shanghai.jpg'
-import {randomString} from '@/utils/index'
+
+import {randomString} from '@/utils'
 import {useStore} from 'vuex'
 import {reactive, ref} from "vue";
 import {decode} from "js-base64";
@@ -376,8 +350,14 @@ export default {
   name: "index",
   data() {
     return {
+      isFromChinaEnv:process.env.VUE_APP_CHINA,
+      loginErrorDialogWidthValue:'50%',
+      loginErrorDialogVisible: false,
       imgLogo,
-      shanghaiImg,
+      logoImgLight,
+      identityBusinessCheckedStatus: false,
+      identityBusinessStrBefore: "",
+      identityBusinessStr: 'Education-Business',
       loginPhoneStatus: false,
       loginEmailStatus: true,
 
@@ -390,7 +370,7 @@ export default {
       },
       loginRules: {
         email: [
-          {required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+          {type:'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
         ],
         password: [
           {required: true, message: 'Please enter your password', trigger: 'blur'}
@@ -398,13 +378,13 @@ export default {
       },
       loginPhoneSmsForm: {
         phone: '',
-        phone_code: ''
+        code: ''
       },
       loginPhoneSmsRules: {
         phone: [
           {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
         ],
-        phone_code: [
+        code: [
           {required: true, message: 'Please enter 6 digit code.', trigger: 'blur'}
         ],
       },
@@ -424,7 +404,7 @@ export default {
       submitLoginLoadingStatus: false,
       submitRegisterLoadingStatus: false,
       humanVerifyStatus: true,
-      remeberValue: false,
+      rememberValue: false,
       registerForm: {
         first_name: '',
         last_name: '',
@@ -444,7 +424,35 @@ export default {
           {required: true, message: 'Please fill out your code.', trigger: 'blur'}
         ],
         email: [
-          {required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+          {type:'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+        ],
+        password: [
+          {required: true, message: 'Please enter your password', trigger: 'blur'}
+        ],
+        c_password: [
+          {required: true, message: 'Please enter your password again', trigger: 'blur'}
+        ]
+      },
+      registerPhoneForm: {
+        first_name: '',
+        last_name: '',
+        phone: '',
+        code: '',
+        password: '',
+        c_password: ''
+      },
+      registerPhoneRules: {
+        first_name: [
+          {required: true, message: 'Please fill out your first name.', trigger: 'blur'}
+        ],
+        last_name: [
+          {required: true, message: 'Please fill out your last name.', trigger: 'blur'}
+        ],
+        phone: [
+          {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
+        ],
+        code: [
+          {required: true, message: 'Please fill out your code', trigger: 'blur'}
         ],
         password: [
           {required: true, message: 'Please enter your password', trigger: 'blur'}
@@ -455,7 +463,8 @@ export default {
       },
       identityValue: 0,
       sendCodeLoading: false,
-      showValue: 1
+      showValue: 'login',
+      businessDialogStatus: false
 
     }
   },
@@ -469,7 +478,7 @@ export default {
     let router = useRouter()
     let route = useRoute()
     const getParams = () => {
-      console.log(route.query)
+      // console.log(route.query)
       return route.query;
     }
 
@@ -483,11 +492,12 @@ export default {
           return router.push({path: b.path, query: b.query})
         }
       }
-      return router.push({path: '/home'})
+
+      return router.push({path: '/overview'})
     }
 
     let value = route.query.type;
-    const showType = value ? value : 1
+    const showType = value ? value : 'login'
 
     const store = useStore()
     const setCurrentUser = (data) => store.commit('currentUser', data)
@@ -537,21 +547,84 @@ export default {
       getCheckCodeTimer,
       forgotDialogVisible
     }
+
+  },
+  beforeRouteUpdate(to) {
+    // console.log(to)
+    if (to.query.email) {
+      this.loginForm.email = to.query.email
+    }
+
+  },
+  unmounted() {
+    window.onresize = null
   },
   mounted() {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      this.loginErrorDialogWidthValue = '90%'
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        this.loginErrorDialogWidthValue = '90%'
+      }
+    }
+
 
     let email = this.$route.query.email
     if (email) {
       this.loginForm.email = email
     }
+
+    let isAccountCookieExist = this.$cookies.isKey('account')
+    console.log(isAccountCookieExist)
+    if (isAccountCookieExist) {
+      let accountCookie = this.$cookies.get('account')
+      this.rememberValue = true;
+
+      if (accountCookie.type === 1) {
+        this.loginForm.email = accountCookie.email
+        this.loginForm.password = accountCookie.password
+      }
+
+      if (accountCookie.type === 2) {
+        this.loginPhonePassForm.phone = accountCookie.phone
+        this.loginPhonePassForm.password = accountCookie.password
+      }
+    }
+
   },
   created() {
     this.showValue = this.showType
-    // let linkedinCode = this.$route.query.code;
-    // console.log(linkedinCode)
   },
   methods: {
-    changeType(e){
+
+    loginErrorOk() {
+      this.loginErrorDialogVisible = false
+    },
+    loginErrorHelp() {
+      window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+
+    },
+    sendPrivatePassword(email) {
+
+      let params = {
+        email: email
+      }
+      SEND_USER_PRIVATE_PASSWORD(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    turnHome() {
+      this.$router.push('/')
+    },
+    changeType(e) {
       e.target.type = 'password'
     },
     getCheckCode() {
@@ -567,14 +640,44 @@ export default {
           this.$message.success('Success')
         }
       }).catch(err => {
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
 
     },
-    goHome() {
-      this.$router.push('/home')
+    getCheckCodeForRegister() {
+
+      let params = {
+        phone: this.registerPhoneForm.phone
+      }
+
+      WEIXIN_SEND_SMS(params).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.getCheckCodeTimer()
+          this.$message.success('Success')
+        }
+      }).catch(err => {
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+
     },
-    remeberChange(e) {
+    signUp() {
+      this.$router.push('/signup')
+    },
+    goHome() {
+      this.$router.push('/')
+    },
+    rememberChange(e) {
       console.log(e)
     },
     humanVerify(response, responseKey) {
@@ -626,14 +729,224 @@ export default {
           }
         }).catch(err => {
           console.log(err)
-          this.$message.error(err.msg)
+          if (err.msg) {
+            this.$message.error(err.msg)
+          }
+          if (err.message) {
+            this.$message.error(err.message)
+          }
         })
       }
 
     },
+    selectEducationBusiness() {
+      this.businessDialogStatus = true
+      this.identityBusinessCheckedStatus = false
+      this.identityValue = 0
+    },
+    submitIdentityBusiness() {
+      if (this.identityValue == 0) {
+        return;
+      }
+      this.businessDialogStatus = false;
+    },
+    selectedIdentityBusiness(identity, identityName) {
+      this.businessDialogStatus = true;
+
+      if (identity && identityName) {
+        this.identityBusinessCheckedStatus = true
+        this.identityValue = identity
+        this.identityBusinessStr = identityName
+      }
+
+    },
+    closeBusinessDialog() {
+      this.businessDialogStatus = false
+      this.identityBusinessCheckedStatus = false
+      this.identityValue = 0
+      this.identityBusinessStr = 'Education-Business'
+    },
     selectedIdentity(value) {
       console.log(value)
+      this.identityBusinessCheckedStatus = false
+      this.identityBusinessStr = 'Education-Business'
+      this.businessDialogStatus = false;
+
       this.identityValue = value
+    },
+    rememberMeAction(data, type) {
+      // 1 email login 2 login by phone and password
+      let isExists = this.$cookies.isKey('account')
+      if (isExists) {
+        this.$cookies.remove('account')
+      }
+
+      if (this.rememberValue) {
+
+        let obj = {}
+        if (type === 1) {
+          obj = {
+            type: 1,
+            email: data.email,
+            password: data.password
+          }
+
+        }
+
+        if (type === 2) {
+          obj = {
+            type: 2,
+            phone: data.phone,
+            password: data.password
+          }
+        }
+
+        this.$cookies.set('account', obj, 60 * 60 * 24 * 30)
+
+      }
+
+
+    },
+    handleSetCurrentUser(uid,identity, companyId, firstName, lastName, avatar){
+
+      let uuid = uid + '#' + identity + '#' + companyId
+      let name = firstName + ' ' + lastName
+
+      let currentUser = {
+        uuid: uuid,
+        name: name,
+        avatar: avatar
+      }
+
+      this.setCurrentUser(currentUser)
+
+    },
+    storageLoginUserInfo(resMessage){
+
+      let self = this;
+
+      let identity = resMessage.identity;
+      let firstName = resMessage.first_name;
+      let lastName = resMessage.last_name;
+      let avatar = 'https://oss.esl-passport.cn/educator.png'
+      let companyId = resMessage.company_id;
+
+      let name = firstName + ' ' + lastName
+      let companyName = ''
+
+      localStorage.setItem('token', resMessage.token)
+      localStorage.setItem('uid', resMessage.id)
+      localStorage.setItem('identity', resMessage.identity)
+      localStorage.setItem('language', resMessage.language)
+      localStorage.setItem('email', resMessage.email)
+      localStorage.setItem('company_id', resMessage.company_id)
+      localStorage.setItem('name', name)
+      localStorage.setItem('first_name', firstName)
+      localStorage.setItem('last_name', lastName)
+
+      if (identity == 1) {
+        avatar = resMessage.headimgurl;
+        companyName = firstName + ' ' + lastName;
+        this.updateEducatorPercentage()
+      }
+      if(identity == 2){
+        avatar = resMessage.recruiting_info.logo;
+        companyName = resMessage.recruiting_info.company_name;
+        this.updateRecruiterPercentage()
+      }
+      if(identity == 3){
+        avatar = resMessage.school_info.logo;
+        companyName = resMessage.school_info.company_name;
+        this.updateSchoolPercentage()
+      }
+      if(identity == 4){
+        avatar = resMessage.other_info.logo;
+        companyName = resMessage.other_info.company_name;
+        this.updateOtherPercentage()
+      }
+      if(identity == 5){
+        avatar = resMessage.vendor_info.logo;
+        companyName = resMessage.vendor_info.company_name;
+        this.updateVendorPercentage()
+      }
+
+      this.$store.commit('currentCompanyId', resMessage.company_id)
+
+      if (resMessage.third_company_id) {
+        localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
+        this.$store.commit('thirdCompanyId', resMessage.third_company_id)
+      }
+
+      this.$store.commit('username', name)
+      this.$store.commit('userAvatar', avatar)
+      this.$store.commit('identity', resMessage.identity)
+      this.$store.commit('companyName', companyName)
+      this.$store.commit('changeThirdCompanyStatus', resMessage.is_third_company)
+
+      this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, avatar)
+      this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
+
+      setTimeout(function () {
+        self.skipHomePage()
+        self.submitLoginLoadingStatus = false
+      }, 1500)
+
+    },
+    updateEducatorPercentage() {
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      EDUCATOR_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    updateRecruiterPercentage(){
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      RECRUITER_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    updateSchoolPercentage(){
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      SCHOOL_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    updateOtherPercentage(){
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      OTHER_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+    },
+    updateVendorPercentage(){
+      let params = {
+        token: localStorage.getItem('token')
+      }
+
+      VENDOR_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
     },
     submitLoginForm(formName) {
       let self = this;
@@ -642,98 +955,48 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let params = Object.assign({}, this.loginForm)
-            EMAIL_LOGIN(params).then(res => {
-              // console.log(res)
+            LOGIN_EMAIL_PWD_V2(params).then(res => {
+              console.log(res)
               if (res.code == 200) {
-                localStorage.setItem('token', res.message.token)
-                localStorage.setItem('uid', res.message.id)
-                localStorage.setItem('identity', res.message.identity)
-                localStorage.setItem('language', res.message.language)
-                localStorage.setItem('email', res.message.email)
+                this.rememberMeAction(params, 1)
 
-                let identity = res.message.identity
-                if (identity == 0) {
-                  localStorage.setItem('name', 'Guest')
-                }
-                let firstName = ''
-                let lastName = ''
-                let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
+                let resMessage = res.message;
 
-                if (identity == 1) {
-                  firstName = res.message.educator.first_name
-                  lastName = res.message.educator.last_name
-                  if (res.message.educator.profile_photo) {
-                    currentAvatar = res.message.educator.profile_photo
-                  }
+                this.storageLoginUserInfo(resMessage)
 
-                }
-
-                if (identity == 2) {
-                  firstName = res.message.business.first_name
-                  lastName = res.message.business.last_name
-                  if (res.message.business.profile_photo) {
-                    currentAvatar = res.message.business.profile_photo
-                  }
-
-                }
-
-                if (identity == 3) {
-                  firstName = res.message.vendor.first_name
-                  lastName = res.message.vendor.last_name
-                  if (res.message.vendor.profile_photo) {
-                    currentAvatar = res.message.vendor.profile_photo
-                  }
-                }
-
-                localStorage.setItem('name', firstName + ' ' + lastName)
-                localStorage.setItem('first_name', firstName)
-                localStorage.setItem('last_name', lastName)
-
-                let currentUser = {
-                  uuid: res.message.id,
-                  identity: identity,
-                  name: firstName + ' ' + lastName,
-                  avatar: currentAvatar,
-                }
-                // console.log(currentUser)
-
-                this.setCurrentUser(currentUser)
-                // localStorage.setItem('currentUser',JSON.stringify(currentUser));
-
-                setTimeout(function () {
-                  self.skipHomePage()
-                  self.submitLoginLoadingStatus = false
-                }, 1500)
               }
             }).catch(err => {
               console.log(err)
 
-              if(err.message.status == 10001){
+              if (err.message.status == 10001) {
 
                 this.$msgbox({
-                  title:"Seems you dont have an account",
-                  message:"would you like to sign up?",
-                  dangerouslyUseHTMLString:false,
-                  type:"warning",
-                  center:true,
-                  showCancelButton:true,
-                  cancelButtonText:"No,thank you",
-                  confirmButtonText:"Sign Up",
-                  "round-button":true,
-                  callback(action){
+                  title: "Seems you dont have an account",
+                  message: "would you like to sign up?",
+                  dangerouslyUseHTMLString: false,
+                  type: "warning",
+                  center: true,
+                  showCancelButton: true,
+                  cancelButtonText: "No,thank you",
+                  confirmButtonText: "Sign Up",
+                  "round-button": true,
+                  callback(action) {
                     console.log(action)
-                    if(action==='confirm'){
-                      self.$router.push({path: '/login', query: {type: 2}})
-                      self.showValue = 2
+                    if (action === 'confirm') {
+                      self.$router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
-              }else{
-                this.$message.error(err.msg)
+              } else {
+
+                this.loginErrorDialogVisible = true;
+
               }
+
               this.submitLoginLoadingStatus = false
+
             })
 
           } else {
@@ -753,61 +1016,42 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let params = Object.assign({}, this.loginPhoneSmsForm)
-            H5_LOGIN(params).then(res => {
+            LOGIN_PHONE_SMS_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
-                localStorage.setItem('token', res.message.token)
-                localStorage.setItem('uid', res.message.id)
-                localStorage.setItem('identity', res.message.identity)
-                localStorage.setItem('language', res.message.language)
-                localStorage.setItem('email', res.message.email)
 
-                let identity = res.message.identity
-                if (identity == 0) {
-                  localStorage.setItem('name', 'Guest')
+                let resMessage = res.message;
+
+                localStorage.setItem('token', resMessage.token)
+                localStorage.setItem('uid', resMessage.id)
+                localStorage.setItem('identity', resMessage.identity)
+                localStorage.setItem('language', resMessage.language)
+                localStorage.setItem('phone', resMessage.phone)
+                localStorage.setItem('company_id', resMessage.company_id)
+                this.$store.commit('currentCompanyId', resMessage.company_id)
+
+                if (resMessage.third_company_id) {
+                  localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
+                  this.$store.commit('thirdCompanyId', resMessage.third_company_id)
                 }
-                let firstName = ''
-                let lastName = ''
+
+                let identity = resMessage.identity
+
+                let firstName = resMessage.first_name
+                let lastName = resMessage.last_name
                 let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
-
-                if (identity == 1) {
-                  firstName = res.message.educator.first_name
-                  lastName = res.message.educator.last_name
-                  if (res.message.educator.profile_photo) {
-                    currentAvatar = res.message.educator.profile_photo
-                  }
-                }
-
-                if (identity == 2) {
-                  firstName = res.message.business.first_name
-                  lastName = res.message.business.last_name
-                  if (res.message.business.profile_photo) {
-                    currentAvatar = res.message.business.profile_photo
-                  }
-
-                }
-                if (identity == 3) {
-                  firstName = res.message.vendor.first_name
-                  lastName = res.message.vendor.last_name
-                  if (res.message.vendor.profile_photo) {
-                    currentAvatar = res.message.vendor.profile_photo
-                  }
-                }
+                let companyId = resMessage.company_id
 
                 localStorage.setItem('name', firstName + ' ' + lastName)
                 localStorage.setItem('first_name', firstName)
                 localStorage.setItem('last_name', lastName)
 
-                let currentUser = {
-                  uuid: res.message.id,
-                  identity: identity,
-                  name: firstName + ' ' + lastName,
-                  avatar: currentAvatar,
-                }
-                // console.log(currentUser)
+                this.$store.commit('identity', resMessage.identity)
 
-                this.setCurrentUser(currentUser)
+                this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, currentAvatar)
+
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
+                this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
 
                 setTimeout(function () {
                   self.skipHomePage()
@@ -816,30 +1060,30 @@ export default {
               }
             }).catch(err => {
               console.log(err)
-              if(err.message.status == 10001){
+              if (err.message.status == 10001) {
 
                 this.$msgbox({
-                  title:"Seems you dont have an account",
-                  message:"would you like to sign up?",
-                  dangerouslyUseHTMLString:false,
-                  type:"warning",
-                  center:true,
-                  showCancelButton:true,
-                  cancelButtonText:"No,thank you",
-                  confirmButtonText:"Sign Up",
-                  "round-button":true,
-                  callback(action){
+                  title: "Seems you dont have an account",
+                  message: "would you like to sign up?",
+                  dangerouslyUseHTMLString: false,
+                  type: "warning",
+                  center: true,
+                  showCancelButton: true,
+                  cancelButtonText: "No,thank you",
+                  confirmButtonText: "Sign Up",
+                  "round-button": true,
+                  callback(action) {
                     console.log(action)
-                    if(action==='confirm'){
-                      self.$router.push({path: '/login', query: {type: 2}})
-                      self.showValue = 2
+                    if (action === 'confirm') {
+                      self.$router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
-              }else{
-                this.$message.error(err.msg)
+              } else {
+                this.loginErrorDialogVisible = true;
+                // this.$message.error(err.msg)
               }
 
             })
@@ -860,62 +1104,43 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let params = Object.assign({}, this.loginPhonePassForm)
-            H5_LOGIN(params).then(res => {
+            LOGIN_PHONE_PWD_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
-                localStorage.setItem('token', res.message.token)
-                localStorage.setItem('uid', res.message.id)
-                localStorage.setItem('identity', res.message.identity)
-                localStorage.setItem('language', res.message.language)
-                localStorage.setItem('email', res.message.email)
 
-                let identity = res.message.identity
-                if (identity == 0) {
-                  localStorage.setItem('name', 'Guest')
+                this.rememberMeAction(params, 2)
+
+                let resMessage = res.message
+
+                localStorage.setItem('token', resMessage.token)
+                localStorage.setItem('uid', resMessage.id)
+                localStorage.setItem('identity', resMessage.identity)
+                localStorage.setItem('language', resMessage.language)
+                localStorage.setItem('phone', resMessage.phone)
+                localStorage.setItem('company_id', resMessage.company_id)
+                this.$store.commit('currentCompanyId', resMessage.company_id)
+
+                if (resMessage.third_company_id) {
+                  localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
+                  this.$store.commit('thirdCompanyId', resMessage.third_company_id)
                 }
-                let firstName = ''
-                let lastName = ''
+
+                let identity = resMessage.identity
+                let firstName = resMessage.first_name
+                let lastName = resMessage.last_name
                 let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
-
-                if (identity == 1) {
-                  firstName = res.message.educator.first_name
-                  lastName = res.message.educator.last_name
-                  if (res.message.educator.profile_photo) {
-                    currentAvatar = res.message.educator.profile_photo
-                  }
-
-                }
-
-                if (identity == 2) {
-                  firstName = res.message.business.first_name
-                  lastName = res.message.business.last_name
-                  if (res.message.business.profile_photo) {
-                    currentAvatar = res.message.business.profile_photo
-                  }
-
-                }
-                if (identity == 3) {
-                  firstName = res.message.vendor.first_name
-                  lastName = res.message.vendor.last_name
-                  if (res.message.vendor.profile_photo) {
-                    currentAvatar = res.message.vendor.profile_photo
-                  }
-                }
+                let companyId = resMessage.company_id
 
                 localStorage.setItem('name', firstName + ' ' + lastName)
                 localStorage.setItem('first_name', firstName)
                 localStorage.setItem('last_name', lastName)
 
-                let currentUser = {
-                  uuid: res.message.id,
-                  identity: identity,
-                  name: firstName + ' ' + lastName,
-                  avatar: currentAvatar,
-                }
-                // console.log(currentUser)
+                this.$store.commit('identity', resMessage.identity)
 
-                this.setCurrentUser(currentUser)
+                this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, currentAvatar)
+
                 // localStorage.setItem('currentUser',JSON.stringify(currentUser));
+                this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
 
                 setTimeout(function () {
                   self.skipHomePage()
@@ -924,30 +1149,30 @@ export default {
               }
             }).catch(err => {
               console.log(err)
-              if(err.message.status == 10001){
+              if (err.message.status == 10001) {
 
                 this.$msgbox({
-                  title:"Seems you dont have an account",
-                  message:"would you like to sign up?",
-                  dangerouslyUseHTMLString:false,
-                  type:"warning",
-                  center:true,
-                  showCancelButton:true,
-                  cancelButtonText:"No,thank you",
-                  confirmButtonText:"Sign Up",
-                  "round-button":true,
-                  callback(action){
+                  title: "Seems you dont have an account",
+                  message: "would you like to sign up?",
+                  dangerouslyUseHTMLString: false,
+                  type: "warning",
+                  center: true,
+                  showCancelButton: true,
+                  cancelButtonText: "No,thank you",
+                  confirmButtonText: "Sign Up",
+                  "round-button": true,
+                  callback(action) {
                     console.log(action)
-                    if(action==='confirm'){
-                      self.$router.push({path: '/login', query: {type: 2}})
-                      self.showValue = 2
+                    if (action === 'confirm') {
+                      self.$router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
-              }else{
-                this.$message.error(err.msg)
+              } else {
+                this.loginErrorDialogVisible = true;
+                // this.$message.error(err.msg)
               }
 
             })
@@ -961,265 +1186,24 @@ export default {
 
       }
     },
-    submitRegisterForm1(userId) {
+    getUserMenuList(uid, identity, companyId, cId) {
 
-      let params = Object.assign({
-        identity: this.identityValue
-      }, this.registerForm)
-
-      let identityStr = ''
-      if (params.identity == 1) {
-        identityStr = 'Educator'
-      }
-      if (params.identity == 2) {
-        identityStr = 'Edu-Business Contact'
-      }
-      if (params.identity == 3) {
-        identityStr = 'Vendor Contact'
+      let params = {
+        user_id: uid,
+        identity: identity,
+        company_id: companyId,
+        create_user_id: cId,
+        page: 1,
+        limit: 1000
       }
 
-      let zohoData = [
-        {
-          'xnQsjsdp': '4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2'
-        },
-        {
-          'zc_gad': ''
-        },
-        {
-          'xmIwtLD': '97a36bab5c5de21168555ee8ab3cfe6d18f88e7ed1182c9e6e5c9ec5ec7d2149'
-        },
-        {
-          'actionType': 'Q29udGFjdHM='
-        },
-        {
-          'returnURL': 'https://dev.eslpassport.com/home'
-        },
-        {
-          'ldeskuid': ''
-        },
-        {
-          'LDTuvid': ''
-        },
-        {
-          'Last Name': params.last_name
-        },
-        {
-          'First Name': params.first_name
-        },
-        {
-          'Email': params.email
-        },
-        {
-          'CONTACTCF154': userId
-        },
-        {
-          'CONTACTCF2': identityStr
-        },
-        {
-          'Lead Source': 'Web App'
+      USER_MENU_LIST(params).then(res => {
+        // console.log(res)
+        if (res.code === 200) {
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData', str)
+          this.$store.commit('menuData', res.message)
         }
-      ];
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://crm.zoho.com/crm/WebToContactForm'
-      }
-
-      ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-
-    },
-    submitRegisterForm2(userId) {
-
-      let params = Object.assign({
-        identity: this.identityValue
-      }, this.registerForm)
-
-      let identityStr = ''
-      if (params.identity == 1) {
-        identityStr = 'Educator'
-      }
-      if (params.identity == 2) {
-        identityStr = 'Edu-Business Contact'
-      }
-      if (params.identity == 3) {
-        identityStr = 'Vendor Contact'
-      }
-
-      let zohoData = [
-        {
-          'xnQsjsdp': '4d59e01d9476e60c9721947f7c6baaeb7af298fd8d2f64b2fa85e6f0f86c7bb2'
-        },
-        {
-          'zc_gad': ''
-        },
-        {
-          'xmIwtLD': '97a36bab5c5de21168555ee8ab3cfe6d037c8611da3e03b743498f3f5ee37b59'
-        },
-        {
-          'actionType': 'Q29udGFjdHM='
-        },
-        {
-          'returnURL': 'https://dev.eslpassport.com/home'
-        },
-        {
-          'ldeskuid': ''
-        },
-        {
-          'LDTuvid': ''
-        },
-        {
-          'Last Name': params.last_name
-        },
-        {
-          'First Name': params.first_name
-        },
-        {
-          'Email': params.email
-        },
-        {
-          'CONTACTCF154': userId
-        },
-        {
-          'CONTACTCF2': identityStr
-        },
-        {
-          'Lead Source': 'Web App'
-        }
-
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://crm.zoho.com/crm/WebToContactForm'
-      }
-
-      ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-
-    },
-    async submitEducatorContactForm(userId){
-
-      let params = Object.assign({}, this.registerForm)
-
-      let zohoData = [
-        {'zf_referrer_name':''},
-        {'zf_redirect_url':''},
-        {'zc_gad':''},
-        {'SingleLine':userId //UserID
-        },
-        {'SingleLine1':params.first_name // First Name
-        },
-        {'SingleLine2':params.last_name //  Last Name
-        },
-        {'Dropdown':'' //  Gender
-        },
-        {'Date':'' //   Date of Birth dd-MMM-yyyy
-        },
-        {'SingleLine3':'' //   Title
-        },
-        {'Email':params.email //   Email
-        },
-        {'PhoneNumber_countrycode':'' //   Phone
-        },
-        {'SingleLine4':'' //   Nationality
-        },
-        {'Dropdown1':'' //   Membership Type
-        },
-        {'MultiLine':'' //   Languages Spoken
-        },
-        {'Number':'' //   Membership Duration
-        },
-        {'SingleLine5':'' //   City
-        },
-        {'SingleLine6':'' //   Province
-        },
-        {'SingleLine7':'' //   Country
-        },
-        {'Dropdown2':'' //   Educator Type
-        },
-        {'MultiLine1':'' //   Education
-        },
-        {'MultiLine2':'' //    Work History
-        },
-        {'Dropdown3':'' //    Teaching Experience
-        },
-        {'MultiLine3':'' //   Certifications
-        },
-        {'MultiLine4':'' //   Educator Intro
-        },
-        {'Website':'' //   Contact image Link
-        },
-        {'Website1':'' //   Intro Video Link
-        }
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/EducatorContactForm/formperma/G014C7ko-MpOp3A2vp6NZlgxhPbGj2HDtbzlZEI6cks/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-
-    },
-    async submitCompanyContactForm(userId){
-
-      let params = Object.assign({}, this.registerForm)
-
-      let zohoData = [
-        {'zf_referrer_name':''},
-        {'zf_redirect_url':''},
-        {'zc_gad':''},
-        {'SingleLine':userId  //UserID
-        },
-        {'SingleLine1':params.first_name  // First Name
-        },
-        {'SingleLine2':params.last_name  //  Last Name
-        },
-        {'Dropdown':'' //  Gender
-        },
-        {'Date':''  //   Date of Birth dd-MMM-yyyy params.birthday
-        },
-        {'SingleLine3':''  //   Title
-        },
-        {'Email':params.email  //   Email
-        },
-        {'PhoneNumber_countrycode':''  //   Phone
-        },
-        {'SingleLine4':''  //   Nationality
-        },
-        {'Dropdown1':''  //   Membership Type
-        },
-        {'Number':''  //   Membership Duration
-        },
-        {'SingleLine5':''  //   City
-        },
-        {'SingleLine6':''  //   Province
-        },
-        {'SingleLine7':''  //   Country
-        },
-        {'Website':'' //   Contact image Link
-        }
-
-      ]
-
-      let zohoParams = {
-        zoho_data: zohoData,
-        zoho_url: 'https://forms.zohopublic.com/edupassport/form/CompanyContactForm/formperma/ZYHWpHeaRP511w85Ljl47AYAS77L3z9qcqUw4Wv48io/htmlRecords/submit'
-      }
-
-      await ZOHO_SYNC(zohoParams).then(res => {
-        console.log(res)
       }).catch(err => {
         console.log(err)
       })
@@ -1237,33 +1221,77 @@ export default {
             identity: self.identityValue
           }, this.registerForm)
 
-          EMAIL_REGISTER(params).then(res => {
+          EMAIL_REGISTER_V2(params).then(res => {
             console.log(res)
             if (res.code == 200) {
-              // let userInfo = res.message
-              // localStorage.setItem('uid',res.message.id)
-              if (self.identityValue == 1) {
-                this.submitEducatorContactForm(res.message.id)
-              }
-              if (self.identityValue == 2 || self.identityValue == 3) {
-                this.submitCompanyContactForm(res.message.id)
-              }
 
               self.submitRegisterLoadingStatus = false
 
               this.$msgbox({
-                title:"All Set",
-                message:"Let's get you logged in!",
-                dangerouslyUseHTMLString:false,
-                type:"success",
-                center:true,
-                confirmButtonText:"OK",
-                "round-button":true,
-                callback(action){
+                title: "All Set",
+                message: "Let's get you logged in!",
+                dangerouslyUseHTMLString: false,
+                type: "success",
+                center: true,
+                confirmButtonText: "OK",
+                "round-button": true,
+                callback(action) {
                   console.log(action)
-                  if(action==='confirm'){
-                    self.$router.push({path: '/login', query: {type: 1}})
-                    self.showValue = 1
+                  if (action === 'confirm') {
+                    self.$router.push({path: '/login', query: {type: 'login', email: self.registerForm.email}})
+                    self.showValue = 'login'
+                  }
+                }
+
+              })
+              // window.location.reload()
+
+            }
+
+          }).catch(err => {
+            console.log(err)
+            self.submitRegisterLoadingStatus = false
+            this.$message.error(err.msg)
+          })
+
+        } else {
+          console.log('error submit!!')
+          this.submitRegisterLoadingStatus = false
+          return false
+        }
+      })
+    },
+    submitRegisterPhoneForm(formName) {
+
+      let self = this;
+      this.submitRegisterLoadingStatus = true;
+
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // console.log(valid)
+          let params = Object.assign({
+            identity: self.identityValue
+          }, this.registerPhoneForm)
+
+          PHONE_REGISTER_V2(params).then(res => {
+            console.log(res)
+            if (res.code == 200) {
+
+              self.submitRegisterLoadingStatus = false
+
+              this.$msgbox({
+                title: "All Set",
+                message: "Let's get you logged in!",
+                dangerouslyUseHTMLString: false,
+                type: "success",
+                center: true,
+                confirmButtonText: "OK",
+                "round-button": true,
+                callback(action) {
+                  console.log(action)
+                  if (action === 'confirm') {
+                    self.$router.push({path: '/login', query: {type: 'login', phone: self.registerPhoneForm.phone}})
+                    self.showValue = 'login'
                   }
                 }
 
@@ -1361,41 +1389,84 @@ export default {
 
 <style scoped>
 
-.container-1 {
-  padding-top: 20px;
+.login-bg {
+  min-height: 100vh;
+  background-color: #F0F2F5;
   position: relative;
 }
 
-.go-home-container {
-  position: absolute;
-  left: 20px;
-  top: 20px;
+.login-container {
+  padding-top: 50px;
 }
 
-.go-home-btn {
-  font-size: 14px;
+.login-l {
+  padding-left: 50px;
+  cursor: pointer;
 }
 
-.logo-container {
+.login-l-logo {
+  width: 60px;
+}
+
+.login-l-edu {
+  font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 40px;
+}
+
+.login-l-passport {
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 17px;
+}
+
+
+.login-m {
+  width: 576px;
+  margin: 0 auto;
+}
+
+.login-m h1 {
+  text-align: center;
+}
+
+.xll-login-form-container {
+  margin-top: 67px;
+}
+
+.xll-divider {
+  margin-top: 50px;
+}
+
+.sign-in-btn-container {
+
+}
+
+.login-r {
+  padding-right: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+
 }
 
-.logo-img {
-  width: 100px;
-  height: 100px;
+.sign-up {
+
 }
 
-.logo-title {
-  text-decoration: none;
+.sign-up-btn {
+  font-size: 20px;
+  color: #262626;
 }
 
-.create-account-tips {
-  color: #808080;
-  padding: 10px;
+.login-close {
+  margin-right: 20px;
 }
+
+.login-close-btn {
+  font-size: 20px;
+  color: #262626;
+}
+
 
 .create-account-link a {
   text-decoration: none;
@@ -1404,154 +1475,45 @@ export default {
   font-weight: bold;
 }
 
-.xll-login-row-container {
-  /*width: 1100px;*/
-  margin: 0 auto;
-  border-radius: 20px;
-  background-color: #DAEBCF;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
-  overflow: hidden;
-  background-image: url("../../assets/bg/bg-shanghai.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.xll-login-container {
-  overflow: hidden;
-  background-color: #FFFFFF;
-}
-
-.xll-login-form-container {
-  padding: 20px 20px 20px 20px;
-}
-
-.xll-register-row-container {
-  /*width: 1100px;*/
-  margin: 0 auto;
-}
-
-.xll-register-container {
-  overflow: hidden;
-  background-color: #FFFFFF;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
-  border-radius: 20px;
-}
-
-.xll-register-form-container {
-  padding: 20px 20px 40px 20px;
-}
-
-.login-tabs-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #EEEEEE;
-}
-
-.login-label {
-  width: 50%;
-  font-size: 16px;
-  padding: 10px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.login-label:hover {
-  background-color: #0AA0A8;
-  color: #FFFFFF;
-}
-
-.login-tab-active {
-  background-color: #0AA0A8;
-  color: #FFFFFF;
-}
-
-.register-label {
-  width: 50%;
-  text-align: center;
-  font-size: 16px;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.register-label:hover {
-  background-color: #0AA0A8;
-  color: #FFFFFF;
-}
-
-.phone-btn-container {
-  margin-top: 10px;
-}
-
-.facebook-btn-container {
-  margin-top: 10px;
-}
-
-.google-btn-container {
-  margin-top: 10px;
-}
-
 .forgot-password-container {
-  margin-top: 10px;
   text-align: center;
 }
 
 .forgot-password-btn {
-  font-size: 16px;
+
 }
 
-.google-btn {
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 26px;
-}
-
-.apple-btn {
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 26px;
-}
-
-.linkedin-btn {
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 26px;
+/deep/ .el-checkbox__label {
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+  font-size: 20px;
 }
 
 .login-option-btn {
+
   width: 100%;
-  font-size: 16px;
-  font-weight: bold;
+  /*font-size: 20px;*/
+  margin-top: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
 }
 
 .submit-btn {
-  width: 100%;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 26px;
-  margin-top: 20px;
+  height: 40px;
+  margin: 50px auto 0;
 }
 
+.remember-forgot-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 
-.footer-container {
-  margin-top: 20px;
 }
 
-.footer-content a {
-  text-decoration: none;
-  color: #808080;
-}
-
-.remeber-container {
+.remember-container {
   text-align: left;
 }
 
@@ -1560,67 +1522,6 @@ export default {
   margin-top: 20px;
 }
 
-.identity-container {
-
-}
-
-.identity-label {
-  font-size: 14px;
-  text-align: left;
-  padding: 10px 0;
-}
-
-.identity-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.identity-btn {
-  background-color: #f5f6f7;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.identity-btn-margin {
-  margin-left: 10px;
-}
-
-.identity-educator-active {
-  background-color: #00b3d2;
-  color: #ffffff;
-}
-
-.identity-business-active {
-  background-color: #d2005b;
-  color: #ffffff;
-}
-
-.identity-vendor-active {
-  background-color: #b1c452;
-  color: #ffffff;
-}
-
-.send-code-btn {
-  background-color: #0AA0A8 !important;
-  color: #ffffff !important;
-  padding: 10px;
-}
-
-.xll-ads-container {
-  height: 100%;
-}
-
-.ads-image {
-  width: 100%;
-  height: 100%;
-}
-
-/deep/ .xll-icon {
-  font-size: 24px;
-}
 
 .login-require-star {
   color: #ff2870;
@@ -1639,6 +1540,7 @@ export default {
 }
 
 .xll-input-container {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1653,13 +1555,102 @@ export default {
   width: 26%;
 }
 
-@media screen and (min-width: 1200px) {
-  .xll-login-row-container {
-    width: 1100px;
+/deep/ .el-divider__text {
+  background-color: #F0F2F5;
+}
+
+
+.login-error-container {
+  text-align: center;
+}
+
+.login-error-container h4 {
+  margin-bottom: 25px;
+}
+
+.login-error-container p {
+  font-size: 20px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
+.login-error-ok-container {
+  margin-top: 25px;
+}
+
+.login-error-ok-container button {
+  width: 100px;
+}
+
+@media screen and (min-width: 769px) {
+  .mobile-banner{
+    display: none;
+  }
+  .mobile-banner-bg{
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+
+  .mobile-banner{
+    position: relative;
+    width: 100%;
+    height: 230px;
+    overflow: hidden;
+  }
+  .mobile-banner .mobile-banner-bg{
+    position: absolute;
+    left: -15%;
+    width: 130%;
+    height: 230px;
+    background-color: #E7DEFF;
+    border-bottom-left-radius: 100%;
+    border-bottom-right-radius: 100%;
+
   }
 
-  .xll-register-row-container {
-    width: 1100px;
+  .login-container {
+    padding-top: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .login-m-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*height: 100vh;*/
+
+  }
+
+  .login-l {
+    padding-left: 15px;
+    padding-top: 15px;
+  }
+
+  .login-m {
+    width: 100%;
+    margin-top: 180px;
+  }
+
+  .login-m h1 {
+    font-size: 20px;
+  }
+
+  .login-r {
+    padding-top: 15px;
+    padding-right: 15px;
+  }
+
+  .login-l-logo{
+    width: 30px;
+  }
+
+  /deep/ .el-checkbox__label {
+    font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+    font-size: 12px;
   }
 
 }

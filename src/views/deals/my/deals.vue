@@ -1,86 +1,119 @@
 <template>
   <div class="bg">
     <div class="profile-container">
-      <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <meSideMenu></meSideMenu>
-        </el-col>
-        <el-col class="deals-r-container" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+      <div class="profile-l-container">
+        <meSideMenu></meSideMenu>
+      </div>
+      <div class="profile-r-container">
+
+        <el-scrollbar class="profile-r-bg-container">
 
           <div class="deals-list-container">
 
             <div class="deals-list-t">
               <div class="deals-list-label">My Deals</div>
               <div class="deals-list-t-r">
-                <el-button type="default" class="post-deal-btn" round @click="postDeal()">Offer a Deal</el-button>
+                <el-button type="primary"
+                           class="post-deal-btn"
+                           round
+                           @click="postDeal()">
+                  Offer a Deal
+                </el-button>
               </div>
             </div>
-            <div class="deals-list-content">
-              <div class="deals-item" v-for="(item,index) in dealsListData"  :key="index">
 
-                <div class="deals-item-bg" :style="'background-image:url('+ item.user_info.profile_photo + ')'">
-                  <div class="deals-item-t">
-                    <div class="deals-item-t-l">
-                      <template v-if="item.user_info">
-                        <el-image class="deals-logo" :src="item.user_info.logo"></el-image>
+            <div class="deals-list-content" v-if="dealsListData.length > 0">
+
+              <div class="deals-item-container"
+                   v-for="(item,index) in dealsListData" :key="index"
+              >
+
+                <div class="deals-item">
+                  <div class="deals-item-bg">
+                    <el-image
+                        class="deals-item-background-img"
+                        :src="item.company_info && item.company_info.background_image ? item.company_info.background_image : ''"
+                        fit="cover"
+                    >
+                      <template #error>
+                        <div class="img-slot-background">
+                          <el-icon :size="80" color="#808080">
+                            <Picture/>
+                          </el-icon>
+                        </div>
                       </template>
+                    </el-image>
+
+                    <div class="list-item-tag actived-0" v-if="item.status==0">
+                      Pending
                     </div>
-                    <div class="deals-item-t-r">
-<!--                      <i class="iconfont el-icon-alixll-heart xll-heart-icon"></i>-->
+                    <div class="list-item-tag actived-1" v-if="item.status==1">
+                      Active
+                    </div>
+                    <div class="list-item-tag actived-2" v-if="item.status==2">
+                      Rejected
+                    </div>
+
+                  </div>
+                  <div class="deals-item-c">
+                    <div class="deals-item-c-l">
+                      <el-avatar class="deals-logo" :src="item.company_logo"></el-avatar>
+                    </div>
+                    <div class="deals-item-c-r">
+                      <div class="deals-item-c-r-1">
+                        {{ item.company_name }}
+                      </div>
+                      <div class="deals-item-c-r-2">
+                        {{ item.title }}
+                      </div>
                     </div>
                   </div>
-<!--                  <div class="deals-item-tag-container">-->
-<!--                    <div class="deals-item-tag">Deal</div>-->
-<!--                  </div>-->
 
-                  <div class="deals-item-name-container">
-                    <div class="deals-item-title"  @click="turnDealDetail(item.id)">
-                      {{ item.title }}
+                  <div class="deals-item-b">
+                    <div class="deals-item-b-l">
+
+                      <template v-if="item.company_info && item.company_info.category_name_en && item.company_info.category_name_en != '0'">
+                        {{ item.company_info.category_name_en }}
+                      </template>
+                      <template v-else>
+                        unknown
+                      </template>
+
                     </div>
-                    <div class="deals-item-name">
-                      {{item.desc}}
+                    <div class="deals-item-b-r">
+                      <el-button link @click="turnEditDeal(item.id)">
+                        EDIT
+                      </el-button>
+                      <el-button link @click="turnDealDetail(item.id)">
+                        DETAILS
+                      </el-button>
                     </div>
                   </div>
 
-                </div>
-
-                <div class="deals-item-b">
-                  <div class="deals-item-b-l">
-                    <template v-if="item.vendor_type_icon">
-                      <el-image class="hot-deal-type-icon" :src="item.vendor_type_icon.icon_url"></el-image>
-                    </template>
-                  </div>
-                  <div class="deals-item-b-r">
-                    <template v-if="item.user_info">
-                      {{ item.user_info.vendor_name_en }}
-                    </template>
-                  </div>
-                </div>
-
-                <div class="list-item-tag actived-0" v-if="item.status==0">
-                  Pending
-                </div>
-                <div class="list-item-tag actived-1" v-if="item.status==1">
-                  Active
-                </div>
-                <div class="list-item-tag actived-2" v-if="item.status==2">
-                  Rejected
                 </div>
 
               </div>
 
+            </div>
+            <div class="deals-list-content-empty" v-else>
+              <el-empty description="-"></el-empty>
             </div>
 
           </div>
-          <div class="deals-pagination">
+
+          <div class="deals-pagination" v-if="dealsListData.length > 0">
             <el-pagination layout="prev, pager, next" :default-current-page="1"
                            @size-change="dealPageSizeChange"
                            @current-change="dealPageChange"
                            :current-page="dealPage" :page-size="dealLimit"
-                           :total="dealTotalNum"></el-pagination>
+                           :total="dealTotalNum">
+            </el-pagination>
           </div>
-        </el-col>
-      </el-row>
+
+        </el-scrollbar>
+
+      </div>
+
     </div>
   </div>
 </template>
@@ -88,7 +121,8 @@
 <script>
 
 import meSideMenu from "@/components/meSideMenu";
-import {VISITOR_USER_INFO,MY_DEALS} from '@/api/api';
+import {MY_DEALS} from '@/api/api';
+import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "deals",
@@ -99,42 +133,66 @@ export default {
     return {
       userInfo: {},
       basicUserInfo: {},
-      dealsListData:[],
-      dealPage:1,
-      dealLimit:10,
-      dealTotalNum:0,
+      dealsListData: [],
+      dealPage: 1,
+      dealLimit: 10,
+      dealTotalNum: 0,
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
-    // this.getVisitorBasicInfo()
-    this.getMyDeals(this.dealPage,this.dealLimit)
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
+
+    this.getMyDeals(this.dealPage, this.dealLimit)
   },
   methods: {
-    postDeal(){
+    postDeal() {
       this.$router.push({
-        path:'/deals/offer',query:{}
+        path: '/deals/offer', query: {}
       })
     },
-    turnDealDetail(id){
-      this.$router.push({path:'/deals/detail',query:{
-        id:id
-        }})
+    turnDealDetail(id) {
+      this.$router.push({
+        path: '/deals/detail', query: {
+          id: id
+        }
+      })
+    },
+    turnEditDeal(id) {
+      this.$router.push({path: '/deals/offer', query: {deal_id: id}})
     },
     dealPageSizeChange(e) {
       console.log(e)
     },
     dealPageChange(e) {
       this.jobPage = e
-      this.getMyJobs(e, this.dealLimit)
+      this.getMyDeals(e, this.dealLimit)
       console.log(e)
     },
-    getMyDeals(page,limit){
+    getMyDeals(page, limit) {
       let params = {
         token: localStorage.getItem('token'),
         page: page,
         limit: limit
       }
-      MY_DEALS(params).then(res=>{
+      MY_DEALS(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.dealsListData = res.message.data
@@ -143,39 +201,18 @@ export default {
         } else {
           console.log(res.msg)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
-      let params = {
-        id: uid,
-        identity: identity
-      }
-      VISITOR_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
-          }
-
+        if (err.msg) {
+          this.$message.error(err.msg)
         }
-      }).catch(err=>{
-        console.log(err)
-        this.$message.error(err.msg)
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
+
     },
+
   }
 }
 </script>
@@ -186,163 +223,77 @@ export default {
 }
 
 .profile-container {
-  width: 1100px;
-  margin: 0 auto;
-  padding: 20px 0;
-}
-.deals-r-container{
-  padding: 0 20px;
-}
-.deals-list-container {
-  padding: 20px;
-  border-radius:10px;
-  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.deals-list-t{
+.profile-l-container {
+
+}
+
+.profile-r-container {
+  padding: 50px;
+  width: calc(100% - 260px);
+  height: calc(100vh - 240px);
+}
+
+.profile-r-bg-container {
+  width: 100%;
+  height: calc(100vh - 240px);
+  background-color: #FFFFFF;
+  border-radius: 18px;
+  box-shadow: 0 3px 23px #00000012;
+}
+
+.deals-list-container {
+  padding: 25px 50px;
+}
+
+.deals-list-t {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #EEEEEE;
 }
 
 .deals-list-label {
-  font-size: 18px;
-  font-weight: bold;
-  text-align: left;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  color: #262626;
+
 }
-.post-deal-btn{
-  background-color: #0AA0A8;
-  color: #FFFFFF;
+
+.post-deal-btn {
+  font-size: 20px;
 }
+
 .deals-list-content {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
+}
+.deals-list-content-empty{
+  text-align: center;
+}
+.deals-item-container {
+  width: 33%;
+  margin-top: 25px;
 }
 
 .deals-item {
-  width: 48%;
-  margin-top: 20px;
-  border-radius: 20px;
+  width: 95%;
+  box-shadow: 0px 0px 10px #0000001A;
+  border-radius: 40px;
+
   overflow: hidden;
   border: 1px solid #eeeeee;
   background-color: #ffffff;
   position: relative;
-  box-shadow: 0px 0px 4px 0px rgba(50, 50, 50, 0.47);
-}
 
-.deals-item-bg {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-}
-
-.deals-item-t {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 10px 10px 40px 10px;
-  background-color: rgba(0,0,0,0.3);
-}
-
-.deals-item-t-l {
-
-}
-
-.deals-logo {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-
-.deals-item-t-r {
-  color: #ffffff;
-
-}
-
-.xll-heart-icon {
-  font-size: 30px !important;
-}
-
-.deals-item-tag-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 10px 20px;
-}
-
-.deals-item-tag {
-  background-color: #0AA0A8;
-  color: #ffffff;
-  padding: 4px 14px;
-  border-radius: 4px;
-
-}
-
-.deals-item-name-container {
-  padding: 10px 20px;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
-.deals-item-title {
-  color: #ffffff;
-  font-size: 16px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.deals-item-title:hover{
-  text-decoration: underline;
-  font-size: 18px;
-}
-.deals-item-name {
-  color: #ffffff;
-  font-size: 16px;
-  text-align: left;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.deals-item-b {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-}
-
-.deals-item-b-l {
-  width: 20%;
-  text-align: left;
-}
-
-.hot-deal-type-icon{
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.deals-item-b-r {
-  width: 80%;
-  font-size: 12px;
-  color: #808080;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.deals-pagination{
-  margin-top: 20px;
-  text-align: center;
 }
 
 .list-item-tag {
@@ -353,7 +304,7 @@ export default {
   transform: rotate(30deg);
   padding: 4px 80px 4px 160px;
   text-align: center;
-  font-size:14px;
+  font-size: 14px;
 }
 
 .actived-0 {
@@ -366,5 +317,185 @@ export default {
 
 .actived-2 {
   background-color: #FF2870;
+}
+
+
+.deals-item-bg {
+  height: 240px;
+  border-radius: 40px;
+
+  background-color: #faf7f7;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  overflow: hidden;
+
+  position: relative;
+}
+
+.deals-item-background-img {
+  width: 100%;
+  height: 100%;
+}
+
+.deals-item-c {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 25px;
+}
+
+.deals-logo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid #EEEEEE;
+  background-color: #FFFFFF;
+}
+
+.deals-item-c-r {
+  margin-left: 25px;
+}
+
+.deals-item-c-r-1 {
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+  cursor: pointer;
+}
+
+.deals-item-c-r-2 {
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  color: #262626;
+  cursor: pointer;
+}
+
+.deals-item-b {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px 25px 25px;
+
+}
+
+.deals-item-b-1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deals-item-b-l {
+  text-align: left;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #262626;
+}
+
+.deals-item-b-r {
+  font-size: 12px;
+  color: #808080;
+  padding-right: 20px;
+  text-align: right;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.deals-pagination {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.img-slot-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #faf7f7;
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (min-width: 1200px) {
+
+}
+
+@media screen and (max-width: 768px) {
+  .profile-r-container {
+    width: 100%;
+    padding: 0;
+    height: calc( var(--i-window-height) - 160px);
+  }
+
+  .profile-r-bg-container {
+    background-color: #F0F2F5;
+    border-radius: 0;
+    box-shadow: none;
+    height: calc( var(--i-window-height) - 160px);
+
+  }
+
+  .deals-list-container{
+    padding: 15px;
+  }
+
+  .deals-list-label{
+    font-size: 18px;
+  }
+  .post-deal-btn{
+    font-size: 12px;
+  }
+
+  .deals-list-content{
+    flex-direction: column;
+  }
+
+  .deals-item-container{
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .deals-item{
+    width: 100%;
+  }
+
+  .deals-item-bg{
+    height:140px;
+  }
+
+  .deals-item-c{
+    padding: 15px;
+  }
+
+  .deals-logo{
+    width:40px;
+    height: 40px;
+  }
+
+  .deals-item-c-r{
+    margin-left: 15px;
+  }
+
+  .deals-item-c-r-1{
+    font-size: 14px;
+  }
+
+  .deals-item-c-r-2{
+    font-size: 18px;
+  }
+
+  .deals-item-b{
+    padding: 0 15px 15px 15px;
+  }
+  .deals-item-b-l{
+    font-size: 12px;
+  }
+
+
 }
 </style>

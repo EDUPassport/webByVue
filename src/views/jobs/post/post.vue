@@ -1,633 +1,818 @@
 <template>
   <div class="bg">
-    <div class="profile-container">
-      <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <meSideMenu></meSideMenu>
-        </el-col>
-        <el-col class="job-r-container" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
-          <div class="job-form-container">
+    <div class="post-container">
+      <div class="post-l-container">
+        <meSideMenu></meSideMenu>
+      </div>
+      <div class="post-r-container">
+        <div class="post-r-container-bg" v-loading="postJobLoadingValue">
+
+          <div class="account-profile-t">
+
+            <div class="account-profile-t-l">New job post</div>
+            <div class="account-profile-t-r">
+
+              <el-popconfirm
+                  width="320"
+                  confirm-button-text="OK"
+                  cancel-button-text="No, Thanks"
+                  icon-color="#626AEF"
+                  title="Are you sure to discard this?"
+                  @confirm="discardJobPost()"
+              >
+                <template #reference>
+                  <el-button class="account-profile-discard-btn" link round  >
+                    DISCARD
+                  </el-button>
+                </template>
+              </el-popconfirm>
+
+<!--              <el-button class="account-profile-draft-btn" plain round>-->
+<!--                SAVE AS DRAFT-->
+<!--              </el-button>-->
+              <el-button class="account-profile-save-btn" type="primary" round
+                         :loading="submitLoadingValue"
+                         @click="submitJob('jobForms',3)">
+                SAVE AND SUBMIT
+              </el-button>
+            </div>
+
+          </div>
+
+          <el-scrollbar class="job-form-container">
             <el-form
-                ref="jobForm"
+                ref="jobForms"
                 :model="jobForm"
                 :rules="jobRules"
                 label-width="120px"
                 label-position="top"
                 class="demo-ruleForm"
             >
-              <div class="job-detail-container">
-                <div class="job-detail-label">
-                  Job Details
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  1. <span v-if="identity==2">Recruiter</span><span v-if="identity==3">School</span><span v-if="identity==4">Other</span> information
                 </div>
-                <div class="job-detail-content">
-                  <el-tabs
-                      class="is-international-container"
-                      v-model="isInternationalName "
-                      type="border-card" @tab-click="handleIsInternationalClick">
-                    <el-tab-pane label="China" name="first">
-                      <template v-if="envName==='developmentCN' || envName==='productionCN' ">
-                        <el-form-item label="Job Location">
-                          <el-select v-model="provinceObj"
-                                     filterable
-                                     value-key="id"
-                                     @change="provinceChange"
-                                     placeholder="Select Province">
-                            <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
-                          <el-select v-model="cityObj"
-                                     filterable
-                                     value-key="id"
-                                     @change="cityChange"
-                                     placeholder="Select City">
-                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
-                          <el-select v-model="districtObj"
-                                     filterable
-                                     value-key="id"
-                                     @change="districtChange"
-                                     placeholder="Select District">
-                            <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
+                <div class="account-profile-item-c">
+                  <el-row :gutter="50">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+
+                      <template v-if="identity == 2">
+                        <el-form-item label="Recruiter name" >
+                          <div class="job-company-name">{{jobForm.company_name}}</div>
                         </el-form-item>
                       </template>
-                      <template v-if="envName==='development' || envName==='production' ">
-                        <h4>
-                          Oops.. sorry, due to data laws, to post a job on the
-                          Chinese
-                          platform, you first need
-                          to redirect to and post a job there
-                        </h4>
-                        <div class="job-detail-china-btn-container">
-                          <el-button class="job-detail-china-btn" type="primary" @click="letGo()">OK, let's go
-                          </el-button>
-                        </div>
-                        <div class="job-detail-china-tips">
-                          Not clear? Need help setting up?
-                          <el-link href="https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4" >Account Management</el-link>
-                          is here !
-                        </div>
+                      <template v-if="identity == 3">
+                        <el-form-item label="School name" >
+                          <div class="job-company-name">{{jobForm.company_name}}</div>
+                        </el-form-item>
+                      </template>
+                      <template v-if="identity == 4">
+                        <el-form-item label="Other name" >
+                          <div class="job-company-name">{{jobForm.company_name}}</div>
+                        </el-form-item>
                       </template>
 
-                    </el-tab-pane>
-                    <el-tab-pane label="International" name="second">
-                      <el-form-item label="Job Location">
-                        <el-select v-model="countryObj"
-                                   filterable
-                                   value-key="id"
-                                   @change="countryChange"
-                                   placeholder="Select Country">
-                          <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.Pinyin"
-                                     :value="item"></el-option>
-                        </el-select>
-                        <template v-if="provinceOptions.length>0">
-                          <el-select v-model="provinceObj"
-                                     filterable
-                                     value-key="id"
-                                     @change="provinceForChange"
-                                     placeholder="Select Province">
-                            <el-option v-for="(item,i) in provinceOptions" :key="i"
-                                       :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
-                        </template>
-                        <template v-if="cityOptions.length>0">
-                          <el-select v-model="cityObj"
-                                     filterable
-                                     value-key="id"
-                                     @change="cityForChange"
-                                     placeholder="Select City">
-                            <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
-                        </template>
-                        <template v-if="districtOptions.length>0">
-                          <el-select v-model="districtObj"
-                                     filterable
-                                     value-key="id"
-                                     @change="districtForChange"
-                                     placeholder="Select District">
-                            <el-option v-for="(item,i) in districtOptions" :key="i" :label="item.Pinyin"
-                                       :value="item"></el-option>
-                          </el-select>
-                        </template>
-<!--                        <el-input v-model="jobForm.nation_address" type="text" placeholder="Country, City"></el-input>-->
+                    </el-col>
+
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item  label="Job Location">
+
+                        <div class="job-current-location" v-if="jobForm.job_location">
+                          {{jobForm.job_location}}
+                        </div>
+
+                        <div class="job-location-container">
+
+                          <div class="job-location-tabs">
+                            <div class="job-location-tab-l"
+                                 :class="jobFromChina ? 'job-location-tab-active' : ''"
+                                 @click="handleJobFromChina()">
+                              China
+                            </div>
+                            <div class="job-location-tab-r"
+                                 :class="jobFromInternational ? 'job-location-tab-active' : '' "
+                                 @click="handleJobFromInternational()">
+                              International
+                            </div>
+                          </div>
+
+                          <div class="job-location-content" v-if="jobFromChina">
+
+                            <template v-if="envName==='developmentCN' || envName==='productionCN' ">
+                              <el-select v-model="countryObj"
+                                         :teleported="false"
+                                         class="job-location-select"
+                                         @change="countryChange"
+                                         value-key="id"
+                                         filterable
+                                         placeholder="Select Country">
+                                <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
+
+                              <template v-if="provinceOptions.length>0">
+                                <el-select v-model="provinceObj"
+                                           :teleported="false"
+                                           class="job-location-select"
+                                           value-key="id"
+                                           filterable
+                                           @change="provinceChange"
+                                           placeholder="Select Province">
+                                  <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                             :value="item"></el-option>
+                                </el-select>
+                              </template>
+                              <template v-if="cityOptions.length>0">
+                                <el-select v-model="cityObj"
+                                           :teleported="false"
+                                           class="job-location-select"
+                                           value-key="id"
+                                           filterable
+                                           @change="cityChange"
+                                           placeholder="Select City">
+                                  <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                             :value="item"></el-option>
+                                </el-select>
+                              </template>
+                            </template>
+                            <template v-if="envName==='development' || envName==='production' ">
+                              <h5>
+                                Oops.. sorry, due to data laws, to post a job on the
+                                Chinese
+                                platform, you first need
+                                to redirect to and post a job there
+                              </h5>
+                              <div class="job-detail-china-btn-container">
+                                <el-button round type="primary" @click="letGo()">
+                                  OK, let's go
+                                </el-button>
+                              </div>
+                              <div class="job-detail-china-tips">
+                                Not clear? Need help setting up?
+                              </div>
+                              <div class="job-detail-china-tips-2">
+                                <el-link
+                                    href="https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4">
+                                  Account Management
+                                </el-link>
+                                is here !
+                              </div>
+                            </template>
+
+                          </div>
+
+                          <div class="job-location-content" v-if="jobFromInternational">
+
+                            <el-select v-model="countryObj"
+                                       :teleported="false"
+                                       class="job-location-select"
+                                       @change="countryChange"
+                                       value-key="id"
+                                       filterable
+                                       placeholder="Select Country">
+                              <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
+                                         :value="item"></el-option>
+                            </el-select>
+
+                            <template v-if="provinceOptions.length>0">
+                              <el-select v-model="provinceObj"
+                                         :teleported="false"
+                                         class="job-location-select"
+                                         value-key="id"
+                                         filterable
+                                         @change="provinceChange"
+                                         placeholder="Select Province">
+                                <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
+                            </template>
+                            <template v-if="cityOptions.length>0">
+                              <el-select v-model="cityObj"
+                                         :teleported="false"
+                                         class="job-location-select"
+                                         value-key="id"
+                                         filterable
+                                         @change="cityChange"
+                                         placeholder="Select City">
+                                <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
+                                           :value="item"></el-option>
+                              </el-select>
+                            </template>
+                          </div>
+
+
+                        </div>
+
                       </el-form-item>
-                    </el-tab-pane>
 
-                  </el-tabs>
-
-<!--                  <el-button @click="testName()">test</el-button>-->
-
-                  <el-form-item label="Add Location Pin">
-                    <div class="map-container">
-                      <div id="mapContainer" class="basemap"></div>
-                    </div>
-
-                  </el-form-item>
-                  <el-form-item label="Number of Vacancies">
-                    <el-input v-model="jobForm.numbers" type="number" placeholder="Number of Vacancies"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Employment Type">
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class="selectEmploymentTypeList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in employmentTypeList" :key="index"
-                             @click="selectEmploymentType(item)">
-                          {{ item.object_en }}
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                      <el-form-item  label="Add Location Pin">
+                        <div class="map-container">
+                          <div id="mapContainer" class="basemap"></div>
                         </div>
-                      </div>
-                    </div>
-                  </el-form-item>
-                  <el-form-item label="Is this an Online Job?">
-                    <el-switch v-model="jobForm.is_online"></el-switch>
-                  </el-form-item>
-                </div>
-              </div>
-
-              <div class="position-info-container">
-                <div class="position-info-label">General Position Info</div>
-                <div class="position-info-content">
-                  <el-form-item label="Job Title">
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectJobTitleList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in jobTitleList" :key="index"
-                             @click="selectJobTitle(item)">
-                          {{ item.object_en }}
+                        <div class="job-current-address">
+                          {{jobForm.address}}
                         </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectJobTitleList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownJobTitleList" :key="index"
-                             @click="selectJobTitle(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addJobTitleStatus==false"
-                             @click="addJobTitleStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addJobTitleStatus">
-                          <el-input type="text" v-model="ownJobTitleValue"
-                                    placeholder="Add job title"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownJobTitleValue.length>0"
-                                       @click="addOwnJobTitle">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownJobTitleValue.length==0"
-                                       @click="addJobTitleStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </el-form-item>
-                  <el-form-item label="Application Deadline">
-                    <el-date-picker
-                        v-model="jobForm.apply_due_date"
-                        type="date"
-                        placeholder="Application Deadline"
-                        format="YYYY-MM-DD"
-                        value-format="YYYY-MM-DD"
-                    >
-                    </el-date-picker>
-                  </el-form-item>
-                  <el-form-item label="Start Date">
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectStartDateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in startDateList" :key="index"
-                             @click="selectStartDate(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectStartDateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownStartDateList" :key="index"
-                             @click="selectStartDate(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addStartDateStatus==false"
-                             @click="addStartDateStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addStartDateStatus">
-                          <el-input type="text" v-model="ownStartDateValue"
-                                    placeholder="Add start date"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownStartDateValue.length>0"
-                                       @click="addOwnStartDate">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownStartDateValue.length==0"
-                                       @click="addStartDateStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-
-                  </el-form-item>
-                  <el-form-item label="Student Ages">
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectAgeToTeachList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ageToTeachList" :key="index"
-                             @click="selectAgeToTeach(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                    </div>
-
-                  </el-form-item>
-                  <el-form-item label="Class Size (Students)">
-                    <el-input v-model="jobForm.class_size" placeholder="Class Size / Students"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Subject(s)">
-
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in subjectList" :key="index"
-                             @click="selectSubject(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectSubjectList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownSubjectList" :key="index"
-                             @click="selectSubject(item)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addSubjectStatus==false"
-                             @click="addSubjectStatus=true">Add+
-                        </div>
-                      </div>
-
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addSubjectStatus">
-                          <el-input type="text" v-model="ownSubjectValue"
-                                    placeholder="Add your subject"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownSubjectValue.length>0"
-                                       @click="addOwnSubject">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownSubjectValue.length==0"
-                                       @click="addSubjectStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-
-                  </el-form-item>
-                  <el-form-item label="Additional Job information">
-                    <el-input v-model="jobForm.desc" type="textarea"
-                              placeholder="Please enter additional job information"></el-input>
-                  </el-form-item>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
 
                 </div>
               </div>
 
-              <div class="compensation-container">
-                <div class="compensation-label">Compensation</div>
-                <div class="compensation-content">
-                  <el-form-item label="Salary (Min)">
-                    <el-input v-model="jobForm.salary_min" placeholder="Enter min salary"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Salary (Max)">
-                    <el-input v-model="jobForm.salary_max" placeholder="Enter max salary"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Payment Period">
-                    <el-select v-model="jobForm.payment_period"
-                               filterable
-                               placeholder="Choose Payment Period">
-                      <el-option v-for="(item,i) in paymentPeriodList" :key="i" :label="item.object_en"
-                                 :value="item.id"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="Currency">
 
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCurrencyList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in currencyList" :key="index"
-                             @click="selectCurrency(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectCurrencyList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownCurrencyList" :key="index"
-                             @click="selectCurrency(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addCurrencyStatus==false"
-                             @click="addCurrencyStatus=true">Add+
-                        </div>
-                      </div>
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  2.Job details
+                </div>
+                <div class="account-profile-item-c">
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addCurrencyStatus">
-                          <el-input type="text" v-model="ownCurrencyValue"
-                                    placeholder="Add your currency"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCurrencyValue.length>0"
-                                       @click="addOwnCurrency">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownCurrencyValue.length==0"
-                                       @click="addCurrencyStatus=false">Cancel
-                            </el-button>
+                  <el-row :gutter="50">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Job Title" required prop="job_title">
+
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add">
+                            <el-input type="text" v-model="jobForm.job_title"
+                                      placeholder="Your job title"></el-input>
                           </div>
                         </div>
-                      </div>
-                    </div>
 
-                  </el-form-item>
-                  <el-form-item label="Working Hours">
-                    <div class="working-hours-show-container" v-if="workingHoursData.length>0">
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class="item.object_en == jobForm.job_title ? 'tags-active' : '' "
+                                 v-for="(item,index) in jobTitleList" :key="index"
+                                 @click="selectJobTitle(item)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
+                        </div>
 
-                      <div class="working-hours-show-item" v-for="(item,index) in workingHoursData" :key="index">
-                        <div class="week-show-item" v-for="(week,i) in item.week" :key="i">
-                          <span v-if="week==1 ">M</span>
-                          <span v-if="week==2 ">T</span>
-                          <span v-if="week==3 ">W</span>
-                          <span v-if="week==4 ">Th</span>
-                          <span v-if="week==5 ">F</span>
-                          <span v-if="week==6 ">Sa</span>
-                          <span v-if="week==7 ">Su</span>
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Start Date">
+
+                        <div class="object-tags-add">
+                          <div class="object-tags-item-add" >
+                            <el-input type="text" v-model="jobForm.entry_date"
+                                      placeholder="Specific date, if applicable"></el-input>
+                          </div>
                         </div>
-                        <view class="hours-show-container">{{ item.hours }}</view>
-                      </div>
-                    </div>
-                    <div class="working-hours-add" @click="addWorkingHours">Add+</div>
-                    <div class="working-hours-container" v-if="workingHoursContainerStatus">
-                      <div class="week-container">
-                        <div class="week-item" v-for="(item,index) in weekList" :key="index"
-                             @click="selectWeekItem(item.id)"
-                             :class="selectWeekItemData.indexOf(item.id) == -1 ? '' : 'week-item-active'">
-                          <span>{{ item.name_en }}</span>
+
+                        <div class="object-tags-container">
+                          <div class="object-tags">
+                            <div class="object-tags-item"
+                                 :class=" item.object_en == jobForm.entry_date ? 'tags-active' : '' "
+                                 v-for="(item,index) in startDateList" :key="index"
+                                 @click="selectStartDate(item)">
+                              {{ item.object_en }}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div class="hours-container">
-                        <el-time-select
-                            v-model="workStartTime"
-                            placeholder="Start time"
-                            start="00:00"
-                            step="00:15"
-                            end="24:00"
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Application Deadline">
+                        <el-date-picker
+                            v-model="jobForm.apply_due_date"
+                            type="date"
+                            placeholder="Select date, if applicable"
+                            format="YYYY-MM-DD"
+                            value-format="YYYY-MM-DD"
                         >
-                        </el-time-select>
-                        <el-time-select
-                            v-model="workEndTime"
-                            :min-time="workStartTime"
-                            placeholder="End time"
-                            start="00:00"
-                            step="00:15"
-                            end="24:00"
+                        </el-date-picker>
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Employment Type">
+
+                        <el-select
+                            v-model="selectEmploymentTypeList"
+                            :teleported="false"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            filterable
+                            allow-create
+                            placeholder="Select employment type"
+                            value-key="id"
                         >
-                        </el-time-select>
-                      </div>
-                      <div class="working-hours-button">
-                        <el-button type="primary" @click="addWorkingHoursConfirm">Confirm</el-button>
-                      </div>
-                    </div>
+                          <el-option
+                              v-for="(item,i) in employmentTypeList"
+                              :key="i"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+                        </el-select>
 
-                  </el-form-item>
-                  <el-form-item label="Benefits">
+                      </el-form-item>
 
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in benefitsList" :key="index"
-                             @click="selectBenefits(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectBenefitsList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownBenefitsList" :key="index"
-                             @click="selectBenefits(item)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addBenefitsStatus==false"
-                             @click="addBenefitsStatus=true">Add+
-                        </div>
-                      </div>
+                    </el-col>
+                  </el-row>
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addBenefitsStatus">
-                          <el-input type="text" v-model="ownBenefitsValue"
-                                    placeholder="Add your benefits"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownBenefitsValue.length>0"
-                                       @click="addOwnBenefits">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownBenefitsValue.length==0"
-                                       @click="addBenefitsStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <el-row :gutter="50">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                      <el-form-item label="Job description">
+<!--                        <el-input v-model="jobForm.desc" type="textarea"-->
+<!--                                  :rows="4"-->
+<!--                                  placeholder="Be as detailed as possible about responsibilities."></el-input>-->
 
+                        <Tinymce v-model="jobForm.desc" width="100%" :height="300"></Tinymce>
 
-                  </el-form-item>
+                      </el-form-item>
+                    
+                    </el-col>
+                  </el-row>
+
                 </div>
               </div>
 
-              <div class="applicant-container">
-                <div class="applicant-label">Applicant Requirements</div>
-                <div class="applicant-content">
-                  <el-form-item label="Native Speaker">
-                    <el-switch v-model="jobForm.is_mom_language"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="Teaching License">
-                    <el-switch v-model="jobForm.is_teaching_license"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="Gender">
-                    <el-select v-model="jobForm.sex" placeholder="Select your gender">
-                      <el-option v-for="(item,i) in sexOptions" :key="i" :label="item.object_en"
-                                 :value="item.value"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="Teaching Certificate(s)">
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  3. Compensation
+                </div>
+                <div class="account-profile-item-c">
 
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectTeachingCertificateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in teachingCertificateList" :key="index"
-                             @click="selectTeachingCertificate(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectTeachingCertificateList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownTeachingCertificateList" :key="index"
-                             @click="selectTeachingCertificate(item)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addTeachingCertificateStatus==false"
-                             @click="addTeachingCertificateStatus=true">Add+
-                        </div>
-                      </div>
+                  <el-row :gutter="50">
+                    <el-col :span="12">
+                      <el-form-item label="Salary" >
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addTeachingCertificateStatus">
-                          <el-input type="text" v-model="ownTeachingCertificateValue"
-                                    placeholder="Add your teaching certificate"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownTeachingCertificateValue.length>0"
-                                       @click="addOwnTeachingCertificate">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownTeachingCertificateValue.length==0"
-                                       @click="addTeachingCertificateStatus=false">Cancel
-                            </el-button>
-                          </div>
+                        <div class="xll-salary-container">
+                          <el-select
+                              v-model="jobForm.currency"
+                              :teleported="false"
+                              class="xll-currency-select"
+                              value-key="object_en"
+                              placeholder="Select" >
+                            <el-option
+                                v-for="(item,index) in currencyList"
+                                :key="index"
+                                :label="item.object_en"
+                                :value="item.object_en"
+                            >
+                            </el-option>
+                          </el-select>
+                          <el-input class="xll-min-salary"
+                                    oninput ="value=value.replace(/[^\d]/g,'')"
+                                    v-model="jobForm.salary_min"
+                                    placeholder="min">
+                          </el-input>
+                          <div class="xll-salary-line">-</div>
+                          <el-input class="xll-max-salary"
+                                    oninput ="value=value.replace(/[^\d]/g,'')"
+                                    v-model="jobForm.salary_max"
+                                    placeholder="max">
+                          </el-input>
+                          <el-select class="xll-payment-select"
+                                     :teleported="false"
+                                     v-model="jobForm.payment_period"
+                                     filterable
+                                     value-key="id"
+                                     placeholder="Choose Payment Period">
+                            <el-option v-for="(item,i) in paymentPeriodList"
+                                       :key="i"
+                                       :label="item.object_en"
+                                       :value="item.id">
+                            </el-option>
+                          </el-select>
                         </div>
-                      </div>
-                    </div>
 
+                      </el-form-item>
 
-                  </el-form-item>
-                  <el-form-item label="CPR Certified">
-                    <el-switch v-model="jobForm.is_cpr"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="First Aid Certified">
-                    <el-switch v-model="jobForm.is_first_aide"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="Teaching Experience">
-                    <el-switch v-model="jobForm.is_teaching_exp"></el-switch>
-                  </el-form-item>
-                  <el-form-item label="" v-if="jobForm.is_teaching_exp">
-                    <el-select v-model="jobForm.teaching_times" placeholder="Choose Teaching Experience">
-                      <el-option v-for="(item,i) in teachingExpList" :key="i" :label="item.object_en"
-                                 :value="item.id"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="Minimum Education Certificate">
-                    <el-select v-model="jobForm.education" placeholder="Choose Degree Level">
-                      <el-option v-for="(item,i) in educationList" :key="i" :label="item.object_en"
-                                 :value="item.id"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="Languages">
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Benefits">
 
-                    <div class="object-tags-container">
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectLanguagesList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in languagesList" :key="index"
-                             @click="selectLanguages(item)">
-                          {{ item.object_en }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item"
-                             :class=" selectLanguagesList.findIndex((element)=>element===item) == -1 ? '' : 'tags-active' "
-                             v-for="(item,index) in ownLanguagesList" :key="index"
-                             @click="selectLanguages(item)">
-                          {{ item.object_name }}
-                        </div>
-                      </div>
-                      <div class="object-tags">
-                        <div class="object-tags-item" v-if="addLanguagesStatus==false"
-                             @click="addLanguagesStatus=true">Add+
-                        </div>
-                      </div>
+                        <el-select
+                            v-model="selectBenefitsList"
+                            :teleported="false"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select benefits"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in benefitsList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
 
-                      <div class="object-tags-add">
-                        <div class="object-tags-item-add" v-if="addLanguagesStatus">
-                          <el-input type="text" v-model="ownLanguagesValue"
-                                    placeholder="Add your language"></el-input>
-                          <div class="object-tags-item-btn-container">
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownLanguagesValue.length>0"
-                                       @click="addOwnLanguages">Confirm
-                            </el-button>
-                            <el-button class="object-tags-item-btn" type="primary"
-                                       v-if="ownLanguagesValue.length==0"
-                                       @click="addLanguagesStatus=false">Cancel
-                            </el-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                        </el-select>
 
-                  </el-form-item>
-                  <el-form-item label="Age">
-                    <el-slider v-model="ageValue" range show-stops :max="100"></el-slider>
-                  </el-form-item>
-                  <el-form-item label="Will you accept applicant of different skin colors?(Equal Opportunity)">
-                    <el-switch v-model="jobForm.is_equal"></el-switch>
-                  </el-form-item>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Number of Vacancies">
+                        <el-input v-model="jobForm.numbers" oninput ="value=value.replace(/[^\d]/g,'')" placeholder="Number of Vacancies"></el-input>
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+
                 </div>
               </div>
 
-              <div class="submit-container">
-                <el-form-item>
-                  <el-button type="primary" @click="submitJob('jobForm',3)">Submit</el-button>
-                </el-form-item>
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  4. Class details
+                </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Subjects">
+
+                        <el-select
+                            v-model="selectSubjectList"
+                            :teleported="false"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select subjects"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in subjectList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Class Size">
+                        <el-input v-model="jobForm.class_size" placeholder="Number of students per class"></el-input>
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Student Ages">
+
+                        <el-select
+                            v-model="selectAgeToTeachList"
+                            :teleported="false"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select student ages"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in ageToTeachList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
+                      </el-form-item>
+
+                    </el-col>
+
+                  </el-row>
+
+                </div>
+              </div>
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  5. Requirements
+                </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+
+                      <div class="nationality-container">
+                        <div>
+                          <el-form-item label="Preferred nationality">
+
+                            <el-select
+                                v-model="selectPnationalityList"
+                                :teleported="false"
+                                multiple
+                                collapse-tags
+                                collapse-tags-tooltip
+                                placeholder="Select"
+                                filterable
+                                allow-create
+                                value-key="id"
+                            >
+                              <el-option
+                                  v-for="(item,index) in pNationalityList"
+                                  :key="index"
+                                  :label="item.object_en"
+                                  :value="item"
+                              />
+
+                            </el-select>
+
+                          </el-form-item>
+
+                        </div>
+                        <div>
+                          <el-form-item label="Acceptable nationality">
+
+                            <el-select
+                                v-model="selectAnationalityList"
+                                :teleported="false"
+                                multiple
+                                collapse-tags
+                                collapse-tags-tooltip
+                                placeholder="Select"
+                                filterable
+                                allow-create
+                                value-key="id"
+                            >
+                              <el-option
+                                  v-for="(item,index) in aNationalityList"
+                                  :key="index"
+                                  :label="item.object_en"
+                                  :value="item"
+                              />
+
+                            </el-select>
+
+                          </el-form-item>
+
+                        </div>
+
+
+
+                      </div>
+
+
+                    </el-col>
+
+
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Teaching license and certificates">
+
+                        <el-select
+                            v-model="selectTeachingCertificateList"
+                            :teleported="false"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select certificate"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in teachingCertificateList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+
+                      <el-form-item label="Minimum degree">
+                        <el-select v-model="jobForm.education" :teleported="false" placeholder="Minimum degree">
+                          <el-option v-for="(item,i) in educationList" :key="i" :label="item.object_en"
+                                     :value="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+
+                    </el-col>
+
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Languages">
+
+                        <el-select
+                            v-model="selectLanguagesList"
+                            :teleported="false"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select languages"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in languagesList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
+
+                      </el-form-item>
+                      <div>
+                        <el-checkbox v-model="jobForm.is_mom_language"
+                                     :true-label="1"
+                                     :false-label="0"
+                                     label="Native Speaker">
+                        </el-checkbox>
+                      </div>
+
+                    </el-col>
+
+                  </el-row>
+
+                </div>
+              </div>
+
+              <div class="account-profile-item-container">
+                <div class="account-profile-item-label">
+                  6. Other requirements
+                </div>
+                <div class="account-profile-item-c">
+
+                  <el-row :gutter="50">
+
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Gender">
+                        <el-select v-model="jobForm.sex"
+                                   :teleported="false"
+                                   placeholder="Select your gender">
+                          <el-option v-for="(item,i) in sexOptions" :key="i" :label="item.object_en"
+                                     :value="item.value"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                      <el-form-item label="Work schedule">
+
+                        <el-select
+                            v-model="selectWorkTypeList"
+                            :teleported="false"
+                            multiple
+                            collapse-tags
+                            collapse-tags-tooltip
+                            placeholder="Select work type"
+                            filterable
+                            allow-create
+                            value-key="id"
+                        >
+                          <el-option
+                              v-for="(item,index) in workTypeList"
+                              :key="index"
+                              :label="item.object_en"
+                              :value="item"
+                          />
+
+                        </el-select>
+
+                      </el-form-item>
+
+                    </el-col>
+
+
+                  </el-row>
+
+                  <el-row :gutter="50">
+
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                      <el-form-item label="Applicant's age">
+                        <el-slider v-model="ageValue" range show-stops :min="1" :max="100"></el-slider>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                      <el-form-item label="Years of Experience Required">
+                        <el-slider v-model="yearOfExpValue" range show-stops  :max="40"></el-slider>
+                      </el-form-item>
+                    </el-col>
+
+
+                  </el-row>
+
+                  <el-row :gutter="50">
+
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                      <el-form-item label="Working Hours">
+                        <div class="working-hours-show-container" v-if="workingHoursData.length>0">
+
+                          <div class="working-hours-show-item" v-for="(item,index) in workingHoursData" :key="index">
+                            <div class="week-show-item" v-for="(week,i) in item.week" :key="i">
+                              <span v-if="week==1 ">M</span>
+                              <span v-if="week==2 ">T</span>
+                              <span v-if="week==3 ">W</span>
+                              <span v-if="week==4 ">Th</span>
+                              <span v-if="week==5 ">F</span>
+                              <span v-if="week==6 ">Sa</span>
+                              <span v-if="week==7 ">Su</span>
+                            </div>
+                            <div class="hours-show-container">{{ item.hours }}</div>
+                            <div class="hours-show-delete">
+                              <el-button link @click="workingHourDelete(index)">DELETE</el-button>
+                            </div>
+
+                          </div>
+
+
+                        </div>
+
+                        <div class="working-hours-add" >
+                          <el-button type="primary" round @click="addWorkingHours">ADD+</el-button>
+                        </div>
+
+                        <div class="working-hours-container" v-if="workingHoursContainerStatus">
+                          <div class="week-container">
+                            <div class="week-item" v-for="(item,index) in weekList" :key="index"
+                                 @click="selectWeekItem(item.id)"
+                                 :class="selectWeekItemData.indexOf(item.id) == -1 ? '' : 'week-item-active'">
+                              <span>{{ item.name_en }}</span>
+                            </div>
+                          </div>
+                          <div class="hours-container">
+                            <el-time-select
+                                v-model="workStartTime"
+                                placeholder="Start time"
+                                start="00:00"
+                                step="00:15"
+                                end="24:00"
+                            >
+                            </el-time-select>
+                            <el-time-select
+                                v-model="workEndTime"
+                                :min-time="workStartTime"
+                                placeholder="End time"
+                                start="00:00"
+                                step="00:15"
+                                end="24:00"
+                            >
+                            </el-time-select>
+                          </div>
+                          <div class="working-hours-button">
+                            <el-button type="primary" @click="addWorkingHoursConfirm">Confirm</el-button>
+                          </div>
+                        </div>
+
+                      </el-form-item>
+
+                    </el-col>
+
+
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                      <el-checkbox
+                          v-model="jobForm.is_equal"
+                          :true-label="1"
+                          :false-label="0"
+                          label="I will accept applicants of different races and skin color"
+                      >
+                      </el-checkbox>
+                    </el-col>
+
+
+                  </el-row>
+
+                </div>
               </div>
 
             </el-form>
-          </div>
-        </el-col>
-      </el-row>
+          </el-scrollbar>
+          
+        </div>
+
+      </div>
+
     </div>
+
+    <submitMessage :title="jobSuccessTitle"
+                   :description="jobSuccessDesc"
+                   @close="submitJobSuccess"
+                   :visible="jobSuccessVisible">
+    </submitMessage>
+
   </div>
 </template>
 
 <script>
-
+import Tinymce from "@/components/Tinymce";
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -635,71 +820,152 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 import meSideMenu from "@/components/meSideMenu";
 import {
-  VISITOR_USER_INFO, ALL_AREAS, USER_OBJECT_LIST, ADD_JOB,
-  JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO, GET_COUNTRY_LIST
+  USER_OBJECT_LIST, ADD_JOB,JOB_DETAIL,
+  JOB_ADD_PROFILE, SYNC_GET_BUSINESS_INFO, GET_COUNTRY_LIST, USER_INFO_BY_TOKEN_V2
 } from '@/api/api';
-// import {ref} from "vue";
+import {ref, reactive} from "vue";
 import axios from 'axios'
 import {encode} from "js-base64";
+import submitMessage from "@/components/popup/submitMessage";
+import {updateWindowHeight} from "@/utils/tools";
+
 
 export default {
   name: "post",
   components: {
-    meSideMenu
+    meSideMenu,
+    Tinymce,
+    submitMessage
   },
   setup() {
     const envName = process.env.VUE_APP_ENV_NAME
 
     const goDomain = process.env.VUE_APP_EXCHANGE_DOMAIN
 
+    const jobForms = ref(null)
+
+    const jobForm = reactive(
+        {
+          job_title: '',
+          job_location: '',
+          country_id: '',
+          state_id: '',
+          town_id: '',
+
+          apply_due_date: '',
+          is_online: 0,
+          salary_min: '',
+          salary_max: '',
+          payment_period: '',
+          payment_period_str: '',
+          desc: '',
+          numbers: 1,
+          is_equal: 0,
+          sex: '',
+          sex_name: '',
+          is_cpr: 0,
+          is_first_aide: 0,
+          is_teaching_exp: 0,
+          teaching_times: '',
+          teaching_times_str: '',
+          is_teaching_license: 0,
+          education: '',
+          education_str: '',
+          nationality: '',
+          age: '',
+          age_min: '',
+          age_max: '',
+          is_interview: 1,
+          interview_name: '',
+          interview_nationlity: '',
+          interview_imgurl: '',
+          entry_date: '',
+          company_id: '',
+          company_name: '',
+          identity: '',
+          currency:  "USD",
+          is_mom_language: 0,
+          employment_type: '',
+          class_size: '',
+          working_hours: '',
+          version_time: '',
+          address: '',
+          state: '',
+          town: '',
+          lat: '',
+          lng: '',
+          international: 1,
+          nation_address: '',
+          working_nums_start:'',
+          working_nums_end:'',
+          token: localStorage.getItem('token')
+        }
+    )
+
+
+    const validatorOwnJobTitle = (rule,value,callback)=>{
+      if(!jobForm.job_title){
+        return callback(new Error('Please input job title'))
+      }
+      callback()
+    }
+
+    const jobRules = reactive(
+        {
+          job_title: [
+            {
+              validator: validatorOwnJobTitle,
+              message: 'Please input',
+              trigger: 'change',
+            },
+          ],
+          job_location: [
+            {
+              required: false,
+              message: 'Please input',
+              trigger: 'change',
+            },
+          ],
+        }
+    )
+
     return {
       envName,
-      goDomain
-
+      goDomain,
+      jobForms,
+      jobForm,
+      jobRules,
     }
 
   },
   data() {
     return {
+
+      descriptionValue:'',
+      mapCenterValue:[-99.91028767893485, 32.082955230919616],
+      submitLoadingValue:false,
       accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
       mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
+
+      jobFromChina:false,
+      jobFromInternational:true,
+
       isInternationalName: 'first',
-      countryName:'',
-      provinceOptions: [],
-      provinceName: '',
-      cityOptions: [],
-      cityName: '',
-      districtOptions: [],
-      districtName: '',
+
       paymentPeriodList: [],
-      employmentTypeList: [{
-        id: 1,
-        object_cn: "全职",
-        object_en: "Full-time"
-      }, {
-        id: 2,
-        object_cn: "兼职",
-        object_en: "Part-time"
-      }, {
-        id: 3,
-        object_cn: "季节性",
-        object_en: "Seasonal"
-      }],
+
+      employmentTypeList: [],
       selectEmploymentTypeList: [],
 
       jobTitleList: [],
-      addJobTitleStatus: false,
+      addJobTitleStatus: true,
       ownJobTitleValue: '',
       ownJobTitleList: [],
       selectJobTitleList: [],
       selectJobTitleArr: [],
 
       benefitsList: [],
-      addBenefitsStatus: false,
-      ownBenefitsValue: '',
-      ownBenefitsList: [],
       selectBenefitsList: [],
-      selectBenefitsArr: [],
 
       startDateList: [],
       addStartDateStatus: false,
@@ -709,19 +975,10 @@ export default {
       selectStartDateArr: [],
 
       ageToTeachList: [],
-      addAgeToTeachStatus: false,
-      ownAgeToTeachValue: '',
-      ownAgeToTeachList: [],
       selectAgeToTeachList: [],
-      selectAgeToTeachArr: [],
 
       subjectList: [],
-      addSubjectStatus: false,
-      ownSubjectValue: '',
-      ownSubjectList: [],
       selectSubjectList: [],
-      selectSubjectArr: [],
-
 
       currencyList: [],
       addCurrencyStatus: false,
@@ -738,11 +995,16 @@ export default {
       selectTeachingCertificateArr: [],
 
       languagesList: [],
-      addLanguagesStatus: false,
-      ownLanguagesValue: '',
-      ownLanguagesList: [],
       selectLanguagesList: [],
-      selectLanguagesArr: [],
+
+      workTypeList: [],
+      selectWorkTypeList: [],
+
+      pNationalityList: [],
+      selectPnationalityList: [],
+
+      aNationalityList: [],
+      selectAnationalityList: [],
 
       weekList: [{
         id: 1,
@@ -799,6 +1061,11 @@ export default {
         },
         {
           value: 3,
+          object_en: 'Non-binary',
+          object_cn:'非二元人'
+        },
+        {
+          value: 4,
           object_en: 'No Gender Requirements',
           object_cn: '无性别要求'
         }
@@ -806,187 +1073,684 @@ export default {
       teachingExpList: [],
       educationList: [],
       ageValue: [18, 60],
+      yearOfExpValue:[0, 20],
 
-      jobForm: {
-        job_title: '',
-        job_location: '',
-        country:'',
-        province: '',
-        city: '',
-        district: '',
-        apply_due_date: '',
-        is_online: 0,
-        salary_min: '',
-        salary_max: '',
-        payment_period: '',
-        payment_period_str: '',
-        desc: '',
-        numbers: 1,
-        is_equal: 0,
-        sex: '',
-        sex_name: '',
-        is_cpr: 0,
-        is_first_aide: 0,
-        is_teaching_exp: 0,
-        teaching_times: '',
-        teaching_times_str: '',
-        is_teaching_license: 0,
-        education: '',
-        education_str: '',
-        nationality: '',
-        age: '',
-        age_min: '',
-        age_max: '',
-        is_interview: 1,
-        interview_name: '',
-        interview_nationlity: '',
-        interview_imgurl: '',
-        entry_date: '',
-        business_id: '',
-        business_name: '',
-        currency: '',
-        is_mom_language: 0,
-        employment_type: '',
-        class_size: '',
-        working_hours: '',
-        version_time: '',
-        address: '',
-        lat: '',
-        lng: '',
-        international: 0,
-        nation_address: '',
-        token: localStorage.getItem('token')
-      },
-      jobRules: {
-        job_location: [
-          {
-            required: false,
-            message: 'Please input',
-            trigger: 'change',
-          },
-        ],
-      },
-      countryOptions:[],
-      sLocationType:1,
-      countryObj:{},
-      provinceObj:{},
-      cityObj:{},
-      districtObj:{}
+      sLocationType: 1,
+      countryObj: {},
+      provinceObj: {},
+      cityObj: {},
+      countryName: '',
+      countryNameCn: '',
+      provinceName: '',
+      provinceNameCn: '',
+      cityName: '',
+      cityNameCn: '',
+
+      countryOptions: [],
+      provinceOptions: [],
+      cityOptions: [],
+
+      checkedEmploymentTypeValue:undefined,
+
+      jobSuccessTitle:'',
+      jobSuccessDesc:'',
+      jobSuccessVisible:false,
+      postJobLoadingValue:true
+
 
     }
   },
+  computed: {
+    identity: {
+      get() {
+        return this.$store.state.identity
+      }
+    }
+  },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
-    this.initMap()
-    this.getAllCountry(0)
-    this.getVisitorBasicInfo()
-    this.getAllAreas(0)
+    let self =this;
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+    }
+
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+      }
+    }
+
+    this.getBasicInfo(this.identity)
+
+    this.getAllCountry()
+
     this.getUserObjectList()
+
+    let jobId = this.$route.query.job_id;
+    if(jobId){
+      this.getJobDetail(jobId)
+    }else {
+      this.initMap(this.mapCenterValue)
+    }
+
+    setTimeout(function (){
+      self.postJobLoadingValue = false
+    }, 3000)
+
+
   },
   methods: {
-    getAllCountry(pid){
-      let params = {
-        pid:pid
+    handleJobFromChina(){
+      this.countryName = undefined;
+      this.provinceName = undefined;
+      this.cityName = undefined;
+      this.districtName = undefined;
+
+      this.countryObj = {}
+      this.provinceObj = {}
+      this.cityObj = {}
+      this.districtObj = {}
+
+      this.jobForm.country_id = undefined;
+      this.jobForm.state_id = undefined;
+      this.jobForm.town_id = undefined;
+
+      let countryObj = {
+        "id": 45,
+        "name": "China",
+        "iso3": "CHN",
+        "numeric_code": "156",
+        "iso2": "CN",
+        "phonecode": "86",
+        "capital": "Beijing",
+        "currency": "CNY",
+        "currency_name": "Chinese yuan",
+        "currency_symbol": "¥",
+        "tld": ".cn",
+        "native": "中国",
+        "region": "Asia",
+        "subregion": "Eastern Asia",
+        "timezones": "[{\"zoneName\":\"Asia/Shanghai\",\"gmtOffset\":28800,\"gmtOffsetName\":\"UTC+08:00\",\"abbreviation\":\"CST\",\"tzName\":\"China Standard Time\"},{\"zoneName\":\"Asia/Urumqi\",\"gmtOffset\":21600,\"gmtOffsetName\":\"UTC+06:00\",\"abbreviation\":\"XJT\",\"tzName\":\"China Standard Time\"}]",
+        "translations": "{\"kr\":\"중국\",\"pt-BR\":\"China\",\"pt\":\"China\",\"nl\":\"China\",\"hr\":\"Kina\",\"fa\":\"چین\",\"de\":\"China\",\"es\":\"China\",\"fr\":\"Chine\",\"ja\":\"中国\",\"it\":\"Cina\",\"cn\":\"中国\",\"tr\":\"Çin\"}",
+        "latitude": "35.00000000",
+        "longitude": "105.00000000",
+        "emoji": "🇨🇳",
+        "emojiU": "U+1F1E8 U+1F1F3",
+        "created_at": "2018-07-21 07:11:03",
+        "updated_at": "2022-05-21 21:11:20",
+        "flag": 1,
+        "wikiDataId": "Q148"
       }
-      GET_COUNTRY_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
+
+      this.jobForm.state_id = undefined
+      this.jobForm.town_id = undefined
+
+      this.provinceOptions = []
+      this.cityOptions = []
+
+      this.jobForm.country_id = countryObj.id
+      this.countryName = countryObj.name
+      this.countryNameCn = countryObj.name
+      this.getAllProvinces(countryObj.id)
+      this.countryObj = countryObj
+
+      this.jobForm.international = 0;
+      this.jobFromChina = true;
+      this.jobFromInternational = false;
+    },
+    handleJobFromInternational(){
+      this.countryName = undefined;
+      this.provinceName = undefined;
+      this.cityName = undefined;
+      this.districtName = undefined;
+
+      this.countryObj = {}
+      this.provinceObj = {}
+      this.cityObj = {}
+      this.districtObj = {}
+
+      this.jobForm.country_id = undefined;
+      this.jobForm.state_id = undefined;
+      this.jobForm.town_id = undefined;
+
+      this.countryObj = {}
+      this.jobForm.state_id = undefined
+      this.jobForm.town_id = undefined
+
+      this.provinceOptions = []
+      this.cityOptions = []
+
+      this.jobForm.international = 1
+      this.jobFromChina = false;
+      this.jobFromInternational = true;
+    },
+    discardJobPost(){
+      this.$router.go(-1)
+    },
+    getJobDetail(id) {
+      let that = this;
+      let params = {
+        job_id: id
+      }
+      JOB_DETAIL(params).then(res => {
+        //console.log(res)
+        if (res.code == 200) {
+          this.detailData = res.message
+
+          const workHours = res.message.working_hours
+          if (workHours) {
+            // this.jobForm.working_hours = JSON.parse(workHours)
+            this.workingHoursData = JSON.parse(workHours)
+          }
+
+          let jobMessage = res.message;
+
+          that.jobForm.job_title = jobMessage.job_title;
+          that.ownJobTitleValue = jobMessage.job_title;
+
+          that.jobForm.job_location = jobMessage.job_location;
+          that.jobForm.age_min = jobMessage.age_min;
+          that.jobForm.age_max = jobMessage.age_max;
+          that.jobForm.is_online = jobMessage.is_online;
+          that.jobForm.salary_min = jobMessage.salary_min.toString();
+          that.jobForm.salary_max = jobMessage.salary_max.toString();
+          that.jobForm.currency = jobMessage.currency;
+          that.jobForm.business_id = jobMessage.business_id;
+          that.jobForm.business_name = jobMessage.business_name;
+
+          that.jobForm.employment_type = jobMessage.employment_type;
+
+          that.jobForm.desc = jobMessage.desc;
+          that.jobForm.numbers = jobMessage.numbers;
+          that.jobForm.is_equal = jobMessage.is_equal;
+          that.jobForm.is_cpr = jobMessage.is_cpr;
+          that.jobForm.is_first_aide = jobMessage.is_first_aide;
+          that.jobForm.is_mom_language = jobMessage.is_mom_language;
+          that.jobForm.is_teaching_exp = jobMessage.is_teaching_exp;
+          that.jobForm.is_interview = jobMessage.is_interview;
+          that.jobForm.interview_name = jobMessage.interview_name;
+          that.jobForm.nationality = jobMessage.nationality;
+          that.jobForm.interview_nationlity = jobMessage.interview_nationlity;
+          that.jobForm.entry_date = jobMessage.entry_date;
+          that.jobForm.is_teaching_license = jobMessage.is_teaching_license;
+          that.jobForm.version_time = jobMessage.version_time;
+
+          that.jobForm.province = jobMessage.province;
+          that.jobForm.city = jobMessage.city;
+          that.jobForm.district = jobMessage.district;
+
+          that.jobForm.class_size = jobMessage.class_size;
+          that.jobForm.working_hours = jobMessage.working_hours;
+
+          that.jobForm.address = jobMessage.address;
+
+          if(jobMessage.lat && jobMessage.lng){
+            that.jobForm.lat = jobMessage.lat;
+            that.jobForm.lng = jobMessage.lng;
+
+            let mapCenterValue = [jobMessage.lng , jobMessage.lat]
+            this.initMap( mapCenterValue )
+          }else{
+            this.initMap(this.mapCenterValue)
+          }
+
+          that.jobForm.international = jobMessage.international;
+          that.jobForm.nation_address = jobMessage.nation_address;
+
+          let ageMin = jobMessage.age_min
+          let ageMax = jobMessage.age_max
+          this.ageValue = [ageMin, ageMax]
+
+          let yearMin = jobMessage.working_nums_start
+          let yearMax = jobMessage.working_nums_end
+          this.yearOfExpValue = [yearMin, yearMax]
+
+          // job title
+          if (jobMessage.job_title) {
+            this.jobForm.job_title = jobMessage.job_title;
+
+            let arr = this.jobTitleList.filter(item => item.object_en == jobMessage.job_title);
+            let arrcn = this.jobTitleList.filter(item => item.object_cn == jobMessage.job_title);
+            if (arr.length > 0 || arrcn.length > 0) {
+              this.selectJobTitleList = arr;
+            } else {
+              let obj = {
+                id: 0,
+                object_en: jobMessage.job_title,
+                object_pid: 6
+              };
+              this.selectJobTitleList.push(obj);
+            }
+          }
+
+          // start date
+          if (jobMessage.entry_date) {
+            this.jobForm.entry_date = jobMessage.entry_date;
+
+            let arr = this.startDateList.filter(item => item.object_en == jobMessage.entry_date);
+            let arrcn = this.startDateList.filter(item => item.object_cn == jobMessage.entry_date);
+            if (arr.length > 0 || arrcn.length > 0) {
+              this.selectStartDateList = arr;
+            } else {
+              let obj = {
+                id: 0,
+                object_en: jobMessage.entry_date,
+                object_pid: 108
+              };
+              this.selectStartDateList.push(obj);
+            }
+          }
+          // currency
+          // if (jobMessage.currency) {
+          //   let arr = this.currencyList.filter(item => item.object_en == jobMessage.currency);
+          //   let arrcn = this.currencyList.filter(item => item.object_cn == jobMessage.currency);
+          //   // console.log(arr)
+          //   if (arr.length > 0 || arrcn.length > 0) {
+          //     this.selectCurrencyList = arr;
+          //   } else {
+          //     let obj = {
+          //       id: 0,
+          //       object_en: jobMessage.currency,
+          //       object_pid: 117
+          //     };
+          //     this.ownCurrencyList.push(obj);
+          //     this.selectCurrencyList.push(obj);
+          //   }
+          //
+          // }
+
+          if (jobMessage.job_type) {
+
+            let arr = jobMessage.job_type;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectEmploymentTypeList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectEmploymentTypeList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.benefits) {
+
+            let benefitsArr = jobMessage.benefits;
+
+            benefitsArr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectBenefitsList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectBenefitsList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.Acceptable) {
+
+            let arr = jobMessage.Acceptable;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectAnationalityList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectAnationalityList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.Prefered_Work_Schedule_Type) {
+
+            let arr = jobMessage.Prefered_Work_Schedule_Type;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectWorkTypeList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectWorkTypeList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.Nationality) {
+
+            let arr = jobMessage.Nationality;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectPnationalityList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectPnationalityList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.age_to_teach) {
+
+            let arr = jobMessage.age_to_teach;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectAgeToTeachList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectAgeToTeachList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.subject) {
+
+            let arr = jobMessage.subject;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectSubjectList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectSubjectList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.Teaching_certificate) {
+            let arr = jobMessage.Teaching_certificate;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectTeachingCertificateList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectTeachingCertificateList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.languages) {
+
+            let arr = jobMessage.languages;
+
+            arr.forEach((item) => {
+
+              if (item.object_id == 0) {
+
+                this.selectLanguagesList.push(item.object_en)
+
+              } else {
+
+                let obj = {
+                  id: item.object_id,
+                  pid: item.object_pid,
+                  object_en: item.object_en,
+                  object_cn: item.object_cn
+                }
+                this.selectLanguagesList.push(obj)
+
+              }
+
+            })
+
+          }
+
+          if (jobMessage.apply_due_date != '' && jobMessage.apply_due_date != '0000-00-00') {
+            that.jobForm.apply_due_date = jobMessage.apply_due_date;
+          }
+
+          if (jobMessage.payment_period) {
+            that.jobForm.payment_period = jobMessage.payment_period;
+            that.jobForm.jobForm = jobMessage.payment_period_en;
+          }
+
+          if (jobMessage.street_address) {
+            that.jobForm.street_address = jobMessage.street_address;
+          }
+
+          if (jobMessage.sex) {
+            that.jobForm.sex = jobMessage.sex;
+            if (jobMessage.sex == 1) {
+              that.jobForm.sex_name = 'Male'
+            }
+            if (jobMessage.sex == 2) {
+              that.jobForm.sex_name = 'Female'
+            }
+            if (jobMessage.sex == 3) {
+              that.jobForm.sex_name = 'Both'
+            }
+          }
+
+          if (jobMessage.teaching_times) {
+            that.jobForm.teaching_times = jobMessage.teaching_times;
+            that.jobForm.teaching_times_str = jobMessage.teaching_times_en;
+          }
+
+          if (jobMessage.education) {
+            that.jobForm.education = jobMessage.education;
+            that.jobForm.education_str = jobMessage.education_en;
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    getBasicInfo(identity) {
+
+      let params = {
+        identity: identity
+      }
+
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
+        // //console.log(res)
+        if (res.code == 200) {
+          let userContact = res.message.user_contact;
+
+          if (userContact) {
+            this.jobForm.company_id = userContact.company_id;
+            this.jobForm.company_name = userContact.company.company_name;
+
+          }
+
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    getAllCountry() {
+      let params = {}
+      GET_COUNTRY_LIST(params).then(res => {
+        //console.log(res)
+        if (res.code == 200) {
           this.countryOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    getAllForProvinces(pid){
+    getAllProvinces(countryId) {
       let params = {
-        pid:pid
+        country_id: countryId
       }
-      GET_COUNTRY_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
+      GET_COUNTRY_LIST(params).then(res => {
+        //console.log(res)
+        if (res.code == 200) {
           this.provinceOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    getAllForCitys(pid){
+    getAllCitys(countryId, stateId) {
       let params = {
-        pid:pid
+        country_id: countryId,
+        state_id: stateId
       }
-      GET_COUNTRY_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
+      GET_COUNTRY_LIST(params).then(res => {
+        //console.log(res)
+        if (res.code == 200) {
           this.cityOptions = res.message;
         }
-      }).catch(err=>{
+      }).catch(err => {
         this.$message.error(err.msg)
       })
     },
-    getAllForDistricts(pid){
-      let params = {
-        pid:pid
-      }
-
-      GET_COUNTRY_LIST(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-          this.districtOptions = res.message;
-        }
-      }).catch(err=>{
-        this.$message.error(err.msg)
-      })
-    },
-    countryChange(e){
+    countryChange(e) {
       console.log(e)
-      this.jobForm.country = e.id
-      this.countryName = e.Pinyin
+      this.jobForm.state_id = undefined
+      this.jobForm.town_id = undefined
 
-      this.jobForm.province=undefined
-      this.jobForm.city = undefined
-      this.jobForm.district = undefined
+      this.provinceOptions = []
+      this.cityOptions = []
 
-      if(e.id == 99999999){
-        this.isInternationalName = 'first'
-        this.getAllAreas(0)
-      }else{
-        this.isInternationalName= 'second'
-        this.getAllForProvinces(e.id)
-      }
+      this.jobForm.country_id = e.id
+      this.countryName = e.name
+      this.countryNameCn = e.name
+      this.getAllProvinces(e.id)
+
+      this.jobForm.job_location = this.countryName
+
     },
-    provinceForChange(e) {
+    provinceChange(e) {
       console.log(e)
-      this.jobForm.province = e.id
-      this.provinceName = e.Pinyin
+      this.jobForm.town_id = undefined
+      this.cityOptions = []
 
-      this.jobForm.city = undefined
-      this.jobForm.district = undefined
-      this.getAllForCitys(e.id)
+      this.jobForm.state_id = e.id
+      this.provinceName = e.name
+      this.provinceNameCn = e.name
+
+      this.getAllCitys(this.jobForm.country_id, e.id)
+      this.jobForm.job_location = this.provinceName + ', ' + this.countryName
     },
-    cityForChange(e) {
+    cityChange(e) {
       console.log(e)
-      this.jobForm.city = e.id
-      this.cityName = e.Pinyin
-
-      this.jobForm.district = undefined
-      this.getAllForDistricts(e.id)
+      this.jobForm.town_id = e.id
+      this.cityName = e.name
+      this.cityNameCn = e.name
+      this.jobForm.job_location =this.cityName + ', ' + this.provinceName + ', ' + this.countryName
     },
-    districtForChange(e) {
-      this.jobForm.district = e.id
-      this.districtName = e.Pinyin
-
-      console.log(e)
-    },
-    initMap() {
+    initMap(mapCenterValue) {
       mapboxgl.accessToken = this.accessToken;
 
       const map = new mapboxgl.Map({
         container: "mapContainer",
-        center: [121.472644, 31.231706],
+        center:mapCenterValue,
         style: this.mapStyle,
         zoom: 12
       });
       const nav = new mapboxgl.NavigationControl();
       map.addControl(nav, "top-right");
+      map.addControl(new mapboxgl.FullscreenControl());
 
       const geolocate = new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -999,6 +1763,7 @@ export default {
 
       const geocoder = new MapboxGeocoder({
         "accessToken": this.accessToken,
+        "language":'en-US',
         "mapboxgl": mapboxgl
       })
 
@@ -1026,394 +1791,23 @@ export default {
       })
 
     },
-    handleIsInternationalClick(tab) {
-      console.log(tab.paneName)
-      this.countryName = undefined;
-      this.provinceName = undefined;
-      this.cityName = undefined;
-      this.districtName = undefined;
-
-      this.countryObj = {}
-      this.provinceObj = {}
-      this.cityObj = {}
-      this.districtObj = {}
-
-      this.jobForm.country = undefined;
-      this.jobForm.province = undefined;
-      this.jobForm.city = undefined;
-      this.jobForm.district = undefined;
-
-      if(tab.paneName=='first'){
-        this.countryName = 'China'
-        this.getAllAreas(0)
-        this.cityOptions = []
-        this.districtOptions = []
-      }
-
-      if(tab.paneName=='second'){
-
-        this.getAllCountry(0)
-        this.provinceOptions = []
-        this.cityOptions = []
-        this.districtOptions = []
-      }
-
-    },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
-      let params = {
-        id: uid,
-        identity: identity
-      }
-      VISITOR_USER_INFO(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
-            this.jobForm.business_id = res.message.business_info.id;
-            this.jobForm.business_name = res.message.business_info.business_name
-
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
-          }
-
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getAllAreas(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.provinceOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getAllCitys(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.cityOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getAllDistricts(pid) {
-      let params = {
-        pid: pid
-      }
-      ALL_AREAS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.districtOptions = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    provinceChange(e) {
-      console.log(e)
-      this.getAllCitys(e.id)
-      this.provinceName = e.Pinyin
-      this.jobForm.province = e.id
-    },
-    cityChange(e) {
-      console.log(e)
-      this.getAllDistricts(e.id)
-      this.cityName = e.Pinyin
-      this.jobForm.city = e.id
-
-    },
-    districtChange(e) {
-      console.log(e)
-      this.jobForm.district = e.id
-      this.districtName = e.Pinyin
-    },
-    selectEmploymentType(value) {
-
-      let index = this.selectEmploymentTypeList.findIndex(element => element == value)
-
-      if (index == -1) {
-        let len = this.selectEmploymentTypeList.length;
-
-        if (len > 0) {
-          this.selectEmploymentTypeList.splice(len - 1, 1);
-        }
-        this.selectEmploymentTypeList.push(value);
-      } else {
-        this.selectEmploymentTypeList.splice(index, 1);
-      }
-    },
-    addOwnJobTitle() {
-      this.addJobTitleStatus = false;
-      let obj = {
-        id: 0,
-        object_en: this.ownJobTitleValue,
-        object_pid: 6
-      }
-      this.ownJobTitleList.push(obj);
-      this.ownJobTitleValue = '';
-      let index = this.selectJobTitleList.findIndex((element) => element === obj);
-
-      if (index == -1) {
-        this.selectJobTitleList.splice(index, 1, obj);
-
-      } else {
-        this.selectJobTitleList.splice(index, 1);
-      }
-      // console.log(this.selectJobTitleList)
-    },
     selectJobTitle(value) {
-      let index = this.selectJobTitleList.findIndex((element) => element === value);
+      // console.log(value)
+      this.jobForm.job_title = value.object_en;
 
-      if (index == -1) {
-        this.selectJobTitleList.splice(index, 1, value);
-      } else {
-        this.selectJobTitleList.splice(index, 1);
-      }
-      // console.log(this.selectJobTitleList)
-    },
-    addOwnStartDate() {
-      this.addStartDateStatus = false;
-      let obj = {
-        id: 0,
-        object_en: this.ownStartDateValue,
-        object_pid: 6
-      }
-      this.ownStartDateList.push(obj);
-      this.ownStartDateValue = '';
-      let index = this.selectStartDateList.findIndex((element) => element === obj);
-
-      if (index == -1) {
-        this.selectStartDateList.splice(index, 1, obj);
-
-      } else {
-        this.selectStartDateList.splice(index, 1);
-      }
-      // console.log(this.selectStartDateList)
     },
     selectStartDate(value) {
-      let index = this.selectStartDateList.findIndex((element) => element === value);
 
-      if (index == -1) {
-        this.selectStartDateList.splice(index, 1, value);
-      } else {
-        this.selectStartDateList.splice(index, 1);
-      }
-      // console.log(this.selectStartDateList)
-    },
-    addOwnAgeToTeach() {
-      this.addAgeToTeachStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownAgeToTeachValue,
-        object_pid: 4
-      }
-      this.ownAgeToTeachList.push(obj);
-      this.ownAgeToTeachValue = '';
-      let index = this.selectAgeToTeachList.findIndex((element) => element === obj);
-      if (index == -1) {
-        if (this.selectAgeToTeachList.length > 3) {
-          return false;
-        }
-        this.selectAgeToTeachList.push(obj);
-      } else {
-        this.selectAgeToTeachList.splice(index, 1);
-      }
-    },
-    selectAgeToTeach(value) {
-      let index = this.selectAgeToTeachList.findIndex((element) => element === value);
-      if (index == -1) {
-        if (this.selectAgeToTeachList.length > 3) {
-          return false;
-        }
-        this.selectAgeToTeachList.push(value);
-      } else {
-        this.selectAgeToTeachList.splice(index, 1);
-      }
-    },
-    addOwnSubject() {
-      this.addSubjectStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownSubjectValue,
-        object_pid: 6
-      }
-      this.ownSubjectList.push(obj);
-      this.ownSubjectValue = '';
-      let index = this.selectSubjectList.findIndex((element) => element === obj);
+      this.jobForm.entry_date = value.object_en;
 
-      if (index == -1) {
-        if (this.selectSubjectList.length > 4) {
-          return false;
-        }
-        this.selectSubjectList.push(obj);
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-    },
-    selectSubject(value) {
-      let index = this.selectSubjectList.findIndex((element) => element === value);
-
-      if (index == -1) {
-        if (this.selectSubjectList.length > 4) {
-          return false;
-        }
-        this.selectSubjectList.push(value);
-      } else {
-        this.selectSubjectList.splice(index, 1);
-      }
-      // console.log(this.selectSubjectList)
-    },
-    addOwnCurrency() {
-      this.addCurrencyStatus = false;
-      let obj = {
-        id: 0,
-        object_en: this.ownCurrencyValue,
-        object_pid: 117,
-      }
-      this.ownCurrencyList.push(obj);
-      this.ownCurrencyValue = '';
-      let index = this.selectCurrencyList.findIndex((element) => element === obj);
-      if (index == -1) {
-        this.selectCurrencyList.splice(index, 1, obj)
-      } else {
-        this.selectCurrencyList.splice(index, 1);
-      }
-    },
-    selectCurrency(value) {
-      let index = this.selectCurrencyList.findIndex((element) => element === value);
-      if (index == -1) {
-        this.selectCurrencyList.splice(index, 1, value)
-      } else {
-        this.selectCurrencyList.splice(index, 1);
-      }
-      // console.log(this.selectCurrencyList);
-    },
-    addOwnTeachingCertificate() {
-      this.addTeachingCertificateStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownTeachingCertificateValue,
-        object_pid: 7,
-
-      }
-      this.ownTeachingCertificateList.push(obj);
-      this.ownTeachingCertificateValue = '';
-      let index = this.selectTeachingCertificateList.findIndex((element) => element === obj);
-      if (index == -1) {
-        if (this.selectTeachingCertificateList.length > 3) {
-          return false;
-        }
-        this.selectTeachingCertificateList.push(obj);
-      } else {
-        this.selectTeachingCertificateList.splice(index, 1);
-      }
-    },
-    selectTeachingCertificate(value) {
-      let index = this.selectTeachingCertificateList.findIndex((element) => element === value);
-      if (index == -1) {
-        if (this.selectTeachingCertificateList.length > 3) {
-          return false;
-        }
-        this.selectTeachingCertificateList.push(value);
-      } else {
-        this.selectTeachingCertificateList.splice(index, 1);
-      }
-    },
-    addOwnLanguages() {
-      this.addLanguagesStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownLanguagesValue,
-        object_pid: 2
-      }
-      this.ownLanguagesList.push(obj);
-      this.ownLanguagesValue = '';
-      let index = this.selectLanguagesList.findIndex((element) => element === obj);
-      if (index == -1) {
-        if (this.selectLanguagesList.length > 3) {
-          return false;
-        }
-        this.selectLanguagesList.push(obj);
-
-      } else {
-        this.selectLanguagesList.splice(index, 1);
-      }
-    },
-    selectLanguages(value) {
-      let index = this.selectLanguagesList.findIndex((element) => element === value);
-      if (index == -1) {
-        if (this.selectLanguagesList.length > 3) {
-          return false
-        }
-        this.selectLanguagesList.push(value);
-
-      } else {
-        this.selectLanguagesList.splice(index, 1);
-      }
-    },
-    addOwnBenefits() {
-      this.addBenefitsStatus = false;
-      let obj = {
-        id: 0,
-        object_name: this.ownBenefitsValue,
-        object_pid: 6
-      }
-      this.ownBenefitsList.push(obj);
-      this.ownBenefitsValue = '';
-      let index = this.selectBenefitsList.findIndex((element) => element === obj);
-
-      if (index == -1) {
-        if (this.selectBenefitsList.length >= 5) {
-          return false
-        }
-        this.selectBenefitsList.push(obj);
-      } else {
-        this.selectBenefitsList.splice(index, 1);
-      }
-    },
-    selectBenefits(value) {
-      let index = this.selectBenefitsList.findIndex((element) => element === value);
-
-      if (index == -1) {
-        if (this.selectBenefitsList.length >= 5) {
-          return false
-        }
-        this.selectBenefitsList.push(value);
-      } else {
-        this.selectBenefitsList.splice(index, 1);
-      }
-      // console.log(this.selectBenefitsList)
     },
     submitBenefits(jobId) {
       let expand = [];
       let objectArr = [];
       this.selectBenefitsList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
       })
@@ -1432,7 +1826,12 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
     },
     submitAgeToTeach(jobId) {
@@ -1440,11 +1839,12 @@ export default {
       let objectArr = [];
       this.selectAgeToTeachList.forEach(item => {
         console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -1457,15 +1857,20 @@ export default {
 
       JOB_ADD_PROFILE(data).then(res => {
         if (res.code == 200) {
-          console.log('agetoteach--submit--' + res.data);
+          console.log('age to teach--submit--' + res.data);
         } else {
-          console.log('agetoTeach--submit--error');
-          console.log(res.msg);
+          console.log('age to Teach--submit--error');
+          //console.log(res.msg);
         }
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
     },
     submitSubject(jobId) {
@@ -1473,12 +1878,13 @@ export default {
       let objectArr = [];
 
       this.selectSubjectList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -1494,21 +1900,28 @@ export default {
           console.log('subject--submit--' + res.data);
         } else {
           console.log('subject--submit-error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
     },
     submitEmploymentType(jobId) {
+
       let expand = [];
       let objectArr = [];
+
       this.selectEmploymentTypeList.forEach(item => {
-        console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
+        // console.log(item);
+        if (typeof item === 'string') {
+          expand.push(item);
         } else {
           objectArr.push(item.id);
         }
@@ -1527,12 +1940,17 @@ export default {
           console.log('employment--submit--' + res.data);
         } else {
           console.log('employment--submit--error');
-          console.log(res.msg)
+          //console.log(res.msg)
         }
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
     },
     submitTeachingCertificate(jobId) {
@@ -1540,8 +1958,8 @@ export default {
       let objectArr = [];
       this.selectTeachingCertificateList.forEach(item => {
         console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
+        if (typeof item === 'string') {
+          expand.push(item);
         } else {
           objectArr.push(item.id);
         }
@@ -1560,12 +1978,17 @@ export default {
           console.log('teachingcertificate--submit--' + res.data);
         } else {
           console.log('teachingcertificate--submit--error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
     },
     submitLanguages(jobId) {
@@ -1573,11 +1996,12 @@ export default {
       let objectArr = [];
       this.selectLanguagesList.forEach(item => {
         console.log(item);
-        if (item.id === 0) {
-          expand.push(item.object_name);
-        } else {
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
           objectArr.push(item.id);
         }
+
       })
 
       let data = {
@@ -1593,12 +2017,137 @@ export default {
           console.log('languages--submit--' + res.data);
         } else {
           console.log('languages--submit--error');
-          console.log(res.msg);
+          //console.log(res.msg);
         }
 
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
+    submitWorkType(jobId) {
+      let expand = [];
+      let objectArr = [];
+      this.selectWorkTypeList.forEach(item => {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
+          objectArr.push(item.id);
+        }
+
+      })
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 184,
+        object_id: objectArr,
+        expand: expand,
+        job_id: jobId
+      }
+
+      JOB_ADD_PROFILE(data).then(res => {
+        if (res.code == 200) {
+          console.log('work type--submit--' + res.data);
+        } else {
+          console.log('work type --submit--error');
+          //console.log(res.msg);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
+    submitPnationality(jobId) {
+
+      let expand = [];
+      let objectArr = this.selectPnationalityList;
+
+      this.selectPnationalityList.forEach(item => {
+
+        if(typeof item === 'string'){
+          expand.push(item);
+        }else{
+          objectArr.push(item.id);
+        }
+
+      })
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 203,
+        object_id: objectArr,
+        expand: expand,
+        job_id: jobId
+      }
+
+      JOB_ADD_PROFILE(data).then(res => {
+        if (res.code == 200) {
+          console.log('p nationality--submit--' + res.data);
+        } else {
+          console.log('p nationality --submit--error');
+          //console.log(res.msg);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
+      })
+    },
+    submitAnationality(jobId) {
+      let expand = [];
+      let objectArr = this.selectAnationalityList;
+
+      this.selectAnationalityList.forEach(item => {
+
+        if (typeof item === 'string') {
+          expand.push(item);
+        } else {
+          objectArr.push(item.id);
+        }
+
+      })
+
+      let data = {
+        token: localStorage.getItem('token'),
+        object_pid: 239,
+        object_id: objectArr,
+        expand: expand,
+        job_id: jobId
+      }
+
+      JOB_ADD_PROFILE(data).then(res => {
+        if (res.code == 200) {
+          console.log('a nationality--submit--' + res.data);
+        } else {
+          console.log('a nationality --submit--error');
+          //console.log(res.msg);
+        }
+
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
     },
     getUserObjectList() {
@@ -1609,24 +2158,35 @@ export default {
         if (res.code == 200) {
           this.benefitsList = res.message.filter(item => item.pid === 6); //benefits
           this.ageToTeachList = res.message.filter(item => item.pid === 4); //age to teach
-          // this.employmentTypeList = res.message.filter(item => item.pid === 3); //employment type
-          this.paymentPeriodList = res.message.filter(item => item.pid ===
-              111); // payment period
+          this.employmentTypeList = res.message.filter(item => item.pid === 3); //employment type
+          this.paymentPeriodList = res.message.filter(item => item.pid === 111); // payment period
           this.currencyList = res.message.filter(item => item.pid === 117); // currency
-          this.teachingCertificateList = res.message.filter(item => item.pid ===
-              7); //teaching certificate ...
+          // console.log(this.currencyList)
+          this.teachingCertificateList = res.message.filter(item => item.pid === 7); //teaching certificate ...
           this.teachingExpList = res.message.filter(item => item.pid === 120); //teaching exp
           this.educationList = res.message.filter(item => item.pid === 125); // education
           this.languagesList = res.message.filter(item => item.pid === 2); // language ..
           this.jobTitleList = res.message.filter(item => item.pid === 103); //job title
           this.startDateList = res.message.filter(item => item.pid === 108); // start date
           this.subjectList = res.message.filter(item => item.pid === 1); //subject
-          this.ageList = res.message.filter(item => item.pid === 131); //age list
+          this.workTypeList = res.message.filter(item => item.pid === 184); //subject
+          this.pNationalityList = res.message.filter(item => item.pid === 203); //subject
+          this.aNationalityList = res.message.filter(item => item.pid === 239); //subject
+          // this.ageList = res.message.filter(item => item.pid === 131); //age list
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
+    },
+    workingHourDelete(index){
+      this.workingHoursData.splice(index, 1)
+      console.log(this.workingHoursData)
     },
     addWorkingHours() {
       // this.workingHoursData = [];
@@ -1662,122 +2222,71 @@ export default {
       } else {
         this.selectWeekItemData.splice(index, 1)
       }
-      console.log(this.selectWeekItemData)
-
-    },
-    testName(){
-      let jobLocationValue = ''
-      let countryName = this.countryName
-      let provinceName = this.provinceName
-      let cityName = this.cityName
-      let districtName = this.districtName
-
-      console.log(countryName)
-      console.log(provinceName)
-      console.log(cityName)
-      console.log(districtName)
-
-      if(countryName ){
-        jobLocationValue = countryName
-      }
-      if(countryName && provinceName ){
-        jobLocationValue = provinceName+', '+countryName
-      }
-
-      if(countryName && provinceName && cityName ){
-        jobLocationValue =  cityName + ', '+provinceName+', '+countryName
-      }
-
-      if(countryName && provinceName && cityName && districtName){
-        jobLocationValue = districtName + ', '+ cityName + ', '+provinceName+', '+countryName
-      }
-      console.log(jobLocationValue)
+      // console.log(this.selectWeekItemData)
 
     },
     submitJob(formName, submitType) {
       let that = this;
 
-      if (this.selectEmploymentTypeList.length <= 0) {
-        return this.$message.warning('Employment Type')
-      }
-
-      if (this.selectJobTitleList.length <= 0) {
-        return this.$message.warning('Job Title')
-      }
-
-      if (this.selectCurrencyList.length <= 0) {
-        return this.$message.warning('Currency')
-      }
-
       let jobLocationValue = ''
       let countryName = this.countryName
       let provinceName = this.provinceName
       let cityName = this.cityName
       let districtName = this.districtName
 
-      console.log(countryName)
-      console.log(provinceName)
-      console.log(cityName)
-      console.log(districtName)
-
-      if(countryName ){
+      if (countryName) {
         jobLocationValue = countryName
       }
-      if(countryName && provinceName ){
-        jobLocationValue = provinceName+', '+countryName
+      if (countryName && provinceName) {
+        jobLocationValue = provinceName + ', ' + countryName
       }
 
-      if(countryName && provinceName && cityName ){
-        jobLocationValue =  cityName + ', '+provinceName+', '+countryName
+      if (countryName && provinceName && cityName) {
+        jobLocationValue = cityName + ', ' + provinceName + ', ' + countryName
       }
 
-      if(countryName && provinceName && cityName && districtName){
-        jobLocationValue = districtName + ', '+ cityName + ', '+provinceName+', '+countryName
+      if (countryName && provinceName && cityName && districtName) {
+        jobLocationValue = districtName + ', ' + cityName + ', ' + provinceName + ', ' + countryName
       }
 
-      this.jobForm.job_location  = jobLocationValue
+      this.jobForm.job_location = jobLocationValue
 
-      if (this.selectEmploymentTypeList.length > 0) {
-        let employmentTypeList = this.selectEmploymentTypeList;
-        this.jobForm.employment_type = employmentTypeList[0].id;
-      }
-      if (this.selectCurrencyList.length > 0) {
-        let currency = this.selectCurrencyList;
-        that.jobForm.currency = currency[0].object_en;
-      } else {
-        that.jobForm.currency = '';
-      }
-      if (this.selectJobTitleList.length > 0) {
-        let a = this.selectJobTitleList;
-        that.jobForm.job_title = a[0].object_en;
-      } else {
-        that.jobForm.job_title = '';
-      }
-
-      if (this.selectStartDateList.length > 0) {
-        let startDate = this.selectStartDateList;
-        that.jobForm.entry_date = startDate[0].object_en;
-      } else {
-        that.jobForm.entry_date = '';
-      }
+      // if (this.selectCurrencyList.length > 0) {
+      //   let currency = this.selectCurrencyList;
+      //   that.jobForm.currency = currency[0].object_en;
+      // } else {
+      //   that.jobForm.currency = '';
+      // }
 
       that.jobForm.age_min = this.ageValue[0];
       that.jobForm.age_max = this.ageValue[1];
 
+      that.jobForm.working_nums_start = this.yearOfExpValue[0];
+      that.jobForm.working_nums_end = this.yearOfExpValue[1];
+
       that.jobForm.version_time = this.$route.query.version_time;
+      that.jobForm.identity = this.identity;
 
       // if (that.isEdit) {
       //   that.form.job_id = this.jobId;
       // }
-      console.log(that.jobForm);
-      this.$loading({
-        text: 'Loading...'
-      })
+      // console.log(that.jobForm);
+      let jobIdFrom = this.$route.query.job_id
+
+      if(jobIdFrom){
+        that.jobForm.job_id = jobIdFrom
+      }
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
+
+          this.$loading({
+            text: 'Loading...'
+          })
+
           let data = Object.assign({}, that.jobForm);
           ADD_JOB(data).then(res => {
-            // console.log(res);
+            // //console.log(res);
             if (res.code == 200) {
 
               let jobId = res.data.job_id;
@@ -1788,40 +2297,82 @@ export default {
               if (this.selectAgeToTeachList.length > 0) {
                 that.submitAgeToTeach(jobId);
               }
-              if (this.subjectList.length > 0) {
+              if (this.selectSubjectList.length > 0) {
                 that.submitSubject(jobId);
               }
+
+              if(this.selectEmploymentTypeList.length > 0){
+                that.submitEmploymentType(jobId)
+              }
+
               if (this.selectTeachingCertificateList.length > 0) {
                 that.submitTeachingCertificate(jobId);
               }
+
               if (this.selectLanguagesList.length > 0) {
                 that.submitLanguages(jobId);
+              }
+
+              if(this.selectWorkTypeList.length > 0){
+                that.submitWorkType(jobId)
+              }
+
+              if(this.selectPnationalityList.length > 0){
+                that.submitPnationality(jobId)
+              }
+
+              if(this.selectAnationalityList.length > 0){
+                that.submitAnationality(jobId)
               }
 
               if (submitType == 3) {
                 // this.$router.push('/')
               }
+
               this.$loading().close()
-              this.$router.push('/jobs/myJobs')
+
+              this.jobSuccessTitle = 'Success'
+              this.jobSuccessDesc = 'Your Job Submission '+ this.jobForm.job_title + ' has been successfully sent.'
+              this.jobSuccessVisible = true;
+
+              // this.$router.push('/jobs/home')
 
             }
           }).catch(err => {
             console.log(err)
-            this.$message.error(err.msg)
+            this.$loading().close()
+
+            if (err.msg) {
+              return this.$message.error(err.msg)
+            }
+            if (err.message) {
+              return this.$message.error(err.message)
+            }
           })
 
         } else {
+          // this.$loading().close()
           console.log('error submit!!')
+          this.$message({
+            type:'warning',
+            message:'Please complete all required fields',
+            grouping:true
+          })
           return false
         }
       })
+
+    },
+    submitJobSuccess(){
+      this.jobSuccessVisible = false
+      this.$router.push('/jobs/home')
 
     },
     letGo() {
       let self = this;
       let uid = localStorage.getItem('uid')
       this.$loading({
-        text:'Loading'
+        text: 'Loading'
       })
 
       let params = {
@@ -1829,38 +2380,38 @@ export default {
       }
 
       SYNC_GET_BUSINESS_INFO(params).then(res => {
-        console.log(res)
+        //console.log(res)
         if (res.code == 200) {
           let aParams = {
             data: JSON.stringify(res.message)
           }
-          let baseUrl =  process.env.VUE_APP_SYNC_BUSINESS_BASE_URL
+          let baseUrl = process.env.VUE_APP_SYNC_BUSINESS_BASE_URL
 
-          axios.post('home/syncUserInfo',aParams,{
-            baseURL:baseUrl,
-            timeout:10000
-          }).then(res=>{
-            console.log(res)
-            if(res.code == 200){
+          axios.post('home/syncUserInfo', aParams, {
+            baseURL: baseUrl,
+            timeout: 10000
+          }).then(res => {
+            //console.log(res)
+            if (res.code == 200) {
               this.$loading().close()
               this.$msgbox({
                 title: 'Success',
-                message:'Your information has been synchronized, please log in ',
-                type:'success',
-                confirmButtonText:'Login',
-                callback(action){
+                message: 'Your information has been synchronized, please log in ',
+                type: 'success',
+                confirmButtonText: 'Login',
+                callback(action) {
                   console.log(action)
-                  if(action === 'confirm'){
+                  if (action === 'confirm') {
                     let redirectParamsObj = {
-                      path:'/jobs/post',
-                      query:{
-                        version_time:self.$route.query.version_time
+                      path: '/jobs/post',
+                      query: {
+                        version_time: self.$route.query.version_time
                       }
                     }
 
-                    let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
-                    let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=1&redirect_params='+redirectParamsStr
-                    window.open(exchange_domain,'_blank')
+                    let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
+                    let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=login&redirect_params=' + redirectParamsStr
+                    window.open(exchange_domain, '_blank')
                   }
 
                 }
@@ -1868,27 +2419,27 @@ export default {
 
               })
             }
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
             this.$loading().close()
             this.$msgbox({
-              title:err.msg,
-              message:err.msg,
-              type:'success',
-              confirmButtonText:'Login',
-              callback(action){
+              title: err.msg,
+              message: err.msg,
+              type: 'success',
+              confirmButtonText: 'Login',
+              callback(action) {
                 console.log(action)
-                if(action === 'confirm'){
+                if (action === 'confirm') {
                   let redirectParamsObj = {
-                    path:'/jobs/post',
-                    query:{
-                      version_time:self.$route.query.version_time
+                    path: '/jobs/post',
+                    query: {
+                      version_time: self.$route.query.version_time
                     }
                   }
 
-                  let redirectParamsStr =encode(JSON.stringify(redirectParamsObj))
-                  let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=1&redirect_params='+redirectParamsStr
-                  window.open(exchange_domain,'_blank')
+                  let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
+                  let exchange_domain = process.env.VUE_APP_EXCHANGE_DOMAIN + '/login?type=login&redirect_params=' + redirectParamsStr
+                  window.open(exchange_domain, '_blank')
                 }
               }
 
@@ -1903,6 +2454,12 @@ export default {
 
       }).catch(err => {
         console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
         this.$loading().close()
       })
 
@@ -1917,6 +2474,12 @@ export default {
         console.log(res)
       }).catch(err => {
         console.log(err)
+        if (err.msg) {
+          this.$message.error(err.msg)
+        }
+        if (err.message) {
+          this.$message.error(err.message)
+        }
       })
 
 
@@ -1932,15 +2495,58 @@ export default {
   background-color: #f5f6f7;
 }
 
-.profile-container {
-  width: 1100px;
-  margin: 0 auto;
-  padding: 20px 0;
+.post-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.job-r-container {
-  padding: 0 20px;
+.post-l-container{
+
 }
+
+.post-r-container{
+  width:calc(100% - 160px);
+}
+
+.post-r-container-bg{
+  padding:30px 50px 0 50px;
+}
+
+
+.account-profile-t{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 110px;
+}
+
+.account-profile-t-l{
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size:30px;
+  color:#262626;
+
+}
+
+.account-profile-t-r{
+
+}
+
+.account-profile-discard-btn{
+  font-size:20px;
+}
+
+.account-profile-draft-btn{
+  background-color: #E7DEFF;
+  font-size:20px;
+}
+
+.account-profile-save-btn{
+  font-size:20px;
+}
+
 
 .job-detail-container {
   background-color: #FFFFFF;
@@ -1962,8 +2568,13 @@ export default {
   margin-top: 10px;
 }
 
+.job-location-select{
+  margin-top: 15px;
+}
+
 .map-container {
-  height: 300px;
+  width: 100%;
+  height: 260px;
 }
 
 .basemap {
@@ -2034,11 +2645,13 @@ export default {
 }
 
 .object-tags-item {
-  background-color: rgba(0, 179, 210, 0.1);
+  background-color: #F0F2F5;
+  border:1px solid #262626;
   padding: 4px 10px;
   border-radius: 6px;
   margin: 10px;
-  font-size: 14px;
+  font-size: 20px;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   cursor: pointer;
 }
 
@@ -2049,26 +2662,30 @@ export default {
 
 .object-tags-item-add {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  position: relative;
+}
+
+.object-tags-item-btn-container{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+}
+
+.object-tags-item-btn{
+  color:#262626;
+  font-size: 20px;
 }
 
 
 .tags-active {
-  background-color: #00CE47;
+  background-color: #6650B3;
   color: #FFFFFF;
 }
 
 
 .working-hours-add {
-  width: 70px;
-  margin-top: 10px;
-  text-align: center;
-  border-radius: 10px;
-  font-size: 14px;
-  background-color: rgba(0, 180, 210, 0.2);
+  margin-left: 20px;
 }
 
 .working-hours-container {
@@ -2088,13 +2705,14 @@ export default {
 }
 
 .week-item {
-  background-color: rgba(0, 179, 210, 0.1);
+  background-color: #F0F2F5;
   color: #000000;
   width: 40px;
   height: 40px;
   margin-left: 10px;
   text-align: center;
   border-radius: 40px;
+  cursor: pointer;
 }
 
 .hours-container {
@@ -2112,7 +2730,7 @@ export default {
 
 .working-hours-button button {
   width: 30%;
-  background-color: #0AA0A8;
+  background-color: #6650B3;
   color: #FFFFFF;
   font-size: 14px;
 }
@@ -2135,7 +2753,7 @@ export default {
 .week-show-item {
   width: 60px;
 
-  background-color: rgba(0, 180, 210, 0.9);
+  background-color: #6650B3;
   color: #FFFFFF;
   font-size: 14px;
   text-align: center;
@@ -2150,8 +2768,12 @@ export default {
   background-color: #FFFFFF;
 }
 
+.hours-show-delete{
+  margin-left: 10px;
+}
+
 .week-item-active {
-  background-color: #00CE47;
+  background-color: #9173ff;
   color: #FFFFFF;
 }
 
@@ -2172,17 +2794,244 @@ export default {
   font-size: 14px;
   margin-top: 10px;
   color: #808080;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
+.job-detail-china-tips-2{
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
+.job-detail-china-tips-2 a {
+  color: #00b3d2;
+  font-size: 16px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+.job-form-container{
+  height: calc(100vh - 280px);
+}
+
+.account-profile-item-container{
+  padding: 50px;
+  border-radius: 38px;
+  background-color: #ffffff;
+  margin-bottom: 50px;
+
+}
+
+
+.account-profile-item-label{
+  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size:26px;
+  color:#262626;
+}
+
+.account-profile-item-c{
+  margin-top:15px;
+}
+.job-company-name{
+  font-size: 23px;
+  font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color:#262626;
+}
+
+.xll-salary-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+}
+
+/deep/ .xll-currency-select .el-input__wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: unset;
+}
+
+/deep/ .xll-currency-select .el-input__inner{
+  width: 50px;
+  border: 0;
+  text-align: center;
+}
+
+/deep/ .xll-currency-select .el-input__suffix{
+  height: auto;
+}
+/deep/ .xll-currency-select .el-input__suffix-inner>:first-child{
+  margin-left: 0;
+}
+/deep/ .xll-currency-select .el-select .el-input.is-focus .el-input__wrapper{
+  box-shadow: unset;
+}
+
+.xll-min-salary{
+  margin-left: 5px;
+  width: 120px;
+}
+.xll-salary-line{
+  width: 20px;
+  text-align: center;
+}
+.xll-max-salary{
+  margin-left: 5px;
+  width: 120px;
+}
+.xll-payment-select{
+  margin-left: 5px;
+}
+
+.job-current-location{
+  width:100%;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+
+}
+
+.job-current-address{
+  width:100%;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+
+}
+
+.job-location-container{
+
+}
+
+.job-location-tabs{
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
 }
 
-.job-detail-china-tips a {
-  color: #00b3d2;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 0 10px;
+.job-location-tab-l{
+  flex:1;
+  text-align: center;
+  line-height: 40px;
+
+  border-left: 1px solid #262626;
+  border-top: 1px solid #262626;
+  border-bottom: 1px solid #262626;
+
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+  cursor: pointer;
+
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+
 }
+.job-location-tab-r{
+  flex:1;
+  text-align: center;
+  line-height: 40px;
+
+  border: 1px solid #262626;
+  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #262626;
+  cursor: pointer;
+
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+
+}
+
+.job-location-tab-active{
+  background: #988CF5;
+  color: #FFFFFF;
+  border: 1px solid #988CF5;
+}
+
+.job-location-content{
+  margin-top: 10px;
+
+}
+
+@media screen and (min-width: 1200px) {
+
+
+}
+
+@media screen and (max-width: 768px) {
+  .post-r-container{
+    width: 100%;
+  }
+
+  .post-r-container-bg{
+    padding: 15px;
+  }
+
+  .account-profile-t{
+    height: 40px;
+    margin-bottom: 15px;
+  }
+
+  .account-profile-t-l{
+    font-size: 20px;
+  }
+
+  .job-form-container{
+    height: calc( var(--i-window-height) - 245px);
+  }
+
+  .account-profile-item-container{
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 18px;
+  }
+
+  .account-profile-item-label{
+    font-size: 18px;
+  }
+
+  /deep/  .mce-container *{
+    white-space: normal;
+  }
+
+  .account-profile-save-btn{
+    font-size: 12px;
+  }
+  .account-profile-discard-btn{
+    font-size: 12px;
+  }
+
+  .job-location-tab-l{
+    font-size: 12px;
+  }
+
+  .job-location-tab-r{
+    font-size: 12px;
+  }
+  .object-tags-item{
+    font-size: 12px;
+  }
+
+  .working-hours-show-container{
+    margin-bottom: 15px;
+  }
+
+  .working-hours-add{
+    margin-left: 0;
+  }
+
+  /deep/ .el-checkbox{
+    white-space: normal;
+  }
+
+  /deep/ .el-checkbox__label{
+    font-size: 12px;
+  }
+
+}
+
 
 </style>

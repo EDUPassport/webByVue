@@ -104,7 +104,7 @@
                             callback: (action) => {
                                 console.log(action)
                                 if(action === 'confirm'){
-                                    self.$router.push({path:'/login',query:{email:email}})
+                                    self.$router.push({path:'/edupassport',query:{email:email}})
                                 }
                             }
                         })

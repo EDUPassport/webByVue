@@ -1,297 +1,812 @@
 <template>
   <div class="bg">
-    <div class="profile-container">
-      <el-row align="top" justify="center">
-        <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <meSideMenu></meSideMenu>
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
+    <div class="overview-container">
+      <div class="overview-l-container">
+        <meSideMenu></meSideMenu>
+      </div>
+      <el-scrollbar class="overview-r-container">
+        <div class="overview-r-container-bg">
+
           <div class="dashboard-container">
-            <div class="dashboard-label">Dashboard</div>
-            <div class="dashboard-content">
-              <template v-if="identity == 1">
-                <div class="dashboard-item events-bg" @click="applicationsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/me/applications">My Applications</router-link>
-                  </div>
-                </div>
 
-              </template>
-              <template v-if="identity == 2">
-                <div class="dashboard-item jobs-bg" @click="jobPostsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/jobs">Job Posts </router-link>
-                  </div>
-                </div>
-                <div class="dashboard-item events-bg" @click="myEventsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/events/myEvents">My Events</router-link>
-                  </div>
-                </div>
+            <template v-if="identity == 1">
 
-              </template>
-              <template v-if="identity == 3">
-                <div class="dashboard-item deals-bg" @click="myDealsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/deals/myDeals"> My Deals</router-link>
-                  </div>
-                </div>
-                <div class="dashboard-item events-bg" @click="myEventsHref()">
-                  <div class="dashboard-item-l">
-                    <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                  </div>
-                  <div class="dashboard-item-r">
-                    <router-link to="/events/myEvents">My Events</router-link>
-                  </div>
-                </div>
-              </template>
-
-<!--              <div class="dashboard-item ads-bg">-->
-<!--                <div class="dashboard-item-l">-->
-<!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
+              <div class="dashboard-1-container">
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>You were viewed</h5>-->
+<!--                  <h1>18 <span>times this week</span></h1>-->
 <!--                </div>-->
-<!--                <div class="dashboard-item-r">-->
-<!--                  <router-link to="/">My Ads</router-link>-->
-<!--                </div>-->
-<!--              </div>-->
-
-              <div class="dashboard-item favorites-bg" @click="myFavoritesHref()">
-                <div class="dashboard-item-l">
-                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>
-                </div>
-                <div class="dashboard-item-r">
-                  <router-link to="/favorites">My Favorites</router-link>
+                <div class="dashboard-1">
+                   <span>More awesome widgets are coming soon...</span>
                 </div>
               </div>
 
-<!--              <div class="dashboard-item msg-bg">-->
-<!--                <div class="dashboard-item-l">-->
-<!--                  <el-image class="dashboard-item-l-icon" :src="dashboardListsImg"></el-image>-->
+              <div class="container-2">
+                <div class="container-2-l">
+                  <dailyJobMatch></dailyJobMatch>
+                </div>
+                <div class="container-2-r">
+                  <applicationsUpdates></applicationsUpdates>
+                </div>
+              </div>
+
+              <div class="container-3">
+                <div class="container-3-l">
+                  <favoritedJobsDashboard></favoritedJobsDashboard>
+                </div>
+
+              </div>
+
+            </template>
+
+            <template v-if="identity == 2 || identity == 3 || identity == 4">
+<!--              <div class="dashboard-1-container">-->
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>New applications</h5>-->
+<!--                  <h1>+7</h1>-->
+<!--                  <div class="dashboard-1-tips">-->
+<!--                    total:21 applications-->
+<!--                  </div>-->
 <!--                </div>-->
-<!--                <div class="dashboard-item-r">-->
-<!--                  <router-link to="/">My Messages</router-link>-->
+
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>Views this month</h5>-->
+<!--                  <h1>-->
+<!--                    +18-->
+<!--                  </h1>-->
+<!--                  <div class="dashboard-1-tips">-->
+<!--                    total:156 views-->
+<!--                  </div>-->
 <!--                </div>-->
+
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>New educators</h5>-->
+<!--                  <h1>-->
+<!--                    +48-->
+<!--                  </h1>-->
+<!--                  <div class="dashboard-1-tips">-->
+<!--                    total:892 educators-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="dashboard-1">-->
+<!--                  <h5 >Jobs posted</h5>-->
+<!--                  <h1>-->
+<!--                    3/ <el-icon> <IconIcOutlineAllInclusive /> </el-icon>-->
+<!--                  </h1>-->
+<!--                  <div class="dashboard-1-tips">-->
+<!--                    <span>this month</span>-->
+<!--                    <el-button class="dashboard-post-a-job-btn"-->
+<!--                               @click="postJob()"-->
+<!--                               type="primary" round>-->
+<!--                      POST A JOB-->
+<!--                    </el-button>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+
+<!--                <div class="dashboard-1  dashboard-1-bg-1">-->
+<!--                  <h5>Quick actions</h5>-->
+<!--                  <div class="dashboard-1-actions">-->
+<!--                    <el-button class="dashboard-1-action-btn" plain round>-->
+<!--                      UPGRADE-->
+<!--                    </el-button>-->
+<!--                    <el-button class="dashboard-1-action-btn" plain round>-->
+<!--                      ADVERTISE-->
+<!--                    </el-button>-->
+<!--                  </div>-->
+<!--                </div>-->
+
 <!--              </div>-->
 
-            </div>
+              <div class="dashboard-1-container">
+                <div class="dashboard-1">
+                  <span>
+                    More awesome widgets are coming soon...
+                  </span>
+                </div>
+              </div>
+
+              <NewApplications :data="myApplicationsData"
+                               @updateIndex="updateApplicationIndex">
+              </NewApplications>
+
+            </template>
+
+            <template v-if="identity == 5">
+
+<!--              <div class="dashboard-1-container">-->
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>You posted</h5>-->
+<!--                  <div class="dashboard-1-h">-->
+<!--                    <h1>-->
+<!--                      18 <span>deals</span>-->
+<!--                    </h1>-->
+<!--                    <h1>-->
+<!--                      2 <span>events</span>-->
+<!--                    </h1>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+<!--                <div class="dashboard-1">-->
+<!--                  <h5 >Deals performance</h5>-->
+<!--                  <div  class="dashboard-1-h">-->
+<!--                    <h1>-->
+<!--                      52 <span>favorited</span>-->
+<!--                    </h1>-->
+<!--                    <h1>-->
+<!--                      1 <span>redeemed</span>-->
+<!--                    </h1>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+<!--                <div class="dashboard-1">-->
+<!--                  <h5>Events performance</h5>-->
+<!--                  <div  class="dashboard-1-h">-->
+<!--                    <h1>-->
+<!--                      0 <span>favorited</span>-->
+<!--                    </h1>-->
+<!--                    <h1>-->
+<!--                      0 <span>redeemed</span>-->
+<!--                    </h1>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+
+<!--              </div>-->
+
+              <div class="dashboard-1-container">
+                <div class="dashboard-1">
+                  <span>
+                    More awesome widgets are coming soon...
+                  </span>
+                </div>
+              </div>
+
+              <div class="container-4">
+                <div class="container-4-l">
+                  <activeDealsDashboard
+                      :listData="dealsListData"
+                  ></activeDealsDashboard>
+                </div>
+                <div class="container-4-r">
+                  <activeEventsDashboard
+                      :list-data="eventsListData"
+                  ></activeEventsDashboard>
+                </div>
+              </div>
+
+
+            </template>
+
+
           </div>
 
-          <accountInfo :info="userInfo" :phone="basicUserInfo.phone" ></accountInfo>
+        </div>
 
-          <div class="ads-container">
-            <el-image class="ads-img" :src="dashboardAdsImg"></el-image>
-          </div>
-        </el-col>
-      </el-row>
+      </el-scrollbar>
+
+
     </div>
   </div>
 </template>
 
 <script>
 import defaultAvatar from '@/assets/default/avatar.png'
-import accountInfo from "../../components/accountInfo";
 import meSideMenu from "@/components/meSideMenu";
-import {VISITOR_USER_INFO} from '@/api/api';
+import {
+  ADS_LIST, ALL_ASSIGN_USERS, ALL_JOB_RESUME, EVENTS_MY_EVENT, MY_DEALS, USER_INFO_BY_TOKEN_V2,
+  USER_INFO_VISITOR_V2, USER_MENU_COMPANY
+} from '@/api/api';
 import dashboardListsImg from '@/assets/dashboard/list.png'
 import dashboardAdsImg from '@/assets/ads/2.png'
-import { onBeforeRouteUpdate } from "vue-router";
-// import {useStore} from "vuex";
-import {computed,ref} from "vue";
+// import {onBeforeRouteUpdate} from "vue-router";
+import { computed} from "vue";
+import {useStore} from 'vuex'
+
+import NewApplications from "@/components/business/newApplications";
+import dailyJobMatch from "@/components/educator/dailyJobMatch";
+import applicationsUpdates from "@/components/educator/applicationsUpdates";
+import favoritedJobsDashboard from "@/components/educator/favoritedJobsDashboard";
+import activeDealsDashboard from "@/components/vendor/activeDealsDashboard";
+import activeEventsDashboard from "@/components/vendor/activeEventsDashboard";
+import {randomString} from "@/utils";
+import {updateWindowHeight} from "@/utils/tools";
+// import {removeZohoFloat, removeJs} from "@/utils/tools";
 
 export default {
   name: "index",
   components: {
     meSideMenu,
-    accountInfo
+    NewApplications,
+    dailyJobMatch,
+    applicationsUpdates,
+    favoritedJobsDashboard,
+    activeDealsDashboard,
+    activeEventsDashboard
   },
-  setup(){
-    // const store = useStore()
-    const i = ref(localStorage.getItem('identity'))
+  setup() {
+    const store = useStore()
+    const currentUser = computed(()=>store.state.currentUser)
 
-    const identity1 = computed(()=>{
-      return i.value
-    })
-
-    // console.log(identity1.value)
     return {
-      identity1
+      currentUser
     }
+
+  },
+  watch: {
+    allIdentityChanged(newValue) {
+      // console.log(newValue)
+      if (newValue) {
+        this.getAllAssignUsers()
+        this.getBasicInfo(this.identity)
+      }
+    },
+    identity(newValue){
+      console.log('identity' + newValue)
+    }
+
+  },
+  computed: {
+    isThirdCompanyStatus: {
+      get() {
+        return this.$store.state.isThirdCompanyStatus
+      }
+    },
+    allIdentityChanged: {
+      get() {
+        return this.$store.state.allIdentityChanged
+      }
+    },
+    identity:{
+      get(){
+        return this.$store.state.identity
+      }
+    }
+
   },
   data() {
     return {
+      expandStatus:false,
       dashboardListsImg,
       dashboardAdsImg,
       defaultAvatar,
       userInfo: {},
       basicUserInfo: {},
-      identity:this.$route.query.identity
+
+      userContact: {},
+
+      companyInfo: {},
+
+      adsDataBottom: [],
+      profilePercentage: 0,
+      accountInfoLevel: 1,
+      accountInfoVipDueTime: '',
+      accountInfoCategoryStr: '',
+
+      assignUserData: [],
+      dialogUserMenuCompanyVisible: false,
+      userMenuCompanyData: [],
+
+      anotherUserId: 0,
+
+      dealsListData:[],
+      eventsListData:[],
+
+      myApplicationsData:[],
+      versionTime:randomString(),
+
     }
   },
+  unmounted() {
+    updateWindowHeight()
+    window.onresize = null
+  },
   mounted() {
-    onBeforeRouteUpdate( to =>{
-      console.log(to)
-      this.identity = to.query.identity
-      this.getVisitorBasicInfo()
-      // console.log(to.params, to.query)
-    })
-    this.getVisitorBasicInfo()
+
+    // onBeforeRouteUpdate(to => {
+    //   // console.log(to)
+    //   this.identity = to.query.identity
+    //   this.getBasicInfo(to.query.identity)
+    //   this.getPercentage(this.identity)
+    //
+    // })
+
+    // this.getBasicInfo(this.identity)
+    // this.getAdsList()
+
+    // this.getPercentage(this.identity)
+    // this.getAllAssignUsers()
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+      updateWindowHeight()
+      this.contributorWidth = '80%'
+    }
+
+    window.onresize = () => {
+      if (screenWidthFloor <= 768) {
+        this.contributorWidth = '80%'
+        updateWindowHeight()
+      }
+    }
+
+    if(this.identity == 2 || this.identity == 3 || this.identity == 4){
+      this.getAllJobResumeList(1,100)
+    }
+
+    if(this.identity == 5){
+      this.getDealsList(1,1000)
+      this.getEventsList(1,1000)
+    }
+
   },
   methods: {
-    applicationsHref(){
-      this.$router.push({path:'/me/applications'})
+    postJob(){
+      this.$router.push({path:'/jobs/post',query:{version_time:this.versionTime}})
     },
-    jobPostsHref(){
-      this.$router.push({path:'/jobs'})
+    viewApplicationEvent(){
+      this.expandStatus = !this.expandStatus
     },
-    myEventsHref(){
-      this.$router.push({path:'/events/myEvents'})
+    selectCompanyToUpdate(userId, companyId) {
+      this.$router.push({
+        path: '/profile/admin/add',
+        query: {action: 'edit', uid: this.anotherUserId, cuid: userId, cId: companyId}
+      })
     },
-    myDealsHref(){
-      this.$router.push({path:'/deals/myDeals'})
-    },
-    myFavoritesHref(){
-      this.$router.push({path:'/favorites'})
-    },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
+    showMyCompany(userId) {
+      this.anotherUserId = userId
       let params = {
-        id: uid,
-        identity: identity
+        user_id: userId
       }
-      VISITOR_USER_INFO(params).then(res => {
+      USER_MENU_COMPANY(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
+          this.dialogUserMenuCompanyVisible = true;
+          this.userMenuCompanyData = res.message;
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getAllAssignUsers() {
+      let params = {}
+      ALL_ASSIGN_USERS(params).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.assignUserData = res.message
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    turnBanner(link) {
+      // console.log(link)
+      if (link != '') {
+        window.location.href = link
+      } else {
+        let token = localStorage.getItem('token')
+        if (!token) {
+          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+
+          return;
+        }
+        this.$router.push('/me/ads/platform')
+      }
+    },
+    getAdsList() {
+      let ads_data = {
+        page: 1,
+        limit: 10000
+      }
+      ADS_LIST(ads_data).then(res => {
+        if (res.code == 200) {
+          // console.log(rs.message)
+          let adsDataBottom = [];
+          let identity = localStorage.getItem('identity');
+
+          if (!identity) {
+            adsDataBottom = res.message.filter(item => item.name == 'guest_m1');
           }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
+          if (identity == 1) {
+
+            adsDataBottom = res.message.filter(item => item.name == 'educator_m1');
           }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
+          if (identity == 2) {
+            adsDataBottom = res.message.filter(item => item.name == 'business_m1');
+          }
+          if (identity == 3) {
+            adsDataBottom = res.message.filter(item => item.name == 'vendor_m1');
+          }
+
+          if (adsDataBottom.length > 0) {
+            this.adsDataBottom = adsDataBottom[0].data;
           }
 
         }
-      }).catch(err=>{
+
+      }).catch(err => {
+        this.$message.error(err.msg)
+      })
+    },
+    getBasicInfo(identity) {
+
+      let params = {
+        identity: identity
+      }
+
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          let userContact = res.message.user_contact;
+
+          let company = {};
+          let educatorContact = {};
+
+          if (userContact) {
+            this.userContact = userContact
+          }
+
+          if (identity == 1) {
+
+            educatorContact = res.message.user_contact.educator_contact;
+
+            if (educatorContact) {
+              this.educatorContact = educatorContact
+              this.accountInfoLevel = educatorContact.vip_level
+              this.accountInfoVipDueTime = educatorContact.vip_due_time
+              this.accountInfoCategoryStr = educatorContact.sub_identity_name_en
+
+            }
+          }
+
+          if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
+
+            company = res.message.user_contact.company;
+
+            if (company) {
+              this.companyInfo = company
+              this.accountInfoLevel = company.vip_level
+              this.accountInfoVipDueTime = company.vip_due_time
+              this.accountInfoCategoryStr = company.category_name_en
+            }
+
+          }
+
+
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    getVisitorInfo(uid, identity) {
+
+      let params = {
+        user_id: uid,
+        identity: identity
+      }
+
+      USER_INFO_VISITOR_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          let userContact = res.message.user_contact;
+          let company = {};
+          let educatorContact = {};
+
+          if (userContact) {
+            this.userContact = userContact
+          }
+
+          if (identity == 1) {
+
+            educatorContact = res.message.user_contact.educator_contact;
+
+            if (educatorContact) {
+              this.educatorContact = educatorContact
+            }
+          }
+
+          if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
+
+            company = res.message.user_contact.company;
+
+            if (company) {
+              this.companyInfo = company
+            }
+
+          }
+
+
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error(err.msg)
+      })
+
+    },
+    getDealsList(page, limit) {
+
+      let params = {
+        status:1,
+        page: page,
+        limit: limit
+      }
+
+      MY_DEALS(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.dealsListData = res.message.data;
+          this.dealTotalNum = res.message.total
+          this.showLoadingStatus = false
+        }
+      }).catch(err => {
         console.log(err)
         this.$message.error(err.msg)
       })
     },
+    getEventsList(page,limit){
+
+      let params = {
+        status:1,
+        page: page,
+        limit: limit
+      }
+
+      EVENTS_MY_EVENT(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.eventsListData = res.message.data;
+          this.eventTotalNum = res.message.total;
+          this.showLoadingStatus=false
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
+    getAllJobResumeList(page, limit) {
+      let params = {
+        token: localStorage.getItem('token'),
+        page: page,
+        limit: limit
+      }
+      ALL_JOB_RESUME(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.myApplicationsData = res.message.data
+          // console.log(res.message.data)
+          // this.totalNum = res.message.total
+        }
+      }).catch(err=>{
+        console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
+      })
+
+    },
+    updateApplicationIndex(i,value){
+      this.myApplicationsData[i]['status'] = value;
+    }
+
+
   }
 }
 </script>
 
 <style scoped>
 .bg {
-  background-color: #f5f6f7;
+  background-color: #F0F2F5;
 }
 
-.profile-container {
-  width: 1100px;
-  margin: 0 auto;
-  padding: 20px 0;
-}
-
-
-.dashboard-container {
-  padding: 20px;
-  text-align: left;
-}
-
-.dashboard-label {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.dashboard-content {
-  padding: 20px;
-  margin-top: 20px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
-  
+.overview-container {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.overview-l-container{
 
 }
 
-.dashboard-item {
-  width: 45%;
-  cursor:pointer;
-  background-color: #EEEEEE;
-  color: #ffffff;
-  margin-top: 20px;
-  padding: 1%;
-  border-radius: 10px;
+.overview-r-container{
+  width:calc(100% - 160px);
+  height: calc(100vh - 140px);
+}
+
+.overview-r-container-bg{
+  padding:50px;
+}
+
+.dashboard-container {
+
+}
+
+.dashboard-item-r a {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.dashboard-1-container {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+}
+
+.dashboard-1 {
+  background-color: #FFFFFF;
+  padding: 20px;
+  box-shadow: 0px 3px 23px 1px rgba(0, 0, 0, 0.07);
+  border-radius: 18px;
+
+  margin-right: 50px;
+  margin-bottom: 50px;
+}
+
+.dashboard-1 h5{
+  font-weight: 400;
+}
+
+.dashboard-1 h1{
+  color: #6650B3;
+  display: flex;
+  align-items: flex-end;
+}
+
+.dashboard-1 span{
+  margin-left: 15px;
+  font-size: 20px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
+
+.dashboard-1-h{
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  margin-top: 30px;
 }
 
-.dashboard-item-l {
-
+.dashboard-1-h h1:nth-child(1){
+  margin-right: 15px;
 }
 
-.dashboard-item-l-icon {
-  width: 50px;
-  height: 50px;
+.dashboard-1-bg-1 {
+  box-shadow: 0px 3px 23px 1px rgba(102, 80, 179, 0.29);
+  background: #E7DEFF;
 }
 
-.dashboard-item-r {
-  padding-left: 20px;
-}
-.dashboard-item-r a{
-  text-decoration: none;
-  color: #FFFFFF;
-}
-.ads-container {
+.dashboard-1-actions {
   margin-top: 20px;
-  padding:0 20px;
-  text-align: center;
-}
-.ads-img{
-  width: 100%;
-  border-radius: 10px;
-}
-.jobs-bg {
-  background-color: #870043;
 }
 
-.deals-bg {
-  background-color: #48cdda;
+.dashboard-1-action-btn {
+  font-size: 20px;
+
 }
 
-.ads-bg {
-  background-color: #20aec6;
+.dashboard-1-tips {
+  font-size: 20px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
 }
 
-.events-bg {
-  background-color: #A8BD4E;
+
+.dashboard-post-a-job-btn {
+  margin-left: 15px;
 }
 
-.favorites-bg {
-  background-color: #FE2563;
+.container-2 {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  /*margin-top: 50px;*/
 }
 
-.msg-bg {
-  background-color: #00525F;
+.container-2-l{
+  width: calc(50% - 40px);
 }
+
+.container-2-r{
+  width: calc(50% - 40px);
+}
+
+.container-3{
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+
+.container-3-l{
+  width: calc(50% - 40px);
+}
+
+
+.container-4 {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.container-4-l{
+  /*width: 580px;*/
+ }
+
+.container-4-r{
+  margin-left: 50px;
+}
+
+@media screen and (max-width: 768px){
+  .dashboard-1{
+    margin-right: 15px;
+    margin-bottom: 15px;
+  }
+
+  .overview-r-container{
+      width: 100%;
+      height: calc( var(--i-window-height) - 160px);
+  }
+
+  .overview-r-container-bg{
+    padding: 0;
+  }
+
+  .dashboard-1-container{
+    margin: 15px;
+  }
+
+  .container-2{
+    flex-direction: column;
+  }
+
+  .container-2-l{
+    width: 100%;
+  }
+
+  .container-2-r{
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .container-3{
+    margin-top: 15px;
+  }
+
+  .container-3-l{
+    width: 100%;
+  }
+
+  .container-4{
+    flex-direction: column;
+  }
+  .container-4-l{
+    width: 100%;
+  }
+
+  .container-4-r{
+    margin-left: 0;
+  }
+
+}
+
 </style>

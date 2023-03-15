@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import {CHANGE_IDENTITY_LANGUAGE, GET_BASIC_INFO} from '@/api/api'
+import {USER_INFO_BY_TOKEN_V2, SWITCH_IDENTITY_V2, USER_INFO_VISITOR_V2} from '@/api/api'
 
 export default {
   name: "switchProfile",
@@ -48,49 +48,109 @@ export default {
   methods:{
     selectRole(e) {
       this.$loading({
-        text:'Loading...'
+        text: 'Loading...'
       })
-      let uid = localStorage.getItem('uid')
+
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
+        user_id: localStorage.getItem('uid'),
+        identity: e
       }
-      GET_BASIC_INFO(params).then(res => {
-        let isEducator = res.message.is_educator;
-        let isBusiness = res.message.is_business;
-        let isVendor = res.message.is_vendor;
-        // let isOther = res.message.is_other;
-        // let identity = res.message.identity;
 
-        if (e == 1) {
-          if (isEducator >= 10) {
-            this.changeIdentity(1)
+      USER_INFO_VISITOR_V2(params).then(res => {
+        let userContact = res.message.user_contact;
+        let educatorContact = {};
+
+        let companyInfo = {};
+
+        let isEducator = userContact.is_educator;
+        let isRecruiting = userContact.is_recruiting;
+        let isSchool = userContact.is_school;
+        let isOther = userContact.is_other;
+        let isVendor = userContact.is_vendor;
+        let identity = e;
+
+        if (identity == 1) {
+          if (isEducator > 10) {
+            educatorContact =  res.message.user_contact.educator_contact;
+            this.changeIdentity(educatorContact.id,1,2)
+            this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$loading().close()
           } else {
             this.$loading().close()
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/educator')
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 1}})
 
           }
 
         }
-        if (e == 2) {
-          if (isBusiness >= 10) {
-            this.changeIdentity(2)
+
+        if (identity == 2) {
+
+          if (isRecruiting > 10) {
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,2,2)
+            // this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
+            this.$loading().close()
           } else {
             this.$loading().close()
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/business')
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
 
+            this.dialogBusinessAccountVisible = false
+          }
+        }
+
+        if (identity == 3) {
+
+          if (isSchool > 10) {
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,3,2)
+            // this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
+
+            this.dialogBusinessAccountVisible = false
           }
 
         }
-        if (e == 3) {
-          if (isVendor >= 10) {
-            this.changeIdentity(3)
+
+        if (identity == 4) {
+
+          if (isOther > 10) {
+            companyInfo = res.message.user_contact.company;
+
+            this.changeIdentity(companyInfo.id,4,2)
+            this.$router.push({path: '/overview', query: {identity: identity}})
+            this.$loading().close()
           } else {
             this.$loading().close()
-            this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push('/role/vendor')
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 4}})
+
+            this.dialogBusinessAccountVisible = false
+          }
+
+        }
+
+        if (identity == 5) {
+
+          if (isVendor > 10) {
+
+            companyInfo = res.message.user_contact.company;
+            this.changeIdentity(companyInfo.id,5,2)
+            this.$router.push({path: '/overview', query: {identity: 5}})
+            this.$loading().close()
+          } else {
+            this.$loading().close()
+            // this.$message.warning('Oops!.. Your profile is incomplete. ')
+            this.$router.push({path: '/profile/contact/user', query: {i: 5}})
 
           }
 
@@ -103,25 +163,33 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    changeIdentity(identity) {
+    changeIdentity(companyId, identity, language) {
       let params = {
-        token: localStorage.getItem('token'),
+        company_id: companyId,
+        language: language,
         identity: identity
       }
 
-      CHANGE_IDENTITY_LANGUAGE(params).then(res => {
-        console.log(res)
+      SWITCH_IDENTITY_V2(params).then(res => {
+        // console.log(res)
         if (res.code == 200) {
+          this.$store.commit('allIdentityChanged',true )
+
+          localStorage.setItem('company_id',companyId)
           localStorage.setItem('identity', identity)
 
-          this.$loading().close()
+          let str = JSON.stringify(res.message)
+          localStorage.setItem('menuData',str)
 
-          this.getBasicInfo()
+          this.$store.commit('identity', identity)
+          this.$store.commit('menuData', res.message)
 
+          this.getBasicInfo(identity)
           this.$router.push({
             path: '/overview', query: {identity: identity}
           })
-          this.handleClose()
+
+          this.$loading().close()
         }
       }).catch(err => {
         console.log(err)
@@ -130,56 +198,50 @@ export default {
       })
 
     },
-    getBasicInfo() {
-      let uid = localStorage.getItem('uid')
+    getBasicInfo(identity) {
+
       let params = {
-        id: uid,
-        token: localStorage.getItem('token')
+        identity: identity
       }
-      GET_BASIC_INFO(params).then(res => {
-        console.log(res)
+
+      USER_INFO_BY_TOKEN_V2(params).then(res => {
+        // console.log(res)
         if (res.code == 200) {
 
-          localStorage.setItem('uid', res.message.id)
-          localStorage.setItem('identity', res.message.identity)
-          localStorage.setItem('language', res.message.language)
-          localStorage.setItem('email', res.message.email)
+          let userContact = res.message.user_contact;
 
-          let identity = res.message.identity
-          let firstName;
-          let lastName;
-          let avatar;
+          let companyInfo = {};
+          let defaultName = userContact.first_name + ' ' + userContact.last_name
+          let name = '';
+          let avatar = 'https://oss.esl-passport.cn/educator.png';
 
-          if (identity == 0) {
-            localStorage.setItem('name', 'Guest')
-            firstName = 'Guest'
-            lastName = ''
-            avatar = ''
-          }
-          if (identity == 1) {
-            firstName = res.message.educator_info.first_name;
-            lastName = res.message.educator_info.last_name;
-            avatar = res.message.educator_info.profile_photo;
-          }
-          if (identity == 2) {
-            firstName = res.message.business_info.first_name;
-            lastName = res.message.business_info.last_name;
-            avatar = res.message.business_info.profile_photo;
-          }
-          if (identity == 3) {
-            firstName = res.message.vendor_info.first_name;
-            lastName = res.message.vendor_info.last_name;
-            avatar = res.message.vendor_info.profile_photo;
+          if(identity == 1){
+            let educatorContact = res.message.user_contact.educator_contact;
+            name = educatorContact.name ? educatorContact.name : defaultName;
+            avatar = userContact.headimgurl;
           }
 
-          localStorage.setItem('name', firstName + ' ' + lastName)
+          if(identity == 2 || identity == 3 || identity == 4 || identity == 5){
+
+            if(userContact.company){
+              companyInfo = userContact.company;
+              name = companyInfo.company_name ? companyInfo.company_name : defaultName;
+              avatar = companyInfo.logo;
+            }else{
+              name = defaultName;
+              avatar = 'https://oss.esl-passport.cn/educator.png';
+            }
+
+          }
+
+          localStorage.setItem('name', name)
           localStorage.setItem('avatar', avatar)
-          localStorage.setItem('first_name', firstName)
-          localStorage.setItem('last_name', lastName)
 
-          this.$store.commit('username', firstName + ' ' + lastName)
+          this.$store.commit('username', name)
           this.$store.commit('userAvatar', avatar)
-          this.$store.commit('identity', identity)
+          this.$store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
+
+          localStorage.setItem('is_third_company',res.message.user_contact.is_third_company )
 
         }
       }).catch(err => {

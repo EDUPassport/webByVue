@@ -62,7 +62,7 @@
                 <el-icon>
                   <Calendar/>
                 </el-icon>&nbsp;
-                {{ $filters.howLongFormat(item.c_time) }}
+                {{ $filters.howLongFormat(item.refresh_time) }}
               </div>
 
             </div>

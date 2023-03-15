@@ -17,14 +17,16 @@
             <div class="jobs-list-content">
               <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
                 <div class="jobs-list-item-l">
-                  <el-image class="jobs-item-logo" :src="item.logo" fit="cover"></el-image>
+                  <el-image class="jobs-item-logo"
+                            :src="item.third_company_logo ? item.third_company_logo : item.company_logo" fit="contain">
+                  </el-image>
                 </div>
                 <div class="jobs-list-item-r">
                   <div class="jobs-list-item-title">
                     <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">{{ item.job_title }}</router-link>
                   </div>
                   <div class="jobs-list-item-name">
-                    {{ item.business_name }}
+                    {{ item.company_name }}
                   </div>
                   <div class="jobs-list-item-address">
                     {{ item.address }}
@@ -56,12 +58,25 @@
                     </view>
                   </div>
 
+                  <div class="jobs-list-item-b-m">
+                    <el-button class="jobs-list-item-b-m-btn" type="primary" round @click="turnApplications(item.id,item.unread_id)">
+                      Applications ( {{item.resume_count}} ) <span v-if="item.unread_status" class="read-star"></span>
+                    </el-button>
+
+                    <el-button class="jobs-list-item-b-m-btn" type="warning" round
+                               @click="turnEditJobs(item.id)">
+                      Edit
+                    </el-button>
+
+                  </div>
+
+
                   <div class="jobs-list-item-b-r">
                     <view class="jobs-list-item-date">
                       <el-icon>
                         <Calendar/>
                       </el-icon>&nbsp;
-                      {{ $filters.howLongFormat(item.c_time) }}
+                      {{ $filters.howLongFormat(item.refresh_time) }}
                     </view>
                     <view class="jobs-list-item-salary">
                       {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
@@ -76,7 +91,7 @@
                   Active
                 </div>
                 <div class="list-item-tag actived-2" v-if="item.status==2">
-                 Rejected
+                  Rejected
                 </div>
 
               </div>
@@ -97,9 +112,9 @@
 </template>
 
 <script>
-import {randomString} from "../../../utils";
+import {randomString} from "@/utils";
 import meSideMenu from "@/components/meSideMenu";
-import {VISITOR_USER_INFO,MY_JOBS} from '@/api/api';
+import {MY_JOBS,SET_READ,USER_UNREAD} from '@/api/api';
 
 export default {
   name: "jobs",
@@ -118,7 +133,6 @@ export default {
     }
   },
   mounted() {
-    // this.getVisitorBasicInfo()
     this.getMyJobs(this.jobPage,this.jobLimit)
   },
   methods: {
@@ -144,45 +158,73 @@ export default {
       MY_JOBS(params).then(res=>{
         console.log(res)
         if (res.code == 200) {
-          this.jobListData = res.message.data
-          // console.log(res.message.data)
+          let jobData =  res.message.data
+
           this.jobTotalNum = res.message.total
-        } else {
-          console.log(res.msg)
+
+          let unread_data = {
+            identity: localStorage.getItem('identity'),
+            token: localStorage.getItem('token')
+          }
+
+          USER_UNREAD(unread_data).then(res=>{
+            if(res.code == 200){
+              let unreadListData = res.message.list;
+              jobData.forEach(item=>{
+                // console.log(item)
+                let a = unreadListData.filter(function(element){
+                  return element.type == 1 && element.type_id == item.id
+                })
+                if(a.length>0){
+                  item.unread_status = true;
+                  item.unread_id = a[0].id;
+                }else{
+                  item.unread_status = false;
+                }
+
+              })
+              this.jobListData = jobData
+              console.log(jobData)
+            }else{
+              console.log('unread:' + res.msg)
+            }
+
+          })
+
         }
+
       }).catch(err=>{
         console.log(err)
         this.$message.error(err.msg)
       })
 
     },
-    getVisitorBasicInfo() {
-      let uid = localStorage.getItem('uid')
-      let identity = localStorage.getItem('identity')
-      let params = {
-        id: uid,
-        identity: identity
+    turnApplications(id,unreadId){
+      let data = {
+        id:unreadId,
+        identity:localStorage.getItem('identity'),
+        status:1,
+        token:localStorage.getItem('token')
       }
-      VISITOR_USER_INFO(params).then(res => {
+      SET_READ(data).then(res=>{
         console.log(res)
-        if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
-          }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
-          }
-
+        if(res.code == 200){
+          this.$router.push({path:'/jobs/applications',query:{id:id}})
+        }else{
+          console.log('set read:'+res.msg)
         }
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
       })
+
+
     },
+    turnEditJobs(jobId){
+      this.$router.push({path:'/jobs/post',query:{job_id:jobId}})
+    }
+
+
+
   }
 }
 </script>
@@ -193,13 +235,15 @@ export default {
 }
 
 .profile-container {
-  width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
 }
 .jobs-r-container{
   padding: 0 20px;
 }
+
+
+
 .jobs-list-container {
   padding: 20px;
   border-radius:10px;
@@ -246,6 +290,7 @@ export default {
 
 .jobs-list-item-l {
   width: 30%;
+  height: 180px;
 }
 
 .jobs-item-logo {
@@ -309,6 +354,30 @@ export default {
   margin-left: 10px;
 }
 
+.jobs-list-item-b-l{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 30%;
+}
+
+
+.jobs-list-item-b-r{
+  width:40%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.jobs-list-item-b-m{
+  width: 30%;
+  text-align: left;
+}
+.jobs-list-item-b-m-btn{
+  position: relative;
+}
+
 .jobs-list-item-work-exp {
   font-size: 12px;
   margin-left: 10px;
@@ -354,4 +423,45 @@ export default {
 .actived-2 {
   background-color: #FF2870;
 }
+.read-star{
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background-color: red;
+  top: 0;
+  right: 1px;
+}
+
+@media screen and (min-width: 1200px){
+  .profile-container{
+    width: 1100px;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+  .jobs-list-item-title a{
+    font-size: 14px;
+  }
+  .jobs-list-item-name{
+    margin-top: 4px;
+    font-size:12px;
+  }
+  .jobs-list-item-desc{
+    display:none;
+  }
+  .jobs-list-item-readmore{
+    margin-top:4px;
+    font-size:14px;
+  }
+  .jobs-list-item-address{
+    margin-top:4px;
+    font-size:12px;
+  }
+  .jobs-list-item-l{
+    height: 100px;
+  }
+}
+
 </style>

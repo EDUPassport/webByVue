@@ -25,11 +25,22 @@
 
               <div class="event-tag" v-if="eventData.is_all == 1">Social</div>
               <div class="event-tag" v-if="eventData.is_all == 2">Professional</div>
+
+              <div class="event-tag" v-if="eventData.countries">{{eventData.countries.name}}</div>
+              <div class="event-tag" v-if="eventData.states">{{eventData.states.name}}</div>
+              <div class="event-tag" v-if="eventData.towns">{{eventData.towns.name}}</div>
+
             </div>
             <div class="event-location">
               <template v-if="eventData.is_online == 2 || eventData.is_online == 3">
                 Location: {{ eventData.location }}
               </template>
+            </div>
+            <div class="event-date" v-if="eventData.is_online == 1 || eventData.is_online == 3">
+              Event Link: {{ eventData.online_url }}
+            </div>
+            <div class="event-date">
+              Event Ticket Price: {{ eventData.pay_money }}
             </div>
             <div class="event-date">
               Date: {{ $filters.ymdFormatEvent(eventData.date) }}
@@ -37,9 +48,13 @@
             <div class="event-time">
               Time: {{ $filters.timeFormatEvent(eventData.start_time, eventData.end_time) }}
             </div>
+            <div class="event-date">
+              Venue: {{ eventData.event_place }}
+            </div>
+
           </div>
 
-          <div class="event-detail-form">
+          <div class="event-detail-form"  v-if="tValue == 1">
             <el-form
                 :model="bookForm"
                 :rules="bookRules"
@@ -88,6 +103,25 @@
 
         </div>
 
+        <div v-if="tValue == 2">
+
+          <div class="book-applications-container">
+            <h4>Booked List</h4>
+            <div class="book-applications">
+              <div class="book-application" v-for="(item,i) in eventApplicationsData" :key="i">
+                <div class="book-application-l">
+                  {{item.first_name}} {{item.last_name}}
+                </div>
+                <div class="book-application-r">
+                  {{item.contact}}
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
       </el-col>
 
       <el-col class="vendor-detail-bg" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
@@ -96,31 +130,19 @@
           <div class="vendor-label">Vendor Bio</div>
           <div class="vendor-label-underline"></div>
           <div class="vendor-content">
-            <template v-if="eventData.identity == 3 ">
-              <el-image class="vendor-company-logo"
-                        :src="eventData.userInfo ? eventData.userInfo.logo : '' "
-              ></el-image>
-            </template>
-            <template v-if="eventData.identity == 2">
-              <el-image class="vendor-company-logo"
-                        :src="eventData.business_info ? eventData.business_info.logo : '' "
-              ></el-image>
-            </template>
+            <el-avatar class="vendor-company-logo"
+                      :src="eventData.third_company_logo ? eventData.third_company_logo : eventData.company_logo "
+            ></el-avatar>
             <p>
-              <template v-if="eventData.identity == 3 && eventData.userInfo ">
-                {{ eventData.userInfo.vendor_bio }}
-              </template>
-              <template v-if="eventData.identity == 2 && eventData.business_info">
-                {{ eventData.business_info.business_bio }}
+              <template v-if="eventData.company ">
+                {{ eventData.company.desc }}
               </template>
             </p>
-
-            <!--            <el-button class="vendor-profile-btn" type="primary" round>View Profile</el-button>-->
 
           </div>
         </div>
 
-        <div class="event-flyer">
+        <div class="event-flyer" v-if="eventData.file">
           <el-image :src="eventData.file" class="event-flyer-img"></el-image>
         </div>
 
@@ -131,9 +153,8 @@
 </template>
 
 <script>
-import detailBannerImg from '../../assets/events/detail-banner.png'
-import {EVENTS_ADD_APPLICANTS, EVENTS_DETAIL} from "@/api/api";
-
+import detailBannerImg from '@/assets/events/banner.png'
+import {EVENTS_ADD_APPLICANTS, EVENTS_DETAIL,EVENT_APPLICATIONS} from "@/api/api";
 
 export default {
   name: "detail",
@@ -167,12 +188,25 @@ export default {
       },
       detailBannerImg,
       eventData: {},
-      submitLoadingStatus: false
+      submitLoadingStatus: false,
+      tValue:0,
+      eventApplicationsData:[]
+
     }
   },
   mounted() {
+
     let id = this.$route.query.id;
     let token = localStorage.getItem('token')
+
+    let tValue = this.$route.query.t;
+    this.tValue = tValue
+
+    if(tValue == 2){
+      this.getEventApplications(id)
+    }
+
+
     if (token) {
       this.bookForm.first_name = localStorage.getItem('first_name')
       this.bookForm.last_name = localStorage.getItem('last_name')
@@ -181,6 +215,19 @@ export default {
     this.getEventDetail(id)
   },
   methods: {
+    getEventApplications(eventId){
+      let params = {
+        event_id:eventId
+      }
+      EVENT_APPLICATIONS(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          this.eventApplicationsData = res.message.data;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     getEventDetail(id) {
       let params = {
         event_id: id
@@ -425,7 +472,31 @@ export default {
   background-color: #B1C452;
   border: 1px solid #B1C452;
 }
+.book-applications-container{
+  background-color: #FFFFFF;
+  margin-top: 20px;
+  padding:20px;
+  border-radius: 10px;
+}
+.book-applications-container h4{
+  border-bottom: 2px solid #B1C452;
+  padding-bottom: 4px;
+}
+.book-applications{
+  margin-top:20px;
 
+}
+
+.book-application{
+  border-bottom:1px solid #EEEEEE;
+  padding: 10px 0;
+}
+.book-application-l{
+  font-size:14px;
+}
+.book-application-r{
+  font-size:14px;
+}
 @media screen and (min-width: 1200px) {
 
   .event-detail-row {

@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'ArimoBold';
+    src:url('Arimo-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'ArimoRegular';
+    src:url('Arimo-Regular.ttf');
+}
+@font-face {
+    font-family: 'Henriette';
+    src:url('Henriette Compressed.otf');
+}
+@font-face {
+    font-family: 'Lucida Handwriting';
+    src:url('Lucida Handwriting.ttf');
+}
+
+@font-face {
+    font-family: 'SourceSansPro-Regular';
+    src:url('SourceSansPro-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'BCM';
+    src: url("BarlowCondensed/BarlowCondensed-Medium.ttf");
+}
+
+@font-face {
+    font-family: 'BCBlack';
+    src: url("BarlowCondensed/BarlowCondensed-Black.ttf");
+}
+
+@font-face {
+    font-family: 'BCRegular';
+    src: url("BarlowCondensed/BarlowCondensed-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'BCSemiBold';
+    src: url("BarlowCondensed/BarlowCondensed-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: 'BCExtraBold';
+    src: url("BarlowCondensed/BarlowCondensed-ExtraBold.ttf");
+}
+
+@font-face {
+    font-family: 'BExtraBold';
+    src: url("Barlow/Barlow-ExtraBold.ttf");
+}
+
+
+@font-face {
+    font-family: 'BCBold';
+    src: url("BarlowCondensed/BarlowCondensed-Bold.ttf");
+}
+
+@font-face {
+    font-family: 'BSemiBold';
+    src: url("Barlow/Barlow-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: 'BarlowM';
+    src: url("Barlow/Barlow-Medium.ttf");
+}
+
+
+@font-face {
+    font-family: 'AssiRegular';
+    src: url("Assistant/static/Assistant-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'Assistant-SemiBold';
+    src: url("Assistant/static/Assistant-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: 'Assistant-Medium';
+    src: url("Assistant/static/Assistant-Medium.ttf");
+}
+
+@font-face {
+    font-family: 'Montserrat Medium';
+    src: url("Montserrat/static/Montserrat-Medium.ttf");
+}
+
+@font-face {
+    font-family: 'Montserrat Regular';
+    src: url("Montserrat/static/Montserrat-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'Cabin SemiBold';
+    src: url("Cabin/static/Cabin/Cabin-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: 'Cabin Medium';
+    src: url("Cabin/static/Cabin/Cabin-Medium.ttf");
+}

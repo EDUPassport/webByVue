@@ -158,7 +158,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import {
-  COMPANY_JOB_LIST, ADD_TO_CHAT, VISITOR_USER_INFO
+  COMPANY_JOB_LIST, ADD_TO_CHAT, USER_INFO_VISITOR_V2
 } from "@/api/api";
 import latestIndustryNews from "@/components/latestIndustryNews";
 import {useStore} from 'vuex'
@@ -242,59 +242,97 @@ export default {
 
     },
     getVisitorBasicInfo(uid,identity) {
-      let self = this;
 
       let params = {
-        id: uid,
+        user_id: uid,
         identity: identity
       }
-      VISITOR_USER_INFO(params).then(res => {
+      USER_INFO_VISITOR_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.basicUserInfo = res.message
-          if (identity == 1 && res.message.educator_info) {
-            this.userInfo = res.message.educator_info
-          }
-          if (identity == 2 && res.message.business_info) {
-            this.userInfo = res.message.business_info
-            let lat = res.message.business_info.lat
-            let lng = res.message.business_info.lng
+          // let userContact = res.message.user_contact;
+          // let companyContact = res.message.user_contact.company_contact;
+          let recruiterInfo = res.message.user_contact.company;
 
-            if(lat && lng){
-              setTimeout(function () {
-                self.initMap(lng,lat)
-              },1500)
-            }
-            if (res.message.business_info.logo) {
-              this.logoPhotoUrl = res.message.business_info.logo
-            }
-            if (res.message.business_info.header_photo) {
-              this.backgroundUrl = res.message.business_info.header_photo
-            }
+          if (recruiterInfo.company_name) {
+            this.basicForm.company_name = recruiterInfo.company_name;
           }
-          if (identity == 3 && res.message.vendor_info) {
-            this.userInfo = res.message.vendor_info
-
-            let lat = res.message.vendor_info.lat
-            let lng = res.message.vendor_info.lng
-
-            if(lat && lng){
-              setTimeout(function () {
-                self.initMap(lng,lat)
-              },1500)
-            }
-            if (res.message.vendor_info.logo) {
-              this.logoPhotoUrl = res.message.vendor_info.logo
-            }
-            if (res.message.vendor_info.header_photo) {
-              this.backgroundUrl = res.message.vendor_info.header_photo
-            }
+          if (recruiterInfo.desc) {
+            this.basicForm.desc = recruiterInfo.desc;
           }
+          if (recruiterInfo.work_phone) {
+            this.basicForm.work_phone = recruiterInfo.work_phone;
+          }
+          if (recruiterInfo.work_email) {
+            this.basicForm.work_email = recruiterInfo.work_email;
+          }
+          if (recruiterInfo.lat) {
+            this.basicForm.lat = recruiterInfo.lat;
+          }
+          if (recruiterInfo.lng) {
+            this.basicForm.lng = recruiterInfo.lng;
+          }
+          if (recruiterInfo.address) {
+            this.basicForm.address = recruiterInfo.address;
+          }
+          if (recruiterInfo.country_code) {
+            this.basicForm.country_code = recruiterInfo.country_code;
+          }
+          if (recruiterInfo.video_url) {
+            this.introVideoUrl = recruiterInfo.video_url;
+            this.basicForm.video_url = recruiterInfo.video_url;
+          }
+          if (recruiterInfo.logo) {
+            this.logoPhotoUrl = recruiterInfo.logo;
+            this.basicForm.logo = recruiterInfo.logo;
+          }
+          if (recruiterInfo.license) {
+            this.licensePhotoUrl = recruiterInfo.license;
+            this.basicForm.license = recruiterInfo.license;
+          }
+          if (recruiterInfo.year_founded) {
+            this.basicForm.year_founded = recruiterInfo.year_founded.toString();
+          }
+
+          if(recruiterInfo.country_info){
+            this.basicForm.country_info = recruiterInfo.country_info;
+          }
+
+          if(recruiterInfo.country){
+            this.basicForm.country = recruiterInfo.country;
+          }
+          if(recruiterInfo.province){
+            this.basicForm.province = recruiterInfo.province;
+          }
+          if(recruiterInfo.city){
+            this.basicForm.city = recruiterInfo.city;
+          }
+          if(recruiterInfo.district){
+            this.basicForm.district = recruiterInfo.district;
+          }
+
+          let typeId = recruiterInfo.category_id;
+          let typeNameEn = recruiterInfo.category_name_en;
+          let typeName = recruiterInfo.category_name_cn
+
+          let typeObj = {
+            id:typeId,
+            identity_name:typeNameEn,
+            identity_name_cn:typeName
+          }
+
+          this.selectBusinessTypeList.push(typeObj)
 
         }
+
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
     },
     getCompanyJobList(userId){
@@ -314,7 +352,12 @@ export default {
 
       }).catch(err=>{
         console.log(err)
-        this.$message.error(err.msg)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     },
@@ -386,6 +429,12 @@ export default {
         }
       }).catch(err=>{
         console.log(err)
+        if(err.msg){
+          this.$message.error(err.msg)
+        }
+        if(err.message){
+          this.$message.error(err.message)
+        }
       })
 
     }

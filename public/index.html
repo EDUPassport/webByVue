@@ -3,11 +3,60 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="p:domain_verify" content="e81c41339f784f8a7c633228dc4f2acc"/>
+    <meta name= facebook-domain-verification content= izxabln/obcag9hvohg1sd7fwnmntc/>
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+<!--    <script>-->
+<!--        // VConsole will be exported to `window.VConsole` by default.-->
+<!--        var vConsole = new window.VConsole();-->
+<!--    </script>-->
+    <meta name="p:domain_verify" content="e81c41339f784f8a7c633228dc4f2acc"/>
+    <% if(process.env.VUE_APP_ENV_NAME === 'developmentCN' || process.env.VUE_APP_ENV_NAME === 'productionCN'){%>
+    <meta name="description" content="We partner up with local vendors to support educators, promote educator-centric events, and offer exclusive deals to our EDU Passport members.">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQNK56PRQW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-XQNK56PRQW');
+    </script>
+    <% } %>
+    <% if(process.env.VUE_APP_ENV_NAME === 'development' || process.env.VUE_APP_ENV_NAME === 'production'){%>
+    <meta name="description" content="EDU Passport is a Global Education Hub that helps educators find job opportunities abroad through a matchmaking service.">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CGM1B7LH7Z"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-CGM1B7LH7Z');
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X5YQ0WLF6"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-5X5YQ0WLF6');
+    </script>
+
+    <link rel="canonical" href="https://www.edupassport.io" />
+    <% } %>
+
     <script src="https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js"></script>
+    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+
 </head>
+
 <body>
 <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
@@ -27,5 +76,7 @@
     d.write("<div id='zsiqwidget'></div>");
 </script>
 
+<!--<script src="https://apps.elfsight.com/p/platform.js" defer></script>-->
+<!--<div class="elfsight-app-cde2f026-8d7f-4748-a69e-71ff8a81a9a0"></div>-->
 </body>
 </html>

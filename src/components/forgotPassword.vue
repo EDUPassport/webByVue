@@ -2,16 +2,19 @@
 <div v-if="isShow">
   <el-dialog :model-value="isShow"
              @close="handleClose()"
-             title="Forgot Password" width="50%" center>
+             title="Forgot Password"
+             :width="dialogWidthValue" center>
 
     <div class="switch-container">
       <div class="switch-item"
+           v-if="showEmail"
            :class="switchValue === 1 ? 'switch-item-active' : '' "
            @click="handleSwitch(1)"
       >
         By Email
       </div>
       <div class="switch-item"
+           v-if="showPhone"
            :class="switchValue === 2 ? 'switch-item-active' : '' "
            @click="handleSwitch(2)"
       >
@@ -25,37 +28,37 @@
             :model="forgotForm1"
             :rules="forgotRules1"
             ref="forgotForm1"
-            label-width="150px"
-            label-position="left"
+            label-width="250px"
+            :label-position="formLabelPosition"
             class="demo-ruleForm"
         >
           <el-form-item label="Email" prop="email" required>
-            <el-input size="medium" placeholder="Email" v-model="forgotForm1.email"></el-input>
+            <el-input  placeholder="Email" v-model="forgotForm1.email"></el-input>
           </el-form-item>
 
           <el-form-item  label="6 Digit Code" prop="email_code" required>
 
             <div class="xll-input-container">
               <div class="xll-input-input">
-                <el-input size="medium" placeholder="Code"
+                <el-input  placeholder="Code"
                           v-model="forgotForm1.email_code">
                 </el-input>
               </div>
               <el-button class="xll-input-btn" type="primary" round
                          :loading="checkCodeBtn.loading"
                          :disabled="checkCodeBtn.disabled"
-                         @click="sendEmailCode()"
+                         @click="sendEmailCode('forgotForm1')"
               >{{checkCodeBtn.text}}</el-button>
             </div>
           </el-form-item>
 
           <el-form-item label="New Password" prop="password" required>
-            <el-input size="medium" placeholder="New Password" type="password"
+            <el-input  placeholder="New Password" type="password"
                       v-model="forgotForm1.password"></el-input>
           </el-form-item>
 
           <el-form-item label="Confirm Password" prop="confirm_password" required>
-            <el-input size="medium" placeholder="Confirm Your New Password"
+            <el-input  placeholder="Confirm Your New Password"
                       type="password"
                       v-model="forgotForm1.confirm_password"></el-input>
           </el-form-item>
@@ -78,19 +81,19 @@
             :model="forgotForm2"
             :rules="forgotRules2"
             ref="forgotForm2"
-            label-width="150px"
-            label-position="left"
+            label-width="250px"
+            :label-position="formLabelPosition"
             class="demo-ruleForm"
         >
           <el-form-item label="Phone #" prop="phone" required>
-            <el-input size="medium" placeholder="Phone #" v-model="forgotForm2.phone"></el-input>
+            <el-input  placeholder="Phone #" v-model="forgotForm2.phone"></el-input>
           </el-form-item>
 
           <el-form-item  label="6 Digit Code" prop="phone_code" required>
 
             <div class="xll-input-container">
               <div class="xll-input-input">
-                <el-input size="medium" placeholder="Code"
+                <el-input  placeholder="Code"
                           v-model="forgotForm2.phone_code">
                 </el-input>
               </div>
@@ -103,13 +106,13 @@
           </el-form-item>
 
           <el-form-item label="New Password" prop="password" required>
-            <el-input size="medium" placeholder="New Password" 
+            <el-input  placeholder="New Password"
                       type="password"
                       v-model="forgotForm2.password"></el-input>
           </el-form-item>
 
           <el-form-item label="Confirm Password" prop="confirm_password" required>
-            <el-input size="medium" placeholder="Confirm Your New Password" 
+            <el-input  placeholder="Confirm Your New Password"
                       type="password"
                       v-model="forgotForm2.confirm_password"></el-input>
           </el-form-item>
@@ -137,11 +140,36 @@
 <script>
 import {ref,reactive} from "vue";
 
-import {SEND_EMAIL_CODE, WEIXIN_SEND_SMS, FOND_PASSWORD_BY_PHONE, FOND_PASSWORD_BY_EMAIL} from "@/api/api";
+import {
+  WEIXIN_SEND_SMS,
+  FIND_PASSWORD_BY_PHONE_V2, FIND_PASSWORD_BY_EMAIL_V2, SEND_EMAIL_CODE_REST_PASSWORD
+} from "@/api/api";
 
 export default {
   name: "forgotPassword",
-  props:['isShow'],
+  props:{
+    isShow:{
+      type:Boolean,
+      default:false
+    },
+    showEmail:{
+      type:Boolean,
+      default: true
+    },
+    showPhone:{
+      type:Boolean,
+      default:true
+    },
+    emailValue:{
+      type:String,
+      default:''
+    },
+    phoneValue:{
+      type:String,
+      default:''
+    }
+
+  },
   setup(props,ctx){
     const handleClose = ()=>{
       ctx.emit('close',false)
@@ -202,6 +230,8 @@ export default {
   },
   data(){
     return {
+      formLabelPosition:'left',
+      dialogWidthValue:'50%',
       forgotForm1:{
         email: '',
         email_code: '',
@@ -213,7 +243,7 @@ export default {
           {required: true, message: 'Please fill out your code.', trigger: 'blur'}
         ],
         email: [
-          {required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+          {type:'email',required: true, message: 'Please fill out your email address.', trigger: 'blur'}
         ],
         password: [
           {required: true, message: 'Please enter your password', trigger: 'blur'}
@@ -245,6 +275,51 @@ export default {
 
     }
   },
+  mounted() {
+    let screenWidth = document.body.clientWidth
+
+    if (Math.floor(screenWidth) <= 768) {
+      this.dialogWidthValue = "90%"
+      this.formLabelPosition = 'top'
+    }
+    if (Math.floor(screenWidth) > 768 && Math.floor(screenWidth) <= 992) {
+      this.dialogWidthValue = "90%"
+      this.formLabelPosition = 'top'
+    }
+    if (Math.floor(screenWidth) > 992 && Math.floor(screenWidth) <= 1200) {
+      this.dialogWidthValue = "50%"
+      this.formLabelPosition = 'left'
+    }
+    if (Math.floor(screenWidth) > 1200) {
+      this.dialogWidthValue = "50%"
+      this.formLabelPosition = 'left'
+    }
+
+    window.onresize = () => {
+      let screenWidth2 = document.body.clientWidth
+      if (Math.floor(screenWidth2) <= 768) {
+        this.dialogWidthValue = "90%"
+        this.formLabelPosition = 'top'
+      }
+      if (Math.floor(screenWidth2) > 768 && Math.floor(screenWidth2) <= 992) {
+        this.dialogWidthValue = "90%"
+        this.formLabelPosition = 'top'
+      }
+      if (Math.floor(screenWidth2) > 992 && Math.floor(screenWidth2) <= 1200) {
+        this.dialogWidthValue = "50%"
+        this.formLabelPosition = 'left'
+      }
+      if (Math.floor(screenWidth2) > 1200) {
+        this.dialogWidthValue = "50%"
+        this.formLabelPosition = 'left'
+      }
+
+      // console.log(document.body.clientWidth)
+    }
+  },
+  unmounted() {
+    window.onresize = null
+  },
   methods:{
     getCheckCode(){
 
@@ -254,12 +329,10 @@ export default {
         let params = {
           phone:phone
         }
-        this.getCheckCodeTimer()
-
         WEIXIN_SEND_SMS(params).then(res=>{
           console.log(res)
           if(res.code === 200){
-
+            this.getCheckCodeTimer()
             this.$message.success('Success')
           }
         }).catch(err=>{
@@ -268,26 +341,42 @@ export default {
       }
 
     },
-    sendEmailCode() {
+    sendEmailCode(formName) {
 
       let self = this;
       let email = this.forgotForm1.email
-      if (email) {
 
-        let params = {
-          email: email
-        }
-        this.getCheckCodeTimer()
-        SEND_EMAIL_CODE(params).then(res => {
-          if (res.code == 200) {
+      this.$refs[formName].validateField('email',(valid) => {
+        if (valid) {
 
-            self.$message.success('Success')
+          if (email) {
+
+            let params = {
+              email: email
+            }
+
+            SEND_EMAIL_CODE_REST_PASSWORD(params).then(res => {
+              if (res.code == 200) {
+                self.getCheckCodeTimer()
+                self.$message.success('Success')
+              }
+            }).catch(err => {
+              console.log(err)
+              return this.$message.error(err.msg)
+            })
           }
-        }).catch(err => {
-          console.log(err)
-          this.$message.error(err.msg)
-        })
-      }
+
+        } else {
+          console.log('error submit!!')
+          return this.$message({
+            type:'warning',
+            message:'Please enter a valid email address',
+            grouping:true
+          })
+        }
+      })
+
+
 
     },
     submitForm1(formName){
@@ -297,7 +386,7 @@ export default {
         if (valid) {
           let params = Object.assign({}, this.forgotForm1)
 
-          FOND_PASSWORD_BY_EMAIL(params).then(res => {
+          FIND_PASSWORD_BY_EMAIL_V2(params).then(res => {
             console.log(res)
             if (res.code == 200) {
               this.$message.success(res.msg)
@@ -326,7 +415,7 @@ export default {
         if (valid) {
           let params = Object.assign({}, this.forgotForm2)
 
-          FOND_PASSWORD_BY_PHONE(params).then(res => {
+          FIND_PASSWORD_BY_PHONE_V2(params).then(res => {
             console.log(res)
             if (res.code == 200) {
               this.$message.success(res.msg)
@@ -377,12 +466,12 @@ export default {
 }
 
 .switch-item:hover{
-  background-color: rgba(10, 160, 168, 0.3);
-  color:#888888;
+  background-color: #9173ff;
+  color:#FFFFFF;
 }
 
 .switch-item-active{
-  background-color: #0AA0A8;
+  background-color: #49397f;
   color:#FFFFFF;
 }
 
@@ -419,5 +508,13 @@ export default {
 .dialog{
   border-radius: 20px;
 }
+
+@media screen and (max-width: 768px){
+  .forgot-form-container{
+    padding:0;
+
+  }
+}
+
 
 </style>

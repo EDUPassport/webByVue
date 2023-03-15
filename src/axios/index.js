@@ -1,6 +1,7 @@
 // 一、配置axios
 import axios from 'axios'
 // import {ElMessage} from "element-plus";
+import {ElLoading} from "element-plus";
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
 //https://api.test.esl-passport.cn/api/
@@ -42,7 +43,9 @@ axios.interceptors.response.use(response => {
     if(response && response.data){
         return Promise.resolve(response.data)
     }else{
-        location.reload()
+        console.log('--------------------- 响应拦截response-------------------- ')
+        // location.reload()
+        return Promise.reject();
     }
 
 }, error => {
@@ -50,20 +53,33 @@ axios.interceptors.response.use(response => {
 
     let errResponse = error.response
 
+    // console.log(errResponse)
+
     if(errResponse){
         let status = errResponse.status
+
         if (status === 401) {
             localStorage.clear()
-            return window.location.href = '/login'
+            const loadingInstance =  ElLoading.service({
+                text:'The login information has expired, please login again'
+            })
+            setTimeout(function () {
+                loadingInstance.close()
+                window.location.href = '/login'
+            },1000)
+
+            return Promise.reject();
         } else {
             return Promise.reject(error.response.data);
         }
+
     }
 
     // 对响应错误做点什么
     if (!errResponse) {
-        location.reload()
-        // return Promise.reject(error);
+        console.log('--------------------- 响应错误response-------------------- ')
+        // location.reload()
+        return Promise.reject();
     }
 })
 

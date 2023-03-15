@@ -1,18 +1,19 @@
 <template>
   <div>
-    <ChatComponent></ChatComponent>
+<!--    <ChatComponent></ChatComponent>-->
 <!--    <el-backtop :right="10"  :bottom="74" />-->
     <el-footer height="auto" class="footer-bg">
       <el-row class="footer-row" :gutter="0" align="top" justify="center">
-        <el-col :xs="24" :sm="3" :md="3" :lg="3" :xl="3">
+        <el-col :xs="0" :sm="3" :md="3" :lg="3" :xl="3">
           <div class="esl-logo-container">
             <el-image class="esl-logo" :src="imgLogo"></el-image>
+            <div class="logo-beta">Beta</div>
           </div>
           <div class="esl-intro">
             Platform for today's education needs, people, and businesses.
           </div>
         </el-col>
-        <el-col :xs="24" :sm="{span:5,offset:1}" :md="{span:5,offset:1}" :lg="{span:5,offset:1}" :xl="{span:5,offset:1}">
+        <el-col :xs="0" :sm="{span:5,offset:1}" :md="{span:5,offset:1}" :lg="{span:5,offset:1}" :xl="{span:5,offset:1}">
           <div class="footer-nav-label">
             Services
           </div>
@@ -46,7 +47,7 @@
           </div>
 
         </el-col>
-        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
+        <el-col :xs="0" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
           <div class="footer-nav-label">
             Consulting
           </div>
@@ -57,14 +58,14 @@
             <router-link to="/">Tech Solutions</router-link>
           </div>
           <div class="footer-nav-item">
-            <router-link to="/consulting/foodEducation">Food For Education</router-link>
+            <router-link to="/food4edu">Food For Education</router-link>
           </div>
           <div class="footer-nav-item">
-            <router-link to="#">Schedule a Meeting</router-link>
+            <el-link href="https://book.edupassport.io/" target="_blank">Schedule a Meeting</el-link>
           </div>
 
         </el-col>
-        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
+        <el-col :xs="0" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
           <div class="footer-nav-label">
             Company
           </div>
@@ -94,7 +95,7 @@
           </div>
 
         </el-col>
-        <el-col :xs="24" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
+        <el-col :xs="0" :sm="{span:4,offset:1}" :md="{span:4,offset:1}" :lg="{span:4,offset:1}" :xl="{span:4,offset:1}">
           <div class="footer-nav-label">
             Get Help
           </div>
@@ -174,7 +175,7 @@ import linkedinImg from '@/assets/footer/linkedin.png'
 import facebookImg from '@/assets/footer/facebook.png'
 import instagramImg from '@/assets/footer/instagram-fill.png'
 import {ADD_SUBSCRIBE_EMAIL} from '@/api/api'
-import ChatComponent from '@/components/chat/chat'
+// import ChatComponent from '@/components/chat/chat'
 
 export default {
   name: "Footer",
@@ -211,7 +212,7 @@ export default {
     }
   },
   components:{
-    ChatComponent
+
   },
   methods:{
     subscribe(){
@@ -237,9 +238,10 @@ export default {
 <style scoped>
 
 .footer-bg {
-  background-color: #162028;
-  color: #ffffff;
+  background-color: #FFFFFF;
+  color: #262626;
   text-align: left;
+  padding-top: 50px;
 
 }
 .footer-row{
@@ -247,9 +249,28 @@ export default {
   margin: 0 auto;
   padding: 20px 40px;
 }
+
+.esl-logo-container{
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
 .esl-logo {
   width: 80px;
   height: 80px;
+}
+
+.logo-beta{
+  position: absolute;
+  font-size: 12px;
+  top:0;
+  right:-32px;
+  background-color:#004956;
+  padding:2px 10px;
+  border-radius:10px;
+  color:#EEEEEE;
+
 }
 
 .esl-intro{
@@ -315,12 +336,24 @@ export default {
 @media screen and (min-width: 1200px) {
 
   .footer-row{
-    width: 1100px;
+    /*width: 1100px;*/
   }
   .footer-b {
-    width: 1100px;
+    /*width: 1100px;*/
   }
 }
 
+@media screen and (max-width: 768px ) {
+  .footer-row{
+    padding:10px 0;
+  }
+  .footer-b-tips{
+    text-align: center;
+  }
 
+  .footer-b{
+    padding-bottom: 100px;
+  }
+
+}
 </style>
