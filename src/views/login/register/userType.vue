@@ -38,6 +38,7 @@
             </div>
           </template>
 
+
           <div class="signup-m-form">
 
             <div class="user-type-container">
@@ -50,10 +51,10 @@
                 <div class="user-type-l">
 
                   <template v-if="userType === item.type ">
-                    <el-image :src="item.icon_active" fit="cover"></el-image>
+                    <el-image class="user-type-l-img" :src="item.icon_active" fit="cover"></el-image>
                   </template>
                   <template v-else>
-                    <el-image :src="item.icon" fit="cover"></el-image>
+                    <el-image class="user-type-l-img" :src="item.icon" fit="cover"></el-image>
                   </template>
 
                 </div>
@@ -136,19 +137,21 @@
 <script>
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
 import passwordLockImg from '@/assets/newHome/login/password-lock.png'
-import educatorImg from '@/assets/newHome/register/educator.png'
-import educatorActiveImg from '@/assets/newHome/register/educator-active.png'
-import businessImg from '@/assets/newHome/register/business.png'
-import businessActiveImg from '@/assets/newHome/register/business-active.png'
-import vendorImg from '@/assets/newHome/register/vendor.png'
-import vendorActiveImg from '@/assets/newHome/register/vendor-active.png'
+import educatorImg from '@/assets/newHome/register/educator.svg'
+import educatorActiveImg from '@/assets/newHome/register/educator-active.svg'
+import businessImg from '@/assets/newHome/register/business.svg'
+import businessActiveImg from '@/assets/newHome/register/business-active.svg'
+import vendorImg from '@/assets/newHome/register/vendor.svg'
+import vendorActiveImg from '@/assets/newHome/register/vendor-active.svg'
+
 import imageDefault from '@/assets/newHome/register/image-rectangle.png'
-import schoolImg from '@/assets/newHome/register/school-icon.png'
-import schoolActiveImg from '@/assets/newHome/register/school-icon-active.png'
-import recruiterImg from '@/assets/newHome/register/recruiter-icon.png'
-import recruiterActiveImg from '@/assets/newHome/register/recruiter-icon-active.png'
-import otherImg from '@/assets/newHome/register/other-icon.png'
-import otherActiveImg from '@/assets/newHome/register/other-icon-active.png'
+
+import schoolImg from '@/assets/newHome/register/school.svg'
+import schoolActiveImg from '@/assets/newHome/register/school-active.svg'
+import recruiterImg from '@/assets/newHome/register/recruiter.svg'
+import recruiterActiveImg from '@/assets/newHome/register/recruiter-active.svg'
+import otherImg from '@/assets/newHome/register/other.svg'
+import otherActiveImg from '@/assets/newHome/register/other-active.svg'
 
 import {useRouter, useRoute} from 'vue-router'
 import {ref, onMounted} from 'vue'
@@ -396,6 +399,11 @@ export default {
 .user-type-active {
   border: 1px solid #6648FF;
   border-radius: 8px;
+}
+
+.user-type-l-img{
+  width: 48px;
+  height: 48px;
 }
 
 .user-type-r {

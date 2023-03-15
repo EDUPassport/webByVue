@@ -265,9 +265,9 @@
 </template>
 
 <script>
-import step1img from '@/assets/newHome/register/step-1.png'
-import step2img from '@/assets/newHome/register/step-2.png'
-import step3img from '@/assets/newHome/register/step-3.png'
+import step1img from '@/assets/newHome/register/step-1.svg'
+import step2img from '@/assets/newHome/register/step-2.svg'
+import step3img from '@/assets/newHome/register/step-3.svg'
 
 export default {
   name: "stepComponent",

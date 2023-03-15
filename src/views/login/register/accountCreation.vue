@@ -63,7 +63,10 @@
               </el-form-item>
 
               <div class="continue-btn-container">
-                <el-button class="continue-btn" type="primary" @click="confirmForm(signForms)">
+                <el-button class="continue-btn"
+                           type="primary"
+                           :loading="confirmLoadingStatus"
+                           @click="confirmForm(signForms)">
                   Confirm
                 </el-button>
               </div>
@@ -115,21 +118,13 @@
 
 <script>
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
-import passwordLockImg from '@/assets/newHome/login/password-lock.png'
-import educatorImg from '@/assets/newHome/register/educator.png'
-import educatorActiveImg from '@/assets/newHome/register/educator-active.png'
-import businessImg from '@/assets/newHome/register/business.png'
-import businessActiveImg from '@/assets/newHome/register/business-active.png'
-import vendorImg from '@/assets/newHome/register/vendor.png'
-import vendorActiveImg from '@/assets/newHome/register/vendor-active.png'
-import imageDefault from '@/assets/newHome/register/image-rectangle.png'
 
 import {useRouter, useRoute} from 'vue-router'
 import {ref, reactive,onMounted} from 'vue'
-import {countriesData} from "@/utils/data";
 import stepComponent from "@/components/register/stepComponent.vue";
 import {encodeByJsBase64,decodeByJsBase64} from "@/utils/utils";
 import {ElMessage} from 'element-plus'
+import {SEND_EMAIL_CODE} from "@/api/api";
 
 export default {
   name: "accountCreation",
@@ -138,16 +133,7 @@ export default {
   },
   data() {
     return {
-      imgLogo,
-      passwordLockImg,
-      educatorImg,
-      educatorActiveImg,
-      businessImg,
-      businessActiveImg,
-      vendorImg,
-      vendorActiveImg,
-      imageDefault,
-      nationalityOptions: countriesData,
+      imgLogo
     }
   },
   setup() {
@@ -157,6 +143,7 @@ export default {
 
     const userType = route.query.type;
     const userStepIndex = ref(3)
+    const confirmLoadingStatus = ref(false)
 
     function turnHome() {
       return router.push('/')
@@ -185,19 +172,55 @@ export default {
 
       formName.validate((valid)=>{
         if(valid){
-          let routeFormInfo = decodeByJsBase64(route.query.formInfo)
-          let formDecode = JSON.parse(routeFormInfo)
 
-          let params = Object.assign(formDecode,signForm)
-          let formInfo = encodeByJsBase64(JSON.stringify(params))
+          confirmLoadingStatus.value = true
 
-          router.push({path: '/signup/accountVerification', query: { type: userType,formInfo:formInfo}})
+          let emailParams = {
+            email:signForm.email
+          }
+
+          SEND_EMAIL_CODE(emailParams).then(res => {
+            if (res.code == 200) {
+
+              let routeFormInfo = decodeByJsBase64(route.query.formInfo)
+              let formDecode = JSON.parse(routeFormInfo)
+
+              let params = Object.assign(formDecode,signForm)
+              let formInfo = encodeByJsBase64(JSON.stringify(params))
+
+              router.push({path: '/signup/accountVerification', query: { type: userType,formInfo:formInfo}})
+
+              confirmLoadingStatus.value = false
+
+            }
+          }).catch(err => {
+            console.log(err)
+            confirmLoadingStatus.value = false
+            if (err.msg) {
+              ElMessage({
+                type:'warning',
+                message: err.msg,
+                grouping:true
+              })
+              return;
+            }
+
+            if (err.message) {
+              ElMessage({
+                type:'warning',
+                message: err.message,
+                grouping:true
+              })
+            }
+
+          })
+
 
         }else{
           console.log('error submit!!')
           ElMessage({
             type:'warning',
-            message:'Please complete all required fields',
+            message:'Enter a valid email address',
             grouping:true
           })
           return false
@@ -219,6 +242,7 @@ export default {
       signForm,
       signRules,
       userType,
+      confirmLoadingStatus,
       turnBack,
       confirmForm,
       turnHome,
@@ -303,53 +327,6 @@ export default {
   margin-top: 40px;
 }
 
-.user-type-container {
-
-}
-
-.user-type {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 12px 20px;
-  border: 1px solid #D0D5DD;
-  border-radius: 8px;
-
-  margin-bottom: 20px;
-  cursor: pointer;
-
-}
-
-.user-type:hover {
-  border: 1px solid #6648FF;
-}
-
-.user-type-active {
-  border: 1px solid #6648FF;
-  border-radius: 8px;
-}
-
-.user-type-r {
-  margin-left: 20px;
-}
-
-.user-type-r-label {
-  font-family: 'Inter', Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 20px;
-  color: #1D2939;
-}
-
-.user-type-r-tips {
-  font-family: 'Inter', Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 18px;
-  color: #667085;
-}
 
 .continue-btn-container {
   margin-top: 50px;
@@ -357,23 +334,6 @@ export default {
 
 .continue-btn {
   width: 100%;
-}
-
-.signup-m-form-sign-in {
-  margin-top: 24px;
-
-  font-family: 'Inter', Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 17px;
-
-  color: #5E5E5E;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
 }
 
 .signup-r-col {

@@ -14,7 +14,7 @@
 
 <script>
 import { reactive} from 'vue'
-import { SEND_EMAIL_CODE_REST_PASSWORD_V3} from "@/api/api";
+import {SEND_EMAIL_CODE, SEND_EMAIL_CODE_REST_PASSWORD_V3} from "@/api/api";
 import {ElMessage} from 'element-plus'
 export default {
   name: "checkCodeButton",
@@ -132,6 +132,48 @@ export default {
         })
 
       }
+
+      if(props.type === 'email-register'){
+
+        SEND_EMAIL_CODE(params).then(res=>{
+          console.log(res)
+          if(res.code == 200){
+            context.emit('complete')
+
+            ElMessage({
+              type:'success',
+              message:props.successText,
+              grouping:true
+            })
+          }
+
+        }).catch(err=>{
+          console.log(err)
+
+          checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
+
+          if(err.msg){
+            ElMessage({
+              type:'error',
+              message: err.msg,
+              grouping:true
+            })
+            return;
+          }
+
+          if(err.message){
+            ElMessage({
+              type:'error',
+              message: err.message,
+              grouping:true
+            })
+
+          }
+
+        })
+
+      }
+
 
     }
 

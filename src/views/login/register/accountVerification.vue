@@ -35,14 +35,18 @@
               </el-form-item>
 
               <check-code-button
-                  type="email"
+                  type="email-register"
                   :email="formInfoDecode.email"
                   text="Resend Code"
                   success-text="Resend Code Successfully">
               </check-code-button>
 
               <div class="continue-btn-container">
-                <el-button class="continue-btn" type="primary" :disabled="nextDisabledStatus" @click="continueNextStep()">
+                <el-button class="continue-btn"
+                           type="primary"
+                           :loading="nextLoadingStatus"
+                           :disabled="nextDisabledStatus"
+                           @click="continueNextStep()">
                   Next
                 </el-button>
               </div>
@@ -76,23 +80,15 @@
 
 <script>
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
-import passwordLockImg from '@/assets/newHome/login/password-lock.png'
-import educatorImg from '@/assets/newHome/register/educator.png'
-import educatorActiveImg from '@/assets/newHome/register/educator-active.png'
-import businessImg from '@/assets/newHome/register/business.png'
-import businessActiveImg from '@/assets/newHome/register/business-active.png'
-import vendorImg from '@/assets/newHome/register/vendor.png'
-import vendorActiveImg from '@/assets/newHome/register/vendor-active.png'
-import imageDefault from '@/assets/newHome/register/image-rectangle.png'
-
 
 import {useRouter, useRoute} from 'vue-router'
 import {ref, reactive,onMounted} from 'vue'
-import {countriesData} from "@/utils/data";
 import stepComponent from "@/components/register/stepComponent.vue";
 import sixInputVerificationCode from "@/components/register/sixInputVerificationCode.vue";
 import checkCodeButton from "@/components/register/checkCodeButton.vue";
 import {decodeByJsBase64, encodeByJsBase64} from "@/utils/utils";
+import {REGISTER_EMAIL_CHECK} from "@/api/api";
+import {ElMessage} from 'element-plus'
 
 export default {
   name: "accountVerification",
@@ -103,16 +99,7 @@ export default {
   },
   data() {
     return {
-      imgLogo,
-      passwordLockImg,
-      educatorImg,
-      educatorActiveImg,
-      businessImg,
-      businessActiveImg,
-      vendorImg,
-      vendorActiveImg,
-      imageDefault,
-      nationalityOptions: countriesData,
+      imgLogo
     }
   },
   setup() {
@@ -122,6 +109,8 @@ export default {
 
     const userType = route.query.type;
     const userStepIndex = ref(3)
+    const nextLoadingStatus = ref(false)
+    const nextDisabledStatus = ref(true)
 
     function turnHome() {
       return router.push('/')
@@ -134,20 +123,6 @@ export default {
     const routeFormInfo = route.query.formInfo
     const formInfoDecode = JSON.parse(decodeByJsBase64(routeFormInfo))
 
-    function continueNextStep(){
-      console.log(formInfoDecode)
-      console.log(signForm)
-
-      let routeFormInfo = decodeByJsBase64(route.query.formInfo)
-      let formDecode = JSON.parse(routeFormInfo)
-
-      let params = Object.assign(formDecode,signForm)
-      let formInfo = encodeByJsBase64(JSON.stringify(params))
-
-      router.push({path: '/signup/passwordSetup', query: { type: userType,formInfo:formInfo}})
-
-      // router.push({path:'/signup/accountVerification',query:{type:userType.value}})
-    }
 
     const signForms = ref(null)
     const signForm = reactive({
@@ -160,7 +135,6 @@ export default {
       ],
     })
 
-    const nextDisabledStatus = ref(true)
 
     function sixCodeComplete(e){
       console.log(e)
@@ -176,6 +150,66 @@ export default {
     function turnBack(){
       router.go(-1)
     }
+
+    function continueNextStep(){
+      console.log(formInfoDecode)
+      console.log(signForm)
+
+      if(!signForm.code || signForm.code === ''){
+        return ElMessage({
+          type:'warning',
+          message:'Enter your verification code',
+          grouping:true
+        })
+      }
+
+      nextLoadingStatus.value =true
+
+      let emailParams = {
+        email:formInfoDecode.email,
+        code:signForm.code
+      }
+
+      REGISTER_EMAIL_CHECK(emailParams).then(res=>{
+        if(res.code == 200){
+          // console.log(res)
+
+          let routeFormInfo = decodeByJsBase64(route.query.formInfo)
+          let formDecode = JSON.parse(routeFormInfo)
+
+          let params = Object.assign(formDecode,signForm)
+          let formInfo = encodeByJsBase64(JSON.stringify(params))
+
+          router.push({path: '/signup/passwordSetup', query: { type: userType,formInfo:formInfo}})
+
+          nextLoadingStatus.value = false
+
+        }
+
+      }).catch(err=>{
+        console.log(err)
+        nextLoadingStatus.value = false
+
+        if (err.msg) {
+          ElMessage({
+            type:'warning',
+            message: err.msg,
+            grouping:true
+          })
+          return;
+        }
+
+        if (err.message) {
+          ElMessage({
+            type:'warning',
+            message: err.message,
+            grouping:true
+          })
+        }
+      })
+
+    }
+
     onMounted(()=>{
       if(userType === 'school' || userType === 'recruiter' || userType === 'other'){
         userStepIndex.value = 4
@@ -190,6 +224,7 @@ export default {
       signForm,
       signRules,
       userType,
+      nextLoadingStatus,
       turnBack,
       continueNextStep,
       turnHome,

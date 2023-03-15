@@ -1,5 +1,5 @@
 <template>
-  <div class="input-box" @keydown="keydown" @keyup="keyup"  @input="inputEvent">
+  <div class="input-box" @paste="paste" @keydown="keydown" @keyup="keyup"  @input="inputEvent">
 
     <input maxlength="1" min="0" max="9" data-index="0" oninput ="value=value.replace(/[^\d]/g,'')" v-model.trim.number="input[0]" ref="firstInput" />
     <input class="input-box-space" disabled data-index="-1" />
@@ -196,14 +196,12 @@ export default {
     }
 
     function  paste(e) {
-      console.log(e)
       // console.log(e.clipboardData)
       // 当进行粘贴时
       e.clipboardData.items[0].getAsString(str => {
         if (str.toString().length === 6) {
-
+          input.value = str.split('')
           document.activeElement.blur();
-
           context.emit('complete',input.value)
           context.emit('disabled',false)
 

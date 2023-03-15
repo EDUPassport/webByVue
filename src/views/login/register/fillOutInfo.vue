@@ -31,11 +31,22 @@
                   label-position="top"
                   class="demo-ruleForm"
               >
-                <el-form-item label="Full Name" prop="name">
-                  <el-input placeholder="Enter your Full Name" v-model="educatorForm.name"></el-input>
+                <el-form-item label="First Name" prop="first_name">
+                  <el-input placeholder="Enter your First Name"
+                            :formatter="(value)=> validForbid(value) "
+                            :parser="(value) => value.replace(/[^\u4E00-\u9FA5a-zA-Z0-9]/g, '')"
+                            v-model="educatorForm.first_name">
+                  </el-input>
                 </el-form-item>
-                <el-form-item label="Current Residence" prop="address">
-                  <el-input placeholder="Enter your Residence" v-model="educatorForm.address"></el-input>
+                <el-form-item label="Last Name" prop="last_name">
+                  <el-input placeholder="Enter your Last Name"
+                            :formatter="(value)=> validForbid(value) "
+                            :parser="(value) => value.replace(/[^\u4E00-\u9FA5a-zA-Z0-9]/g, '')"
+                            v-model="educatorForm.last_name">
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="Current Residence" prop="current_residence">
+                  <el-input placeholder="Enter your Residence" v-model="educatorForm.current_residence"></el-input>
                 </el-form-item>
 
                 <el-form-item label="Nationality" prop="nationality">
@@ -77,36 +88,63 @@
                   label-position="top"
                   class="demo-ruleForm"
               >
-                <el-form-item label="Country" prop="country">
-                  <el-select v-model="countryObj"
+                <el-form-item label="Country" prop="country_id">
+                  <el-select v-model="schoolForm.country_id"
                              style="width: 100%;"
                              :teleported="false"
-                             @change="countryChange"
+                             @change="countryChange(schoolForm.country_id)"
                              value-key="id"
                              filterable
                              placeholder="Select your Country">
-                    <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                               :value="item"></el-option>
+                    <el-option v-for="(item,i) in countryOptions"
+                               :key="i"
+                               :label="item.name"
+                               :value="item.id">
+                    </el-option>
                   </el-select>
 
                 </el-form-item>
 
-                <el-form-item label="City" prop="city">
-                  <el-select v-model="cityObj"
-                             style="width: 100%;"
-                             :teleported="false"
-                             class="account-location-select"
-                             value-key="id"
-                             filterable
-                             @change="cityChange"
-                             placeholder="Select your city">
-                    <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                               :value="item"></el-option>
-                  </el-select>
-                </el-form-item>
+                <template v-if="stateOptions.length>0">
+                  <el-form-item label="Province" prop="state_id">
+                    <el-select v-model="schoolForm.state_id"
+                               style="width: 100%;"
+                               :teleported="false"
+                               value-key="id"
+                               filterable
+                               @change="stateChange(schoolForm.country_id,schoolForm.state_id)"
+                               placeholder="Select your province">
+                      <el-option v-for="(item,i) in stateOptions"
+                                 :key="i"
+                                 :label="item.name"
+                                 :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </template>
 
-                <el-form-item label="School Name" prop="name">
-                  <el-input placeholder="Enter your School Name" v-model="schoolForm.company_name"></el-input>
+                <template v-if="townOptions.length > 0">
+                  <el-form-item label="City" prop="town_id">
+                    <el-select v-model="schoolForm.town_id"
+                               style="width: 100%;"
+                               :teleported="false"
+                               value-key="id"
+                               filterable
+                               @change="townChange"
+                               placeholder="Select your city">
+                      <el-option v-for="(item,i) in townOptions"
+                                 :key="i"
+                                 :label="item.name"
+                                 :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </template>
+
+                <el-form-item label="School Name" prop="company_name">
+                  <el-input placeholder="Enter your School Name"
+                            v-model="schoolForm.company_name">
+                  </el-input>
                 </el-form-item>
 
                 <div class="continue-btn-container">
@@ -137,12 +175,26 @@
                   label-position="top"
                   class="demo-ruleForm"
               >
-                <el-form-item label="Company Name" prop="name">
-                  <el-input placeholder="Enter your Company Name" v-model="recruiterForm.company_name"></el-input>
+                <el-form-item label="Company Name" prop="company_name">
+                  <el-input placeholder="Enter your Company Name"
+                            v-model="recruiterForm.company_name">
+                  </el-input>
                 </el-form-item>
 
-                <el-form-item label="Country" prop="name">
-                  <el-input placeholder="Select your Country" v-model="recruiterForm.company_name"></el-input>
+                <el-form-item label="Country" prop="country_id">
+                  <el-select v-model="recruiterForm.country_id"
+                             style="width: 100%;"
+                             :teleported="false"
+                             value-key="id"
+                             filterable
+                             placeholder="Select your Country">
+                    <el-option v-for="(item,i) in countryOptions"
+                               :key="i"
+                               :label="item.name"
+                               :value="item.id">
+                    </el-option>
+                  </el-select>
+
                 </el-form-item>
 
                 <div class="continue-btn-container">
@@ -171,8 +223,10 @@
                   label-position="top"
                   class="demo-ruleForm"
               >
-                <el-form-item label="Company Name" prop="name">
-                  <el-input placeholder="Enter your Company Name" v-model="otherForm.company_name"></el-input>
+                <el-form-item label="Company Name" prop="company_name">
+                  <el-input placeholder="Enter your Company Name"
+                            v-model="otherForm.company_name">
+                  </el-input>
                 </el-form-item>
 
                 <div class="continue-btn-container">
@@ -203,7 +257,9 @@
                   class="demo-ruleForm"
               >
                 <el-form-item label="Business Name" prop="company_name">
-                  <el-input placeholder="Enter your Business Name" v-model="vendorForm.company_name"></el-input>
+                  <el-input placeholder="Enter your Business Name"
+                            v-model="vendorForm.company_name">
+                  </el-input>
                 </el-form-item>
 
                 <div class="continue-btn-container">
@@ -216,7 +272,6 @@
 
             </div>
           </template>
-
 
         </div>
         <div class="signup-b">
@@ -242,15 +297,6 @@
 
 <script>
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
-import passwordLockImg from '@/assets/newHome/login/password-lock.png'
-import educatorImg from '@/assets/newHome/register/educator.png'
-import educatorActiveImg from '@/assets/newHome/register/educator-active.png'
-import businessImg from '@/assets/newHome/register/business.png'
-import businessActiveImg from '@/assets/newHome/register/business-active.png'
-import vendorImg from '@/assets/newHome/register/vendor.png'
-import vendorActiveImg from '@/assets/newHome/register/vendor-active.png'
-import imageDefault from '@/assets/newHome/register/image-rectangle.png'
-
 import {useRouter, useRoute} from 'vue-router'
 import {ref, reactive, onMounted} from 'vue'
 import {countriesData} from "@/utils/data";
@@ -267,14 +313,6 @@ export default {
   data() {
     return {
       imgLogo,
-      passwordLockImg,
-      educatorImg,
-      educatorActiveImg,
-      businessImg,
-      businessActiveImg,
-      vendorImg,
-      vendorActiveImg,
-      imageDefault,
       nationalityOptions: countriesData
     }
   },
@@ -294,12 +332,11 @@ export default {
       return router.push('/login')
     }
 
-
     const educatorForms = ref(null)
     const educatorForm = reactive({
       first_name: '',
       last_name: '',
-      address:'',
+      current_residence:'',
       nationality:''
     })
 
@@ -318,7 +355,7 @@ export default {
           trigger: 'blur',
         },
       ],
-      address: [
+      current_residence: [
         {
           required: true,
           message: "Enter your Residence",
@@ -337,22 +374,53 @@ export default {
 
     const schoolForms = ref(null)
     const schoolForm = reactive({
-      country:'',
-      city:'',
+      country_id:'',
+      state_id:'',
+      town_id:'',
       company_name:''
     })
 
-    const schoolRules = reactive({})
+    const schoolRules = reactive({
+      company_name: [
+        {
+          required: true,
+          message: 'Enter your School name',
+          trigger: 'blur',
+        }
+      ]
+
+    })
 
     const recruiterForms = ref(null)
-    const recruiterForm = reactive({})
+    const recruiterForm = reactive({
+      country_id:'',
+      company_name:''
+    })
 
-    const recruiterRules = reactive({})
+    const recruiterRules = reactive({
+      company_name: [
+        {
+          required: true,
+          message: 'Enter your Company name',
+          trigger: 'blur',
+        }
+      ]
+    })
 
     const otherForms = ref(null)
-    const otherForm = reactive({})
+    const otherForm = reactive({
+      company_name:''
+    })
 
-    const otherRules = reactive({})
+    const otherRules = reactive({
+      company_name: [
+        {
+          required: true,
+          message: 'Enter your Company name',
+          trigger: 'blur',
+        }
+      ]
+    })
 
     const vendorForms = ref(null)
     const vendorForm = reactive({
@@ -381,6 +449,7 @@ export default {
       if(userType === 'other'){
         forms = otherForms.value
       }
+
       if(userType === 'vendor'){
         forms = vendorForms.value
       }
@@ -427,6 +496,10 @@ export default {
 
     const countryOptions = ref([])
     const countryObj = ref({})
+    const stateOptions = ref([])
+    const stateObj = ref({})
+    const townOptions = ref([])
+    const townObj = ref({})
 
     function getAllCountry(){
       let params = {
@@ -447,23 +520,14 @@ export default {
       })
     }
 
-
-    function countryChange(){
-      getAllCity()
-    }
-
-    const cityOptions = ref([])
-    const cityObj = ref({})
-
-    function getAllCity(){
+    function getAllState(countryId){
       let params = {
-        country_id:1,
-        state_id:1
+        country_id:countryId
       }
       GET_COUNTRY_LIST(params).then(res=>{
         console.log(res)
         if(res.code == 200){
-          this.cityOptions = res.message;
+           stateOptions.value = res.message;
         }
       }).catch(err=>{
         ElMessage({
@@ -475,7 +539,47 @@ export default {
       })
     }
 
-    function cityChange(e){
+    function getAllTown(countryId, stateId){
+
+      let params = {
+        country_id:countryId,
+        state_id:stateId
+      }
+
+      GET_COUNTRY_LIST(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+          townOptions.value = res.message;
+        }
+      }).catch(err=>{
+        ElMessage({
+          type:'warning',
+          message:err.msg,
+          grouping:true
+        })
+
+      })
+    }
+
+
+
+    function countryChange(countryId){
+      stateOptions.value = []
+      townOptions.value = []
+      schoolForm.state_id = ''
+      schoolForm.town_id = ''
+
+      getAllState(countryId)
+
+    }
+
+    function stateChange(countryId, stateId){
+      townOptions.value = []
+      schoolForm.town_id = ''
+      getAllTown(countryId, stateId)
+    }
+
+    function townChange(e){
       console.log(e)
     }
 
@@ -518,15 +622,18 @@ export default {
       countryOptions,
       countryObj,
       countryChange,
-
-      cityOptions,
-      cityObj,
-      cityChange
+      stateOptions,
+      stateObj,
+      stateChange,
+      townOptions,
+      townObj,
+      townChange
 
     }
 
   }
 }
+
 </script>
 
 <style scoped>

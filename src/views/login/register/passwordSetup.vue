@@ -68,7 +68,10 @@
               </el-form-item>
 
               <div class="continue-btn-container">
-                <el-button class="continue-btn" type="primary" @click="confirmForm(signForms)">
+                <el-button class="continue-btn"
+                           type="primary"
+                           :loading="confirmLoadingStatus"
+                           @click="confirmForm(signForms)">
                   Confirm
                 </el-button>
               </div>
@@ -102,22 +105,13 @@
 
 <script>
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
-import passwordLockImg from '@/assets/newHome/login/password-lock.png'
-import educatorImg from '@/assets/newHome/register/educator.png'
-import educatorActiveImg from '@/assets/newHome/register/educator-active.png'
-import businessImg from '@/assets/newHome/register/business.png'
-import businessActiveImg from '@/assets/newHome/register/business-active.png'
-import vendorImg from '@/assets/newHome/register/vendor.png'
-import vendorActiveImg from '@/assets/newHome/register/vendor-active.png'
-import imageDefault from '@/assets/newHome/register/image-rectangle.png'
-
 
 import {useRouter, useRoute} from 'vue-router'
 import {ref, reactive,onMounted} from 'vue'
-import {countriesData} from "@/utils/data";
 import stepComponent from "@/components/register/stepComponent.vue";
 import {decodeByJsBase64} from "@/utils/utils";
-import {ElMessage} from 'element-plus'
+import {ElMessage,ElMessageBox } from 'element-plus'
+import {EMAIL_REGISTER_V2} from "@/api/api";
 
 export default {
   name: "passwordSetup",
@@ -126,16 +120,7 @@ export default {
   },
   data() {
     return {
-      imgLogo,
-      passwordLockImg,
-      educatorImg,
-      educatorActiveImg,
-      businessImg,
-      businessActiveImg,
-      vendorImg,
-      vendorActiveImg,
-      imageDefault,
-      nationalityOptions: countriesData,
+      imgLogo
     }
   },
   setup() {
@@ -145,6 +130,7 @@ export default {
 
     const userType = route.query.type;
     const userStepIndex = ref(4)
+    const confirmLoadingStatus = ref(false)
 
     function turnHome() {
       return router.push('/')
@@ -188,20 +174,76 @@ export default {
 
       formName.validate((valid)=>{
         if(valid){
+          confirmLoadingStatus.value = true
+
           let routeFormInfo = decodeByJsBase64(route.query.formInfo)
           let formDecode = JSON.parse(routeFormInfo)
+
+          if(userType === 'educator'){
+            signForm.identity = 1
+          }else if(userType === 'school'){
+            signForm.identity = 3
+          }else if(userType === 'recruiter'){
+            signForm.identity = 2
+          }else if(userType === 'other'){
+            signForm.identity = 4
+          }else if(userType === 'vendor'){
+            signForm.identity = 5
+          }
 
           let params = Object.assign(formDecode,signForm)
 
           console.log(params)
 
+          EMAIL_REGISTER_V2(params).then(res => {
+            console.log(res)
+            if (res.code == 200) {
+
+              confirmLoadingStatus.value = false
+
+              ElMessageBox({
+                title: "All Set",
+                message: "Let's get you logged in!",
+                dangerouslyUseHTMLString: false,
+                type: "success",
+                center: true,
+                confirmButtonText: "OK",
+                "round-button": true,
+                callback(action) {
+                  if (action === 'confirm') {
+                     router.push({path: '/login', query: {email: formDecode.email}})
+                  }
+                }
+
+              })
+
+            }
+
+          }).catch(err => {
+            console.log(err)
+            confirmLoadingStatus.value = false
+
+            if (err.msg) {
+              ElMessage({
+                type:'warning',
+                message: err.msg,
+                grouping:true
+              })
+              return;
+            }
+
+            if (err.message) {
+              ElMessage({
+                type:'warning',
+                message: err.message,
+                grouping:true
+              })
+            }
+          })
+
+
         }else{
           console.log('error submit!!')
-          ElMessage({
-            type:'warning',
-            message:'Please complete all required fields',
-            grouping:true
-          })
           return false
         }
 
@@ -221,6 +263,7 @@ export default {
       signForm,
       signRules,
       userType,
+      confirmLoadingStatus,
       turnBack,
       confirmForm,
       turnHome,
