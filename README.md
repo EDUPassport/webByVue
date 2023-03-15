@@ -82,5 +82,6 @@ Educators apply for jobs:
 ```angular2html
 1.jobs 2.deals 3.Event 4.educator 5.recruitor 6.school 7.other 8.vendor
 ```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
