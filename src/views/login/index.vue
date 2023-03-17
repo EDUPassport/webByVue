@@ -235,17 +235,17 @@
             <!--            </div>-->
 
             <div class="sign-in-btn-container">
-              <el-button @click="googleSignIn()"
-                         class="login-option-btn"
-                         plain
-              >
-                <template #icon>
-                  <el-icon>
-                    <IconLogosGoogleIcon></IconLogosGoogleIcon>
-                  </el-icon>
-                </template>
-                Sign in with Google
-              </el-button>
+              <GoogleLogin class="login-option-btn" :callback="googleSignIn" popup-type="TOKEN">
+                <el-button plain  style="width: 100%;">
+                  <template #icon>
+                    <el-icon>
+                      <IconLogosGoogleIcon></IconLogosGoogleIcon>
+                    </el-icon>
+                  </template>
+                  Sign in with Google
+                </el-button>
+              </GoogleLogin>
+
             </div>
 
           </div>
@@ -342,7 +342,7 @@ import {useStore} from 'vuex'
 import {reactive, ref} from "vue";
 import {decode} from "js-base64";
 import ForgotPassword from '@/components/forgotPassword'
-
+import {decodeCredential} from 'vue3-google-login'
 export default {
   name: "index",
   data() {
@@ -1319,40 +1319,20 @@ export default {
     switchLoginRegister(value) {
       this.showValue = value
     },
-    async googleSignIn1() {
-      console.log('google sign in')
-      try {
-        const googleUser = await this.$gAuth.signIn();
-        if (!googleUser) {
-          return null;
-        }
-        console.log("googleUser", googleUser);
-        this.user = googleUser.getBasicProfile().getEmail();
-        console.log("getId", this.user);
-        console.log("getBasicProfile", googleUser.getBasicProfile());
-        console.log("getAuthResponse", googleUser.getAuthResponse());
-        console.log(
-            "getAuthResponse",
-            this.$gAuth.instance.currentUser.get().getAuthResponse()
-        );
-
-      } catch (error) {
-        //on fail do something
-        console.error(error);
-        return null;
+    googleSignIn(response){
+      console.log(response)
+      
+      if(response.credential) {
+        const userData = decodeCredential(response.credential)
+        console.log("Handle the userData", userData)
+        console.log("Call the endpoint which validates JWT credential string")
+      } else {
+        console.log("Call the endpoint which validates authorization code")
       }
-    },
-    // handleClickGetAuthCode
-    async googleSignIn() {
 
-      try {
-        const authCode = await this.$gAuth.getAuthCode();
-        console.log("authCode", authCode);
-      } catch (error) {
-        //on fail do something
-        console.error(error);
-        return null;
-      }
+      // console.log(response)
+      // alert(JSON.stringify(response))
+
     },
     linkedinSignIn() {
       let client_id = process.env.VUE_APP_LINKEDIN_CLIENT_ID

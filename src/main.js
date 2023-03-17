@@ -20,19 +20,16 @@ import './assets/fonts/index.css'
 import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
 import store from "./store";
 import VueSocialSharing from 'vue-social-sharing'
-
-import GAuth from 'vue3-google-oauth2'
-
 // import 'amfe-flexible';
 import GoEasy from "goeasy";
-
 import Vue3CountryIntl from 'vue3-country-intl';
 // 引入css
 import 'vue3-country-intl/lib/vue3-country-intl.css'
-
 import VueQrcode from '@chenfengyuan/vue-qrcode';
-
 import VueClipboard from 'vue-clipboard2'
+
+import vue3GoogleLogin from 'vue3-google-login'
+
 
 const messages = {
     en: {
@@ -43,7 +40,6 @@ const messages = {
     }
 }
 
-
 const i18n = createI18n({
     locale: 'ch', // set locale
     fallbackLocale: 'en', // set fallback locale
@@ -52,13 +48,7 @@ const i18n = createI18n({
     // ...
 })
 
-
-
 const app = createApp(App)
-
-
-const gAuthOptions = {clientId:'572731205450-h52vrr9q4ra5tornakcoo57lj0skqcl0.apps.googleusercontent.com', scope:'email',prompt:'consent',fetch_basic_profile:false}
-app.use(GAuth, gAuthOptions)
 
 for(const [key,component] of Object.entries(ElementPlusIconsVue)){
     app.component(key,component)
@@ -66,6 +56,10 @@ for(const [key,component] of Object.entries(ElementPlusIconsVue)){
 
 app.component(Vue3CountryIntl.name, Vue3CountryIntl)
 app.component(VueQrcode.name, VueQrcode)
+
+app.use(vue3GoogleLogin,{
+    clientId:'178559735458-vb7pkh7uphukpi26idrqbqtgq5kol7nc.apps.googleusercontent.com'
+})
 
 app.use(router)
 app.use(store)
