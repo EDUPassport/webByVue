@@ -432,3 +432,5 @@ export const USER_CONTACT_EMAIL_CHECK = (params) => post('/home/user/contact/ema
 // 职位增加浏览次数
 export const ADD_JOBS_VIEWS = (params) => post('/job/jobViews', params)
 
+// google login /api/home/google/callback
+export const GOOGLE_CALLBACK_API = (params) => get('/home/google/callback',params)

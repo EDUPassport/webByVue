@@ -27,9 +27,7 @@ import Vue3CountryIntl from 'vue3-country-intl';
 import 'vue3-country-intl/lib/vue3-country-intl.css'
 import VueQrcode from '@chenfengyuan/vue-qrcode';
 import VueClipboard from 'vue-clipboard2'
-
 import vue3GoogleLogin from 'vue3-google-login'
-
 
 const messages = {
     en: {
@@ -57,8 +55,11 @@ for(const [key,component] of Object.entries(ElementPlusIconsVue)){
 app.component(Vue3CountryIntl.name, Vue3CountryIntl)
 app.component(VueQrcode.name, VueQrcode)
 
-app.use(vue3GoogleLogin,{
-    clientId:'178559735458-vb7pkh7uphukpi26idrqbqtgq5kol7nc.apps.googleusercontent.com'
+app.use(vue3GoogleLogin, {
+    clientId: '178559735458-vb7pkh7uphukpi26idrqbqtgq5kol7nc.apps.googleusercontent.com',
+    scope: 'email',
+    prompt: 'consent',
+    fetch_basic_profile: true
 })
 
 app.use(router)

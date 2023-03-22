@@ -86,7 +86,7 @@ module.exports = {
         ],
         devServer: {
             allowedHosts: [
-                '810a-183-208-226-152.jp.ngrok.io'
+                'ea04-183-208-224-229.jp.ngrok.io'
             ],
             proxy: {
                 '/hcaptcha': {

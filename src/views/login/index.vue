@@ -235,8 +235,10 @@
             <!--            </div>-->
 
             <div class="sign-in-btn-container">
-              <GoogleLogin class="login-option-btn" :callback="googleSignIn" popup-type="TOKEN">
-                <el-button plain  style="width: 100%;">
+              <GoogleLogin style="width: 100%;"
+                           class="login-option-btn"
+                           :callback="googleSignInWithCode">
+                <el-button plain style="width: 100%;" >
                   <template #icon>
                     <el-icon>
                       <IconLogosGoogleIcon></IconLogosGoogleIcon>
@@ -246,6 +248,14 @@
                 </el-button>
               </GoogleLogin>
 
+            </div>
+            <div class="sign-in-btn-container">
+              <GoogleLogin class="login-option-btn"
+                           style="width: 100%;"
+                           :callback="googleSignIn"
+                           :auto-login="false"
+                           :prompt="false"
+                           :button-config="{type:'standard',locale: 'en-US',text:'signin_with'}" />
             </div>
 
           </div>
@@ -331,7 +341,7 @@ import {
   RECRUITER_PERCENTAGE_V2,
   SCHOOL_PERCENTAGE_V2,
   OTHER_PERCENTAGE_V2,
-  VENDOR_PERCENTAGE_V2
+  VENDOR_PERCENTAGE_V2, GOOGLE_CALLBACK_API
 } from "@/api/api";
 //LINKEDIN_CODE
 import {useRoute, useRouter} from "vue-router";
@@ -342,7 +352,7 @@ import {useStore} from 'vuex'
 import {reactive, ref} from "vue";
 import {decode} from "js-base64";
 import ForgotPassword from '@/components/forgotPassword'
-import {decodeCredential} from 'vue3-google-login'
+import { decodeCredential } from 'vue3-google-login'
 export default {
   name: "index",
   data() {
@@ -1319,20 +1329,19 @@ export default {
     switchLoginRegister(value) {
       this.showValue = value
     },
+    googleSignInWithCode(response){
+      console.log("Handle the response", response)
+      let params = Object.assign({},response)
+      GOOGLE_CALLBACK_API(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
     googleSignIn(response){
-      console.log(response)
-      
-      if(response.credential) {
-        const userData = decodeCredential(response.credential)
-        console.log("Handle the userData", userData)
-        console.log("Call the endpoint which validates JWT credential string")
-      } else {
-        console.log("Call the endpoint which validates authorization code")
-      }
-
-      // console.log(response)
-      // alert(JSON.stringify(response))
-
+      const userData = decodeCredential(response.credential)
+      console.log("Handle the userData", userData)
     },
     linkedinSignIn() {
       let client_id = process.env.VUE_APP_LINKEDIN_CLIENT_ID

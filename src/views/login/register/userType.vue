@@ -390,6 +390,8 @@ export default {
   margin-bottom: 20px;
   cursor: pointer;
 
+  transition-duration: .5s;
+  transition-timing-function: ease-out;
 }
 
 .user-type:hover {
@@ -399,11 +401,14 @@ export default {
 .user-type-active {
   border: 1px solid #6648FF;
   border-radius: 8px;
+
 }
 
 .user-type-l-img{
   width: 48px;
   height: 48px;
+  transition-duration: 2s;
+  transition-timing-function: ease-in-out;
 }
 
 .user-type-r {

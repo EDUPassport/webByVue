@@ -4,6 +4,8 @@ import {createRouter, createWebHistory} from 'vue-router'
 import appLayout from "@/layout/appLayout";
 // import {isPhone} from "@/utils";
 import chatHome from '@/views/chat/chatHome'
+import NProgress from 'nprogress'
+import '../style/nprogress.css'
 
 const routes = [
 
@@ -835,8 +837,12 @@ const router = createRouter({
 
 const defaultTitle = 'Home';
 
+NProgress.configure({ showSpinner: false });
+
 router.beforeEach((to, from, next) => {
 
+    NProgress.start()
+    console.log(NProgress.start())
 
     let envName = process.env.VUE_APP_ENV_NAME
 
@@ -890,6 +896,10 @@ router.beforeEach((to, from, next) => {
 
     // next();
 
+})
+
+router.afterEach(() => {
+    NProgress.done()
 })
 
 export default router;
