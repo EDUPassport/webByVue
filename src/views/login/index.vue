@@ -1319,39 +1319,6 @@ export default {
     switchLoginRegister(value) {
       this.showValue = value
     },
-    async googleSignIn() {
-      try {
-        const googleUser = await this.$gAuth.signIn();
-        if (!googleUser) {
-          return null;
-        }
-        console.log("googleUser", googleUser);
-        this.user = googleUser.getBasicProfile().getEmail();
-        console.log("getId", this.user);
-        console.log("getBasicProfile", googleUser.getBasicProfile());
-        console.log("getAuthResponse", googleUser.getAuthResponse());
-        console.log(
-            "getAuthResponse",
-            this.$gAuth.instance.currentUser.get().getAuthResponse()
-        );
-
-      } catch (error) {
-        //on fail do something
-        console.error(error);
-        return null;
-      }
-    },
-    async handleClickGetAuthCode() {
-
-      try {
-        const authCode = await this.$gAuth.getAuthCode();
-        console.log("authCode", authCode);
-      } catch (error) {
-        //on fail do something
-        console.error(error);
-        return null;
-      }
-    },
     linkedinSignIn() {
       let client_id = process.env.VUE_APP_LINKEDIN_CLIENT_ID
       let response_type = process.env.VUE_APP_LINKEDIN_RESPONSE_TYPE
