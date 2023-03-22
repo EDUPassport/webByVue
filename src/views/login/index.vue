@@ -3,7 +3,7 @@
 
     <el-row justify="center" align="top" class="login-container">
 
-      <el-col class="login-l-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+      <el-col class="login-l-col" :xs="24" :sm="24" :md="12" :lg="11" :xl="11">
 
         <div class="login-t" @click="turnHome()">
           <el-image class="login-t-logo" :src="imgLogo"></el-image>
@@ -37,10 +37,10 @@
                 </el-form-item>
 
                 <div class="remember-forgot-container">
-                  <div class="remember-container">
-                    <el-checkbox size="large" v-model="rememberValue" label="Remember Me"
-                                 @change="rememberChange"></el-checkbox>
-                  </div>
+<!--                  <div class="remember-container">-->
+<!--                    <el-checkbox size="large" v-model="rememberValue" label="Remember Me"-->
+<!--                                 @change="rememberChange"></el-checkbox>-->
+<!--                  </div>-->
                   <div class="forgot-password-container">
                     <el-button link class="forgot-password-btn" @click="forgotPassword()">
                       Forgot password?
@@ -108,9 +108,9 @@
                   </el-form-item>
 
                   <div class="remember-forgot-container">
-                    <div class="remember-container">
-                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>
-                    </div>
+<!--                    <div class="remember-container">-->
+<!--                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>-->
+<!--                    </div>-->
                     <div class="forgot-password-container">
                       <el-button link class="forgot-password-btn" @click="forgotPassword()">Forgot password?
                       </el-button>
@@ -167,9 +167,9 @@
                   </el-form-item>
 
                   <div class="remember-forgot-container">
-                    <div class="remember-container">
-                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>
-                    </div>
+<!--                    <div class="remember-container">-->
+<!--                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>-->
+<!--                    </div>-->
                     <div class="forgot-password-container">
                       <el-button link class="forgot-password-btn" @click="forgotPassword()">
                         Forgot password?
@@ -273,7 +273,7 @@
 
       </el-col>
 
-      <el-col :xs="0" :sm="0" :md="12" :lg="12" :xl="12">
+      <el-col :xs="0" :sm="0" :md="12" :lg="13" :xl="13">
         <div class="login-r-images">
           <el-image class="login-r-image" :src="loginRImage" fit="cover"></el-image>
           <div class="login-r-image-mask">
@@ -1382,22 +1382,24 @@ export default {
 <style scoped>
 
 .login-bg {
-  height: 100vh;
+  height: var(--i-window-height);
   position: relative;
   background-color: #FFFFFF;
 }
 
 .login-container {
+  max-width: 1440px;
   margin: 0 auto;
   height: 100%;
 }
+
 .login-l-col{
   display: flex;
   flex-direction: column;
-
 }
+
 .login-t {
-  margin: 30px 0 0 40px;
+  padding: 32px 0 0 40px;
   cursor: pointer;
 }
 
@@ -1407,7 +1409,7 @@ export default {
 
 .login-m {
   width: 360px;
-  margin: 100px auto 25px;
+  margin: 120px auto 0;
 }
 
 .login-m-label {
@@ -1428,7 +1430,8 @@ export default {
 
   text-align: center;
   color: #667085;
-  margin-top: 4px;
+  margin-top: 12px;
+
 }
 
 .login-sign-up-container {
@@ -1533,11 +1536,11 @@ export default {
 }
 
 .xll-login-form-container {
-  margin-top: 67px;
+  margin-top: 40px;
 }
 
 .xll-divider {
-  margin-top: 50px;
+  margin-top: 24px;
 }
 
 .forgot-password-container {
@@ -1572,14 +1575,14 @@ export default {
 
 .submit-btn {
   width: 100%;
-  margin: 50px auto 0;
+  margin: 30px auto 0;
 }
 
 .remember-forgot-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 
 }
 
@@ -1674,36 +1677,6 @@ export default {
   }
 }
 
-@media screen and (min-width: 1400px) {
-  .login-container {
-    max-width: 1400px;
-  }
-
-  .login-m {
-    width: 360px;
-    margin: 100px auto 25px;
-  }
-
-  .login-m-label {
-    font-size: 32px;
-    line-height: 32px;
-  }
-
-  .login-m-tips {
-    margin-top: 4px;
-    font-size: 16px;
-    line-height: 19px;
-    text-align: center;
-  }
-
-  .login-sign-up-container {
-    margin-top: 20px;
-    font-size: 14px;
-    line-height: 17px;
-  }
-
-
-}
 
 @media screen and (max-width: 768px) {
 

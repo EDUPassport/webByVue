@@ -12,7 +12,8 @@
 
 .el-button{
     --el-button-border-color: #000000;
-    --el-button-font-size: 20px;
+    --el-button-font-size: 16px;
+    height: 44px;
     font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 
@@ -26,6 +27,8 @@
     --el-button-hover-bg-color: #E7DEFF;
     --el-button-hover-text-color: #49397F;
     --el-button-hover-border-color: #6650B3;
+
+    font-weight: 600;
 }
 
 .el-button--default{
@@ -53,6 +56,8 @@
 
     --el-button-hover-bg-color: #9173ff;
     --el-button-hover-border-color:#9173ff;
+
+    font-weight: 700;
 }
 
 .el-input--large{
@@ -70,7 +75,7 @@
 }
 
 .el-input--default .el-input__wrapper{
-    min-height: 50px;
+    min-height: 44px;
 }
 
 .el-input--default .el-input__inner{
@@ -126,7 +131,9 @@
     color: #344054;
     font-weight: 500;
 }
-
+.el-form--label-top .el-form-item .el-form-item__label{
+    margin-bottom: 0 !important;
+}
 
 .el-checkbox.el-checkbox--large .el-checkbox__label{
     font-size: 18px;
