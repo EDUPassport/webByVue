@@ -113,7 +113,7 @@
                         >
                           <el-form-item label="E-MAIL ADDRESS" prop="email">
                             <div class="xll-form-email-tips"></div>
-                            <div class="xll-email-input">
+                            <div class="xll-email-input">                           
                               <el-input v-model="accountEmailForm.email" placeholder="E-mail address"></el-input>
                               <div class="send-code-btn" @click="sendEmailCode('accountEmailForms')">
                                 {{ checkCodeBtn.text }}
@@ -981,10 +981,8 @@ export default {
     },
     editAccountEmail() {
       this.accountEmailDialogVisible = true;
-      // this.accountEmailForm.email = this.basicForm.email;
-      this.accountEmailForm.email = '';
+      this.accountEmailForm.email = this.basicForm.email;
       this.accountEmailForm.code = '';
-
     },
     editAccount() {
       let userContact = this.userContact;
