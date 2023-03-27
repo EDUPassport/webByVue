@@ -1,59 +1,86 @@
 <template>
-<div>
   <div class="e-j">
     <div class="e-j-label">
       Our picks for you
     </div>
+
     <el-scrollbar max-height="320px" class="e-j-c">
 
       <template v-if="jobFeaturedData.length>0">
-        <div class="e-j-item-bg" v-for="(item,i) in jobFeaturedData" :key="i">
-          <div class="e-j-item">
-            <div class="e-j-item-l">
-              <el-avatar class="e-j-c-item-avatar"
-                         :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
-              ></el-avatar>
+
+        <div class="e-j-item"
+             v-for="(item,i) in jobFeaturedData" :key="i"
+        >
+          <div class="e-j-item-t">
+            <div class="e-j-item-t-l">
+              <el-image class="e-j-item-avatar"
+                        :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+              ></el-image>
             </div>
-            <div class="e-j-item-m">
-              <div class="e-j-item-m-1"> {{ item.company_name }}</div>
-              <div class="e-j-item-m-2" @click="turnJobDetail(item.id)">
-                {{ item.job_title }}
+            <div class="e-j-item-t-r">
+              <div class="e-j-item-t-r-t">
+                <h5  @click="turnJobDetail(item.id)"> {{ item.job_title }} </h5>
+                <el-tag class="e-j-item-tag"
+                        type="warning"
+                        round
+                        v-if="item.employment_type==1">
+                  Full time
+                </el-tag>
+                <el-tag class="e-j-item-tag"
+                        type="warning"
+                        round
+                        v-if="item.employment_type==2">
+                  Part time
+                </el-tag>
+                <el-tag class="e-j-item-tag"
+                        type="warning"
+                        round
+                        v-if="item.employment_type==3">
+                  Seasonal
+                </el-tag>
               </div>
-              <div class="e-j-item-m-3">
-                {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
-                <span v-if="item.payment_period == 112">hourly</span>
-                <span v-if="item.payment_period == 113">daily</span>
-                <span v-if="item.payment_period == 114">weekly</span>
-                <span v-if="item.payment_period == 115">monthly</span>
-                <span v-if="item.payment_period == 116">annually</span>
-              </div>
-              <!--            <div class="e-j-item-m-3">-->
-              <!--              Multiple-->
-              <!--            </div>-->
-              <div class="e-j-item-m-3">
-                <span v-if="item.employment_type==1">Full time</span>
-                <span v-if="item.employment_type==2">Part time</span>
-                <span v-if="item.employment_type==3">Seasonal</span>
+              <div class="e-j-item-t-r-b">
+                <el-image class="e-j-item-icon-16" :src="companyIconImg"></el-image>
+                <span>{{item.company_name}}</span>
               </div>
 
             </div>
 
-            <div class="e-j-item-r">
-              <div class="e-j-item-r-1">{{item.educator_matching_score}}% match</div>
-              <div class="e-j-item-r-2">
-                <template v-if="item.educator_matching_score <= 60">
-                  <el-image class="e-j-c-item-avatar" :src="doubtingImg" fit="contain"></el-image>
-                </template>
-                <template v-if="item.educator_matching_score > 60 && item.educator_matching_score <=80">
-                  <el-image class="e-j-c-item-avatar" :src="thumbUpImg" fit="contain"></el-image>
-                </template>
-                <template v-if="item.educator_matching_score > 80">
-                  <el-image class="e-j-c-item-avatar" :src="funfareImg" fit="contain"></el-image>
-                </template>
-
-              </div>
+          </div>
+          <div class="e-j-item-b">
+            <div class="e-j-item-b-item">
+              <el-image class="e-j-item-icon-24" :src="locationIconImg"></el-image>
+              {{item.job_location}}
+            </div>
+            <div class="e-j-item-b-item">
+              <el-image class="e-j-item-icon-24" :src="salaryIconImg"></el-image>
+              {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
+              <span v-if="item.payment_period == 112">hourly</span>
+              <span v-if="item.payment_period == 113">daily</span>
+              <span v-if="item.payment_period == 114">weekly</span>
+              <span v-if="item.payment_period == 115">monthly</span>
+              <span v-if="item.payment_period == 116">annually</span>
+            </div>
+            <div class="e-j-item-b-btn-container">
+              <el-button type="primary">Apply Now</el-button>
             </div>
           </div>
+
+<!--          <div class="e-j-item-r">-->
+<!--            <div class="e-j-item-r-1">{{item.educator_matching_score}}% match</div>-->
+<!--            <div class="e-j-item-r-2">-->
+<!--              <template v-if="item.educator_matching_score <= 60">-->
+<!--                <el-image class="e-j-c-item-avatar" :src="doubtingImg" fit="contain"></el-image>-->
+<!--              </template>-->
+<!--              <template v-if="item.educator_matching_score > 60 && item.educator_matching_score <=80">-->
+<!--                <el-image class="e-j-c-item-avatar" :src="thumbUpImg" fit="contain"></el-image>-->
+<!--              </template>-->
+<!--              <template v-if="item.educator_matching_score > 80">-->
+<!--                <el-image class="e-j-c-item-avatar" :src="funfareImg" fit="contain"></el-image>-->
+<!--              </template>-->
+
+<!--            </div>-->
+<!--          </div>-->
 
         </div>
 
@@ -67,13 +94,15 @@
     </el-scrollbar>
   </div>
 
-</div>
 </template>
 
 <script>
 import doubtingImg from '@/assets/newHome/match/doubting.png'
 import funfareImg from '@/assets/newHome/match/funfare.png'
 import thumbUpImg from '@/assets/newHome/match/thumb_up.png'
+import companyIconImg from '@/assets/newHome/dashboard/company_nofill.svg'
+import locationIconImg from '@/assets/newHome/dashboard/location_nofill.svg'
+import salaryIconImg from '@/assets/newHome/dashboard/salary_nofill.svg'
 
 import {EDUCATOR_JOB_MATCH_LIST, EDUCATOR_MANUAL_MATCH_JOB, JOB_FEATURED_LIST} from "@/api/api";
 
@@ -84,6 +113,9 @@ export default {
       doubtingImg,
       funfareImg,
       thumbUpImg,
+      companyIconImg,
+      locationIconImg,
+      salaryIconImg,
       jobFeaturedData:[]
     }
   },
@@ -149,141 +181,119 @@ export default {
 
 .e-j {
 
-  padding: 25px 50px;
-  box-shadow: 0px 0px 23px #00000012;
-  border-radius: 18px;
-  background-color: #FFFFFF;
+  box-sizing: border-box;
+
+  width: 508px;
+  height: 409px;
+  left: 340px;
+  top: 312px;
+  background: #FFFFFF;
+  border: 1px solid #EAECF0;
+  box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+  border-radius: 8px;
 
 }
 
 .e-j-label {
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 30px;
-  color: #262626;
-}
-
-.e-j-c {
-  margin-top: 25px;
-
-}
-
-.e-j-item-bg {
-  border-bottom: 1px solid #F0F2F5;
-  padding: 25px 15px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #101828;
+  margin: 16px 0 8px 20px;
 }
 
 .e-j-item {
-  box-shadow: 0px 3px 23px #00000026;
-  border-radius: 18px;
-  background-color: #FFFFFF;
+  margin: 16px 20px;
+  padding: 16px;
+  height: 124px;
+  background: #F9FAFB;
+  border-radius: 12px;
+}
+
+.e-j-item-t{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+}
+
+.e-j-item-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #EEEEEE;
+}
+
+.e-j-item-t-r-t{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 9px;
+}
+.e-j-item-tag{
+  margin-left: 20px;
+}
+
+.e-j-item-t-r-b{
+  margin-left: 9px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.e-j-item-t-r-b span{
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #667085;
+}
+
+.e-j-item-b{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 24px;
+}
+
+.e-j-item-b-item{
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
+  color: #344054;
+  margin-right: 8px;
+
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  justify-content: flex-start;
-  padding: 25px;
 }
 
-.e-j-c-item-avatar {
-  margin-top: 15px;
-  width: 70px;
-  height: 70px;
-  /*border-radius: 70px;*/
+.e-j-item-b-btn-container{
+
 }
 
-.e-j-item-l {
-  width: 80px;
+.e-j-item-icon-16{
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
 }
 
-.e-j-item-m {
-  width: calc(100% - 190px);
-}
-
-.e-j-item-r {
-  width: 110px;
-  text-align: center;
-}
-
-.e-j-item-m-1 {
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  color: #262626;
-}
-
-.e-j-item-m-2 {
-  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 25px;
-  color: #262626;
-  cursor: pointer;
-}
-
-.e-j-item-m-3 {
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #262626;
+.e-j-item-icon-24{
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
 }
 
 @media screen and (max-width: 768px){
-  .e-j{
-    padding: 0;
-    background-color: #F0F2F5;
-    box-shadow: none;
-  }
 
-  .e-j-label{
-    font-size: 20px;
-    margin: 0 15px 8px 15px;
-  }
-
-  .e-j-item-bg{
-    padding: 0;
-    margin: 7px 15px 15px 15px;
-  }
-
-
-
-  .e-j-c{
-    margin-top: 0;
-  }
-
-  .e-j-item{
-    padding: 15px;
-    box-shadow: 0px 0px 10px #00000012;
-    border-radius: 18px;
-    justify-content: space-between;
-  }
-
-  .e-j-item-l{
-    width: 40px;
-  }
-
-  .e-j-c-item-avatar{
-    width: 40px;
-    height: 40px;
-  }
-
-  .e-j-item-m{
-    width: calc(100% - 135px);
-  }
-
-  .e-j-item-m-1{
-    font-size: 12px;
-  }
-
-  .e-j-item-m-2{
-    font-size: 18px;
-  }
-
-  .e-j-item-m-3{
-    font-size: 12px;
-  }
-
-  .e-j-item-r{
-    width: 75px;
-  }
-
-  .e-j-item-r-1{
-    font-size: 12px;
-  }
 
 }
 

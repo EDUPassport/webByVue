@@ -2,6 +2,7 @@ import layout from "@/layout";
 // import appLayout from "@/layout/appLayout";
 import {createRouter, createWebHistory} from 'vue-router'
 import appLayout from "@/layout/appLayout";
+import dashboardLayout from "@/layout/dashboardLayout.vue";
 // import {isPhone} from "@/utils";
 import chatHome from '@/views/chat/chatHome'
 import NProgress from 'nprogress'
@@ -128,7 +129,7 @@ const routes = [
     },
     {
         path: '/overview',
-        component: layout,
+        component: dashboardLayout,
         children: [
             {
                 path: '/overview',
@@ -146,7 +147,7 @@ const routes = [
     },
     {
         path: '/account',
-        component: layout,
+        component: dashboardLayout,
         children: [
             {
                 path: 'home',

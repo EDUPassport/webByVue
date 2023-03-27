@@ -38,6 +38,7 @@
 
               <el-form-item>
                 <el-button class="reset-btn"
+                           size="large"
                            type="primary"
                            :disabled="nextDisabledStatus"
                            @click="verificationCodeForEmail(passwordForms)">

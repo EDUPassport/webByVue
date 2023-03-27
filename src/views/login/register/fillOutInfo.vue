@@ -8,7 +8,7 @@
         <div class="signup-m">
 
           <div class="signup-back-btn-container">
-            <el-button plain @click="turnBack()">
+            <el-button  size="small" plain @click="turnBack()">
               <el-icon style="margin-right: 10px;">
                 <Back/>
               </el-icon>
@@ -62,7 +62,7 @@
                 </el-form-item>
 
                 <div class="continue-btn-container">
-                  <el-button class="continue-btn" type="primary" @click="continueNextStep()">
+                  <el-button class="continue-btn" size="large" type="primary" @click="continueNextStep()">
                     Continue
                   </el-button>
                 </div>
@@ -148,7 +148,7 @@
                 </el-form-item>
 
                 <div class="continue-btn-container">
-                  <el-button class="continue-btn" type="primary" @click="continueNextStep()">
+                  <el-button class="continue-btn" size="large" type="primary" @click="continueNextStep()">
                     Continue
                   </el-button>
                 </div>
@@ -198,7 +198,7 @@
                 </el-form-item>
 
                 <div class="continue-btn-container">
-                  <el-button class="continue-btn" type="primary" @click="continueNextStep()">
+                  <el-button class="continue-btn" size="large" type="primary" @click="continueNextStep()">
                     Continue
                   </el-button>
                 </div>
@@ -230,7 +230,7 @@
                 </el-form-item>
 
                 <div class="continue-btn-container">
-                  <el-button class="continue-btn" type="primary" @click="continueNextStep()">
+                  <el-button class="continue-btn" size="large" type="primary" @click="continueNextStep()">
                     Continue
                   </el-button>
                 </div>
@@ -263,7 +263,7 @@
                 </el-form-item>
 
                 <div class="continue-btn-container">
-                  <el-button class="continue-btn" type="primary" @click="continueNextStep()">
+                  <el-button class="continue-btn" size="large" type="primary" @click="continueNextStep()">
                     Continue
                   </el-button>
                 </div>

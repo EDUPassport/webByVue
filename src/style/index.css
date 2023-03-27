@@ -13,8 +13,19 @@
 .el-button{
     --el-button-border-color: #000000;
     --el-button-font-size: 16px;
-    height: 44px;
     font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+
+.el-button--small{
+    --el-button-size:30px;
+}
+
+.el-button--default{
+    --el-button-size:34px;
+}
+
+.el-button--large{
+    --el-button-size:44px;
 }
 
 .el-button.is-link{
@@ -32,6 +43,14 @@
 }
 
 .el-button--default{
+    --el-button-border-color:transparent;
+}
+
+.el-button--info{
+    --el-button-bg-color:#F2F4F7;
+    --el-button-text-color:#1D2939;
+    font-weight: 600;
+    font-size: 12px;
     --el-button-border-color:transparent;
 }
 

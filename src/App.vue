@@ -81,10 +81,12 @@ h4{
 }
 
 h5{
-  font-size: 22px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-
-  color: #262626;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  color: #000000;
 }
 
 button{

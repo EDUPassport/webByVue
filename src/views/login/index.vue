@@ -42,7 +42,7 @@
 <!--                                 @change="rememberChange"></el-checkbox>-->
 <!--                  </div>-->
                   <div class="forgot-password-container">
-                    <el-button link class="forgot-password-btn" @click="forgotPassword()">
+                    <el-button  size="small" link class="forgot-password-btn" @click="forgotPassword()">
                       Forgot password?
                     </el-button>
                   </div>
@@ -50,6 +50,7 @@
 
                 <el-form-item>
                   <el-button class="submit-btn"
+                             size="large"
                              type="primary"
                              :loading="submitLoginLoadingStatus"
                              @click="submitLoginForm('loginForm')">
@@ -112,14 +113,14 @@
 <!--                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>-->
 <!--                    </div>-->
                     <div class="forgot-password-container">
-                      <el-button link class="forgot-password-btn" @click="forgotPassword()">Forgot password?
+                      <el-button  size="small" link class="forgot-password-btn" @click="forgotPassword()">Forgot password?
                       </el-button>
                     </div>
                   </div>
 
                   <el-form-item>
                     <el-button class="submit-btn"
-
+                               size="large"
                                type="primary"
                                @click="submitLoginPhoneSmsForm('loginPhoneSmsForm')">
                       Sign in
@@ -179,7 +180,7 @@
 
                   <el-form-item>
                     <el-button class="submit-btn"
-
+                               size="large"
                                type="primary"
                                @click="submitLoginPhonePassForm('loginPhonePassForm')">
                       Sign in
@@ -196,6 +197,7 @@
 
             <div class="sign-in-btn-container" v-if="isFromChinaEnv === 'yes' ">
               <el-button v-if="!loginPhoneStatus"
+                         size="large"
                          @click="loginWithPhone()"
                          class="login-option-btn" plain>
                 <template #icon>
@@ -207,6 +209,7 @@
                 Sign in with phone number
               </el-button>
               <el-button v-if="!loginEmailStatus"
+                         size="large"
                          @click="loginWithPhone()"
                          class="login-option-btn"
                          plain
@@ -238,7 +241,7 @@
               <GoogleLogin style="width: 100%;"
                            class="login-option-btn"
                            :callback="googleSignInWithCode">
-                <el-button plain style="width: 100%;" >
+                <el-button size="large" plain style="width: 100%;" >
                   <template #icon>
                     <el-icon>
                       <IconLogosGoogleIcon></IconLogosGoogleIcon>
@@ -249,13 +252,27 @@
               </GoogleLogin>
 
             </div>
+
             <div class="sign-in-btn-container">
-              <GoogleLogin class="login-option-btn"
-                           style="width: 100%;"
-                           :callback="googleSignIn"
-                           :auto-login="false"
-                           :prompt="false"
-                           :button-config="{type:'standard',locale: 'en-US',text:'signin_with'}" />
+              <el-button size="large" plain style="width: 100%;" @click="googleSignIn()">
+                <template #icon>
+                  <el-icon>
+                    <IconLogosGoogleIcon></IconLogosGoogleIcon>
+                  </el-icon>
+                </template>
+                Sign in with Google
+              </el-button>
+            </div>
+
+            <div class="sign-in-btn-container">
+              <el-button size="large" plain style="width: 100%;" @click="googleSignInCustom()">
+                <template #icon>
+                  <el-icon>
+                    <IconLogosGoogleIcon></IconLogosGoogleIcon>
+                  </el-icon>
+                </template>
+                Sign in with Google
+              </el-button>
             </div>
 
           </div>
@@ -605,6 +622,15 @@ export default {
       }
     }
 
+    console.log(this.$route.query)
+    if(this.$route.query.code){
+      let params = Object.assign({},this.$route.query)
+      GOOGLE_CALLBACK_API(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
 
 
   },
@@ -1340,8 +1366,42 @@ export default {
 
     },
     googleSignIn(response){
-      const userData = decodeCredential(response.credential)
-      console.log("Handle the userData", userData)
+      let responseType = 'code'
+      let accessType = 'online'
+      let clientId = '178559735458-vb7pkh7uphukpi26idrqbqtgq5kol7nc.apps.googleusercontent.com'
+      let redirectUri = 'https://dev.edupassport.io/login'
+      let scope = 'email profile'
+      let approvalPrompt = 'auto'
+
+      let url = 'https://accounts.google.com/o/oauth2/v2/auth?response_type='+responseType+
+          '&access_type='+accessType+'&client_id=' + clientId + '&redirect_uri='+redirectUri+'&state&scope='+scope+'&approval_prompt='+approvalPrompt
+
+      window.open(url,'_self')
+
+      if(response && response.credential){
+        const userData = decodeCredential(response.credential)
+        console.log("Handle the userData", userData)
+      }
+
+    },
+    googleSignInCustom(response){
+      let responseType = 'code'
+      let accessType = 'online'
+      let clientId = '178559735458-vb7pkh7uphukpi26idrqbqtgq5kol7nc.apps.googleusercontent.com'
+      let redirectUri = 'https://google.edupassport.io/api/home/google/callback'
+      let scope = 'email profile'
+      let approvalPrompt = 'auto'
+
+      let url = 'https://accounts.google.com/o/oauth2/v2/auth?response_type='+responseType+
+          '&access_type='+accessType+'&client_id=' + clientId + '&redirect_uri='+redirectUri+'&state&scope='+scope+'&approval_prompt='+approvalPrompt
+
+      window.open(url,'_self')
+
+      if(response && response.credential){
+        const userData = decodeCredential(response.credential)
+        console.log("Handle the userData", userData)
+      }
+
     },
     linkedinSignIn() {
       let client_id = process.env.VUE_APP_LINKEDIN_CLIENT_ID

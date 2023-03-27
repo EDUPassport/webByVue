@@ -4,61 +4,96 @@
     <el-scrollbar class="overview-container">
 
       <div class="dashboard-container">
-        <template v-if="identity === 10">
-          <div class="dashboard-b-item">
-            <applicationsUpdates></applicationsUpdates>
-          </div>
-          <div class="dashboard-b-item">
-            <favoritedJobsDashboard></favoritedJobsDashboard>
-          </div>
-        </template>
 
         <template v-if="identity == 1">
 
-          <div class="dashboard-t-container">
-
-            <div class="dashboard-t-item dashboard-t-item-gap">
-              <div class="dashboard-t-item-t">Jobs Applied</div>
-              <div class="dashboard-t-item-m">12</div>
-              <div class="dashboard-t-item-b">
-                <span>40%</span> vs last month '"40%"'
-              </div>
+          <div class="dashboard-1-container">
+            <!--                <div class="dashboard-1">-->
+            <!--                  <h5>You were viewed</h5>-->
+            <!--                  <h1>18 <span>times this week</span></h1>-->
+            <!--                </div>-->
+            <div class="dashboard-1">
+              <span>More awesome widgets are coming soon...</span>
             </div>
-
-            <div class="dashboard-t-item dashboard-t-item-gap">
-              <div class="dashboard-t-item-t">Event Registered</div>
-              <div class="dashboard-t-item-m">3</div>
-              <div class="dashboard-t-item-b">
-                <span>10%</span> vs last month '"40%"'
-              </div>
-            </div>
-
-            <div class="dashboard-t-item">
-              <div class="dashboard-t-item-t">Deal Offers</div>
-              <div class="dashboard-t-item-m-other">
-                Discover up to 35% off from vendors across the Globe
-              </div>
-              <div class="dashboard-t-item-b">
-                <el-button size="small" type="info">View Deals</el-button>
-              </div>
-            </div>
-
           </div>
 
-          <div class="dashboard-b-container">
-            <div class="dashboard-b-item">
+          <div class="container-2">
+            <div class="container-2-l">
               <dailyJobMatch></dailyJobMatch>
             </div>
-            <div class="dashboard-b-item">
-              <metricsComponent></metricsComponent>
+            <div class="container-2-r">
+              <applicationsUpdates></applicationsUpdates>
+            </div>
+          </div>
+
+          <div class="container-3">
+            <div class="container-3-l">
+              <favoritedJobsDashboard></favoritedJobsDashboard>
             </div>
 
           </div>
 
         </template>
 
-
         <template v-if="identity == 2 || identity == 3 || identity == 4">
+          <!--              <div class="dashboard-1-container">-->
+          <!--                <div class="dashboard-1">-->
+          <!--                  <h5>New applications</h5>-->
+          <!--                  <h1>+7</h1>-->
+          <!--                  <div class="dashboard-1-tips">-->
+          <!--                    total:21 applications-->
+          <!--                  </div>-->
+          <!--                </div>-->
+
+          <!--                <div class="dashboard-1">-->
+          <!--                  <h5>Views this month</h5>-->
+          <!--                  <h1>-->
+          <!--                    +18-->
+          <!--                  </h1>-->
+          <!--                  <div class="dashboard-1-tips">-->
+          <!--                    total:156 views-->
+          <!--                  </div>-->
+          <!--                </div>-->
+
+          <!--                <div class="dashboard-1">-->
+          <!--                  <h5>New educators</h5>-->
+          <!--                  <h1>-->
+          <!--                    +48-->
+          <!--                  </h1>-->
+          <!--                  <div class="dashboard-1-tips">-->
+          <!--                    total:892 educators-->
+          <!--                  </div>-->
+          <!--                </div>-->
+
+          <!--                <div class="dashboard-1">-->
+          <!--                  <h5 >Jobs posted</h5>-->
+          <!--                  <h1>-->
+          <!--                    3/ <el-icon> <IconIcOutlineAllInclusive /> </el-icon>-->
+          <!--                  </h1>-->
+          <!--                  <div class="dashboard-1-tips">-->
+          <!--                    <span>this month</span>-->
+          <!--                    <el-button class="dashboard-post-a-job-btn"-->
+          <!--                               @click="postJob()"-->
+          <!--                               type="primary" round>-->
+          <!--                      POST A JOB-->
+          <!--                    </el-button>-->
+          <!--                  </div>-->
+
+          <!--                </div>-->
+
+          <!--                <div class="dashboard-1  dashboard-1-bg-1">-->
+          <!--                  <h5>Quick actions</h5>-->
+          <!--                  <div class="dashboard-1-actions">-->
+          <!--                    <el-button class="dashboard-1-action-btn" plain round>-->
+          <!--                      UPGRADE-->
+          <!--                    </el-button>-->
+          <!--                    <el-button class="dashboard-1-action-btn" plain round>-->
+          <!--                      ADVERTISE-->
+          <!--                    </el-button>-->
+          <!--                  </div>-->
+          <!--                </div>-->
+
+          <!--              </div>-->
 
           <div class="dashboard-1-container">
             <div class="dashboard-1">
@@ -75,6 +110,46 @@
         </template>
 
         <template v-if="identity == 5">
+
+          <!--              <div class="dashboard-1-container">-->
+          <!--                <div class="dashboard-1">-->
+          <!--                  <h5>You posted</h5>-->
+          <!--                  <div class="dashboard-1-h">-->
+          <!--                    <h1>-->
+          <!--                      18 <span>deals</span>-->
+          <!--                    </h1>-->
+          <!--                    <h1>-->
+          <!--                      2 <span>events</span>-->
+          <!--                    </h1>-->
+          <!--                  </div>-->
+
+          <!--                </div>-->
+          <!--                <div class="dashboard-1">-->
+          <!--                  <h5 >Deals performance</h5>-->
+          <!--                  <div  class="dashboard-1-h">-->
+          <!--                    <h1>-->
+          <!--                      52 <span>favorited</span>-->
+          <!--                    </h1>-->
+          <!--                    <h1>-->
+          <!--                      1 <span>redeemed</span>-->
+          <!--                    </h1>-->
+          <!--                  </div>-->
+
+          <!--                </div>-->
+          <!--                <div class="dashboard-1">-->
+          <!--                  <h5>Events performance</h5>-->
+          <!--                  <div  class="dashboard-1-h">-->
+          <!--                    <h1>-->
+          <!--                      0 <span>favorited</span>-->
+          <!--                    </h1>-->
+          <!--                    <h1>-->
+          <!--                      0 <span>redeemed</span>-->
+          <!--                    </h1>-->
+          <!--                  </div>-->
+
+          <!--                </div>-->
+
+          <!--              </div>-->
 
           <div class="dashboard-1-container">
             <div class="dashboard-1">
@@ -129,7 +204,7 @@ import activeEventsDashboard from "@/components/vendor/activeEventsDashboard";
 import {randomString} from "@/utils";
 import {updateWindowHeight} from "@/utils/tools";
 // import {removeZohoFloat, removeJs} from "@/utils/tools";
-import metricsComponent from "@/components/metrics/metrics.vue";
+
 export default {
   name: "index",
   components: {
@@ -138,8 +213,7 @@ export default {
     applicationsUpdates,
     favoritedJobsDashboard,
     activeDealsDashboard,
-    activeEventsDashboard,
-    metricsComponent
+    activeEventsDashboard
   },
   setup() {
     const store = useStore()
@@ -532,86 +606,6 @@ export default {
 
 }
 
-.dashboard-t-container{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-
-  margin-left: 40px;
-}
-
-.dashboard-t-item{
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 16px 20px;
-
-  width: 272px;
-  height: 148px;
-
-  background: #FFFFFF;
-  border: 1px solid #EAECF0;
-  box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
-  border-radius: 8px;
-
-  margin: 20px 32px 20px 0;
-}
-
-.dashboard-t-item-gap{gap: 16px;}
-
-.dashboard-t-item-t{
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
-  color: #101828;
-}
-.dashboard-t-item-m{
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 36px;
-  line-height: 44px;
-  color: #101828;
-}
-
-.dashboard-t-item-m-other{
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 18px;
-  color: #667085;
-}
-
-.dashboard-t-item-b{
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-  color: #667085;
-}
-
-.dashboard-b-container{
-  margin: 20px 40px 0 40px;
-
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-}
-
-.dashboard-b-item{
-  width: calc(50% - 12px);
-}
-
 .dashboard-item-r a {
   text-decoration: none;
   color: #FFFFFF;
@@ -664,12 +658,38 @@ export default {
   margin-right: 15px;
 }
 
+.dashboard-1-bg-1 {
+  box-shadow: 0px 3px 23px 1px rgba(102, 80, 179, 0.29);
+  background: #E7DEFF;
+}
+
+.dashboard-1-actions {
+  margin-top: 20px;
+}
+
+.dashboard-1-action-btn {
+  font-size: 20px;
+
+}
+
+.dashboard-1-tips {
+  font-size: 20px;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #262626;
+}
+
+
+.dashboard-post-a-job-btn {
+  margin-left: 15px;
+}
+
 .container-2 {
   display: flex;
   flex-direction: row;
   align-items: baseline;
   justify-content: space-between;
   flex-wrap: wrap;
+  /*margin-top: 50px;*/
 }
 
 .container-2-l{
@@ -703,7 +723,7 @@ export default {
 }
 
 .container-4-l{
-
+  /*width: 580px;*/
  }
 
 .container-4-r{
@@ -711,10 +731,18 @@ export default {
 }
 
 @media screen and (max-width: 768px){
-
   .dashboard-1{
     margin-right: 15px;
     margin-bottom: 15px;
+  }
+
+  .overview-r-container{
+      width: 100%;
+      height: calc( var(--i-window-height) - 160px);
+  }
+
+  .overview-r-container-bg{
+    padding: 0;
   }
 
   .dashboard-1-container{

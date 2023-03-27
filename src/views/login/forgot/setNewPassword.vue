@@ -33,6 +33,7 @@
 
               <el-form-item>
                 <el-button class="reset-btn"
+                           size="large"
                            type="primary"
                            :loading="passwordLoadingStatus"
                            @click="resetPassword(passwordForms)">

@@ -8,7 +8,7 @@
         <div class="signup-m">
 
           <div class="signup-back-btn-container">
-            <el-button plain @click="turnBack()">
+            <el-button  size="small" plain @click="turnBack()">
               <el-icon style="margin-right: 10px;">
                 <Back/>
               </el-icon>
@@ -69,6 +69,7 @@
 
               <div class="continue-btn-container">
                 <el-button class="continue-btn"
+                           size="large"
                            type="primary"
                            :loading="confirmLoadingStatus"
                            @click="confirmForm(signForms)">

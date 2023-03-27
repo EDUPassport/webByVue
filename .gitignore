@@ -6,6 +6,7 @@ node_modules
 /distCN
 /chinaProd
 /chinaDev
+/internationalDev
 /internationalProd
 
 # local env files
