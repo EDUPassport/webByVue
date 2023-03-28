@@ -253,28 +253,6 @@
 
             </div>
 
-            <div class="sign-in-btn-container">
-              <el-button size="large" plain style="width: 100%;" @click="googleSignIn()">
-                <template #icon>
-                  <el-icon>
-                    <IconLogosGoogleIcon></IconLogosGoogleIcon>
-                  </el-icon>
-                </template>
-                Sign in with Google
-              </el-button>
-            </div>
-
-            <div class="sign-in-btn-container">
-              <el-button size="large" plain style="width: 100%;" @click="googleSignInCustom()">
-                <template #icon>
-                  <el-icon>
-                    <IconLogosGoogleIcon></IconLogosGoogleIcon>
-                  </el-icon>
-                </template>
-                Sign in with Google
-              </el-button>
-            </div>
-
           </div>
 
           <div class="login-sign-up-container">
@@ -338,18 +316,16 @@
 </template>
 
 <script>
-
+import {encodeByJsBase64} from "@/utils/utils";
 // import {hcaptcha} from "@shubhamranjan/vue-hcaptcha";
 import logoImgLight from "@/assets/newHome/logo/Logo_Transparent.png"
 import loginRImage from "@/assets/newHome/login/r-image.png"
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
 //WEIXIN_SEND_SMS
 import {
-  EMAIL_REGISTER_V2,
   SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
   LOGIN_EMAIL_PWD_V2,
-  PHONE_REGISTER_V2,
   LOGIN_PHONE_SMS_V2,
   LOGIN_PHONE_PWD_V2,
   USER_MENU_LIST,
@@ -369,7 +345,7 @@ import {useStore} from 'vuex'
 import {reactive, ref} from "vue";
 import {decode} from "js-base64";
 import ForgotPassword from '@/components/forgotPassword'
-import { decodeCredential } from 'vue3-google-login'
+// import { decodeCredential } from 'vue3-google-login'
 export default {
   name: "index",
   data() {
@@ -860,7 +836,6 @@ export default {
     storageLoginUserInfo(resMessage) {
 
       let self = this;
-
       let identity = resMessage.identity;
       let firstName = resMessage.first_name;
       let lastName = resMessage.last_name;
@@ -869,6 +844,7 @@ export default {
 
       let name = firstName + ' ' + lastName
       let companyName = ''
+      let percentageValue = 0
 
       localStorage.setItem('token', resMessage.token)
       localStorage.setItem('uid', resMessage.id)
@@ -883,30 +859,39 @@ export default {
       if (identity == 1) {
         avatar = resMessage.headimgurl;
         companyName = firstName + ' ' + lastName;
+        percentageValue = resMessage.is_educator
         this.updateEducatorPercentage()
       }
+
       if (identity == 2) {
         avatar = resMessage.recruiting_info.logo;
         companyName = resMessage.recruiting_info.company_name;
+        percentageValue = resMessage.is_recruiting;
         this.updateRecruiterPercentage()
       }
       if (identity == 3) {
         avatar = resMessage.school_info.logo;
         companyName = resMessage.school_info.company_name;
+        percentageValue = resMessage.is_school;
         this.updateSchoolPercentage()
       }
       if (identity == 4) {
         avatar = resMessage.other_info.logo;
         companyName = resMessage.other_info.company_name;
+        percentageValue = resMessage.is_other;
         this.updateOtherPercentage()
       }
       if (identity == 5) {
         avatar = resMessage.vendor_info.logo;
+        percentageValue = resMessage.is_vendor;
         companyName = resMessage.vendor_info.company_name;
         this.updateVendorPercentage()
       }
 
+      localStorage.setItem('profile_percentage', percentageValue)
+
       this.$store.commit('currentCompanyId', resMessage.company_id)
+      this.$store.commit('setProfilePercentage', percentageValue)
 
       if (resMessage.third_company_id) {
         localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
@@ -1245,162 +1230,55 @@ export default {
       })
 
     },
-    submitRegisterForm(formName) {
-
-      let self = this;
-      this.submitRegisterLoadingStatus = true;
-
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          // console.log(valid)
-          let params = Object.assign({
-            identity: self.identityValue
-          }, this.registerForm)
-
-          EMAIL_REGISTER_V2(params).then(res => {
-            console.log(res)
-            if (res.code == 200) {
-
-              self.submitRegisterLoadingStatus = false
-
-              this.$msgbox({
-                title: "All Set",
-                message: "Let's get you logged in!",
-                dangerouslyUseHTMLString: false,
-                type: "success",
-                center: true,
-                confirmButtonText: "OK",
-                "round-button": true,
-                callback(action) {
-                  console.log(action)
-                  if (action === 'confirm') {
-                    self.$router.push({path: '/login', query: {type: 'login', email: self.registerForm.email}})
-                    self.showValue = 'login'
-                  }
-                }
-
-              })
-              // window.location.reload()
-
-            }
-
-          }).catch(err => {
-            console.log(err)
-            self.submitRegisterLoadingStatus = false
-            this.$message.error(err.msg)
-          })
-
-        } else {
-          console.log('error submit!!')
-          this.submitRegisterLoadingStatus = false
-          return false
-        }
-      })
-    },
-    submitRegisterPhoneForm(formName) {
-
-      let self = this;
-      this.submitRegisterLoadingStatus = true;
-
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          // console.log(valid)
-          let params = Object.assign({
-            identity: self.identityValue
-          }, this.registerPhoneForm)
-
-          PHONE_REGISTER_V2(params).then(res => {
-            console.log(res)
-            if (res.code == 200) {
-
-              self.submitRegisterLoadingStatus = false
-
-              this.$msgbox({
-                title: "All Set",
-                message: "Let's get you logged in!",
-                dangerouslyUseHTMLString: false,
-                type: "success",
-                center: true,
-                confirmButtonText: "OK",
-                "round-button": true,
-                callback(action) {
-                  console.log(action)
-                  if (action === 'confirm') {
-                    self.$router.push({path: '/login', query: {type: 'login', phone: self.registerPhoneForm.phone}})
-                    self.showValue = 'login'
-                  }
-                }
-
-              })
-              // window.location.reload()
-
-            }
-
-          }).catch(err => {
-            console.log(err)
-            self.submitRegisterLoadingStatus = false
-            this.$message.error(err.msg)
-          })
-
-        } else {
-          console.log('error submit!!')
-          this.submitRegisterLoadingStatus = false
-          return false
-        }
-      })
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-    },
-    switchLoginRegister(value) {
-      this.showValue = value
-    },
     googleSignInWithCode(response){
-      console.log("Handle the response", response)
-      let params = Object.assign({},response)
+      let self = this;
+      let redirectUri = window.location.origin
+
+      let params = Object.assign({
+        redirect_uri:redirectUri
+      },response)
+
       GOOGLE_CALLBACK_API(params).then(res=>{
         console.log(res)
+        if(res.code === 200){
+          if(res.msg === '10002'){
+            let routeQuery = {
+              email:res.message,
+              method:'Google_login'
+            }
+
+            this.$msgbox({
+              title: "Seems you dont have an account",
+              message: "would you like to sign up?",
+              dangerouslyUseHTMLString: false,
+              type: "warning",
+              center: true,
+              showCancelButton: true,
+              cancelButtonText: "No,thank you",
+              confirmButtonText: "Sign Up",
+              "round-button": true,
+              callback(action) {
+                console.log(action)
+                if (action === 'confirm') {
+                  self.$router.push({path: '/signup', query: {method: encodeByJsBase64(JSON.stringify(routeQuery))}})
+                }
+              }
+
+            })
+            return;
+          }
+
+          this.rememberMeAction(params, 1)
+
+          let resMessage = res.message;
+
+          this.storageLoginUserInfo(resMessage)
+
+        }
+
       }).catch(err=>{
         console.log(err)
       })
-
-    },
-    googleSignIn(response){
-      let responseType = 'code'
-      let accessType = 'online'
-      let clientId = '178559735458-vb7pkh7uphukpi26idrqbqtgq5kol7nc.apps.googleusercontent.com'
-      let redirectUri = 'https://dev.edupassport.io/login'
-      let scope = 'email profile'
-      let approvalPrompt = 'auto'
-
-      let url = 'https://accounts.google.com/o/oauth2/v2/auth?response_type='+responseType+
-          '&access_type='+accessType+'&client_id=' + clientId + '&redirect_uri='+redirectUri+'&state&scope='+scope+'&approval_prompt='+approvalPrompt
-
-      window.open(url,'_self')
-
-      if(response && response.credential){
-        const userData = decodeCredential(response.credential)
-        console.log("Handle the userData", userData)
-      }
-
-    },
-    googleSignInCustom(response){
-      let responseType = 'code'
-      let accessType = 'online'
-      let clientId = '178559735458-vb7pkh7uphukpi26idrqbqtgq5kol7nc.apps.googleusercontent.com'
-      let redirectUri = 'https://google.edupassport.io/api/home/google/callback'
-      let scope = 'email profile'
-      let approvalPrompt = 'auto'
-
-      let url = 'https://accounts.google.com/o/oauth2/v2/auth?response_type='+responseType+
-          '&access_type='+accessType+'&client_id=' + clientId + '&redirect_uri='+redirectUri+'&state&scope='+scope+'&approval_prompt='+approvalPrompt
-
-      window.open(url,'_self')
-
-      if(response && response.credential){
-        const userData = decodeCredential(response.credential)
-        console.log("Handle the userData", userData)
-      }
 
     },
     linkedinSignIn() {

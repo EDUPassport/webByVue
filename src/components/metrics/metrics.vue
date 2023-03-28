@@ -4,19 +4,49 @@
     <div class="metrics-t-label">Metrics</div>
     <div class="metrics-t-actions">
       <div class="metrics-t-actions-top">
-        <el-button class="action-btn" plain @click="exportPdf">Export PDF</el-button>
-        <el-button class="action-btn" plain @click="exportExcel">Export CSV</el-button>
+<!--        <el-button class="action-btn"-->
+<!--                   plain-->
+<!--                   :loading="pdfLoadingStatus"-->
+<!--                   @click="exportPNG">-->
+<!--          <el-image class="download-icon" :src="downloadImg"></el-image>-->
+<!--          Export PNG-->
+<!--        </el-button>-->
+        <el-button class="action-btn"
+                   plain
+                   :loading="pdfLoadingStatus"
+                   @click="exportPDF">
+          <el-image class="download-icon" :src="downloadImg"></el-image>
+          Export PDF
+        </el-button>
+        <el-button class="action-btn"
+                   plain
+                   :loading="pngLoadingStatus"
+                   @click="exportExcel">
+          <el-image class="download-icon" :src="downloadImg"></el-image>
+          Export CSV
+        </el-button>
       </div>
       <div class="metrics-t-actions-date">
+        <div class="metrics-t-actions-date-item" style="position: relative;" @click="showDatePicker">
+          Custom date
+          <el-date-picker
+              style="position: absolute;z-index: -100;top: 0;left: 0;"
+              ref="datePicker"
+              type="daterange"
+          >
+          </el-date-picker>
+        </div>
         <div class="metrics-t-actions-date-item">12 Months</div>
-        <div class="metrics-t-actions-date-item">3 Months</div>
+        <div class="metrics-t-actions-date-item" >3 Months</div>
         <div class="metrics-t-actions-date-item">30 Days</div>
         <div class="metrics-t-actions-date-item">7 Days</div>
+
       </div>
     </div>
+
   </div>
 
-  <div class="metrics-chart">
+  <div class="metrics-chart" id="metrics-chart">
     <v-chart class="chart" :option="polar" />
   </div>
 
@@ -24,6 +54,7 @@
 </template>
 
 <script>
+import downloadImg from '@/assets/newHome/dashboard/download.svg'
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { PieChart , BarChart, LineChart  } from "echarts/charts";
@@ -35,6 +66,9 @@ import {
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
 import { ref, provide } from "vue";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf'
+
 
 use([
   CanvasRenderer,
@@ -52,7 +86,16 @@ export default {
   components:{
     VChart
   },
+  data(){
+    return {
+      downloadImg
+    }
+  },
   setup(){
+
+    const pngLoadingStatus = ref(false)
+    const pdfLoadingStatus = ref(false)
+    const csvLoadingStatus = ref(false)
 
     provide(THEME_KEY, "light");
 
@@ -82,7 +125,7 @@ export default {
       },
       xAxis: [
         {
-          type: "category",
+          type: "time",
           axisLabel: {
             // interval: 0, // 让横坐标每一项都显示
           },
@@ -95,6 +138,7 @@ export default {
       yAxis: [
         {
           type: "value",
+          nameLocation:'start',
           splitLine: {
             show: true,
             lineStyle: {
@@ -102,71 +146,187 @@ export default {
               type: "dashed",
             },
           },
-        },
-        {
-          type: "value",
-          splitLine: {
-            show: true,
-            lineStyle: {
-              // 设置坐标轴刻度设置为虚线
-              type: "dashed",
-            },
-          },
-        },
+        }
       ],
       series: [
         {
           name: "Profile Visits",
           type: "line",
-          yAxisIndex: 1,
           symbol: "circle", //将小圆点改成实心 不写symbol默认空心
           symbolSize: 5, //小圆点的大小
-          data: [1,2,6,8,10,4,6]
+          data: [
+            ["2019-10-01", 10],
+            ["2019-10-02", 230],
+            ["2019-10-03", 40],
+            ["2019-10-04", 22],
+            ["2019-10-05", 330],
+            ["2019-10-06", 33],
+            ["2019-10-07", 33],
+          ]
         },
         {
           name: "Jobs Shortlisted",
           type: "line",
-          yAxisIndex: 1,
           symbol: "circle", //将小圆点改成实心 不写symbol默认空心
           symbolSize: 5, //小圆点的大小
-          data: [0,2,4,6,8,10,0]
+          data: [
+            ["2019-10-01", 110],
+            ["2019-10-02", 310],
+            ["2019-10-03", 410],
+            ["2019-10-04", 122],
+            ["2019-10-05", 310],
+            ["2019-10-06", 313],
+            ["2019-10-07", 313],
+          ]
         },
       ],
 
     })
 
-    function exportPdf(){
-      window.print()
-      console.log('pdf')
+    // function exportPNG(){
+    //   console.log('pdf')
+    //   const HTMLElement = document.getElementById('metrics-chart')
+    //   html2canvas(HTMLElement).then(canvas=>{
+    //     const contentWidth = canvas.width;
+    //     const contentHeight = canvas.height;
+    //     const ctx = canvas.getContext('2d')
+    //     ctx.textAlign = 'center'
+    //     ctx.textBaseline = 'middle'
+    //     ctx.font = 'Inter'
+    //     ctx.fillStyle = ''
+    //
+    //     for(let i = contentWidth + -1; i< contentWidth; i+=240){
+    //       for(let j = contentHeight * -1; j< contentHeight; j += 100){
+    //         ctx.fillText('EDU Passport', i , j)
+    //       }
+    //     }
+    //
+    //     const imgUrl = canvas.toDataURL('image/png')
+    //     const tempLink = document.createElement('a')
+    //     tempLink.style.display = 'none'
+    //     tempLink.href = imgUrl
+    //     tempLink.setAttribute('download','EDU Passport')
+    //
+    //     if(typeof tempLink.download === 'undefined'){
+    //       tempLink.setAttribute('target','_blank')
+    //     }
+    //
+    //     document.body.appendChild(tempLink)
+    //     tempLink.click()
+    //     document.body.removeChild(tempLink)
+    //     window.URL.revokeObjectURL(imgUrl)
+    //
+    //   })
+    // }
+
+    function exportPDF(){
+      pdfLoadingStatus.value = true;
+
+      const HTMLElement = document.getElementById('metrics-chart')
+      html2canvas(HTMLElement,{
+        dpi:96, // 分辨率
+        scale:2, //设置缩放
+        useCORS:true, // 允许canvas画布内，可以跨域请求外部链接图片，允许跨域请求
+        bgColor:'#ffffff',
+        logging:false
+      }).then(canvas=>{
+        const contentWidth = canvas.width
+        const contentHeight = canvas.height
+        // 一页pdf显示html页面生成canvas高度
+        const pageHeight = (contentWidth / 592.28) * 841.89
+        // 未生成pdf的html页面高度
+        let leftHeight = contentHeight
+        // 页面偏移
+        let position = 0;
+        // a4纸的尺寸[595.28,841.89],html 页面生成的canvas在pdf中图片的宽高
+        const imgWidth = 595.28
+        const imgHeight = (595.28 / contentWidth) * contentHeight
+        const ctx = canvas.getContext('2d')
+        // 添加水印
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.rotate((25 * Math.PI) / 180)
+        ctx.font = '14px Inter'
+        ctx.fillStyle = 'rgba(184,184,184,0.8)'
+
+        for(let i = contentWidth * -1; i< contentWidth; i += 240){
+          for(let j = contentHeight * -1; j< contentHeight; j+= 100){
+            //填充文字 x间距 y间距
+            ctx.fillText('EDU Passport',i,j)
+          }
+        }
+
+        const pageData = canvas.toDataURL('image/jpeg',1.0)
+        const pdf = new jsPDF('','pt','a4')
+
+        if(leftHeight < pageHeight){
+          // 在pdf.addImage(pageData,'JPEG',左,上,宽度,高度) 设置在pdf中显示
+          pdf.addImage(pageData,'JPEG',0,0,imgWidth,imgHeight)
+        }else{
+          //分页
+          while(leftHeight > 0){
+            pdf.addImage(pageData,'JPEG',0,position,imgWidth,imgHeight)
+
+            leftHeight -= pageHeight
+            position -= 841.89;
+            //避免添加空白页
+            if(leftHeight>0){
+              pdf.addPage()
+            }
+
+          }
+
+        }
+
+        pdf.save()
+
+        pdfLoadingStatus.value = false;
+
+      })
     }
 
     function exportExcel(){
-      console.log('excel')
+      csvLoadingStatus.value = true;
+
       import('@/utils/Export2Excel').then(excel => {
         const tHeader = ['Name', 'Index']
         // const data = [{"Id":'1',"Title":'title1',"Author":'author1'}]
         const data =  [
-          { Name: "Bill Clinton", Index: 42 },
-          { Name: "GeorgeW Bush", Index: 43 },
-          { Name: "Barack Obama", Index: 44 },
-          { Name: "Donald Trump", Index: 45 },
-          { Name: "Joseph Biden", Index: 46 }
+          [ "Bill Clinton",  42 ],
+          [ "GeorgeW Bush",  43 ],
+          [ "Barack Obama",  44 ],
+          [ "Donald Trump",  45 ],
+          [ "Joseph Biden", 46 ]
         ]
         excel.export_json_to_excel({
           header: tHeader, //表头 必填
           data, //具体数据 必填
-          filename: 'excel-list', //非必填
+          filename: 'csv-list', //非必填
           autoWidth: true, //非必填
-          bookType: 'xlsx' //非必填
+          bookType: 'csv' //非必填 xlsx
         })
+
+        csvLoadingStatus.value = false;
+
       })
 
     }
 
+    const datePicker = ref(null)
+
+    function showDatePicker(){
+      datePicker.value.focus()
+    }
+
     return {
       polar,
+      pngLoadingStatus,
+      pdfLoadingStatus,
+      csvLoadingStatus,
       exportExcel,
-      exportPdf
+      exportPDF,
+      datePicker,
+      showDatePicker
     }
   }
 }
@@ -239,9 +399,6 @@ export default {
   text-align: right;
   color: #1D2939;
 
-  flex: none;
-  order: 0;
-  flex-grow: 0;
   padding: 8px 12px;
 
   border-left: 1px solid #D0D5DD;
@@ -249,9 +406,22 @@ export default {
 
 }
 
+.metrics-t-actions-top{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+
 .action-btn{
   border-color: #6648FF;
   color: #6648FF;
+  display: flex;
+  align-items: center;
 }
 
+.download-icon{
+  margin-right: 4px;
+}
 </style>

@@ -41,9 +41,9 @@
       <div class="menu-bottom-container">
 
         <div class="menu-bottom-top-container">
-          <div class="menu-custom-item"  @click="contactUs()">
+          <div class="menu-custom-item"  >
             <el-image :src="messageQuestionImg" class="menu-custom-item-img"></el-image>
-            <span>Support</span>
+            <span @click="contactUs()">Support</span>
           </div>
           <div class="menu-custom-item">
             <el-image :src="settingImg" class="menu-custom-item-img"></el-image>
@@ -52,9 +52,9 @@
         </div>
 
         <div class="menu-bottom-bottom-container">
-          <div class="menu-logout-container" @click="logout()">
+          <div class="menu-logout-container" >
             <el-image :src="logoutImg" class="menu-custom-item-img"></el-image>
-            <span>Logout</span>
+            <span @click="logout()">Logout</span>
           </div>
         </div>
 
@@ -356,6 +356,11 @@ export default {
   margin-left: 12px;
 }
 
+.menu-item a:hover{
+  background: #5C41E6;
+  border-radius: 6px;
+}
+
 .router-link-exact-active{
   background: #5C41E6;
   border-radius: 6px;
@@ -378,7 +383,9 @@ export default {
   height: 40px;
   cursor: pointer;
 }
-
+.menu-upgrade-btn:hover{
+  background-color: #fdb022;
+}
 .menu-upgrade-img{
   width: 20px;
   height: 20px;
@@ -421,10 +428,12 @@ export default {
   display: flex;
   align-items: center;
   height: 40px;
-  cursor: pointer;
+
   margin-bottom: 8px;
 }
-
+.menu-custom-item span:hover{
+  color: #98a2b3;
+}
 .menu-custom-item span{
   margin-left: 12px;
   font-family: 'Inter',Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
@@ -433,6 +442,7 @@ export default {
   font-size: 16px;
   line-height: 20px;
   color: #FFFFFF;
+  cursor: pointer;
 }
 
 .menu-custom-item-img{
@@ -448,7 +458,7 @@ export default {
   display: flex;
   align-items: center;
   height: 40px;
-  cursor: pointer;
+
 }
 
 .menu-logout-container span{
@@ -458,7 +468,11 @@ export default {
   font-weight: 500;
   font-size: 16px;
   line-height: 20px;
-  color: #FDA29B;;
+  color: #FDA29B;
+  cursor: pointer;
+}
+.menu-logout-container span:hover{
+    color: #f79009;
 }
 
 @media screen and (min-width: 769px) {

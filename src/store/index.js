@@ -7,6 +7,7 @@ const store = createStore({
         let menuDataStr = localStorage.getItem('menuData')
         let isThirdCompanyValue = localStorage.getItem('is_third_company')
         let companyId = localStorage.getItem('company_id')
+        let profilePercentage = localStorage.getItem('profile_percentage')
 
         return {
             username: localStorage.getItem('name'),
@@ -23,7 +24,8 @@ const store = createStore({
             menuDataStatus:false,
             isThirdCompanyStatus: isThirdCompanyValue ? isThirdCompanyValue : 0,
             currentCompanyId: companyId ? companyId : 0,
-            imUnreadTotal:0
+            imUnreadTotal:0,
+            profilePercentage:profilePercentage
 
         }
     },
@@ -73,7 +75,10 @@ const store = createStore({
         },
         setImUnreadTotal(state, data){
             state.imUnreadTotal = data
-        }
+        },
+        setProfilePercentage(state, data){
+            state.profilePercentage = data
+        },
 
     },
     actions:{

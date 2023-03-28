@@ -190,6 +190,8 @@ export default {
 
     const businessStatus = ref(false)
 
+    const methodValue = route.query.method
+
     let userTypeDataArr = [
       {
         type: 'educator',
@@ -255,17 +257,30 @@ export default {
 
     function selectUserType(type) {
       userType.value = type
-      router.replace({path:'/signup',query:{type:type}})
+      let rQuery = {
+        type:type
+      }
+      if(methodValue){
+        rQuery.method = methodValue
+      }
+      router.replace({path:'/signup',query: rQuery })
+
     }
 
-
     function continueNextStep() {
+      let rQuery = {
+        type:userType.value
+      }
+      if(methodValue){
+        rQuery.method = methodValue
+      }
+
       if (userType.value === 'business') {
         businessStatus.value = true;
         userTypeData.value = userTypeForBusinessData
 
       } else {
-        router.push({path: '/signup/fillOutInfo', query: {type: userType.value}})
+        router.push({path: '/signup/fillOutInfo', query: rQuery })
       }
 
     }

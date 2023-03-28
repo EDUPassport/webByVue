@@ -754,10 +754,12 @@ export default {
           let name = userContact.first_name + ' ' + userContact.last_name;
           let companyName = ''
           let avatar = 'https://oss.esl-passport.cn/educator.png';
+          let percentageValue = ''
 
           if (identity == 1) {
             avatar = userContact.headimgurl;
             companyName = name;
+            percentageValue = userContact.is_educator;
           }
 
           if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
@@ -765,9 +767,12 @@ export default {
             if (userContact.company) {
               companyInfo = userContact.company;
               avatar = companyInfo.logo;
-              // name = companyInfo.company_name;
               companyName = companyInfo.company_name;
             }
+            if(identity == 2){percentageValue = userContact.is_recruiting}
+            if(identity == 3){percentageValue = userContact.is_school}
+            if(identity == 4){percentageValue = userContact.is_other}
+            if(identity == 5){percentageValue = userContact.is_vendor}
 
           }
 
@@ -776,11 +781,13 @@ export default {
           localStorage.setItem('name', name)
           localStorage.setItem('avatar', avatar)
           localStorage.setItem('is_third_company', res.message.user_contact.is_third_company)
+          localStorage.setItem('profile_percentage', percentageValue)
 
           this.$store.commit('username', name)
           this.$store.commit('userAvatar', avatar)
           this.$store.commit('companyName', companyName)
           this.$store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
+          this.$store.commit('setProfilePercentage', percentageValue)
 
         }
       }).catch(err => {
@@ -1494,9 +1501,11 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  color: #262626;
-  font-size: 25px;
-  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  color: #1D2939;
+  font-weight: 600;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 
@@ -1504,15 +1513,20 @@ export default {
   display: flex;
   align-items: center;
 
-  color: #262626;
-  font-size: 22px;
-  font-family: BCRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  color: #1D2939;
+  font-weight: 600;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .el-dropdown-link-1 {
-  color: #262626;
-  font-size: 20px;
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+
+  font-size: 14px;
+  line-height: 18px;
+  color: #1D2939;
+  font-weight: 600;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .el-dropdown-tips {
@@ -1520,7 +1534,7 @@ export default {
   padding-left: 20px;
   color: #262626;
   font-size: 14px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .xll-add-icon-container {
@@ -1528,6 +1542,14 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.xll-add-icon-container span{
+  font-size: 14px;
+  line-height: 18px;
+  color: #1D2939;
+  font-weight: 600;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .xll-icon-circle-plus-1 {
@@ -1586,8 +1608,9 @@ export default {
 }
 
 .notification-all-read {
-  font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
+  font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
   text-align: right;
   cursor: pointer;
 }
@@ -1633,8 +1656,9 @@ export default {
 }
 
 .notification-item-time {
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .notification-item-c {
@@ -1658,7 +1682,7 @@ export default {
 .notification-item-c-r {
   width: calc(100% - 50px);
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
+  font-size: 14px;
   word-break: break-word;
   text-align: left;
   cursor: pointer;
@@ -1687,8 +1711,8 @@ export default {
 
 .im-msg-container span {
 
-  font-size: 18px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   margin-left: 15px;
 }
 

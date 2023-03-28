@@ -2,7 +2,11 @@
 
 :root {
     --el-color-info-light-9: #6650B3;
+    --el-color-primary-light-3:#3d2b99;
     --el-color-primary-light-5:#9173ff;
+    --el-color-primary-light-7: #6648ff;
+    --el-color-primary-light-8: #a391ff;
+    --el-color-primary-light-9: #d1c8ff;
     --el-color-primary: #49397f;
     --el-bg-color:#ffffff;
     --el-color-danger: #F04438;
@@ -185,20 +189,19 @@
     background-color: #6650B3;
 }
 
-
 .el-message-box__title{
-    font-size: 35px;
-    font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: Inter, BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-
 .el-message-box__message p{
-    font-size: 22px;
-    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-family: Inter, AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .el-empty__description p{
-    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-family: Inter,AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .dialog-custom-css{
@@ -208,6 +211,12 @@
 .el-message__content{
     font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size: 12px;
+}
+
+.el-progress__text{
+    font-family: Inter, AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color: #1D2939;
+    font-weight: 600;
 }
 
 @media screen and (max-width: 768px){
