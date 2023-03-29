@@ -1453,7 +1453,7 @@ export default {
         company_name: [
           {
             required: true,
-            message: "Please enter your company title",
+            message: "Please enter your company name",
             trigger: 'blur',
           },
         ],
