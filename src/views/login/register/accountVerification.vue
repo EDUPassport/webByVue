@@ -35,6 +35,7 @@
               </el-form-item>
 
               <check-code-button
+                 v-if="showBtn"
                   type="email-register"
                   :email="formInfoDecode.email"
                   text="Resend Code"
@@ -107,7 +108,7 @@ export default {
 
     const router = useRouter()
     const route = useRoute()
-
+    const showBtn = ref(false);
     const userType = route.query.type;
     const userStepIndex = ref(3)
     const nextLoadingStatus = ref(false)
@@ -210,12 +211,17 @@ export default {
       })
 
     }
-
+   
     onMounted(()=>{
       if(userType === 'school' || userType === 'recruiter' || userType === 'other'){
         userStepIndex.value = 4
       }
-    })
+    });
+    onMounted(() => {
+      setTimeout(() => {
+        showBtn.value = true;
+      }, 60000); // 60000 milliseconds = 1 minute
+    });
 
     return {
       userStepIndex,
@@ -226,6 +232,7 @@ export default {
       signRules,
       userType,
       nextLoadingStatus,
+      showBtn,
       turnBack,
       continueNextStep,
       turnHome,
@@ -234,7 +241,7 @@ export default {
       disabledNext
     }
 
-  }
+  },
 }
 </script>
 

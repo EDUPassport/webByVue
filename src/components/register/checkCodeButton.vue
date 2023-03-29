@@ -130,11 +130,8 @@ export default {
           }
 
         })
-
       }
-
       if(props.type === 'email-register'){
-
         SEND_EMAIL_CODE(params).then(res=>{
           console.log(res)
           if(res.code == 200){
@@ -148,10 +145,7 @@ export default {
           }
 
         }).catch(err=>{
-          console.log(err)
-
-          checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
-
+          // checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
           if(err.msg){
             ElMessage({
               type:'error',
@@ -169,12 +163,8 @@ export default {
             })
 
           }
-
         })
-
       }
-
-
     }
 
     return {
