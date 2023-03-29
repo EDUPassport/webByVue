@@ -211,17 +211,15 @@ export default {
       })
 
     }
-   
+
     onMounted(()=>{
       if(userType === 'school' || userType === 'recruiter' || userType === 'other'){
         userStepIndex.value = 4
       }
-    });
-    onMounted(() => {
       setTimeout(() => {
         showBtn.value = true;
       }, 60000); // 60000 milliseconds = 1 minute
-    });
+    })
 
     return {
       userStepIndex,
