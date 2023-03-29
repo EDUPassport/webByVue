@@ -21,7 +21,7 @@
               <el-form
                   :model="loginForm"
                   :rules="loginRules"
-                  ref="loginForm"
+                  ref="loginForms"
                   label-width="100px"
                   label-position="top"
                   class="demo-ruleForm"
@@ -37,15 +37,16 @@
                 </el-form-item>
 
                 <div class="remember-forgot-container">
-<!--                  <div class="remember-container">-->
-<!--                    <el-checkbox size="large" v-model="rememberValue" label="Remember Me"-->
-<!--                                 @change="rememberChange"></el-checkbox>-->
-<!--                  </div>-->
+                  <!--                  <div class="remember-container">-->
+                  <!--                    <el-checkbox size="large" v-model="rememberValue" label="Remember Me"-->
+                  <!--                                 @change="rememberChange"></el-checkbox>-->
+                  <!--                  </div>-->
                   <div class="forgot-password-container">
-                    <el-button  size="small" link class="forgot-password-btn" @click="forgotPassword()">
+                    <el-button size="small" link class="forgot-password-btn" @click="forgotPassword()">
                       Forgot password?
                     </el-button>
                   </div>
+
                 </div>
 
                 <el-form-item>
@@ -53,7 +54,7 @@
                              size="large"
                              type="primary"
                              :loading="submitLoginLoadingStatus"
-                             @click="submitLoginForm('loginForm')">
+                             @click="submitLoginForm(loginForms)">
                     Sign in
                   </el-button>
                 </el-form-item>
@@ -65,7 +66,7 @@
                 <el-form
                     :model="loginPhoneSmsForm"
                     :rules="loginPhoneSmsRules"
-                    ref="loginPhoneSmsForm"
+                    ref="loginPhoneSmsForms"
                     :hide-required-asterisk="true"
                     label-position="top"
                     class="demo-ruleForm"
@@ -109,11 +110,12 @@
                   </el-form-item>
 
                   <div class="remember-forgot-container">
-<!--                    <div class="remember-container">-->
-<!--                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>-->
-<!--                    </div>-->
+                    <!--                    <div class="remember-container">-->
+                    <!--                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>-->
+                    <!--                    </div>-->
                     <div class="forgot-password-container">
-                      <el-button  size="small" link class="forgot-password-btn" @click="forgotPassword()">Forgot password?
+                      <el-button size="small" link class="forgot-password-btn" @click="forgotPassword()">Forgot
+                        password?
                       </el-button>
                     </div>
                   </div>
@@ -122,7 +124,8 @@
                     <el-button class="submit-btn"
                                size="large"
                                type="primary"
-                               @click="submitLoginPhoneSmsForm('loginPhoneSmsForm')">
+                               :loading="submitLoginPhoneLoadingStatus"
+                               @click="submitLoginPhoneSmsForm(loginPhoneSmsForms)">
                       Sign in
                     </el-button>
                   </el-form-item>
@@ -134,7 +137,7 @@
                 <el-form
                     :model="loginPhonePassForm"
                     :rules="loginPhonePassRules"
-                    ref="loginPhonePassForm"
+                    ref="loginPhonePassForms"
                     :hide-required-asterisk="true"
                     label-position="top"
                     class="demo-ruleForm"
@@ -168,9 +171,9 @@
                   </el-form-item>
 
                   <div class="remember-forgot-container">
-<!--                    <div class="remember-container">-->
-<!--                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>-->
-<!--                    </div>-->
+                    <!--                    <div class="remember-container">-->
+                    <!--                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>-->
+                    <!--                    </div>-->
                     <div class="forgot-password-container">
                       <el-button link class="forgot-password-btn" @click="forgotPassword()">
                         Forgot password?
@@ -182,7 +185,8 @@
                     <el-button class="submit-btn"
                                size="large"
                                type="primary"
-                               @click="submitLoginPhonePassForm('loginPhonePassForm')">
+                               :loading="submitLoginPhonePassLoadingStatus"
+                               @click="submitLoginPhonePassForm(loginPhonePassForms)">
                       Sign in
                     </el-button>
                   </el-form-item>
@@ -191,7 +195,7 @@
               </template>
             </template>
 
-            <div class="xll-divider" v-if="isFromChinaEnv === 'yes' ">
+            <div class="xll-divider">
               <el-divider content-position="center">OR</el-divider>
             </div>
 
@@ -237,11 +241,13 @@
             <!--              </el-button>-->
             <!--            </div>-->
 
-            <div class="sign-in-btn-container">
+            <div class="sign-in-btn-container" v-if="isFromChinaEnv === 'no'">
               <GoogleLogin style="width: 100%;"
                            class="login-option-btn"
                            :callback="googleSignInWithCode">
-                <el-button size="large" plain style="width: 100%;" >
+                <el-button size="large"
+                           :loading="submitLoginGoogleLoadingStatus"
+                           plain style="width: 100%;">
                   <template #icon>
                     <el-icon>
                       <IconLogosGoogleIcon></IconLogosGoogleIcon>
@@ -290,8 +296,6 @@
 
     </el-row>
 
-    <ForgotPassword :isShow="forgotDialogVisible" @close="closeForgotDialog()"></ForgotPassword>
-
     <el-dialog v-model="loginErrorDialogVisible" :width="loginErrorDialogWidthValue">
       <div class="login-error-container">
         <h4>
@@ -321,169 +325,113 @@ import {encodeByJsBase64} from "@/utils/utils";
 import logoImgLight from "@/assets/newHome/logo/Logo_Transparent.png"
 import loginRImage from "@/assets/newHome/login/r-image.png"
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
-//WEIXIN_SEND_SMS
+
 import {
-  SEND_EMAIL_CODE,
   WEIXIN_SEND_SMS,
   LOGIN_EMAIL_PWD_V2,
   LOGIN_PHONE_SMS_V2,
   LOGIN_PHONE_PWD_V2,
   USER_MENU_LIST,
-  SEND_USER_PRIVATE_PASSWORD,
   EDUCATOR_PERCENTAGE_V2,
   RECRUITER_PERCENTAGE_V2,
   SCHOOL_PERCENTAGE_V2,
   OTHER_PERCENTAGE_V2,
   VENDOR_PERCENTAGE_V2, GOOGLE_CALLBACK_API
 } from "@/api/api";
-//LINKEDIN_CODE
+
 import {useRoute, useRouter} from "vue-router";
 import axios from "axios";
 
 import {randomString} from '@/utils'
 import {useStore} from 'vuex'
-import {reactive, ref} from "vue";
+import {reactive, ref, onMounted, onUnmounted, getCurrentInstance} from "vue";
 import {decode} from "js-base64";
-import ForgotPassword from '@/components/forgotPassword'
-// import { decodeCredential } from 'vue3-google-login'
+import {ElMessage, ElMessageBox} from 'element-plus'
+
 export default {
   name: "index",
   data() {
     return {
       isFromChinaEnv: process.env.VUE_APP_CHINA,
-      loginErrorDialogWidthValue: '50%',
-      loginErrorDialogVisible: false,
       imgLogo,
       logoImgLight,
       loginRImage,
-      identityBusinessCheckedStatus: false,
-      identityBusinessStrBefore: "",
-      identityBusinessStr: 'Education-Business',
-      loginPhoneStatus: false,
-      loginEmailStatus: true,
-
-      loginByPhoneWithPasswordStatus: false,
-      loginByPhoneWithSmsStatus: true,
-
-      loginForm: {
-        email: '',
-        password: ''
-      },
-      loginRules: {
-        email: [
-          {type: 'email', required: true, message: 'Enter a valid email address', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: 'Invalid password', trigger: 'blur'}
-        ]
-      },
-      loginPhoneSmsForm: {
-        phone: '',
-        code: ''
-      },
-      loginPhoneSmsRules: {
-        phone: [
-          {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
-        ],
-        code: [
-          {required: true, message: 'Please enter 6 digit code.', trigger: 'blur'}
-        ],
-      },
-      loginPhonePassForm: {
-        phone: '',
-        password: '',
-      },
-      loginPhonePassRules: {
-        phone: [
-          {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: 'Please enter your password', trigger: 'blur'}
-        ]
-      },
-
-      submitLoginLoadingStatus: false,
-      submitRegisterLoadingStatus: false,
-      humanVerifyStatus: true,
-      rememberValue: false,
-      registerForm: {
-        first_name: '',
-        last_name: '',
-        email: '',
-        code: '',
-        password: '',
-        c_password: ''
-      },
-      registerRules: {
-        first_name: [
-          {required: true, message: 'Please fill out your first name.', trigger: 'blur'}
-        ],
-        last_name: [
-          {required: true, message: 'Please fill out your last name.', trigger: 'blur'}
-        ],
-        code: [
-          {required: true, message: 'Please fill out your code.', trigger: 'blur'}
-        ],
-        email: [
-          {type: 'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: 'Please enter your password', trigger: 'blur'}
-        ],
-        c_password: [
-          {required: true, message: 'Please enter your password again', trigger: 'blur'}
-        ]
-      },
-      registerPhoneForm: {
-        first_name: '',
-        last_name: '',
-        phone: '',
-        code: '',
-        password: '',
-        c_password: ''
-      },
-      registerPhoneRules: {
-        first_name: [
-          {required: true, message: 'Please fill out your first name.', trigger: 'blur'}
-        ],
-        last_name: [
-          {required: true, message: 'Please fill out your last name.', trigger: 'blur'}
-        ],
-        phone: [
-          {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
-        ],
-        code: [
-          {required: true, message: 'Please fill out your code', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: 'Please enter your password', trigger: 'blur'}
-        ],
-        c_password: [
-          {required: true, message: 'Please enter your password again', trigger: 'blur'}
-        ]
-      },
-      identityValue: 0,
-      sendCodeLoading: false,
-      showValue: 'login',
-      businessDialogStatus: false
-
     }
-  },
-  components: {
-    ForgotPassword
   },
   setup(props, context) {
     //hcaptcha,
     console.log(props)
     console.log(context)
-    let router = useRouter()
-    let route = useRoute()
+    const router = useRouter()
+    const route = useRoute()
+    const store = useStore()
+    const Cookies = getCurrentInstance()?.appContext.config.globalProperties.$cookies
+
+    const submitLoginLoadingStatus = ref(false)
+    const submitLoginPhoneLoadingStatus = ref(false)
+    const submitLoginPhonePassLoadingStatus = ref(false)
+    const submitLoginGoogleLoadingStatus = ref(false)
+    const loginErrorDialogVisible = ref(false)
+    const identityValue = ref(0)
+    const businessDialogStatus = ref(false)
+    const loginByPhoneWithPasswordStatus = ref(false)
+    const loginByPhoneWithSmsStatus = ref(true)
+    const loginPhoneStatus = ref(false)
+    const loginEmailStatus = ref(true)
+
+    const loginErrorDialogWidthValue = ref('50%')
+
+
+    const loginForms = ref(null)
+
+    const loginForm = reactive(
+        {
+          email: '',
+          password: ''
+        }
+    )
+
+    const loginRules = reactive({
+      email: [
+        {type: 'email', required: true, message: 'Enter a valid email address', trigger: 'blur'}
+      ],
+      password: [
+        {required: true, message: 'Invalid password', trigger: 'blur'}
+      ]
+    })
+    const loginPhoneSmsForms = ref(null)
+    const loginPhoneSmsForm = reactive({
+      phone: '',
+      code: ''
+    })
+    const loginPhoneSmsRules = reactive({
+      phone: [
+        {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
+      ],
+      code: [
+        {required: true, message: 'Please enter 6 digit code.', trigger: 'blur'}
+      ],
+    })
+
+    const loginPhonePassForms = ref(null)
+    const loginPhonePassForm = reactive({
+      phone: '',
+      password: '',
+    })
+
+    const loginPhonePassRules = reactive({
+      phone: [
+        {required: true, message: 'Please fill out your phone #.', trigger: 'blur'}
+      ],
+      password: [
+        {required: true, message: 'Please enter your password', trigger: 'blur'}
+      ]
+    })
+
     const getParams = () => {
       // console.log(route.query)
       return route.query;
     }
-
-    const forgotDialogVisible = ref(false)
 
     const skipHomePage = () => {
       let a = route.query.redirect_params
@@ -497,10 +445,7 @@ export default {
       return router.push({path: '/overview'})
     }
 
-    let value = route.query.type;
-    const showType = value ? value : 'login'
 
-    const store = useStore()
     const setCurrentUser = (data) => store.commit('currentUser', data)
 
     let checkCodeBtn = reactive(
@@ -539,165 +484,144 @@ export default {
       }, 1000)
     }
 
-    return {
-      getParams,
-      skipHomePage,
-      showType,
-      setCurrentUser,
-      checkCodeBtn,
-      getCheckCodeTimer,
-      forgotDialogVisible
-    }
-
-  },
-  beforeRouteUpdate(to) {
-    // console.log(to)
-    if (to.query.email) {
-      this.loginForm.email = to.query.email
-    }
-
-  },
-  unmounted() {
-    window.onresize = null
-  },
-  mounted() {
-
-    let screenWidth = document.body.clientWidth
-    let screenWidthFloor = Math.floor(screenWidth)
-
-    if (screenWidthFloor <= 768) {
-      this.loginErrorDialogWidthValue = '90%'
-    }
-
-    window.onresize = () => {
-      if (screenWidthFloor <= 768) {
-        this.loginErrorDialogWidthValue = '90%'
+    function updateEducatorPercentage() {
+      let params = {
+        token: localStorage.getItem('token')
       }
-    }
-
-
-    let email = this.$route.query.email
-    if (email) {
-      this.loginForm.email = email
-    }
-
-    let isAccountCookieExist = this.$cookies.isKey('account')
-
-    if (isAccountCookieExist) {
-      let accountCookie = this.$cookies.get('account')
-      this.rememberValue = true;
-
-      if (accountCookie.type === 1) {
-        this.loginForm.email = accountCookie.email
-        this.loginForm.password = accountCookie.password
-      }
-
-      if (accountCookie.type === 2) {
-        this.loginPhonePassForm.phone = accountCookie.phone
-        this.loginPhonePassForm.password = accountCookie.password
-      }
-    }
-
-    console.log(this.$route.query)
-    if(this.$route.query.code){
-      let params = Object.assign({},this.$route.query)
-      GOOGLE_CALLBACK_API(params).then(res=>{
+      EDUCATOR_PERCENTAGE_V2(params).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
+        ElMessage({
+          type: 'error',
+          message: err.msg,
+          grouping: true
+        })
+
+      })
+    }
+
+    function updateRecruiterPercentage() {
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      RECRUITER_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        ElMessage({
+          type: 'error',
+          message: err.msg,
+          grouping: true
+        })
+      })
+    }
+
+    function updateSchoolPercentage() {
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      SCHOOL_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        ElMessage({
+          type: 'error',
+          message: err.msg,
+          grouping: true
+        })
+      })
+    }
+
+    function updateOtherPercentage() {
+      let params = {
+        token: localStorage.getItem('token')
+      }
+      OTHER_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        ElMessage({
+          type: 'error',
+          message: err.msg,
+          grouping: true
+        })
+      })
+    }
+
+    function updateVendorPercentage() {
+      let params = {
+        token: localStorage.getItem('token')
+      }
+
+      VENDOR_PERCENTAGE_V2(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        ElMessage({
+          type: 'error',
+          message: err.msg,
+          grouping: true
+        })
       })
     }
 
 
-  },
-  created() {
-    this.showValue = this.showType
-  },
-  methods: {
+    function loginErrorOk() {
+      loginErrorDialogVisible.value = false
+    }
 
-    loginErrorOk() {
-      this.loginErrorDialogVisible = false
-    },
-    loginErrorHelp() {
+    function loginErrorHelp() {
       window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+    }
 
-    },
-    sendPrivatePassword(email) {
+    function turnHome() {
+      router.push('/')
+    }
 
-      let params = {
-        email: email
-      }
-      SEND_USER_PRIVATE_PASSWORD(params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    turnHome() {
-      this.$router.push('/')
-    },
-    changeType(e) {
-      e.target.type = 'password'
-    },
-    getCheckCode() {
+    function getCheckCode() {
 
       let params = {
-        phone: this.loginPhoneSmsForm.phone
+        phone: loginPhoneSmsForm.phone
       }
 
       WEIXIN_SEND_SMS(params).then(res => {
         console.log(res)
         if (res.code === 200) {
-          this.getCheckCodeTimer()
-          this.$message.success('Success')
+          getCheckCodeTimer()
         }
       }).catch(err => {
         if (err.msg) {
-          this.$message.error(err.msg)
+          return ElMessage({
+            type: 'error',
+            message: err.msg,
+            grouping: true
+          })
         }
         if (err.message) {
-          this.$message.error(err.message)
+          ElMessage({
+            type: 'error',
+            message: err.message,
+            grouping: true
+          })
         }
       })
 
-    },
-    getCheckCodeForRegister() {
+    }
 
-      let params = {
-        phone: this.registerPhoneForm.phone
-      }
+    function signUp() {
+      router.push('/signup')
+    }
 
-      WEIXIN_SEND_SMS(params).then(res => {
-        console.log(res)
-        if (res.code === 200) {
-          this.getCheckCodeTimer()
-          this.$message.success('Success')
-        }
-      }).catch(err => {
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-
-    },
-    signUp() {
-      this.$router.push('/signup')
-    },
-    goHome() {
-      this.$router.push('/')
-    },
-    rememberChange(e) {
+    function rememberChange(e) {
       console.log(e)
-    },
-    humanVerify(response, responseKey) {
-      // console.log(response);
+    }
+
+    const humanVerifyStatus = ref(true)
+
+    function humanVerify(response, responseKey) {
       console.log(responseKey);
-      this.$loading({
-        text: 'Loading...'
-      })
+
       let params = new FormData()
       params.append('secret', '0x55587f4f237ef6B48A96284Ee257D0AA3d828508')
       params.append('response', response)
@@ -711,89 +635,31 @@ export default {
       }).then(res => {
         console.log(res)
         if (res.success) {
-          this.$loading().close()
-          this.humanVerifyStatus = true
-          this.$message.success('Success')
+          humanVerifyStatus.value = true
+
         } else {
-          this.$message.error('Fail')
-          this.$loading().close()
+          ElMessage({
+            type: 'error',
+            message: 'Fail',
+            grouping: true
+          })
         }
 
       })
 
-    },
-    sendEmailCode() {
-      let self = this;
-      let email = this.registerForm.email
-      if (email) {
+    }
 
-        let params = {
-          email: email
-        }
-        self.sendCodeLoading = true
-        SEND_EMAIL_CODE(params).then(res => {
-          if (res.code == 200) {
+    const rememberValue = ref(false)
 
-            setTimeout(function () {
-              self.sendCodeLoading = false
-              self.$message.success('Activation Code Sent')
-            }, 1500)
-          }
-        }).catch(err => {
-          console.log(err)
-          if (err.msg) {
-            this.$message.error(err.msg)
-          }
-          if (err.message) {
-            this.$message.error(err.message)
-          }
-        })
-      }
-
-    },
-    selectEducationBusiness() {
-      this.businessDialogStatus = true
-      this.identityBusinessCheckedStatus = false
-      this.identityValue = 0
-    },
-    submitIdentityBusiness() {
-      if (this.identityValue == 0) {
-        return;
-      }
-      this.businessDialogStatus = false;
-    },
-    selectedIdentityBusiness(identity, identityName) {
-      this.businessDialogStatus = true;
-
-      if (identity && identityName) {
-        this.identityBusinessCheckedStatus = true
-        this.identityValue = identity
-        this.identityBusinessStr = identityName
-      }
-
-    },
-    closeBusinessDialog() {
-      this.businessDialogStatus = false
-      this.identityBusinessCheckedStatus = false
-      this.identityValue = 0
-      this.identityBusinessStr = 'Education-Business'
-    },
-    selectedIdentity(value) {
-      console.log(value)
-      this.identityBusinessCheckedStatus = false
-      this.identityBusinessStr = 'Education-Business'
-      this.businessDialogStatus = false;
-
-      this.identityValue = value
-    },
-    rememberMeAction(data, type) {
+    function rememberMeAction(data, type) {
       // 1 email login 2 login by phone and password
-      let isExists = this.$cookies.isKey('account')
+      let isExists = Cookies.isKey('account')
+
       if (isExists) {
-        this.$cookies.remove('account')
+        Cookies.remove('account')
       }
 
-      if (this.rememberValue) {
+      if (rememberValue.value) {
 
         let obj = {}
         if (type === 1) {
@@ -813,13 +679,14 @@ export default {
           }
         }
 
-        this.$cookies.set('account', obj, 60 * 60 * 24 * 30)
+        Cookies.set('account', obj, 60 * 60 * 24 * 30)
 
       }
 
 
-    },
-    handleSetCurrentUser(uid, identity, companyId, firstName, lastName, avatar) {
+    }
+
+    function handleSetCurrentUser(uid, identity, companyId, firstName, lastName, avatar) {
 
       let uuid = uid + '#' + identity + '#' + companyId
       let name = firstName + ' ' + lastName
@@ -830,12 +697,12 @@ export default {
         avatar: avatar
       }
 
-      this.setCurrentUser(currentUser)
+      setCurrentUser(currentUser)
 
-    },
-    storageLoginUserInfo(resMessage) {
+    }
 
-      let self = this;
+    function storageLoginUserInfo(resMessage) {
+
       let identity = resMessage.identity;
       let firstName = resMessage.first_name;
       let lastName = resMessage.last_name;
@@ -860,130 +727,78 @@ export default {
         avatar = resMessage.headimgurl;
         companyName = firstName + ' ' + lastName;
         percentageValue = resMessage.is_educator
-        this.updateEducatorPercentage()
+        updateEducatorPercentage()
       }
 
       if (identity == 2) {
         avatar = resMessage.recruiting_info.logo;
         companyName = resMessage.recruiting_info.company_name;
         percentageValue = resMessage.is_recruiting;
-        this.updateRecruiterPercentage()
+        updateRecruiterPercentage()
       }
       if (identity == 3) {
         avatar = resMessage.school_info.logo;
         companyName = resMessage.school_info.company_name;
         percentageValue = resMessage.is_school;
-        this.updateSchoolPercentage()
+        updateSchoolPercentage()
       }
       if (identity == 4) {
         avatar = resMessage.other_info.logo;
         companyName = resMessage.other_info.company_name;
         percentageValue = resMessage.is_other;
-        this.updateOtherPercentage()
+        updateOtherPercentage()
       }
       if (identity == 5) {
         avatar = resMessage.vendor_info.logo;
         percentageValue = resMessage.is_vendor;
         companyName = resMessage.vendor_info.company_name;
-        this.updateVendorPercentage()
+        updateVendorPercentage()
       }
 
       localStorage.setItem('profile_percentage', percentageValue)
 
-      this.$store.commit('currentCompanyId', resMessage.company_id)
-      this.$store.commit('setProfilePercentage', percentageValue)
+      store.commit('currentCompanyId', resMessage.company_id)
+      store.commit('setProfilePercentage', percentageValue)
 
       if (resMessage.third_company_id) {
         localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
-        this.$store.commit('thirdCompanyId', resMessage.third_company_id)
+        store.commit('thirdCompanyId', resMessage.third_company_id)
       }
 
-      this.$store.commit('username', name)
-      this.$store.commit('userAvatar', avatar)
-      this.$store.commit('identity', resMessage.identity)
-      this.$store.commit('companyName', companyName)
-      this.$store.commit('changeThirdCompanyStatus', resMessage.is_third_company)
+      store.commit('username', name)
+      store.commit('userAvatar', avatar)
+      store.commit('identity', resMessage.identity)
+      store.commit('companyName', companyName)
+      store.commit('changeThirdCompanyStatus', resMessage.is_third_company)
 
-      this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, avatar)
-      this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
+      handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, avatar)
+      getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
 
-      setTimeout(function () {
-        self.skipHomePage()
-        self.submitLoginLoadingStatus = false
-      }, 1500)
+    }
 
-    },
-    updateEducatorPercentage() {
-      let params = {
-        token: localStorage.getItem('token')
-      }
-      EDUCATOR_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    updateRecruiterPercentage() {
-      let params = {
-        token: localStorage.getItem('token')
-      }
-      RECRUITER_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    updateSchoolPercentage() {
-      let params = {
-        token: localStorage.getItem('token')
-      }
-      SCHOOL_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    updateOtherPercentage() {
-      let params = {
-        token: localStorage.getItem('token')
-      }
-      OTHER_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    updateVendorPercentage() {
-      let params = {
-        token: localStorage.getItem('token')
-      }
+    function submitLoginForm(formName) {
 
-      VENDOR_PERCENTAGE_V2(params).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    submitLoginForm(formName) {
-      let self = this;
-      if (self.humanVerifyStatus) {
-        this.submitLoginLoadingStatus = true;
-        this.$refs[formName].validate((valid) => {
+      if (humanVerifyStatus.value) {
+
+        submitLoginLoadingStatus.value = true;
+
+        formName.validate((valid) => {
+
           if (valid) {
-            let params = Object.assign({}, this.loginForm)
+            let params = Object.assign({}, loginForm)
             LOGIN_EMAIL_PWD_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
-                this.rememberMeAction(params, 1)
+                rememberMeAction(params, 1)
 
                 let resMessage = res.message;
 
-                this.storageLoginUserInfo(resMessage)
+                storageLoginUserInfo(resMessage)
+
+                setTimeout(function () {
+                  skipHomePage()
+                  submitLoginLoadingStatus.value = false
+                }, 1500)
 
               }
             }).catch(err => {
@@ -991,7 +806,7 @@ export default {
 
               if (err.message.status == 10001) {
 
-                this.$msgbox({
+                ElMessageBox({
                   title: "Seems you dont have an account",
                   message: "would you like to sign up?",
                   dangerouslyUseHTMLString: false,
@@ -1004,7 +819,7 @@ export default {
                   callback(action) {
                     console.log(action)
                     if (action === 'confirm') {
-                      self.$router.push({path: '/signup', query: {}})
+                       router.push({path: '/signup', query: {}})
                     }
                   }
 
@@ -1012,78 +827,57 @@ export default {
 
               } else {
 
-                this.loginErrorDialogVisible = true;
+                loginErrorDialogVisible.value = true;
 
               }
 
-              this.submitLoginLoadingStatus = false
+              submitLoginLoadingStatus.value = false
 
             })
 
           } else {
             console.log('error submit!!')
-            this.submitLoginLoadingStatus = false
-            return false
+            submitLoginLoadingStatus.value = false
           }
         })
 
       }
 
-    },
-    submitLoginPhoneSmsForm(formName) {
-      let self = this;
-      if (self.humanVerifyStatus) {
-        // this.submitLoginLoadingStatus = true;
-        this.$refs[formName].validate((valid) => {
+    }
+
+    function submitLoginPhoneSmsForm(formName) {
+
+      if (humanVerifyStatus.value) {
+
+        formName.validate((valid) => {
           if (valid) {
-            let params = Object.assign({}, this.loginPhoneSmsForm)
+
+            submitLoginPhoneLoadingStatus.value = true;
+
+            let params = Object.assign({}, loginPhoneSmsForm)
             LOGIN_PHONE_SMS_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
 
+                rememberMeAction(params, 2)
+
                 let resMessage = res.message;
 
-                localStorage.setItem('token', resMessage.token)
-                localStorage.setItem('uid', resMessage.id)
-                localStorage.setItem('identity', resMessage.identity)
-                localStorage.setItem('language', resMessage.language)
-                localStorage.setItem('phone', resMessage.phone)
-                localStorage.setItem('company_id', resMessage.company_id)
-                this.$store.commit('currentCompanyId', resMessage.company_id)
-
-                if (resMessage.third_company_id) {
-                  localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
-                  this.$store.commit('thirdCompanyId', resMessage.third_company_id)
-                }
-
-                let identity = resMessage.identity
-
-                let firstName = resMessage.first_name
-                let lastName = resMessage.last_name
-                let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
-                let companyId = resMessage.company_id
-
-                localStorage.setItem('name', firstName + ' ' + lastName)
-                localStorage.setItem('first_name', firstName)
-                localStorage.setItem('last_name', lastName)
-
-                this.$store.commit('identity', resMessage.identity)
-
-                this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, currentAvatar)
-
-                // localStorage.setItem('currentUser',JSON.stringify(currentUser));
-                this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
+                storageLoginUserInfo(resMessage)
 
                 setTimeout(function () {
-                  self.skipHomePage()
-                  self.submitLoginLoadingStatus = false
+                  skipHomePage()
+                  submitLoginPhoneLoadingStatus.value = false
                 }, 1500)
               }
+
             }).catch(err => {
               console.log(err)
+              submitLoginPhoneLoadingStatus.value = false
+
               if (err.message.status == 10001) {
 
-                this.$msgbox({
+                ElMessageBox({
                   title: "Seems you dont have an account",
                   message: "would you like to sign up?",
                   dangerouslyUseHTMLString: false,
@@ -1096,83 +890,60 @@ export default {
                   callback(action) {
                     console.log(action)
                     if (action === 'confirm') {
-                      self.$router.push({path: '/signup', query: {}})
+                      router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
               } else {
-                this.loginErrorDialogVisible = true;
-                // this.$message.error(err.msg)
+                loginErrorDialogVisible.value = true;
               }
 
             })
 
           } else {
             console.log('error submit!!')
-            this.submitLoginLoadingStatus = false
-            return false
+            submitLoginPhoneLoadingStatus.value = false
           }
         })
 
       }
-    },
-    submitLoginPhonePassForm(formName) {
-      let self = this;
-      if (self.humanVerifyStatus) {
-        // this.submitLoginLoadingStatus = true;
-        this.$refs[formName].validate((valid) => {
+    }
+
+    function submitLoginPhonePassForm(formName)
+    {
+
+      if (humanVerifyStatus.value) {
+
+        formName.validate((valid) => {
           if (valid) {
-            let params = Object.assign({}, this.loginPhonePassForm)
+
+            submitLoginPhonePassLoadingStatus.value = true;
+
+            let params = Object.assign({}, loginPhonePassForm)
             LOGIN_PHONE_PWD_V2(params).then(res => {
               console.log(res)
               if (res.code == 200) {
 
-                this.rememberMeAction(params, 2)
+                rememberMeAction(params, 2)
 
                 let resMessage = res.message
 
-                localStorage.setItem('token', resMessage.token)
-                localStorage.setItem('uid', resMessage.id)
-                localStorage.setItem('identity', resMessage.identity)
-                localStorage.setItem('language', resMessage.language)
-                localStorage.setItem('phone', resMessage.phone)
-                localStorage.setItem('company_id', resMessage.company_id)
-                this.$store.commit('currentCompanyId', resMessage.company_id)
-
-                if (resMessage.third_company_id) {
-                  localStorage.setItem('thirdCompanyId', resMessage.third_company_id)
-                  this.$store.commit('thirdCompanyId', resMessage.third_company_id)
-                }
-
-                let identity = resMessage.identity
-                let firstName = resMessage.first_name
-                let lastName = resMessage.last_name
-                let currentAvatar = 'https://oss.esl-passport.cn/educator.png'
-                let companyId = resMessage.company_id
-
-                localStorage.setItem('name', firstName + ' ' + lastName)
-                localStorage.setItem('first_name', firstName)
-                localStorage.setItem('last_name', lastName)
-
-                this.$store.commit('identity', resMessage.identity)
-
-                this.handleSetCurrentUser(resMessage.id, identity, companyId, firstName, lastName, currentAvatar)
-
-                // localStorage.setItem('currentUser',JSON.stringify(currentUser));
-                this.getUserMenuList(resMessage.id, identity, resMessage.company_id, resMessage.id)
+                storageLoginUserInfo(resMessage)
 
                 setTimeout(function () {
-                  self.skipHomePage()
-                  self.submitLoginLoadingStatus = false
+                  skipHomePage()
+                  submitLoginPhonePassLoadingStatus.value = false
                 }, 1500)
               }
+
             }).catch(err => {
+              submitLoginPhonePassLoadingStatus.value = false;
               console.log(err)
               if (err.message.status == 10001) {
 
-                this.$msgbox({
+                ElMessageBox({
                   title: "Seems you dont have an account",
                   message: "would you like to sign up?",
                   dangerouslyUseHTMLString: false,
@@ -1185,29 +956,30 @@ export default {
                   callback(action) {
                     console.log(action)
                     if (action === 'confirm') {
-                      self.$router.push({path: '/signup', query: {}})
+                      router.push({path: '/signup', query: {}})
                     }
                   }
 
                 })
 
               } else {
-                this.loginErrorDialogVisible = true;
-                // this.$message.error(err.msg)
+                loginErrorDialogVisible.value = true;
+
               }
 
             })
 
           } else {
             console.log('error submit!!')
-            this.submitLoginLoadingStatus = false
-            return false
+            submitLoginPhonePassLoadingStatus.value = false
+
           }
         })
 
       }
-    },
-    getUserMenuList(uid, identity, companyId, cId) {
+    }
+
+    function getUserMenuList(uid, identity, companyId, cId) {
 
       let params = {
         user_id: uid,
@@ -1223,31 +995,36 @@ export default {
         if (res.code === 200) {
           let str = JSON.stringify(res.message)
           localStorage.setItem('menuData', str)
-          this.$store.commit('menuData', res.message)
+          store.commit('menuData', res.message)
         }
       }).catch(err => {
         console.log(err)
       })
 
-    },
-    googleSignInWithCode(response){
-      let self = this;
+    }
+
+    function googleSignInWithCode(response) {
+
+      submitLoginGoogleLoadingStatus.value =true;
+
       let redirectUri = window.location.origin
 
       let params = Object.assign({
-        redirect_uri:redirectUri
-      },response)
+        redirect_uri: redirectUri
+      }, response)
 
-      GOOGLE_CALLBACK_API(params).then(res=>{
+      GOOGLE_CALLBACK_API(params).then(res => {
         console.log(res)
-        if(res.code === 200){
-          if(res.msg === '10002'){
+        if (res.code === 200) {
+
+          if (res.msg === '10002') {
+
             let routeQuery = {
-              email:res.message,
-              method:'Google_login'
+              email: res.message,
+              method: 'Google_login'
             }
 
-            this.$msgbox({
+            ElMessageBox({
               title: "Seems you dont have an account",
               message: "would you like to sign up?",
               dangerouslyUseHTMLString: false,
@@ -1255,33 +1032,43 @@ export default {
               center: true,
               showCancelButton: true,
               cancelButtonText: "No,thank you",
-              confirmButtonText: "Sign Up",
+              confirmButtonText: "Sign up with Google",
               "round-button": true,
               callback(action) {
                 console.log(action)
                 if (action === 'confirm') {
-                  self.$router.push({path: '/signup', query: {method: encodeByJsBase64(JSON.stringify(routeQuery))}})
+                  router.push({path: '/signup', query: {method: encodeByJsBase64(JSON.stringify(routeQuery))}})
                 }
               }
 
             })
+            submitLoginGoogleLoadingStatus.value =false
             return;
           }
 
-          this.rememberMeAction(params, 1)
+          rememberMeAction(params, 1)
 
           let resMessage = res.message;
 
-          this.storageLoginUserInfo(resMessage)
+          storageLoginUserInfo(resMessage)
+
+          setTimeout(function () {
+            skipHomePage()
+            submitLoginGoogleLoadingStatus.value =false
+          }, 1500)
 
         }
 
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
+        submitLoginGoogleLoadingStatus.value =false
+
       })
 
-    },
-    linkedinSignIn() {
+    }
+
+    function linkedinSignIn()
+    {
       let client_id = process.env.VUE_APP_LINKEDIN_CLIENT_ID
       let response_type = process.env.VUE_APP_LINKEDIN_RESPONSE_TYPE
       let redirect_uri = process.env.VUE_APP_LINKEDIN_REDIRECT_URI
@@ -1292,24 +1079,126 @@ export default {
       window.location.href = 'https://www.linkedin.com/oauth/v2/authorization?response_type=' + response_type + '&client_id=' + client_id
           + '&redirect_uri=' + redirect_uri + '&state=' + state + '&scope=' + scope
 
-    },
-    loginWithPhone() {
-      this.loginPhoneStatus = !this.loginPhoneStatus
-      this.loginEmailStatus = !this.loginEmailStatus
-
-    },
-    switchToPhoneBySms() {
-      this.loginByPhoneWithSmsStatus = !this.loginByPhoneWithSmsStatus
-      this.loginByPhoneWithPasswordStatus = !this.loginByPhoneWithPasswordStatus
-    },
-    forgotPassword() {
-      this.$router.push({path:'/forgot/password',query:{ }})
-      // this.forgotDialogVisible = true
-    },
-    closeForgotDialog() {
-      this.forgotDialogVisible = false
     }
 
+    function loginWithPhone()
+    {
+      loginPhoneStatus.value = !loginPhoneStatus.value
+      loginEmailStatus.value = !loginEmailStatus.value
+
+    }
+
+    function switchToPhoneBySms()
+    {
+      loginByPhoneWithSmsStatus.value = !loginByPhoneWithSmsStatus.value
+      loginByPhoneWithPasswordStatus.value = !loginByPhoneWithPasswordStatus.value
+    }
+
+    function forgotPassword()
+    {
+      router.push({path: '/forgot/password', query: {}})
+    }
+
+    onMounted(()=>{
+      let screenWidth = document.body.clientWidth
+      let screenWidthFloor = Math.floor(screenWidth)
+
+      if (screenWidthFloor <= 768) {
+        loginErrorDialogWidthValue.value = '90%'
+      }
+
+      window.onresize = () => {
+        if (screenWidthFloor <= 768) {
+          loginErrorDialogWidthValue.value = '90%'
+        }
+      }
+
+
+      let email =  route.query.email
+      if (email) {
+         loginForm.email = email
+      }
+
+      let isAccountCookieExist = Cookies.isKey('account')
+
+      if (isAccountCookieExist) {
+        let accountCookie = Cookies.get('account')
+         rememberValue.value = true;
+
+        if (accountCookie.type === 1) {
+           loginForm.email = accountCookie.email
+           loginForm.password = accountCookie.password
+        }
+
+        if (accountCookie.type === 2) {
+           loginPhonePassForm.phone = accountCookie.phone
+           loginPhonePassForm.password = accountCookie.password
+        }
+      }
+    })
+
+    onUnmounted(()=>{
+      window.onresize = null
+    })
+
+    return {
+      loginForms,
+      loginForm,
+      loginRules,
+      loginPhoneSmsForms,
+      loginPhoneSmsForm,
+      loginPhoneSmsRules,
+      loginPhonePassForms,
+      loginPhonePassForm,
+      loginPhonePassRules,
+
+      getParams,
+      skipHomePage,
+
+      setCurrentUser,
+      checkCodeBtn,
+      getCheckCodeTimer,
+      loginErrorOk,
+      loginErrorHelp,
+      turnHome,
+      updateEducatorPercentage,
+      updateRecruiterPercentage,
+      updateSchoolPercentage,
+      updateOtherPercentage,
+      updateVendorPercentage,
+      signUp,
+      rememberChange,
+      humanVerifyStatus,
+      humanVerify,
+      rememberMeAction,
+      getCheckCode,
+
+      submitLoginLoadingStatus,
+      submitLoginPhoneLoadingStatus,
+      submitLoginPhonePassLoadingStatus,
+      submitLoginGoogleLoadingStatus,
+      identityValue,
+      businessDialogStatus,
+      loginByPhoneWithPasswordStatus,
+      loginByPhoneWithSmsStatus,
+      loginPhoneStatus,
+      loginEmailStatus,
+      loginErrorDialogWidthValue,
+      loginErrorDialogVisible,
+
+      loginWithPhone,
+      switchToPhoneBySms,
+      forgotPassword,
+
+      linkedinSignIn,
+      googleSignInWithCode,
+      storageLoginUserInfo,
+      submitLoginForm,
+      submitLoginPhoneSmsForm,
+      submitLoginPhonePassForm,
+
+
+    }
 
   }
 
@@ -1331,7 +1220,7 @@ export default {
   height: 100%;
 }
 
-.login-l-col{
+.login-l-col {
   display: flex;
   flex-direction: column;
 }
@@ -1594,18 +1483,17 @@ export default {
 }
 
 
-
 @keyframes gradientBG {
-   0% {
-     background-position: 0% 50%;
-   }
-   50% {
-     background-position: 100% 50%;
-   }
-   100% {
-     background-position: 0% 50%;
-   }
- }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 
 @media screen and (min-width: 992px ) and (max-width: 1399px) {
@@ -1618,20 +1506,20 @@ export default {
 
 @media screen and (max-width: 768px) {
 
-   .login-m{
-     width:auto;
-     margin: 100px 25px 0 25px;
-   }
+  .login-m {
+    width: auto;
+    margin: 100px 25px 0 25px;
+  }
 
-  .xll-login-form-container{
+  .xll-login-form-container {
     margin-top: 40px;
   }
 
-  .submit-btn{
+  .submit-btn {
     margin-top: 25px;
   }
 
-  .xll-divider{
+  .xll-divider {
     margin-top: 25px;
   }
 

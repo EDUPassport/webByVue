@@ -286,7 +286,7 @@
             Signup Progress
           </div>
 
-          <stepComponent :userType="userType" :step-index="userStepIndex"></stepComponent>
+          <stepComponent :fromGoogle="registerRefGoogle" :userType="userType" :step-index="userStepIndex"></stepComponent>
 
         </div>
 
@@ -325,6 +325,11 @@ export default {
     const userType = route.query.type;
     const userStepIndex = ref(2)
     const methodValue = route.query.method;
+    const methodJson = methodValue ?  JSON.parse(decodeByJsBase64(methodValue)) : {}
+    console.log(methodJson)
+
+    const registerRefGoogle = ref(methodJson.method === 'Google_login')
+    console.log(registerRefGoogle)
 
     function turnHome() {
       return router.push('/')
@@ -491,8 +496,10 @@ export default {
           }
 
           if(methodValue){
-            let methodJson = JSON.parse(decodeByJsBase64(methodValue))
+            // let methodJson = JSON.parse(decodeByJsBase64(methodValue))
             if(methodJson.method === 'Google_login'){
+
+              methodJson.email = 'test' + Math.random() + '@gmail.com'
 
               let registerParams = Object.assign({email:methodJson.email}, params)
               console.log(registerParams)
@@ -694,7 +701,8 @@ export default {
       stateChange,
       townOptions,
       townObj,
-      townChange
+      townChange,
+      registerRefGoogle
 
     }
 
