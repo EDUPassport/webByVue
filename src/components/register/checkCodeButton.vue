@@ -107,10 +107,7 @@ export default {
           }
 
         }).catch(err=>{
-          console.log(err)
-
-          checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
-
+          // checkCodeBtn.timer && clearInterval(checkCodeBtn.timer)
           if(err.msg){
             ElMessage({
               type:'error',
