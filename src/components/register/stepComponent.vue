@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class="step-item">
+      <div class="step-item" v-if='!fromGoogle'>
         <div class="step-item-l">
           <template v-if="stepIndex>3">
             <el-image class="step-item-l-img" :src="step1img"></el-image>
@@ -60,7 +60,7 @@
         </div>
       </div>
 
-      <div class="step-item">
+      <div class="step-item" v-if="!fromGoogle">
         <div class="step-item-l">
           <template v-if="stepIndex>4">
             <el-image class="step-item-l-img" :src="step1img"></el-image>
@@ -140,7 +140,7 @@
         </div>
       </div>
 
-      <div class="step-item">
+      <div class="step-item" v-if="!fromGoogle">
         <div class="step-item-l">
           <template v-if="stepIndex>4">
             <el-image class="step-item-l-img" :src="step1img"></el-image>
@@ -159,7 +159,7 @@
         </div>
       </div>
 
-      <div class="step-item">
+      <div class="step-item" v-if="!fromGoogle">
         <div class="step-item-l">
           <template v-if="stepIndex>5">
             <el-image class="step-item-l-img" :src="step1img"></el-image>
@@ -219,7 +219,7 @@
         </div>
       </div>
 
-      <div class="step-item">
+      <div class="step-item" v-if="!fromGoogle">
         <div class="step-item-l">
           <template v-if="stepIndex>3">
             <el-image class="step-item-l-img" :src="step1img"></el-image>
@@ -238,7 +238,7 @@
         </div>
       </div>
 
-      <div class="step-item">
+      <div class="step-item" v-if="!fromGoogle">
         <div class="step-item-l">
           <template v-if="stepIndex>4">
             <el-image class="step-item-l-img" :src="step1img"></el-image>
@@ -257,8 +257,6 @@
         </div>
       </div>
     </template>
-
-
 
   </div>
 
@@ -279,6 +277,10 @@ export default {
     stepIndex:{
       type:[String,Number],
       default: 1
+    },
+    fromGoogle:{
+      type:Boolean,
+      default:false
     }
 
   },

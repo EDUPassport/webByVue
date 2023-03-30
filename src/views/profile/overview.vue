@@ -13,23 +13,35 @@
           </div>
         </template>
 
+        <div>
+          <un-complete-profile-prompt :percent="profilePercentage"></un-complete-profile-prompt>
+        </div>
+
         <template v-if="identity == 1">
 
           <div class="dashboard-t-container">
 
             <div class="dashboard-t-item dashboard-t-item-gap">
               <div class="dashboard-t-item-t">Jobs Applied</div>
-              <div class="dashboard-t-item-m">12</div>
-              <div class="dashboard-t-item-b">
-                <span>40%</span> vs last month '"40%"'
+              <compareUpDownPercentage
+                  :now-value="educatorJobApplyCountForNow"
+                  :prev-value="educatorJobApplyCountForPrev"
+                  color="#027A48">
+              </compareUpDownPercentage>
+              <div class="dashboard-t-item-chart">
+                <vsLastMonthCharts color="#12B76A" areaColor="#ecfdf3"></vsLastMonthCharts>
               </div>
             </div>
 
             <div class="dashboard-t-item dashboard-t-item-gap">
               <div class="dashboard-t-item-t">Event Registered</div>
-              <div class="dashboard-t-item-m">3</div>
-              <div class="dashboard-t-item-b">
-                <span>10%</span> vs last month '"40%"'
+              <compareUpDownPercentage
+                  :now-value="educatorEventRegisterForNow"
+                  :prev-value="educatorEventRegisterForPrev"
+                  color="#B42318">
+              </compareUpDownPercentage>
+              <div class="dashboard-t-item-chart">
+                <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
               </div>
             </div>
 
@@ -38,7 +50,7 @@
               <div class="dashboard-t-item-m-other">
                 Discover up to 35% off from vendors across the Globe
               </div>
-              <div class="dashboard-t-item-b">
+              <div class="dashboard-t-item-b-1">
                 <el-button size="small" type="info">View Deals</el-button>
               </div>
             </div>
@@ -57,20 +69,71 @@
 
         </template>
 
-
         <template v-if="identity == 2 || identity == 3 || identity == 4">
 
-          <div class="dashboard-1-container">
-            <div class="dashboard-1">
-                  <span>
-                    More awesome widgets are coming soon...
-                  </span>
+          <div class="dashboard-t-container">
+
+            <div class="dashboard-t-item-business dashboard-t-item-gap">
+              <div class="dashboard-t-item-t">Jobs Posted</div>
+              <compareUpDownPercentage
+                  :now-value="educatorJobApplyCountForNow"
+                  :prev-value="educatorJobApplyCountForPrev"
+                  color="#027A48">
+              </compareUpDownPercentage>
+              <div class="dashboard-t-item-chart">
+                <vsLastMonthCharts color="#12B76A" areaColor="#ecfdf3"></vsLastMonthCharts>
+              </div>
             </div>
+
+            <div class="dashboard-t-item-business dashboard-t-item-gap">
+              <div class="dashboard-t-item-t">Job Views</div>
+              <compareUpDownPercentage
+                  :now-value="educatorEventRegisterForNow"
+                  :prev-value="educatorEventRegisterForPrev"
+                  color="#B42318">
+              </compareUpDownPercentage>
+              <div class="dashboard-t-item-chart">
+                <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
+              </div>
+            </div>
+
+            <div class="dashboard-t-item-business dashboard-t-item-gap">
+              <div class="dashboard-t-item-t">Fill Rate</div>
+              <compareUpDownPercentage
+                  :now-value="educatorEventRegisterForNow"
+                  :prev-value="educatorEventRegisterForPrev"
+                  color="#B42318">
+              </compareUpDownPercentage>
+              <div class="dashboard-t-item-chart">
+                <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
+              </div>
+            </div>
+
+            <div class="dashboard-t-item-business dashboard-t-item-gap">
+              <div class="dashboard-t-item-t">Events Posted</div>
+              <compareUpDownPercentage
+                  :now-value="educatorEventRegisterForNow"
+                  :prev-value="educatorEventRegisterForPrev"
+                  color="#B42318">
+              </compareUpDownPercentage>
+              <div class="dashboard-t-item-chart">
+                <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
+              </div>
+            </div>
+
           </div>
 
-          <NewApplications :data="myApplicationsData"
-                           @updateIndex="updateApplicationIndex">
-          </NewApplications>
+          <div class="dashboard-b-container">
+            <div class="dashboard-b-item">
+              <NewApplications :data="myApplicationsData"
+                               @updateIndex="updateApplicationIndex">
+              </NewApplications>
+            </div>
+            <div class="dashboard-b-item">
+              <metricsComponent></metricsComponent>
+            </div>
+
+          </div>
 
         </template>
 
@@ -87,19 +150,17 @@
           <div class="container-4">
             <div class="container-4-l">
               <activeDealsDashboard
-                  :listData="dealsListData"
+                  :listData="dealsData"
               ></activeDealsDashboard>
             </div>
             <div class="container-4-r">
               <activeEventsDashboard
-                  :list-data="eventsListData"
+                  :list-data="eventsData"
               ></activeEventsDashboard>
             </div>
           </div>
 
-
         </template>
-
 
       </div>
 
@@ -108,17 +169,14 @@
 </template>
 
 <script>
-import defaultAvatar from '@/assets/default/avatar.png'
-
 import {
-  ADS_LIST, ALL_ASSIGN_USERS, ALL_JOB_RESUME, EVENTS_MY_EVENT, MY_DEALS, USER_INFO_BY_TOKEN_V2,
-  USER_INFO_VISITOR_V2, USER_MENU_COMPANY
+  ALL_JOB_RESUME, EDUCATOR_STATIC_DATA, EVENTS_MY_EVENT, MY_DEALS, USER_INFO_BY_TOKEN_V2
 } from '@/api/api';
-import dashboardListsImg from '@/assets/dashboard/list.png'
-import dashboardAdsImg from '@/assets/ads/2.png'
+
 // import {onBeforeRouteUpdate} from "vue-router";
-import { computed} from "vue";
+import {ref, computed, onMounted, watch, onUnmounted} from "vue";
 import {useStore} from 'vuex'
+import {useRouter} from 'vue-router'
 
 import NewApplications from "@/components/business/newApplications";
 import dailyJobMatch from "@/components/educator/dailyJobMatch";
@@ -130,6 +188,11 @@ import {randomString} from "@/utils";
 import {updateWindowHeight} from "@/utils/tools";
 // import {removeZohoFloat, removeJs} from "@/utils/tools";
 import metricsComponent from "@/components/metrics/metrics.vue";
+import vsLastMonthCharts from "@/components/metrics/vsLastMonthCharts.vue";
+import unCompleteProfilePrompt from "@/components/unCompleteProfilePrompt.vue";
+import compareUpDownPercentage from "@/components/metrics/compareUpDownPercentage.vue";
+import {ElMessage} from 'element-plus'
+
 export default {
   name: "index",
   components: {
@@ -139,215 +202,118 @@ export default {
     favoritedJobsDashboard,
     activeDealsDashboard,
     activeEventsDashboard,
-    metricsComponent
+    metricsComponent,
+    vsLastMonthCharts,
+    unCompleteProfilePrompt,
+    compareUpDownPercentage
   },
   setup() {
     const store = useStore()
-    const currentUser = computed(()=>store.state.currentUser)
+    const router = useRouter()
+    const currentUser = computed(() => store.state.currentUser)
+    const identity =  ref(store.state.identity)
 
-    return {
-      currentUser
-    }
+    const isThirdCompanyStatus = ref(store.state.isThirdCompanyStatus)
+    const allIdentityChanged = ref(store.state.allIdentityChanged)
 
-  },
-  watch: {
-    allIdentityChanged(newValue) {
-      // console.log(newValue)
-      if (newValue) {
-        this.getAllAssignUsers()
-        this.getBasicInfo(this.identity)
-      }
-    },
-    identity(newValue){
-      console.log('identity' + newValue)
-    }
+    const dealsData = ref([])
+    const eventsData = ref([])
 
-  },
-  computed: {
-    isThirdCompanyStatus: {
-      get() {
-        return this.$store.state.isThirdCompanyStatus
-      }
-    },
-    allIdentityChanged: {
-      get() {
-        return this.$store.state.allIdentityChanged
-      }
-    },
-    identity:{
-      get(){
-        return this.$store.state.identity
-      }
-    }
+    function getDealsList(page, limit) {
 
-  },
-  data() {
-    return {
-      expandStatus:false,
-      dashboardListsImg,
-      dashboardAdsImg,
-      defaultAvatar,
-      userInfo: {},
-      basicUserInfo: {},
-
-      userContact: {},
-
-      companyInfo: {},
-
-      adsDataBottom: [],
-      profilePercentage: 0,
-      accountInfoLevel: 1,
-      accountInfoVipDueTime: '',
-      accountInfoCategoryStr: '',
-
-      assignUserData: [],
-      dialogUserMenuCompanyVisible: false,
-      userMenuCompanyData: [],
-
-      anotherUserId: 0,
-
-      dealsListData:[],
-      eventsListData:[],
-
-      myApplicationsData:[],
-      versionTime:randomString(),
-
-    }
-  },
-  unmounted() {
-    updateWindowHeight()
-    window.onresize = null
-  },
-  mounted() {
-
-    // onBeforeRouteUpdate(to => {
-    //   // console.log(to)
-    //   this.identity = to.query.identity
-    //   this.getBasicInfo(to.query.identity)
-    //   this.getPercentage(this.identity)
-    //
-    // })
-
-    // this.getBasicInfo(this.identity)
-    // this.getAdsList()
-
-    // this.getPercentage(this.identity)
-    // this.getAllAssignUsers()
-
-    let screenWidth = document.body.clientWidth
-    let screenWidthFloor = Math.floor(screenWidth)
-
-    if (screenWidthFloor <= 768) {
-      updateWindowHeight()
-      this.contributorWidth = '80%'
-    }
-
-    window.onresize = () => {
-      if (screenWidthFloor <= 768) {
-        this.contributorWidth = '80%'
-        updateWindowHeight()
-      }
-    }
-
-    if(this.identity == 2 || this.identity == 3 || this.identity == 4){
-      this.getAllJobResumeList(1,100)
-    }
-
-    if(this.identity == 5){
-      this.getDealsList(1,1000)
-      this.getEventsList(1,1000)
-    }
-
-  },
-  methods: {
-    postJob(){
-      this.$router.push({path:'/jobs/post',query:{version_time:this.versionTime}})
-    },
-    viewApplicationEvent(){
-      this.expandStatus = !this.expandStatus
-    },
-    selectCompanyToUpdate(userId, companyId) {
-      this.$router.push({
-        path: '/profile/admin/add',
-        query: {action: 'edit', uid: this.anotherUserId, cuid: userId, cId: companyId}
-      })
-    },
-    showMyCompany(userId) {
-      this.anotherUserId = userId
       let params = {
-        user_id: userId
+        status: 1,
+        page: page,
+        limit: limit
       }
-      USER_MENU_COMPANY(params).then(res => {
+
+      MY_DEALS(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.dialogUserMenuCompanyVisible = true;
-          this.userMenuCompanyData = res.message;
+          dealsData.value = res.message.data;
         }
       }).catch(err => {
         console.log(err)
-      })
-    },
-    getAllAssignUsers() {
-      let params = {}
-      ALL_ASSIGN_USERS(params).then(res => {
-        console.log(res)
-        if (res.code === 200) {
-          this.assignUserData = res.message
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    turnBanner(link) {
-      // console.log(link)
-      if (link != '') {
-        window.location.href = link
-      } else {
-        let token = localStorage.getItem('token')
-        if (!token) {
-          window.open('https://salesiq.zoho.com/signaturesupport.ls?widgetcode=75672d291fd9d5fcab53ffa3194f32598809c21f9b5284cbaf3493087cdd2e0d1a2010ab7b6727677d37b27582c0e9c4', '_blank')
+        ElMessage({
+          type: 'error',
+          message: err.msg,
+          grouping: true
+        })
 
+      })
+    }
+
+    function getEventsList(page, limit) {
+
+      let params = {
+        status: 1,
+        page: page,
+        limit: limit
+      }
+
+      EVENTS_MY_EVENT(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          eventsData.value = res.message.data;
+        }
+
+      }).catch(err => {
+        console.log(err)
+        ElMessage({
+          type: 'error',
+          message: err.msg,
+          grouping: true
+        })
+      })
+
+    }
+
+    const myApplicationsData = ref([])
+
+    function getAllJobResumeList(page, limit) {
+      let params = {
+        token: localStorage.getItem('token'),
+        page: page,
+        limit: limit
+      }
+      ALL_JOB_RESUME(params).then(res => {
+
+        if (res.code == 200) {
+          myApplicationsData.value = res.message.data
+        }
+      }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+          ElMessage({
+            type: 'error',
+            message: err.msg,
+            grouping: true
+          })
           return;
         }
-        this.$router.push('/me/ads/platform')
-      }
-    },
-    getAdsList() {
-      let ads_data = {
-        page: 1,
-        limit: 10000
-      }
-      ADS_LIST(ads_data).then(res => {
-        if (res.code == 200) {
-          // console.log(rs.message)
-          let adsDataBottom = [];
-          let identity = localStorage.getItem('identity');
-
-          if (!identity) {
-            adsDataBottom = res.message.filter(item => item.name == 'guest_m1');
-          }
-          if (identity == 1) {
-
-            adsDataBottom = res.message.filter(item => item.name == 'educator_m1');
-          }
-          if (identity == 2) {
-            adsDataBottom = res.message.filter(item => item.name == 'business_m1');
-          }
-          if (identity == 3) {
-            adsDataBottom = res.message.filter(item => item.name == 'vendor_m1');
-          }
-
-          if (adsDataBottom.length > 0) {
-            this.adsDataBottom = adsDataBottom[0].data;
-          }
-
+        if (err.message) {
+          ElMessage({
+            type: 'error',
+            message: err.message,
+            grouping: true
+          })
         }
-
-      }).catch(err => {
-        this.$message.error(err.msg)
       })
-    },
-    getBasicInfo(identity) {
+
+    }
+
+    const contributorWidth = ref('50%')
+    const versionTime = randomString()
+
+    function postJob() {
+      router.push({path: '/jobs/post', query: {version_time: versionTime}})
+    }
+
+    const userContact = ref({})
+    const educatorContact = ref({})
+    const companyInfo = ref({})
+
+    function getBasicInfo(identity) {
 
       let params = {
         identity: identity
@@ -356,37 +322,30 @@ export default {
       USER_INFO_BY_TOKEN_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
-          let userContact = res.message.user_contact;
+          let userContactValue = res.message.user_contact;
 
-          let company = {};
-          let educatorContact = {};
+          let companyValue = {};
+          let educatorContactValue = {};
 
-          if (userContact) {
-            this.userContact = userContact
+          if (userContactValue) {
+            userContact.value = userContactValue
           }
 
           if (identity == 1) {
 
-            educatorContact = res.message.user_contact.educator_contact;
+            educatorContactValue = res.message.user_contact.educator_contact;
 
-            if (educatorContact) {
-              this.educatorContact = educatorContact
-              this.accountInfoLevel = educatorContact.vip_level
-              this.accountInfoVipDueTime = educatorContact.vip_due_time
-              this.accountInfoCategoryStr = educatorContact.sub_identity_name_en
-
+            if (educatorContactValue) {
+              educatorContact.value = educatorContactValue
             }
           }
 
           if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
 
-            company = res.message.user_contact.company;
+            companyValue = res.message.user_contact.company;
 
-            if (company) {
-              this.companyInfo = company
-              this.accountInfoLevel = company.vip_level
-              this.accountInfoVipDueTime = company.vip_due_time
-              this.accountInfoCategoryStr = company.category_name_en
+            if (companyValue) {
+              companyInfo.value = companyValue
             }
 
           }
@@ -395,126 +354,134 @@ export default {
         }
       }).catch(err => {
         console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    getVisitorInfo(uid, identity) {
-
-      let params = {
-        user_id: uid,
-        identity: identity
-      }
-
-      USER_INFO_VISITOR_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          let userContact = res.message.user_contact;
-          let company = {};
-          let educatorContact = {};
-
-          if (userContact) {
-            this.userContact = userContact
-          }
-
-          if (identity == 1) {
-
-            educatorContact = res.message.user_contact.educator_contact;
-
-            if (educatorContact) {
-              this.educatorContact = educatorContact
-            }
-          }
-
-          if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
-
-            company = res.message.user_contact.company;
-
-            if (company) {
-              this.companyInfo = company
-            }
-
-          }
-
-
+        if (err.msg) {
+          ElMessage({
+            type: 'error',
+            message: err.msg,
+            grouping: true
+          })
+          return;
         }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    },
-    getDealsList(page, limit) {
-
-      let params = {
-        status:1,
-        page: page,
-        limit: limit
-      }
-
-      MY_DEALS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.dealsListData = res.message.data;
-          this.dealTotalNum = res.message.total
-          this.showLoadingStatus = false
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getEventsList(page,limit){
-
-      let params = {
-        status:1,
-        page: page,
-        limit: limit
-      }
-
-      EVENTS_MY_EVENT(params).then(res=>{
-        console.log(res)
-        if(res.code == 200){
-          this.eventsListData = res.message.data;
-          this.eventTotalNum = res.message.total;
-          this.showLoadingStatus=false
-
-        }
-      }).catch(err=>{
-        console.log(err)
-      })
-
-    },
-    getAllJobResumeList(page, limit) {
-      let params = {
-        token: localStorage.getItem('token'),
-        page: page,
-        limit: limit
-      }
-      ALL_JOB_RESUME(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.myApplicationsData = res.message.data
-          // console.log(res.message.data)
-          // this.totalNum = res.message.total
-        }
-      }).catch(err=>{
-        console.log(err)
-        if(err.msg){
-          this.$message.error(err.msg)
-        }
-        if(err.message){
-          this.$message.error(err.message)
+        if (err.message) {
+          ElMessage({
+            type: 'error',
+            message: err.message,
+            grouping: true
+          })
         }
       })
 
-    },
-    updateApplicationIndex(i,value){
-      this.myApplicationsData[i]['status'] = value;
     }
 
+    function updateApplicationIndex(i, value) {
+      myApplicationsData[i]['status'] = value;
+    }
+
+    const educatorStaticData = ref({})
+    const educatorJobApplyCountForNow = ref(0)
+    const educatorJobApplyCountForPrev = ref(0)
+    const educatorEventRegisterForNow = ref(0)
+    const educatorEventRegisterForPrev = ref(0)
+    function getEducatorStaticData(){
+      EDUCATOR_STATIC_DATA().then(res=>{
+        console.log(res)
+        if(res.code === 200){
+          if(res.msg === 10000){
+              let message = res.message;
+              if(message.job_apply_count){
+                educatorJobApplyCountForNow.value = message.job_apply_count.now_job_apply_count;
+                educatorJobApplyCountForPrev.value = message.job_apply_count.prev_job_apply_count;
+              }
+              if(message.getUserRegisterEventLog){
+                educatorEventRegisterForNow.value = message.getUserRegisterEventLog.now_event_apply_count;
+                educatorEventRegisterForPrev.value = message.getUserRegisterEventLog.prev_job_apply_count;
+              }
+
+          }
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+
+    watch(identity, (newValue, oldValue) => {
+      console.log(newValue, oldValue)
+    })
+
+    watch(allIdentityChanged, (newValue, oldValue) => {
+      if (newValue) {
+        console.log('old value --- ' + oldValue)
+        getBasicInfo(newValue)
+      }
+    }, {
+      immediate: true
+    })
+
+    const profilePercentage = ref(Number(store.state.profilePercentage))
+
+    onMounted(() => {
+
+      let screenWidth = document.body.clientWidth
+      let screenWidthFloor = Math.floor(screenWidth)
+
+      if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+        contributorWidth.value = '80%'
+      }
+
+      window.onresize = () => {
+        if (screenWidthFloor <= 768) {
+          contributorWidth.value = '80%'
+          updateWindowHeight()
+        }
+      }
+
+      if(identity.value == 1){
+        getEducatorStaticData()
+      }
+
+      if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
+        getAllJobResumeList(1, 100)
+      }
+
+      if (identity.value == 5) {
+        getDealsList(1, 1000)
+        getEventsList(1, 1000)
+      }
+
+    })
+
+    onUnmounted(()=>{
+      updateWindowHeight()
+      window.onresize = null
+    })
+
+    return {
+      identity,
+      currentUser,
+      dealsData,
+      eventsData,
+      isThirdCompanyStatus,
+      allIdentityChanged,
+      contributorWidth,
+      myApplicationsData,
+      postJob,
+      updateApplicationIndex,
+      userContact,
+      companyInfo,
+      educatorContact,
+      profilePercentage,
+      educatorStaticData,
+      educatorJobApplyCountForNow,
+      educatorJobApplyCountForPrev,
+      educatorEventRegisterForNow,
+      educatorEventRegisterForPrev
+
+    }
 
   }
+
+
 }
 </script>
 
@@ -532,17 +499,17 @@ export default {
 
 }
 
-.dashboard-t-container{
+.dashboard-t-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   flex-wrap: wrap;
 
   margin-left: 40px;
 }
 
-.dashboard-t-item{
+.dashboard-t-item {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -550,8 +517,7 @@ export default {
   padding: 16px 20px;
 
   width: 272px;
-  height: 148px;
-
+  height: 188px;
   background: #FFFFFF;
   border: 1px solid #EAECF0;
   box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
@@ -560,9 +526,28 @@ export default {
   margin: 20px 32px 20px 0;
 }
 
-.dashboard-t-item-gap{gap: 16px;}
+.dashboard-t-item-business {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 20px;
 
-.dashboard-t-item-t{
+  width: 252px;
+  height: 188px;
+  background: #FFFFFF;
+  border: 1px solid #EAECF0;
+  box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+  border-radius: 8px;
+
+  margin: 20px 20px 20px 0;
+}
+
+.dashboard-t-item-gap {
+  gap: 16px;
+}
+
+.dashboard-t-item-t {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
@@ -570,16 +555,8 @@ export default {
   line-height: 20px;
   color: #101828;
 }
-.dashboard-t-item-m{
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 36px;
-  line-height: 44px;
-  color: #101828;
-}
 
-.dashboard-t-item-m-other{
+.dashboard-t-item-m-other {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -588,16 +565,31 @@ export default {
   color: #667085;
 }
 
-.dashboard-t-item-b{
+.dashboard-t-item-chart {
+  width: 100%;
+}
+
+.dashboard-t-item-b {
   font-family: 'Inter';
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14px;
   line-height: 20px;
   color: #667085;
+
+  display: flex;
+  align-items: center;
+
 }
 
-.dashboard-b-container{
+.dashboard-t-item-b-1 {
+  width: 100%;
+  margin-bottom: 0;
+  margin-top: auto;
+  text-align: right;
+}
+
+.dashboard-b-container {
   margin: 20px 40px 0 40px;
 
   display: flex;
@@ -608,7 +600,7 @@ export default {
 
 }
 
-.dashboard-b-item{
+.dashboard-b-item {
   width: calc(50% - 12px);
 }
 
@@ -635,24 +627,24 @@ export default {
   margin-bottom: 50px;
 }
 
-.dashboard-1 h5{
+.dashboard-1 h5 {
   font-weight: 400;
 }
 
-.dashboard-1 h1{
+.dashboard-1 h1 {
   color: #6650B3;
   display: flex;
   align-items: flex-end;
 }
 
-.dashboard-1 span{
+.dashboard-1 span {
   margin-left: 15px;
   font-size: 20px;
   font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
-.dashboard-1-h{
+.dashboard-1-h {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -660,7 +652,7 @@ export default {
   margin-top: 30px;
 }
 
-.dashboard-1-h h1:nth-child(1){
+.dashboard-1-h h1:nth-child(1) {
   margin-right: 15px;
 }
 
@@ -672,15 +664,15 @@ export default {
   flex-wrap: wrap;
 }
 
-.container-2-l{
+.container-2-l {
   width: calc(50% - 40px);
 }
 
-.container-2-r{
+.container-2-r {
   width: calc(50% - 40px);
 }
 
-.container-3{
+.container-3 {
   display: flex;
   flex-direction: row;
   align-items: baseline;
@@ -689,7 +681,7 @@ export default {
   margin-top: 50px;
 }
 
-.container-3-l{
+.container-3-l {
   width: calc(50% - 40px);
 }
 
@@ -702,54 +694,55 @@ export default {
   flex-wrap: wrap;
 }
 
-.container-4-l{
+.container-4-l {
 
- }
+}
 
-.container-4-r{
+.container-4-r {
   margin-left: 50px;
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
 
-  .dashboard-1{
+  .dashboard-1 {
     margin-right: 15px;
     margin-bottom: 15px;
   }
 
-  .dashboard-1-container{
+  .dashboard-1-container {
     margin: 15px;
   }
 
-  .container-2{
+  .container-2 {
     flex-direction: column;
   }
 
-  .container-2-l{
+  .container-2-l {
     width: 100%;
   }
 
-  .container-2-r{
+  .container-2-r {
     width: 100%;
     margin-top: 15px;
   }
 
-  .container-3{
+  .container-3 {
     margin-top: 15px;
   }
 
-  .container-3-l{
+  .container-3-l {
     width: 100%;
   }
 
-  .container-4{
+  .container-4 {
     flex-direction: column;
   }
-  .container-4-l{
+
+  .container-4-l {
     width: 100%;
   }
 
-  .container-4-r{
+  .container-4-r {
     margin-left: 0;
   }
 

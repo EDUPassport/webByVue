@@ -1,84 +1,71 @@
 <template>
-<div>
-  <div class="dashboard-applications">
-    <div class="dashboard-applications-label">
-      <span>New applicants({{data.length}})</span>
-      <el-button class="dashboard-applications-all-btn"
+  <div class="applications">
+    <div class="applications-label">
+      <span>Recent Applications ({{ data.length }})</span>
+      <el-button class="applications-all-btn"
                  @click="showAllApplications()"
                  link>
-        ALL APPLICATIONS
+        All Applications
       </el-button>
     </div>
-    <el-scrollbar class="dashboard-application-container">
+
+    <el-scrollbar class="application-container">
 
       <template v-if="data.length > 0">
-        <div  v-for="(item,i) in data" :key="i">
 
-          <div class="dashboard-application" >
+        <div class="application-header">
+          <div class="application-header-item">Applicant Name</div>
+          <div class="application-header-item">Post Applied</div>
+          <div class="application-header-item">Match Meter</div>
+          <div class="application-header-item"></div>
+        </div>
 
-            <div class="dashboard-application-basic">
-              <div class="dashboard-application-basic-l">
-                <el-avatar class="dashboard-application-avatar-img"
-                           :src="item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
-                </el-avatar>
-              </div>
-              <div class="dashboard-application-basic-r">
-                <div class="dashboard-application-name">{{ item.user_contact.educator_contact.name }}</div>
-                <div class="dashboard-application-n">
-                  <div class="dashboard-application-n-1">{{item.user_contact.educator_contact.nationality}}</div>
-                  <div class="dashboard-application-n-2"
-                       v-if="item.user_contact.educator_contact.Teaching_experience"
-                  >
-                <span v-for="(exp,i) in item.user_contact.educator_contact.Teaching_experience"
-                      :key="i"
-                >{{exp.object_en}}</span>
-                  </div>
-                </div>
-              </div>
+        <div v-for="(item,i) in data" :key="i">
 
+          <div class="application">
+
+            <div class="application-item">
+              <el-avatar class="application-avatar-img"
+                         :src="item.user_contact.headimgurl ? item.user_contact.headimgurl : defaultAvatar ">
+              </el-avatar>
+              <span>{{ item.user_contact.educator_contact.name }}</span>
             </div>
-            <div class="dashboard-application-job">
-              <div class="dashboard-application-job-1">{{item.job.job_title}}</div>
-              <div class="dashboard-application-job-2">
-                position applied for
+            <div class="application-item">
+              <span>{{ item.job.job_title }}</span>
+            </div>
+
+            <div class="application-item">
+              <div style="width: 100px;">
+                <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF"/>
               </div>
             </div>
 
-            <div class="dashboard-application-match">
-              <div class="dashboard-application-match-1">
-                <div style="width: 100px;">
-                  <el-progress :stroke-width="15" :percentage="item.match_meter" color="#9173FF" />
-                </div>
-              </div>
-              <div class="dashboard-application-match-2">match meter</div>
-            </div>
-
-            <div class="dashboard-view-application">
-              <el-button class="dashboard-view-application-btn" plain round @click="viewApplicationEvent(item.id)">
-                VIEW APPLICATION
+            <div class="application-item" style="justify-content: flex-end;">
+              <el-button class="view-application-btn" size="small" type="info" @click="viewApplicationEvent(item.id)">
+                View
               </el-button>
             </div>
 
           </div>
 
-          <div class="dashboard-application-expand" v-if="item.id == selectedApplicationIdWithCompany">
-            <div class="dashboard-work-exp">
-              <div class="dashboard-work-exp-label">
+          <div class="application-expand" v-if="item.id == selectedApplicationIdWithCompany">
+            <div class="work-exp">
+              <div class="work-exp-label">
                 <span>Working experience</span>
-                <el-button class="dashboard-view-detail-btn" link  @click="viewEducatorDetail(item)">
+                <el-button class="view-detail-btn" link @click="viewEducatorDetail(item)">
                   VIEW DETAILS
                 </el-button>
               </div>
-              <div class="dashboard-work-exp-c">
+              <div class="work-exp-c">
 
                 <template v-for="(work,i) in item.user_contact.educator_contact.work_info" :key="i">
 
-                  <div class="dashboard-work-exp-c-item"  v-if="i<=2">
-                    <div class="dashboard-work-exp-c-item-label"> {{work.title}}</div>
-                    <div class="dashboard-work-exp-c-item-text">
-                      {{work.company_name}}, {{work.location}}
+                  <div class="work-exp-c-item" v-if="i<=2">
+                    <div class="work-exp-c-item-label"> {{ work.title }}</div>
+                    <div class="work-exp-c-item-text">
+                      {{ work.company_name }}, {{ work.location }}
                     </div>
-                    <div class="dashboard-work-exp-c-item-text">
+                    <div class="work-exp-c-item-text">
                       {{ $filters.ymdFormatTimestamp(work.work_time_from) }} - {{
                         $filters.ymdFormatTimestamp(work.work_time_to)
                       }}
@@ -87,30 +74,30 @@
 
                 </template>
 
-                <div class="dashboard-work-exp-c-item">
-<!--                  <div class="dashboard-work-exp-c-item-label">+2 more jobs</div>-->
+                <div class="work-exp-c-item">
+                  <!--                  <div class="work-exp-c-item-label">+2 more jobs</div>-->
                 </div>
 
 
               </div>
             </div>
 
-            <div class="dashboard-education-cer">
-              <div class="dashboard-education-cer-label">
+            <div class="education-cer">
+              <div class="education-cer-label">
                 Education & Certifications
               </div>
-              <div class="dashboard-education-cer-c">
+              <div class="education-cer-c">
 
                 <template v-for="(education,i) in item.user_contact.educator_contact.education_info"
                           :key="i">
-                  <div class="dashboard-education-cer-c-item">
-                    <div class="dashboard-education-cer-c-label">
-                      {{education.school_name}}
+                  <div class="education-cer-c-item">
+                    <div class="education-cer-c-label">
+                      {{ education.school_name }}
                     </div>
-                    <div class="dashboard-education-cer-c-text">
-                      {{education.degree}}
+                    <div class="education-cer-c-text">
+                      {{ education.degree }}
                     </div>
-                    <div class="dashboard-education-cer-c-text">
+                    <div class="education-cer-c-text">
                       {{
                         $filters.ymdFormatTimestamp(education.start_time)
                       }}-{{ $filters.ymdFormatTimestamp(education.end_time) }}
@@ -118,26 +105,26 @@
                   </div>
                 </template>
 
-                <!--              <div class="dashboard-education-cer-c-item">-->
-                <!--                <div class="dashboard-education-cer-c-label">-->
+                <!--              <div class="education-cer-c-item">-->
+                <!--                <div class="education-cer-c-label">-->
                 <!--                  Certificates and Diplomas-->
                 <!--                </div>-->
-                <!--                <div class="dashboard-education-cer-c-text">-->
+                <!--                <div class="education-cer-c-text">-->
                 <!--                  TOEFL,CELTA,Delta Module 1,Delta Module2,Delta Module 3-->
                 <!--                </div>-->
                 <!--              </div>-->
 
-                <!--              <div class="dashboard-education-cer-c-item">-->
-                <!--                <div class="dashboard-education-cer-c-label">-->
+                <!--              <div class="education-cer-c-item">-->
+                <!--                <div class="education-cer-c-label">-->
                 <!--                  Languages-->
                 <!--                </div>-->
-                <!--                <div class="dashboard-education-cer-c-text">-->
+                <!--                <div class="education-cer-c-text">-->
                 <!--                  English(native)-->
                 <!--                </div>-->
-                <!--                <div class="dashboard-education-cer-c-text">-->
+                <!--                <div class="education-cer-c-text">-->
                 <!--                  Korean(fluent)-->
                 <!--                </div>-->
-                <!--                <div class="dashboard-education-cer-c-text">-->
+                <!--                <div class="education-cer-c-text">-->
                 <!--                  Turkish(beginner)-->
                 <!--                </div>-->
                 <!--              </div>-->
@@ -145,29 +132,29 @@
               </div>
             </div>
 
-            <div class="dashboard-application-b">
-              <div class="dashboard-application-b-l">
-                <el-button class="dashboard-application-b-l-btn-1" plain round @click="viewEducatorDetail(item)">
+            <div class="application-b">
+              <div class="application-b-l">
+                <el-button class="application-b-l-btn-1" plain round @click="viewEducatorDetail(item)">
                   View Profile
                   <el-icon style="margin-left: 4px;">
-                    <IconIconParkShare />
+                    <IconIconParkShare/>
                   </el-icon>
                 </el-button>
-                <el-button class="dashboard-application-b-l-btn-1" plain round @click="viewEducatorResume(item)">
+                <el-button class="application-b-l-btn-1" plain round @click="viewEducatorResume(item)">
                   Resume
                   <el-icon style="margin-left: 4px;">
-                    <IconIconParkShare />
+                    <IconIconParkShare/>
                   </el-icon>
                 </el-button>
               </div>
-              <div class="dashboard-application-b-r">
-                <el-button class="dashboard-application-b-l-btn-1" link round
+              <div class="application-b-r">
+                <el-button class="application-b-l-btn-1" link round
                            :disabled="item.status == 3"
                            @click="showApplyJobStatusDialog(item.id,3,i)"
                 >
                   NOT INTERESTED
                 </el-button>
-                <el-button class="dashboard-application-b-l-btn-2" type="primary" round
+                <el-button class="application-b-l-btn-2" type="primary" round
                            :disabled="item.status == 2"
                            @click="showApplyJobStatusDialog(item.id,2,i)"
                 >
@@ -187,98 +174,98 @@
 
     </el-scrollbar>
 
+    <jobApplyStatusPopup :visible="applyJobStatusVisible"
+                         :status="applyJobStatusValue"
+                         @update="updateApplyJobStatus"
+                         @close="applyJobStatusVisible = false">
+
+    </jobApplyStatusPopup>
+
   </div>
 
-  <jobApplyStatusPopup  :visible="applyJobStatusVisible"
-                        :status="applyJobStatusValue"
-                        @update="updateApplyJobStatus"
-                        @close="applyJobStatusVisible = false">
 
-  </jobApplyStatusPopup>
-
-</div>
 </template>
 
 <script>
 import jobApplyStatusPopup from "@/components/status/jobApplyStatusPopup";
 import defaultAvatar from '@/assets/default/avatar.png'
 import {SET_APPLY_JOB_STATUS} from "@/api/api";
-import {encode } from 'js-base64'
+import {encode} from 'js-base64'
 
 export default {
   name: "newApplications",
-  props:['data'],
+  props: ['data'],
   components: {
     jobApplyStatusPopup
   },
-  data(){
+  data() {
     return {
       defaultAvatar,
-      expandStatus:false,
-      selectedApplicationIdWithCompany:undefined,
+      expandStatus: false,
+      selectedApplicationIdWithCompany: undefined,
 
-      applyJobStatusVisible:false,
-      applyJobStatusValue:0,
-      applyJobStatusIndex:0,
-      applyJobAlwaysValue:false
+      applyJobStatusVisible: false,
+      applyJobStatusValue: 0,
+      applyJobStatusIndex: 0,
+      applyJobAlwaysValue: false
 
     }
   },
-  methods:{
-    viewApplicationEvent(id){
+  methods: {
+    viewApplicationEvent(id) {
 
-      if(this.selectedApplicationIdWithCompany === id){
+      if (this.selectedApplicationIdWithCompany === id) {
         this.selectedApplicationIdWithCompany = 0
-      }else{
+      } else {
         this.selectedApplicationIdWithCompany = id
       }
 
       // this.expandStatus = !this.expandStatus
     },
-    showAllApplications(){
+    showAllApplications() {
       this.$router.push('/jobs/home')
     },
-    setApplyJobStatus(id,value,index,type){
+    setApplyJobStatus(id, value, index, type) {
 
       let params = {
         id: id,
         status: value
       }
 
-      SET_APPLY_JOB_STATUS(params).then(res=>{
+      SET_APPLY_JOB_STATUS(params).then(res => {
         console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
           // this.applyJobStatusValue = value
           this.$message({
-            type:'success',
-            message:'Success'
+            type: 'success',
+            message: 'Success'
           })
 
-          if(type === 1){
-            this.applyJobStatusVisible =false
-            if(this.applyJobAlwaysValue){
+          if (type === 1) {
+            this.applyJobStatusVisible = false
+            if (this.applyJobAlwaysValue) {
               localStorage.setItem('statusDialogAlways', this.applyJobAlwaysValue)
             }
           }
 
-          this.$emit('updateIndex',index, value)
+          this.$emit('updateIndex', index, value)
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
 
     },
-    updateApplyJobStatus(alwaysValue){
+    updateApplyJobStatus(alwaysValue) {
       // console.log(alwaysValue)
       this.applyJobAlwaysValue = alwaysValue
-      this.setApplyJobStatus(this.applyJobStatusId, this.applyJobStatusValue, this.applyJobStatusIndex,1)
+      this.setApplyJobStatus(this.applyJobStatusId, this.applyJobStatusValue, this.applyJobStatusIndex, 1)
 
     },
-    showApplyJobStatusDialog(id,value,index){
+    showApplyJobStatusDialog(id, value, index) {
       let alwaysValue = localStorage.getItem('statusDialogAlways')
-      if(alwaysValue){
-        this.setApplyJobStatus(id, value, index,2)
+      if (alwaysValue) {
+        this.setApplyJobStatus(id, value, index, 2)
         return;
       }
 
@@ -297,14 +284,14 @@ export default {
         cid: companyId,
         uid: userId,
         identity: 1,
-        from:'other'
+        from: 'other'
       }
 
       let str = encode(JSON.stringify(obj))
-      let { href } = this.$router.resolve({
+      let {href} = this.$router.resolve({
         path: '/educator/profile', query: {str: str}
       })
-      window.open(href,'_blank')
+      window.open(href, '_blank')
       // this.$router.push({path: '/educator/profile', query: {str: str}})
 
     },
@@ -312,13 +299,13 @@ export default {
       console.log(info)
       let resumePdf = info.user_contact.educator_contact.resume_pdf
 
-      if(resumePdf){
-        window.open(resumePdf,'_blank')
-      }else{
+      if (resumePdf) {
+        window.open(resumePdf, '_blank')
+      } else {
         this.$message({
-          type:'warning',
-          message:'The user does not have a resume in pdf format',
-          grouping:true
+          type: 'warning',
+          message: 'The user does not have a resume in pdf format',
+          grouping: true
         })
       }
 
@@ -331,411 +318,344 @@ export default {
 
 <style scoped>
 
-.dashboard-applications {
-  background-color: #FFFFFF;
-  padding: 20px;
-  border-radius: 15px;
-  /*margin-top: 20px;*/
+.applications {
 
+  box-sizing: border-box;
+
+  width: 520px;
+  height: 409px;
+  border: 1px solid #EAECF0;
+  filter: drop-shadow(0px 2px 3px rgba(16, 24, 40, 0.1));
+  border-radius: 10px;
 }
 
-.dashboard-applications-label {
-  font-size: 30px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 400;
-  color: #262626;
+.applications-label {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #101828;
+
+  margin-top: 26px;
+  margin-left: 16px;
 }
 
-.dashboard-applications-all-btn {
-  font-size: 20px;
-  font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #6650B3;
+.applications-all-btn {
   margin-left: 10px;
 }
 
-.dashboard-application-container {
+.application-container {
   margin-top: 20px;
-  height: 588px;
-  /*overflow-y: scroll;*/
+  height: 340px;
 }
 
-.dashboard-application {
+.application-header{
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0;
-  border-bottom: 2px solid #f0f2f5;
+
+  height: 42px;
+  left: 16px;
+  top: 67px;
+
+  background: #F9FAFB;
+  border-radius: 0px;
+
+  margin: 0 16px;
+  padding: 0 9px;
 }
 
+.application-header-item{
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  color: #1D2939;
 
-.dashboard-application-basic {
-  flex: 1;
+  width: 107px;
+}
+
+.application {
   display: flex;
-  align-items: center;
   flex-direction: row;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px;
+
 }
 
-.dashboard-application-basic-l {
-
-}
-
-.dashboard-application-avatar-img {
-  width: 70px;
-  height: 70px;
-  border-radius: 70px;
-}
-
-
-.dashboard-application-basic-r {
-  margin-left: 10px;
-}
-
-.dashboard-application-name {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-n {
+.application-item{
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 15px;
+  padding: 0 9px;
+  width: 107px;
+
 }
 
-.dashboard-application-n-1 {
-  font-size: 18px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
+.application-avatar-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  margin-right: 8px;
 }
 
-.dashboard-application-n-2 {
-  margin-left: 10px;
-  font-size: 18px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
+.application-item span {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+
+  color: #667085;
 }
 
-.dashboard-application-job {
-  flex: 1;
-}
 
-.dashboard-application-job-1 {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-job-2 {
-  margin-top: 15px;
-  font-size: 18px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-match {
-  flex: 1;
-}
-
-.dashboard-application-match-1 {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-application-match-2 {
-  margin-top: 15px;
-  font-size: 18px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.dashboard-view-application {
-  flex: 1;
-}
-
-.dashboard-view-application-btn {
+.view-application-btn {
   font-size: 20px;
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
-.dashboard-application-expand {
+.application-expand {
   padding: 20px;
 
 }
 
-.dashboard-work-exp {
+.work-exp {
 
 }
 
-.dashboard-work-exp-label {
+.work-exp-label {
   border-bottom: 2px solid #B3B3B3;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
 }
 
-.dashboard-work-exp-label span{
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+.work-exp-label span {
+  font-size: 16px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 500;
   color: #262626;
 }
-.dashboard-view-detail-btn{
-  font-size: 20px;
+
+.view-detail-btn {
+
   font-weight: 500;
   color: #6650B3;
   margin-left: 10px;
 }
 
-.dashboard-work-exp-c {
+.work-exp-c {
   display: flex;
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-start;
-  margin-top:25px;
+  margin-top: 15px;
 }
 
-.dashboard-work-exp-c-item {
+.work-exp-c-item {
   flex: 1;
   padding-right: 40px;
 }
 
-.dashboard-work-exp-c-item-label {
-  font-size: 23px;
-  font-family: Assistant-Medium, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+.work-exp-c-item-label {
+  font-size: 14px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #262626;
   margin-bottom: 5px;
 }
 
-.dashboard-work-exp-c-item-text {
-  font-size: 23px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+.work-exp-c-item-text {
+  font-size: 14px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 400;
   color: #262626;
 }
 
-.dashboard-education-cer {
-  margin-top: 50px;
+.education-cer {
+  margin-top: 16px;
 }
 
-.dashboard-education-cer-label {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+.education-cer-label {
+  font-size: 16px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 500;
   color: #262626;
   border-bottom: 2px solid #B3B3B3;
 }
 
-.dashboard-education-cer-c {
+.education-cer-c {
   display: flex;
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-start;
-  margin-top: 25px;
+  margin-top: 16px;
 }
 
-.dashboard-education-cer-c-item {
+.education-cer-c-item {
   flex: 1;
   padding-right: 40px;
 }
 
-.dashboard-education-cer-c-label {
-  font-size: 23px;
-  font-family: Assistant-Medium, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+.education-cer-c-label {
+  font-size: 14px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #262626;
   margin-bottom: 5px;
 }
 
-.dashboard-education-cer-c-text {
-  font-size: 23px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+.education-cer-c-text {
+  font-size: 14px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 400;
   color: #262626;
 }
 
-.dashboard-application-b {
+.application-b {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top:50px;
+  margin-top: 26px;
 
 }
 
-.dashboard-application-b-l {
+.application-b-l {
 
 }
 
-.dashboard-application-b-l-btn-1{
-  font-size: 20px;
+.application-b-l-btn-1 {
+  font-size: 12px;
   font-weight: 500;
   color: #262626;
 }
 
-.dashboard-application-b-l-btn-2{
-  font-size: 20px;
+.application-b-l-btn-2 {
+  font-size: 12px;
   font-weight: 500;
   color: #FFFFFF;
 }
 
-.dashboard-application-b-r {
+.application-b-r {
 
 }
 
 @media screen and (max-width: 768px) {
-  .dashboard-applications{
+  .applications {
     padding: 0;
     background-color: #F0F2F5;
   }
 
-  .dashboard-applications-label{
+  .applications-label {
     font-size: 20px;
     margin: 0 15px 8px 15px;
   }
-  .dashboard-applications-all-btn{
+
+  .applications-all-btn {
     font-size: 12px;
   }
 
-  .dashboard-application{
+  .application {
     padding: 15px;
     margin: 7px 15px 15px 15px;
     border-radius: 18px;
-    border-bottom:none;
+    border-bottom: none;
     background-color: #FFFFFF;
     flex-direction: column;
     align-items: flex-start;
     position: relative;
   }
 
-  .dashboard-application-basic{
-    width: 100%;
-  }
-  .dashboard-application-avatar-img{
-    width: 40px;
-    height: 40px;
-  }
-  .dashboard-application-name{
-    font-size: 18px;
-  }
-  .dashboard-application-n{
-    margin-top: 4px;
-  }
-  .dashboard-application-n-1{
+  .view-application-btn {
     font-size: 12px;
   }
 
-  .dashboard-application-n-2{
-    font-size: 12px;
-  }
-
-  .dashboard-application-job{
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .dashboard-application-job-1{
-    font-size: 18px;
-  }
-  .dashboard-application-job-2{
-    display: none;
-  }
-
-  .dashboard-application-match{
-    width: 100%;
-    margin-top: 20px;
-  }
-  .dashboard-application-match-2{
-    display: none;
-  }
-
-  .dashboard-view-application{
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-
-  }
-
-  .dashboard-view-application-btn{
-    font-size: 12px;
-  }
-
-  .dashboard-application-expand{
+  .application-expand {
     padding: 15px;
   }
-  .dashboard-work-exp-label span{
+
+  .work-exp-label span {
     font-size: 18px;
   }
-  .dashboard-view-detail-btn{
+
+  .view-detail-btn {
     font-size: 12px;
   }
-  .dashboard-work-exp-c{
+
+  .work-exp-c {
     flex-wrap: wrap;
     margin-top: 15px;
   }
-  .dashboard-work-exp-c-item{
+
+  .work-exp-c-item {
     width: 100%;
     flex: auto;
     padding-right: 0;
     margin-bottom: 4px;
   }
 
-  .dashboard-work-exp-c-item-label{
+  .work-exp-c-item-label {
     font-size: 14px;
   }
-  .dashboard-work-exp-c-item-text{
+
+  .work-exp-c-item-text {
     font-size: 12px;
   }
 
-  .dashboard-education-cer{
+  .education-cer {
     margin-top: 15px;
   }
 
-  .dashboard-education-cer-label{
+  .education-cer-label {
     font-size: 18px;
   }
-  .dashboard-education-cer-c{
+
+  .education-cer-c {
     margin-top: 15px;
     flex-wrap: wrap;
   }
 
-  .dashboard-education-cer-c-item{
+  .education-cer-c-item {
     width: 100%;
     flex: auto;
     padding-right: 0;
     margin-bottom: 4px;
   }
 
-  .dashboard-education-cer-c-label{
+  .education-cer-c-label {
     font-size: 14px;
   }
 
-  .dashboard-education-cer-c-text{
+  .education-cer-c-text {
     font-size: 12px;
   }
 
-  .dashboard-application-b{
+  .application-b {
     margin-top: 15px;
     flex-direction: column;
   }
 
-  .dashboard-application-b-l{
+  .application-b-l {
 
   }
-  .dashboard-application-b-r{
+
+  .application-b-r {
     margin-top: 10px;
   }
-  .dashboard-application-b-l-btn-1{
+
+  .application-b-l-btn-1 {
     font-size: 12px;
   }
 
-  .dashboard-application-b-l-btn-2{
+  .application-b-l-btn-2 {
     font-size: 12px;
   }
 

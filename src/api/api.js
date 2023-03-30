@@ -434,3 +434,6 @@ export const ADD_JOBS_VIEWS = (params) => post('/job/jobViews', params)
 
 // google login /api/home/google/callback
 export const GOOGLE_CALLBACK_API = (params) => post('/home/google/callback',params)
+
+// educator 统计数据
+export const EDUCATOR_STATIC_DATA = (params) => get('/home/educator/index',params)

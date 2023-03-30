@@ -286,7 +286,7 @@
             Signup Progress
           </div>
 
-          <stepComponent :userType="userType" :step-index="userStepIndex"></stepComponent>
+          <stepComponent :fromGoogle="registerRefGoogle" :userType="userType" :step-index="userStepIndex"></stepComponent>
 
         </div>
 
@@ -302,8 +302,9 @@ import {ref, reactive, onMounted} from 'vue'
 import {countriesData} from "@/utils/data";
 import stepComponent from "@/components/register/stepComponent.vue";
 import {ElMessage} from 'element-plus'
-import {encodeByJsBase64} from "@/utils/utils";
-import {GET_COUNTRY_LIST} from "@/api/api";
+import {encodeByJsBase64,decodeByJsBase64} from "@/utils/utils";
+import {EMAIL_REGISTER_V2, GET_COUNTRY_LIST} from "@/api/api";
+import {ElMessageBox} from 'element-plus'
 
 export default {
   name: "accountCreation",
@@ -323,6 +324,12 @@ export default {
 
     const userType = route.query.type;
     const userStepIndex = ref(2)
+    const methodValue = route.query.method;
+    const methodJson = methodValue ?  JSON.parse(decodeByJsBase64(methodValue)) : {}
+    console.log(methodJson)
+
+    const registerRefGoogle = ref(methodJson.method === 'Google_login')
+    console.log(registerRefGoogle)
 
     function turnHome() {
       return router.push('/')
@@ -459,24 +466,91 @@ export default {
           let params = {}
 
           if(userType === 'educator'){
-            params = Object.assign({},educatorForm)
+            params = Object.assign({
+              identity:1
+            },educatorForm)
           }
 
           if(userType === 'school'){
-            params = Object.assign({},schoolForm)
+            params = Object.assign({
+              identity:3
+            },schoolForm)
           }
 
           if(userType === 'recruiter'){
-            params = Object.assign({},recruiterForm)
+            params = Object.assign({
+              identity:2
+            },recruiterForm)
           }
 
           if(userType === 'other'){
-            params = Object.assign({},otherForm)
+            params = Object.assign({
+              identity:4
+            },otherForm)
           }
 
           if(userType === 'vendor'){
-            params = Object.assign({},vendorForm)
+            params = Object.assign({
+              identity:5
+            },vendorForm)
           }
+
+          if(methodValue){
+            // let methodJson = JSON.parse(decodeByJsBase64(methodValue))
+            if(methodJson.method === 'Google_login'){
+
+              methodJson.email = 'test' + Math.random() + '@gmail.com'
+
+              let registerParams = Object.assign({email:methodJson.email}, params)
+              console.log(registerParams)
+
+              EMAIL_REGISTER_V2(registerParams).then(res => {
+                console.log(res)
+                if (res.code == 200) {
+
+                  ElMessageBox({
+                    title: "All Set",
+                    message: "Let's get you logged in!",
+                    dangerouslyUseHTMLString: false,
+                    type: "success",
+                    center: true,
+                    confirmButtonText: "OK",
+                    "round-button": true,
+                    callback(action) {
+                      if (action === 'confirm') {
+                        router.push({path: '/login', query: {email: methodJson.email}})
+                      }
+                    }
+
+                  })
+
+                }
+
+              }).catch(err => {
+                console.log(err)
+
+                if (err.msg) {
+                  ElMessage({
+                    type:'warning',
+                    message: err.msg,
+                    grouping:true
+                  })
+                  return;
+                }
+
+                if (err.message) {
+                  ElMessage({
+                    type:'warning',
+                    message: err.message,
+                    grouping:true
+                  })
+                }
+              })
+
+            }
+            return false;
+          }
+
           let formInfo = encodeByJsBase64(JSON.stringify(params))
           router.push({path: '/signup/accountCreation', query: {type: userType,formInfo: formInfo}})
 
@@ -627,7 +701,8 @@ export default {
       stateChange,
       townOptions,
       townObj,
-      townChange
+      townChange,
+      registerRefGoogle
 
     }
 
