@@ -1,134 +1,67 @@
 <template>
-  <div>
-    <div class="menu-xll-bg-container">
 
-      <div class="menu-btn-container">
-        <el-button class="menu-btn" type="primary" @click="showSideMenu()">Menu</el-button>
-      </div>
+  <div class="menu-xll-bg-container">
 
-      <div class="menu-edu-logo" @click="turnHome()">
-        <el-image :src="eduLogoImg"></el-image>
-      </div>
+    <div class="menu-edu-logo" @click="turnHome()">
+      <el-image class="menu-edu-logo-img" :src="eduLogoImg"></el-image>
+      <el-image class="menu-edu-logo-43-img" :src="logo43Img"></el-image>
+    </div>
 
-      <div class="menu-items-container">
+    <div class="menu-items-container">
 
-        <div class="menu-item menu-item-margin" v-for="(item,i) in menuData" :Key="i">
+      <div class="menu-item menu-item-margin" v-for="(item,i) in menuData" :Key="i">
 
-          <router-link :to="{path:item.link}" exact>
+        <router-link :to="{path:item.link}" exact>
 
-            <el-image class="xll-icon-image"
-                      :class="selectedKeys === item.link  ? 'router-img-active' : '' "
-                      :src="selectedKeys === item.link ? item.icon_hover : item.icon">
-            </el-image>
+          <el-image class="xll-icon-image"
+                    :class="selectedKeys === item.link  ? 'router-img-active' : '' "
+                    :src="selectedKeys === item.link ? item.icon_hover : item.icon">
+          </el-image>
 
-            <span :class="selectedKeys === item.link  ? 'router-txt-active' : '' ">{{ item.menu_name_en }}</span>
+          <span :class="selectedKeys === item.link  ? 'router-txt-active' : '' ">{{ item.menu_name_en }}</span>
 
-          </router-link>
+        </router-link>
 
-          <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
-            {{ unreadTotal }}
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="menu-upgrade-btn">
-        <el-image class="menu-upgrade-img" :src="upgradeImg"></el-image>
-        <span>Upgrade to Premium</span>
-      </div>
-
-      <div class="menu-bottom-container">
-
-        <div class="menu-bottom-top-container">
-          <div class="menu-custom-item"  >
-            <el-image :src="messageQuestionImg" class="menu-custom-item-img"></el-image>
-            <span @click="contactUs()">Support</span>
-          </div>
-          <div class="menu-custom-item">
-            <el-image :src="settingImg" class="menu-custom-item-img"></el-image>
-            <span>Settings</span>
-          </div>
-        </div>
-
-        <div class="menu-bottom-bottom-container">
-          <div class="menu-logout-container" >
-            <el-image :src="logoutImg" class="menu-custom-item-img"></el-image>
-            <span @click="logout()">Logout</span>
-          </div>
+        <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
+          {{ unreadTotal }}
         </div>
 
       </div>
 
     </div>
 
-    <div class="menu-mobile-bg">
-      <div class="menu-mobile-container">
+    <div class="menu-upgrade-btn">
+      <el-image class="menu-upgrade-img" :src="upgradeImg"></el-image>
+      <span>Upgrade to Premium</span>
+    </div>
 
-        <div class="menu-mobile-item" v-for="(item,i) in menuData.slice(0,4)" :Key="i">
+    <div class="menu-bottom-container">
 
-          <router-link :to="{path:item.link}" exact>
-            <el-image class="xll-icon-image"
-                      :class="selectedKeys === item.link  ? 'router-img-active' : '' "
-                      :src="selectedKeys === item.link ? item.icon_hover : item.icon">
-            </el-image>
-
-            <span :class="selectedKeys === item.link  ? 'router-txt-active' : '' ">{{ item.menu_name_en }}</span>
-
-          </router-link>
-
-          <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
-            {{ unreadTotal }}
-          </div>
-
+      <div class="menu-bottom-top-container">
+        <div class="menu-custom-item"  >
+          <el-image
+              :src="messageQuestionImg"
+              @click="contactUs()"
+              class="menu-custom-item-img">
+          </el-image>
+          <span @click="contactUs()">Support</span>
         </div>
-
-        <div class="menu-mobile-item-more-container" @click="showMoreMenuItemsWithMobile()">
-
-          <template v-if="showMoreMenuItemsVisible">
-            <el-icon class="menu-mobile-item-more-icon" :size="30">
-              <IconIcBaselineClose />
-            </el-icon>
-            <span>Close</span>
-          </template>
-          <template v-else>
-            <el-icon class="menu-mobile-item-more-icon" :size="30">
-              <IconIcRoundMoreVert />
-            </el-icon>
-            <span>More</span>
-          </template>
-
-          <div  class="menu-mobile-more-show-container" v-if="showMoreMenuItemsVisible">
-
-            <div class="menu-mobile-item menu-mobile-item-circle"
-                 v-for="(item,i) in menuData.slice(4)" :Key="i">
-
-              <router-link :to="{path:item.link}" exact>
-                <el-image class="xll-icon-image"
-                          :class="selectedKeys === item.link  ? 'router-img-active' : '' "
-                          :src="selectedKeys === item.link ? item.icon_hover : item.icon">
-                </el-image>
-
-                <span :class="selectedKeys === item.link  ? 'router-txt-active' : '' ">{{ item.menu_name_en }}</span>
-
-              </router-link>
-
-              <div class="item-head_unread" v-if="item.menu_name_en === 'MESSAGES' && unreadTotal > 0 ">
-                {{ unreadTotal }}
-              </div>
-
-            </div>
-
-          </div>
-
+        <div class="menu-custom-item">
+          <el-image :src="settingImg" class="menu-custom-item-img"></el-image>
+          <span>Settings</span>
         </div>
+      </div>
 
+      <div class="menu-bottom-bottom-container">
+        <div class="menu-logout-container" >
+          <el-image :src="logoutImg" class="menu-custom-item-img"></el-image>
+          <span @click="logout()">Logout</span>
+        </div>
       </div>
 
     </div>
 
   </div>
-
 
 </template>
 
@@ -143,6 +76,8 @@ import upgradeImg from '@/assets/newHome/dashboard/upgrade.svg'
 import messageQuestionImg from '@/assets/newHome/dashboard/message-question.svg'
 import settingImg from '@/assets/newHome/dashboard/setting.svg'
 import logoutImg from '@/assets/newHome/dashboard/logout.svg'
+import logo43Img from '@/assets/newHome/dashboard/logo-43.svg'
+
 import {LOGOUT_V2} from "@/api/api";
 
 export default {
@@ -182,6 +117,7 @@ export default {
       messageQuestionImg,
       settingImg,
       logoutImg,
+      logo43Img,
       accountInfo: {},
       accountPhotoValue: '',
       versionTime: randomString(),
@@ -322,6 +258,14 @@ export default {
   cursor: pointer;
 }
 
+.menu-edu-logo-img{
+  width: 100%;
+}
+
+.menu-edu-logo-43-img{
+  display: none;
+}
+
 .menu-items-container{
   margin-top: 40px;
 }
@@ -341,10 +285,11 @@ export default {
   justify-content: flex-start;
   flex-direction: row;
   text-decoration: none;
-  width: calc(100% - 32px);
-  margin: 0 auto 8px;
+
+  width: 100%;
   height: 40px;
-  padding-left: 16px;
+  margin:0 16px 8px 16px;
+  padding: 0 16px;
 }
 
 .menu-item a span{
@@ -449,6 +394,7 @@ export default {
   width: 20px;
   height: 20px;
   margin-left: 16px;
+  cursor: pointer;
 }
 
 .menu-bottom-bottom-container{
@@ -458,7 +404,6 @@ export default {
   display: flex;
   align-items: center;
   height: 40px;
-
 }
 
 .menu-logout-container span{
@@ -475,118 +420,49 @@ export default {
     color: #f79009;
 }
 
+@media screen and (max-width: 1200px) {
+  .menu-xll-bg-container {
+    width: 80px;
+  }
+
+  .menu-edu-logo{
+    width: 43px;
+    padding-top: 40px;
+    padding-left: 17px;
+  }
+  .menu-edu-logo-43-img{
+    display: block;
+  }
+
+  .menu-edu-logo-img{
+    display: none;
+  }
+
+  .menu-item a span{
+    display: none;
+  }
+
+  .menu-upgrade-btn span{
+    display: none;
+  }
+
+  .menu-custom-item span{
+    display: none;
+  }
+
+  .menu-logout-container span{
+    display: none;
+  }
+
+}
+
 @media screen and (min-width: 769px) {
 
-  .menu-btn-container {
-    display: none;
-  }
-
-  .menu-btn {
-    margin: 10px 20px;
-  }
-
-  .menu-mobile-bg {
-    display: none;
-  }
 }
 
 @media screen and (max-width: 768px) {
-  .menu-xll-bg-container {
+  .menu-xll-bg-container{
     display: none;
-  }
-
-  .menu-mobile-bg {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    background-color: #ffffff;
-    z-index: 1000;
-    padding: 10px 0 10px 20px;
-    height: 60px;
-
-    border-top: 1px solid #F0F2F5;
-
-  }
-
-  .menu-mobile-container {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-
-  .menu-mobile-item {
-    position: relative;
-    flex: 1;
-  }
-
-  .menu-mobile-item-circle{
-    width:70px;
-    height: 70px;
-    background-color: #FFFFFF;
-    margin: 10px;
-    padding: 4px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .menu-mobile-item a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-
-    border-radius: 15px;
-
-    margin: 0 auto;
-    text-align: center;
-
-    font-size: 12px;
-    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-    text-decoration: none;
-    color: #262626;
-
-  }
-
-  .menu-mobile-item-more-container{
-    flex: 1;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
-
-  }
-  .menu-mobile-item-more-icon{
-    padding: 4px 15px;
-  }
-
-  .xll-icon-image{
-    width:30px;
-    height: 30px;
-    padding: 4px 15px;
-
-  }
-  .menu-mobile-item-more-container span{
-    font-size: 12px;
-    font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-    text-decoration: none;
-    color: #262626;
-  }
-
-  .menu-mobile-more-show-container{
-    z-index: 2100;
-    position: absolute;
-    bottom: 60px;
-    right: 0;
-
   }
 
 }

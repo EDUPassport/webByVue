@@ -538,7 +538,7 @@ export default {
 
 .jobs-list-item-title {
   font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 26px;
+  font-size: 18px;
   color: #262626;
   text-decoration: none;
   cursor: pointer;
@@ -546,17 +546,16 @@ export default {
 
 .jobs-list-item-title:hover {
   text-decoration: underline;
-  font-size: 26px;
 }
 
 .jobs-list-item-name {
-  font-size: 16px;
+  font-size: 14px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
 .jobs-list-item-address {
-  font-size: 16px;
+  font-size: 14px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
@@ -578,7 +577,7 @@ export default {
 }
 
 .jobs-list-item-work-type span {
-  font-size: 16px;
+  font-size: 14px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
@@ -602,7 +601,7 @@ export default {
 
 .jobs-list-item-date span{
   margin-left: 4px;
-  font-size: 16px;
+  font-size: 14px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
@@ -694,7 +693,7 @@ export default {
     font-size: 12px;
   }
   .jobs-list-item-title{
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .jobs-list-item-salary{

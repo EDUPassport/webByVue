@@ -154,7 +154,7 @@
 
 <script>
 import detailBannerImg from '@/assets/events/banner.png'
-import {EVENTS_ADD_APPLICANTS, EVENTS_DETAIL,EVENT_APPLICATIONS} from "@/api/api";
+import {EVENTS_ADD_APPLICANTS, EVENTS_DETAIL, EVENT_APPLICATIONS, USER_BROWSING_HISTORY_ADD} from "@/api/api";
 
 export default {
   name: "detail",
@@ -206,15 +206,27 @@ export default {
       this.getEventApplications(id)
     }
 
-
     if (token) {
       this.bookForm.first_name = localStorage.getItem('first_name')
       this.bookForm.last_name = localStorage.getItem('last_name')
       this.bookForm.contact = localStorage.getItem('email')
     }
     this.getEventDetail(id)
+    this.addUserBrowsingHistory(id)
   },
   methods: {
+    addUserBrowsingHistory(id){
+      let params = {
+        type:3,
+        type_id:id
+      }
+      USER_BROWSING_HISTORY_ADD(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
     getEventApplications(eventId){
       let params = {
         event_id:eventId

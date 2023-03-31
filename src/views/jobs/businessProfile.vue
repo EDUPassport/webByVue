@@ -21,6 +21,7 @@
 <script>
 
 import {
+  USER_BROWSING_HISTORY_ADD,
   USER_INFO_VISITOR_V2,
 } from "@/api/api";
 import BusinessProfile from "@/components/businessProfile";
@@ -63,6 +64,7 @@ export default {
       USER_INFO_VISITOR_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
+          addUserBrowsingHistory(identity, companyId)
           companyInfo.value = res.message.user_contact.company;
           store.commit('jobCompanyName', res.message.user_contact.company.company_name)
           showLoadingStatus.value = false;
@@ -72,6 +74,31 @@ export default {
         console.log(err)
         ElMessage.error(err.msg)
       })
+
+    }
+
+    function addUserBrowsingHistory(identity,id){
+      let type = 0
+      if(identity == 2){
+        type = 5
+      }
+      if(identity == 3){
+        type = 6
+      }
+      if(identity == 4){
+        type = 7
+      }
+      if(type){
+        let params = {
+          type: type,
+          type_id:id
+        }
+        USER_BROWSING_HISTORY_ADD(params).then(res=>{
+          console.log(res)
+        }).catch(err=>{
+          console.log(err)
+        })
+      }
 
     }
 

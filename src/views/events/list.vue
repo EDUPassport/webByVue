@@ -137,7 +137,14 @@
 <script>
 import eventFilterComponent from "@/components/eventFilterComponent";
 import bannerImg from '../../assets/events/banner.png'
-import {EVENT_APPLICATIONS, EVENT_LOCATION_LIST, EVENTS_CATEGORY, EVENTS_LIST, TAGS_LIST} from "@/api/api";
+import {
+  EVENT_APPLICATIONS,
+  EVENT_LOCATION_LIST,
+  EVENTS_CATEGORY,
+  EVENTS_LIST,
+  TAGS_LIST,
+  USER_BROWSING_HISTORY_ADD
+} from "@/api/api";
 import eventDetailCard from "@/components/eventDetailCard";
 import bookEventForm from "@/components/bookEventForm";
 import BookEventList from "@/components/bookEventList";
@@ -201,6 +208,18 @@ export default {
     this.getEventsList(this.eventPage,this.eventLimit)
   },
   methods:{
+    addUserBrowsingHistory(id){
+      let params = {
+        type:3,
+        type_id:id
+      }
+      USER_BROWSING_HISTORY_ADD(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
     getEventLocationList(){
       let params = {}
       EVENT_LOCATION_LIST(params).then(res=>{
@@ -213,20 +232,23 @@ export default {
       })
     },
     showBookEvent(item){
+      this.addUserBrowsingHistory(item.id)
+
       if(item.online_url){
         window.open(item.online_url,'_blank')
       }else{
         this.eventDetailData = item
-        this.bookEventDialogVisible = true;
-        // this.eventDialogVisible = false;
+        this.bookEventDialogVisible = true
       }
 
     },
     showBookList(item){
-      this.bookListDialogVisible = true;
+      this.bookListDialogVisible = true
+
       let params = {
         event_id:item.id
       }
+
       EVENT_APPLICATIONS(params).then(res=>{
         console.log(res)
         if(res.code == 200){
@@ -235,6 +257,7 @@ export default {
       }).catch(err=>{
         console.log(err)
       })
+
     },
     confirmFilterSearch(e){
       console.log(e)
@@ -246,6 +269,7 @@ export default {
       // console.log(item)
       this.eventDetailData  = item;
       this.eventDialogVisible = true;
+      this.addUserBrowsingHistory(item.id)
 
       // console.log(item)
       // let params = {
@@ -452,7 +476,7 @@ export default {
 .events-item-desc{
   margin-top: 25px;
   font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 18px;
+  font-size: 14px;
   color: #262626;
 
   height: 66px;
@@ -475,10 +499,10 @@ export default {
 .events-item-name{
   margin-top: 25px;
   font-family: BCM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 24px;
+  font-size: 18px;
   color: #262626;
   cursor: pointer;
-  height: 60px;
+  height: 24px;
 }
 
 .events-item-name:hover{

@@ -49,7 +49,7 @@ import {
   DEALS_AREA_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  ADS_LIST, USER_INFO_VISITOR_V2, USER_SUB_IDENTITY_V2, FEATURED_DEALS_LIST
+  ADS_LIST, USER_INFO_VISITOR_V2, USER_SUB_IDENTITY_V2, FEATURED_DEALS_LIST, USER_BROWSING_HISTORY_ADD
 } from "@/api/api";
 import {encode} from "js-base64";
 
@@ -171,6 +171,7 @@ export default {
 
     if(userId && identity && cid){
       this.getVisitorUserInfo(userId,identity,cid)
+      this.addUserBrowsingHistory(cid)
     }
 
     this.getFeaturedDealsList()
@@ -182,6 +183,18 @@ export default {
 
   },
   methods: {
+    addUserBrowsingHistory(id){
+      let params = {
+        type:8,
+        type_id:id
+      }
+      USER_BROWSING_HISTORY_ADD(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
     confirmFilterSearch(e) {
       console.log(e)
       this.filterResultData = e;

@@ -385,10 +385,10 @@ export default {
 
     function applyJob(id) {
       applyBtnLoading.value = true;
-      
+
       let identity = localStorage.getItem('identity')
       let token = localStorage.getItem('token')
-     
+
       if (identity == 1) {
         let params = {
           job_id: id,
@@ -550,7 +550,7 @@ export default {
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-  height: 120px;
+  height: 80px;
 }
 
 .job-detail-t-l{
@@ -560,7 +560,7 @@ export default {
 .job-detail-t-l-1{
   cursor: pointer;
   font-family:BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
+  font-size: 14px;
   color:#6650B3;
 
   white-space: nowrap;
@@ -570,7 +570,7 @@ export default {
 
 .job-detail-t-l-2{
   font-family:BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 35px;
+  font-size: 18px;
   color:#262626;
   width: 80%;
   white-space: nowrap;
@@ -580,16 +580,13 @@ export default {
 
 .job-detail-t-l-3{
   font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 23px;
+  font-size: 14px;
   color:#262626;
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-
-
 
 .job-detail-c-1{
 
@@ -605,12 +602,12 @@ export default {
 .job-detail-c-item-l{
   /*width: 210px;*/
   font-family:Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 23px;
+  font-size: 14px;
   color:#262626;
 }
 .job-detail-c-item-r{
   font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 23px;
+  font-size: 16px;
   color:#262626;
   margin-left: 10px;
 }
@@ -634,7 +631,7 @@ export default {
 
 .job-detail-c-item-label{
   font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 26px;
+  font-size: 18px;
   color:#262626;
 }
 .job-detail-c-item-c{
@@ -646,14 +643,14 @@ export default {
 
 .job-detail-desc-label{
   font-family:BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 26px;
+  font-size: 18px;
   color:#262626;
 }
 
 .job-detail-desc-content{
   margin-top: 25px;
   font-family:AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   color:#262626;
 }
 

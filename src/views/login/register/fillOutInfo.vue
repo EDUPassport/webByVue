@@ -263,7 +263,11 @@
                 </el-form-item>
 
                 <div class="continue-btn-container">
-                  <el-button class="continue-btn" size="large" type="primary" @click="continueNextStep()">
+                  <el-button class="continue-btn"
+                             size="large"
+                             type="primary"
+                             :loading="continueLoadingStatus"
+                             @click="continueNextStep()">
                     Continue
                   </el-button>
                 </div>
@@ -326,10 +330,11 @@ export default {
     const userStepIndex = ref(2)
     const methodValue = route.query.method;
     const methodJson = methodValue ?  JSON.parse(decodeByJsBase64(methodValue)) : {}
-    console.log(methodJson)
+    // console.log(methodJson)
+    const continueLoadingStatus = ref(false)
 
     const registerRefGoogle = ref(methodJson.method === 'Google_login')
-    console.log(registerRefGoogle)
+    // console.log(registerRefGoogle)
 
     function turnHome() {
       return router.push('/')
@@ -498,11 +503,12 @@ export default {
           if(methodValue){
             // let methodJson = JSON.parse(decodeByJsBase64(methodValue))
             if(methodJson.method === 'Google_login'){
+              continueLoadingStatus.value = true;
 
-              methodJson.email = 'test' + Math.random() + '@gmail.com'
+              // methodJson.email = 'test' + Math.random() + '@gmail.com'
 
               let registerParams = Object.assign({email:methodJson.email}, params)
-              console.log(registerParams)
+              // console.log(registerParams)
 
               EMAIL_REGISTER_V2(registerParams).then(res => {
                 console.log(res)
@@ -524,10 +530,13 @@ export default {
 
                   })
 
+                  continueLoadingStatus.value = false;
+
                 }
 
               }).catch(err => {
                 console.log(err)
+                continueLoadingStatus.value = false;
 
                 if (err.msg) {
                   ElMessage({
@@ -545,6 +554,8 @@ export default {
                     grouping:true
                   })
                 }
+
+
               })
 
             }
@@ -702,7 +713,8 @@ export default {
       townOptions,
       townObj,
       townChange,
-      registerRefGoogle
+      registerRefGoogle,
+      continueLoadingStatus
 
     }
 

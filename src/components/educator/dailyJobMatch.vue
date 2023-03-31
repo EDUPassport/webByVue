@@ -48,19 +48,29 @@
 
           </div>
           <div class="e-j-item-b">
-            <div class="e-j-item-b-item">
-              <el-image class="e-j-item-icon-24" :src="locationIconImg"></el-image>
-              {{item.job_location}}
-            </div>
+
+            <el-tooltip
+                effect="light"
+                :content="item.job_location"
+                placement="bottom"
+            >
+              <div class="e-j-item-b-item-job-location">
+                <el-image class="e-j-item-icon-24" :src="locationIconImg"></el-image>
+                <span>{{item.job_location}}</span>
+              </div>
+
+            </el-tooltip>
+
             <div class="e-j-item-b-item">
               <el-image class="e-j-item-icon-24" :src="salaryIconImg"></el-image>
-              {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
-              <span v-if="item.payment_period == 112">hourly</span>
-              <span v-if="item.payment_period == 113">daily</span>
-              <span v-if="item.payment_period == 114">weekly</span>
-              <span v-if="item.payment_period == 115">monthly</span>
-              <span v-if="item.payment_period == 116">annually</span>
+              <span>{{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}</span>
+<!--              <span v-if="item.payment_period == 112">hourly</span>-->
+<!--              <span v-if="item.payment_period == 113">daily</span>-->
+<!--              <span v-if="item.payment_period == 114">weekly</span>-->
+<!--              <span v-if="item.payment_period == 115">monthly</span>-->
+<!--              <span v-if="item.payment_period == 116">annually</span>-->
             </div>
+
             <div class="e-j-item-b-btn-container">
               <el-button type="primary">Apply Now</el-button>
             </div>
@@ -88,8 +98,6 @@
       <template v-else>
         <el-empty description="..."></el-empty>
       </template>
-
-
 
     </el-scrollbar>
   </div>
@@ -180,18 +188,13 @@ export default {
 <style scoped>
 
 .e-j {
-
   box-sizing: border-box;
-
   width: 508px;
   height: 409px;
-  left: 340px;
-  top: 312px;
   background: #FFFFFF;
   border: 1px solid #EAECF0;
   box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
   border-radius: 8px;
-
 }
 
 .e-j-label {
@@ -258,22 +261,45 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-top: 24px;
 }
+.e-j-item-b-item-job-location{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-right: 8px;
+}
 
-.e-j-item-b-item{
+.e-j-item-b-item-job-location span{
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
   line-height: 12px;
   color: #344054;
-  margin-right: 8px;
+  cursor: pointer;
 
+  width: 80px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.e-j-item-b-item{
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
+}
+
+.e-j-item-b-item span{
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
+  color: #344054;
 }
 
 .e-j-item-b-btn-container{
@@ -293,7 +319,16 @@ export default {
 }
 
 @media screen and (max-width: 768px){
-
+  .e-j{
+    width: 100%;
+  }
+  .e-j-item{
+    height: 140px;
+  }
+  .e-j-item-b{
+    margin-top: 10px;
+    flex-direction: column;
+  }
 
 }
 

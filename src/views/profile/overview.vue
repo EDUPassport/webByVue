@@ -25,8 +25,8 @@
               <div class="dashboard-t-item-t">Jobs Applied</div>
               <compareUpDownPercentage
                   :now-value="educatorJobApplyCountForNow"
-                  :prev-value="educatorJobApplyCountForPrev"
-                  color="#027A48">
+                  :percent="educatorJobApplyCountPercent"
+              >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
                 <vsLastMonthCharts color="#12B76A" areaColor="#ecfdf3"></vsLastMonthCharts>
@@ -37,8 +37,8 @@
               <div class="dashboard-t-item-t">Event Registered</div>
               <compareUpDownPercentage
                   :now-value="educatorEventRegisterForNow"
-                  :prev-value="educatorEventRegisterForPrev"
-                  color="#B42318">
+                  :percent="educatorEventRegisterPercent"
+              >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
                 <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
@@ -62,7 +62,7 @@
               <dailyJobMatch></dailyJobMatch>
             </div>
             <div class="dashboard-b-item">
-              <metricsComponent></metricsComponent>
+              <metricsComponent :options="educatorMetricsOptions"></metricsComponent>
             </div>
 
           </div>
@@ -76,9 +76,9 @@
             <div class="dashboard-t-item-business dashboard-t-item-gap">
               <div class="dashboard-t-item-t">Jobs Posted</div>
               <compareUpDownPercentage
-                  :now-value="educatorJobApplyCountForNow"
-                  :prev-value="educatorJobApplyCountForPrev"
-                  color="#027A48">
+                  :now-value="businessJobsPostedForNow"
+                  :percent="businessJobsPostedPercent"
+              >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
                 <vsLastMonthCharts color="#12B76A" areaColor="#ecfdf3"></vsLastMonthCharts>
@@ -88,9 +88,9 @@
             <div class="dashboard-t-item-business dashboard-t-item-gap">
               <div class="dashboard-t-item-t">Job Views</div>
               <compareUpDownPercentage
-                  :now-value="educatorEventRegisterForNow"
-                  :prev-value="educatorEventRegisterForPrev"
-                  color="#B42318">
+                  :now-value="0"
+                  :percent="educatorEventRegisterPercent"
+              >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
                 <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
@@ -100,9 +100,9 @@
             <div class="dashboard-t-item-business dashboard-t-item-gap">
               <div class="dashboard-t-item-t">Fill Rate</div>
               <compareUpDownPercentage
-                  :now-value="educatorEventRegisterForNow"
-                  :prev-value="educatorEventRegisterForPrev"
-                  color="#B42318">
+                  :now-value="0"
+                  :percent="educatorEventRegisterPercent"
+              >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
                 <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
@@ -112,9 +112,9 @@
             <div class="dashboard-t-item-business dashboard-t-item-gap">
               <div class="dashboard-t-item-t">Events Posted</div>
               <compareUpDownPercentage
-                  :now-value="educatorEventRegisterForNow"
-                  :prev-value="educatorEventRegisterForPrev"
-                  color="#B42318">
+                  :now-value="businessEventsPostedForNow"
+                  :percent="businessEventsPostedPercent"
+              >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
                 <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
@@ -130,7 +130,7 @@
               </NewApplications>
             </div>
             <div class="dashboard-b-item">
-              <metricsComponent></metricsComponent>
+              <metricsComponent :options="businessMetricsOptions"></metricsComponent>
             </div>
 
           </div>
@@ -170,7 +170,13 @@
 
 <script>
 import {
-  ALL_JOB_RESUME, EDUCATOR_STATIC_DATA, EVENTS_MY_EVENT, MY_DEALS, USER_INFO_BY_TOKEN_V2
+  ALL_JOB_RESUME,
+  EDUCATOR_STATIC_DATA,
+  EVENTS_MY_EVENT,
+  HOME_JOB_SHORTLISTED,
+  HOME_USER_METRICS,
+  MY_DEALS,
+  USER_INFO_BY_TOKEN_V2, USER_POST_JOB_COUNT
 } from '@/api/api';
 
 // import {onBeforeRouteUpdate} from "vue-router";
@@ -185,7 +191,7 @@ import favoritedJobsDashboard from "@/components/educator/favoritedJobsDashboard
 import activeDealsDashboard from "@/components/vendor/activeDealsDashboard";
 import activeEventsDashboard from "@/components/vendor/activeEventsDashboard";
 import {randomString} from "@/utils";
-import {updateWindowHeight} from "@/utils/tools";
+import {nowValueFormat, getPercentByNowAndPrev, updateWindowHeight} from "@/utils/tools";
 // import {removeZohoFloat, removeJs} from "@/utils/tools";
 import metricsComponent from "@/components/metrics/metrics.vue";
 import vsLastMonthCharts from "@/components/metrics/vsLastMonthCharts.vue";
@@ -377,11 +383,11 @@ export default {
       myApplicationsData[i]['status'] = value;
     }
 
-    const educatorStaticData = ref({})
+    const educatorJobApplyCountPercent = ref(0)
     const educatorJobApplyCountForNow = ref(0)
-    const educatorJobApplyCountForPrev = ref(0)
+    const educatorEventRegisterPercent = ref(0)
     const educatorEventRegisterForNow = ref(0)
-    const educatorEventRegisterForPrev = ref(0)
+
     function getEducatorStaticData(){
       EDUCATOR_STATIC_DATA().then(res=>{
         console.log(res)
@@ -389,12 +395,13 @@ export default {
           if(res.msg === 10000){
               let message = res.message;
               if(message.job_apply_count){
-                educatorJobApplyCountForNow.value = message.job_apply_count.now_job_apply_count;
-                educatorJobApplyCountForPrev.value = message.job_apply_count.prev_job_apply_count;
+                educatorJobApplyCountForNow.value = nowValueFormat(message.job_apply_count.now_job_apply_count)
+                educatorJobApplyCountPercent.value = getPercentByNowAndPrev(message.job_apply_count.now_job_apply_count,message.job_apply_count.prev_job_apply_count)
               }
+
               if(message.getUserRegisterEventLog){
-                educatorEventRegisterForNow.value = message.getUserRegisterEventLog.now_event_apply_count;
-                educatorEventRegisterForPrev.value = message.getUserRegisterEventLog.prev_job_apply_count;
+                educatorEventRegisterForNow.value = nowValueFormat(message.getUserRegisterEventLog.now_event_apply_count)
+                educatorEventRegisterPercent.value =getPercentByNowAndPrev(message.getUserRegisterEventLog.now_event_apply_count,message.getUserRegisterEventLog.prev_job_apply_count) ;
               }
 
           }
@@ -419,6 +426,224 @@ export default {
 
     const profilePercentage = ref(Number(store.state.profilePercentage))
 
+    const educatorMetricsOptions = ref({
+      title: {
+        // text: "参与情况",
+        textStyle: {
+          color: "#667085",
+          fontSize: 12,
+          fontWeight: 400,
+          fontFamily: "Inter, PingFang SC",
+        },
+      },
+      tooltip: {
+        trigger: "axis",
+      },
+      color: ["#F9B019", "#7F56D9"], // 设置折线颜色
+      legend: {
+        data: ["Profile Visits", "Jobs Shortlisted"],
+        right: "2%",
+      },
+      grid: {
+        left: "3%",
+        right: "1%",
+        bottom: "0%",
+        containLabel: true, // 是否居中显示图表
+      },
+      xAxis: [
+        {
+          type: "time",
+          axisLabel: {
+            // interval: 0, // 让横坐标每一项都显示
+          },
+          axisTick: {
+            alignWithLabel: true, // 将刻度显示在中间
+          },
+          data: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        },
+      ],
+      yAxis: [
+        {
+          type: "value",
+          nameLocation:'start',
+          splitLine: {
+            show: true,
+            lineStyle: {
+              // 设置坐标轴刻度设置为虚线
+              type: "dashed",
+            },
+          },
+        }
+      ],
+      series: [
+        {
+          name: "Profile Visits",
+          type: "line",
+          symbol: "circle", //将小圆点改成实心 不写symbol默认空心
+          symbolSize: 5, //小圆点的大小
+          data: [
+            ["2019-10-01", 10],
+            ["2019-10-02", 230],
+            ["2019-10-03", 40],
+            ["2019-10-04", 22],
+            ["2019-10-05", 330],
+            ["2019-10-06", 33],
+            ["2019-10-07", 33],
+          ]
+        },
+        {
+          name: "Jobs Shortlisted",
+          type: "line",
+          symbol: "circle", //将小圆点改成实心 不写symbol默认空心
+          symbolSize: 5, //小圆点的大小
+          data: [
+            ["2019-10-01", 110],
+            ["2019-10-02", 310],
+            ["2019-10-03", 410],
+            ["2019-10-04", 122],
+            ["2019-10-05", 310],
+            ["2019-10-06", 313],
+            ["2019-10-07", 313],
+          ]
+        },
+      ],
+
+    })
+
+    const businessMetricsOptions = ref({
+      title: {
+        // text: "参与情况",
+        textStyle: {
+          color: "#667085",
+          fontSize: 12,
+          fontWeight: 400,
+          fontFamily: "Inter, PingFang SC",
+        },
+      },
+      tooltip: {
+        trigger: "axis",
+      },
+      color: ["#F9B019", "#7F56D9"], // 设置折线颜色
+      legend: {
+        data: ["Job Views", "Candidates Shortlisted"],
+        right: "2%",
+      },
+      grid: {
+        left: "3%",
+        right: "1%",
+        bottom: "0%",
+        containLabel: true, // 是否居中显示图表
+      },
+      xAxis: [
+        {
+          type: "time",
+          axisLabel: {
+            // interval: 0, // 让横坐标每一项都显示
+          },
+          axisTick: {
+            alignWithLabel: true, // 将刻度显示在中间
+          },
+          data: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        },
+      ],
+      yAxis: [
+        {
+          type: "value",
+          nameLocation:'start',
+          splitLine: {
+            show: true,
+            lineStyle: {
+              // 设置坐标轴刻度设置为虚线
+              type: "dashed",
+            },
+          },
+        }
+      ],
+      series: [
+        {
+          name: "Job Views",
+          type: "line",
+          symbol: "circle", //将小圆点改成实心 不写symbol默认空心
+          symbolSize: 5, //小圆点的大小
+          data: [
+            ["2019-10-01", 10],
+            ["2019-10-02", 230],
+            ["2019-10-03", 40],
+            ["2019-10-04", 22],
+            ["2019-10-05", 330],
+            ["2019-10-06", 33],
+            ["2019-10-07", 33],
+          ]
+        },
+        {
+          name: "Candidates Shortlisted",
+          type: "line",
+          symbol: "circle", //将小圆点改成实心 不写symbol默认空心
+          symbolSize: 5, //小圆点的大小
+          data: [
+            ["2019-10-01", 110],
+            ["2019-10-02", 310],
+            ["2019-10-03", 410],
+            ["2019-10-04", 122],
+            ["2019-10-05", 310],
+            ["2019-10-06", 313],
+            ["2019-10-07", 313],
+          ]
+        },
+      ],
+
+    })
+
+    function getUserMetrics(){
+      HOME_USER_METRICS().then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
+
+
+    function getJobShortListed(){
+      HOME_JOB_SHORTLISTED().then(res=>{
+        console.log(res)
+        if(res.code === 200){
+          educatorMetricsOptions.value.series[1].data = res.message;
+          console.log(educatorMetricsOptions.value)
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+
+    const businessJobsPostedPercent = ref(0)
+    const businessJobsPostedForNow = ref(0)
+    const businessEventsPostedPercent = ref(0)
+    const businessEventsPostedForNow = ref(0)
+
+    function getUserPostCount(){
+
+      USER_POST_JOB_COUNT().then(res=>{
+        console.log(res)
+        if(res.code === 200){
+          let message = res.message;
+          if(message.event_post_result){
+            businessEventsPostedForNow.value = nowValueFormat(message.event_post_result.now_event_post_count)
+            businessEventsPostedPercent.value = getPercentByNowAndPrev(message.event_post_result.now_event_post_count,message.event_post_result.prev_event_post_count)
+          }
+          if(message.job_post_result){
+            businessJobsPostedForNow.value = nowValueFormat(message.job_post_result.now_job_post_count)
+            businessJobsPostedPercent.value = getPercentByNowAndPrev(message.job_post_result.now_job_post_count,message.job_post_result.prev_job_post_count)
+          }
+
+        }
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
+
     onMounted(() => {
 
       let screenWidth = document.body.clientWidth
@@ -438,10 +663,13 @@ export default {
 
       if(identity.value == 1){
         getEducatorStaticData()
+        getUserMetrics()
+        getJobShortListed()
       }
 
       if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
         getAllJobResumeList(1, 100)
+        getUserPostCount()
       }
 
       if (identity.value == 5) {
@@ -471,11 +699,16 @@ export default {
       companyInfo,
       educatorContact,
       profilePercentage,
-      educatorStaticData,
+      educatorJobApplyCountPercent,
       educatorJobApplyCountForNow,
-      educatorJobApplyCountForPrev,
+      educatorEventRegisterPercent,
       educatorEventRegisterForNow,
-      educatorEventRegisterForPrev
+      educatorMetricsOptions,
+      businessMetricsOptions,
+      businessJobsPostedPercent,
+      businessJobsPostedForNow,
+      businessEventsPostedPercent,
+      businessEventsPostedForNow
 
     }
 
@@ -523,7 +756,7 @@ export default {
   box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
   border-radius: 8px;
 
-  margin: 20px 32px 20px 0;
+  margin: 20px 32px 0 0;
 }
 
 .dashboard-t-item-business {
@@ -590,7 +823,7 @@ export default {
 }
 
 .dashboard-b-container {
-  margin: 20px 40px 0 40px;
+  margin: 0 40px 24px 40px;
 
   display: flex;
   flex-direction: row;
@@ -601,7 +834,8 @@ export default {
 }
 
 .dashboard-b-item {
-  width: calc(50% - 12px);
+
+  margin-top: 24px;
 }
 
 .dashboard-item-r a {
@@ -644,47 +878,9 @@ export default {
   color: #262626;
 }
 
-.dashboard-1-h {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 30px;
-}
-
 .dashboard-1-h h1:nth-child(1) {
   margin-right: 15px;
 }
-
-.container-2 {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.container-2-l {
-  width: calc(50% - 40px);
-}
-
-.container-2-r {
-  width: calc(50% - 40px);
-}
-
-.container-3 {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-top: 50px;
-}
-
-.container-3-l {
-  width: calc(50% - 40px);
-}
-
 
 .container-4 {
   display: flex;
@@ -703,47 +899,30 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-
-  .dashboard-1 {
-    margin-right: 15px;
-    margin-bottom: 15px;
+  .overview-container{
+    height: calc(100vh - 182px);
+  }
+  .dashboard-t-container{
+    margin: 0 24px;
   }
 
-  .dashboard-1-container {
-    margin: 15px;
-  }
-
-  .container-2 {
-    flex-direction: column;
-  }
-
-  .container-2-l {
+  .dashboard-t-item{
     width: 100%;
+    margin: 0 0 20px 0;
   }
 
-  .container-2-r {
+  .dashboard-b-container{
+    margin: 0 24px;
+  }
+  .dashboard-b-item{
+    margin: 0 0 24px 0;
     width: 100%;
-    margin-top: 15px;
+    overflow: scroll;
   }
 
-  .container-3 {
-    margin-top: 15px;
-  }
-
-  .container-3-l {
+  .dashboard-t-item-business{
     width: 100%;
-  }
-
-  .container-4 {
-    flex-direction: column;
-  }
-
-  .container-4-l {
-    width: 100%;
-  }
-
-  .container-4-r {
-    margin-left: 0;
+    margin: 0 0 20px 0;
   }
 
 }

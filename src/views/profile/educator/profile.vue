@@ -439,7 +439,7 @@ import {ref} from 'vue'
 
 import {
   USER_INFO_BY_TOKEN_V2,
-  EDUCATOR_PERCENTAGE_V2,USER_INFO_VISITOR_V2, ADD_FAVORITE, CANCEL_FAVORITE
+  EDUCATOR_PERCENTAGE_V2, USER_INFO_VISITOR_V2, ADD_FAVORITE, CANCEL_FAVORITE, USER_BROWSING_HISTORY_ADD
 } from '@/api/api'
 import {decode} from 'js-base64'
 
@@ -527,6 +527,8 @@ export default {
       if(strParse.from == 'other'){
         this.isFromOther = true;
         this.getUserInfoForVisitor(strParse.uid, strParse.cid)
+        this.addUserBrowsingHistory(strParse.cid)
+
       }else{
         this.getUserInfo()
         this.updateEducatorProfile()
@@ -542,6 +544,17 @@ export default {
 
   },
   methods: {
+    addUserBrowsingHistory(id){
+      let params = {
+        type: 4,
+        type_id:id
+      }
+      USER_BROWSING_HISTORY_ADD(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     readMoreForBio(){
       this.bioTextLength = -1
     },

@@ -47,7 +47,7 @@
   </div>
 
   <div class="metrics-chart" id="metrics-chart">
-    <v-chart class="chart" :option="polar" />
+    <v-chart class="chart" :option="options" />
   </div>
 
 </div>
@@ -83,6 +83,7 @@ use([
 
 export default {
   name: "metrics",
+  props:['options'],
   components:{
     VChart
   },
@@ -423,5 +424,30 @@ export default {
 
 .download-icon{
   margin-right: 4px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .metrics-container{
+    width: 100%;
+  }
+
+  .metrics-t{
+    flex-direction: column;
+  }
+  .metrics-t-actions{
+    margin: 0;
+  }
+
+  .metrics-t-actions-top{
+    margin: 16px;
+  }
+
+  .metrics-t-actions-date{
+    margin: 0 16px;
+    flex-wrap: wrap;
+  }
+
+
 }
 </style>

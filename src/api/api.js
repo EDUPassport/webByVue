@@ -437,3 +437,14 @@ export const GOOGLE_CALLBACK_API = (params) => post('/home/google/callback',para
 
 // educator 统计数据
 export const EDUCATOR_STATIC_DATA = (params) => get('/home/educator/index',params)
+
+// 添加用户的浏览记录
+export const USER_BROWSING_HISTORY_ADD = (params) => post('/home/user/browsing/history/add',params)
+// 获取用户时间区间内metrics
+export const HOME_USER_METRICS = (params) => get('/home/user/metrics',params)
+
+//获取用户时间区间内 shortlisted
+export const HOME_JOB_SHORTLISTED = (params) => get('/home/job/shortlisted',params)
+
+// 上月和本月发布的职位数量
+export const USER_POST_JOB_COUNT = (params) => get('/home/user/post/job/count',params)

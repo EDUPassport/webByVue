@@ -1,53 +1,34 @@
 <template>
 <div class="compare-container">
-  {{now}}
-  <template v-if="percent >= 0">
-    <el-icon :size="20" :color="color">
+  {{nowValue}}
+  <template v-if="percent > 0">
+    <el-icon :size="20" color="#027A48">
       <Top/>
     </el-icon>
+    <span style="color: #027A48;">{{percent}}%</span>
+  </template>
+  <template v-else-if="percent === 0">
+    <el-icon :size="20" color="#667085">
+      <Top/>
+    </el-icon>
+    <span style="color: #667085;">{{percent}}%</span>
   </template>
   <template v-else>
-    <el-icon :size="20" :color="color">
+    <el-icon :size="20" color="#B42318">
       <Bottom/>
     </el-icon>
+    <span style="color: #B42318;">{{percent}}%</span>
   </template>
 
-  <span :style="'color: ' + color + ';'">{{percent}}%</span>
 </div>
+
 </template>
 
 <script>
-import {ref} from 'vue'
 export default {
   name: "compareUpDownPercentage",
-  props:['nowValue','prevValue','color'],
-  setup(props){
-    const now = ref(props.nowValue)
-    now.value = new Intl.NumberFormat('en-IN').format(now.value)
-
-    function getPercent(now,prev){
-      now = parseFloat(now)
-      prev = parseFloat(prev)
-      if(isNaN(now) || isNaN(prev)){
-        return '-'
-      }
-
-      if(prev > 0){
-        let a = Math.round((now - prev) / prev * 10000 ) / 100.00
-        console.log(a)
-        return a;
-      }else{
-        return 0
-      }
-
-    }
-
-    const percent = getPercent(props.nowValue, props.prevValue)
-
-    return {
-      now,
-      percent
-    }
+  props:['percent','nowValue'],
+  setup(){
 
   }
 }

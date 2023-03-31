@@ -62,7 +62,7 @@ import {useRouter, useRoute} from "vue-router";
 import {
   ADS_LIST,
   ADD_FAVORITE,
-  CANCEL_FAVORITE, JOB_DETAIL, COMPANY_JOB_LIST
+  CANCEL_FAVORITE, JOB_DETAIL, COMPANY_JOB_LIST, USER_BROWSING_HISTORY_ADD
 } from "@/api/api";
 
 import ExchangeAccountInfo from '@/components/jobs/exchangeInfo';
@@ -72,7 +72,7 @@ import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-
+import {onMounted} from 'vue'
 export default {
   name: "detail",
   data() {
@@ -145,6 +145,24 @@ export default {
         query: query
       })
     }
+
+    function addUserBrowsingHistory(){
+      let params = {
+        type:1,
+        type_id:route.query.id
+      }
+      USER_BROWSING_HISTORY_ADD(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
+
+    onMounted(()=>{
+      addUserBrowsingHistory()
+    })
+
     return {
       onSwiper,
       onSlideChange,

@@ -11,6 +11,7 @@
       </div>
     </div>
     <div class="un-profile-r">
+      <el-progress class="un-profile-progress-mobile" :percentage="percent" :stroke-width="8" color="#F9B019" />
       <el-button class="complete-btn">
         Complete Profile
       </el-button>
@@ -74,4 +75,49 @@ export default {
 .complete-btn{
   background-color:#FFEBC3;
 }
+
+@media screen and (min-width: 769px) {
+  .un-profile-progress-mobile{
+    display: none;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+  .un-profile-container{
+    max-width: 100%;
+    margin:20px 24px;
+    flex-direction: column;
+  }
+  .un-profile-progress{
+    display: none;
+  }
+  .un-profile-progress-mobile{
+    max-width: 192px;
+    min-width: 140px;
+  }
+  .un-profile-l{
+    width: 100%;
+  }
+  .un-profile-l-t{
+    font-size: 14px;
+  }
+  .un-profile-l-b{
+    font-size: 12px;
+  }
+
+  .un-profile-r{
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+  }
+
+
+
+}
+
 </style>

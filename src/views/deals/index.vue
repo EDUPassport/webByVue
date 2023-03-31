@@ -108,10 +108,10 @@
                         </div>
                         <div class="deals-item-b-r">
                           <el-button link @click="showDealDetailDialog(item)">
-                            QUICK VIEW
+                            Quick View
                           </el-button>
                           <el-button link @click="turnDealDetail(item.id)">
-                            DETAILS
+                            Details
                           </el-button>
                         </div>
                       </div>
@@ -181,7 +181,13 @@ import {
   DEALS_AREA_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  ADS_LIST, USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2, USER_SUB_IDENTITY_V2, FEATURED_DEALS_LIST, DEALS_DETAIL
+  ADS_LIST,
+  USER_INFO_VISITOR_V2,
+  SWITCH_IDENTITY_V2,
+  USER_SUB_IDENTITY_V2,
+  FEATURED_DEALS_LIST,
+  DEALS_DETAIL,
+  USER_BROWSING_HISTORY_ADD
 } from "@/api/api";
 import {encode} from "js-base64";
 
@@ -340,6 +346,18 @@ export default {
 
   },
   methods: {
+    addUserBrowsingHistory(id){
+      let params = {
+        type:2,
+        type_id:id
+      }
+      USER_BROWSING_HISTORY_ADD(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
     confirmFilterSearch(e) {
       console.log(e)
       this.filterResultData = e;
@@ -358,6 +376,7 @@ export default {
     },
     showDealDetailDialog(item) {
 
+      this.addUserBrowsingHistory(item.id)
       this.dealDetailData = item;
       this.dealDetailDialogVisible = true;
       this.qrcodeValue = this.webDomain + '?id=' + item.id;
@@ -370,30 +389,7 @@ export default {
       this.shareUrl = this.locationUrl + '/deals/detail?id='+e.id;
     },
     viewProfile(userId, identity, companyId) {
-
-      // this.$loading({text:''})
-
       this.$router.push({path: '/deals/vendor/profile', query: {uid: userId, i: identity, cid: companyId}})
-
-      // let params = {
-      //   user_id:userId,
-      //   identity:identity,
-      //   company_id:companyId
-      // }
-      //
-      // USER_INFO_VISITOR_V2(params).then(res => {
-      //   console.log(res)
-      //   if (res.code == 200) {
-      //     this.companyInfo = res.message.user_contact.company;
-      //     this.showDealDetailStatus = true;
-      //     this.dealDetailDialogVisible = false;
-      //     this.$loading().close()
-      //   }
-      // }).catch(err => {
-      //   console.log(err)
-      //   this.$message.error(err.msg)
-      // })
-
     },
     turnBanner(link) {
       console.log(link)
@@ -459,13 +455,13 @@ export default {
       })
     },
     turnDealDetail(id) {
+
       this.$router.push({
         path: '/deals/detail', query: {
           id: id
         }
       })
-      // this.showDealDetailStatus = true;
-      // this.$router.push({path: '/deals', query: {id: id}})
+
     },
     getSubIdentityList() {
       let params = {
@@ -983,8 +979,8 @@ export default {
 }
 
 .deals-logo {
-  width: 70px;
-  height: 70px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid #EEEEEE;
   background-color: #FFFFFF;
@@ -996,14 +992,14 @@ export default {
 
 .deals-item-c-r-1 {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
+  font-size: 14px;
   color: #262626;
   cursor: pointer;
 }
 
 .deals-item-c-r-2 {
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 24px;
+  font-size: 16px;
   color: #262626;
   cursor: pointer;
 }

@@ -17,7 +17,7 @@ import {useRoute} from "vue-router";
 import {
   ADD_JOBS_VIEWS,
   ADS_LIST,
-  JOB_DETAIL
+  JOB_DETAIL, USER_BROWSING_HISTORY_ADD
 } from "@/api/api";
 import {ref, onMounted,onUnmounted} from 'vue'
 import {ElMessage} from 'element-plus'
@@ -69,6 +69,7 @@ export default {
           if(token){
             addJobViews(id)
           }
+          addUserBrowsingHistory(id)
 
         }
       }).catch(err=>{
@@ -144,6 +145,19 @@ export default {
       }).catch(err=>{
         console.log(err)
       })
+    }
+
+    function addUserBrowsingHistory(id){
+      let params = {
+        type:1,
+        type_id:id
+      }
+      USER_BROWSING_HISTORY_ADD(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
     }
 
     onMounted(()=>{

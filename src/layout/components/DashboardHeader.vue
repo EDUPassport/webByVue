@@ -4,7 +4,7 @@
       <el-header class="header-container" height="auto">
         <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
 
-          <el-col class="header-l-col" :xs="4" :sm="4" :md="4" :lg="8" :xl="8">
+          <el-col class="header-l-col" :xs="0" :sm="4" :md="4" :lg="8" :xl="8">
             <div class="header-page-name">
               Dashboard
             </div>
@@ -12,7 +12,19 @@
               Welcome, {{ companyName }}!
             </div>
           </el-col>
-          <el-col class="header-r-col" :xs="20" :sm="20" :md="20" :lg="16" :xl="16">
+
+          <el-col class="mobile-menu-col" :xs="8" :sm="0" :md="0" :lg="0" :xl="0">
+              <el-image class="mobile-menu-img"
+                        @click="menuDrawerStatus=!menuDrawerStatus"
+                        :src="menuLineHorizontalImg"></el-image>
+          </el-col>
+
+          <el-col class="mobile-logo-col" :xs="8" :sm="0" :md="0" :lg="0" :xl="0">
+              <el-image class="mobile-logo-img" :src="logoMobileImg"></el-image>
+          </el-col>
+
+          <el-col class="header-r-col" :xs="8" :sm="20" :md="20" :lg="16" :xl="16">
+
             <div class="nav-link-container">
 
               <router-link to="/jobs" exact> EDU JOBS</router-link>
@@ -380,6 +392,18 @@
 
         </el-row>
 
+        <el-row class="header-mobile-row-container" :gutter="0" >
+          <el-col class="header-mobile-l-col" :xs="24" :sm="0" :md="0" :lg="0" :xl="0">
+            <div class="header-page-name">
+              Dashboard
+            </div>
+            <div class="header-welcome-name">
+              Welcome, {{ companyName }}!
+            </div>
+          </el-col>
+
+        </el-row>
+
       </el-header>
 
     </el-affix>
@@ -442,6 +466,8 @@ import {onBeforeRouteUpdate, onBeforeRouteLeave} from 'vue-router'
 import {ref, inject} from 'vue'
 import {useStore} from 'vuex';
 import MobileDrawerMenu from "@/components/mobileDrawerMenu.vue";
+import menuLineHorizontalImg from '@/assets/newHome/dashboard/menu-line-horizontal.svg'
+import logoMobileImg from '@/assets/newHome/dashboard/logo-mobile.svg'
 
 export default {
   name: "Header",
@@ -495,6 +521,8 @@ export default {
       logoImgLogo,
       discountCardImg,
       defaultAvatar,
+      menuLineHorizontalImg,
+      logoMobileImg,
       menuDrawerStatus: false,
       dialogBusinessAccountVisible: false,
       dialogBusinessAccountWidth:'30%',
@@ -1732,17 +1760,62 @@ export default {
   background-color: #FF4D4D;
 }
 
-.logo-mobile-new-container {
-  display: none;
+@media screen and (min-width: 769px) {
+  .header-mobile-row-container{
+    display: none;
+  }
 }
 
 @media screen and  (max-width: 768px) {
 
-  .el-dropdown-link {
-    font-size: 12px;
-    max-width: 100px;
+  .header-container{
+    padding: 32px 24px 0 24px;
+    height: auto;
   }
 
+  .nav-link-container{
+    display: none;
+  }
+
+  .mobile-menu-col{
+    text-align: left;
+  }
+  .mobile-menu-img{
+    width: 40px;
+    height:40px;
+    cursor: pointer;
+  }
+
+  .mobile-logo-col{
+    text-align: center;
+  }
+
+  .mobile-logo-img{
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .user-avatar-img{
+    width: 32px;
+    height: 32px;
+  }
+
+  .header-mobile-row-container{
+
+  }
+
+  .header-mobile-l-col{
+    margin-top: 26px;
+    margin-bottom: 20px;
+  }
+
+  .header-welcome-name{
+    font-size: 14px;
+  }
+
+  .header-page-name{
+    font-size: 24px;
+  }
 
 }
 

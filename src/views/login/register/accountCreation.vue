@@ -77,18 +77,20 @@
               </div>
 
               <div class="sign-in-btn-container">
-                <el-button
-                    size="large"
-                    class="login-option-btn"
-                    plain
-                >
-                  <template #icon>
-                    <el-icon>
-                      <IconLogosGoogleIcon></IconLogosGoogleIcon>
-                    </el-icon>
-                  </template>
-                  Sign up with Google
-                </el-button>
+                <GoogleLogin style="width: 100%;"
+                             class="login-option-btn"
+                             :callback="googleSignUpWithCode">
+                  <el-button size="large"
+                             :loading="submitGoogleLoadingStatus"
+                             plain style="width: 100%;">
+                    <template #icon>
+                      <el-icon>
+                        <IconLogosGoogleIcon></IconLogosGoogleIcon>
+                      </el-icon>
+                    </template>
+                    Sign up with Google
+                  </el-button>
+                </GoogleLogin>
               </div>
 
             </el-form>
@@ -125,8 +127,8 @@ import {useRouter, useRoute} from 'vue-router'
 import {ref, reactive,onMounted} from 'vue'
 import stepComponent from "@/components/register/stepComponent.vue";
 import {encodeByJsBase64,decodeByJsBase64} from "@/utils/utils";
-import {ElMessage} from 'element-plus'
-import {SEND_EMAIL_CODE} from "@/api/api";
+import {ElMessage,ElMessageBox} from 'element-plus'
+import {EMAIL_REGISTER_V2, GOOGLE_CALLBACK_API, SEND_EMAIL_CODE} from "@/api/api";
 
 export default {
   name: "accountCreation",
@@ -146,6 +148,7 @@ export default {
     const userType = route.query.type;
     const userStepIndex = ref(3)
     const confirmLoadingStatus = ref(false)
+    const submitGoogleLoadingStatus = ref(false)
 
     function turnHome() {
       return router.push('/')
@@ -168,6 +171,118 @@ export default {
 
     function turnBack() {
       router.go(-1)
+    }
+
+    function googleSignUpWithCode(response) {
+
+      submitGoogleLoadingStatus.value =true;
+
+      let redirectUri = window.location.origin
+
+      let params = Object.assign({
+        redirect_uri: redirectUri
+      }, response)
+
+      GOOGLE_CALLBACK_API(params).then(res => {
+        // console.log(res)
+        if (res.code === 200) {
+
+          if (res.msg === '10002') {
+            let email = res.message;
+            // email = 'test' + Math.random() + '@gmail.com'
+
+            let routeFormInfo = decodeByJsBase64(route.query.formInfo)
+            let formDecode = JSON.parse(routeFormInfo)
+            let registerParams = {email:email}
+
+            if(userType === 'educator'){
+              registerParams.identity = 1
+            }else if(userType === 'school'){
+              registerParams.identity = 3
+            }else if(userType === 'recruiter'){
+              registerParams.identity = 2
+            }else if(userType === 'other'){
+              registerParams.identity = 4
+            }else if(userType === 'vendor'){
+              registerParams.identity = 5
+            }
+
+            let params = Object.assign(registerParams,formDecode)
+
+            EMAIL_REGISTER_V2(params).then(res => {
+              console.log(res)
+              if (res.code == 200) {
+
+                submitGoogleLoadingStatus.value = false
+
+                ElMessageBox({
+                  title: "All Set",
+                  message: "Let's get you logged in!",
+                  dangerouslyUseHTMLString: false,
+                  type: "success",
+                  center: true,
+                  confirmButtonText: "OK",
+                  "round-button": true,
+                  callback(action) {
+                    if (action === 'confirm') {
+                      router.push({path: '/login', query: {email: formDecode.email}})
+                    }
+                  }
+
+                })
+
+              }
+
+            }).catch(err => {
+              console.log(err)
+              submitGoogleLoadingStatus.value = false
+
+              if (err.msg) {
+                ElMessage({
+                  type:'warning',
+                  message: err.msg,
+                  grouping:true
+                })
+                return;
+              }
+
+              if (err.message) {
+                ElMessage({
+                  type:'warning',
+                  message: err.message,
+                  grouping:true
+                })
+              }
+            })
+            return;
+          }
+
+          ElMessageBox({
+            title: "You are already registered",
+            message: "Please go back to the login page to log in!",
+            dangerouslyUseHTMLString: false,
+            type: "success",
+            center: true,
+            confirmButtonText: "Go back",
+            "round-button": true,
+            callback(action) {
+              if (action === 'confirm') {
+                router.push({path: '/login', query: {}})
+              }
+            }
+
+          })
+
+          submitGoogleLoadingStatus.value =false
+
+        }
+
+      }).catch(err => {
+        console.log(err)
+        submitGoogleLoadingStatus.value =false
+
+      })
+
     }
 
     function confirmForm(formName) {
@@ -248,7 +363,10 @@ export default {
       turnBack,
       confirmForm,
       turnHome,
-      backToLogin
+      backToLogin,
+      googleSignUpWithCode,
+      submitGoogleLoadingStatus
+
     }
 
   }

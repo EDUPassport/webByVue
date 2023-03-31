@@ -72,3 +72,23 @@ export const eventStartAndEndTimeFormat = (value) => {
     let timeStr = time.slice(0, -3)
     return timeStr
 }
+
+export const getPercentByNowAndPrev = (now,prev)=>{
+    now = parseFloat(now)
+    prev = parseFloat(prev)
+    if(isNaN(now) || isNaN(prev)){
+        return '-'
+    }
+
+    if(prev > 0){
+        return  Math.round((now - prev) / prev * 10000 ) / 100.00
+    }else if(prev === 0){
+        return Math.round((now - prev) * 10000 ) / 100.00
+    }else{
+        return 0
+    }
+
+}
+export const nowValueFormat = (value)=>{
+    return new Intl.NumberFormat('en-IN').format(value)
+}

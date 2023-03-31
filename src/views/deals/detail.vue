@@ -165,7 +165,7 @@ import {
   DEALS_AREA_LIST,
   ADD_FAVORITE,
   CANCEL_FAVORITE,
-  ADS_LIST, USER_INFO_VISITOR_V2, USER_SUB_IDENTITY_V2, FEATURED_DEALS_LIST, DEALS_DETAIL
+  ADS_LIST, USER_INFO_VISITOR_V2, USER_SUB_IDENTITY_V2, FEATURED_DEALS_LIST, DEALS_DETAIL, USER_BROWSING_HISTORY_ADD
 } from "@/api/api";
 
 import mapboxgl from "mapbox-gl";
@@ -239,6 +239,7 @@ export default {
 
     if(dealId){
       this.getDealDetail(dealId)
+      this.addUserBrowsingHistory(dealId)
     }
 
   },
@@ -265,6 +266,7 @@ export default {
     let dealId = this.$route.query.id;
     if (dealId) {
       this.getDealDetail(dealId)
+      this.addUserBrowsingHistory(dealId)
     }
     this.getFeaturedDealsList()
     this.getSubIdentityList()
@@ -274,6 +276,18 @@ export default {
 
   },
   methods: {
+    addUserBrowsingHistory(id){
+      let params = {
+        type:2,
+        type_id:id
+      }
+      USER_BROWSING_HISTORY_ADD(params).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
     confirmFilterSearch(e) {
       console.log(e)
       this.filterResultData = e;

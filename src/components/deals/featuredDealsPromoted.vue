@@ -72,10 +72,10 @@
                     </div>
                     <div class="deals-item-b-r">
                       <el-button link @click="showDealDetailDialog(item)">
-                        QUICK VIEW
+                        Quick View
                       </el-button>
                       <el-button link @click="turnDealDetail(item.id)">
-                        DETAILS
+                        Details
                       </el-button>
                     </div>
                   </div>
@@ -148,11 +148,11 @@ export default {
     }
   },
   methods:{
-
     viewProfile(userId, identity, companyId){
       this.$emit('viewProfile', userId, identity, companyId)
     },
     showDealDetailDialog(e){
+
       this.$emit('detail',e)
     },
     addFavorite(id, type, title, url, index) {
@@ -252,20 +252,20 @@ export default {
 
 .deals-item-c-r-1 {
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
+  font-size: 14px;
   color: #262626;
   cursor: pointer;
 }
 
 .deals-item-c-r-2 {
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 24px;
+  font-size: 16px;
   color: #262626;
   cursor: pointer;
 }
 .deals-item-c-r-3{
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 23px;
+  font-size: 12px;
   color: #262626;
 
   /*min-height: 100px;*/
@@ -297,7 +297,7 @@ export default {
 .deals-item-b-l {
   text-align: left;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 18px;
+  font-size: 12px;
   color: #262626;
 }
 
