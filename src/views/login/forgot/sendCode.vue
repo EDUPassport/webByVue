@@ -30,6 +30,7 @@
               </el-form-item>
 
               <check-code-button
+                  v-if="showBtn"
                   type="email-forgot"
                   :email="passwordForm.email"
                   text="Resend Code"
@@ -66,7 +67,7 @@ import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Ligh
 import passwordLockImg from '@/assets/newHome/login/verification-code.png'
 
 import {useRouter, useRoute} from 'vue-router'
-import {ref,reactive} from 'vue'
+import {ref,reactive,onMounted} from 'vue'
 import {ElMessage} from 'element-plus'
 import {CHECK_EMAIL_CODE_REST_PASSWORD_V3} from "@/api/api";
 import {encode,decode} from 'js-base64'
@@ -86,7 +87,7 @@ export default {
     }
   },
   setup(){
-
+    const showBtn = ref(false);
     const router = useRouter()
     const route = useRoute()
     function turnHome(){
@@ -176,14 +177,18 @@ export default {
       })
 
     }
-
+    onMounted(() => {
+      setTimeout(() => {
+        showBtn.value = true;
+      }, 60000); // 60000 milliseconds = 1 minute
+    });
     return {
 
       verificationCodeForEmail,
       passwordForms,
       passwordForm,
       passwordRules,
-
+      showBtn,
       nextDisabledStatus,
       sixCodeComplete,
       disabledNext,
