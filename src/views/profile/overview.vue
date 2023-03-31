@@ -33,7 +33,7 @@
               >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
-                <vsLastMonthCharts color="#12B76A" areaColor="#ecfdf3"></vsLastMonthCharts>
+                <vsLastMonthCharts :percent="educatorJobApplyCountPercent"></vsLastMonthCharts>
               </div>
             </div>
 
@@ -45,7 +45,7 @@
               >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
-                <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
+                <vsLastMonthCharts :percent="educatorEventRegisterPercent"></vsLastMonthCharts>
               </div>
             </div>
 
@@ -66,7 +66,10 @@
               <dailyJobMatch></dailyJobMatch>
             </div>
             <div class="dashboard-b-item">
-              <metricsComponent :options="educatorMetricsOptions"></metricsComponent>
+              <metricsComponent :options="educatorMetricsOptions"
+                                @dateChange="customDateChange"
+                                @howLongChange="changeHowLong">
+              </metricsComponent>
             </div>
 
           </div>
@@ -85,19 +88,19 @@
               >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
-                <vsLastMonthCharts color="#12B76A" areaColor="#ecfdf3"></vsLastMonthCharts>
+                <vsLastMonthCharts :percent="businessJobsPostedPercent" color="#12B76A" areaColor="#ecfdf3"></vsLastMonthCharts>
               </div>
             </div>
 
             <div class="dashboard-t-item-business dashboard-t-item-gap">
               <div class="dashboard-t-item-t">Job Views</div>
               <compareUpDownPercentage
-                  :now-value="0"
-                  :percent="educatorEventRegisterPercent"
+                  :now-value="businessJobViewsForNow"
+                  :percent="businessJobViewsPercent"
               >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
-                <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
+                <vsLastMonthCharts :percent="businessJobViewsPercent" ></vsLastMonthCharts>
               </div>
             </div>
 
@@ -109,7 +112,7 @@
               >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
-                <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
+                <vsLastMonthCharts :percent="educatorEventRegisterPercent" ></vsLastMonthCharts>
               </div>
             </div>
 
@@ -121,7 +124,7 @@
               >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
-                <vsLastMonthCharts color="#b42318" areaColor="#fef3f2"></vsLastMonthCharts>
+                <vsLastMonthCharts :percent="businessEventsPostedPercent"></vsLastMonthCharts>
               </div>
             </div>
 
@@ -134,7 +137,10 @@
               </NewApplications>
             </div>
             <div class="dashboard-b-item">
-              <metricsComponent :options="businessMetricsOptions"></metricsComponent>
+              <metricsComponent :options="businessMetricsOptions"
+                                @dateChange="customDateChange"
+                                @howLongChange="changeHowLong">
+              </metricsComponent>
             </div>
 
           </div>
@@ -174,7 +180,7 @@
 
 <script>
 import {
-  ALL_JOB_RESUME,
+  ALL_JOB_RESUME, BUSINESS_JOB_SHORTLISTED, BUSINESS_JOB_VIEWS,
   EDUCATOR_STATIC_DATA,
   EVENTS_MY_EVENT,
   HOME_JOB_SHORTLISTED,
@@ -195,7 +201,14 @@ import favoritedJobsDashboard from "@/components/educator/favoritedJobsDashboard
 import activeDealsDashboard from "@/components/vendor/activeDealsDashboard";
 import activeEventsDashboard from "@/components/vendor/activeEventsDashboard";
 import {randomString} from "@/utils";
-import {nowValueFormat, getPercentByNowAndPrev, updateWindowHeight} from "@/utils/tools";
+import {
+  nowValueFormat,
+  getPercentByNowAndPrev,
+  updateWindowHeight,
+  nowDateYmd,
+  dateYmdAgo,
+  dateYmdAndNumber
+} from "@/utils/tools";
 // import {removeZohoFloat, removeJs} from "@/utils/tools";
 import metricsComponent from "@/components/metrics/metrics.vue";
 import vsLastMonthCharts from "@/components/metrics/vsLastMonthCharts.vue";
@@ -405,7 +418,7 @@ export default {
 
               if(message.getUserRegisterEventLog){
                 educatorEventRegisterForNow.value = nowValueFormat(message.getUserRegisterEventLog.now_event_apply_count)
-                educatorEventRegisterPercent.value =getPercentByNowAndPrev(message.getUserRegisterEventLog.now_event_apply_count,message.getUserRegisterEventLog.prev_job_apply_count) ;
+                educatorEventRegisterPercent.value =getPercentByNowAndPrev(message.getUserRegisterEventLog.now_event_apply_count,message.getUserRegisterEventLog.prev_event_apply_count) ;
               }
 
           }
@@ -485,30 +498,14 @@ export default {
           type: "line",
           symbol: "circle", //将小圆点改成实心 不写symbol默认空心
           symbolSize: 5, //小圆点的大小
-          data: [
-            ["2019-10-01", 10],
-            ["2019-10-02", 230],
-            ["2019-10-03", 40],
-            ["2019-10-04", 22],
-            ["2019-10-05", 330],
-            ["2019-10-06", 33],
-            ["2019-10-07", 33],
-          ]
+          data: []
         },
         {
           name: "Jobs Shortlisted",
           type: "line",
           symbol: "circle", //将小圆点改成实心 不写symbol默认空心
           symbolSize: 5, //小圆点的大小
-          data: [
-            ["2019-10-01", 110],
-            ["2019-10-02", 310],
-            ["2019-10-03", 410],
-            ["2019-10-04", 122],
-            ["2019-10-05", 310],
-            ["2019-10-06", 313],
-            ["2019-10-07", 313],
-          ]
+          data: []
         },
       ],
 
@@ -569,51 +566,107 @@ export default {
           type: "line",
           symbol: "circle", //将小圆点改成实心 不写symbol默认空心
           symbolSize: 5, //小圆点的大小
-          data: [
-            ["2019-10-01", 10],
-            ["2019-10-02", 230],
-            ["2019-10-03", 40],
-            ["2019-10-04", 22],
-            ["2019-10-05", 330],
-            ["2019-10-06", 33],
-            ["2019-10-07", 33],
-          ]
+          data: []
         },
         {
           name: "Candidates Shortlisted",
           type: "line",
           symbol: "circle", //将小圆点改成实心 不写symbol默认空心
           symbolSize: 5, //小圆点的大小
-          data: [
-            ["2019-10-01", 110],
-            ["2019-10-02", 310],
-            ["2019-10-03", 410],
-            ["2019-10-04", 122],
-            ["2019-10-05", 310],
-            ["2019-10-06", 313],
-            ["2019-10-07", 313],
-          ]
+          data: []
         },
       ],
 
     })
 
-    function getUserMetrics(){
-      HOME_USER_METRICS().then(res=>{
-        console.log(res)
+    const howLong = ref(7)
+
+    function getUserMetrics(howLong){
+      let endTime = nowDateYmd()
+      let startTime = dateYmdAgo(howLong)
+
+      let params = {
+        start_time:startTime,
+        end_time:endTime
+      }
+
+      HOME_USER_METRICS(params).then(res=>{
+        if(res.code === 200){
+          let resMessage = res.message;
+          if(resMessage.length > 0){
+            educatorMetricsOptions.value.series[0].data = res.message;
+          }else{
+            educatorMetricsOptions.value.series[0].data = dateYmdAndNumber(howLong);
+          }
+
+        }
       }).catch(err=>{
         console.log(err)
       })
 
     }
 
+    function getJobShortListed(howLong){
 
-    function getJobShortListed(){
-      HOME_JOB_SHORTLISTED().then(res=>{
-        console.log(res)
+      let endTime = nowDateYmd()
+      let startTime = dateYmdAgo(howLong)
+
+      let params = {
+        start_time:startTime,
+        end_time:endTime
+      }
+      HOME_JOB_SHORTLISTED(params).then(res=>{
         if(res.code === 200){
-          educatorMetricsOptions.value.series[1].data = res.message;
-          console.log(educatorMetricsOptions.value)
+          let resMessage = res.message;
+          if(resMessage.length > 0){
+            educatorMetricsOptions.value.series[1].data = res.message;
+          }else{
+            educatorMetricsOptions.value.series[1].data = dateYmdAndNumber(howLong);
+          }
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+
+    function getUserMetricsByTime(startTime, endTime){
+
+      let params = {
+        start_time:startTime,
+        end_time:endTime
+      }
+
+      HOME_USER_METRICS(params).then(res=>{
+        if(res.code === 200){
+          let resMessage = res.message;
+          if(resMessage.length > 0){
+            educatorMetricsOptions.value.series[0].data = res.message;
+          }else{
+            educatorMetricsOptions.value.series[0].data = dateYmdAndNumber(7);
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    }
+
+    function getJobShortListedByTime(startTime, endTime){
+
+      let params = {
+        start_time:startTime,
+        end_time:endTime
+      }
+
+      HOME_JOB_SHORTLISTED(params).then(res=>{
+        if(res.code === 200){
+          let resMessage = res.message;
+          if(resMessage.length > 0){
+            educatorMetricsOptions.value.series[1].data = res.message;
+          }else{
+            educatorMetricsOptions.value.series[1].data = dateYmdAndNumber(7);
+          }
         }
       }).catch(err=>{
         console.log(err)
@@ -624,6 +677,8 @@ export default {
     const businessJobsPostedForNow = ref(0)
     const businessEventsPostedPercent = ref(0)
     const businessEventsPostedForNow = ref(0)
+    const businessJobViewsPercent = ref(0)
+    const businessJobViewsForNow = ref(0)
 
     function getUserPostCount(){
 
@@ -639,12 +694,139 @@ export default {
             businessJobsPostedForNow.value = nowValueFormat(message.job_post_result.now_job_post_count)
             businessJobsPostedPercent.value = getPercentByNowAndPrev(message.job_post_result.now_job_post_count,message.job_post_result.prev_job_post_count)
           }
+          if(message.job_views){
+            businessJobViewsForNow.value = nowValueFormat(message.job_views.now_job_views_count)
+            businessJobViewsPercent.value = getPercentByNowAndPrev(message.job_views.now_job_views_count,message.job_views.prev_job_views_count)
+          }
+
 
         }
 
       }).catch(err=>{
         console.log(err)
       })
+
+    }
+
+    function getBusinessJobViews(howLong){
+
+      let endTime = nowDateYmd()
+      let startTime = dateYmdAgo(howLong)
+
+      let params = {
+        start_time:startTime,
+        end_time:endTime
+      }
+
+      BUSINESS_JOB_VIEWS(params).then(res=>{
+        if(res.code === 200){
+          let message = res.message
+          if(message.length > 0 ){
+            businessMetricsOptions.value.series[0].data = res.message;
+          }else{
+            businessMetricsOptions.value.series[0].data = dateYmdAndNumber(howLong)
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+
+    function getBusinessJobShortlisted(howLong){
+      let endTime = nowDateYmd()
+      let startTime = dateYmdAgo(howLong)
+
+      let params = {
+        start_time:startTime,
+        end_time:endTime
+      }
+
+      BUSINESS_JOB_SHORTLISTED(params).then(res=>{
+        if(res.code === 200){
+          let resMessage = res.message
+          if(resMessage.length > 0){
+            businessMetricsOptions.value.series[1].data = res.message;
+          }else{
+            businessMetricsOptions.value.series[1].data = dateYmdAndNumber(howLong)
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+
+    function getBusinessJobViewsByTime(startTime, endTime){
+
+      let params = {
+        start_time:startTime,
+        end_time:endTime
+      }
+
+      BUSINESS_JOB_VIEWS(params).then(res=>{
+        if(res.code === 200){
+          let message = res.message
+          if(message.length > 0 ){
+            businessMetricsOptions.value.series[0].data = res.message;
+          }else{
+            businessMetricsOptions.value.series[0].data = dateYmdAndNumber(7)
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+
+    function getBusinessJobShortlistedByTime(startTime, endTime){
+
+      let params = {
+        start_time:startTime,
+        end_time:endTime
+      }
+
+      BUSINESS_JOB_SHORTLISTED(params).then(res=>{
+        if(res.code === 200){
+          let resMessage = res.message
+          if(resMessage.length > 0){
+            businessMetricsOptions.value.series[1].data = res.message;
+          }else{
+            businessMetricsOptions.value.series[1].data = dateYmdAndNumber(7)
+          }
+
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+
+    function changeHowLong(e){
+      // console.log(e)
+      if(identity.value == 1){
+        getUserMetrics(e)
+        getJobShortListed(e)
+      }
+
+      if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
+        getBusinessJobViews(e)
+        getBusinessJobShortlisted(e)
+
+      }
+    }
+
+    function customDateChange(startTime,endTime){
+
+      if(identity.value == 1){
+        getUserMetricsByTime(startTime,endTime)
+        getJobShortListedByTime(startTime,endTime)
+      }
+
+      if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
+        getBusinessJobViewsByTime(startTime,endTime)
+        getBusinessJobShortlistedByTime(startTime,endTime)
+
+      }
 
     }
 
@@ -667,13 +849,19 @@ export default {
 
       if(identity.value == 1){
         getEducatorStaticData()
-        getUserMetrics()
-        getJobShortListed()
+
+        getUserMetrics(howLong.value)
+        getJobShortListed(howLong.value)
+
       }
 
       if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
         getAllJobResumeList(1, 100)
         getUserPostCount()
+
+        getBusinessJobViews(howLong.value)
+        getBusinessJobShortlisted(howLong.value)
+
       }
 
       if (identity.value == 5) {
@@ -712,7 +900,12 @@ export default {
       businessJobsPostedPercent,
       businessJobsPostedForNow,
       businessEventsPostedPercent,
-      businessEventsPostedForNow
+      businessEventsPostedForNow,
+      businessJobViewsPercent,
+      businessJobViewsForNow,
+      howLong,
+      changeHowLong,
+      customDateChange
 
     }
 

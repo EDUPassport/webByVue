@@ -31,15 +31,17 @@
           Custom date
           <el-date-picker
               style="position: absolute;z-index: -100;top: 0;left: 0;"
+              v-model="dateRangeValue"
               ref="datePicker"
               type="daterange"
+              @change="dateChange"
           >
           </el-date-picker>
         </div>
-        <div class="metrics-t-actions-date-item">12 Months</div>
-        <div class="metrics-t-actions-date-item" >3 Months</div>
-        <div class="metrics-t-actions-date-item">30 Days</div>
-        <div class="metrics-t-actions-date-item">7 Days</div>
+        <div class="metrics-t-actions-date-item" @click="changeHowLong(365)">12 Months</div>
+        <div class="metrics-t-actions-date-item" @click="changeHowLong(90)">3 Months</div>
+        <div class="metrics-t-actions-date-item" @click="changeHowLong(30)">30 Days</div>
+        <div class="metrics-t-actions-date-item" @click="changeHowLong(7)">7 Days</div>
 
       </div>
     </div>
@@ -68,7 +70,7 @@ import VChart, { THEME_KEY } from "vue-echarts";
 import { ref, provide } from "vue";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf'
-
+import {nowDateYmdByTime} from "@/utils/tools";
 
 use([
   CanvasRenderer,
@@ -92,98 +94,13 @@ export default {
       downloadImg
     }
   },
-  setup(){
+  setup(props,context){
 
     const pngLoadingStatus = ref(false)
     const pdfLoadingStatus = ref(false)
     const csvLoadingStatus = ref(false)
 
     provide(THEME_KEY, "light");
-
-    const polar =ref({
-      title: {
-        // text: "参与情况",
-        textStyle: {
-          color: "#667085",
-          fontSize: 12,
-          fontWeight: 400,
-          fontFamily: "Inter, PingFang SC",
-        },
-      },
-      tooltip: {
-        trigger: "axis",
-      },
-      color: ["#F9B019", "#7F56D9"], // 设置折线颜色
-      legend: {
-        data: ["Profile Visits", "Jobs Shortlisted"],
-        right: "2%",
-      },
-      grid: {
-        left: "3%",
-        right: "1%",
-        bottom: "0%",
-        containLabel: true, // 是否居中显示图表
-      },
-      xAxis: [
-        {
-          type: "time",
-          axisLabel: {
-            // interval: 0, // 让横坐标每一项都显示
-          },
-          axisTick: {
-            alignWithLabel: true, // 将刻度显示在中间
-          },
-          data: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-        },
-      ],
-      yAxis: [
-        {
-          type: "value",
-          nameLocation:'start',
-          splitLine: {
-            show: true,
-            lineStyle: {
-              // 设置坐标轴刻度设置为虚线
-              type: "dashed",
-            },
-          },
-        }
-      ],
-      series: [
-        {
-          name: "Profile Visits",
-          type: "line",
-          symbol: "circle", //将小圆点改成实心 不写symbol默认空心
-          symbolSize: 5, //小圆点的大小
-          data: [
-            ["2019-10-01", 10],
-            ["2019-10-02", 230],
-            ["2019-10-03", 40],
-            ["2019-10-04", 22],
-            ["2019-10-05", 330],
-            ["2019-10-06", 33],
-            ["2019-10-07", 33],
-          ]
-        },
-        {
-          name: "Jobs Shortlisted",
-          type: "line",
-          symbol: "circle", //将小圆点改成实心 不写symbol默认空心
-          symbolSize: 5, //小圆点的大小
-          data: [
-            ["2019-10-01", 110],
-            ["2019-10-02", 310],
-            ["2019-10-03", 410],
-            ["2019-10-04", 122],
-            ["2019-10-05", 310],
-            ["2019-10-06", 313],
-            ["2019-10-07", 313],
-          ]
-        },
-      ],
-
-    })
-
     // function exportPNG(){
     //   console.log('pdf')
     //   const HTMLElement = document.getElementById('metrics-chart')
@@ -314,20 +231,36 @@ export default {
     }
 
     const datePicker = ref(null)
-
+    const dateRangeValue = ref([])
     function showDatePicker(){
       datePicker.value.focus()
     }
 
+    function dateChange(e){
+      console.log(e)
+      // console.log(dateRangeValue.value)
+      let startTime = nowDateYmdByTime(e[0])
+      let endTime = nowDateYmdByTime(e[1])
+
+      context.emit('dateChange', startTime, endTime)
+    }
+
+    console.log(props)
+    function changeHowLong(value){
+      context.emit('howLongChange', value)
+    }
+
     return {
-      polar,
       pngLoadingStatus,
       pdfLoadingStatus,
       csvLoadingStatus,
       exportExcel,
       exportPDF,
       datePicker,
-      showDatePicker
+      showDatePicker,
+      changeHowLong,
+      dateChange,
+      dateRangeValue
     }
   }
 }

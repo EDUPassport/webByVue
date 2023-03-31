@@ -92,3 +92,49 @@ export const getPercentByNowAndPrev = (now,prev)=>{
 export const nowValueFormat = (value)=>{
     return new Intl.NumberFormat('en-IN').format(value)
 }
+
+// 获取当前时间 和 前7天的时间点
+export const nowDateYmd = ()=>{
+    let date = new Date()
+    let year = date.getFullYear()
+    let month = date.getMonth()+1;
+    let day = date.getDate()
+
+    return year + '-' + month + '-' + day;
+}
+
+// 多少天之前
+export const dateYmdAgo = (value)=>{
+
+    let now = new Date()
+    let date = new Date(now.getTime() - value * 24 * 3600 * 1000)
+    let year = date.getFullYear()
+    let month = date.getMonth()+1;
+    let day = date.getDate()
+    return year + '-' + month + '-' + day;
+}
+
+export const dateYmdAndNumber = (value)=>{
+    let now = new Date()
+    let arr = []
+    for(let i=1;i<=value;i++){
+        let date = new Date(now.getTime() - i * 24 * 3600 * 1000)
+        let year = date.getFullYear()
+        let month = date.getMonth()+1;
+        let day = date.getDate()
+
+        let aa = year + '-' + month + '-' + day;
+
+        arr.push([aa,0])
+    }
+    return arr;
+}
+
+export const nowDateYmdByTime = (value)=>{
+    let date = new Date(value)
+    let year = date.getFullYear()
+    let month = date.getMonth()+1;
+    let day = date.getDate()
+
+    return year + '-' + month + '-' + day;
+}

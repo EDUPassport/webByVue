@@ -448,3 +448,10 @@ export const HOME_JOB_SHORTLISTED = (params) => get('/home/job/shortlisted',para
 
 // 上月和本月发布的职位数量
 export const USER_POST_JOB_COUNT = (params) => get('/home/user/post/job/count',params)
+
+// business统计页面 job views折线图数据
+export const BUSINESS_JOB_VIEWS = (params) => get('/home/business/job/views',params)
+
+//business统计页面 shortlisted数据
+export const BUSINESS_JOB_SHORTLISTED = (params) => get('/home/business/shortlisted',params)
+
