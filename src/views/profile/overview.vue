@@ -13,9 +13,13 @@
           </div>
         </template>
 
-        <div>
-          <un-complete-profile-prompt :percent="profilePercentage"></un-complete-profile-prompt>
+
+        <div class="dashboard-t-actions" v-if="identity == 2 || identity == 3 || identity == 4">
+         <el-button plain>User Management</el-button>
+         <el-button type="primary" icon="Plus" @click="postJob()">Post a Job</el-button>
         </div>
+
+        <un-complete-profile-prompt :percent="profilePercentage"></un-complete-profile-prompt>
 
         <template v-if="identity == 1">
 
@@ -730,6 +734,11 @@ export default {
 
 .dashboard-container {
 
+}
+
+.dashboard-t-actions{
+  margin: 0 38px;
+  text-align: right;
 }
 
 .dashboard-t-container {
