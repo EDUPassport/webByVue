@@ -46,7 +46,7 @@
           </el-image>
           <span @click="contactUs()">Support</span>
         </div>
-        <div class="menu-custom-item">
+        <div class="menu-custom-item" @click="turnSetting()">
           <el-image :src="settingImg" class="menu-custom-item-img"></el-image>
           <span>Settings</span>
         </div>
@@ -204,6 +204,9 @@ export default {
     },
     turnHome(){
       this.$router.push('/')
+    },
+    turnSetting(){
+      this.$router.push('/setting')
     },
     turnMyMessages() {
       // this.activeMsg = true

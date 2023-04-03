@@ -3,6 +3,7 @@ import layout from "@/layout";
 import {createRouter, createWebHistory} from 'vue-router'
 import appLayout from "@/layout/appLayout";
 import dashboardLayout from "@/layout/dashboardLayout.vue";
+import leftMenuLayout from "@/layout/leftMenuLayout.vue";
 // import {isPhone} from "@/utils";
 import chatHome from '@/views/chat/chatHome'
 import NProgress from 'nprogress'
@@ -276,13 +277,13 @@ const routes = [
                             {
                                 path: 'privatechat/:id',
                                 component: () => import('@/views/chat/PrivateChat'),
-                                activeMenu:'/chat/messages',
+                                activeMenu: '/chat/messages',
                                 requireAuth: true
                             },
                             {
                                 path: 'groupchat/:id',
                                 component: () => import('@/views/chat/GroupChat'),
-                                activeMenu:'/chat/messages',
+                                activeMenu: '/chat/messages',
                                 requireAuth: true
                             },
                         ],
@@ -290,13 +291,13 @@ const routes = [
                     {
                         path: 'contacts',
                         component: () => import('@/views/chat/Contacts'),
-                        activeMenu:'/chat/messages',
+                        activeMenu: '/chat/messages',
                         requireAuth: true
                     },
                     {
                         path: 'history',
                         component: () => import('@/views/chat/History'),
-                        activeMenu:'/chat/messages',
+                        activeMenu: '/chat/messages',
                         requireAuth: true
                     },
 
@@ -306,6 +307,34 @@ const routes = [
 
         ]
 
+    },
+    {
+        path: '/setting',
+        component: leftMenuLayout,
+        children: [
+            {
+                path: '',
+                name: 'settingIndex',
+                component: () => import('@/views/setting/index.vue'),
+                meta: {
+                    titleC: 'Setting',
+                    titleG: 'Setting',
+                    requireAuth: true
+                },
+                children: [
+                    {
+                        path: 'account',
+                        component: () => import('@/views/setting/account.vue'),
+                        name: 'settingAccount',
+                        meta: {
+                            titleC: 'Setting Account',
+                            titleG: 'Setting Account',
+                            requireAuth: true
+                        },
+                    }
+                ]
+            }
+        ]
     },
     {
         path: '/favorites',
@@ -838,7 +867,7 @@ const router = createRouter({
 
 const defaultTitle = 'Home';
 
-NProgress.configure({ showSpinner: false });
+NProgress.configure({showSpinner: false});
 
 router.beforeEach((to, from, next) => {
 
@@ -855,10 +884,10 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.titleG ? to.meta.titleG : defaultTitle;
     }
 
-    if(to.path === '/jobs/detail'){
+    if (to.path === '/jobs/detail') {
 
         let nPath = '/jobs/detail/' + to.query.id + '/' + 1
-        next({path:nPath})
+        next({path: nPath})
 
     }
 

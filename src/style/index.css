@@ -98,13 +98,14 @@
 }
 
 .el-input--default .el-input__wrapper{
-    min-height: 44px;
+    min-height: 42px;
 }
 
 .el-input--default .el-input__inner{
-    font-size: 18px;
-    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-
+    font-size: 14px;
+    font-weight: 400;
+    font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color: #667085;
 }
 
 .el-input--small .el-input__wrapper{
@@ -125,8 +126,8 @@
 }
 
 .el-textarea__inner{
-    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-    font-size: 16px;
+    font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 14px;
     color:#262626;
 }
 
@@ -145,29 +146,34 @@
 }
 
 .el-radio__label{
-    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .el-form--default.el-form--label-top .el-form-item .el-form-item__label{
-    font-family: Inter, Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size: 14px;
     color: #344054;
-    font-weight: 500;
 }
+
+.el-form-item__label{
+    font-family: Inter, Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    color: #101828;
+}
+
 .el-form--label-top .el-form-item .el-form-item__label{
     margin-bottom: 0 !important;
 }
 
 .el-checkbox.el-checkbox--large .el-checkbox__label{
-    font-size: 18px;
-    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     color:#262626;
 }
 
 .el-divider__text{
-    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     color:#262626;
-    font-size: 18px;
+    font-size: 14px;
 
 }
 
@@ -217,6 +223,12 @@
     font-family: Inter, AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     color: #1D2939;
     font-weight: 600;
+}
+
+.el-popover.el-popper{
+    font-family: Inter, AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    color: #3d3d3d;
 }
 
 @media screen and (max-width: 768px){
