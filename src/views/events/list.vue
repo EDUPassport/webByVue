@@ -106,7 +106,8 @@
                 Post an Event
               </el-button>
             </div>
-            <el-empty style="height: 100%;" description="Sorry, there are no upcoming events at the moment..."></el-empty>
+            <el-empty  v-if="loadingEvent" style="height: 100%;" description="loading......"></el-empty>
+            <el-empty v-else style="height: 100%;" description="Sorry, there are no upcoming events at the moment..."></el-empty>
           </template>
 
         </el-scrollbar>
@@ -153,6 +154,7 @@ export default {
   },
   data(){
     return {
+      loadingEvent:false,
       bannerImg,
       eventPage:1,
       eventLimit:6,
@@ -331,6 +333,7 @@ export default {
     },
     getEventsList(page,limit){
 
+      this.loadingEvent= true
       let filterResult = this.filterResultData;
 
       let paramsA = {
@@ -346,6 +349,7 @@ export default {
           this.eventsList = res.message.data;
           this.eventTotalNum = res.message.total;
           this.showLoadingStatus=false
+          this.loadingEvent= false
 
         }
       }).catch(err=>{

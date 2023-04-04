@@ -459,7 +459,7 @@
                               <el-input v-model="workExpForm.title" placeholder="eg. ESL teacher"></el-input>
                             </el-form-item>
                             <el-form-item class="work-form-item" label="Company" prop="company_name">
-                              <el-input v-model="workExpForm.company_name" placeholder="ABC Academy"></el-input>
+                              <el-input v-model="workExpForm.company_name" placeholder="eg. Academy"></el-input>
                             </el-form-item>
                             <el-form-item class="work-form-item" label="Location">
                               <el-input v-model="workExpForm.location" placeholder="City, Country"></el-input>
@@ -1453,7 +1453,7 @@ export default {
         company_name: [
           {
             required: true,
-            message: "ABC Academy",
+            message: "Please enter your company name",
             trigger: 'blur',
           },
         ],

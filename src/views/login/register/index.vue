@@ -536,7 +536,7 @@ export default {
 
   },
   methods: {
-
+  
     test() {
       this.$msgbox({
         title: "All Set",
@@ -751,7 +751,11 @@ export default {
           let password = this.registerForm.password
           let confirmPassword = this.registerForm.c_password;
 
-          let params = {
+          const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+           if (!passwordRegex.test(password)) {
+            return this.$message.warning('Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.')
+          } 
+            let params = {
             email:email,
             code:emailCode
           }
@@ -764,15 +768,12 @@ export default {
                 return;
               }
               self.stepValue = 2;
-
             }
-
           }).catch(err=>{
             console.log(err)
             return this.$message.warning('Incorrect verification code')
           })
-
-
+          
         } else {
           console.log('error submit!!')
           this.submitRegisterLoadingStatus = false

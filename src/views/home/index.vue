@@ -522,7 +522,7 @@ export default {
           {
             type: 'email',
             required: true,
-            message: 'please enter your valid email',
+            message: 'Please enter your email address',
             trigger: 'blur',
           },
         ],

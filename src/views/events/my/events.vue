@@ -273,7 +273,7 @@ export default {
 
       EVENTS_MY_EVENT(params).then(res => {
         console.log(res)
-        if (res.code == 200) {
+       if (res.code == 200) {
           this.eventsList = res.message.data
           // console.log(res.message.data)
           this.eventTotalNum = res.message.total
