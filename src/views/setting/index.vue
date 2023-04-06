@@ -10,26 +10,34 @@
       <span>Account</span>
     </div>
     <div class="switch-item switch-item-m"
+         :class="sPathName === '/setting/profile/educator' || sPathName === '/setting/profile/recruiter'
+         ? 'switch-item-active' : '' "
          @click="turnProfile()">
       <span>Profile</span>
     </div>
     <div class="switch-item switch-item-r"
+         :class="sPathName === '/setting/privacy' ? 'switch-item-active' : '' "
          @click="turnPrivacy()">
       <span>Privacy</span>
     </div>
   </div>
 
   <router-view></router-view>
+
+
 </div>
 </template>
 
 <script>
 import {onBeforeRouteUpdate, useRouter} from 'vue-router'
 import {ref} from 'vue'
+import {useStore} from 'vuex'
 export default {
   name: "index",
   setup(){
     const router = useRouter()
+    const store = useStore()
+    const identity = ref(store.state.identity)
 
     const sPathName = ref(window.location.pathname)
     // console.log(sPathName)
@@ -42,7 +50,15 @@ export default {
     }
 
     function turnProfile(){
-      router.push({path:'/setting/educator'})
+      console.log(identity)
+
+      if(identity.value == 1 ){
+        router.push({path:'/setting/profile/educator'})
+      }
+      if(identity.value == 2 ){
+        router.push({path:'/setting/profile/recruiter'})
+      }
+
     }
 
     function turnPrivacy(){
@@ -53,7 +69,8 @@ export default {
       sPathName,
       turnAccount,
       turnProfile,
-      turnPrivacy
+      turnPrivacy,
+      identity
     }
 
   }

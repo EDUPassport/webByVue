@@ -331,7 +331,27 @@ const routes = [
                             titleG: 'Setting Account',
                             requireAuth: true
                         },
-                    }
+                    },
+                    {
+                        path: 'profile/educator',
+                        component: () => import('@/views/setting/profile/educator.vue'),
+                        name: 'settingProfileEducator',
+                        meta: {
+                            titleC: 'Setting Profile Educator',
+                            titleG: 'Setting Profile Educator',
+                            requireAuth: true
+                        },
+                    },
+                    {
+                        path: 'privacy',
+                        component: () => import('@/views/setting/privacy.vue'),
+                        name: 'settingPrivacy',
+                        meta: {
+                            titleC: 'Setting Privacy',
+                            titleG: 'Setting Privacy',
+                            requireAuth: true
+                        },
+                    },
                 ]
             }
         ]

@@ -2,7 +2,7 @@
   <div class="bg">
     <div class="account-container">
       <div class="account-l-container">
-        <meSideMenu></meSideMenu>
+
       </div>
       <el-scrollbar class="account-r-container">
         <div class="account-r-container-bg">
@@ -600,7 +600,7 @@
 
 <script>
 import defaultAvatar from '@/assets/default/avatar.png'
-import meSideMenu from "@/components/meSideMenu";
+
 import ForgotPassword from '@/components/forgotPassword'
 
 import {
@@ -634,7 +634,7 @@ import {updateWindowHeight} from "@/utils/tools";
 export default {
   name: "accountHome",
   components: {
-    meSideMenu,
+
     xllLoading,
     ForgotPassword
   },
@@ -1868,8 +1868,8 @@ export default {
 }
 
 .account-r-container {
-  width: calc(100% - 160px);
-  height: calc(100vh - 140px);
+  width: 100%;
+  height: calc(var(--i-window-height) - 140px);
 }
 
 .account-r-container-bg {
