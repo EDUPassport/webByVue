@@ -107,12 +107,12 @@
             <div class="dashboard-t-item-business dashboard-t-item-gap">
               <div class="dashboard-t-item-t">Fill Rate</div>
               <compareUpDownPercentage
-                  :now-value="0"
-                  :percent="educatorEventRegisterPercent"
+                  :now-value="businessFillRateForNow"
+                  :percent="businessFillRatePercent"
               >
               </compareUpDownPercentage>
               <div class="dashboard-t-item-chart">
-                <vsLastMonthCharts :percent="educatorEventRegisterPercent" ></vsLastMonthCharts>
+                <vsLastMonthCharts :percent="businessFillRatePercent" ></vsLastMonthCharts>
               </div>
             </div>
 
@@ -679,6 +679,8 @@ export default {
     const businessEventsPostedForNow = ref(0)
     const businessJobViewsPercent = ref(0)
     const businessJobViewsForNow = ref(0)
+    const businessFillRatePercent = ref(0)
+    const businessFillRateForNow = ref(0)
 
     function getUserPostCount(){
 
@@ -697,6 +699,11 @@ export default {
           if(message.job_views){
             businessJobViewsForNow.value = nowValueFormat(message.job_views.now_job_views_count)
             businessJobViewsPercent.value = getPercentByNowAndPrev(message.job_views.now_job_views_count,message.job_views.prev_job_views_count)
+          }
+
+          if(message.fill_rate){
+            businessFillRateForNow.value = nowValueFormat(message.fill_rate.now_job_fill_rate)
+            businessFillRatePercent.value = getPercentByNowAndPrev(message.fill_rate.now_job_fill_rate,message.fill_rate.prev_job_fill_rate)
           }
 
 
@@ -903,6 +910,8 @@ export default {
       businessEventsPostedForNow,
       businessJobViewsPercent,
       businessJobViewsForNow,
+      businessFillRateForNow,
+      businessFillRatePercent,
       howLong,
       changeHowLong,
       customDateChange
