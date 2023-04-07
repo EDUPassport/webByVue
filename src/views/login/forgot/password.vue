@@ -18,13 +18,18 @@
           <el-form
               :model="passwordForm"
               :rules="passwordRules"
+              @submit.prevent
               ref="passwordForms"
               label-width="100px"
               label-position="top"
               class="demo-ruleForm"
           >
             <el-form-item label="Email" prop="email">
-              <el-input placeholder="Enter your email" v-model="passwordForm.email"></el-input>
+              <el-input placeholder="Enter your email"
+                        v-model="passwordForm.email"
+                        @keyup.enter="sendCode(passwordForms)"
+              >
+              </el-input>
             </el-form-item>
 
             <el-form-item>

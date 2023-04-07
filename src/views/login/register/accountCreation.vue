@@ -53,13 +53,17 @@
             <el-form
                 :model="signForm"
                 :rules="signRules"
+                @submit.prevent
                 ref="signForms"
                 label-width="100px"
                 label-position="top"
                 class="demo-ruleForm"
             >
               <el-form-item label="Email" prop="email">
-                <el-input placeholder="Enter your email" v-model="signForm.email"></el-input>
+                <el-input placeholder="Enter your email"
+                          @keyup.enter = "confirmForm(signForms)"
+                          v-model="signForm.email">
+                </el-input>
               </el-form-item>
 
               <div class="continue-btn-container">
