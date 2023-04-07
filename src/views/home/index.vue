@@ -1,18 +1,19 @@
 <template>
   <div class="bg">
     <el-row class="t-container" :gutter="0" align="middle" justify="center">
-      <el-col :xs="12" :sm="2" :md="2" :lg="1" :xl="1">
+      <el-col :xs="12" :sm="2" :md="2" :lg="2" :xl="2">
 
         <div class="logo-new-container">
           <div class="logo-new">
             <el-image class="logo-new-logo-img" :src="logoTransparentImg" fit="contain"></el-image>
             <el-image class="logo-new-logo-mobile-img" :src="logoImgLight" fit="contain"></el-image>
+            <div class="logo-new-beta">Beta</div>
           </div>
         </div>
 
       </el-col>
 
-      <el-col :xs="0" :sm="0" :md="16" :lg="17" :xl="17">
+      <el-col :xs="0" :sm="0" :md="16" :lg="16" :xl="16">
 
         <div class="nav-link-container">
           <router-link to="/" exact>HOME</router-link>
@@ -725,7 +726,6 @@ export default {
 }
 
 .logo-new-container{
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -735,10 +735,23 @@ export default {
 
 .logo-new{
   cursor: pointer;
+  position: relative;
 }
 
 .logo-new-logo-img{
   width:50px;
+}
+
+.logo-new-beta {
+  position: absolute;
+  top: 0;
+  right: -50px;
+  background-color: #49397f;
+  padding: 2px 10px;
+  border-radius: 10px;
+  color: #EEEEEE;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 12px;
 }
 
 .logo-edu {

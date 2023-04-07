@@ -100,7 +100,7 @@
                     <el-icon :size="12">
                       <Calendar/>
                     </el-icon>&nbsp;
-                    <span>{{ $filters.howLongFormat(item.refresh_time) }}</span>
+                    <span>Refreshed: {{ $filters.howLongFormat(item.refresh_time) }}</span>
                   </div>
 
                 </div>
@@ -196,7 +196,7 @@
                     <el-icon :size="12">
                       <Calendar/>
                     </el-icon>
-                    <span>{{ $filters.howLongFormat(item.refresh_time) }}</span>
+                    <span>Refreshed: {{ $filters.howLongFormat(item.refresh_time) }}</span>
                   </div>
 
                 </div>
@@ -359,7 +359,6 @@ export default {
         let path = '/jobs/detail/' + id + '/' +  this.jobPage;
         this.$router.push({path:path,query:{uid:userId}})
       }
-
 
     },
     getJobFeaturedList() {

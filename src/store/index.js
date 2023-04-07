@@ -23,8 +23,14 @@ const store = createStore({
             menuDataStatus:false,
             isThirdCompanyStatus: isThirdCompanyValue ? isThirdCompanyValue : 0,
             currentCompanyId: companyId ? companyId : 0,
-            imUnreadTotal:0
+            imUnreadTotal:0,
+            axiosPromiseArr:[]
 
+        }
+    },
+    getters:{
+        axiosPromiseArr(state) {
+            return state.axiosPromiseArr;
         }
     },
     mutations: {
@@ -73,7 +79,13 @@ const store = createStore({
         },
         setImUnreadTotal(state, data){
             state.imUnreadTotal = data
-        }
+        },
+        pushAxiosPromiseArr(state, data){
+            state.axiosPromiseArr.push(data);
+        },
+        setAxiosPromiseArr(state, value) {
+            state.axiosPromiseArr = value;
+        },
 
     },
     actions:{

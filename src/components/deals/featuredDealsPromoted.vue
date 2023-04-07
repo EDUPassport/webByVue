@@ -264,6 +264,8 @@ export default {
   cursor: pointer;
 }
 .deals-item-c-r-3{
+
+  word-break: break-word;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 23px;
   color: #262626;
@@ -273,7 +275,7 @@ export default {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4; /* 这里是超出几行省略 */
+  -webkit-line-clamp: 3; /* 这里是超出几行省略 */
   overflow: hidden;
 
 }
