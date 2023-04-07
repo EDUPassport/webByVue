@@ -129,7 +129,7 @@ export default {
       window.open('https://support.edupassport.io', '_blank')
     },
     turnBlogs(){
-      window.open('https://blogs.edupassport.io','_blank')
+      window.open('https://blog.edupassport.io','_blank')
     }
 
   }

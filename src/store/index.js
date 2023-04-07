@@ -25,8 +25,13 @@ const store = createStore({
             isThirdCompanyStatus: isThirdCompanyValue ? isThirdCompanyValue : 0,
             currentCompanyId: companyId ? companyId : 0,
             imUnreadTotal:0,
-            profilePercentage:profilePercentage
-
+            profilePercentage:profilePercentage,
+            axiosPromiseArr:[]
+        }
+    },
+    getters:{
+        axiosPromiseArr(state) {
+            return state.axiosPromiseArr;
         }
     },
     mutations: {
@@ -78,6 +83,13 @@ const store = createStore({
         },
         setProfilePercentage(state, data){
             state.profilePercentage = data
+        },
+        pushAxiosPromiseArr(state, data){
+            state.axiosPromiseArr.push(data);
+        },
+        setAxiosPromiseArr(state, value) {
+            state.axiosPromiseArr = value;
+
         },
 
     },

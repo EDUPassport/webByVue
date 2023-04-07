@@ -2,10 +2,8 @@
 import axios from 'axios'
 // import {ElMessage} from "element-plus";
 import {ElLoading} from "element-plus";
-// import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
-// 获取浏览器的接口地址。
-//https://api.test.esl-passport.cn/api/
-//https://dev.api.eslpassport.com/api/
+import store from '@/store/index'
+
 let baseUrl = process.env.VUE_APP_URL
 // axios配置
 axios.defaults.baseURL = baseUrl
@@ -14,6 +12,13 @@ axios.defaults.timeout = 30000
 // axios.defaults.withCredentials = true
 // 请求拦截器，设置token
 axios.interceptors.request.use(config => {
+
+    //设置取消请求的cancel token
+    config.cancelToken = new axios.CancelToken(cancel=>{
+        // 存入数组
+        store.commit('pushAxiosPromiseArr', cancel)
+    })
+
     const token = localStorage.getItem('token');
     const sourceUrl = window.location.href;
 

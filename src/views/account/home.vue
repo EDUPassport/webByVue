@@ -113,7 +113,7 @@
                         >
                           <el-form-item label="E-MAIL ADDRESS" prop="email">
                             <div class="xll-form-email-tips"></div>
-                            <div class="xll-email-input">
+                            <div class="xll-email-input">                           
                               <el-input v-model="accountEmailForm.email" placeholder="E-mail address"></el-input>
                               <div class="send-code-btn" @click="sendEmailCode('accountEmailForms')">
                                 {{ checkCodeBtn.text }}
@@ -437,11 +437,12 @@
                             <div class="admin-item-r-container">
                               <div class="admin-item-name">{{ item.first_name }} {{ item.last_name }}</div>
                               <div class="admin-item-role">
-                                <template v-if="item.identity === 1">Educator</template>
+                                Contributor
+                                <!-- <template v-if="item.identity === 1">Educator</template>
                                 <template v-if="item.identity === 2">Recruiter</template>
                                 <template v-if="item.identity === 3">School</template>
                                 <template v-if="item.identity === 4">Other</template>
-                                <template v-if="item.identity === 5">Vendor</template>
+                                <template v-if="item.identity === 5">Vendor</template> -->
                               </div>
                             </div>
 
@@ -981,10 +982,8 @@ export default {
     },
     editAccountEmail() {
       this.accountEmailDialogVisible = true;
-      // this.accountEmailForm.email = this.basicForm.email;
-      this.accountEmailForm.email = '';
+      this.accountEmailForm.email = this.basicForm.email;
       this.accountEmailForm.code = '';
-
     },
     editAccount() {
       let userContact = this.userContact;
@@ -2292,6 +2291,8 @@ export default {
 }
 
 .admin-item-role {
+  position: relative;
+  top: 7px;
   font-family: AssiRegular, serif;
   font-size: 18px;
   color: #262626;

@@ -1064,7 +1064,6 @@ export default {
         submitLoginGoogleLoadingStatus.value =false
 
       })
-
     }
 
     function linkedinSignIn()

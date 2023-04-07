@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+    <% if(process.env.VUE_APP_ENV_NAME === 'development' || process.env.VUE_APP_ENV_NAME === 'production'){%>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-PPGXS58');</script>
+    <!-- End Google Tag Manager -->
+    <% } %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-capable" content="no">
@@ -30,15 +39,7 @@
     <% } %>
     <% if(process.env.VUE_APP_ENV_NAME === 'development' || process.env.VUE_APP_ENV_NAME === 'production'){%>
     <meta name="description" content="EDU Passport is a Global Education Hub that helps educators find job opportunities abroad through a matchmaking service.">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CGM1B7LH7Z"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-CGM1B7LH7Z');
-    </script>
+    <link rel="canonical" href="https://www.edupassport.io" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X5YQ0WLF6"></script>
@@ -49,7 +50,7 @@
 
         gtag('config', 'G-5X5YQ0WLF6');
     </script>
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJER5VKVFW"></script>
     <script>
@@ -61,8 +62,8 @@
     </script>
 
     <link rel="canonical" href="https://www.edupassport.io" />
-    <% } %>
 
+    <% } %>
     <script src="https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js"></script>
     <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
 
@@ -71,7 +72,13 @@
 <body>
 <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-        Please enable it to continue.</strong>
+        Please enable it to continue.
+    </strong>
+    <!-- Google Tag Manager (noscript) -->
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PPGXS58"
+            height="0" width="0" style="display:none;visibility:hidden">
+    </iframe>
+    <!-- End Google Tag Manager (noscript) -->
 </noscript>
 <div id="app"></div>
 <!-- built files will be auto injected -->

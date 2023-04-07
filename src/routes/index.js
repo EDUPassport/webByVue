@@ -5,6 +5,7 @@ import appLayout from "@/layout/appLayout";
 import dashboardLayout from "@/layout/dashboardLayout.vue";
 import leftMenuLayout from "@/layout/leftMenuLayout.vue";
 // import {isPhone} from "@/utils";
+import store from '@/store/index'
 import chatHome from '@/views/chat/chatHome'
 import NProgress from 'nprogress'
 import '../style/nprogress.css'
@@ -892,7 +893,10 @@ NProgress.configure({showSpinner: false});
 router.beforeEach((to, from, next) => {
 
     NProgress.start()
-    console.log(NProgress.start())
+
+    // 路由跳转之前， 中指还在等待中的请求
+    store.getters.axiosPromiseArr.forEach((cancel)=>cancel())
+    store.commit('setAxiosPromiseArr', [])
 
     let envName = process.env.VUE_APP_ENV_NAME
 
