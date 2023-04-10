@@ -38,10 +38,18 @@
           >
           </el-date-picker>
         </div>
-        <div class="metrics-t-actions-date-item" @click="changeHowLong(365)">12 Months</div>
-        <div class="metrics-t-actions-date-item" @click="changeHowLong(90)">3 Months</div>
-        <div class="metrics-t-actions-date-item" @click="changeHowLong(30)">30 Days</div>
-        <div class="metrics-t-actions-date-item" @click="changeHowLong(7)">7 Days</div>
+        <div class="metrics-t-actions-date-item"
+             :class="howLongValue === 365 ? 'metrics-t-actions-date-item-active' : ''"
+             @click="changeHowLong(365)">12 Months</div>
+        <div class="metrics-t-actions-date-item"
+             :class="howLongValue === 90 ? 'metrics-t-actions-date-item-active' : ''"
+             @click="changeHowLong(90)">3 Months</div>
+        <div class="metrics-t-actions-date-item"
+             :class="howLongValue === 30 ? 'metrics-t-actions-date-item-active' : ''"
+             @click="changeHowLong(30)">30 Days</div>
+        <div class="metrics-t-actions-date-item"
+             :class="howLongValue === 7 ? 'metrics-t-actions-date-item-active' : ''"
+             @click="changeHowLong(7)">7 Days</div>
 
       </div>
     </div>
@@ -246,11 +254,14 @@ export default {
     }
 
     console.log(props)
+    const howLongValue = ref(7)
     function changeHowLong(value){
+      howLongValue.value = value
       context.emit('howLongChange', value)
     }
 
     return {
+      howLongValue,
       pngLoadingStatus,
       pdfLoadingStatus,
       csvLoadingStatus,
@@ -338,6 +349,13 @@ export default {
   border-left: 1px solid #D0D5DD;
   cursor: pointer;
 
+}
+
+.metrics-t-actions-date-item:hover{
+  background: #F2F4F7;
+}
+.metrics-t-actions-date-item-active{
+  background: #F2F4F7;
 }
 
 .metrics-t-actions-top{
