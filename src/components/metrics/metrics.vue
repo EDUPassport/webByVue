@@ -214,25 +214,25 @@ export default {
     function exportExcel(){
       csvLoadingStatus.value = true;
 
-      import('@/utils/Export2Excel').then(excel => {
-        const tHeader = ['Name', 'Index']
-        // const data = [{"Id":'1',"Title":'title1',"Author":'author1'}]
-        const data =  [
-          [ "Bill Clinton",  42 ],
-          [ "GeorgeW Bush",  43 ],
-          [ "Barack Obama",  44 ],
-          [ "Donald Trump",  45 ],
-          [ "Joseph Biden", 46 ]
-        ]
-        excel.export_json_to_excel({
-          header: tHeader, //表头 必填
-          data, //具体数据 必填
-          filename: 'csv-list', //非必填
-          autoWidth: true, //非必填
-          bookType: 'csv' //非必填 xlsx
-        })
+      let seriesData = props.options.series;
 
-        csvLoadingStatus.value = false;
+      seriesData.forEach(item=>{
+
+        import('@/utils/Export2Excel').then(excel => {
+          const tHeader = [item.name, 'Number']
+          // const data = [{"Id":'1',"Title":'title1',"Author":'author1'}]
+          const data =  item.data
+          excel.export_json_to_excel({
+            header: tHeader, //表头 必填
+            data, //具体数据 必填
+            filename:item.name + 'csv-list', //非必填
+            autoWidth: true, //非必填
+            bookType: 'csv' //非必填 xlsx
+          })
+
+          csvLoadingStatus.value = false;
+
+        })
 
       })
 

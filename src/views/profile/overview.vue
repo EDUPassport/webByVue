@@ -471,13 +471,22 @@ export default {
         {
           type: "time",
           axisLabel: {
-            // interval: 0, // 让横坐标每一项都显示
+            interval: 'auto', // 让横坐标每一项都显示
+            margin:10,
+            hideOverlap:true
+          },
+          axisLine:{
+            lineStyle:{
+              color:'#667085'
+            }
           },
           axisTick: {
+            length: 8,
             alignWithLabel: true, // 将刻度显示在中间
           },
-          data: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-        },
+
+
+        }
       ],
       yAxis: [
         {
@@ -539,12 +548,20 @@ export default {
         {
           type: "time",
           axisLabel: {
-            // interval: 0, // 让横坐标每一项都显示
+            interval: 'auto', // 让横坐标每一项都显示
+            margin:10,
+            hideOverlap:true
+          },
+          axisLine:{
+            lineStyle:{
+              color:'#667085'
+            }
           },
           axisTick: {
+            length: 8,
             alignWithLabel: true, // 将刻度显示在中间
           },
-          data: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+
         },
       ],
       yAxis: [
