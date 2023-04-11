@@ -132,7 +132,7 @@ import {ref, reactive,onMounted} from 'vue'
 import stepComponent from "@/components/register/stepComponent.vue";
 import {encodeByJsBase64,decodeByJsBase64} from "@/utils/utils";
 import {ElMessage,ElMessageBox} from 'element-plus'
-import {GOOGLE_CALLBACK_API, SEND_EMAIL_CODE} from "@/api/api";
+import {EMAIL_REGISTER_V2, GOOGLE_CALLBACK_API, SEND_EMAIL_CODE} from "@/api/api";
 
 export default {
   name: "accountCreation",
@@ -188,6 +188,7 @@ export default {
       }, response)
 
       GOOGLE_CALLBACK_API(params).then(res => {
+        // console.log(res)
         if (res.code === 200) {
 
           if (res.msg === '10002') {
@@ -211,10 +212,52 @@ export default {
             }
 
             let params = Object.assign(registerParams,formDecode)
-            let formInfo = encodeByJsBase64(JSON.stringify(params))
-            submitGoogleLoadingStatus.value = false
-            router.push({path: '/signup/passwordSetup', query: { type: userType,formInfo:formInfo}})
 
+            EMAIL_REGISTER_V2(params).then(res => {
+              console.log(res)
+              if (res.code == 200) {
+
+                submitGoogleLoadingStatus.value = false
+
+                ElMessageBox({
+                  title: "All Set",
+                  message: "Let's get you logged in!",
+                  dangerouslyUseHTMLString: false,
+                  type: "success",
+                  center: true,
+                  confirmButtonText: "OK",
+                  "round-button": true,
+                  callback(action) {
+                    if (action === 'confirm') {
+                      router.push({path: '/login', query: {email: formDecode.email}})
+                    }
+                  }
+
+                })
+
+              }
+
+            }).catch(err => {
+              console.log(err)
+              submitGoogleLoadingStatus.value = false
+
+              if (err.msg) {
+                ElMessage({
+                  type:'warning',
+                  message: err.msg,
+                  grouping:true
+                })
+                return;
+              }
+
+              if (err.message) {
+                ElMessage({
+                  type:'warning',
+                  message: err.message,
+                  grouping:true
+                })
+              }
+            })
             return;
           }
 
