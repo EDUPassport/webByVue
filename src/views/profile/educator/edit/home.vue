@@ -669,7 +669,7 @@
                               class="demo-ruleForm"
                           >
                             <el-form-item label="School" prop="school_name">
-                              <el-input v-model="educationForm.school_name" placeholder="University"></el-input>
+                              <el-input v-model="educationForm.school_name" placeholder="Please enter the university name"></el-input>
                             </el-form-item>
                             <el-form-item label="Degree" prop="degree">
                               <el-select v-model="educationDegreeObj"
@@ -1506,7 +1506,7 @@ export default {
         school_name: [
           {
             required: true,
-            message: 'University',
+            message: 'Please enter the university name',
             trigger: 'blur',
           }
         ],

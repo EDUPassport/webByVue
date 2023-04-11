@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { reactive} from 'vue'
+import { reactive,onMounted} from 'vue'
 import {SEND_EMAIL_CODE, SEND_EMAIL_CODE_REST_PASSWORD_V3} from "@/api/api";
 import {ElMessage} from 'element-plus'
 export default {
@@ -163,7 +163,9 @@ export default {
         })
       }
     }
-
+    onMounted(()=>{
+      getCheckCodeTimer()
+    })
     return {
       checkCodeBtn,
       getCheckCodeTimer,
