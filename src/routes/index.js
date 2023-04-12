@@ -257,7 +257,7 @@ const routes = [
     {
         path: '/chat',
         name: 'chat',
-        component: layout,
+        component: leftMenuLayout,
         redirect: '/chat/messages',
         children: [
             {
