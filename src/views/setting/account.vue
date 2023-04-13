@@ -43,11 +43,25 @@
         <div class="ctb-container">
             <div class="ctb-t">
                 <span>Current Contributors</span>
-                <el-button type="primary">+ Add Contributors</el-button>
+                <el-button type="primary" @click="addContributorsDialogVisible=true">+ Add Contributors</el-button>
             </div>
             <div class="ctb-b">
-                <el-table>
-                    <el-table-column></el-table-column>
+                <el-table
+                    :data="contributorsData"
+                    flexible
+                    max-height="224px"
+                >
+                    <el-table-column prop="name" label="Name"></el-table-column>
+                    <el-table-column prop="email" label="Email Address"></el-table-column>
+                    <el-table-column prop="permission" label="Permission"></el-table-column>
+                    <el-table-column prop="status" label="Status"></el-table-column>
+                    <el-table-column label="">
+                        <template #default="scope">
+                            <el-icon @click="handleDelete(scope.row)">
+                                <Delete></Delete>
+                            </el-icon>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </div>
         </div>
@@ -56,20 +70,25 @@
             <deleteAccountComponent></deleteAccountComponent>
         </div>
 
+        <addContributorsDialog :visible="addContributorsDialogVisible" @close="addContributorsDialogVisible=false" ></addContributorsDialog>
+
     </div>
+
 </template>
 
 <script>
 import {ref, reactive} from 'vue'
 import deleteAccountComponent from '@/components/deleteAccountComponent.vue'
+import addContributorsDialog from "@/components/addContributorsDialog.vue";
 
 export default {
     name: "account",
     components:{
-        deleteAccountComponent
+        deleteAccountComponent,
+        addContributorsDialog
     },
     setup() {
-        const verificationVisible = ref(false)
+
         const accountForms = ref(null)
         const accountForm = reactive({
             password: '',
@@ -92,27 +111,69 @@ export default {
             ]
         })
 
-        function confirmDelete() {
-            verificationVisible.value = true
+        const contributorsData = ref([
+            {
+                name:'Jack Hill',
+                email:'jackhill@edupassport.io',
+                permission:'Contributor',
+                status:'Online'
+            },
+            {
+                name:'Jack Hill',
+                email:'jackhill@edupassport.io',
+                permission:'Contributor',
+                status:'Away'
+            },
+            {
+                name:'Jack Hill',
+                email:'jackhill@edupassport.io',
+                permission:'Contributor',
+                status:'Online'
+            },
+            {
+                name:'Jack Hill',
+                email:'jackhill@edupassport.io',
+                permission:'Contributor',
+                status:'Online'
+            },
+            {
+                name:'Jack Hill',
+                email:'jackhill@edupassport.io',
+                permission:'Contributor',
+                status:'Away'
+            },
+            {
+                name:'Jack Hill',
+                email:'jackhill@edupassport.io',
+                permission:'Contributor',
+                status:'Online'
+            }
+        ])
+
+        function handleDelete(row){
+            console.log(row)
         }
+
+        const addContributorsDialogVisible = ref(false)
 
         return {
             accountForms,
             accountForm,
             accountRules,
-            verificationVisible,
-            confirmDelete
+            contributorsData,
+            handleDelete,
+            addContributorsDialogVisible
         }
     }
 }
 </script>
 
 <style scoped>
+
 .account-bg {
     height: calc(var(--i-window-height) - 144px);
     display: flex;
     flex-direction: column;
-
 }
 
 .account-top-container {
@@ -156,6 +217,53 @@ export default {
 
 .delete-container{
     margin: auto 40px 40px 40px;
+}
+
+.ctb-container{
+    margin: 24px 40px;
+}
+
+.ctb-t {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ctb-t span{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #1D2939;
+}
+
+.ctb-b{
+    margin-top: 20px;
+    background: #FFFFFF;
+    border: 1px solid #EAECF0;
+    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/deep/ .el-table--default .el-table__header .cell{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #475467;
+}
+
+/deep/ .el-table--default .el-table__body .cell{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #1D2939;
 }
 
 </style>
