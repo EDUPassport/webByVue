@@ -206,7 +206,7 @@ export default {
       this.$router.push('/')
     },
     turnSetting(){
-      this.$router.push('/setting')
+      this.$router.push('/setting/account')
     },
     turnMyMessages() {
       // this.activeMsg = true
