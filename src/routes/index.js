@@ -862,6 +862,24 @@ const routes = [
         },
     },
     {
+        path: '/zoho/survey/educator',
+        name: 'zohoSurveyEducator',
+        component: () => import(/* webpackChunkName: "noFound" */ '@/views/zoho/survey/educator.vue'),
+        meta: {
+            titleC: 'Educators',
+            titleG: 'Educators',
+        },
+    },
+    {
+        path: '/zoho/survey/business',
+        name: 'zohoSurveyBusiness',
+        component: () => import(/* webpackChunkName: "noFound" */ '@/views/zoho/survey/business.vue'),
+        meta: {
+            titleC: 'Education Business',
+            titleG: 'Education Business',
+        },
+    },
+    {
         path: '/from/admin/landing',
         name: 'fromAdminPanel',
         component: () => import(/* webpackChunkName: "noFound" */ '@/views/fromAdminPanel.vue'),

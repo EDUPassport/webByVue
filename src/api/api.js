@@ -367,70 +367,70 @@ export const SET_READ = (params) => post('user/setRead', params)
 export const SET_READ_ALL = (params) => post('user/setRead/all', params)
 
 // 获取报名【event】人员
-// export const EVENT_APPLICATIONS = (params) => get('/home/getEventApplicants',params)
+// export const EVENT_APPLICATIONS = (params) => get('home/getEventApplicants',params)
 
 // 获取报名【event】人员
-export const EVENT_APPLICATIONS = (params) => get('/home/event/apply/user',params)
+export const EVENT_APPLICATIONS = (params) => get('home/event/apply/user',params)
 
 // 获取报名【event】人员
-export const USER_ALL_INFO = (params) => get('/home/user/all/info',params)
+export const USER_ALL_INFO = (params) => get('home/user/all/info',params)
 
 //获取用户发布的【所有的】【职位下】的用户
-export const ALL_JOB_RESUME = (params) => get('/job/getAllJobResume',params)
+export const ALL_JOB_RESUME = (params) => get('job/getAllJobResume',params)
 
 //获取用户发布的【所有的】【职位下】的用户
-export const ALL_LANGUAGE_PROFICIENCY = (params) => get('/home/language/proficiency',params)
+export const ALL_LANGUAGE_PROFICIENCY = (params) => get('home/language/proficiency',params)
 
 //向用户发送密码邮件
-export const SEND_USER_PRIVATE_PASSWORD = (params) => post('/user/private/password',params)
+export const SEND_USER_PRIVATE_PASSWORD = (params) => post('user/private/password',params)
 
 // 用户申请职位后 更新教育者对职位的状态
-export const SET_APPLY_JOB_STATUS = (params) => post('/home/setApplyJobStatus', params)
+export const SET_APPLY_JOB_STATUS = (params) => post('home/setApplyJobStatus', params)
 
 // 教育者 智能匹配 职位 结果列表
-export const EDUCATOR_JOB_MATCH_LIST = (params) => get('/home/educator/matching',params)
+export const EDUCATOR_JOB_MATCH_LIST = (params) => get('home/educator/matching',params)
 
 // 未读消息列表
-export const USER_UNREAD_LIST = (params) => get('/user/unread/list',params)
+export const USER_UNREAD_LIST = (params) => get('user/unread/list',params)
 
 // 未读消息详情
-export const USER_UNREAD_DETAIL = (params) => get('/user/unread/detail',params)
+export const USER_UNREAD_DETAIL = (params) => get('user/unread/detail',params)
 
 // 删除用户profile 【物理删除】
-export const DELETE_USER_PROFILE = (params) => post('/home/user/profile/delete', params)
+export const DELETE_USER_PROFILE = (params) => post('home/user/profile/delete', params)
 
 // 复制School信息到Recruiting
-export const SCHOOL_CONVERT_TO_RECRUITER = (params) => post('/home/school/copy/recruiting', params)
+export const SCHOOL_CONVERT_TO_RECRUITER = (params) => post('home/school/copy/recruiting', params)
 
 // 未读消息详情
-export const EDUCATOR_MANUAL_MATCH_JOB = (params) => get('/home/educator/manual/match/job',params)
+export const EDUCATOR_MANUAL_MATCH_JOB = (params) => get('home/educator/manual/match/job',params)
 
 // 发布过event的城市
-export const EVENT_LOCATION_LIST = (params) => get('/home/event/location/list',params)
+export const EVENT_LOCATION_LIST = (params) => get('home/event/location/list',params)
 
 // 增加聊天
-export const ADD_CHAT_TO_DATABASE = (params) => post('/chat/addChat', params)
+export const ADD_CHAT_TO_DATABASE = (params) => post('chat/addChat', params)
 
 // 聊天列表
-export const CHAT_LIST_FROM_DATABASE = (params) => get('/chat/list',params)
+export const CHAT_LIST_FROM_DATABASE = (params) => get('chat/list',params)
 
 //教育工作者 删除工作经历
-export const EDUCATOR_DELETE_WORK_ITEM = (params) => post('/home/educator/work/delete', params)
+export const EDUCATOR_DELETE_WORK_ITEM = (params) => post('home/educator/work/delete', params)
 
 //教育工作者 删除教育经历
-export const EDUCATOR_DELETE_EDUCATION_ITEM = (params) => post('/home/education/delete', params)
+export const EDUCATOR_DELETE_EDUCATION_ITEM = (params) => post('home/education/delete', params)
 
 //单独验证注册验证码是否正确
-export const REGISTER_EMAIL_CHECK = (params) => post('/home/register/email/check', params)
+export const REGISTER_EMAIL_CHECK = (params) => post('home/register/email/check', params)
 
 // 用户修改profile邮箱 获取验证码
-export const USER_CONTACT_SEND_EMAIL_CODE = (params) => get('/home/send/user/contact/email/code',params)
+export const USER_CONTACT_SEND_EMAIL_CODE = (params) => get('home/send/user/contact/email/code',params)
 
 // 用户修改profile邮箱 获取验证码【验证码验证】
-export const USER_CONTACT_EMAIL_CHECK = (params) => post('/home/user/contact/email/check', params)
+export const USER_CONTACT_EMAIL_CHECK = (params) => post('home/user/contact/email/check', params)
 
 // 职位增加浏览次数
-export const ADD_JOBS_VIEWS = (params) => post('/job/jobViews', params)
+export const ADD_JOBS_VIEWS = (params) => post('job/jobViews', params)
 
 // google login /api/home/google/callback
 export const GOOGLE_CALLBACK_API = (params) => post('/home/google/callback',params)
