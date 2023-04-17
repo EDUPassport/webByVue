@@ -4,7 +4,7 @@
       <div class="conversation-list-container">
         <div class="conversation-list-top">
           <div class="conversation-list-top-label">
-            <span>Recent Messages</span>
+            <span>Messages</span>
             <el-button type="primary" round @click="turnHistory()">
               History
             </el-button>
@@ -19,7 +19,7 @@
                 reserve-keyword
                 :remote-method="chatSearchRemoteMethod"
                 :loading="chatSearchLoading"
-                placeholder="Search chats"
+                placeholder="Search"
                 @change="chatLocationChange"
             >
               <el-option
@@ -349,9 +349,15 @@ export default {
   }
 
   .conversation-list-top-label span{
-    color: #262626;
-    font-size: 24px;
-    font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 24px;
+      /* identical to box height, or 133% */
+
+
+      color: #000000;
   }
 
   .conversation-list-top-search{

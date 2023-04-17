@@ -1,63 +1,52 @@
 <template>
   <div class="bg">
-    <div class="msg-xll-container">
-      <div class="msg-xll-l-container">
-        <meSideMenu></meSideMenu>
-      </div>
-      <div class="msg-xll-r-container">
-        <div class="msg-xll-r-bg-container">
 
-          <div class="home">
-            <div class="home-container">
-              <div class="home-menu">
-                <div class="menu-header">
+      <div class="home-container">
+          <div class="home-menu">
+              <div class="menu-header">
                   <el-avatar class="user-avatar" :src="currentUser.avatar"/>
                   <div class="user-profile">
-                    <div class="user-profile-main">
-                      <div class="user-profile-header">
-                        <el-avatar :src="currentUser.avatar"/>
-                        <div>{{ currentUser.name }}</div>
+                      <div class="user-profile-main">
+                          <div class="user-profile-header">
+                              <el-avatar :src="currentUser.avatar"/>
+                              <div>{{ currentUser.name }}</div>
+                          </div>
+                          <!--                      <div class="user-profile-info">-->
+                          <!--                        <div class="user-profile-info-title">Email</div>-->
+                          <!--                        <div>{{ currentUser.email }}</div>-->
+                          <!--                      </div>-->
+                          <!--                      <div class="user-profile-info">-->
+                          <!--                        <div class="user-profile-info-title">Phone</div>-->
+                          <!--                        <div>{{ currentUser.phone }}</div>-->
+                          <!--                      </div>-->
                       </div>
-<!--                      <div class="user-profile-info">-->
-<!--                        <div class="user-profile-info-title">Email</div>-->
-<!--                        <div>{{ currentUser.email }}</div>-->
-<!--                      </div>-->
-<!--                      <div class="user-profile-info">-->
-<!--                        <div class="user-profile-info-title">Phone</div>-->
-<!--                        <div>{{ currentUser.phone }}</div>-->
-<!--                      </div>-->
-                    </div>
                   </div>
-                </div>
-                <div class="menu-box">
+              </div>
+              <div class="menu-box">
                   <div class="menu-list">
-                    <router-link tag="div" class="menu-item" to="/chat/messages" replace>
-                      <el-icon :size="25">
-                        <IconMaterialSymbolsChatOutline />
-                      </el-icon>
-                      <span v-if="unreadAmount" class="menu-unread">{{ unreadAmount }}</span>
-                    </router-link>
-                    <router-link tag="div" class="menu-item" to="/chat/history" replace>
-                    <el-icon :size="25">
-                      <IconRiChatHistoryLine />
-                    </el-icon>
-                  </router-link>
+                      <router-link tag="div" class="menu-item" to="/chat/messages" replace>
+                          <el-icon :size="25">
+                              <IconMaterialSymbolsChatOutline />
+                          </el-icon>
+                          <span v-if="unreadAmount" class="menu-unread">{{ unreadAmount }}</span>
+                      </router-link>
+                      <router-link tag="div" class="menu-item" to="/chat/history" replace>
+                          <el-icon :size="25">
+                              <IconRiChatHistoryLine />
+                          </el-icon>
+                      </router-link>
                   </div>
 
-                </div>
               </div>
-              <div class="home-main">
-                <suspense>
-                  <router-view></router-view>
-                </suspense>
-
-              </div>
-            </div>
           </div>
+          <div class="home-main">
+              <suspense>
+                  <router-view></router-view>
+              </suspense>
 
-        </div>
+          </div>
       </div>
-    </div>
+
 
   </div>
 </template>
@@ -67,12 +56,11 @@
 import {ref, onBeforeMount, inject} from 'vue';
 import {useRouter} from 'vue-router';
 import {useStore} from 'vuex';
-import meSideMenu from "@/components/meSideMenu";
 
 export default {
   name: 'chatHome',
   components:{
-    meSideMenu
+
   },
   setup() {
 
@@ -143,44 +131,13 @@ export default {
   background-color: #F0F2F5;
 }
 
-.msg-xll-container{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-
-.msg-xll-l-container {
-
-}
-
-.msg-xll-r-container {
-  width: calc(100% - 160px);
-  height: calc(100vh - 140px);
-}
-
-.msg-xll-r-bg-container {
-  padding: 50px;
-}
-
-
-.home {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .home-container {
   width: 100%;
-  height: calc(100vh - 340px);
+  height: var(--i-window-height);
   background: #FFFFFF;
   display: flex;
   position: relative;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 18px;
+
   overflow: hidden;
 }
 
@@ -198,14 +155,13 @@ export default {
 }
 
 .user-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
   cursor: pointer;
 }
 
 .user-avatar:hover + .user-profile {
-  /*display: block;*/
   display: none;
 }
 
@@ -322,16 +278,7 @@ export default {
     box-shadow: none;
   }
 
-  .msg-xll-r-container{
-    width: 100%;
-    height: calc( var(--i-window-height) - 160px);
-  }
 
-  .msg-xll-r-bg-container{
-    height: 100%;
-    padding: 0;
-
-  }
 
   .home-menu{
     width: 60px;

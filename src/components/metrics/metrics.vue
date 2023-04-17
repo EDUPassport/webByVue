@@ -38,10 +38,18 @@
           >
           </el-date-picker>
         </div>
-        <div class="metrics-t-actions-date-item" @click="changeHowLong(365)">12 Months</div>
-        <div class="metrics-t-actions-date-item" @click="changeHowLong(90)">3 Months</div>
-        <div class="metrics-t-actions-date-item" @click="changeHowLong(30)">30 Days</div>
-        <div class="metrics-t-actions-date-item" @click="changeHowLong(7)">7 Days</div>
+        <div class="metrics-t-actions-date-item"
+             :class="howLongValue === 365 ? 'metrics-t-actions-date-item-active' : ''"
+             @click="changeHowLong(365)">12 Months</div>
+        <div class="metrics-t-actions-date-item"
+             :class="howLongValue === 90 ? 'metrics-t-actions-date-item-active' : ''"
+             @click="changeHowLong(90)">3 Months</div>
+        <div class="metrics-t-actions-date-item"
+             :class="howLongValue === 30 ? 'metrics-t-actions-date-item-active' : ''"
+             @click="changeHowLong(30)">30 Days</div>
+        <div class="metrics-t-actions-date-item"
+             :class="howLongValue === 7 ? 'metrics-t-actions-date-item-active' : ''"
+             @click="changeHowLong(7)">7 Days</div>
 
       </div>
     </div>
@@ -206,25 +214,25 @@ export default {
     function exportExcel(){
       csvLoadingStatus.value = true;
 
-      import('@/utils/Export2Excel').then(excel => {
-        const tHeader = ['Name', 'Index']
-        // const data = [{"Id":'1',"Title":'title1',"Author":'author1'}]
-        const data =  [
-          [ "Bill Clinton",  42 ],
-          [ "GeorgeW Bush",  43 ],
-          [ "Barack Obama",  44 ],
-          [ "Donald Trump",  45 ],
-          [ "Joseph Biden", 46 ]
-        ]
-        excel.export_json_to_excel({
-          header: tHeader, //表头 必填
-          data, //具体数据 必填
-          filename: 'csv-list', //非必填
-          autoWidth: true, //非必填
-          bookType: 'csv' //非必填 xlsx
-        })
+      let seriesData = props.options.series;
 
-        csvLoadingStatus.value = false;
+      seriesData.forEach(item=>{
+
+        import('@/utils/Export2Excel').then(excel => {
+          const tHeader = [item.name, 'Number']
+          // const data = [{"Id":'1',"Title":'title1',"Author":'author1'}]
+          const data =  item.data
+          excel.export_json_to_excel({
+            header: tHeader, //表头 必填
+            data, //具体数据 必填
+            filename:item.name + 'csv-list', //非必填
+            autoWidth: true, //非必填
+            bookType: 'csv' //非必填 xlsx
+          })
+
+          csvLoadingStatus.value = false;
+
+        })
 
       })
 
@@ -246,11 +254,14 @@ export default {
     }
 
     console.log(props)
+    const howLongValue = ref(7)
     function changeHowLong(value){
+      howLongValue.value = value
       context.emit('howLongChange', value)
     }
 
     return {
+      howLongValue,
       pngLoadingStatus,
       pdfLoadingStatus,
       csvLoadingStatus,
@@ -338,6 +349,13 @@ export default {
   border-left: 1px solid #D0D5DD;
   cursor: pointer;
 
+}
+
+.metrics-t-actions-date-item:hover{
+  background: #F2F4F7;
+}
+.metrics-t-actions-date-item-active{
+  background: #F2F4F7;
 }
 
 .metrics-t-actions-top{

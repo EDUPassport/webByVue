@@ -1,10 +1,8 @@
 import layout from "@/layout";
-// import appLayout from "@/layout/appLayout";
 import {createRouter, createWebHistory} from 'vue-router'
 import appLayout from "@/layout/appLayout";
 import dashboardLayout from "@/layout/dashboardLayout.vue";
 import leftMenuLayout from "@/layout/leftMenuLayout.vue";
-// import {isPhone} from "@/utils";
 import store from '@/store/index'
 import chatHome from '@/views/chat/chatHome'
 import NProgress from 'nprogress'
@@ -266,7 +264,7 @@ const routes = [
     {
         path: '/chat',
         name: 'chat',
-        component: layout,
+        component: leftMenuLayout,
         redirect: '/chat/messages',
         children: [
             {
@@ -761,6 +759,7 @@ const routes = [
         meta: {
             titleC: 'EDU Passport Login',
             titleG: 'EDU Passport Login',
+            noAccessTokenExists:true
         },
     },
     {
@@ -770,6 +769,8 @@ const routes = [
         meta: {
             titleC: 'EDU Passport Sign Up Select User Type',
             titleG: 'EDU Passport Sign Up Select User Type',
+            noAccessTokenExists:true
+
         },
     },
     {
@@ -779,6 +780,7 @@ const routes = [
         meta: {
             titleC: 'EDU Passport Fill Out Info',
             titleG: 'EDU Passport Fill Out Info',
+            noAccessTokenExists:true
         },
     },
     {
@@ -788,6 +790,7 @@ const routes = [
         meta: {
             titleC: 'EDU Passport Account Creation',
             titleG: 'EDU Passport Account Creation',
+            noAccessTokenExists:true
         },
     },
     {
@@ -797,6 +800,7 @@ const routes = [
         meta: {
             titleC: 'EDU Passport Account Verification',
             titleG: 'EDU Passport Account Verification',
+            noAccessTokenExists:true
         },
     },
     {
@@ -806,6 +810,7 @@ const routes = [
         meta: {
             titleC: 'EDU Passport Password Setup',
             titleG: 'EDU Passport Password Setup',
+            noAccessTokenExists:true
         },
     },
     {
@@ -833,6 +838,7 @@ const routes = [
         meta: {
             titleC: 'Forget Password',
             titleG: 'Forget Password',
+            noAccessTokenExists:true
         }
     },
     {
@@ -842,6 +848,7 @@ const routes = [
         meta: {
             titleC: 'Verification Code',
             titleG: 'Verification Code',
+            noAccessTokenExists:true
         }
     },
     {
@@ -851,6 +858,7 @@ const routes = [
         meta: {
             titleC: 'Set New Password',
             titleG: 'Set New Password',
+            noAccessTokenExists:true
         }
     },
     {
@@ -933,31 +941,18 @@ router.beforeEach((to, from, next) => {
             next({path: '/login'})
         }
     } else {
-        next()
+
+        if (to.matched.some(record => record.meta.noAccessTokenExists)) {
+            const token = localStorage.getItem('token')
+            if (token) {
+                next(from)
+            } else {
+                next()
+            }
+        } else {
+            next()
+        }
     }
-
-    // if (isPhone()) {
-    //     let domain = ''
-    //     if (envName === 'developmentCN') {
-    //         domain = 'https://m.dev.edupassport.cn'
-    //     }
-    //
-    //     if (envName === 'development') {
-    //         domain = 'https://test.esl-passport.cn'
-    //     }
-    //
-    //     if (envName === 'productionCN') {
-    //         domain = 'https://m.edupassport.cn'
-    //     }
-    //
-    //     if (envName === 'production') {
-    //         domain = 'https://m.edupassport.io'
-    //     }
-    //
-    //     return window.location.href = domain
-    // }
-
-    // next();
 
 })
 
