@@ -889,6 +889,15 @@ const routes = [
         },
     },
     {
+        path: '/delete/account/success',
+        name: 'deleteAccountSuccess',
+        component: () => import(/* webpackChunkName: "noFound" */ '@/views/deleteAccountSuccess.vue'),
+        meta: {
+            titleC: 'Account Deleted Successfully',
+            titleG: 'Account Deleted Successfully',
+        },
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'noFound',
         component: () => import(/* webpackChunkName: "noFound" */ '@/views/noFound.vue'),

@@ -53,7 +53,7 @@
 <script>
 import contributorPersonIcon from '@/assets/newHome/add-contributor-person.svg'
 import contributorSuccessIcon from '@/assets/newHome/add-contributors-success.svg'
-import {ElMessage} from 'element-plus'
+import {ElMessage, ElMessageBox} from 'element-plus'
 import {ref, reactive, onMounted} from 'vue'
 
 export default {
@@ -93,11 +93,58 @@ export default {
                     let params = Object.assign({}, vForm)
                     console.log(params)
 
+                    ElMessageBox.confirm(
+                        'Invitation Sent',
+                        'Warning',
+                        {
+                            confirmButtonText: 'OK',
+                            cancelButtonText: 'Cancel',
+                            type: 'warning',
+                            center: true,
+                        }
+                    )
+                        .then(() => {
+                            ElMessage({
+                                type: 'success',
+                                message: 'Delete completed',
+                            })
+                        })
+                        .catch(() => {
+                            ElMessage({
+                                type: 'info',
+                                message: 'Delete canceled',
+                            })
+                        })
+
                 } else {
                     console.log('error submit!!')
+                    ElMessageBox.confirm(
+                        '<div class="box-avatar"></div><div >Invitation Sent</div><a href="https://www.baidu.com">Invite sent successfully. We’ll let you know when user joins.</a>',
+                        '',
+                        {
+                            customClass:'edu-msg-box',
+                            confirmButtonText: 'OK',
+                            cancelButtonText: 'Close',
+                            center: true,
+                            dangerouslyUseHTMLString:true
+                        }
+                    )
+                        .then(() => {
+                            ElMessage({
+                                type: 'success',
+                                message: 'Delete completed',
+                            })
+                        })
+                        .catch(() => {
+                            ElMessage({
+                                type: 'info',
+                                message: 'Delete canceled',
+                            })
+                        })
+
                     ElMessage({
                         type: 'warning',
-                        message: 'Enter your verification code',
+                        message: 'Enter a valid email address',
                         grouping: true
                     })
                     return false
@@ -143,8 +190,7 @@ export default {
 <style scoped>
 
 .dialog-container {
-    width: 380px;
-    /*height: 300px;*/
+
     margin: 0 auto;
     padding: 23px 85px;
     background-color: #FFFFFF;
@@ -200,6 +246,7 @@ export default {
     width: 100%;
     margin-top: 40px;
 }
+
 
 @media screen and (max-width: 768px) {
     .dialog-container {

@@ -16,7 +16,7 @@
                     @confirm="confirmDelete"
             >
                 <template #reference>
-                    <el-button type="danger">Delete Account</el-button>
+                    <el-button type="danger" :loading="deleteLoadingStatus">Delete Account</el-button>
                 </template>
 
             </el-popconfirm>
@@ -24,13 +24,21 @@
         </div>
 
     </div>
-    <verificationCodeDialog :visible="verificationVisible" @close="verificationVisible=false"></verificationCodeDialog>
+
+    <verificationCodeDialog type="deleteAccount"
+                            :visible="verificationVisible"
+                            @success="deleteSuccess"
+                            @close="verificationVisible=false">
+    </verificationCodeDialog>
 
 </template>
 
 <script>
 import {ref} from 'vue'
 import verificationCodeDialog from "@/components/verificationCodeDialog.vue";
+import {SEND_DELETE_USER_CODE} from "@/api/api";
+import {ElMessage} from 'element-plus'
+import {useRouter} from 'vue-router'
 
 export default {
     name: "deleteAccountComponent",
@@ -39,14 +47,59 @@ export default {
     },
     setup(){
         const verificationVisible = ref(false)
+        const router = useRouter()
+        const deleteLoadingStatus = ref(false)
 
         function confirmDelete(){
-            verificationVisible.value = true
+
+            deleteLoadingStatus.value = true;
+
+            SEND_DELETE_USER_CODE().then(res=>{
+                if(res.code === 200){
+                    ElMessage({
+                        type: 'success',
+                        message: "Success",
+                        grouping: true
+                    })
+
+                    verificationVisible.value = true;
+                    deleteLoadingStatus.value = false;
+                }
+            }).catch(err=>{
+                deleteLoadingStatus.value = false;
+                console.log(err)
+                if (err.msg) {
+                    ElMessage({
+                        type: 'error',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return;
+                }
+
+                if (err.message) {
+                    ElMessage({
+                        type: 'error',
+                        message: err.message,
+                        grouping: true
+                    })
+
+                }
+            })
+
+        }
+
+        function deleteSuccess(){
+            console.log('delete success')
+            localStorage.clear()
+            router.push('/delete/account/success')
         }
 
         return {
             verificationVisible,
-            confirmDelete
+            confirmDelete,
+            deleteSuccess,
+            deleteLoadingStatus
         }
     }
 

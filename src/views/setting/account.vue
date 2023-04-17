@@ -1,78 +1,82 @@
 <template>
     <div class="account-bg">
 
-        <div class="account-top-container">
-            <div class="account-top-l">
-                <div class="account-label">
-                    <span>Change Password</span>
+        <el-scrollbar class="account-scroll-container">
+            <div class="account-top-container">
+                <div class="account-top-l">
+                    <div class="account-label">
+                        <span>Change Password</span>
+                    </div>
+                    <div class="account-tips">
+                        <span>Changing your password is a simple but effective way to do this!</span>
+                    </div>
                 </div>
-                <div class="account-tips">
-                    <span>Changing your password is a simple but effective way to do this!</span>
+                <div class="account-top-r">
+                    <el-button type="info">Cancel</el-button>
+                    <el-button type="success">Update Password</el-button>
                 </div>
-            </div>
-            <div class="account-top-r">
-                <el-button type="info">Cancel</el-button>
-                <el-button type="success">Update Password</el-button>
+
             </div>
 
-        </div>
-
-        <div class="account-form">
-            <el-form
+            <div class="account-form">
+                <el-form
                     ref="accountForms"
                     :model="accountForm"
                     :rules="accountRules"
                     label-width="220px"
                     label-position="left"
                     class="demo-ruleForm"
-            >
-                <el-form-item label="Current Password">
-                    <el-input v-model="accountForm.current_password"
-                              placeholder="Enter your Current Password"></el-input>
-                </el-form-item>
-                <el-form-item label="New Password">
-                    <el-input v-model="accountForm.password" placeholder="Enter your New Password"></el-input>
-                </el-form-item>
-                <el-form-item label="Confirm New Password">
-                    <el-input v-model="accountForm.confirm_password" placeholder="Confirm New Password"></el-input>
-                </el-form-item>
-
-            </el-form>
-        </div>
-
-        <div class="ctb-container">
-            <div class="ctb-t">
-                <span>Current Contributors</span>
-                <el-button type="primary" @click="addContributorsDialogVisible=true">+ Add Contributors</el-button>
-            </div>
-            <div class="ctb-b">
-                <el-table
-                    :data="contributorsData"
-                    flexible
-                    max-height="224px"
                 >
-                    <el-table-column prop="name" label="Name"></el-table-column>
-                    <el-table-column prop="email" label="Email Address"></el-table-column>
-                    <el-table-column prop="permission" label="Permission"></el-table-column>
-                    <el-table-column prop="status" label="Status"></el-table-column>
-                    <el-table-column label="">
-                        <template #default="scope">
-                            <el-icon @click="handleDelete(scope.row)">
-                                <Delete></Delete>
-                            </el-icon>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                    <el-form-item label="Current Password">
+                        <el-input v-model="accountForm.current_password"
+                                  placeholder="Enter your Current Password"></el-input>
+                    </el-form-item>
+                    <el-form-item label="New Password">
+                        <el-input v-model="accountForm.password" placeholder="Enter your New Password"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Confirm New Password">
+                        <el-input v-model="accountForm.confirm_password" placeholder="Confirm New Password"></el-input>
+                    </el-form-item>
+
+                </el-form>
             </div>
-        </div>
+
+            <div class="ctb-container">
+                <div class="ctb-t">
+                    <span>Current Contributors</span>
+                    <el-button type="primary" @click="addContributorsDialogVisible=true">+ Add Contributors</el-button>
+                </div>
+                <div class="ctb-b">
+                    <el-table
+                        :data="contributorsData"
+                        flexible
+                        max-height="224px"
+                    >
+                        <el-table-column prop="name" label="Name"></el-table-column>
+                        <el-table-column prop="email" label="Email Address"></el-table-column>
+                        <el-table-column prop="permission" label="Permission"></el-table-column>
+                        <el-table-column prop="status" label="Status"></el-table-column>
+                        <el-table-column label="">
+                            <template #default="scope">
+                                <el-icon @click="handleDelete(scope.row)">
+                                    <Delete></Delete>
+                                </el-icon>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </div>
+
+        </el-scrollbar>
 
         <div class="delete-container">
             <deleteAccountComponent></deleteAccountComponent>
         </div>
 
-        <addContributorsDialog :visible="addContributorsDialogVisible" @close="addContributorsDialogVisible=false" ></addContributorsDialog>
 
     </div>
+
+    <addContributorsDialog :visible="addContributorsDialogVisible" @close="addContributorsDialogVisible=false" ></addContributorsDialog>
 
 </template>
 
@@ -171,9 +175,14 @@ export default {
 <style scoped>
 
 .account-bg {
+
     height: calc(var(--i-window-height) - 144px);
     display: flex;
     flex-direction: column;
+}
+
+.account-scroll-container{
+    height: calc(var(--i-window-height) - 220px);
 }
 
 .account-top-container {
@@ -240,10 +249,12 @@ export default {
 }
 
 .ctb-b{
+
+    width: calc(100% - 4px);
     margin-top: 20px;
     background: #FFFFFF;
     border: 1px solid #EAECF0;
-    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+    /*box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);*/
     border-radius: 8px;
     overflow: hidden;
 }

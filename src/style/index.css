@@ -195,6 +195,17 @@
     background-color: #6650B3;
 }
 
+.edu-msg-box{
+    padding: 25px 25px 50px 25px !important;
+    width: auto !important;
+    max-width: none !important;
+}
+.custom-icon {
+    background-image: url('@/assets/newHome/add-contributors-success.svg');
+    background-size: contain;
+    width: 48px;
+    height: 48px;
+}
 .el-message-box__title{
     font-size: 20px;
     font-weight: 600;
@@ -202,8 +213,13 @@
 }
 
 .el-message-box__message p{
-    font-size: 18px;
-    font-family: Inter, AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    color: #667085;
 }
 
 .el-empty__description p{
@@ -230,6 +246,15 @@
     font-weight: 500;
     color: #3d3d3d;
 }
+
+.box-avatar{
+    background-image: url("@/assets/newHome/add-contributors-success.svg");
+    background-position: center;
+    background-size: 100%;
+    width: 40px;
+    height: 40px;
+}
+
 
 @media screen and (max-width: 768px){
 

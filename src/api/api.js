@@ -433,29 +433,34 @@ export const USER_CONTACT_EMAIL_CHECK = (params) => post('home/user/contact/emai
 export const ADD_JOBS_VIEWS = (params) => post('job/jobViews', params)
 
 // google login /api/home/google/callback
-export const GOOGLE_CALLBACK_API = (params) => post('/home/google/callback',params)
+export const GOOGLE_CALLBACK_API = (params) => post('home/google/callback',params)
 
 // google login
-export const GOOGLE_CALLBACK_LOGIN = (params) => post('/home/google/login',params)
+export const GOOGLE_CALLBACK_LOGIN = (params) => post('home/google/login',params)
 
 
 // educator 统计数据
-export const EDUCATOR_STATIC_DATA = (params) => get('/home/educator/index',params)
+export const EDUCATOR_STATIC_DATA = (params) => get('home/educator/index',params)
 
 // 添加用户的浏览记录
-export const USER_BROWSING_HISTORY_ADD = (params) => post('/home/user/browsing/history/add',params)
+export const USER_BROWSING_HISTORY_ADD = (params) => post('home/user/browsing/history/add',params)
 // 获取用户时间区间内metrics
-export const HOME_USER_METRICS = (params) => get('/home/user/metrics',params)
+export const HOME_USER_METRICS = (params) => get('home/user/metrics',params)
 
 //获取用户时间区间内 shortlisted
-export const HOME_JOB_SHORTLISTED = (params) => get('/home/job/shortlisted',params)
+export const HOME_JOB_SHORTLISTED = (params) => get('home/job/shortlisted',params)
 
 // 上月和本月发布的职位数量
-export const USER_POST_JOB_COUNT = (params) => get('/home/user/post/job/count',params)
+export const USER_POST_JOB_COUNT = (params) => get('home/user/post/job/count',params)
 
 // business统计页面 job views折线图数据
-export const BUSINESS_JOB_VIEWS = (params) => get('/home/business/job/views',params)
+export const BUSINESS_JOB_VIEWS = (params) => get('home/business/job/views',params)
 
 //business统计页面 shortlisted数据
-export const BUSINESS_JOB_SHORTLISTED = (params) => get('/home/business/shortlisted',params)
+export const BUSINESS_JOB_SHORTLISTED = (params) => get('home/business/shortlisted',params)
 
+// 删除账户直接获取验证码
+export const SEND_DELETE_USER_CODE = (params) => post('home/send/delete/user/code',params)
+
+// 前台登录用户 删除账户
+export const CANCEL_MYSELF_ACCOUNT = (params) => post('home/cancel/myself/account',params)
