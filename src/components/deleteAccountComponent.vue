@@ -135,4 +135,17 @@ export default {
     color: #667085;
 }
 
+@media screen and (max-width: 768px) {
+    .delete{
+        flex-direction: column;
+        padding: 24px 0 0 0 ;
+
+    }
+    .delete-r{
+        width: 100%;
+        margin-top: 24px;
+        text-align: left;
+    }
+}
+
 </style>

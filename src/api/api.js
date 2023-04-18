@@ -464,3 +464,8 @@ export const SEND_DELETE_USER_CODE = (params) => post('home/send/delete/user/cod
 
 // 前台登录用户 删除账户
 export const CANCEL_MYSELF_ACCOUNT = (params) => post('home/cancel/myself/account',params)
+
+// 修改密码
+export const USER_CHANGE_PASSWORD = (params) => post('home/user/change/password',params)
+
+
