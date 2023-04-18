@@ -201,6 +201,8 @@ export const ZOHO_SYNC = (params) => post('zoho/sync', params)
 
 export const EVENTS_LIST = (params) => get('event/eventList', params)
 
+export const EVENT_DETAIL = (params) => get('event/detail', params)
+
 export const EVENTS_DETAIL = (params) => get('event/detail', params)
 
 export const EVENTS_ADD_APPLICANTS = (params) => post('home/addApplicants', params)

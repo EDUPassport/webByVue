@@ -69,8 +69,24 @@
 
                     <div class="events-item-action-container">
                       <div class="events-item-action-l">
-                        <!--                      <el-button link>ADD TO CALENDAR</el-button>-->
-                      </div>
+                          <div class="share-r" >
+                      <el-popover
+                        placement="top-start"
+                        :width="40"
+                        trigger="click"
+                        content="link copied!"
+                    >
+                      <template #reference>
+                        <el-button link @click="copyLink(item)">
+                          <el-icon :size="20">
+                            <IconAntDesignLinkOutlined/>
+                          </el-icon>
+                           Copy Link
+                        </el-button>
+                      </template>
+                    </el-popover>
+                  </div>
+                        </div>
                       <div class="events-item-action-r">
                         <el-button link @click="showBookEvent(item)">
                           <el-icon :size="20">
@@ -210,6 +226,15 @@ export default {
     this.getEventsList(this.eventPage,this.eventLimit)
   },
   methods:{
+    copyLink(val) {
+      let origin  = window.location.origin
+      let locationUrl = origin + '/event/event-detail?event_id='+val.id;
+      this.$copyText(locationUrl).then(function (e) {
+        console.log(e)
+      }, function (e) {
+        console.log(e)
+      })
+      },
     addUserBrowsingHistory(id){
       let params = {
         type:3,
