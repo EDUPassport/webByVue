@@ -315,6 +315,10 @@
     margin-top: 30px;
 }
 
+.event-xll-dialog {
+    --el-dialog-bg-color: none;
+    --el-dialog-box-shadow: none;
+}
 
 @media screen and (max-width: 768px){
 
