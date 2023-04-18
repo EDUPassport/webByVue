@@ -231,6 +231,79 @@
     color: #3d3d3d;
 }
 
+.edu-msg-box .box-avatar{
+    background-image: url("@/assets/newHome/add-contributors-success.svg");
+    background-position: center;
+    background-size: 100%;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto;
+}
+
+.edu-msg-box .box-avatar-person{
+    background-image: url("@/assets/newHome/add-contributor-person.svg");
+    background-position: center;
+    background-size: 100%;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto;
+}
+
+.edu-msg-box .box-label{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    text-align: center;
+    color: #101828;
+    margin-top: 20px;
+
+}
+
+.edu-msg-box .box-tips{
+    font-family: 'Inter';
+    font-style: normal;
+    width: 90%;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    color: #667085;
+    margin-top: 12px;
+}
+
+.edu-msg-box .box-cancel-button{
+    background-color: #6941C6;
+    color: #FFFFFF;
+    border: transparent;
+    width: 90%;
+    margin: 40px auto 0;
+}
+
+.edu-msg-box .box-prompt-confirm-button{
+    background-color: #6941C6;
+    color: #FFFFFF;
+    border: transparent;
+    width: 100%;
+    margin: 10px auto 0;
+}
+
+.edu-msg-box .box-form-label{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 12px;
+    color: #344054;
+    margin-top: 30px;
+}
+
+.event-xll-dialog {
+    --el-dialog-bg-color: none;
+    --el-dialog-box-shadow: none;
+}
+
 @media screen and (max-width: 768px){
 
    :root{

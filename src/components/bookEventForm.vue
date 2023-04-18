@@ -1,6 +1,8 @@
 <template>
 <div>
-  <el-dialog :model-value="visible" title="RSVP"
+  <el-dialog :model-value="visible"
+             :zIndex="4000"
+             title="RSVP"
              :before-close="beforeClose"
              :width="widthValue"
   >
