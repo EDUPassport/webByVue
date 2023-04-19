@@ -470,4 +470,4 @@ export const CANCEL_MYSELF_ACCOUNT = (params) => post('home/cancel/myself/accoun
 // 修改密码
 export const USER_CHANGE_PASSWORD = (params) => post('home/user/change/password',params)
 
-
+export const USER_QUESTION_SHOW = (params) => get('home/user/question/show', params)
