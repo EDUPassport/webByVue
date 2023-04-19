@@ -158,7 +158,7 @@
                                                                      v-infinite-scroll="loadUserUnreadMore">
 
                                                                     <div
-                                                                        v-if="identity == 1 || identity == 2 || identity == 3 || identity == 4"
+                                                                        v-if="showSurveyStatus"
                                                                         class="notification-survey"
                                                                     >
                                                                         <div class="notification-survey-l">
@@ -575,7 +575,14 @@ import {
     SWITCH_IDENTITY_V2,
     USER_INFO_VISITOR_V2,
     USER_ALL_IDENTITY_V2,
-    LOGOUT_V2, USER_MENU_LIST, COMEBACK_MYSELF, USER_UNREAD_LIST, SET_READ, SET_READ_ALL, USER_UNREAD
+    LOGOUT_V2,
+    USER_MENU_LIST,
+    COMEBACK_MYSELF,
+    USER_UNREAD_LIST,
+    SET_READ,
+    SET_READ_ALL,
+    USER_UNREAD,
+    USER_QUESTION_SHOW
 } from '@/api/api'
 import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
@@ -665,7 +672,8 @@ export default {
             inAppUnreadTotal: 0,
 
             showEarthStatus: false,
-            nowMenuData: []
+            nowMenuData: [],
+            showSurveyStatus:false
 
         }
     },
@@ -678,6 +686,7 @@ export default {
                 this.inAppNotificationData = []
                 this.getUserUnreadList(1, this.inAppLimit)
                 this.getUserUnread()
+                this.getUserQuestionList()
             }
         },
         unreadTotal(newValue) {
@@ -760,12 +769,23 @@ export default {
             this.getAllIdentity()
             this.getUserUnreadList(this.inAppPage, this.inAppLimit)
             this.getUserUnread()
+            this.getUserQuestionList()
         }
 
     },
     methods: {
-        navigate(e) {
-            console.log(e)
+
+        getUserQuestionList(){
+            USER_QUESTION_SHOW().then(res=>{
+                console.log(res)
+                if(res.code === 200){
+                    if(res.message){
+                        this.showSurveyStatus = true;
+                    }
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
         },
         showMobileMenu() {
             this.menuDrawerStatus = true;

@@ -427,3 +427,4 @@ export const USER_CONTACT_EMAIL_CHECK = (params) => post('home/user/contact/emai
 // 职位增加浏览次数
 export const ADD_JOBS_VIEWS = (params) => post('job/jobViews', params)
 
+export const USER_QUESTION_SHOW = (params) => get('home/user/question/show', params)
