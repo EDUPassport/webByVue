@@ -5,8 +5,7 @@
     </div>
 
     <el-scrollbar max-height="320px" class="e-j-c">
-
-      <template v-if="jobFeaturedData.length>0">
+      <template v-if="jobFeaturedData.length>0 && percentage >= 80">
 
         <div class="e-j-item"
              v-for="(item,i) in jobFeaturedData" :key="i"
@@ -72,7 +71,11 @@
             </div>
 
             <div class="e-j-item-b-btn-container">
-              <el-button type="primary">Apply Now</el-button>
+
+              <applyJobButton :selectJobId="item.id"
+                                btn-text="Apply Now"
+                                :job-info="item" >
+                </applyJobButton>
             </div>
           </div>
 
@@ -111,11 +114,16 @@ import thumbUpImg from '@/assets/newHome/match/thumb_up.png'
 import companyIconImg from '@/assets/newHome/dashboard/company_nofill.svg'
 import locationIconImg from '@/assets/newHome/dashboard/location_nofill.svg'
 import salaryIconImg from '@/assets/newHome/dashboard/salary_nofill.svg'
+import applyJobButton from '@/components/jobs/applyButton'
+
 
 import {EDUCATOR_JOB_MATCH_LIST, EDUCATOR_MANUAL_MATCH_JOB, JOB_FEATURED_LIST} from "@/api/api";
 
 export default {
   name: "dailyJobMatch",
+  components: {
+  applyJobButton
+  },
   data(){
     return {
       doubtingImg,
@@ -124,13 +132,15 @@ export default {
       companyIconImg,
       locationIconImg,
       salaryIconImg,
-      jobFeaturedData:[]
+      jobFeaturedData:[],
+      percentage:null
     }
   },
   mounted(){
     this.manualMatchJob()
 
     this.getEducatorJobMatchingList()
+     this.percentage=localStorage.getItem('profile_percentage')   
     // this.getJobFeaturedList()
   },
   methods:{

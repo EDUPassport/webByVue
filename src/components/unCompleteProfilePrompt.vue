@@ -12,7 +12,7 @@
     </div>
     <div class="un-profile-r">
       <el-progress class="un-profile-progress-mobile" :percentage="percent" :stroke-width="8" color="#F9B019" />
-      <el-button class="complete-btn">
+      <el-button  class="complete-btn"  @click="editUserProfile(identity,id)">
         Complete Profile
       </el-button>
     </div>
@@ -21,9 +21,72 @@
 </template>
 
 <script>
+import {encode} from "js-base64";
+
 export default {
   name: "unCompleteProfilePrompt",
-  props:['percent']
+  props:['percent'],
+
+  data(){
+    return{
+       id:null,
+       identity:null,
+       number:null,
+    }
+  },
+
+  mounted(){
+
+    this.id=localStorage.getItem('identity')
+    this.identity=localStorage.getItem('company_id')   
+               
+    },
+  methods:{
+    editUserProfile(companyId, roleValue) {
+
+      if (roleValue == 1) {
+        let strObj = {
+          i: companyId,
+          action: 'edit'
+        }
+        let str = encode(JSON.stringify(strObj))
+        this.$router.push({path: '/educator/edit/home', query: {s: str}})
+      }
+      if (roleValue == 2) {
+        let strObj = {
+          cid: companyId,
+          action: 'edit'
+        }
+        let str = encode(JSON.stringify(strObj))
+        this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
+      }
+      if (roleValue == 3) {
+        let strObj = {
+          cid: companyId,
+          action: 'edit'
+        }
+        let str = encode(JSON.stringify(strObj))
+        this.$router.push({path: '/business/edit/school', query: {s: str}})
+      }
+      if (roleValue == 4) {
+        let strObj = {
+          cid: companyId,
+          action: 'edit'
+        }
+        let str = encode(JSON.stringify(strObj))
+        this.$router.push({path: '/business/edit/other', query: {s: str}})
+      }
+      if (roleValue == 5) {
+        let strObj = {
+          cid: companyId,
+          action: 'edit'
+        }
+        let str = encode(JSON.stringify(strObj))
+        this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
+
+      }
+    },
+  }
 }
 </script>
 

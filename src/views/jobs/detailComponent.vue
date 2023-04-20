@@ -45,8 +45,6 @@ export default {
       let params = {
         job_id: id
       }
-      let token = localStorage.getItem('token')
-
       JOB_DETAIL(params).then(res => {
         console.log(res)
         if (res.code == 200) {
@@ -65,10 +63,8 @@ export default {
             workingHoursData.value = JSON.parse(workHours)
           }
           showLoadingStatus.value = false
-
-          if(token){
-            addJobViews(id)
-          }
+            
+          addJobViews(id)
           addUserBrowsingHistory(id)
 
         }
