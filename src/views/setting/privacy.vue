@@ -17,17 +17,30 @@
 
         </div>
 
-        <div class="privacy-profile-container">
+        <div class="privacy-profile-container" v-if="identity == 1">
             <div class="privacy-profile-l">
                 <span>Profile Visibility</span>
             </div>
-            <div class="privacy-profile-r">
+            <div class="privacy-profile-r" >
                 <el-checkbox v-model="profileVisible" label="Make my profile visible to others" />
                 <br>
                 <span>
                     <el-icon><Warning /></el-icon>
                     Your profile is no longer visible from the candidate pool
                 </span>
+            </div>
+
+        </div>
+
+        <div class="privacy-profile-container" v-if="identity == 2 || identity == 3 || identity == 4">
+            <div class="privacy-profile-l">
+                <span>Job Post Visibility</span>
+            </div>
+            <div class="privacy-profile-r" >
+                <el-radio-group v-model="jobPostVisible">
+                    <el-radio label="1">Candidates on Favourites</el-radio>
+                    <el-radio label="2">Everyone</el-radio>
+                </el-radio-group>
             </div>
 
         </div>
@@ -42,15 +55,29 @@
                         <span>{{item.label}}</span>
                     </div>
                     <div class="privacy-alert-line"></div>
-                    <div class="privacy-alert-icon-container">
-                        <el-image class="privacy-alert-icon" :src="arrowDownIcon"></el-image>
+                    <div class="privacy-alert-icon-container" @click="handleExpandAlert(i)">
+
+                        <el-image
+                            v-if="expandKeysData.indexOf(i) === -1"
+                            class="privacy-alert-icon"
+                            :src="arrowDownIcon">
+                        </el-image>
+                        <el-image
+                            v-else
+                            class="privacy-alert-icon"
+                            :src="arrowUpIcon">
+                        </el-image>
+
                     </div>
                 </div>
-                <div class="privacy-alert-b">
-                    <div v-for="(cItem,index) in item.data" :key="index">
-                        <el-checkbox :label="cItem.value"/>
+                <el-collapse-transition>
+                    <div class="privacy-alert-b"  v-show="expandKeysData.indexOf(i) === -1">
+                        <div v-for="(cItem,index) in item.data" :key="index">
+                            <el-checkbox :label="cItem.value"/>
+                        </div>
                     </div>
-                </div>
+                </el-collapse-transition>
+
             </div>
         </div>
 
@@ -60,7 +87,8 @@
 <script>
 import arrowDownIcon from '@/assets/newHome/arrow-circle-down.svg'
 import arrowUpIcon from '@/assets/newHome/arrow-circle-up.svg'
-import {ref} from 'vue'
+import {ref, onMounted} from 'vue'
+import {useStore } from 'vuex'
 
 export default {
     name: "privacy",
@@ -73,71 +101,157 @@ export default {
 
     },
     setup() {
+        const store = useStore()
+        const identity = store.state.identity
+
         const profileVisible = ref(false)
-        const alertsData = [
-            {
-                label:'Job Alerts',
-                data:[
+        const alertsData = ref([])
+        const jobPostVisible = ref('1')
+
+        const getAlertsDataByIdentity = (identity)=>{
+
+            console.log(identity)
+
+            if(identity === 1){
+
+                alertsData.value = [
                     {
-                        key:'j1',
-                        value:'Latest Job Listings'
+                        label:'Job Alerts',
+                        data:[
+                            {
+                                key:'j1',
+                                value:'Latest Job Listings'
+                            },
+                            {
+                                key:'j2',
+                                value:'Resume/Cover letter Tips'
+                            },
+                            {
+                                key:'j3',
+                                value:'Jobs that match your location'
+                            },
+                            {
+                                key:'j4',
+                                value:'Featured Jobs'
+                            },
+
+                        ]
                     },
                     {
-                        key:'j2',
-                        value:'Resume/Cover letter Tips'
+                        label:'Event Alerts',
+                        data:[
+                            {
+                                key:'d1',
+                                value:'Upcoming Events'
+                            },
+                            {
+                                key:'d2',
+                                value:'Featured Events'
+                            },
+                            {
+                                key:'d3',
+                                value:'Events that best match your preferences settings'
+                            },
+
+                        ]
                     },
                     {
-                        key:'j3',
-                        value:'Jobs that match your location'
-                    },
-                    {
-                        key:'j4',
-                        value:'Featured Jobs'
-                    },
-                    {
-                        key:'j5',
-                        value:'Jobs that best match your preferences settings'
-                    },
-                ]
-            },
-            {
-                label:'Deal Alerts',
-                data:[
-                    {
-                        key:'d1',
-                        value:'Upcoming Events'
-                    },
-                    {
-                        key:'d2',
-                        value:'Featured Events'
-                    },
-                    {
-                        key:'d3',
-                        value:'Events that best match your preferences settings'
-                    },
-                    {
-                        key:'d4',
-                        value:'Career Development events'
-                    }
-                ]
-            },
-            {
-                label:'Event Alerts',
-                data:[
-                    {
-                        key:'e1',
-                        value:'Discounted Products and Services'
-                    },
-                    {
-                        key:'e2',
-                        value:'Promotions and Giveaways'
+                        label:'Deal Alerts',
+                        data:[
+                            {
+                                key:'e1',
+                                value:'Discounted Products and Services'
+                            },
+                            {
+                                key:'e2',
+                                value:'Promotions and Giveaways'
+                            }
+                        ]
                     }
                 ]
             }
-        ]
+
+            if(identity === 2 || identity ===  3 || identity === 4 || identity === 5){
+
+                alertsData.value = [
+                    {
+                        label:'Job Alerts',
+                        data:[
+                            {
+                                key:'j1',
+                                value:'Profiles Recently Made Public'
+                            },
+
+
+                        ]
+                    },
+                    {
+                        label:'Event Alerts',
+                        data:[
+                            {
+                                key:'d1',
+                                value:'Upcoming Events'
+                            },
+                            {
+                                key:'d2',
+                                value:'Featured Events'
+                            },
+                            {
+                                key:'d3',
+                                value:'Events that best match your preferences settings'
+                            },
+                            {
+                                key:'d4',
+                                value:'Career Development events'
+                            },
+
+                        ]
+                    },
+                    {
+                        label:'Deal Alerts',
+                        data:[
+                            {
+                                key:'e1',
+                                value:'Discounted Products and Services'
+                            },
+                            {
+                                key:'e2',
+                                value:'Promotions and Giveaways'
+                            }
+                        ]
+                    }
+                ]
+
+            }
+
+        }
+
+        const expandKeysData = ref([])
+
+        const handleExpandAlert = (i)=>{
+
+            let index = expandKeysData.value.indexOf(i)
+            if(index === -1){
+                expandKeysData.value.push(i)
+            }else{
+                expandKeysData.value.splice(index,1)
+            }
+
+        }
+
+        onMounted(()=>{
+            getAlertsDataByIdentity(parseInt(identity) )
+        })
+
         return {
+            identity,
             profileVisible,
-            alertsData
+            jobPostVisible,
+            alertsData,
+            getAlertsDataByIdentity,
+            handleExpandAlert,
+            expandKeysData
+
         }
     }
 }
@@ -253,6 +367,7 @@ export default {
     font-size: 14px;
     line-height: 18px;
     color: #101828;
+    min-width: 80px;
 
 }
 .privacy-alert-line{
@@ -262,5 +377,10 @@ export default {
     margin: 0 15px;
 }
 
+.privacy-alert-icon{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
 
 </style>
