@@ -140,7 +140,7 @@ export default {
 
     function turnBlog() {
       context.emit('close')
-      return window.open('https://blogs.edupassport.io/')
+      return window.open('https://blog.edupassport.io/')
     }
 
     return {

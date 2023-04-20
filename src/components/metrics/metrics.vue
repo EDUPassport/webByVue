@@ -2,7 +2,7 @@
 <div class="metrics-container">
   <div class="metrics-t">
     <div class="metrics-t-label">Metrics</div>
-    <div class="metrics-t-actions">
+    <div class="metrics-t-actions" v-if="(percentage >= 80 && identity == 1) || (identity == 2) || (identity == 3) || (identity == 4)">
       <div class="metrics-t-actions-top">
 <!--        <el-button class="action-btn"-->
 <!--                   plain-->
@@ -34,6 +34,7 @@
               v-model="dateRangeValue"
               ref="datePicker"
               type="daterange"
+              :disabled-date="disabledDate"
               @change="dateChange"
           >
           </el-date-picker>
@@ -55,10 +56,12 @@
     </div>
 
   </div>
-
-  <div class="metrics-chart" id="metrics-chart">
+  <div class="metrics-chart" id="metrics-chart" v-if="(percentage >= 80 && identity == 1) || identity == 2 || identity == 3 || identity == 4">
     <v-chart class="chart" :option="options" />
   </div>
+  <template v-else>
+        <el-empty description="..."></el-empty>
+      </template>
 
 </div>
 </template>
@@ -99,8 +102,17 @@ export default {
   },
   data(){
     return {
-      downloadImg
+      downloadImg,
+      percentage:null,
+      identity:null,
+      
     }
+  },
+
+  mounted(){
+     this.percentage=localStorage.getItem('profile_percentage')  
+     this.identity=localStorage.getItem('identity')   
+ 
   },
   setup(props,context){
 
@@ -260,6 +272,10 @@ export default {
       context.emit('howLongChange', value)
     }
 
+   function disabledDate(time){
+    return time.getTime() > Date.now()
+    }
+
     return {
       howLongValue,
       pngLoadingStatus,
@@ -271,7 +287,8 @@ export default {
       showDatePicker,
       changeHowLong,
       dateChange,
-      dateRangeValue
+      dateRangeValue,
+      disabledDate
     }
   }
 }
