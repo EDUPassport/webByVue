@@ -19,7 +19,7 @@
                     <el-button type="primary" icon="Plus" @click="postJob()">Post a Job</el-button>
                 </div>
 
-                <un-complete-profile-prompt :percent="profilePercentage"></un-complete-profile-prompt>
+                <un-complete-profile-prompt :percent="profilePercentage"  v-if="profilePercentage != 100"></un-complete-profile-prompt>
 
                 <template v-if="identity == 1">
 
@@ -55,7 +55,7 @@
                                 Discover up to 35% off from vendors across the Globe
                             </div>
                             <div class="dashboard-t-item-b-1">
-                                <el-button size="small" type="info">View Deals</el-button>
+                                <el-button size="small" type="info" @click="viewDeals()">View Deals</el-button>
                             </div>
                         </div>
 
@@ -859,6 +859,10 @@ export default {
             router.push({path: '/setting/account'})
         }
 
+        function viewDeals(){
+            router.push('/deals')
+        }
+
         onMounted(() => {
 
             let screenWidth = document.body.clientWidth
@@ -937,7 +941,8 @@ export default {
             businessFillRatePercent,
             howLong,
             changeHowLong,
-            customDateChange
+            customDateChange,
+            viewDeals
 
         }
 

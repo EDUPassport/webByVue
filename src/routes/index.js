@@ -37,18 +37,9 @@ const routes = [
                 }
             },
             {
-                path: 'detail',
-                name: 'eventsDetail',
-                component: () => import('@/views/events/detail'),
-                meta: {
-                    titleC: 'Events Detail',
-                    titleG: 'Events Detail',
-                }
-            },
-            {
                 path: '/event/event-detail',
-                name: 'getInfo',
-                component: () => import('@/views/EventDetailInfo'),
+                name: 'eventDetail',
+                component: () => import('@/views/events/EventDetailInfo.vue'),
                 meta: {
                     titleC: 'Event detail',
                     titleG: 'Event detail',
