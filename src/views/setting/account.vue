@@ -62,7 +62,7 @@
                         <el-table-column prop="status" label="Status"></el-table-column>
                         <el-table-column label="">
                             <template #default="scope">
-                                <el-icon @click="handleDelete(scope.row)">
+                                <el-icon style="cursor: pointer;" color="#F97066" @click="handleDelete(scope.row)">
                                     <Delete></Delete>
                                 </el-icon>
                             </template>
