@@ -834,7 +834,25 @@ export default {
       let name = firstName + ' ' + lastName
       let companyName = ''
 
-      localStorage.setItem('token', resMessage.token)
+        let identityStr = ''
+        if(parseInt(identity) === 1){identityStr = 'Educator'}
+        if(parseInt(identity) === 2){identityStr = 'Recruiter'}
+        if(parseInt(identity) === 3){identityStr = 'School'}
+        if(parseInt(identity) === 4){identityStr = 'Other'}
+        if(parseInt(identity) === 5){identityStr = 'Vendor'}
+        window.dataLayer = window.dataLayer || [];
+
+        if(resMessage.id && identityStr){
+
+            window.dataLayer.push({
+                'event':'login',
+                'userId' : resMessage.id , //this number must be replaced with an actual User ID
+                'userType': identityStr
+            })
+        }
+
+
+        localStorage.setItem('token', resMessage.token)
       localStorage.setItem('uid', resMessage.id)
       localStorage.setItem('identity', resMessage.identity)
       localStorage.setItem('language', resMessage.language)
