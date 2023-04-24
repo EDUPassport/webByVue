@@ -7,6 +7,8 @@ import store from '@/store/index'
 import chatHome from '@/views/chat/chatHome'
 import NProgress from 'nprogress'
 import '../style/nprogress.css'
+import version from "../../public/verison.json";
+import vueCookies from 'vue-cookies'
 
 const routes = [
 
@@ -928,6 +930,17 @@ NProgress.configure({showSpinner: false});
 router.beforeEach((to, from, next) => {
 
     NProgress.start()
+
+    if(vueCookies.isKey('version')){
+        if(version.version !== vueCookies.get('version')){
+            vueCookies.set('version',version.version)
+            window.location.reload()
+        }
+    }else{
+        vueCookies.set('version',version.version)
+        window.location.reload()
+    }
+
 
     // 路由跳转之前， 中指还在等待中的请求
     store.getters.axiosPromiseArr.forEach((cancel)=>cancel())
