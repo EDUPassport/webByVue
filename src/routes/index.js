@@ -5,6 +5,8 @@ import appLayout from "@/layout/appLayout";
 // import {isPhone} from "@/utils";
 import store from '@/store/index'
 import chatHome from '@/views/chat/chatHome'
+import version from "../../public/verison.json";
+import vueCookies from 'vue-cookies'
 
 const routes = [
 
@@ -793,6 +795,16 @@ const router = createRouter({
 const defaultTitle = 'Home';
 
 router.beforeEach((to, from, next) => {
+
+    if(vueCookies.isKey('version')){
+        if(version.version !== vueCookies.get('version')){
+            vueCookies.set('version',version.version)
+            window.location.reload()
+        }
+    }else{
+        vueCookies.set('version',version.version)
+        window.location.reload()
+    }
 
     // 路由跳转之前， 中指还在等待中的请求
     store.getters.axiosPromiseArr.forEach((cancel)=>cancel())

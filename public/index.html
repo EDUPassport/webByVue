@@ -3,11 +3,38 @@
 <head>
     <% if(process.env.VUE_APP_ENV_NAME === 'development' || process.env.VUE_APP_ENV_NAME === 'production'){%>
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-PPGXS58');</script>
+    <script>
+        (function(w,d,s,l,i){
+            w[l]=w[l]||[];
+
+            var userId = localStorage.getItem('uid')
+            var identity = localStorage.getItem('identity')
+            var identityStr = ''
+            if(parseInt(identity) === 1){identityStr = 'Educator'}
+            if(parseInt(identity) === 2){identityStr = 'Recruiter'}
+            if(parseInt(identity) === 3){identityStr = 'School'}
+            if(parseInt(identity) === 4){identityStr = 'Other'}
+            if(parseInt(identity) === 5){identityStr = 'Vendor'}
+
+            if(userId && identityStr){
+                // console.log(userId, identityStr)
+                w[l].push({
+                    'event':'login',
+                    'userId' : userId, //this number must be replaced with an actual User ID
+                    'userType': identityStr
+                })
+            }
+
+            w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+
+            var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode.insertBefore(j,f);
+
+        })(window,document,'script','dataLayer','GTM-PPGXS58');
+
+    </script>
     <!-- End Google Tag Manager -->
     <% } %>
     <meta charset="utf-8">
@@ -18,10 +45,7 @@
     <meta name= facebook-domain-verification content= izxabln/obcag9hvohg1sd7fwnmntc/>
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
-<!--    <script>-->
-<!--        // VConsole will be exported to `window.VConsole` by default.-->
-<!--        var vConsole = new window.VConsole();-->
-<!--    </script>-->
+
     <meta name="p:domain_verify" content="e81c41339f784f8a7c633228dc4f2acc"/>
     <% if(process.env.VUE_APP_ENV_NAME === 'developmentCN' || process.env.VUE_APP_ENV_NAME === 'productionCN'){%>
     <meta name="description" content="We partner up with local vendors to support educators, promote educator-centric events, and offer exclusive deals to our EDU Passport members.">
@@ -39,6 +63,17 @@
     <% if(process.env.VUE_APP_ENV_NAME === 'development' || process.env.VUE_APP_ENV_NAME === 'production'){%>
     <meta name="description" content="EDU Passport is a Global Education Hub that helps educators find job opportunities abroad through a matchmaking service.">
     <link rel="canonical" href="https://www.edupassport.io" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJER5VKVFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-5X5YQ0WLF6');
+    </script>
+
     <% } %>
     <script src="https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js"></script>
     <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>

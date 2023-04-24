@@ -582,7 +582,7 @@ import {
     SET_READ,
     SET_READ_ALL,
     USER_UNREAD,
-    USER_QUESTION_SHOW
+    USER_QUESTION_SHOW, USER_QUESTION_READ
 } from '@/api/api'
 import logoImg from '@/assets/logo.png'
 import defaultAvatar from '@/assets/default/avatar.png'
@@ -1529,13 +1529,28 @@ export default {
         },
         fillSurvey(){
             console.log('fill survey')
-            if(this.identity == 1){
-                this.$router.push({path:'/zoho/survey/educator'})
-            }
+            USER_QUESTION_READ().then(res=>{
+                if(res.code === 200){
+                    // console.log(res)
 
-            if(this.identity == 2 || this.identity == 3 || this.identity == 4 || this.identity == 5){
-                this.$router.push({path:'/zoho/survey/business'})
-            }
+                    if(this.identity == 1){
+                        let {href} = this.$router.resolve({path:'/zoho/survey/educator'})
+                        window.open(href,'_blank')
+                        // this.$router.push({path:'/zoho/survey/educator'})
+                    }
+
+                    if(this.identity == 2 || this.identity == 3 || this.identity == 4 || this.identity == 5){
+                        let {href} = this.$router.resolve({path:'/zoho/survey/business'})
+                        window.open(href,'_blank')
+                        // this.$router.push({path:'/zoho/survey/business'})
+                    }
+
+                }
+
+            }).catch(err=>{
+                console.log(err)
+            })
+
 
         }
 
