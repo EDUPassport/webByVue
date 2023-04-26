@@ -56,15 +56,32 @@
                             flexible
                             max-height="224px"
                     >
-                        <el-table-column prop="name" label="Name"></el-table-column>
-                        <el-table-column prop="email" label="Email Address"></el-table-column>
-                        <el-table-column prop="permission" label="Permission"></el-table-column>
-                        <el-table-column prop="status" label="Status"></el-table-column>
+                        <el-table-column min-width="120px" prop="last_name" label="Name"></el-table-column>
+                        <el-table-column min-width="160px" prop="email" label="Email Address"></el-table-column>
+                        <el-table-column min-width="100px" prop="permission" label="Permission">Contributor</el-table-column>
+                        <el-table-column prop="status" label="Status">
+                            <div class="contributor-tag"> <span></span> online</div>
+                        </el-table-column>
                         <el-table-column label="">
                             <template #default="scope">
-                                <el-icon style="cursor: pointer;" color="#F97066" @click="handleDelete(scope.row)">
-                                    <Delete></Delete>
-                                </el-icon>
+                                <div style="text-align: right;">
+                                    <el-popconfirm
+                                        width="310"
+                                        :hide-icon="true"
+                                        confirm-button-text="Yes"
+                                        cancel-button-text="No"
+                                        title="This action will remove your contributor account permanently, Are your sure?"
+                                        @confirm="handleDelete(scope.row)"
+                                    >
+                                        <template #reference>
+                                            <el-icon style="cursor: pointer;margin-right: 35px;" color="#F97066" >
+                                                <Delete></Delete>
+                                            </el-icon>
+                                        </template>
+                                    </el-popconfirm>
+
+                                </div>
+
                             </template>
                         </el-table-column>
                     </el-table>
@@ -83,11 +100,11 @@
 </template>
 
 <script>
-import {ref, reactive} from 'vue'
+import {ref, reactive, onMounted} from 'vue'
 import deleteAccountComponent from '@/components/deleteAccountComponent.vue'
-
-import {USER_CHANGE_PASSWORD} from "@/api/api";
-import {ElMessage, ElMessageBox} from 'element-plus'
+import {useStore} from 'vuex'
+import {ALL_ASSIGN_USERS, ALL_MENU_LIST, USER_ADD_MENU, USER_CHANGE_PASSWORD, USER_MENU_DELETE} from "@/api/api";
+import {ElMessage, ElMessageBox, ElLoading} from 'element-plus'
 
 export default {
     name: "account",
@@ -95,6 +112,10 @@ export default {
         deleteAccountComponent
     },
     setup() {
+
+        const store = useStore()
+        const identity = store.state.identity;
+        const currentCompanyId = store.state.currentCompanyId;
 
         const accountForms = ref(null)
         const accountForm = reactive({
@@ -116,44 +137,7 @@ export default {
             ]
         })
 
-        const contributorsData = ref([
-            {
-                name: 'Jack Hill',
-                email: 'jackhill@edupassport.io',
-                permission: 'Contributor',
-                status: 'Online'
-            },
-            {
-                name: 'Jack Hill',
-                email: 'jackhill@edupassport.io',
-                permission: 'Contributor',
-                status: 'Away'
-            },
-            {
-                name: 'Jack Hill',
-                email: 'jackhill@edupassport.io',
-                permission: 'Contributor',
-                status: 'Online'
-            },
-            {
-                name: 'Jack Hill',
-                email: 'jackhill@edupassport.io',
-                permission: 'Contributor',
-                status: 'Online'
-            },
-            {
-                name: 'Jack Hill',
-                email: 'jackhill@edupassport.io',
-                permission: 'Contributor',
-                status: 'Away'
-            },
-            {
-                name: 'Jack Hill',
-                email: 'jackhill@edupassport.io',
-                permission: 'Contributor',
-                status: 'Online'
-            }
-        ])
+        const contributorsData = ref([])
 
         const submitPasswordLoading = ref(false)
 
@@ -209,11 +193,42 @@ export default {
 
         function handleDelete(row) {
             console.log(row)
+            let params = {
+                user_id:row.id
+            }
+            USER_MENU_DELETE(params).then(res=>{
+                console.log(res)
+                if(res.code === 200){
+                    getAllAssignUsers()
+                }
+            }).catch(err=>{
+                console.log(err)
+                if (err.msg) {
+                    ElMessage({
+                        type: 'error',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return;
+                }
+
+                if (err.message) {
+                    ElMessage({
+                        type: 'error',
+                        message: err.message,
+                        grouping: true
+                    })
+
+                }
+
+            })
+
         }
 
         const addContributorsDialogVisible = ref(false)
 
         const createContributors = () => {
+            let confirmButtonLoadingStatus = false
             ElMessageBox.prompt(
                 '<div class="box-avatar-person"></div>' +
                 '<div class="box-label">Add Contributor</div>' +
@@ -231,38 +246,106 @@ export default {
                         /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
                     inputErrorMessage: 'Enter a invalid email address',
                     inputPlaceholder: 'Enter your email',
-                    confirmButtonLoading:false
+                    confirmButtonLoading:confirmButtonLoadingStatus
 
                 }
             )
                 .then((res) => {
                     if(res.action === 'confirm'){
-                        alert(res.value)
+                       const loading =  ElLoading.service({
+                            lock: true,
+                            text: 'Loading',
+                            background: 'rgba(255, 255, 255, 0.7)',
+                        })
 
-                        ElMessageBox.confirm(
-                            '<div class="box-avatar"></div>' +
-                            '<div class="box-label">Invitation Sent</div>' +
-                            '<div class="box-tips">Invite sent successfully. We’ll let you know when user joins.</div>',
-                            '',
-                            {
-                                customClass:'edu-msg-box',
-                                cancelButtonClass:'box-cancel-button',
-                                cancelButtonText: 'Close',
-                                buttonSize:'large',
-                                showConfirmButton:false,
-                                center: true,
-                                dangerouslyUseHTMLString:true
-                            }
-                        )
-                            .then(() => {
-                                ElMessage({
-                                    type: 'success',
-                                    message: 'Closed Success',
+                        let email = res.value;
+
+                        ALL_MENU_LIST({}).then(res => {
+                            console.log(res)
+                            if (res.code == 200) {
+
+                                let resData = res.message
+
+                                let educatorMenuData = resData.educator
+                                let recruiterMenuData = resData.recruiting
+                                let schoolMenuData = resData.school
+                                let otherMenuData = resData.other
+                                let vendorMenuData = resData.vendor
+
+                                let menuPermissionData = []
+
+                                if (identity == 1) {
+                                    menuPermissionData = educatorMenuData
+                                }
+                                if (identity == 2) {
+                                    menuPermissionData = recruiterMenuData
+                                }
+                                if (identity == 3) {
+                                    menuPermissionData = schoolMenuData
+                                }
+                                if (identity == 4) {
+                                    menuPermissionData = otherMenuData
+                                }
+                                if (identity == 5) {
+                                    menuPermissionData = vendorMenuData
+                                }
+
+                                let menuIdData = []
+                                menuPermissionData.forEach(item=>{
+                                    menuIdData.push(item.id)
                                 })
-                            })
-                            .catch(() => {
-                                console.log('cancel close sent')
-                            })
+
+                                let aParams = {
+                                    email: email,
+                                    identity: identity,
+                                    company_id: currentCompanyId,
+                                    menu_id: menuIdData.join(',')
+                                }
+
+                                console.log(aParams)
+
+                                USER_ADD_MENU(aParams).then(res => {
+                                    console.log(res)
+                                    if (res.code == 200) {
+                                        loading.close()
+
+                                        ElMessageBox.confirm(
+                                            '<div class="box-avatar-warn"></div>' +
+                                            '<div class="box-label">Alert!</div>' +
+                                            '<div class="box-tips">This user is already registered at EDU Passport. <br /> We’ve sent an invitation to his email for Contributor Access</div>',
+                                            '',
+                                            {
+                                                customClass:'edu-msg-box',
+                                                cancelButtonClass:'box-cancel-button',
+                                                cancelButtonText: 'Close',
+                                                buttonSize:'large',
+                                                showConfirmButton:false,
+                                                center: true,
+                                                dangerouslyUseHTMLString:true
+                                            }
+                                        )
+                                            .then(() => {
+
+                                                console.log('closed success')
+                                                // ElMessage({
+                                                //     type: 'success',
+                                                //     message: 'Closed Success',
+                                                // })
+                                            })
+                                            .catch(() => {
+                                                console.log('cancel close sent')
+                                                getAllAssignUsers()
+                                            })
+
+                                    }
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+
+                            }
+                        }).catch(err => {
+                            console.log(err)
+                        })
 
 
                     }
@@ -272,6 +355,40 @@ export default {
                 })
 
         }
+
+        const getAllAssignUsers = ()=> {
+            let params = {}
+            ALL_ASSIGN_USERS(params).then(res => {
+                console.log(res)
+                if (res.code === 200) {
+                    contributorsData.value = res.message
+                }
+            }).catch(err => {
+                console.log(err)
+                if (err.msg) {
+                    ElMessage({
+                        type: 'error',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return;
+                }
+
+                if (err.message) {
+                    ElMessage({
+                        type: 'error',
+                        message: err.message,
+                        grouping: true
+                    })
+
+                }
+            })
+        }
+
+        onMounted(()=>{
+            getAllAssignUsers()
+
+        })
 
         return {
             accountForms,
@@ -283,7 +400,8 @@ export default {
             handleDelete,
             submitPasswordLoading,
             addContributorsDialogVisible,
-            createContributors
+            createContributors,
+            getAllAssignUsers
         }
     }
 }
@@ -392,6 +510,38 @@ export default {
     font-size: 16px;
     line-height: 20px;
     color: #1D2939;
+}
+
+.contributor-tag{
+    width: 58px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    /* identical to box height, or 150% */
+
+
+    /* Success/500 */
+
+    color: #12B76A;
+    background: #ECFDF3;
+    border-radius: 22px;
+}
+
+.contributor-tag span{
+    display: block;
+    margin-right: 2px;
+    width: 4px;
+    height: 4px;
+    border-radius: 4px;
+    background-color: #12B76A;
 }
 
 @media screen and (max-width: 768px) {

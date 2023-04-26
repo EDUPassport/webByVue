@@ -758,6 +758,23 @@ export default {
             localStorage.setItem('first_name', firstName)
             localStorage.setItem('last_name', lastName)
 
+            window.dataLayer = window.dataLayer || [];
+            let identityStr = ''
+            if(parseInt(identity) === 1){identityStr = 'Educator'}
+            if(parseInt(identity) === 2){identityStr = 'Recruiter'}
+            if(parseInt(identity) === 3){identityStr = 'School'}
+            if(parseInt(identity) === 4){identityStr = 'Other'}
+            if(parseInt(identity) === 5){identityStr = 'Vendor'}
+
+            if(resMessage.id && identityStr){
+                // console.log(userId, identityStr)
+                window.dataLayer.push({
+                    'event':'refresh',
+                    'userId' : resMessage.id,
+                    'userType': identityStr
+                })
+            }
+
             if (identity == 1) {
                 avatar = resMessage.headimgurl;
                 companyName = firstName + ' ' + lastName;

@@ -141,7 +141,7 @@ export default {
       }
 
       if(identity == 2 || identity == 3 || identity == 4 || identity == 5 ){
-        name = targetUser.display_name;
+        name = targetUser.company_name;
         avatar = targetUser.logo ? targetUser.logo : 'https://oss.esl-passport.cn/educator.png';
       }
 

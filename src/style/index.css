@@ -247,6 +247,19 @@
     color: #3d3d3d;
 }
 
+.el-popconfirm__main{
+    word-break: break-word;
+}
+
+.edu-msg-box .box-avatar-warn{
+    background-image: url("@/assets/newHome/add-contributors-warn.svg");
+    background-position: center;
+    background-size: 100%;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto;
+}
+
 .edu-msg-box .box-avatar{
     background-image: url("@/assets/newHome/add-contributors-success.svg");
     background-position: center;

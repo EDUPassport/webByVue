@@ -132,7 +132,7 @@ export default {
         const GoEasy = inject('GoEasy');
         const goEasy = inject('goEasy');
         const currentUser = store.state.currentUser;
-        console.log(currentUser)
+        // console.log(currentUser)
 
         let conversations = ref([]);
         let rightClickMenu = reactive({
@@ -166,7 +166,7 @@ export default {
         function loadConversations() {
             goEasy.im.latestConversations({
                 onSuccess: (result) => {
-                    console.log(result)
+                    // console.log(result)
 
                     let content = result.content;
                     renderConversations(content);
@@ -183,7 +183,29 @@ export default {
         }
 
         function renderConversations(content) {
+
+            let userIdData = []
+            let cData = content.conversations;
+
+            cData.forEach(item=>{
+                userIdData.push(item.userId)
+            })
+
+            goEasy.im.hereNow({
+                userIds:userIdData,
+                onSuccess:function (result){
+                    console.log('------------- here now ----------')
+                    console.log(result)
+                    console.log('------------- here now end -----------')
+                },
+                onFailed:function (error) {
+                    console.log(error)
+                }
+
+            })
+
             conversations.value = content.conversations;
+            // console.log(conversations.value)
         }
 
         // function subscribeGroup() {

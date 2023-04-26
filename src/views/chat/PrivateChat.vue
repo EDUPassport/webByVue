@@ -505,7 +505,7 @@ export default {
     }
 
     function deleteMessage() {
-      let conf = confirm("确认删除？");
+      let conf = confirm("Confirm delete？");
       if (conf === true) {
         let selectedMessages = [];
         history.messages.forEach((message) => {
