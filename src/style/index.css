@@ -230,6 +230,10 @@
     border-radius: 12px;
 }
 
+.add-contributor-dialog{
+    border-radius: 8px;
+}
+
 .el-message__content{
     font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size: 12px;

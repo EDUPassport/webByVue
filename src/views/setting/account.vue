@@ -48,7 +48,11 @@
             <div class="ctb-container">
                 <div class="ctb-t">
                     <span>Current Contributors</span>
-                    <el-button type="primary" @click="createContributors()">+ Add Contributors</el-button>
+                    <el-button type="primary"
+                               :disabled="addContributorDisabledStatus"
+                               @click="createContributors()">
+                        + Add Contributors
+                    </el-button>
                 </div>
                 <div class="ctb-b">
                     <el-table
@@ -94,12 +98,47 @@
             <deleteAccountComponent></deleteAccountComponent>
         </div>
 
+        <el-dialog width="auto"
+                   center
+                   align-center
+                   class="add-contributor-dialog"
+                   v-model="addContributorsDialogVisible">
+            <div class="add-contributor-box">
+                <div class="box-avatar-person"></div>
+                <div class="box-label">Add Contributor</div>
+                <div class="box-tips">Enter the email address for the user to join as contributor</div>
+                <div class="box-form">
+                    <el-form
+                        :model="contributorForm"
+                        :rules="contributorRules"
+                        ref="contributorForms"
+                        label-position="top"
+                    >
+                        <el-form-item label="Display Name" prop="display_name">
+                            <el-input v-model="contributorForm.display_name" placeholder="Enter your Name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="Email" prop="email">
+                            <el-input v-model="contributorForm.email" placeholder="Enter your email"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div class="box-btns">
+                    <el-button type="primary"
+                               class="box-btn"
+                               size="large"
+                               @click="sendInvite(contributorForms)">
+                        Send Invite
+                    </el-button>
+                </div>
+            </div>
+        </el-dialog>
 
     </div>
 
 </template>
 
 <script>
+
 import {ref, reactive, onMounted} from 'vue'
 import deleteAccountComponent from '@/components/deleteAccountComponent.vue'
 import {useStore} from 'vuex'
@@ -116,6 +155,23 @@ export default {
         const store = useStore()
         const identity = store.state.identity;
         const currentCompanyId = store.state.currentCompanyId;
+
+        const addContributorDisabledStatus = ref(true)
+
+        const contributorForms = ref(null)
+        const contributorForm = reactive({
+            display_name:'',
+            email:''
+        })
+
+        const contributorRules = reactive({
+            display_name: [
+                {required: true, message: 'Enter your Name', trigger: 'blur'}
+            ],
+            email: [
+                {type:'email', required: true, message: 'Enter a invalid email address', trigger: 'blur'}
+            ],
+        })
 
         const accountForms = ref(null)
         const accountForm = reactive({
@@ -227,133 +283,124 @@ export default {
 
         const addContributorsDialogVisible = ref(false)
 
-        const createContributors = () => {
-            let confirmButtonLoadingStatus = false
-            ElMessageBox.prompt(
-                '<div class="box-avatar-person"></div>' +
-                '<div class="box-label">Add Contributor</div>' +
-                '<div class="box-tips">Enter the email address for the user to join as contributor</div>' +
-                '<div class="box-form-label">Email</div>',
-                '',
-                {
-                    customClass: 'edu-msg-box',
-                    confirmButtonClass: 'box-prompt-confirm-button',
-                    confirmButtonText: 'Send Invite',
-                    buttonSize: 'large',
-                    showCancelButton: false,
-                    dangerouslyUseHTMLString: true,
-                    inputPattern:
-                        /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-                    inputErrorMessage: 'Enter a invalid email address',
-                    inputPlaceholder: 'Enter your email',
-                    confirmButtonLoading:confirmButtonLoadingStatus
+        const sendInvite = (formEl)=>{
+            formEl.validate((valid)=>{
+                if(valid){
+                    addContributorsDialogVisible.value = false;
 
-                }
-            )
-                .then((res) => {
-                    if(res.action === 'confirm'){
-                       const loading =  ElLoading.service({
-                            lock: true,
-                            text: 'Loading',
-                            background: 'rgba(255, 255, 255, 0.7)',
-                        })
+                    const loading =  ElLoading.service({
+                        lock: true,
+                        text: 'Loading',
+                        background: 'rgba(255, 255, 255, 0.7)',
+                    })
 
-                        let email = res.value;
+                    ALL_MENU_LIST({}).then(res => {
+                        console.log(res)
+                        if (res.code == 200) {
 
-                        ALL_MENU_LIST({}).then(res => {
-                            console.log(res)
-                            if (res.code == 200) {
+                            let resData = res.message
 
-                                let resData = res.message
+                            let educatorMenuData = resData.educator
+                            let recruiterMenuData = resData.recruiting
+                            let schoolMenuData = resData.school
+                            let otherMenuData = resData.other
+                            let vendorMenuData = resData.vendor
 
-                                let educatorMenuData = resData.educator
-                                let recruiterMenuData = resData.recruiting
-                                let schoolMenuData = resData.school
-                                let otherMenuData = resData.other
-                                let vendorMenuData = resData.vendor
+                            let menuPermissionData = []
 
-                                let menuPermissionData = []
-
-                                if (identity == 1) {
-                                    menuPermissionData = educatorMenuData
-                                }
-                                if (identity == 2) {
-                                    menuPermissionData = recruiterMenuData
-                                }
-                                if (identity == 3) {
-                                    menuPermissionData = schoolMenuData
-                                }
-                                if (identity == 4) {
-                                    menuPermissionData = otherMenuData
-                                }
-                                if (identity == 5) {
-                                    menuPermissionData = vendorMenuData
-                                }
-
-                                let menuIdData = []
-                                menuPermissionData.forEach(item=>{
-                                    menuIdData.push(item.id)
-                                })
-
-                                let aParams = {
-                                    email: email,
-                                    identity: identity,
-                                    company_id: currentCompanyId,
-                                    menu_id: menuIdData.join(',')
-                                }
-
-                                console.log(aParams)
-
-                                USER_ADD_MENU(aParams).then(res => {
-                                    console.log(res)
-                                    if (res.code == 200) {
-                                        loading.close()
-
-                                        ElMessageBox.confirm(
-                                            '<div class="box-avatar-warn"></div>' +
-                                            '<div class="box-label">Alert!</div>' +
-                                            '<div class="box-tips">This user is already registered at EDU Passport. <br /> We’ve sent an invitation to his email for Contributor Access</div>',
-                                            '',
-                                            {
-                                                customClass:'edu-msg-box',
-                                                cancelButtonClass:'box-cancel-button',
-                                                cancelButtonText: 'Close',
-                                                buttonSize:'large',
-                                                showConfirmButton:false,
-                                                center: true,
-                                                dangerouslyUseHTMLString:true
-                                            }
-                                        )
-                                            .then(() => {
-
-                                                console.log('closed success')
-                                                // ElMessage({
-                                                //     type: 'success',
-                                                //     message: 'Closed Success',
-                                                // })
-                                            })
-                                            .catch(() => {
-                                                console.log('cancel close sent')
-                                                getAllAssignUsers()
-                                            })
-
-                                    }
-                                }).catch(err => {
-                                    console.log(err)
-                                })
-
+                            if (identity == 1) {
+                                menuPermissionData = educatorMenuData
                             }
-                        }).catch(err => {
-                            console.log(err)
-                        })
+                            if (identity == 2) {
+                                menuPermissionData = recruiterMenuData
+                            }
+                            if (identity == 3) {
+                                menuPermissionData = schoolMenuData
+                            }
+                            if (identity == 4) {
+                                menuPermissionData = otherMenuData
+                            }
+                            if (identity == 5) {
+                                menuPermissionData = vendorMenuData
+                            }
+
+                            let menuIdData = []
+                            menuPermissionData.forEach(item=>{
+                                menuIdData.push(item.id)
+                            })
+
+                            let params  = Object.assign({
+                                identity: identity,
+                                company_id: currentCompanyId,
+                                menu_id: menuIdData.join(',')
+                            },contributorForm)
+
+                            USER_ADD_MENU(params).then(res => {
+                                console.log(res)
+                                if (res.code == 200) {
+                                    loading.close()
+
+                                    let customHtml = ''
+
+                                    if(res.msg === 10012){
+                                        customHtml = '<div class="box-avatar"></div>' +
+                                            '<div class="box-label">Invitation Sent!</div>' +
+                                            '<div class="box-tips">Invite sent successfully. We’ll let you know when user joins.</div>'
+                                    }
+
+                                    if(res.msg === 10011){
+                                        customHtml = '<div class="box-avatar-warn"></div>' +
+                                            '<div class="box-label">Alert!</div>' +
+                                            '<div class="box-tips">This user is already registered at EDU Passport. <br /> We’ve sent an invitation to his email for Contributor Access</div>'
+                                    }
+
+                                    ElMessageBox.confirm(customHtml,
+                                        '',
+                                        {
+                                            customClass:'edu-msg-box',
+                                            cancelButtonClass:'box-cancel-button',
+                                            cancelButtonText: 'Close',
+                                            buttonSize:'large',
+                                            showConfirmButton:false,
+                                            center: true,
+                                            dangerouslyUseHTMLString:true
+                                        }
+                                    )
+                                        .then(() => {
+
+                                            console.log('closed success')
+                                            // ElMessage({
+                                            //     type: 'success',
+                                            //     message: 'Closed Success',
+                                            // })
+                                        })
+                                        .catch(() => {
+                                            console.log('cancel close sent')
+                                            getAllAssignUsers()
+                                        })
+
+                                }
+                            }).catch(err => {
+                                console.log(err)
+                                loading.close()
+
+                            })
+
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                        loading.close()
+
+                    })
 
 
-                    }
-                })
-                .catch((e) => {
-                    console.log(e)
-                })
-
+                }else{
+                    console.log('error submit')
+                }
+            })
+        }
+        const createContributors = () => {
+            addContributorsDialogVisible.value = true;
         }
 
         const getAllAssignUsers = ()=> {
@@ -361,6 +408,8 @@ export default {
             ALL_ASSIGN_USERS(params).then(res => {
                 console.log(res)
                 if (res.code === 200) {
+                    let resMessage = res.message;
+                    addContributorDisabledStatus.value = resMessage.length >= 3;
                     contributorsData.value = res.message
                 }
             }).catch(err => {
@@ -391,6 +440,7 @@ export default {
         })
 
         return {
+            addContributorDisabledStatus,
             accountForms,
             accountForm,
             accountRules,
@@ -401,7 +451,11 @@ export default {
             submitPasswordLoading,
             addContributorsDialogVisible,
             createContributors,
-            getAllAssignUsers
+            getAllAssignUsers,
+            contributorForms,
+            contributorForm,
+            contributorRules,
+            sendInvite
         }
     }
 }
@@ -525,10 +579,6 @@ export default {
     font-weight: 500;
     font-size: 12px;
     line-height: 18px;
-    /* identical to box height, or 150% */
-
-
-    /* Success/500 */
 
     color: #12B76A;
     background: #ECFDF3;
@@ -542,6 +592,56 @@ export default {
     height: 4px;
     border-radius: 4px;
     background-color: #12B76A;
+}
+
+.add-contributor-box{
+    padding:  0 25px 0 25px;
+}
+
+.box-avatar-person{
+    background-image: url("@/assets/newHome/add-contributor-person.svg");
+    background-position: center;
+    background-size: 100%;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto;
+}
+
+.box-label{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    text-align: center;
+    color: #101828;
+    margin-top: 20px;
+
+}
+
+.box-tips{
+    font-family: 'Inter';
+    font-style: normal;
+    width: 90%;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    color: #667085;
+    margin-top: 12px;
+}
+
+.box-form{
+    margin-top: 30px;
+}
+
+.box-btns{
+    margin-top: 40px;
+    width:100%;
+}
+
+.box-btn{
+    width: 100%;
 }
 
 @media screen and (max-width: 768px) {
