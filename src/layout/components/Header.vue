@@ -136,7 +136,7 @@
                                                     >
                                                         <template #reference>
                                                             <el-icon class="circle-circle" :size="20" color="#6650B3"
-                                                                     v-if="unreadTotal>0 || inAppUnreadTotal > 0">
+                                                                     v-if="unreadTotal>0 || inAppUnreadTotal > 0 || showSurveyStatus">
                                                                 <IconBiBellFill></IconBiBellFill>
                                                                 <span class="circle-red"></span>
                                                             </el-icon>
