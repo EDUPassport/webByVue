@@ -27,6 +27,7 @@
                                     :model="educatorForm"
                                     :rules="educatorRules"
                                     ref="educatorForms"
+                                    @submit.prevent
                                     label-width="100px"
                                     label-position="top"
                                     class="demo-ruleForm"
@@ -35,6 +36,7 @@
                                     <el-input placeholder="Enter your First Name"
                                               :formatter="(value)=> validForbid(value) "
                                               :parser="(value) => value.replace(/[^\u4E00-\u9FA5a-zA-Z0-9]/g, '')"
+                                              @keyup.enter="continueNextStep()"
                                               v-model="educatorForm.first_name">
                                     </el-input>
                                 </el-form-item>
@@ -42,12 +44,15 @@
                                     <el-input placeholder="Enter your Last Name"
                                               :formatter="(value)=> validForbid(value) "
                                               :parser="(value) => value.replace(/[^\u4E00-\u9FA5a-zA-Z0-9]/g, '')"
+                                              @keyup.enter="continueNextStep()"
                                               v-model="educatorForm.last_name">
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item label="Current Residence" prop="current_residence">
                                     <el-input placeholder="Enter your Residence"
-                                              v-model="educatorForm.current_residence"></el-input>
+                                              @keyup.enter="continueNextStep()"
+                                              v-model="educatorForm.current_residence">
+                                    </el-input>
                                 </el-form-item>
 
                                 <el-form-item label="Nationality" prop="nationality">
@@ -87,6 +92,7 @@
                                     :model="schoolForm"
                                     :rules="schoolRules"
                                     ref="schoolForms"
+                                    @submit.prevent
                                     label-width="100px"
                                     label-position="top"
                                     class="demo-ruleForm"
@@ -146,6 +152,7 @@
 
                                 <el-form-item label="School Name" prop="company_name">
                                     <el-input placeholder="Enter your School Name"
+                                              @keyup.enter="continueNextStep()"
                                               v-model="schoolForm.company_name">
                                     </el-input>
                                 </el-form-item>
@@ -176,12 +183,14 @@
                                     :model="recruiterForm"
                                     :rules="recruiterRules"
                                     ref="recruiterForms"
+                                    @submit.prevent
                                     label-width="100px"
                                     label-position="top"
                                     class="demo-ruleForm"
                             >
                                 <el-form-item label="Company Name" prop="company_name">
                                     <el-input placeholder="Enter your Company Name"
+                                              @keyup.enter="continueNextStep()"
                                               v-model="recruiterForm.company_name">
                                     </el-input>
                                 </el-form-item>
@@ -226,12 +235,14 @@
                                     :model="otherForm"
                                     :rules="otherRules"
                                     ref="otherForms"
+                                    @submit.prevent
                                     label-width="100px"
                                     label-position="top"
                                     class="demo-ruleForm"
                             >
                                 <el-form-item label="Company Name" prop="company_name">
                                     <el-input placeholder="Enter your Company Name"
+                                              @keyup.enter="continueNextStep()"
                                               v-model="otherForm.company_name">
                                     </el-input>
                                 </el-form-item>
@@ -261,12 +272,14 @@
                                     :model="vendorForm"
                                     :rules="vendorRules"
                                     ref="vendorForms"
+                                    @submit.prevent
                                     label-width="100px"
                                     label-position="top"
                                     class="demo-ruleForm"
                             >
                                 <el-form-item label="Business Name" prop="company_name">
                                     <el-input placeholder="Enter your Business Name"
+                                              @keyup.enter="continueNextStep()"
                                               v-model="vendorForm.company_name">
                                     </el-input>
                                 </el-form-item>
@@ -726,11 +739,21 @@ export default {
                 console.log(res)
             }).catch(err => {
                 console.log(err)
-                ElMessage({
-                    type: 'error',
-                    message: err.msg,
-                    grouping: true
-                })
+                if(err.msg){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return ;
+                }
+                if(err.message){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.message,
+                        grouping: true
+                    })
+                }
 
             })
         }
@@ -743,11 +766,21 @@ export default {
                 console.log(res)
             }).catch(err => {
                 console.log(err)
-                ElMessage({
-                    type: 'error',
-                    message: err.msg,
-                    grouping: true
-                })
+                if(err.msg){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return ;
+                }
+                if(err.message){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.message,
+                        grouping: true
+                    })
+                }
             })
         }
 
@@ -759,11 +792,21 @@ export default {
                 console.log(res)
             }).catch(err => {
                 console.log(err)
-                ElMessage({
-                    type: 'error',
-                    message: err.msg,
-                    grouping: true
-                })
+                if(err.msg){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return ;
+                }
+                if(err.message){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.message,
+                        grouping: true
+                    })
+                }
             })
         }
 
@@ -775,11 +818,21 @@ export default {
                 console.log(res)
             }).catch(err => {
                 console.log(err)
-                ElMessage({
-                    type: 'error',
-                    message: err.msg,
-                    grouping: true
-                })
+                if(err.msg){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return ;
+                }
+                if(err.message){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.message,
+                        grouping: true
+                    })
+                }
             })
         }
 
@@ -792,11 +845,21 @@ export default {
                 console.log(res)
             }).catch(err => {
                 console.log(err)
-                ElMessage({
-                    type: 'error',
-                    message: err.msg,
-                    grouping: true
-                })
+                if(err.msg){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return ;
+                }
+                if(err.message){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.message,
+                        grouping: true
+                    })
+                }
             })
         }
 
@@ -816,11 +879,22 @@ export default {
                     countryOptions.value = res.message;
                 }
             }).catch(err => {
-                ElMessage({
-                    type: 'warning',
-                    message: err.msg,
-                    grouping: true
-                })
+                if(err.msg){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return ;
+                }
+                if(err.message){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.message,
+                        grouping: true
+                    })
+                }
+
 
             })
         }
@@ -835,11 +909,21 @@ export default {
                     stateOptions.value = res.message;
                 }
             }).catch(err => {
-                ElMessage({
-                    type: 'warning',
-                    message: err.msg,
-                    grouping: true
-                })
+                if(err.msg){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return ;
+                }
+                if(err.message){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.message,
+                        grouping: true
+                    })
+                }
 
             })
         }
@@ -857,11 +941,21 @@ export default {
                     townOptions.value = res.message;
                 }
             }).catch(err => {
-                ElMessage({
-                    type: 'warning',
-                    message: err.msg,
-                    grouping: true
-                })
+                if(err.msg){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.msg,
+                        grouping: true
+                    })
+                    return ;
+                }
+                if(err.message){
+                    ElMessage({
+                        type: 'warning',
+                        message: err.message,
+                        grouping: true
+                    })
+                }
 
             })
         }

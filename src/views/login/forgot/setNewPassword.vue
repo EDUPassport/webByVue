@@ -18,17 +18,25 @@
             <el-form
                 :model="passwordForm"
                 :rules="passwordRules"
+                @submit.prevent
                 ref="passwordForms"
                 label-width="100px"
                 label-position="top"
                 class="demo-ruleForm"
             >
-
               <el-form-item label="New Password" prop="password">
-                <el-input show-password placeholder="Enter your password" v-model="passwordForm.password"></el-input>
+                <el-input show-password
+                          @keyup.enter="resetPassword(passwordForms)"
+                          placeholder="Enter your password"
+                          v-model="passwordForm.password">
+                </el-input>
               </el-form-item>
               <el-form-item label="Confirm Password" prop="confirm_password">
-                <el-input show-password placeholder="Confirm your password" v-model="passwordForm.confirm_password"></el-input>
+                <el-input show-password
+                          placeholder="Confirm your password"
+                          @keyup.enter="resetPassword(passwordForms)"
+                          v-model="passwordForm.confirm_password">
+                </el-input>
               </el-form-item>
 
               <el-form-item>

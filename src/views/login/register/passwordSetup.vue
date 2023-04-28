@@ -54,16 +54,20 @@
                 :model="signForm"
                 :rules="signRules"
                 ref="signForms"
+                @submit.prevent
                 label-width="100px"
                 label-position="top"
                 class="demo-ruleForm"
             >
 
               <el-form-item label="Password" prop="password">
-                <el-input show-password placeholder="Enter your password" v-model="signForm.password"></el-input>
+                <el-input show-password placeholder="Enter your password"
+                          @keyup.enter="confirmForm(signForms)"
+                          v-model="signForm.password"></el-input>
               </el-form-item>
               <el-form-item label="Confirm Password" prop="c_password">
                 <el-input show-password placeholder="Confirm your password"
+                          @keyup.enter="confirmForm(signForms)"
                           v-model="signForm.c_password"></el-input>
               </el-form-item>
 

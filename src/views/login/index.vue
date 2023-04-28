@@ -22,18 +22,23 @@
                                     :model="loginForm"
                                     :rules="loginRules"
                                     ref="loginForms"
+                                    @submit.prevent
                                     label-width="100px"
                                     label-position="top"
                                     class="demo-ruleForm"
                             >
                                 <el-form-item label="Email" prop="email">
-                                    <el-input placeholder="Enter your email" v-model="loginForm.email"></el-input>
+                                    <el-input placeholder="Enter your email"
+                                              @keyup.enter="submitLoginForm(loginForms)"
+                                              v-model="loginForm.email">
+                                    </el-input>
                                 </el-form-item>
                                 <el-form-item label="Password" prop="password">
                                     <el-input placeholder="Enter your password"
-                                              type="password"
                                               show-password
-                                              v-model="loginForm.password"></el-input>
+                                              @keyup.enter="submitLoginForm(loginForms)"
+                                              v-model="loginForm.password">
+                                    </el-input>
                                 </el-form-item>
 
                                 <div class="remember-forgot-container">
@@ -68,6 +73,7 @@
                                         :model="loginPhoneSmsForm"
                                         :rules="loginPhoneSmsRules"
                                         ref="loginPhoneSmsForms"
+                                        @submit.prevent
                                         :hide-required-asterisk="true"
                                         label-position="top"
                                         class="demo-ruleForm"
@@ -78,7 +84,9 @@
                                             <span class="login-label-text">Phone #</span>
                                         </template>
                                         <el-input placeholder="Phone #"
-                                                  v-model="loginPhoneSmsForm.phone"></el-input>
+                                                  @keyup.enter="submitLoginPhoneSmsForm(loginPhoneSmsForms)"
+                                                  v-model="loginPhoneSmsForm.phone">
+                                        </el-input>
                                     </el-form-item>
 
                                     <el-form-item label="6 Digit Code" prop="phone_code">
@@ -98,6 +106,7 @@
                                         <div class="xll-input-container">
                                             <div class="xll-input-input">
                                                 <el-input placeholder="Code"
+                                                          @keyup.enter="submitLoginPhoneSmsForm(loginPhoneSmsForms)"
                                                           v-model="loginPhoneSmsForm.code">
                                                 </el-input>
                                             </div>
@@ -115,9 +124,11 @@
                                         <!--                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>-->
                                         <!--                    </div>-->
                                         <div class="forgot-password-container">
-                                            <el-button size="small" link class="forgot-password-btn"
-                                                       @click="forgotPassword()">Forgot
-                                                password?
+                                            <el-button size="small"
+                                                       link
+                                                       class="forgot-password-btn"
+                                                       @click="forgotPassword()">
+                                                Forgot password?
                                             </el-button>
                                         </div>
                                     </div>
@@ -140,6 +151,7 @@
                                         :model="loginPhonePassForm"
                                         :rules="loginPhonePassRules"
                                         ref="loginPhonePassForms"
+                                        @submit.prevent
                                         :hide-required-asterisk="true"
                                         label-position="top"
                                         class="demo-ruleForm"
@@ -150,7 +162,9 @@
                                             <span class="login-label-text">Phone #</span>
                                         </template>
                                         <el-input placeholder="Phone #"
-                                                  v-model="loginPhonePassForm.phone"></el-input>
+                                                  @keyup.enter="submitLoginPhonePassForm(loginPhonePassForms)"
+                                                  v-model="loginPhonePassForm.phone">
+                                        </el-input>
                                     </el-form-item>
 
                                     <el-form-item label="Password" prop="password">
@@ -167,9 +181,11 @@
                                                 </div>
                                             </div>
                                         </template>
-                                        <el-input placeholder="Password" type="password"
+                                        <el-input placeholder="Password"
+                                                  @keyup.enter="submitLoginPhonePassForm(loginPhonePassForms)"
                                                   show-password
-                                                  v-model="loginPhonePassForm.password"></el-input>
+                                                  v-model="loginPhonePassForm.password">
+                                        </el-input>
                                     </el-form-item>
 
                                     <div class="remember-forgot-container">
@@ -177,7 +193,8 @@
                                         <!--                      <el-checkbox v-model="rememberValue" label="Remember Me" @change="rememberChange"></el-checkbox>-->
                                         <!--                    </div>-->
                                         <div class="forgot-password-container">
-                                            <el-button link class="forgot-password-btn" @click="forgotPassword()">
+                                            <el-button link class="forgot-password-btn"
+                                                       @click="forgotPassword()">
                                                 Forgot password?
                                             </el-button>
                                         </div>

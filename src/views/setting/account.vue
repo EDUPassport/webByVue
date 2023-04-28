@@ -33,13 +33,18 @@
                 >
                     <el-form-item label="Current Password" prop="password">
                         <el-input v-model="accountForm.password"
+                                  show-password
                                   placeholder="Enter your Current Password"></el-input>
                     </el-form-item>
                     <el-form-item label="New Password" prop="new_password">
-                        <el-input v-model="accountForm.new_password" placeholder="Enter your New Password"></el-input>
+                        <el-input v-model="accountForm.new_password"
+                                  show-password
+                                  placeholder="Enter your New Password"></el-input>
                     </el-form-item>
                     <el-form-item label="Confirm New Password" prop="confirm_password">
-                        <el-input v-model="accountForm.confirm_password" placeholder="Confirm New Password"></el-input>
+                        <el-input v-model="accountForm.confirm_password"
+                                  show-password
+                                  placeholder="Confirm New Password"></el-input>
                     </el-form-item>
 
                 </el-form>
