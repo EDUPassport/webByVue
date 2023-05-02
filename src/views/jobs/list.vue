@@ -431,18 +431,16 @@ export default {
       console.log(e)
     },
     jobPageChange(e) {
-      console.log(e)
-      this.jobPage = e
-      this.selectedJobId = 0
-      let userId = this.$route.query.uid;
-
+      // console.log(e)
+      // this.jobPage = e
+      // this.selectedJobId = 0
+      // let userId = this.$route.query.uid;
       this.getJobList(e, this.jobLimit)
-
-      if(this.isOther){
-        this.$router.push({path:'/jobs',query:{page:e,uid:userId}})
-      }else{
-        this.$router.push({path:'/jobs',query:{page:e}})
-      }
+      // if(this.isOther){
+      //   this.$router.push({path:'/jobs',query:{page:e,uid:userId}})
+      // }else{
+      //   this.$router.push({path:'/jobs',query:{page:e}})
+      // }
 
     },
     getJobList(page, limit) {
