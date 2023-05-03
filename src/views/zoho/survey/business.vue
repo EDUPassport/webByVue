@@ -42,7 +42,7 @@
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ZOHO_SYNC} from "@/api/api";
-import {ElMessage, ElMessageBox} from 'element-plus'
+import {ElLoading} from 'element-plus'
 
 export default {
     name: "business",
@@ -136,6 +136,12 @@ export default {
              formEl.validate((valid,fields)=>{
                  if(valid){
 
+                     const loading = ElLoading.service({
+                         lock:true,
+                         text:'Thank you! Your response has been submitted.',
+                         background: 'rgba(255, 255, 255, 0.9)'
+                     })
+
                      let zoho_data = Object.assign({},vForm.value)
                      let zoho_url = 'https://forms.zohopublic.com/edupassport/form/EducationBusiness/formperma/7P0vzN1jnbViC7T_KXKM5OCuZ80k9Wr34nrQYIcgv48/htmlRecords/submit'
                      console.log(zoho_data)
@@ -151,23 +157,8 @@ export default {
                      ZOHO_SYNC(params).then(res => {
                          console.log(res)
                          // router.go(-1)
-                         ElMessageBox.confirm('Your response has been submitted.','Thank you!',{
-                             confirmButtonText: 'Back',
-                             showCancelButton:false,
-                             type: 'success',
-                             draggable: true,
-                         }).then(()=>{
-                             router.go(-1)
-                             // ElMessage({
-                             //     type: 'success',
-                             //     message: 'Delete completed',
-                             // })
-                         }).catch(()=>{
-                             ElMessage({
-                                 type: 'info',
-                                 message: 'canceled',
-                             })
-                         })
+                         loading.close()
+                         router.push('/overview')
                      }).catch(err => {
                          console.log(err)
                      })
