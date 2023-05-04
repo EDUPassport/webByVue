@@ -13,21 +13,11 @@ axios.defaults.timeout = 30000
 // 请求拦截器，设置token
 axios.interceptors.request.use(config => {
 
-    let reqWhiteList = [
-        'user/unread/list',
-        'user/unread',
-        'home/user/question/show'
-    ]
-
-    if(reqWhiteList.indexOf(config.url) === -1){
-
-        //设置取消请求的cancel token
-        config.cancelToken = new axios.CancelToken(cancel=>{
-            // 存入数组
-            store.commit('pushAxiosPromiseArr', cancel)
-        })
-
-    }
+    //设置取消请求的cancel token
+    config.cancelToken = new axios.CancelToken(cancel=>{
+        // 存入数组
+        store.commit('pushAxiosPromiseArr', cancel)
+    })
 
     const token = localStorage.getItem('token');
     const sourceUrl = window.location.href;

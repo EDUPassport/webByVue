@@ -430,20 +430,20 @@ export default {
     jobPageSizeChange(e) {
       console.log(e)
     },
-    jobPageChange(e) {
-      // console.log(e)
-      // this.jobPage = e
+    async jobPageChange(e) {
+      console.log(e)
+      this.jobPage = e
       // this.selectedJobId = 0
-      // let userId = this.$route.query.uid;
-      this.getJobList(e, this.jobLimit)
-      // if(this.isOther){
-      //   this.$router.push({path:'/jobs',query:{page:e,uid:userId}})
-      // }else{
-      //   this.$router.push({path:'/jobs',query:{page:e}})
-      // }
+      let userId = this.$route.query.uid;
+      await this.getJobList(e, this.jobLimit, true)
+      if(this.isOther){
+        this.$router.push({path:'/jobs',query:{page:e,uid:userId}})
+      }else if (! this.$route.params.id){
+        this.$router.push({path:'/jobs',query:{page:e}})
+      }
 
     },
-    getJobList(page, limit) {
+    async getJobList(page, limit, pageClicked) {
       this.jobLoadingValue = true;
       // this.showLoadingStatus = true;
       let params = {
@@ -493,7 +493,7 @@ export default {
         params.payment_period = e.payment_period
       }
 
-      JOB_LIST(params).then(res => {
+      await JOB_LIST(params).then(res => {
         // console.log(res)
         if (res.code == 200) {
           let jobData = res.message.data;
@@ -510,11 +510,11 @@ export default {
 
             let routeJobId = this.$route.params.id;
 
-            if(!routeJobId){
+            if(!routeJobId || pageClicked){
 
-              if(jobData.length>0){
-                this.selectedJobId = jobData[0]['id']
-              }
+              if(this.jobTotalNum>0){
+                this.selectedJobId = Object.values(jobData)[0]['id']
+             }
 
             }
 
