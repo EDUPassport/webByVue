@@ -16,8 +16,7 @@
       <el-col class="events-list-col" :xs="24" :sm="24" :md="20" :lg="20" :xl="20">
 
         <el-scrollbar ref="eventScroll"  class="events-list-bg-container">
-
-          <template v-if="eventsList.length > 0">
+        <template v-if="eventTotalNum > 0">
             <div class="empty-post-event-btn-container">
               <el-button type="primary" round @click="postEventWhenEmpty()">
                 Post an Event
