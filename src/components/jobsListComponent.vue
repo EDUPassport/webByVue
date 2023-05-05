@@ -121,7 +121,7 @@
 
       <div class="jobs-list-content">
 
-        <template v-if="jobListData.length > 0">
+        <template v-if="jobTotalNum > 0">
           <div  class="jobs-list-item "
                 v-for="(item,index) in jobListData" :key="index"
                 :class="item.id == selectedJobId ? 'jobs-list-item-active' : '' ">
@@ -212,7 +212,7 @@
 
       </div>
 
-      <div class="jobs-list-pagination" v-if="jobListData.length > 0">
+      <div class="jobs-list-pagination" v-if="jobTotalNum > 0">
         <el-pagination layout="prev, pager, next"
                        :default-current-page="jobPage"
                        @size-change="jobPageSizeChange"
