@@ -42,7 +42,7 @@
           <div class="footer-contact-us">
             <div class="footer-contact-us-label">Contact us</div>
             <div class="footer-contact-us-c">
-              care@edupassport.io
+              <a href="mailto:care@edupassport.io">care@edupassport.io</a>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
           We are change-makers in global education.
         </div>
         <div class="footer-b-r-mobile">
-          care@edupassport.io
+          <a href="mailto:care@edupassport.io">care@edupassport.io</a>
         </div>
 
       </div>
@@ -126,7 +126,7 @@ export default {
       this.$router.push('/about/us')
     },
     turnSupport(){
-      window.open('https://support.edupassport.io', '_blank')
+      window.open('https://support.edupassport.io/portal/en/kb/support', '_blank')
     },
     turnBlogs(){
       window.open('https://blog.edupassport.io','_blank')
@@ -200,7 +200,7 @@ export default {
   font-size: 20px;
   color: #FFFFFF;
 }
-.footer-contact-us-c{
+.footer-contact-us-c a{
   font-family: BarlowM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-size: 20px;
   color: #FFFFFF;
@@ -325,10 +325,11 @@ export default {
     display: none;
     margin-top: 10px;
     font-size: 16px;
-  }
-  .footer-b-r-mobile{
+  }   
+  .footer-b-r-mobile a{
     font-size: 12px;
     font-family: Assistant-SemiBold, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    color: white;
   }
 
   .t-btn-menu-icon-container{
