@@ -17,7 +17,7 @@
               EDU Deals
             </div>
             <div class="footer-menu-item" @click="turnEvents()">
-              EDU Events
+              Events
             </div>
             <div class="footer-menu-item" @click="turnBlogs()">
               EDU Blogs

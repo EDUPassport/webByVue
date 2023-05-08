@@ -31,7 +31,7 @@
           <span :class="sMenuPath === '/deals' ? 'nav-link-item-active' : '' ">EDU DEALS</span>
         </div>
         <div class="nav-link-item" @click="turnEvents()">
-          <span :class="sMenuPath === '/events' ? 'nav-link-item-active' : '' ">EDU EVENTS</span>
+          <span :class="sMenuPath === '/events' ? 'nav-link-item-active' : '' ">EVENTS</span>
         </div>
         <template v-if="envBlog ==='yes'">
           <div class="nav-link-item" @click="turnBlog()">
