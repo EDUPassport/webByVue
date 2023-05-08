@@ -74,7 +74,7 @@
 
                             <router-link to="/jobs" exact> EDU JOBS</router-link>
                             <router-link to="/deals" exact> EDU DEALS</router-link>
-                            <router-link to="/events" exact> EDU EVENTS</router-link>
+                            <router-link to="/events" exact> EVENTS</router-link>
                             <template v-if="envBlog === 'yes'">
                                 <el-link :underline=false href="https://blog.edupassport.io/" target="_blank">EDU
                                     BLOGS
