@@ -16,7 +16,13 @@ axios.interceptors.request.use(config => {
     let reqWhiteList = [
         'user/unread/list',
         'user/unread',
-        'home/user/question/show'
+        'home/user/question/show',
+        'home/user/menu/list',
+        'home/user/educator/company/calculate',
+        'home/user/recruiting/company/calculate',
+        'home/user/school/company/calculate',
+        'home/user/other/company/calculate',
+        'home/user/vendor/company/calculate',
     ]
 
     if(reqWhiteList.indexOf(config.url) === -1){
