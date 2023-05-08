@@ -68,7 +68,7 @@
           <div class="menu-item menu-item-margin">
 
             <router-link to="/events" exact>
-              <span>EDU Events</span>
+              <span>Events</span>
             </router-link>
 
           </div>
