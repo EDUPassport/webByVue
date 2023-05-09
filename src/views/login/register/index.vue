@@ -402,13 +402,13 @@ export default {
           text: 'SEND CODE',
           loading: false,
           disabled: false,
-          duration: 10,
+          duration: 60,
           timer: null
         }
     )
 
     const getCheckCodeTimer = () => {
-      if (checkCodeBtn.duration !== 10) {
+      if (checkCodeBtn.duration !== 60) {
         checkCodeBtn.disabled = true
         checkCodeBtn.loading = true
       }
@@ -423,7 +423,7 @@ export default {
         if (tmp <= 0) {
           //清除定时器
           clearInterval(checkCodeBtn.timer)
-          checkCodeBtn.duration = 10
+          checkCodeBtn.duration = 60
           checkCodeBtn.text = 'Reacquire'
           // 设置按钮可以点击
           checkCodeBtn.disabled = false
