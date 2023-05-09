@@ -641,7 +641,7 @@ export default {
           ADD_SUBSCRIBE_EMAIL(params).then(res => {
             console.log(res)
             if (res.code == 200) {
-              this.$message.success('Subscribe Success')
+              this.$message.success('Thanks for signing up')
               this.subscribeForm.email = ''
             }
           }).catch(err => {
