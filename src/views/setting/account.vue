@@ -215,6 +215,16 @@ export default {
                     submitPasswordLoading.value = true;
 
                     let params = Object.assign({}, accountForm)
+
+                    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+                    if (!passwordRegex.test(params.new_password)) {
+                        submitPasswordLoading.value = false
+                        return ElMessage({
+                                type: 'error',
+                                message: 'Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.',
+                                grouping: true
+                            })                    
+                        } 
                     USER_CHANGE_PASSWORD(params).then(res => {
                         console.log(res)
                         if (res.code === 200) {

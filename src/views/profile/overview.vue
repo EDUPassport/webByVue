@@ -18,8 +18,7 @@
                     <el-button plain @click="turnUserManagement()">User Management</el-button>
                     <el-button type="primary" icon="Plus" @click="postJob()">Post a Job</el-button>
                 </div>
-
-                <un-complete-profile-prompt :percent="profilePercentage"  v-if="profilePercentage != 100"></un-complete-profile-prompt>
+                <un-complete-profile-prompt :percent="profilePercentage"  v-if="(identity == 1 && profilePercentage <= 80 ) || (identity == 2 && profilePercentage <= 60)"></un-complete-profile-prompt>
 
                 <template v-if="identity == 1">
 
