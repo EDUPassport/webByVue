@@ -189,8 +189,6 @@ export default {
         const validatePassword = (rule,value,callback)=>{
             if(value === ''){
                 callback(new Error('Enter your Current Password'))
-            }else if(!passwordRegex.test(value) ){
-                callback(new Error('Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.'))
             }else{
                 callback()
             }
