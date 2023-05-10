@@ -185,16 +185,50 @@ export default {
             new_password: ''
         })
 
-        const accountRules = reactive({
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+        const validatePassword = (rule,value,callback)=>{
+            if(value === ''){
+                callback(new Error('Enter your Current Password'))
+            }else if(!passwordRegex.test(value) ){
+                callback(new Error('Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.'))
+            }else{
+                callback()
+            }
+        }
 
+        const validateNewPassword = (rule,value,callback)=>{
+            if(value === ''){
+                callback(new Error('Enter your Current Password'))
+            }else if(!passwordRegex.test(value) ){
+                callback(new Error('Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.'))
+            }else if(accountForm.confirm_password && value !== accountForm.confirm_password){
+                callback(new Error("Two inputs don't match!"))
+            }else{
+                callback()
+            }
+        }
+
+        const validateConfirmPassword = (rule,value,callback)=>{
+            if(value === ''){
+                callback(new Error('Enter your Current Password'))
+            }else if(!passwordRegex.test(value) ){
+                callback(new Error('Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.'))
+            }else if(accountForm.new_password && value !== accountForm.new_password){
+                callback(new Error("Two inputs don't match!"))
+            }else{
+                callback()
+            }
+        }
+
+        const accountRules = reactive({
             password: [
-                {required: true, message: 'Enter your Current Password', trigger: 'blur'}
+                {required: true, validator:validatePassword,trigger: 'blur'}
             ],
             new_password: [
-                {required: true, message: 'Enter your New Password', trigger: 'blur'}
+                {required: true, validator: validateNewPassword, trigger: 'blur'}
             ],
             confirm_password: [
-                {required: true, message: 'Confirm New Password', trigger: 'blur'}
+                {required: true, validator: validateConfirmPassword, trigger: 'blur'}
             ]
         })
 
@@ -216,15 +250,15 @@ export default {
 
                     let params = Object.assign({}, accountForm)
 
-                    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-                    if (!passwordRegex.test(params.new_password)) {
-                        submitPasswordLoading.value = false
-                        return ElMessage({
-                                type: 'error',
-                                message: 'Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.',
-                                grouping: true
-                            })                    
-                        } 
+                    // const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+                    // if (!passwordRegex.test(params.new_password)) {
+                    //     submitPasswordLoading.value = false
+                    //     return ElMessage({
+                    //             type: 'error',
+                    //             message: 'Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.',
+                    //             grouping: true
+                    //         })
+                    //     }
                     USER_CHANGE_PASSWORD(params).then(res => {
                         console.log(res)
                         if (res.code === 200) {
