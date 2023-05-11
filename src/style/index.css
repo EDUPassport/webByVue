@@ -132,12 +132,12 @@
 }
 
 .el-textarea{
-    --el-input-border-color:#262626;
     --el-input-hover-border: 1px solid #6650B3;
     --el-input-focus-border: 2px solid #6650B3;
     --el-input-hover-border-color:#E7DEFF;
     --el-input-focus-border-color:#6650B3;
 }
+
 .el-form-item__error{
     font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-weight: 400;
@@ -162,6 +162,14 @@
 
 .el-form--label-top .el-form-item .el-form-item__label{
     margin-bottom: 0 !important;
+}
+
+.el-checkbox__label{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #101828;
 }
 
 .el-checkbox.el-checkbox--large .el-checkbox__label{

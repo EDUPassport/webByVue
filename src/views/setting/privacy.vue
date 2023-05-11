@@ -2,17 +2,11 @@
     <div class="privacy-bg">
 
         <div class="privacy-top-container">
-            <div class="privacy-top-l">
-                <div class="privacy-label">
-                    <span>Privacy</span>
-                </div>
-                <div class="privacy-tips">
-                    <span>Privacy Privacy Privacy Privacy Privacy Privacy Privacy!</span>
-                </div>
+            <div class="privacy-label">
+                <span>Privacy</span>
             </div>
-            <div class="privacy-top-r">
-                <el-button type="info">Cancel</el-button>
-                <el-button type="primary">Save & Continue</el-button>
+            <div class="privacy-tips">
+                <span>Privacy Privacy Privacy Privacy Privacy Privacy Privacy!</span>
             </div>
 
         </div>
@@ -21,63 +15,75 @@
             <div class="privacy-profile-l">
                 <span>Profile Visibility</span>
             </div>
-            <div class="privacy-profile-r" >
-                <el-checkbox v-model="profileVisible" label="Make my profile visible to others" />
+            <div class="privacy-profile-r">
+                <el-checkbox
+                        v-model="profileVisibleValue"
+                        @change="profileVisibleChange"
+                        label="Make my profile visible to others"/>
                 <br>
                 <span>
-                    <el-icon><Warning /></el-icon>
+                    <el-icon><Warning/></el-icon>
                     Your profile is no longer visible from the candidate pool
                 </span>
             </div>
 
         </div>
 
-        <div class="privacy-profile-container" v-if="identity == 2 || identity == 3 || identity == 4">
-            <div class="privacy-profile-l">
-                <span>Job Post Visibility</span>
-            </div>
-            <div class="privacy-profile-r" >
-                <el-radio-group v-model="jobPostVisible">
-                    <el-radio label="1">Candidates on Favourites</el-radio>
-                    <el-radio label="2">Everyone</el-radio>
-                </el-radio-group>
-            </div>
+<!--        <div class="privacy-profile-container" v-if="identity == 2 || identity == 3 || identity == 4">-->
+<!--            <div class="privacy-profile-l">-->
+<!--                <span>Job Post Visibility</span>-->
+<!--            </div>-->
+<!--            <div class="privacy-profile-r">-->
+<!--                <el-radio-group v-model="jobPostVisible">-->
+<!--                    <el-radio label="1">Candidates on Favourites</el-radio>-->
+<!--                    <el-radio label="2">Everyone</el-radio>-->
+<!--                </el-radio-group>-->
+<!--            </div>-->
 
-        </div>
+<!--        </div>-->
 
         <div class="privacy-alerts-container">
             <div class="privacy-alerts-label">
                 <span>Notifications & Alerts</span>
             </div>
-            <div class="privacy-alert" v-for="(item,i) in alertsData" :key="i">
-                <div class="privacy-alert-t">
-                    <div class="privacy-alert-label">
-                        <span>{{item.label}}</span>
-                    </div>
-                    <div class="privacy-alert-line"></div>
-                    <div class="privacy-alert-icon-container" @click="handleExpandAlert(i)">
+            <div class="alert-loading-container" v-loading="alertLoadingStatus">
+                <div class="privacy-alert" v-for="(item,i) in alertsData" :key="i">
+                    <div class="privacy-alert-t">
+                        <div class="privacy-alert-label">
+                            <span v-if="item.type === '1' "> Job Alerts </span>
+                            <span v-if="item.type === '2' "> Event Alerts </span>
+                            <span v-if="item.type === '3' "> Deal Alerts </span>
+                        </div>
+                        <div class="privacy-alert-line"></div>
+                        <div class="privacy-alert-icon-container" @click="handleExpandAlert(i)">
 
-                        <el-image
-                            v-if="expandKeysData.indexOf(i) === -1"
-                            class="privacy-alert-icon"
-                            :src="arrowDownIcon">
-                        </el-image>
-                        <el-image
-                            v-else
-                            class="privacy-alert-icon"
-                            :src="arrowUpIcon">
-                        </el-image>
+                            <el-image
+                                    v-if="expandKeysData.indexOf(i) === -1"
+                                    class="privacy-alert-icon"
+                                    :src="arrowDownIcon">
+                            </el-image>
+                            <el-image
+                                    v-else
+                                    class="privacy-alert-icon"
+                                    :src="arrowUpIcon">
+                            </el-image>
 
-                    </div>
-                </div>
-                <el-collapse-transition>
-                    <div class="privacy-alert-b"  v-show="expandKeysData.indexOf(i) === -1">
-                        <div v-for="(cItem,index) in item.data" :key="index">
-                            <el-checkbox :label="cItem.value"/>
                         </div>
                     </div>
-                </el-collapse-transition>
+                    <el-collapse-transition>
+                        <div class="privacy-alert-b" v-show="expandKeysData.indexOf(i) === -1">
+                            <!--                        <el-checkbox-group :model-value="alertCheckedData">-->
+                            <div v-for="(cItem,index) in item.data" :key="index">
+                                <el-checkbox :label="cItem.value"
+                                             :checked="alertCheckedData.indexOf(cItem.id) !== -1"
+                                             @change="privacyChange($event,cItem.id)">
+                                </el-checkbox>
+                            </div>
+                            <!--                        </el-checkbox-group>-->
+                        </div>
+                    </el-collapse-transition>
 
+                </div>
             </div>
         </div>
 
@@ -88,12 +94,19 @@
 import arrowDownIcon from '@/assets/newHome/arrow-circle-down.svg'
 import arrowUpIcon from '@/assets/newHome/arrow-circle-up.svg'
 import {ref, onMounted} from 'vue'
-import {useStore } from 'vuex'
+import {useStore} from 'vuex'
+import {
+    EDUCATOR_VISIBLE_EDIT, EDUCATOR_VISIBLE_STATUS,
+    PRIVACY_CATEGORY_ADD,
+    PRIVACY_CATEGORY_LIST,
+    PRIVACY_USER_SELECTED_LIST
+} from "@/api/api";
+import {ElLoading} from 'element-plus'
 
 export default {
     name: "privacy",
     components: {},
-    data(){
+    data() {
         return {
             arrowUpIcon,
             arrowDownIcon
@@ -103,144 +116,132 @@ export default {
     setup() {
         const store = useStore()
         const identity = store.state.identity
+        const userId = localStorage.getItem('uid')
+        const companyId = store.state.currentCompanyId
 
+        const alertLoadingStatus = ref(true)
         const profileVisible = ref(false)
         const alertsData = ref([])
         const jobPostVisible = ref('1')
+        const alertCheckedData = ref([])
 
-        const getAlertsDataByIdentity = (identity)=>{
+        const getAlertsDataByIdentity = async () => {
+            await PRIVACY_CATEGORY_LIST().then(res => {
+                console.log(res)
+                if (res.code === 200) {
+                    alertsData.value = res.message
+                    alertLoadingStatus.value = false
+                }
 
-            console.log(identity)
-
-            if(identity === 1){
-
-                alertsData.value = [
-                    {
-                        label:'Job Alerts',
-                        data:[
-                            {
-                                key:'j1',
-                                value:'Latest Job Listings'
-                            },
-                            {
-                                key:'j2',
-                                value:'Resume/Cover letter Tips'
-                            },
-                            {
-                                key:'j3',
-                                value:'Jobs that match your location'
-                            },
-                            {
-                                key:'j4',
-                                value:'Featured Jobs'
-                            },
-
-                        ]
-                    },
-                    {
-                        label:'Event Alerts',
-                        data:[
-                            {
-                                key:'d1',
-                                value:'Upcoming Events'
-                            },
-                            {
-                                key:'d2',
-                                value:'Featured Events'
-                            },
-                            {
-                                key:'d3',
-                                value:'Events that best match your preferences settings'
-                            },
-
-                        ]
-                    },
-                    {
-                        label:'Deal Alerts',
-                        data:[
-                            {
-                                key:'e1',
-                                value:'Discounted Products and Services'
-                            },
-                            {
-                                key:'e2',
-                                value:'Promotions and Giveaways'
-                            }
-                        ]
-                    }
-                ]
-            }
-
-            if(identity === 2 || identity ===  3 || identity === 4 || identity === 5){
-
-                alertsData.value = [
-                    {
-                        label:'Job Alerts',
-                        data:[
-                            {
-                                key:'j1',
-                                value:'Profiles Recently Made Public'
-                            },
-
-
-                        ]
-                    },
-                    {
-                        label:'Event Alerts',
-                        data:[
-                            {
-                                key:'d1',
-                                value:'Upcoming Events'
-                            },
-                            {
-                                key:'d2',
-                                value:'Featured Events'
-                            },
-                            {
-                                key:'d3',
-                                value:'Events that best match your preferences settings'
-                            },
-                            {
-                                key:'d4',
-                                value:'Career Development events'
-                            },
-
-                        ]
-                    },
-                    {
-                        label:'Deal Alerts',
-                        data:[
-                            {
-                                key:'e1',
-                                value:'Discounted Products and Services'
-                            },
-                            {
-                                key:'e2',
-                                value:'Promotions and Giveaways'
-                            }
-                        ]
-                    }
-                ]
-
-            }
+            }).catch(err => {
+                console.log(err)
+            })
 
         }
 
         const expandKeysData = ref([])
 
-        const handleExpandAlert = (i)=>{
+        const handleExpandAlert = (i) => {
 
             let index = expandKeysData.value.indexOf(i)
-            if(index === -1){
+            if (index === -1) {
                 expandKeysData.value.push(i)
-            }else{
-                expandKeysData.value.splice(index,1)
+            } else {
+                expandKeysData.value.splice(index, 1)
             }
 
         }
 
-        onMounted(()=>{
-            getAlertsDataByIdentity(parseInt(identity) )
+        const profileVisibleChange = (e) => {
+            const loading = ElLoading.service({
+                lock: true,
+                text: 'Loading',
+                background: 'rgba(255, 255, 255, 0.7)',
+            })
+
+            let params = {
+                is_visible: e === true ? 1 : 0
+            }
+
+            EDUCATOR_VISIBLE_EDIT(params).then(res => {
+                console.log(res)
+                if (res.code === 200) {
+                    console.log('change profile visible success')
+                    loading.close()
+                }
+            }).catch(err => {
+                console.log(err)
+                profileVisibleValue.value = e === true ? 1 : 0
+                loading.close()
+            })
+
+        }
+
+        const profileVisibleValue = ref(false)
+        const getEducatorVisibleStatus = async () => {
+            await EDUCATOR_VISIBLE_STATUS().then(res => {
+                console.log(res)
+                if (res.code === 200) {
+
+                    profileVisibleValue.value = res.message.is_visible === 1
+
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+
+        const privacyChange = (e, id) => {
+            console.log(e, id)
+            const loading = ElLoading.service({
+                lock: true,
+                text: 'Loading',
+                background: 'rgba(255, 255, 255, 0.7)',
+            })
+
+            let params = {
+                user_id: userId,
+                identity: identity,
+                companyId: companyId,
+                privacy_category_id: id
+            }
+
+            PRIVACY_CATEGORY_ADD(params).then(res => {
+                // console.log(res)
+                if (res.code === 200) {
+                    userSelectedPrivacyList()
+                    loading.close()
+                }
+
+            }).catch(err => {
+                console.log(err)
+                loading.close()
+            })
+
+        }
+
+        const userSelectedPrivacyList = async () => {
+            await PRIVACY_USER_SELECTED_LIST().then(res => {
+                // console.log(res)
+                if (res.code === 200) {
+                    let resMessage = res.message
+                    resMessage.forEach(item => {
+                        let cateId = parseInt(item.privacy_category_id)
+                        alertCheckedData.value.push(cateId)
+                    })
+
+                }
+
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+
+        onMounted(async () => {
+            await getEducatorVisibleStatus()
+            await userSelectedPrivacyList()
+            await getAlertsDataByIdentity()
+
         })
 
         return {
@@ -250,8 +251,12 @@ export default {
             alertsData,
             getAlertsDataByIdentity,
             handleExpandAlert,
-            expandKeysData
-
+            expandKeysData,
+            alertCheckedData,
+            privacyChange,
+            profileVisibleChange,
+            alertLoadingStatus,
+            profileVisibleValue
         }
     }
 }
@@ -266,10 +271,6 @@ export default {
 }
 
 .privacy-top-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
     margin: 40px 40px 0 40px;
     border-bottom: 1px solid #D0D5DD;
 }
@@ -308,7 +309,7 @@ export default {
 
 }
 
-.privacy-profile-l span{
+.privacy-profile-l span {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
@@ -317,11 +318,11 @@ export default {
     color: #101828;
 }
 
-.privacy-profile-r{
+.privacy-profile-r {
     margin-left: 115px;
 }
 
-.privacy-profile-r span{
+.privacy-profile-r span {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
@@ -336,11 +337,11 @@ export default {
 
 }
 
-.privacy-alerts-container{
+.privacy-alerts-container {
     margin: 24px 40px;
 }
 
-.privacy-alerts-label{
+.privacy-alerts-label {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 600;
@@ -349,18 +350,22 @@ export default {
     color: #101828;
 }
 
-.privacy-alert{
+.alert-loading-container {
+    min-height: 300px;
+}
+
+.privacy-alert {
     margin-top: 25px;
 
 }
 
-.privacy-alert-t{
+.privacy-alert-t {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.privacy-alert-label{
+.privacy-alert-label {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
@@ -370,14 +375,15 @@ export default {
     min-width: 80px;
 
 }
-.privacy-alert-line{
+
+.privacy-alert-line {
     width: 420px;
     height: 1px;
     background-color: #D0D5DD;
     margin: 0 15px;
 }
 
-.privacy-alert-icon{
+.privacy-alert-icon {
     width: 20px;
     height: 20px;
     cursor: pointer;

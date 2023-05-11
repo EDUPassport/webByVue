@@ -67,29 +67,34 @@
                     >
                         <el-table-column min-width="120px" prop="last_name" label="Name"></el-table-column>
                         <el-table-column min-width="160px" prop="email" label="Email Address"></el-table-column>
-                        <el-table-column min-width="100px" prop="permission" label="Permission">Contributor</el-table-column>
+                        <el-table-column min-width="100px" prop="permission" label="Permission">Contributor
+                        </el-table-column>
                         <el-table-column prop="status" label="Status">
-                            <div class="contributor-tag"> <span></span> online</div>
+                            <div class="contributor-tag"><span></span> online</div>
                         </el-table-column>
                         <el-table-column label="">
                             <template #default="scope">
-                                <div style="text-align: right;">
+
+                                <div class="contributor-actions">
+
+                                    <el-button type="info" @click="resendForContributor(scope.row)">Resend</el-button>
+
                                     <el-popconfirm
-                                        width="310"
-                                        :hide-icon="true"
-                                        confirm-button-text="Yes"
-                                        cancel-button-text="No"
-                                        title="This action will remove your contributor account permanently, Are your sure?"
-                                        @confirm="handleDelete(scope.row)"
+                                            width="310"
+                                            :hide-icon="true"
+                                            confirm-button-text="Yes"
+                                            cancel-button-text="No"
+                                            title="This action will remove your contributor account permanently, Are your sure?"
+                                            @confirm="handleDelete(scope.row)"
                                     >
                                         <template #reference>
-                                            <el-icon style="cursor: pointer;margin-right: 35px;" color="#F97066" >
+                                            <el-icon style="cursor: pointer;margin-right: 15px;" color="#F97066">
                                                 <Delete></Delete>
                                             </el-icon>
                                         </template>
                                     </el-popconfirm>
-
                                 </div>
+
 
                             </template>
                         </el-table-column>
@@ -114,10 +119,10 @@
                 <div class="box-tips">Enter the email address for the user to join as contributor</div>
                 <div class="box-form">
                     <el-form
-                        :model="contributorForm"
-                        :rules="contributorRules"
-                        ref="contributorForms"
-                        label-position="top"
+                            :model="contributorForm"
+                            :rules="contributorRules"
+                            ref="contributorForms"
+                            label-position="top"
                     >
                         <el-form-item label="Display Name" prop="display_name">
                             <el-input v-model="contributorForm.display_name" placeholder="Enter your Name"></el-input>
@@ -165,8 +170,8 @@ export default {
 
         const contributorForms = ref(null)
         const contributorForm = reactive({
-            display_name:'',
-            email:''
+            display_name: '',
+            email: ''
         })
 
         const contributorRules = reactive({
@@ -174,7 +179,7 @@ export default {
                 {required: true, message: 'Enter your Name', trigger: 'blur'}
             ],
             email: [
-                {type:'email', required: true, message: 'Enter a invalid email address', trigger: 'blur'}
+                {type: 'email', required: true, message: 'Enter a invalid email address', trigger: 'blur'}
             ],
         })
 
@@ -297,14 +302,14 @@ export default {
         function handleDelete(row) {
             console.log(row)
             let params = {
-                user_id:row.id
+                user_id: row.id
             }
-            USER_MENU_DELETE(params).then(res=>{
+            USER_MENU_DELETE(params).then(res => {
                 console.log(res)
-                if(res.code === 200){
+                if (res.code === 200) {
                     getAllAssignUsers()
                 }
-            }).catch(err=>{
+            }).catch(err => {
                 console.log(err)
                 if (err.msg) {
                     ElMessage({
@@ -330,12 +335,12 @@ export default {
 
         const addContributorsDialogVisible = ref(false)
 
-        const sendInvite = (formEl)=>{
-            formEl.validate((valid)=>{
-                if(valid){
+        const sendInvite = (formEl) => {
+            formEl.validate((valid) => {
+                if (valid) {
                     addContributorsDialogVisible.value = false;
 
-                    const loading =  ElLoading.service({
+                    const loading = ElLoading.service({
                         lock: true,
                         text: 'Loading',
                         background: 'rgba(255, 255, 255, 0.7)',
@@ -372,15 +377,15 @@ export default {
                             }
 
                             let menuIdData = []
-                            menuPermissionData.forEach(item=>{
+                            menuPermissionData.forEach(item => {
                                 menuIdData.push(item.id)
                             })
 
-                            let params  = Object.assign({
+                            let params = Object.assign({
                                 identity: identity,
                                 company_id: currentCompanyId,
                                 menu_id: menuIdData.join(',')
-                            },contributorForm)
+                            }, contributorForm)
 
                             USER_ADD_MENU(params).then(res => {
                                 console.log(res)
@@ -389,13 +394,13 @@ export default {
 
                                     let customHtml = ''
 
-                                    if(res.msg === 10012){
+                                    if (res.msg === 10012) {
                                         customHtml = '<div class="box-avatar"></div>' +
                                             '<div class="box-label">Invitation Sent!</div>' +
                                             '<div class="box-tips">Invite sent successfully. We’ll let you know when user joins.</div>'
                                     }
 
-                                    if(res.msg === 10011){
+                                    if (res.msg === 10011) {
                                         customHtml = '<div class="box-avatar-warn"></div>' +
                                             '<div class="box-label">Alert!</div>' +
                                             '<div class="box-tips">This user is already registered at EDU Passport. <br /> We’ve sent an invitation to his email for Contributor Access</div>'
@@ -404,13 +409,13 @@ export default {
                                     ElMessageBox.confirm(customHtml,
                                         '',
                                         {
-                                            customClass:'edu-msg-box',
-                                            cancelButtonClass:'box-cancel-button',
+                                            customClass: 'edu-msg-box',
+                                            cancelButtonClass: 'box-cancel-button',
                                             cancelButtonText: 'Close',
-                                            buttonSize:'large',
-                                            showConfirmButton:false,
+                                            buttonSize: 'large',
+                                            showConfirmButton: false,
                                             center: true,
-                                            dangerouslyUseHTMLString:true
+                                            dangerouslyUseHTMLString: true
                                         }
                                     )
                                         .then(() => {
@@ -441,16 +446,24 @@ export default {
                     })
 
 
-                }else{
+                } else {
                     console.log('error submit')
                 }
             })
         }
+
+        const resendForContributor = (row) => {
+            // console.log(row)
+            contributorForm.display_name = row.last_name
+            contributorForm.email = row.email
+            addContributorsDialogVisible.value = true;
+        }
+
         const createContributors = () => {
             addContributorsDialogVisible.value = true;
         }
 
-        const getAllAssignUsers = ()=> {
+        const getAllAssignUsers = () => {
             let params = {}
             ALL_ASSIGN_USERS(params).then(res => {
                 console.log(res)
@@ -481,7 +494,7 @@ export default {
             })
         }
 
-        onMounted(()=>{
+        onMounted(() => {
             getAllAssignUsers()
 
         })
@@ -502,7 +515,8 @@ export default {
             contributorForms,
             contributorForm,
             contributorRules,
-            sendInvite
+            sendInvite,
+            resendForContributor
         }
     }
 }
@@ -613,7 +627,7 @@ export default {
     color: #1D2939;
 }
 
-.contributor-tag{
+.contributor-tag {
     width: 58px;
     height: 22px;
     display: flex;
@@ -632,7 +646,7 @@ export default {
     border-radius: 22px;
 }
 
-.contributor-tag span{
+.contributor-tag span {
     display: block;
     margin-right: 2px;
     width: 4px;
@@ -641,11 +655,18 @@ export default {
     background-color: #12B76A;
 }
 
-.add-contributor-box{
-    padding:  0 25px 0 25px;
+.contributor-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.box-avatar-person{
+.add-contributor-box {
+    padding: 0 25px 0 25px;
+}
+
+.box-avatar-person {
     background-image: url("@/assets/newHome/add-contributor-person.svg");
     background-position: center;
     background-size: 100%;
@@ -654,7 +675,7 @@ export default {
     margin: 0 auto;
 }
 
-.box-label{
+.box-label {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
@@ -666,7 +687,7 @@ export default {
 
 }
 
-.box-tips{
+.box-tips {
     font-family: 'Inter';
     font-style: normal;
     width: 90%;
@@ -678,56 +699,62 @@ export default {
     margin-top: 12px;
 }
 
-.box-form{
+.box-form {
     margin-top: 30px;
 }
 
-.box-btns{
+.box-btns {
     margin-top: 40px;
-    width:100%;
+    width: 100%;
 }
 
-.box-btn{
+.box-btn {
     width: 100%;
 }
 
 @media screen and (max-width: 768px) {
 
-    .account-top-container{
+    .account-top-container {
         margin: 24px 24px 0 24px;
         flex-direction: column;
     }
-    .account-label span{font-size: 18px;}
 
-    .account-tips{padding-bottom: 10px}
-    .account-tips span{
+    .account-label span {
+        font-size: 18px;
+    }
+
+    .account-tips {
+        padding-bottom: 10px
+    }
+
+    .account-tips span {
         font-size: 14px;
     }
 
-    .account-top-r{
+    .account-top-r {
         width: 100%;
         text-align: right;
         margin-bottom: 24px;
     }
 
 
-    .account-form{
+    .account-form {
         margin: 24px;
     }
 
-    /deep/ .el-form-item{
+    /deep/ .el-form-item {
         flex-direction: column;
     }
 
-    .ctb-container{
+    .ctb-container {
         margin: 24px;
     }
 
-    .ctb-t span{
+    .ctb-t span {
         font-size: 16px;
     }
 
-    .delete-container{
+    .delete-container {
         margin: 0 24px 24px 24px;
     }
 }

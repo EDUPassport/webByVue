@@ -26,7 +26,8 @@ const store = createStore({
             currentCompanyId: companyId ? companyId : 0,
             imUnreadTotal:0,
             profilePercentage:profilePercentage,
-            axiosPromiseArr:[]
+            axiosPromiseArr:[],
+            userObjectData:[]
         }
     },
     getters:{
@@ -89,8 +90,8 @@ const store = createStore({
         },
         setAxiosPromiseArr(state, value) {
             state.axiosPromiseArr = value;
-
         },
+
 
     },
     actions:{

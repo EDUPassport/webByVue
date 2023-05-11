@@ -473,3 +473,11 @@ export const USER_CHANGE_PASSWORD = (params) => post('home/user/change/password'
 export const USER_QUESTION_SHOW = (params) => get('home/user/question/show', params)
 
 export const USER_QUESTION_READ = (params) => post('home/user/question/read', params)
+
+export const PRIVACY_CATEGORY_ADD = (params) => post('home/user/privacy/category/add', params)
+export const PRIVACY_CATEGORY_LIST = (params) => get('home/privacy/category/list', params)
+// 获取当前用户已经选中的privacy列表 API
+export const PRIVACY_USER_SELECTED_LIST = (params) => get('home/user/selected/privacy/list', params)
+export const EDUCATOR_VISIBLE_LIST = (params) => get('home/educator/visible/list', params)
+export const EDUCATOR_VISIBLE_EDIT = (params) => post('home/educator/edit/visible', params)
+export const EDUCATOR_VISIBLE_STATUS = (params) => get('home/educator/visible/status', params)
