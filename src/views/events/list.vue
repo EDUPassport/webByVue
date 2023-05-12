@@ -596,7 +596,7 @@ export default {
   }
 
   .events-item-t{
-    max-height: 180px;
+    max-height: 700px;
   }
 
   .events-item-banner{

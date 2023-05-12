@@ -39,7 +39,7 @@
             <div class="user-container">
               <template v-if="token && token !='' ">
 
-                <div class="user-earth-container">
+                <!-- <div class="user-earth-container">
 
                   <el-popover :width="200" >
 
@@ -64,7 +64,7 @@
                     </template>
                   </el-popover>
 
-                </div>
+                </div> -->
 
                 <div class="user-bell-container">
                   <el-popover :width="330">
