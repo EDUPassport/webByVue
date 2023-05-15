@@ -31,7 +31,7 @@
               <router-link to="/deals" exact> EDU DEALS</router-link>
               <router-link to="/events" exact> EDU EVENTS</router-link>
               <template v-if="envBlog === 'yes'">
-                <el-link :underline=false href="https://blog.edupassport.io/" target="_blank">EDU BLOGS</el-link>
+                <el-link :underline=false href="https://blog.edupassport.io/" target="_blank">EDU BLOG</el-link>
               </template>
 
             </div>
