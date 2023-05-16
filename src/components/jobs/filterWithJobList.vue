@@ -421,8 +421,10 @@ export default {
 
     },
     getUserObjectList() {
+      let pid= '4,3,111,117,184';
       let data = {
-        token: localStorage.getItem('token')
+        token: localStorage.getItem('token'),
+        pid:pid
       }
       USER_OBJECT_LIST(data).then(res => {
         if (res.code == 200) {

@@ -1,10 +1,12 @@
 <template>
-  <div>
-    <el-dialog :model-value="visible"
-               width="auto"
-               center
-               :show-close="false"
-               :before-close="beforeClose"
+  <div >
+    <el-dialog 
+      :model-value="visible"
+      append-to-body
+      center
+      :show-close="false"
+      :before-close="beforeClose"
+      style="background-color:#ffffff00"
     >
 
       <div class="dialog-container" >
@@ -143,9 +145,7 @@ export default {
 
 }
 </script>
-
 <style scoped>
-
 .dialog-container{
 
   background-color: #F0F2F5;

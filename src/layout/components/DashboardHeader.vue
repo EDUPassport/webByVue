@@ -31,7 +31,7 @@
               <router-link to="/deals" exact> EDU DEALS</router-link>
               <router-link to="/events" exact> EDU EVENTS</router-link>
               <template v-if="envBlog === 'yes'">
-                <el-link :underline=false href="https://blog.edupassport.io/" target="_blank">EDU BLOGS</el-link>
+                <el-link :underline=false href="https://blog.edupassport.io/" target="_blank">EDU BLOG</el-link>
               </template>
 
             </div>
@@ -39,7 +39,7 @@
             <div class="user-container">
               <template v-if="token && token !='' ">
 
-                <div class="user-earth-container">
+                <!-- <div class="user-earth-container">
 
                   <el-popover :width="200" >
 
@@ -64,7 +64,7 @@
                     </template>
                   </el-popover>
 
-                </div>
+                </div> -->
 
                 <div class="user-bell-container">
                   <el-popover :width="330">

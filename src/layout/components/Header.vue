@@ -91,7 +91,7 @@
 
                                     <div class="user-1-r">
                                         <div class="user-1-r-container">
-                                            <div class="user-container-1-earth">
+                                            <!-- <div class="user-container-1-earth">
 
                                                 <el-popover :width="160">
 
@@ -118,7 +118,7 @@
                                                     </template>
                                                 </el-popover>
 
-                                            </div>
+                                            </div> -->
 
                                             <div class="user-name">
                                                 Welcome back, {{ username }}

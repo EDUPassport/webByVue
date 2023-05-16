@@ -20,7 +20,7 @@
               Events
             </div>
             <div class="footer-menu-item" @click="turnBlogs()">
-              EDU Blogs
+              EDU Blog
             </div>
             <div class="footer-menu-item" @click="turnSupport()">
               EDU Support
