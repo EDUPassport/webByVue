@@ -71,7 +71,7 @@
 
                             <template v-else>
                               <el-select v-model="countryObj"
-                                         :teleported="false"
+                                         
                                          @change="countryChange"
                                          value-key="id"
                                          filterable
@@ -82,7 +82,7 @@
 
                               <template v-if="provinceOptions.length>0">
                                 <el-select v-model="provinceObj"
-                                           :teleported="false"
+                                           
                                            class="account-location-select"
                                            value-key="id"
                                            filterable
@@ -94,7 +94,7 @@
                               </template>
                               <template v-if="cityOptions.length>0">
                                 <el-select v-model="cityObj"
-                                           :teleported="false"
+                                           
                                            class="account-location-select"
                                            value-key="id"
                                            filterable
@@ -171,7 +171,7 @@
                         <div class="contact-phone-container">
                           <div class="contact-phone-l">
                             <!--                    @onChange="onDefaultChange"-->
-                            <el-select v-model="basicForm.country_code" :teleported="false" filterable class="m-2" placeholder="Select" >
+                            <el-select v-model="basicForm.country_code"  filterable class="m-2" placeholder="Select" >
                               <el-option
                                   v-for="item in phoneCodeData"
                                   :key="item.phone_code"
@@ -334,7 +334,7 @@
 
                         <el-select
                             v-model="selectSubjectList"
-                            :teleported="false"
+                            
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -360,7 +360,7 @@
 
                         <el-select
                             v-model="selectStudentAgeList"
-                            :teleported="false"
+                            
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -407,7 +407,7 @@
 <!--                        </el-input>-->
                         <el-select
                             v-model="selectedAvailableTechnologiesList"
-                            :teleported="false"
+                            
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -432,7 +432,7 @@
                       <el-form-item  label="Facilities">
                         <el-select
                             v-model="selectSchoolFacilitesList"
-                            :teleported="false"
+                            
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -457,7 +457,7 @@
                       <el-form-item  label="Tuition">
                         <el-input v-model="tuitionValue" oninput ="value=value.replace(/[^\d]/g,'')"  placeholder="amount per year">
                           <template #prepend>
-                            <el-select v-model="currencyValue" :teleported="false" placeholder="Currency" style="width: 115px">
+                            <el-select v-model="currencyValue"  placeholder="Currency" style="width: 115px">
                               <el-option :label="item.object_en" :value="item.id" v-for="(item,i) in currencyList" :key="i"/>
                             </el-select>
                           </template>

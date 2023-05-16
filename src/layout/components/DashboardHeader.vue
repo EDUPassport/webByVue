@@ -919,7 +919,7 @@ export default {
           }
           let str = encode(JSON.stringify(strObj))
 
-          this.$router.push({path: '/educator/edit/home', query: {s: str}})
+          this.$router.push({path: '/setting/profile/educator', query: {s: str}})
 
         }
 
@@ -931,7 +931,7 @@ export default {
             action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
-          this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
+          this.$router.push({path: '/setting/profile/recruiter', query: {s: str}})
 
         }
 
@@ -943,7 +943,7 @@ export default {
             action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
-          this.$router.push({path: '/business/edit/school', query: {s: str}})
+          this.$router.push({path: '/setting/profile/school', query: {s: str}})
         }
 
         if (identity == 4) {
@@ -955,7 +955,7 @@ export default {
             action: 'add'
           }
           let str = encode(JSON.stringify(strObj))
-          this.$router.push({path: '/business/edit/other', query: {s: str}})
+          this.$router.push({path: '/setting/profile/other', query: {s: str}})
 
         }
 
@@ -969,7 +969,7 @@ export default {
           }
 
           let str = encode(JSON.stringify(strObj))
-          this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
+          this.$router.push({path: '/setting/profile/vendor', query: {s: str}})
 
         }
 
@@ -991,7 +991,7 @@ export default {
           action: 'add'
         }
         let str = encode(JSON.stringify(strObj))
-        this.$router.push({path: '/educator/edit/home', query: {s: str}})
+        this.$router.push({path: '/setting/profile/educator', query: {s: str}})
 
       }
 
@@ -1003,7 +1003,7 @@ export default {
           action: 'add'
         }
         let str = encode(JSON.stringify(strObj))
-        this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
+        this.$router.push({path: '/setting/profile/recruiter', query: {s: str}})
 
         this.dialogBusinessAccountVisible = false
       }
@@ -1016,7 +1016,7 @@ export default {
           action: 'add'
         }
         let str = encode(JSON.stringify(strObj))
-        this.$router.push({path: '/business/edit/school', query: {s: str}})
+        this.$router.push({path: '/setting/profile/school', query: {s: str}})
 
         this.dialogBusinessAccountVisible = false
 
@@ -1032,7 +1032,7 @@ export default {
         }
         let str = encode(JSON.stringify(strObj))
 
-        this.$router.push({path: '/business/edit/other', query: {s: str}})
+        this.$router.push({path: '/setting/profile/other', query: {s: str}})
         this.dialogBusinessAccountVisible = false
 
       }
@@ -1047,7 +1047,7 @@ export default {
         }
 
         let str = encode(JSON.stringify(strObj))
-        this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
+        this.$router.push({path: '/setting/profile/vendor', query: {s: str}})
 
       }
 
@@ -1290,7 +1290,6 @@ export default {
       if (envName === 'developmentCN' || envName === 'productionCN') {
         window.open('https://news.esl-passport.cn/blogs', '_blank')
       }
-
 
     },
     loadUserUnreadMore() {

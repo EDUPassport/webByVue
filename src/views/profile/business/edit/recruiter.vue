@@ -74,7 +74,7 @@
 
                             <template v-else>
                               <el-select v-model="countryObj"
-                                         :teleported="false"
+                                         
                                          @change="countryChange"
                                          value-key="id"
                                          filterable
@@ -85,7 +85,7 @@
 
                               <template v-if="provinceOptions.length>0">
                                 <el-select v-model="provinceObj"
-                                           :teleported="false"
+                                           
                                            value-key="id"
                                            filterable
                                            class="account-location-select"
@@ -97,7 +97,7 @@
                               </template>
                               <template v-if="cityOptions.length>0">
                                 <el-select v-model="cityObj"
-                                           :teleported="false"
+                                           
                                            value-key="id"
                                            filterable
                                            class="account-location-select"
@@ -213,7 +213,7 @@
                           <div class="contact-phone-l">
                             <!--                    @onChange="onDefaultChange"-->
                             <el-select v-model="basicForm.country_code"
-                                       :teleported="false"
+                                       
                                        filterable class="m-2" placeholder="Select">
                               <el-option
                                   v-for="item in phoneCodeData"

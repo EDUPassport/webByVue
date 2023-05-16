@@ -34,8 +34,25 @@
                                 </div>
                             </div>
                             <div class="profile-top-r">
-                                <el-button type="info">Cancel</el-button>
-                                <el-button type="primary">Save & Continue</el-button>
+
+                                <template v-if="stepOneStatus">
+                                    <el-button icon="Edit" plain @click="editStepOne()">
+                                        Edit
+                                    </el-button>
+                                </template>
+                                <template v-else>
+                                    <el-button type="info"
+                                               @click="cancelStepOne()">
+                                        Cancel
+                                    </el-button>
+                                    <el-button type="primary"
+                                               :loading="stepOneLoadingStatus"
+                                               @click="saveStepOne(personalForms)">
+                                        Save & Continue
+                                    </el-button>
+
+                                </template>
+
                             </div>
 
                         </div>
@@ -49,20 +66,23 @@
                                     label-position="left"
                                     class="demo-ruleForm"
                             >
-                                <el-form-item label="Name">
+                                <el-form-item label="Name" prop="first_name">
                                     <div class="form-item-container">
                                         <el-input style="margin-right: 20px;"
+                                                  :disabled="stepOneStatus"
                                                   v-model="personalForm.first_name"
                                                   placeholder="Enter First Name">
                                         </el-input>
                                         <el-input v-model="personalForm.last_name"
+                                                  :disabled="stepOneStatus"
                                                   placeholder="Enter Second Name">
                                         </el-input>
                                     </div>
                                 </el-form-item>
-                                <el-form-item label="E-mail Address">
+                                <el-form-item label="E-mail Address" prop="email">
                                     <el-input class="form-width-388"
                                               v-model="personalForm.email"
+                                              :disabled="stepOneStatus"
                                               placeholder="Enter your E-mail">
                                     </el-input>
                                 </el-form-item>
@@ -70,9 +90,10 @@
                                 <el-form-item label="Nationality" prop="nationality">
                                     <el-select v-model="personalForm.nationality"
                                                class="form-width-388"
+                                               :disabled="stepOneStatus"
                                                filterable
                                                fit-input-width
-                                               :teleported="false"
+                                               
                                                placeholder="Enter your nationality">
                                         <el-option v-for="(item,i) in nationalityOptions"
                                                    :key="i"
@@ -83,7 +104,7 @@
                                 </el-form-item>
 
                                 <el-form-item label="Profile visibility">
-                                    <el-radio-group v-model="personalForm.is_visible">
+                                    <el-radio-group :disabled="stepOneStatus" v-model="personalForm.is_visible">
                                         <el-radio class="form-width-percent-100" :label="0">Private</el-radio>
                                         <el-radio class="form-width-percent-100" :label="1">Public</el-radio>
                                     </el-radio-group>
@@ -93,14 +114,16 @@
                                     <div class="form-item-container">
 
                                         <el-input v-model="personalForm.phone"
+                                                  :disabled="stepOneStatus"
                                                   class="form-width-388"
                                                   oninput="value=value.replace(/[^\d]/g,'')"
                                                   maxlength="15"
                                                   placeholder="Phone #">
                                             <template #prepend>
                                                 <el-select v-model="personalForm.phone_code"
+                                                           :disabled="stepOneStatus"
                                                            class="form-width-100"
-                                                           :teleported="false"
+                                                           
                                                            filterable
                                                            placeholder="Select">
                                                     <el-option
@@ -121,36 +144,30 @@
                                 </el-form-item>
 
                                 <el-form-item label="Job Seeking Status">
-                                    <el-radio-group v-model="jobSeekingValue">
+                                    <el-radio-group :disabled="stepOneStatus" v-model="personalForm.is_seeking">
                                         <template v-for="(item,i) in jobSeekingOptions" :key="i">
-                                            <el-radio class="form-width-percent-100" :label="item.id">{{
-                                                item.object_en
-                                                }}
+                                            <el-radio class="form-width-percent-100" :label="item.id">
+                                                {{ item.object_en }}
                                             </el-radio>
                                         </template>
                                     </el-radio-group>
                                 </el-form-item>
 
-                                <el-form-item label="About Yourself" prop="bio">
-                                    <el-input type="textarea"
-                                              class="form-width-388"
-                                              v-model="personalForm.bio"
-                                              :rows="6"
-                                              placeholder="A short bio">
-                                    </el-input>
-                                </el-form-item>
-
                                 <el-form-item label="Educator Type(Up to 3)">
 
-                                    <el-checkbox-group v-model="subCategoryValue" class="form-width-388" :min="1"
+                                    <el-checkbox-group :disabled="stepOneStatus"
+                                                       v-model="personalForm.sub_categories"
+                                                       class="form-width-388"
+                                                       :min="1"
                                                        :max="3">
                                         <template v-for="(item,i) in subCategoryOptions" :key="i">
 
-                                            <el-checkbox v-if="item['children'].length === 0" :label="item.id">
+                                            <el-checkbox v-if="item['children'].length === 0" :label="item">
                                                 {{ item.identity_name }}
                                             </el-checkbox>
 
-                                            <el-checkbox v-for="(child,key) in item['children']" :key="key">
+                                            <el-checkbox v-for="(child,key) in item['children']" :key="key"
+                                                         :label="item">
                                                 {{ child.identity_name }}
                                             </el-checkbox>
 
@@ -175,20 +192,23 @@
 
                                     <div class="profile-picture-r">
 
-                                        <el-avatar icon="UserFilled" :size="80"></el-avatar>
+                                        <el-avatar class="profile-avatar-img"
+                                                   :src="personalForm.profile_photo"></el-avatar>
 
                                         <el-upload
                                                 class="profile-picture-upload"
                                                 drag
-
+                                                action=""
+                                                :headers="uploadHeaders"
+                                                :show-file-list="false"
+                                                accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                :http-request="profilePhotoHttpRequest"
+                                                :before-upload="beforeProfilePhotoUpload"
+                                                :disabled="stepOneStatus"
                                         >
-                                            <el-icon class="el-icon--upload">
-                                                <upload-filled/>
-                                            </el-icon>
-                                            <div class="el-upload__text">
-                                                <em>Click to Upload</em> Or Drag your photo
-                                            </div>
-                                            <div class="el-upload__text">
+                                            <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
+                                            <div class="profile-upload-text">
+                                                <span>Click to Upload</span> Or Drag your photo <br>
                                                 SVG,PNG,JPEG OR GIF (400x400)
                                             </div>
 
@@ -238,11 +258,26 @@
                                 </div>
                             </div>
                             <div class="profile-top-r">
-                                <el-button type="info">Cancel</el-button>
-                                <el-button type="primary" @click="saveProfession(professionForms)">Save & Continue
-                                </el-button>
-                            </div>
 
+                                <template v-if="stepTwoStatus">
+                                    <el-button icon="Edit" plain @click="editStepTwo()">
+                                        Edit
+                                    </el-button>
+                                </template>
+                                <template v-else>
+                                    <el-button type="info"
+                                               @click="cancelStepTwo()">
+                                        Cancel
+                                    </el-button>
+                                    <el-button type="primary"
+                                               :loading="stepTwoLoadingStatus"
+                                               @click="saveStepTwo(professionForms)">
+                                        Save & Continue
+                                    </el-button>
+
+                                </template>
+
+                            </div>
                         </div>
 
                         <div class="profile-form">
@@ -257,31 +292,44 @@
                                 <el-form-item label="Job title" prop="job_title">
                                     <el-input
                                             class="form-width-388"
+                                            :disabled="stepTwoStatus"
                                             v-model="professionForm.job_title"
                                             placeholder="Enter Job title here"></el-input>
                                 </el-form-item>
-                                <el-form-item label="Qualification/Education Level" prop="job_title">
+                                <el-form-item label="Qualification/Education Level">
                                     <el-input
                                             class="form-width-388"
-                                            v-model="professionForm.job_title"
+                                            :disabled="stepTwoStatus"
+                                            v-model="professionForm.q_level"
                                             placeholder="Enter your Qualification"></el-input>
                                 </el-form-item>
-                                <el-form-item label="Professional Description" prop="job_title">
+                                <el-form-item label="Professional Description">
                                     <el-input
                                             class="form-width-388"
-                                            v-model="professionForm.job_title"
+                                            :disabled="stepTwoStatus"
+                                            v-model="professionForm.bio"
                                             type="textarea"
                                             :rows="6"
                                             placeholder="Description*">
                                     </el-input>
                                 </el-form-item>
 
-                                <el-form-item label="Work destination (Type to add new) ">
-
+                                <el-form-item label="Work destination ">
+                                    <template #label>
+                                        <div>
+                                            <div>
+                                                Work destination
+                                            </div>
+                                            <div class="profile-picture-tips">
+                                                (Type to add new)
+                                            </div>
+                                        </div>
+                                    </template>
                                     <el-select
                                             class="form-width-388"
                                             filterable
-                                            :teleported="false"
+                                            
+                                            :disabled="stepTwoStatus"
                                             v-model="workDestinationValue"
                                             multiple
                                             collapse-tags
@@ -305,8 +353,9 @@
                                     <el-select
                                             class="form-width-388"
                                             filterable
-                                            :teleported="false"
+                                            
                                             multiple
+                                            :disabled="stepTwoStatus"
                                             v-model="jobTypeValue"
                                             collapse-tags
                                             collapse-tags-tooltip
@@ -323,12 +372,39 @@
 
                                 </el-form-item>
 
+                                <el-form-item label="Interests">
+
+                                    <el-select
+                                            class="form-width-388"
+                                            v-model="interestsValue"
+                                            :disabled="stepTwoStatus"
+                                            
+                                            multiple
+                                            collapse-tags
+                                            collapse-tags-tooltip
+                                            placeholder="Select interests"
+                                            filterable
+                                            allow-create
+                                            value-key="id"
+                                    >
+                                        <el-option
+                                                v-for="(item,index) in interestsOptions"
+                                                :key="index"
+                                                :label="item"
+                                                :value="item"
+                                        />
+
+                                    </el-select>
+
+                                </el-form-item>
+
                                 <el-form-item label="Work schedule type">
 
                                     <el-select
                                             class="form-width-388"
+                                            :disabled="stepTwoStatus"
                                             v-model="workScheduleTypeValue"
-                                            :teleported="false"
+                                            
                                             filterable
                                             collapse-tags
                                             placeholder="Select work schedule type"
@@ -347,8 +423,9 @@
 
                                     <el-select
                                             class="form-width-388"
+                                            :disabled="stepTwoStatus"
                                             v-model="benefitsValue"
-                                            :teleported="false"
+                                            
                                             multiple
                                             collapse-tags
                                             collapse-tags-tooltip
@@ -372,7 +449,8 @@
 
                                     <el-select
                                             class="form-width-388"
-                                            :teleported="false"
+                                            
+                                            :disabled="stepTwoStatus"
                                             v-model="subjectValue"
                                             multiple
                                             collapse-tags
@@ -397,7 +475,8 @@
 
                                     <el-select
                                             class="form-width-388"
-                                            :teleported="false"
+                                            
+                                            :disabled="stepTwoStatus"
                                             v-model="ageToTeachValue"
                                             multiple
                                             collapse-tags
@@ -418,6 +497,44 @@
 
                                 </el-form-item>
 
+                                <el-form-item label="Languages & Proficiency">
+                                    <div>
+                                        <el-button type="primary"
+                                                   :disabled="stepTwoStatus"
+                                                   @click="addLanguageAndProficiency()"
+                                        >
+                                            Add Language
+                                            <el-icon>
+                                                <Plus></Plus>
+                                            </el-icon>
+                                        </el-button>
+                                    </div>
+
+                                    <div class="language-add-container">
+
+                                        <template v-if="selectedLanguageList.length > 0">
+                                            <div class="language-checkbox-item" v-for="(item,i) in selectedLanguageList"
+                                                 :key="i">
+                                                <div class="language-checkbox-item-l">
+                                                    {{ item.object_en }}
+                                                </div>
+                                                <div class="language-checkbox-item-r">
+                                                    {{ item.level_name }}
+                                                </div>
+
+                                                <div class="language-checkbox-item-delete">
+                                                    <el-button link @click="removeLanguageItem(i)">
+                                                        Remove
+                                                    </el-button>
+                                                </div>
+
+                                            </div>
+
+                                        </template>
+
+                                    </div>
+
+                                </el-form-item>
 
                             </el-form>
                         </div>
@@ -458,8 +575,23 @@
                                 </div>
                             </div>
                             <div class="profile-top-r">
-                                <el-button type="info">Cancel</el-button>
-                                <el-button type="primary" @click="savePastExp(pastExpForms)">Save & Continue</el-button>
+                                <template v-if="stepThreeStatus">
+                                    <el-button icon="Edit" plain @click="editStepThree()">
+                                        Edit
+                                    </el-button>
+                                </template>
+                                <template v-else>
+                                    <el-button type="info" @click="cancelStepThree()">
+                                        Cancel
+                                    </el-button>
+                                    <el-button type="primary"
+                                               :loading="stepThreeLoadingStatus"
+                                               @click="saveStepThree(pastExpForms)">
+                                        Save & Continue
+                                    </el-button>
+
+                                </template>
+
                             </div>
 
                         </div>
@@ -475,9 +607,10 @@
                             >
                                 <el-form-item label="Years of experience">
                                     <el-select v-model="teachExpValue"
+                                               :disabled="stepThreeStatus"
                                                class="form-width-388"
                                                filterable
-                                               :teleported="false"
+                                               
                                                placeholder="Years of Experience"
                                                value-key="id"
                                     >
@@ -493,8 +626,10 @@
                                     <el-select
                                             class="form-width-388"
                                             filterable
-                                            :teleported="false"
+                                            clearable
+                                            
                                             v-model="placesTraveledValue"
+                                            :disabled="stepThreeStatus"
                                             multiple
                                             collapse-tags
                                             collapse-tags-tooltip
@@ -515,8 +650,10 @@
                                     <el-select
                                             class="form-width-388"
                                             filterable
-                                            :teleported="false"
+                                            clearable
+                                            
                                             v-model="placesLivedValue"
+                                            :disabled="stepThreeStatus"
                                             multiple
                                             collapse-tags
                                             collapse-tags-tooltip
@@ -537,13 +674,13 @@
                                     <div class="work-experience">
                                         <el-button class="work-exp-temp-btn"
                                                    type="primary"
+                                                   :disabled="stepThreeStatus"
                                                    @click="showWorkExpDialog()">
                                             Add Past Experience
                                             <el-icon>
                                                 <Plus/>
                                             </el-icon>
                                         </el-button>
-
 
                                         <div class="work-exp-temp-container">
 
@@ -572,32 +709,27 @@
                                                 </div>
                                                 <div class="work-form-item">
                                                     <div class="work-form-item-l">Responsibilities</div>
-                                                    <div class="work-form-item-r">{{ item.teaching_experience }}
-                                                        ddddddddd ds fdsfds dsfds f sdfsdfdsfds
-                                                    </div>
+                                                    <div class="work-form-item-r">{{ item.teaching_experience }}</div>
                                                 </div>
 
                                                 <div class="work-exp-temp-btn-container">
                                                     <el-button plain
+                                                               :disabled="stepThreeStatus"
                                                                @click="deleteWorkExp(item)"
                                                     >
                                                         Delete
                                                     </el-button>
                                                     <el-button type="primary"
+                                                               :disabled="stepThreeStatus"
                                                                @click="editWorkExp(item)"
                                                     >
                                                         Edit
                                                     </el-button>
                                                 </div>
                                             </div>
-
                                         </div>
-
                                     </div>
-
-
                                 </el-form-item>
-
 
                             </el-form>
                         </div>
@@ -638,17 +770,30 @@
                                 </div>
                             </div>
                             <div class="profile-top-r">
-                                <el-button type="info">Cancel</el-button>
-                                <el-button type="primary">Save & Continue</el-button>
+                                <template v-if="stepFourStatus">
+                                    <el-button icon="Edit" plain @click="editStepFour()">
+                                        Edit
+                                    </el-button>
+                                </template>
+                                <template v-else>
+                                    <el-button type="info" @click="cancelStepFour()">
+                                        Cancel
+                                    </el-button>
+                                    <el-button type="primary"
+                                               :loading="stepFourLoadingStatus"
+                                               @click="saveStepFour(educationsForms)">
+                                        Save & Continue
+                                    </el-button>
+                                </template>
                             </div>
 
                         </div>
 
                         <div class="profile-form">
                             <el-form
-                                    ref="profileForms"
-                                    :model="profileForm"
-                                    :rules="profileRules"
+                                    ref="educationsForms"
+                                    :model="educationsForm"
+                                    :rules="educationsRules"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -656,77 +801,88 @@
                                 <el-form-item label="Certifications">
 
                                     <el-select
-                                        :teleported="false"
-                                        v-model="certificationsValue"
-                                        multiple
-                                        collapse-tags
-                                        collapse-tags-tooltip
-                                        placeholder="Select certifications"
-                                        filterable
-                                        allow-create
-                                        value-key="id"
+                                            
+                                            v-model="certificationsValue"
+                                            :disabled="stepFourStatus"
+                                            multiple
+                                            collapse-tags
+                                            collapse-tags-tooltip
+                                            placeholder="Select certifications"
+                                            filterable
+                                            allow-create
+                                            value-key="id"
                                     >
                                         <el-option
-                                            v-for="(item,index) in certificationsOptions"
-                                            :key="index"
-                                            :label="item.object_en"
-                                            :value="item"
+                                                v-for="(item,index) in certificationsOptions"
+                                                :key="index"
+                                                :label="item.object_en"
+                                                :value="item"
                                         />
 
                                     </el-select>
 
                                 </el-form-item>
 
-<!--                                <el-form-item>-->
-<!--                                    <div class="work-experience">-->
-<!--                                        <div class="work-exp-temp-container">-->
-<!--                                            <div class="work-exp-temp-container">-->
+                                <el-form-item label="Education">
+                                    <div class="work-experience">
 
-<!--                                                <div class="work-exp-temp-item"-->
-<!--                                                     v-for="(item,i) in educationData" :key="i">-->
+                                        <el-button class="work-exp-temp-btn"
+                                                   type="primary"
+                                                   :disabled="stepFourStatus"
+                                                   @click="showEducationDialog()">
+                                            Add Education
+                                            <el-icon>
+                                                <Plus></Plus>
+                                            </el-icon>
+                                        </el-button>
 
-<!--                                                    <el-form-item label="School" prop="school_name">-->
-<!--                                                        {{ item.school_name }}-->
-<!--                                                    </el-form-item>-->
-<!--                                                    <el-form-item label="Degree" prop="degree">-->
-<!--                                                        {{ item.degree }}-->
-<!--                                                    </el-form-item>-->
-<!--                                                    <el-form-item label="Field of Study">-->
-<!--                                                        {{ item.field_of_study }}-->
-<!--                                                    </el-form-item>-->
+                                        <div class="work-exp-temp-container">
 
-<!--                                                    <el-form-item label="Duration of Study" prop="date">-->
-<!--                                                        {{-->
-<!--                                                            $filters.ymdFormatTimestamp(item.start_time)-->
-<!--                                                        }}-{{ $filters.ymdFormatTimestamp(item.end_time) }}-->
-<!--                                                    </el-form-item>-->
+                                            <div class="work-exp-temp-item"
+                                                 v-for="(item,i) in educationData" :key="i">
 
-<!--                                                    <div class="work-exp-temp-btn-container">-->
-<!--                                                        <el-button class="work-exp-temp-btn" link type="primary"-->
-<!--                                                                   @click="deleteEducation(item)"-->
-<!--                                                        >-->
-<!--                                                            DELETE-->
-<!--                                                        </el-button>-->
-<!--                                                        <el-button class="work-exp-temp-btn" plain round-->
-<!--                                                                   @click="editEducation(item)"-->
-<!--                                                        >-->
-<!--                                                            EDIT-->
-<!--                                                        </el-button>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
+                                                <div class="work-form-item">
+                                                    <div class="work-form-item-l">School Name</div>
+                                                    <div class="work-form-item-r">{{ item.school_name }}</div>
+                                                </div>
+                                                <div class="work-form-item">
+                                                    <div class="work-form-item-l">Degree</div>
+                                                    <div class="work-form-item-r">{{ item.degree }}</div>
+                                                </div>
+                                                <div class="work-form-item">
+                                                    <div class="work-form-item-l">Field of Study</div>
+                                                    <div class="work-form-item-r">{{ item.field_of_study }}</div>
+                                                </div>
+                                                <div class="work-form-item">
+                                                    <div class="work-form-item-l">Duration of Study</div>
+                                                    <div class="work-form-item-r">
+                                                        {{
+                                                        $filters.ymdFormatTimestamp(item.start_time)
+                                                        }}-{{ $filters.ymdFormatTimestamp(item.end_time) }}
+                                                    </div>
+                                                </div>
 
-<!--                                            </div>-->
+                                                <div class="work-exp-temp-btn-container">
+                                                    <el-button plain
+                                                               :disabled="stepFourStatus"
+                                                               @click="deleteEducation(item)"
+                                                    >
+                                                        Delete
+                                                    </el-button>
+                                                    <el-button type="primary"
+                                                               :disabled="stepFourStatus"
+                                                               @click="editEducation(item)"
+                                                    >
+                                                        Edit
+                                                    </el-button>
+                                                </div>
+                                            </div>
 
-<!--                                        </div>-->
-<!--                                        <el-button class="work-exp-temp-btn"-->
-<!--                                                   plain-->
-<!--                                                   round-->
-<!--                                                   @click="showEducationDialog()">-->
-<!--                                            ADD EDUCATION-->
-<!--                                        </el-button>-->
-<!--                                    </div>-->
+                                        </div>
 
-<!--                                </el-form-item>-->
+                                    </div>
+
+                                </el-form-item>
 
                             </el-form>
                         </div>
@@ -767,21 +923,447 @@
                                 </div>
                             </div>
                             <div class="profile-top-r">
-                                <el-button type="info">Cancel</el-button>
-                                <el-button type="primary">Save & Continue</el-button>
+                                <template v-if="stepFiveStatus">
+                                    <el-button icon="Edit" plain @click="editStepFive()">
+                                        Edit
+                                    </el-button>
+                                </template>
+                                <template v-else>
+                                    <el-button type="info"
+                                               @click="cancelStepFive()">
+                                        Cancel
+                                    </el-button>
+                                    <el-button type="primary"
+                                               :loading="stepFiveLoadingStatus"
+                                               @click="saveStepFive(mediaForms)">
+                                        Save & Continue
+                                    </el-button>
+                                </template>
                             </div>
 
                         </div>
 
                         <div class="profile-form">
                             <el-form
-                                    ref="profileForms"
-                                    :model="profileForm"
-                                    :rules="profileRules"
+                                    ref="mediaForms"
+                                    :model="mediaForm"
+                                    :rules="mediaRules"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
                             >
+                                <el-form-item label="Background Image">
+                                    <template #label>
+                                        <div>
+                                            <div>
+                                                Background Image
+                                            </div>
+                                            <div class="profile-picture-tips">
+                                                Attach Image for background banner
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div class="profile-picture-r">
+
+                                        <template v-if="mediaForm.background_image && editBackgroundImageStatus">
+
+                                            <div class="attachment-xll">
+                                                <div class="attachment-xll-btns">
+                                                    <div class="attachment-xll-btn">
+                                                        <div class="attachment-xll-btn-l">
+                                                            <el-icon color="#667085">
+                                                                <IconIcomoonFreeAttachment/>
+                                                            </el-icon>
+                                                            {{ mediaForm.background_image_name }}
+                                                        </div>
+                                                        <div class="attachment-xll-btn-r">
+                                                            <el-icon class="attachment-xll-icon"
+                                                                     v-if="!stepFiveStatus"
+                                                                     @click="handleSingleImageRemove('background_image')"
+                                                                     color="#F97066">
+                                                                <Delete></Delete>
+                                                            </el-icon>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <template v-if="!stepFiveStatus">
+                                                        <div class="attachment-xll-btn-edit"
+                                                             @click="handleEditMedia('background_image')"
+                                                        >
+                                                            <el-icon class="attachment-xll-icon">
+                                                                <IconUilEdit/>
+                                                            </el-icon>
+                                                        </div>
+                                                        <div class="attachment-xll-btn-download"
+                                                             @click="handleDownloadMedia(mediaForm.background_image)"
+                                                        >
+                                                            <el-icon class="attachment-xll-icon">
+                                                                <IconUisDownloadAlt/>
+                                                            </el-icon>
+                                                        </div>
+                                                    </template>
+
+                                                </div>
+
+                                                <div class="attachment-xll-image">
+                                                    <el-image class="attachment-xll-img"
+                                                              :src="mediaForm.background_image"
+                                                              fit="cover"
+                                                    >
+                                                    </el-image>
+                                                    <div class="attachment-xll-image-mask" v-if="!stepFiveStatus">
+                                                        <el-icon
+                                                            style="cursor: pointer;"
+                                                            @click="handleSingleImagePreview(mediaForm.background_image,'background_image')"
+                                                            color="#ffffff"
+                                                            :size="20">
+                                                            <zoom-in/>
+                                                        </el-icon>
+
+                                                        <el-icon
+                                                            style="cursor: pointer;margin-left: 15px;"
+                                                            @click="handleSingleImageRemove('background_image')"
+                                                            color="#F97066"
+                                                            :size="20">
+                                                            <Delete/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </template>
+                                        <template v-else>
+                                            <el-upload
+                                                :disabled="stepFiveStatus"
+                                                action=""
+                                                :limit="1"
+                                                :headers="uploadHeaders"
+                                                :show-file-list="false"
+                                                accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                :http-request="backgroundHttpRequest"
+                                                :before-upload="beforeBackgroundPhotoUpload"
+                                            >
+
+                                                <template #trigger>
+                                                    <div class="attachment-btn">
+                                                        <span>Attach files</span>
+                                                        <el-icon color="#667085">
+                                                            <IconIcomoonFreeAttachment/>
+                                                        </el-icon>
+                                                    </div>
+                                                </template>
+
+                                            </el-upload>
+                                        </template>
+                                    </div>
+
+                                </el-form-item>
+
+                                <el-form-item label="Video">
+                                    <template #label>
+                                        <div>
+                                            <div>
+                                                Video
+                                            </div>
+                                            <div class="profile-picture-tips">
+                                                Attach Introduction video for your profile
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div class="profile-picture-r">
+
+                                        <template v-if="mediaForm.video_url && editVideoStatus">
+
+                                            <div class="attachment-xll">
+                                                <div class="attachment-xll-btns">
+                                                    <div class="attachment-xll-btn">
+                                                        <div class="attachment-xll-btn-l">
+                                                            <el-icon color="#667085">
+                                                                <IconIcomoonFreeAttachment/>
+                                                            </el-icon>
+                                                            {{ mediaForm.video_name }}
+                                                        </div>
+                                                        <div class="attachment-xll-btn-r">
+                                                            <el-icon class="attachment-xll-icon"
+                                                                     v-if="!stepFiveStatus"
+                                                                     @click="handleSingleImageRemove('video_url')"
+                                                                     color="#F97066">
+                                                                <Delete></Delete>
+                                                            </el-icon>
+                                                        </div>
+
+                                                    </div>
+                                                    <template v-if="!stepFiveStatus">
+                                                        <div class="attachment-xll-btn-edit"
+                                                             @click="handleEditMedia('video_url')"
+                                                        >
+                                                            <el-icon class="attachment-xll-icon">
+                                                                <IconUilEdit/>
+                                                            </el-icon>
+                                                        </div>
+                                                        <div class="attachment-xll-btn-download"
+                                                             @click="handleDownloadMedia(mediaForm.video_url)"
+                                                        >
+                                                            <el-icon class="attachment-xll-icon">
+                                                                <IconUisDownloadAlt/>
+                                                            </el-icon>
+                                                        </div>
+                                                    </template>
+
+                                                </div>
+
+                                                <div class="attachment-xll-image">
+                                                    <video class="attachment-xll-img"
+                                                           :src="mediaForm.video_url"
+                                                           controls
+                                                    >
+                                                    </video>
+                                                    <div class="attachment-xll-image-mask"  v-if="!stepFiveStatus">
+                                                        <el-icon
+                                                                style="cursor: pointer;"
+                                                                @click="handleSingleImagePreview(mediaForm.video_url,'video_url')"
+                                                                color="#ffffff"
+                                                                :size="20">
+                                                            <zoom-in/>
+                                                        </el-icon>
+
+                                                        <el-icon
+                                                                style="cursor: pointer;margin-left: 15px;"
+                                                                @click="handleSingleImageRemove('video_url')"
+                                                                color="#F97066"
+                                                                :size="20">
+                                                            <Delete/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </template>
+                                        <template v-else>
+                                            <el-upload
+                                                    action=""
+                                                    :disabled="stepFiveStatus"
+                                                    :limit="1"
+                                                    :headers="uploadHeaders"
+                                                    :show-file-list="false"
+                                                    accept=".mp4,.MP4"
+                                                    :http-request="videoHttpRequest"
+                                                    :before-upload="beforeIntroVideoUpload"
+                                            >
+
+                                                <template #trigger>
+                                                    <div class="attachment-btn">
+                                                        <span>Attach files</span>
+                                                        <el-icon color="#667085">
+                                                            <IconIcomoonFreeAttachment/>
+                                                        </el-icon>
+                                                    </div>
+                                                </template>
+
+                                            </el-upload>
+
+                                        </template>
+                                    </div>
+
+                                </el-form-item>
+
+                                <el-form-item label="Account Files">
+                                    <template #label>
+                                        <div>
+                                            <div>
+                                                Account Files
+                                            </div>
+                                            <div class="profile-picture-tips">
+                                                Attach your account files for your profile
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div style="flex-direction: column;" class="profile-picture-r">
+
+                                        <el-upload
+                                                action=""
+                                                :disabled="stepFiveStatus"
+                                                :multiple="true"
+                                                :auto-upload="false"
+                                                :show-file-list="false"
+                                                :limit="6"
+                                                :headers="uploadHeaders"
+                                                name="file[]"
+                                                accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                :before-upload="beforeAccountImageUpload"
+                                                :on-change="handleAccountImageChange"
+                                                :http-request="handleAccountFilesRequest"
+                                        >
+
+                                            <template #trigger>
+                                                <div class="attachment-btn">
+                                                    <span>Attach files</span>
+                                                    <el-icon color="#667085">
+                                                        <IconIcomoonFreeAttachment/>
+                                                    </el-icon>
+                                                </div>
+                                            </template>
+
+                                        </el-upload>
+
+                                        <div style="display: flex;flex-direction: column;margin-top: 20px;"
+                                             v-if="accountFilesData.length ">
+
+                                            <div class="attachment-xll"
+                                                 v-for="(item, i) in accountFilesData"
+                                                 :key="i"
+                                            >
+                                                <div class="attachment-xll-btns">
+                                                    <div class="attachment-xll-btn">
+                                                        <div class="attachment-xll-btn-l">
+                                                            <el-icon color="#667085">
+                                                                <IconIcomoonFreeAttachment/>
+                                                            </el-icon>
+                                                            {{ $filters.substringFromEnd(item.url, 10) }}
+                                                        </div>
+                                                        <div class="attachment-xll-btn-r">
+                                                            <el-icon class="attachment-xll-icon"
+                                                                     v-if="!stepFiveStatus"
+                                                                     @click="handleAccountImageRemove(item,i)"
+                                                                     color="#F97066">
+                                                                <Delete></Delete>
+                                                            </el-icon>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="attachment-xll-btn-download"
+                                                         v-if="!stepFiveStatus"
+                                                         @click="handleDownloadMedia(item.url)"
+                                                    >
+                                                        <el-icon class="attachment-xll-icon">
+                                                            <IconUisDownloadAlt/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                                <div class="attachment-xll-image">
+                                                    <el-image class="attachment-xll-img"
+                                                              :src="item.url"
+                                                              fit="cover"
+                                                    >
+                                                    </el-image>
+                                                    <div class="attachment-xll-image-mask"  v-if="!stepFiveStatus">
+                                                        <el-icon
+                                                                style="cursor: pointer;"
+                                                                @click="handleSingleImagePreview(item.url,'account_files')"
+                                                                color="#ffffff"
+                                                                :size="20">
+                                                            <zoom-in/>
+                                                        </el-icon>
+
+                                                        <el-icon
+                                                                style="cursor: pointer;margin-left: 15px;"
+                                                                @click="handleAccountImageRemove(item,i)"
+                                                                color="#F97066"
+                                                                :size="20">
+                                                            <Delete/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </el-form-item>
+
+                                <el-form-item label="Resume PDF">
+                                    <template #label>
+                                        <div>
+                                            <div>
+                                                Resume PDF
+                                            </div>
+                                            <div class="profile-picture-tips">
+                                                Attach Resume PDF for your profile
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div class="profile-picture-r">
+
+                                        <template v-if="mediaForm.resume_pdf && editResumeStatus">
+
+                                            <div class="attachment-xll">
+                                                <div class="attachment-xll-btns">
+                                                    <div class="attachment-xll-btn">
+                                                        <div class="attachment-xll-btn-l">
+                                                            <el-icon color="#667085">
+                                                                <IconIcomoonFreeAttachment/>
+                                                            </el-icon>
+                                                            {{ mediaForm.resume_name }}
+                                                        </div>
+                                                        <div class="attachment-xll-btn-r">
+                                                            <el-icon class="attachment-xll-icon"
+                                                                     v-if="!stepFiveStatus"
+                                                                     @click="handleSingleImageRemove('resume_pdf')"
+                                                                     color="#F97066">
+                                                                <Delete></Delete>
+                                                            </el-icon>
+                                                        </div>
+
+                                                    </div>
+                                                    <template  v-if="!stepFiveStatus">
+                                                        <div class="attachment-xll-btn-edit"
+                                                             @click="handleEditMedia('resume_pdf')"
+                                                        >
+                                                            <el-icon class="attachment-xll-icon">
+                                                                <IconUilEdit/>
+                                                            </el-icon>
+                                                        </div>
+                                                        <div class="attachment-xll-btn-download"
+                                                             @click="handleDownloadMedia(mediaForm.resume_pdf)"
+                                                        >
+                                                            <el-icon class="attachment-xll-icon">
+                                                                <IconUisDownloadAlt/>
+                                                            </el-icon>
+                                                        </div>
+                                                    </template>
+
+                                                </div>
+
+                                            </div>
+
+                                        </template>
+                                        <template v-else>
+                                            <el-upload
+                                                    action=""
+                                                    :disabled="stepFiveStatus"
+                                                    :limit="1"
+                                                    :headers="uploadHeaders"
+                                                    :show-file-list="false"
+                                                    accept=".pdf,.PDF"
+                                                    :http-request="resumePdfHttpRequest"
+                                                    :before-upload="beforeResumePdfUpload"
+                                            >
+
+                                                <template #trigger>
+                                                    <div class="attachment-btn">
+                                                        <span>Attach files</span>
+                                                        <el-icon color="#667085">
+                                                            <IconIcomoonFreeAttachment/>
+                                                        </el-icon>
+                                                    </div>
+                                                </template>
+
+                                            </el-upload>
+                                        </template>
+                                    </div>
+
+                                </el-form-item>
 
 
                             </el-form>
@@ -795,34 +1377,65 @@
         </el-scrollbar>
 
         <div class="delete-container">
-            <div class="delete-l">
-                <div class="delete-label">Delete Account</div>
-                <div class="delete-tips">
-                    By clicking on Delete Account Button your account will be removed permanently
-                </div>
-            </div>
-            <div class="delete-r">
-                <el-popconfirm
-                        width="310"
-                        :hide-icon="true"
-                        confirm-button-text="Yes"
-                        cancel-button-text="No"
-                        title="This action will remove your account permanently, Are your sure?"
-                        @confirm="confirmDelete"
-                >
-                    <template #reference>
-                        <el-button type="danger">Delete Account</el-button>
-                    </template>
-
-                </el-popconfirm>
-
-            </div>
-
+            <deleteAccountComponent></deleteAccountComponent>
         </div>
 
-        <verificationCodeDialog :visible="verificationVisible"
-                                @close="verificationVisible=false">
-        </verificationCodeDialog>
+        <el-dialog
+                v-model="languageDialogVisible"
+                title="Add Languages & Proficiency"
+                width="600px"
+                align-center
+        >
+            <el-form
+                    ref="languageForms"
+                    label-width="120px"
+                    :model="languageForm"
+                    :rules="languageRules"
+                    label-position="left"
+                    class="demo-ruleForm"
+            >
+                <el-form-item label="Language">
+                    <el-select
+                            class="form-width-388"
+                            v-model="languageValue"
+                            
+                            value-key="id">
+                        <el-option v-for="(item,i) in languageOptionsData" :key="i"
+                                   :label="item.object_en"
+                                   :value="item"
+
+                        >
+                        </el-option>
+                    </el-select>
+
+                </el-form-item>
+
+                <el-form-item class="work-form-item" label="Proficiency">
+                    <el-select
+                            class="form-width-388"
+                            v-model="languageLevelValue"
+                            
+                            value-key="value">
+                        <el-option
+                                v-for="(level,ii) in languageLevelOptionsData" :key="ii"
+                                :label="level.label"
+                                :value="level">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+            </el-form>
+
+            <div style="margin-top: 25px;text-align: right;">
+                <el-button plain @click="cancelLanguageItem()">
+                    Cancel
+                </el-button>
+                <el-button type="primary" @click="submitLanguageItem()">
+                    Save
+                </el-button>
+            </div>
+
+        </el-dialog>
 
         <el-dialog
                 v-model="workExpDialogVisible"
@@ -912,385 +1525,1964 @@
 
         </el-dialog>
 
-<!--        <el-dialog-->
-<!--            v-model="educationDialogVisible"-->
-<!--            title="Education"-->
-<!--            :width="educationDialogWidth"-->
-<!--        >-->
-<!--            <el-form-->
-<!--                ref="educationForm"-->
-<!--                :model="educationForm"-->
-<!--                :rules="educationRules"-->
-<!--                label-width="120px"-->
-<!--                label-position="top"-->
-<!--                class="demo-ruleForm"-->
-<!--            >-->
-<!--                <el-form-item label="School" prop="school_name">-->
-<!--                    <el-input v-model="educationForm.school_name" placeholder="Please enter the university name"></el-input>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="Degree" prop="degree">-->
-<!--                    <el-select v-model="educationDegreeObj"-->
-<!--                               :teleported="false"-->
-<!--                               value-key="id"-->
-<!--                               placeholder="Doctorate, Master's, Bachelor's, etc...">-->
-<!--                        <el-option v-for="(degree,i) in degreeOptionsData" :key="i"-->
-<!--                                   :label="degree.object_en"-->
-<!--                                   :value="degree"-->
-<!--                        ></el-option>-->
-<!--                    </el-select>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="Field of Study">-->
-<!--                    <el-input v-model="educationForm.field_of_study" type="textarea"-->
-<!--                              placeholder="Chemistry, International Business, Dance, etc..."></el-input>-->
-<!--                </el-form-item>-->
+        <el-dialog
+                v-model="educationDialogVisible"
+                title="Education"
+                :width="educationDialogWidth"
+        >
+            <el-form
+                    ref="educationForms"
+                    :model="educationForm"
+                    :rules="educationRules"
+                    label-width="120px"
+                    label-position="top"
+                    class="demo-ruleForm"
+            >
+                <el-form-item label="School" prop="school_name">
+                    <el-input v-model="educationForm.school_name"
+                              placeholder="Please enter the university name"></el-input>
+                </el-form-item>
+                <el-form-item label="Degree" prop="degree">
+                    <el-select v-model="educationDegreeObj"
+                               
+                               value-key="id"
+                               placeholder="Doctorate, Master's, Bachelor's, etc...">
+                        <el-option v-for="(degree,i) in degreeOptions" :key="i"
+                                   :label="degree.object_en"
+                                   :value="degree"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="Field of Study">
+                    <el-input v-model="educationForm.field_of_study" type="textarea"
+                              placeholder="Chemistry, International Business, Dance, etc..."></el-input>
+                </el-form-item>
 
-<!--                <el-form-item label="Duration of Study" prop="date">-->
-<!--                    <div class="duration-mobile-container">-->
-<!--                        <div class="duration-mobile-item">-->
-<!--                            <el-date-picker-->
-<!--                                v-model="educationForm.start_time"-->
-<!--                                type="month"-->
-<!--                                unlink-panels-->
-<!--                                format="MM/YYYY"-->
-<!--                                value-format="x"-->
-<!--                                placeholder="Start month"-->
-<!--                                :disabled-date="birthdayDisabledDate"-->
+                <el-form-item label="Duration of Study" prop="date">
+                    <div class="duration-mobile-container">
+                        <div class="duration-mobile-item">
+                            <el-date-picker
+                                    v-model="educationForm.start_time"
+                                    type="month"
+                                    unlink-panels
+                                    format="MM/YYYY"
+                                    value-format="x"
+                                    placeholder="Start month"
+                                    :disabled-date="birthdayDisabledDate"
 
-<!--                            ></el-date-picker>-->
-<!--                        </div>-->
-<!--                        <div class="duration-mobile-item-to">-->
-<!--                            <span>To</span>-->
-<!--                        </div>-->
-<!--                        <div class="duration-mobile-item">-->
-<!--                            <el-date-picker-->
-<!--                                v-model="educationForm.end_time"-->
-<!--                                type="month"-->
-<!--                                unlink-panels-->
-<!--                                format="MM/YYYY"-->
-<!--                                value-format="x"-->
-<!--                                placeholder="End month"-->
-<!--                                :disabled-date="birthdayDisabledDate"-->
+                            ></el-date-picker>
+                        </div>
+                        <div class="duration-mobile-item-to">
+                            <span>To</span>
+                        </div>
+                        <div class="duration-mobile-item">
+                            <el-date-picker
+                                    v-model="educationForm.end_time"
+                                    type="month"
+                                    unlink-panels
+                                    format="MM/YYYY"
+                                    value-format="x"
+                                    placeholder="End month"
+                                    :disabled-date="birthdayDisabledDate"
 
-<!--                            ></el-date-picker>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                            ></el-date-picker>
+                        </div>
+                    </div>
 
-<!--                </el-form-item>-->
+                </el-form-item>
 
-<!--            </el-form>-->
+            </el-form>
 
-<!--            <div class="work-exp-btn-container">-->
-<!--                <el-button type="primary"-->
-<!--                           link-->
-<!--                           @click="educationDialogVisible=false"-->
-<!--                >-->
-<!--                    CANCEL-->
-<!--                </el-button>-->
-<!--                <el-button type="primary"-->
-<!--                           round-->
-<!--                           :loading="submitEducationLoadingValue"-->
-<!--                           @click="saveEducationTemp()">-->
-<!--                    SAVE-->
-<!--                </el-button>-->
-<!--            </div>-->
+            <div class="work-exp-btn-container">
+                <el-button type="primary"
+                           link
+                           @click="educationDialogVisible=false"
+                >
+                    CANCEL
+                </el-button>
+                <el-button type="primary"
+                           round
+                           :loading="submitEducationLoadingValue"
+                           @click="saveEducationTemp(educationForms)">
+                    SAVE
+                </el-button>
+            </div>
 
-<!--        </el-dialog>-->
+        </el-dialog>
 
+        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
+            <template v-if="dialogSingleField === 'background_image'">
+                <el-image :src="dialogSingleImageUrl"></el-image>
+            </template>
+            <template v-if="dialogSingleField === 'video_url' ">
+                <video :src="dialogSingleImageUrl" controls></video>
+            </template>
 
+        </el-dialog>
+        <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUploadProfile()"></xllLoading>
 
     </div>
 </template>
 
-<script>
-
-import verificationCodeDialog from "@/components/verificationCodeDialog.vue";
+<script setup>
+import ImageCompressor from "compressorjs";
+import uploadIcon from '@/assets/newHome/profile/upload-icon.svg'
+import defaultAvatarIcon from '@/assets/newHome/profile/default-avatar.svg'
+import deleteAccountComponent from "@/components/deleteAccountComponent.vue";
 import {ref, reactive, onMounted} from 'vue'
 import {useStore} from 'vuex'
+import {useRoute } from 'vue-router'
 import arrowDownIcon from '@/assets/newHome/arrow-circle-down.svg'
 import arrowUpIcon from '@/assets/newHome/arrow-circle-up.svg'
 import {countriesData} from "@/utils/data";
 import {phoneCodeData} from "@/utils/phoneCode";
 import {
+    ADD_LANGUAGE_SCORE_V2,
     ADD_PROFILE_V2,
-    ADD_USER_WORK_V2,
-    EDUCATOR_DELETE_WORK_ITEM, USER_INFO_BY_TOKEN_V2,
+    ADD_USER_EDUCATION_V2,
+    ADD_USER_IMG_V2,
+    ADD_USER_WORK_V2, ALL_LANGUAGE_PROFICIENCY, EDUCATOR_CONTACT_EDIT_V2,
+    EDUCATOR_DELETE_EDUCATION_ITEM,
+    EDUCATOR_DELETE_WORK_ITEM, SWITCH_IDENTITY_V2,
+    UPLOAD_BY_ALI_OSS,
+    UPLOAD_BY_SERVICE,
+    UPLOAD_BY_SERVICE_MORE,
+    USER_CONTACT_EDIT_V2,
+    USER_INFO_BY_TOKEN_V2,
     USER_OBJECT_LIST,
     USER_SUB_IDENTITY_V2
 } from "@/api/api";
-import VueCookies from 'vue-cookies'
 import {updateWindowHeight} from "@/utils/tools";
+import localStorageService from "@/utils/localStorageService";
+import xllLoading from "@/components/xllLoading.vue";
+import {ElMessage} from 'element-plus'
+import {decode} from 'js-base64'
 
-export default {
-    name: "educator",
-    components: {
-        verificationCodeDialog
-    },
-    data() {
-        return {
-            arrowDownIcon,
-            arrowUpIcon
+const store = useStore()
+const route = useRoute()
+
+const companyId = ref(store.state.currentCompanyId)
+
+const expandKeysData = ref([2, 3, 4, 5])
+
+const addExpandKeys = (value) => {
+    let index = expandKeysData.value.indexOf(value)
+    if (index === -1) {
+        expandKeysData.value.push(value)
+    } else {
+        expandKeysData.value.splice(index, 1)
+    }
+
+}
+
+const personalForms = ref(null)
+const personalForm = reactive({
+    name: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    nationality: '',
+    is_seeking: 0,
+    is_public: 0,
+    is_visible: 0,
+    phone_code: '+1',
+    phone: '',
+    address: '',
+    sub_categories: [],
+    sub_identity_id: '',
+    sub_identity_name_cn: '',
+    sub_identity_name_en: '',
+    profile_photo: defaultAvatarIcon
+})
+
+const personalRules = reactive({
+    first_name: [
+        {required: true, message: 'Enter First Name', trigger: 'blur'}
+    ],
+    last_name: [
+        {required: true, message: 'Enter Second Name', trigger: 'blur'}
+    ],
+    email: [
+        {type: 'email', required: false, message: 'Enter your E-mail', trigger: 'blur'}
+    ]
+})
+
+const professionForms = ref(null)
+const professionForm = reactive({
+    job_title: '',
+    q_level: '',
+    bio: '',
+    hobbies: ''
+})
+
+const professionRules = reactive({
+    job_title: [
+        {required: true, message: 'Enter Job title here', trigger: 'blur'}
+    ]
+})
+
+const pastExpForms = ref(null)
+const pastExpForm = reactive({})
+const pastExpRules = reactive({})
+
+const educationsForms = ref(null)
+const educationsForm = reactive({})
+const educationsRules = reactive({})
+
+const educationForms = ref(null)
+const educationForm = reactive({
+    school_name: '',
+    degree: '',
+    degree_id: '',
+    field_of_study: '',
+    start_time: '',
+    end_time: '',
+    grade: '',
+})
+
+const educationRules = reactive({
+    school_name: [
+        {
+            required: true,
+            message: 'Please enter the university name',
+            trigger: 'blur',
         }
-    },
-    setup() {
+    ],
+    degree_id: [
+        {
+            required: false,
+            message: "Doctorate, Master's, Bachelor's, etc...",
+            trigger: 'blur',
+        },
+    ],
+    date: [
+        {
+            required: true,
+            validator: (rule, value, callback) => {
+                let startTime = educationForm.start_time;
+                let endTime = educationForm.end_time;
 
-        const store = useStore()
-
-        const companyId = store.state.currentCompanyId
-
-        const expandKeysData = ref([])
-
-        const addExpandKeys = (value) => {
-            let index = expandKeysData.value.indexOf(value)
-            if (index === -1) {
-                expandKeysData.value.push(value)
-            } else {
-                expandKeysData.value.splice(index, 1)
-            }
-
-        }
-
-        const personalForms = ref(null)
-        const personalForm = reactive({
-            name: '',
-            resume_pdf: '',
-            video_url: '',
-            country_code: '+86',
-            phone: '',
-            educator_email: '',
-            address: '',
-            bio: '',
-            is_seeking: 0,
-            is_public: 0,
-            job_title: '',
-            sub_identity_id: '',
-            sub_identity_name_cn: '',
-            sub_identity_name_en: '',
-            hobbies: '',
-            nationality: '',
-            background_image: '',
-            profile_photo: '',
-            logo: '',
-            min_monthly_salary: '',
-            min_hourly_salary: ''
-
-        })
-
-        const personalRules = reactive({
-            email_code: [
-                {required: true, message: 'Please fill out your code.', trigger: 'blur'}
-            ],
-            email: [
-                {type: 'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
-            ],
-            password: [
-                {required: true, message: 'Please enter your password', trigger: 'blur'}
-            ],
-            confirm_password: [
-                {required: true, message: 'Please enter your password again', trigger: 'blur'}
-            ]
-        })
-
-        const professionForms = ref(null)
-        const professionForm = reactive({})
-
-        const professionRules = reactive({
-            email_code: [
-                {required: true, message: 'Please fill out your code.', trigger: 'blur'}
-            ],
-            email: [
-                {type: 'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
-            ],
-        })
-
-        const pastExpForms = ref(null)
-        const pastExpForm = reactive({})
-
-        const pastExpRules = reactive({
-            email_code: [
-                {required: true, message: 'Please fill out your code.', trigger: 'blur'}
-            ],
-            email: [
-                {type: 'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
-            ],
-        })
-
-
-        const profileForms = ref(null)
-        const profileForm = reactive({
-            password: '',
-            confirm_password: '',
-            current_password: ''
-        })
-
-        const profileRules = reactive({
-            email_code: [
-                {required: true, message: 'Please fill out your code.', trigger: 'blur'}
-            ],
-            email: [
-                {type: 'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
-            ],
-            password: [
-                {required: true, message: 'Please enter your password', trigger: 'blur'}
-            ],
-            confirm_password: [
-                {required: true, message: 'Please enter your password again', trigger: 'blur'}
-            ]
-        })
-
-        const nationalityOptions = ref(countriesData)
-        const phoneCodeOptions = ref(phoneCodeData)
-
-        const jobSeekingOptions = ref([])
-        const jobSeekingValue = ref()
-
-        const workDestinationValue = ref()
-        const workDestinationOptions = ref([])
-
-        const jobTypeValue = ref()
-        const jobTypeOptions = ref([])
-
-        const workScheduleTypeValue = ref()
-        const workScheduleTypeOptions = ref([])
-
-        const benefitsValue = ref()
-        const benefitsOptions = ref([])
-
-        const subjectValue = ref()
-        const subjectOptions = ref([])
-
-        const ageToTeachValue = ref()
-        const ageToTeachOptions = ref([])
-
-        const teachExpValue = ref()
-        const teachExpOptions = ref([])
-
-        const placesTraveledValue = ref()
-        const placesTraveledOptions = ref([])
-
-        const placesLivedValue = ref()
-        const placesLivedOptions = ref([])
-
-        const certificationsValue = ref()
-        const certificationsOptions = ref([])
-
-        const loadUserObjectData = async () => {
-
-            if (VueCookies.isKey('jobSeeking') && VueCookies.isKey('workDestination') &&
-                VueCookies.isKey('workScheduleType') && VueCookies.isKey('jobType')
-                && VueCookies.isKey('benefits') && VueCookies.isKey('subject') && VueCookies.isKey('ageToTeach'
-                    && VueCookies.isKey('teachExp') && VueCookies.isKey('placesTraveled') && VueCookies.isKey('placesLived')
-                )
-            ) {
-                jobSeekingOptions.value = JSON.parse(VueCookies.get('jobSeeking'))
-                workDestinationOptions.value = JSON.parse(VueCookies.get('workDestination'))
-                workScheduleTypeOptions.value = JSON.parse(VueCookies.get('workScheduleType'))
-                jobTypeOptions.value = JSON.parse(VueCookies.get('jobType'))
-                benefitsOptions.value = JSON.parse(VueCookies.get('benefits'))
-                subjectOptions.value = JSON.parse(VueCookies.get('subject'))
-                ageToTeachOptions.value = JSON.parse(VueCookies.get('ageToTeach'))
-                teachExpOptions.value = JSON.parse(VueCookies.get('teachExp'))
-                placesTraveledOptions.value = JSON.parse(VueCookies.get('placesTraveled'))
-                placesLivedOptions.value = JSON.parse(VueCookies.get('placesLived'))
-                return;
-            }
-
-            await USER_OBJECT_LIST({}).then(res => {
-                // console.log(res)
-                if (res.code == 200) {
-
-                    let jobSeekingArr = res.message.filter(item => item.pid === 199);
-                    jobSeekingOptions.value = jobSeekingArr
-                    if (!VueCookies.isKey('jobSeeking')) {
-                        VueCookies.set('jobSeeking', JSON.stringify(jobSeekingArr), 60 * 60 * 60)
-                    }
-
-                    let workDestinationArr = res.message.filter(item => item.pid === 155)  // 71 155
-                    workDestinationOptions.value = workDestinationArr
-                    if (!VueCookies.isKey('workDestination')) {
-                        VueCookies.set('workDestination', JSON.stringify(workDestinationArr), 60 * 60 * 60)
-                    }
-
-                    let jobTypeArr = res.message.filter(item => item.pid === 3);
-                    jobTypeOptions.value = jobTypeArr
-                    if (!VueCookies.isKey('jobType')) {
-                        VueCookies.set('jobType', JSON.stringify(jobTypeArr), 60 * 60 * 60)
-                    }
-
-                    let workScheduleTypeArr = res.message.filter(item => item.pid === 184);
-                    workScheduleTypeOptions.value = workScheduleTypeArr
-                    if (!VueCookies.isKey('workScheduleType')) {
-                        VueCookies.set('workScheduleType', JSON.stringify(workScheduleTypeArr), 60 * 60 * 60)
-                    }
-
-                    let benefitsArr = res.message.filter(item => item.pid === 6);
-                    benefitsOptions.value = benefitsArr
-                    if (!VueCookies.isKey('benefits')) {
-                        VueCookies.set('benefits', JSON.stringify(benefitsArr), 60 * 60 * 60)
-                    }
-
-                    let subjectArr = res.message.filter(item => item.pid === 1)
-                    subjectOptions.value = subjectArr
-                    if (!VueCookies.isKey('subject')) {
-                        VueCookies.set('subject', JSON.stringify(subjectArr), 60 * 60 * 60)
-                    }
-
-                    let ageToTeachArr = res.message.filter(item => item.pid === 4);
-                    ageToTeachOptions.value = ageToTeachArr
-                    if (!VueCookies.isKey('ageToTeach')) {
-                        VueCookies.set('ageToTeach', JSON.stringify(ageToTeachArr), 60 * 60 * 60)
-                    }
-
-                    let teachExpArr = res.message.filter(item => item.pid === 120)
-                    teachExpOptions.value = teachExpArr
-                    if (!VueCookies.isKey('teachExp')) {
-                        VueCookies.set('teachExp', JSON.stringify(teachExpArr), 60 * 60 * 60)
-                    }
-
-                    // 原来是8 现在使用nationality的值 pid 203
-                    let placesTraveledArr = res.message.filter(item => item.pid === 8);
-                    placesTraveledOptions.value = placesTraveledArr
-                    if (!VueCookies.isKey('placesTraveled')) {
-                        VueCookies.set('placesTraveled', JSON.stringify(placesTraveledArr), 60 * 60 * 60)
-                    }
-                    // 原来是9 现在使用nationality的值 pid 203
-                    let placesLivedArr = res.message.filter(item => item.pid === 9);
-                    placesLivedOptions.value = placesLivedArr
-                    if (!VueCookies.isKey('placesLived')) {
-                        VueCookies.set('placesLived', JSON.stringify(placesLivedArr), 60 * 60 * 60)
-                    }
-
-                    // this.editRegionList = res.message.filter(item => item.pid === 5);
-
-                    // this.editCertificationsList = res.message.filter(item => item.pid === 7);
-                    //
-
-                    // // 原来是71 现在使用nationality的值 pid 203
-                    // this.editLocationList = res.message.filter(item => item.pid === 71)  // 71 155
-                    // // 原来是155 现在使用nationality的值 pid 203
-
-                    // this.profileStatusData = res.message.filter(item => item.pid === 195);
-
-                    // this.degreeOptionsData = res.message.filter(item => item.pid === 125);
-                    // this.languageOptionsData = res.message.filter(item => item.pid === 2);
-
+                if (!startTime) {
+                    return callback(new Error('Please select start month'))
                 }
 
+                if (!endTime) {
+                    return callback(new Error('Please select end month'))
+                }
+                if (endTime <= startTime) {
+                    return callback(new Error('End month is less than start month'))
+                }
+
+                callback()
+
+            },
+            trigger: 'change',
+        },
+    ]
+
+})
+
+const mediaForms = ref(null)
+const mediaForm = reactive({
+    background_image_name: '',
+    background_image: '',
+    video_name: '',
+    video_url: '',
+    resume_name: '',
+    resume_pdf: ''
+})
+
+const mediaRules = reactive({
+    email_code: [
+        {required: true, message: 'Please fill out your code.', trigger: 'blur'}
+    ],
+    email: [
+        {type: 'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
+    ],
+    password: [
+        {required: true, message: 'Please enter your password', trigger: 'blur'}
+    ],
+    confirm_password: [
+        {required: true, message: 'Please enter your password again', trigger: 'blur'}
+    ]
+})
+
+const nationalityOptions = ref(countriesData)
+const phoneCodeOptions = ref(phoneCodeData)
+
+const jobSeekingOptions = ref([])
+// const jobSeekingValue = ref()
+
+const workDestinationValue = ref([])
+const workDestinationOptions = ref([])
+
+const jobTypeValue = ref([])
+const jobTypeOptions = ref([])
+
+const interestsValue = ref([])
+const interestsOptions = ref(['Fitness', 'Photography', 'Travel'])
+
+const workScheduleTypeValue = ref(0)
+const workScheduleTypeOptions = ref([])
+
+const benefitsValue = ref([])
+const benefitsOptions = ref([])
+
+const subjectValue = ref([])
+const subjectOptions = ref([])
+
+const ageToTeachValue = ref([])
+const ageToTeachOptions = ref([])
+
+const selectedLanguageList = ref([])
+const languageDialogVisible = ref(false)
+const languageOptionsData = ref([])
+const languageValue = ref('')
+const languageLevelOptionsData = ref([])
+const languageLevelValue = ref('')
+const languageForms = ref(null)
+const languageForm = reactive({})
+const languageRules = reactive({})
+
+const removeLanguageItem = (i) => {
+    selectedLanguageList.value.splice(i, 1)
+}
+
+const addLanguageAndProficiency = () => {
+    getAllLanguageProficiencyList()
+    languageDialogVisible.value = true
+}
+const cancelLanguageItem = () => {
+    languageDialogVisible.value = false
+}
+const submitLanguageItem = () => {
+
+    if (languageValue.value && languageLevelValue.value) {
+
+        let aa = selectedLanguageList.value.filter(item => item.id === languageValue.value.id)
+
+        // 说明存在
+        if (aa.length > 0) {
+
+            if (aa[0].level === languageLevelValue.value) {
+                return ElMessage.warning('language and proficiency already added')
+            } else {
+                aa[0]['level'] = languageLevelValue.value.value
+                aa[0]['level_name'] = languageLevelValue.value.label
+            }
+
+        } else {
+            languageValue.value.level = languageLevelValue.value.value
+            languageValue.value.level_name = languageLevelValue.value.label
+
+            selectedLanguageList.value.push(languageValue.value)
+        }
+
+        languageDialogVisible.value = false;
+    }
+
+
+}
+const getAllLanguageProficiencyList = async () => {
+    let data = {}
+
+    await ALL_LANGUAGE_PROFICIENCY(data).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            languageLevelOptionsData.value = res.message
+        }
+
+    }).catch(err => {
+        console.log(err)
+        ElMessage.error(err.msg)
+    })
+}
+
+const languageConfirm = () => {
+    let sLanguageData = selectedLanguageList.value
+    let sData = []
+    sLanguageData.forEach(item => {
+        let obj = {
+            object_id: item.id,
+            score: item.level ? item.level : 0,
+            object_name: item.object_en,
+            object_pid: item.pid
+        }
+        sData.push(obj)
+    })
+
+    let params = {
+        company_id: companyId.value,
+        object_arr: sData
+    }
+
+    ADD_LANGUAGE_SCORE_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            console.log('language confirm -------------')
+        }
+    }).catch(err => {
+        console.log(err)
+        ElMessage.error(err.msg)
+    })
+
+}
+
+const teachExpValue = ref()
+const teachExpOptions = ref([])
+
+const placesTraveledValue = ref([])
+const placesTraveledOptions = ref([])
+
+const placesLivedValue = ref([])
+const placesLivedOptions = ref([])
+
+const certificationsValue = ref([])
+const certificationsOptions = ref([])
+
+const degreeOptions = ref([])
+const loadUserObjectData = async () => {
+
+    if (localStorageService.getItem('jobSeeking') && localStorageService.getItem('workDestination') &&
+        localStorageService.getItem('workScheduleType') && localStorageService.getItem('jobType')
+        && localStorageService.getItem('benefits') && localStorageService.getItem('subject') &&
+        localStorageService.getItem('ageToTeach')
+        && localStorageService.getItem('teachExp') && localStorageService.getItem('placesTraveled')
+        && localStorageService.getItem('placesLived') && localStorageService.getItem('certifications')
+        && localStorageService.getItem('degree') && localStorageService.getItem('languages')
+
+    ) {
+        jobSeekingOptions.value = JSON.parse(localStorageService.getItem('jobSeeking'))
+        workDestinationOptions.value = JSON.parse(localStorageService.getItem('workDestination'))
+        workScheduleTypeOptions.value = JSON.parse(localStorageService.getItem('workScheduleType'))
+        jobTypeOptions.value = JSON.parse(localStorageService.getItem('jobType'))
+        benefitsOptions.value = JSON.parse(localStorageService.getItem('benefits'))
+        subjectOptions.value = JSON.parse(localStorageService.getItem('subject'))
+        ageToTeachOptions.value = JSON.parse(localStorageService.getItem('ageToTeach'))
+        teachExpOptions.value = JSON.parse(localStorageService.getItem('teachExp'))
+        placesTraveledOptions.value = JSON.parse(localStorageService.getItem('placesTraveled'))
+        placesLivedOptions.value = JSON.parse(localStorageService.getItem('placesLived'))
+        certificationsOptions.value = JSON.parse(localStorageService.getItem('certifications'))
+        degreeOptions.value = JSON.parse(localStorageService.getItem('degree'))
+        languageOptionsData.value = JSON.parse(localStorageService.getItem('languages'))
+        return;
+    }
+
+    await USER_OBJECT_LIST({}).then(res => {
+        // console.log(res)
+        if (res.code == 200) {
+
+            let jobSeekingArr = res.message.filter(item => item.pid === 199);
+            jobSeekingOptions.value = jobSeekingArr
+            if (!localStorageService.getItem('jobSeeking')) {
+                localStorageService.setItem('jobSeeking', JSON.stringify(jobSeekingArr), 60)
+            }
+
+            let workDestinationArr = res.message.filter(item => item.pid === 155)  // 71 155
+            workDestinationOptions.value = workDestinationArr
+            if (!localStorageService.getItem('workDestination')) {
+                localStorageService.setItem('workDestination', JSON.stringify(workDestinationArr), 60)
+            }
+
+            let jobTypeArr = res.message.filter(item => item.pid === 3);
+            jobTypeOptions.value = jobTypeArr
+            if (!localStorageService.getItem('jobType')) {
+                localStorageService.setItem('jobType', JSON.stringify(jobTypeArr), 60)
+            }
+
+            let workScheduleTypeArr = res.message.filter(item => item.pid === 184);
+            workScheduleTypeOptions.value = workScheduleTypeArr
+            if (!localStorageService.getItem('workScheduleType')) {
+                localStorageService.setItem('workScheduleType', JSON.stringify(workScheduleTypeArr), 60)
+            }
+
+            let benefitsArr = res.message.filter(item => item.pid === 6);
+            benefitsOptions.value = benefitsArr
+            if (!localStorageService.getItem('benefits')) {
+                localStorageService.setItem('benefits', JSON.stringify(benefitsArr), 60)
+            }
+
+            let subjectArr = res.message.filter(item => item.pid === 1)
+            subjectOptions.value = subjectArr
+            if (!localStorageService.getItem('subject')) {
+                localStorageService.setItem('subject', JSON.stringify(subjectArr), 60)
+            }
+
+            let ageToTeachArr = res.message.filter(item => item.pid === 4);
+            ageToTeachOptions.value = ageToTeachArr
+            if (!localStorageService.getItem('ageToTeach')) {
+                localStorageService.setItem('ageToTeach', JSON.stringify(ageToTeachArr), 60)
+            }
+
+            let teachExpArr = res.message.filter(item => item.pid === 120)
+            teachExpOptions.value = teachExpArr
+            if (!localStorageService.getItem('teachExp')) {
+                localStorageService.setItem('teachExp', JSON.stringify(teachExpArr), 60)
+            }
+
+            // 原来是8 现在使用nationality的值 pid 203
+            let placesTraveledArr = res.message.filter(item => item.pid === 8);
+            placesTraveledOptions.value = placesTraveledArr
+            if (!localStorageService.getItem('placesTraveled')) {
+                localStorageService.setItem('placesTraveled', JSON.stringify(placesTraveledArr), 60)
+            }
+            // 原来是9 现在使用nationality的值 pid 203
+            let placesLivedArr = res.message.filter(item => item.pid === 9);
+            placesLivedOptions.value = placesLivedArr
+            if (!localStorageService.getItem('placesLived')) {
+                localStorageService.setItem('placesLived', JSON.stringify(placesLivedArr), 60)
+            }
+
+            let certificationsArr = res.message.filter(item => item.pid === 7);
+            certificationsOptions.value = certificationsArr
+            if (!localStorageService.getItem('certifications')) {
+                localStorageService.setItem('certifications', JSON.stringify(certificationsArr), 60)
+            }
+
+            let degreeArr = res.message.filter(item => item.pid === 125);
+            degreeOptions.value = degreeArr
+            if (!localStorageService.getItem('degree')) {
+                localStorageService.setItem('degree', JSON.stringify(degreeArr), 60)
+            }
+
+            let languageArr = res.message.filter(item => item.pid === 2);
+            languageOptionsData.value = languageArr
+            if (!localStorageService.getItem('languages')) {
+                localStorageService.setItem('languages', JSON.stringify(languageArr), 60)
+            }
+
+            // this.editRegionList = res.message.filter(item => item.pid === 5);
+
+            // // 原来是71 现在使用nationality的值 pid 203
+            // this.editLocationList = res.message.filter(item => item.pid === 71)  // 71 155
+            // // 原来是155 现在使用nationality的值 pid 203
+
+            // this.profileStatusData = res.message.filter(item => item.pid === 195);
+
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const jobTypeConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+
+    jobTypeValue.value.forEach(item => {
+        objectArr.push(item.id);
+    })
+
+    let data = {
+        object_pid: 3,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('job type--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const workScheduleTypeConfirm = () => {
+
+    let expand = [];
+    let objectArr = [workScheduleTypeValue.value];
+
+    let data = {
+        object_pid: 184,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('Work Schedule Type--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const workDestinationConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+
+    workDestinationValue.value.forEach(item => {
+        objectArr.push(item.id);
+    })
+
+    let data = {
+        object_pid: 155,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('work destination--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const ageToTeachConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+
+    ageToTeachValue.value.forEach(item => {
+
+        if (typeof item === 'string') {
+            expand.push(item)
+        } else {
+            objectArr.push(item.id);
+        }
+
+    })
+
+    let data = {
+        object_pid: 4,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('age to teach--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const benefitsConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+    benefitsValue.value.forEach(item => {
+
+        if (typeof item === 'string') {
+            expand.push(item);
+        } else {
+            objectArr.push(item.id);
+        }
+
+    })
+
+    let data = {
+        object_pid: 6,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('benefits--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const subjectConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+    subjectValue.value.forEach(item => {
+
+        if (typeof item === 'string') {
+            expand.push(item)
+        } else {
+            objectArr.push(item.id);
+        }
+    })
+
+    let data = {
+        object_pid: 1,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('subject--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const teachExpConfirm = () => {
+
+    let expand = [];
+    let objectArr = [teachExpValue.value];
+
+    let data = {
+        object_pid: 120,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('years of experience success -------')
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const placesTraveledConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+    placesTraveledValue.value.forEach(item => {
+        objectArr.push(item.id);
+    })
+
+    let data = {
+        object_pid: 8,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('place traveled --submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const placesLivedConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+    placesLivedValue.value.forEach(item => {
+        objectArr.push(item.id);
+    })
+
+    let data = {
+        object_pid: 9,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('place lived --submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const certificationsConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+
+    certificationsValue.value.forEach(item => {
+
+        if (typeof item === 'string') {
+            expand.push(item)
+        } else {
+
+            objectArr.push(item.id);
+        }
+
+    })
+
+    let data = {
+        object_pid: 7,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('certifications--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const workExpData = ref([])
+// const workExpTempData = ref([])
+// const editWorkExpIndex = ref(-1)
+const editExistWorkExpStatus = ref(false)
+
+const workExpDialogVisible = ref(false)
+const submitWorkExpLoadingValue = ref(false)
+const workExpDialogWidth = ref('600px')
+
+const workExpForms = ref(null)
+const workExpForm = reactive({
+    company_name: '',
+    title: '',
+    location: '',
+    teaching_times: '',
+    teaching_experience: '',
+    work_time_from: '',
+    work_time_to: '',
+    date: ''
+})
+
+const workExpRules = reactive({
+    title: [
+        {
+            required: true,
+            message: 'Please enter your job title',
+            trigger: 'blur',
+        }
+    ],
+    company_name: [
+        {
+            required: true,
+            message: "Please enter your company name",
+            trigger: 'blur',
+        },
+    ],
+    date: [
+        {
+            required: true,
+            validator: (rule, value, callback) => {
+                let workTimeFrom = workExpForm.work_time_from;
+                let workTimeTo = workExpForm.work_time_to;
+
+                if (!workTimeFrom) {
+                    return callback(new Error('Please select start date'))
+                }
+
+                if (!workTimeTo) {
+                    return callback(new Error('Please select end date'))
+                }
+                if (workTimeTo <= workTimeFrom) {
+                    return callback(new Error('End date is less than start date'))
+                }
+
+                callback()
+
+            },
+            trigger: 'change',
+        },
+    ]
+
+})
+
+const showWorkExpDialog = () => {
+    workExpDialogVisible.value = true;
+}
+
+const saveWorkExpTemp = (formEl) => {
+    submitWorkExpForm(formEl)
+}
+
+const getBasicInfo = async () => {
+
+    let params = {
+        identity: 1
+    }
+
+    await USER_INFO_BY_TOKEN_V2(params).then(res => {
+
+        if (res.code == 200) {
+            let userContact = res.message.user_contact;
+            let educatorContact = res.message.user_contact.educator_contact;
+
+            // step one form 第一部分
+            personalForm.first_name = userContact.first_name
+            personalForm.last_name = userContact.last_name
+
+            personalForm.email = educatorContact.email
+            personalForm.nationality = educatorContact.nationality
+            personalForm.is_visible = educatorContact.is_visible
+
+            if (educatorContact.phone) {
+                let phone = educatorContact.phone;
+                let phoneArr = phone.split('#')
+                // console.log(phoneArr)
+                if (phoneArr.length > 1) {
+                    personalForm.phone_code = phoneArr[0]
+                    personalForm.phone = phoneArr[1]
+                } else {
+                    personalForm.phone = phoneArr[0]
+                }
+            }
+
+            personalForm.is_seeking = educatorContact.is_seeking
+
+            personalForm.sub_categories = []
+            let subIdentityStr = educatorContact.sub_identity_id
+            if (subIdentityStr) {
+                if (subIdentityStr.length > 1) {
+                    let subIdentityArr = subIdentityStr.split(',')
+                    let subData = []
+                    subIdentityArr.forEach(item => {
+                        let cateValue = subCategoryOptions.value.filter(value => value.id == item)
+                        subData.push(cateValue[0])
+                    })
+                    personalForm.sub_categories = subData
+                }
+            }
+
+            if (userContact.headimgurl) {
+                personalForm.profile_photo = userContact.headimgurl
+            }
+
+            if (educatorContact.job_title) {
+                professionForm.job_title = educatorContact.job_title;
+            }
+            if (educatorContact.bio) {
+                professionForm.bio = educatorContact.bio
+            }
+
+            workDestinationValue.value = []
+            if (educatorContact.Prefered_Work_Destination) {
+                let objArr = educatorContact.Prefered_Work_Destination;
+                let obj = {}
+                objArr.forEach((item) => {
+                    obj = {
+                        id: item.object_id,
+                        pid: item.object_pid,
+                        object_en: item.object_en,
+                        object_cn: item.object_cn
+                    }
+                    workDestinationValue.value.push(obj)
+                })
+            }
+
+            jobTypeValue.value = []
+            if (educatorContact.job_type) {
+                let objArr = educatorContact.job_type;
+                let obj = {}
+                objArr.forEach((item) => {
+                    obj = {
+                        id: item.object_id,
+                        pid: item.object_pid,
+                        object_en: item.object_en,
+                        object_cn: item.object_cn
+                    }
+                    jobTypeValue.value.push(obj)
+                })
+            }
+
+            if (educatorContact.hobbies) {
+                professionForm.hobbies = educatorContact.hobbies;
+                interestsValue.value = educatorContact.hobbies.split(',');
+            }
+
+            if (educatorContact.Prefered_Work_Schedule_Type) {
+                let objArr = educatorContact.Prefered_Work_Schedule_Type;
+                objArr.forEach((item) => {
+                    workScheduleTypeValue.value = item.object_id
+                })
+            }
+
+            benefitsValue.value = []
+            if (educatorContact.benefits) {
+                let benefitsArr = educatorContact.benefits;
+                benefitsArr.forEach((item) => {
+                    if (item.object_id == 0) {
+                        benefitsValue.value.push(item.object_en)
+                    } else {
+                        let obj = {
+                            id: item.object_id,
+                            pid: item.object_pid,
+                            object_en: item.object_en,
+                            object_cn: item.object_cn
+                        }
+                        benefitsValue.value.push(obj)
+                    }
+                })
+            }
+
+            subjectValue.value = []
+            if (educatorContact.subject) {
+                let subjectArr = educatorContact.subject
+                let obj = {}
+                subjectArr.forEach((item) => {
+                    if (item.object_id == 0) {
+                        subjectValue.value.push(item.object_en)
+                    } else {
+                        obj = {
+                            id: item.object_id,
+                            pid: item.object_pid,
+                            object_en: item.object_en,
+                            object_cn: item.object_cn
+                        }
+                    }
+                    subjectValue.value.push(obj)
+                })
+            }
+
+            ageToTeachValue.value = []
+            if (educatorContact.age_to_teach) {
+                let ageToTeachArr = educatorContact.age_to_teach;
+                ageToTeachArr.forEach((item) => {
+                    if (item.object_id == 0) {
+                        ageToTeachValue.value.push(item.object_en)
+                    } else {
+                        let obj = {
+                            id: item.object_id,
+                            pid: item.object_pid,
+                            object_en: item.object_en,
+                            object_cn: item.object_cn
+                        }
+                        ageToTeachValue.value.push(obj)
+                    }
+                })
+
+            }
+
+
+            let languagesArr = educatorContact.languages
+            if (languagesArr && languagesArr.length) {
+
+                let languagesOptions = languageOptionsData.value
+
+                let a = []
+                languagesArr.forEach(item => {
+
+                    let b = languagesOptions.filter(option => item.object_id == option.id)
+
+                    if (item.object_score) {
+                        b[0]['level'] = item.object_score;
+                        if (item.object_score == 1) {
+                            b[0]['level_name'] = 'Native';
+                        }
+                        if (item.object_score == 2) {
+                            b[0]['level_name'] = 'Fluent';
+                        }
+                        if (item.object_score == 3) {
+                            b[0]['level_name'] = 'Conversational';
+                        }
+                        if (item.object_score == 4) {
+                            b[0]['level_name'] = 'Beginner';
+                        }
+
+                    }
+
+                    a = a.concat(b)
+
+                })
+
+                selectedLanguageList.value = a
+            }
+
+            certificationsValue.value = []
+            if (educatorContact.Teaching_certificate) {
+                let certificationArr = educatorContact.Teaching_certificate;
+                certificationArr.forEach((item) => {
+                    if (item.object_id == 0) {
+                        certificationsValue.value.push(item.object_en)
+                    } else {
+                        let obj = {
+                            id: item.object_id,
+                            pid: item.object_pid,
+                            object_en: item.object_en,
+                            object_cn: item.object_cn
+                        }
+                        certificationsValue.value.push(obj)
+                    }
+                })
+            }
+
+            if (educatorContact.work_info) {
+                workExpData.value = educatorContact.work_info
+            }
+
+            if (educatorContact.education_info) {
+                educationData.value = educatorContact.education_info;
+            }
+
+            if (educatorContact.Teaching_experience) {
+                let expArr = educatorContact.Teaching_experience
+                expArr.forEach((item) => {
+                    teachExpValue.value = item.object_id;
+                })
+            }
+
+            placesLivedValue.value = []
+            if (educatorContact.places_lived) {
+                let livedArr = educatorContact.places_lived;
+                let obj = {}
+                livedArr.forEach((item) => {
+                    obj = {
+                        id: item.object_id,
+                        pid: item.object_pid,
+                        object_en: item.object_en,
+                        object_cn: item.object_cn
+                    }
+                    placesLivedValue.value.push(obj)
+                })
+            }
+
+            placesTraveledValue.value = []
+            if (educatorContact.places_traveled) {
+                let travelArr = educatorContact.places_traveled;
+                let obj = {}
+                travelArr.forEach((item) => {
+                    obj = {
+                        id: item.object_id,
+                        pid: item.object_pid,
+                        object_en: item.object_en,
+                        object_cn: item.object_cn
+                    }
+                    placesTraveledValue.value.push(obj)
+                })
+            }
+
+            let backgroundImage = educatorContact.background_image
+            if (backgroundImage) {
+                mediaForm.background_image = backgroundImage
+                mediaForm.background_image_name = backgroundImage.substring(backgroundImage.length - 10)
+            }
+
+            let videoUrl = educatorContact.video_url
+            if(videoUrl){
+                mediaForm.video_url = videoUrl
+                mediaForm.video_name = videoUrl.substring(videoUrl.length - 10)
+            }
+
+            if (educatorContact.images) {
+
+                let userImages = educatorContact.images
+                if (userImages.length > 0) {
+                    let userImagesArr = []
+                    userImages.forEach(item => {
+                        let userImageObj = {
+                            name:  item.url.substring(item.url.length - 10),
+                            url: item.url
+                        }
+                        userImagesArr.push(userImageObj)
+                    })
+                    accountFilesData.value = []
+                    accountFilesData.value = userImagesArr
+                }
+
+            }
+
+            let resume = educatorContact.resume_pdf
+            if(resume){
+                mediaForm.resume_pdf = resume
+                mediaForm.resume_name = resume.substring(resume.length - 10)
+            }
+
+            // if (educatorContact.Job_Seeking_Status) {
+            //     let objArr = educatorContact.Job_Seeking_Status;
+            //     objArr.forEach((item) => {
+            //         this.selectedJobSeekingValue = item.object_id;
+            //     })
+            // }
+            //
+            // if (educatorContact.Profile_Status) {
+            //     let objArr = educatorContact.Profile_Status;
+            //     objArr.forEach((item) => {
+            //         this.selectedProfileStatusValue = item.object_id;
+            //     })
+            // }
+
+            //
+            // if (educatorContact.desc) {
+            //     this.basicForm.desc = educatorContact.desc
+            // }
+            //
+
+            // if (educatorContact.address) {
+            //     this.basicForm.address = educatorContact.address
+            // }
+
+            //
+            // if (educatorContact.Location) {
+            //     let locationArr = educatorContact.Location;
+            //
+            //     locationArr.forEach((item) => {
+            //
+            //         if (item.object_id == 0) {
+            //
+            //             this.selectLocationList.push(item.object_en)
+            //
+            //         } else {
+            //             let obj = {
+            //                 id: item.object_id,
+            //                 pid: item.object_pid,
+            //                 object_en: item.object_en,
+            //                 object_cn: item.object_cn
+            //             }
+            //             this.selectLocationList.push(obj)
+            //
+            //         }
+            //
+            //     })
+            //
+            // }
+
+            // if (educatorContact.region) {
+            //
+            //     let regionArr = educatorContact.region;
+            //
+            //     regionArr.forEach((item) => {
+            //
+            //         if (item.object_id == 0) {
+            //             this.selectRegionList.push(item.object_en)
+            //         } else {
+            //             let obj = {
+            //                 id: item.object_id,
+            //                 pid: item.object_pid,
+            //                 object_en: item.object_en,
+            //                 object_cn: item.object_cn
+            //             }
+            //             this.selectRegionList.push(obj)
+            //         }
+            //
+            //     })
+            // }
+
+            // this.initProfileLoadingStatus = false;
+
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const deleteWorkExp = (item) => {
+
+    let params = {
+        id: item.id
+    }
+
+    EDUCATOR_DELETE_WORK_ITEM(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            getBasicInfo()
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+const editWorkExp = (item) => {
+
+    workExpForm.company_name = item.company_name
+    workExpForm.title = item.title
+    workExpForm.location = item.location
+    workExpForm.teaching_times = item.teaching_times
+    workExpForm.teaching_experience = item.teaching_experience
+
+    workExpForm.date = item.date
+
+    let workTimeFrom = item.work_time_from
+    let workTimeTo = item.work_time_to
+
+    // this.workExpForm.date = [workTimeFrom * 1000, workTimeTo * 1000]
+
+    workExpForm.work_time_from = workTimeFrom * 1000;
+    workExpForm.work_time_to = workTimeTo * 1000;
+    workExpForm.work_id = item.id
+
+    editExistWorkExpStatus.value = true
+    workExpDialogVisible.value = true
+
+}
+
+const submitWorkExpForm = (formEl) => {
+    formEl.validate((valid) => {
+        if (valid) {
+            workExpForm.work_time_from = Math.floor(workExpForm.work_time_from / 1000)
+            workExpForm.work_time_to = Math.floor(workExpForm.work_time_to / 1000)
+            let params = Object.assign({}, workExpForm)
+            ADD_USER_WORK_V2(params).then(res => {
+                // console.log(res)
+                if (res.code == 200) {
+                    editExistWorkExpStatus.value = false;
+                    workExpDialogVisible.value = false;
+                    getBasicInfo()
+                }
             }).catch(err => {
                 console.log(err)
             })
+        } else {
+            console.log('error submit!!')
+        }
+    })
+}
 
+const educationDialogVisible = ref(false)
+const submitEducationLoadingValue = ref(false)
+const educationData = ref([])
+const editExistEducationStatus = ref(false)
+const educationDegreeObj = ref({})
+const showEducationDialog = () => {
+
+    educationForm.school_name = ''
+    educationForm.degree = ''
+    educationForm.degree_id = ''
+    educationForm.field_of_study = ''
+    educationForm.start_time = ''
+    educationForm.end_time = ''
+    educationForm.grade = ''
+
+    educationDegreeObj.value = {}
+    educationDialogVisible.value = true;
+}
+
+const saveEducationTemp = (formEl) => {
+    submitEducationForm(formEl)
+}
+
+const deleteEducation = (item) => {
+
+    let params = {
+        id: item.id
+    }
+
+    EDUCATOR_DELETE_EDUCATION_ITEM(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            getBasicInfo()
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const editEducation = (item) => {
+
+    if (item.degree && item.degree_id) {
+        educationDegreeObj.value = {
+            id: item.degree_id,
+            object_en: item.degree
+        }
+    }
+
+    educationForm.school_name = item.school_name
+    educationForm.degree = item.degree
+    educationForm.degree_id = item.degree_id
+    educationForm.field_of_study = item.field_of_study
+
+    educationForm.grade = item.grade
+
+    let startTime = item.start_time
+    let endTime = item.end_time
+    // this.educationForm.date = [startTime * 1000, endTime * 1000]
+
+    educationForm.start_time = startTime * 1000;
+    educationForm.end_time = endTime * 1000;
+    educationForm.education_id = item.id;
+    editExistEducationStatus.value = true;
+    educationDialogVisible.value = true;
+}
+
+const submitEducationForm = (formEl) => {
+
+    formEl.validate((valid) => {
+        if (valid) {
+
+            educationForm.start_time = Math.floor(educationForm.start_time / 1000)
+            educationForm.end_time = Math.floor(educationForm.end_time / 1000)
+
+            educationForm.degree = educationDegreeObj.value.object_en;
+            educationForm.degree_id = educationDegreeObj.value.id;
+
+            let params = Object.assign({}, educationForm)
+            ADD_USER_EDUCATION_V2(params).then(res => {
+                console.log(res)
+                if (res.code == 200) {
+                    editExistEducationStatus.value = false;
+                    educationDialogVisible.value = false;
+                    getBasicInfo()
+                }
+            }).catch(err => {
+                console.log(err)
+
+            })
+        } else {
+            console.log('error submit!!')
+            return false
+        }
+    })
+
+}
+
+const subCategoryOptions = ref([])
+
+const loadSubCategoryData = async () => {
+
+    let params = {
+        pid: 1,
+        tree: 1
+    }
+
+    await USER_SUB_IDENTITY_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            subCategoryOptions.value = res.message
         }
 
-        const saveProfession = (formEl) => {
-            formEl.validate((valid) => {
-                if (valid) {
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const birthdayDisabledDate = (date) => {
+    let myDate = new Date();
+    return date.getTime() >= myDate.getTime();
+}
+
+const educationDialogWidth = ref('454px')
+
+const uploadLoadingStatus = ref(false)
+const uploadHeaders = {
+    platform: 4
+}
+
+const profilePhotoHttpRequest = (options) => {
+    uploadLoadingStatus.value = true;
+    // console.log(options)
+    new ImageCompressor(options.file, {
+        quality: 0.6,
+        success(file) {
+            // console.log(file)
+            const formData = new FormData();
+
+            formData.append('token', localStorage.getItem('token'))
+            // console.log(file)
+            let isInChina = process.env.VUE_APP_CHINA
+            if (isInChina === 'yes') {
+                formData.append('file[]', file, file.name)
+                UPLOAD_BY_ALI_OSS(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.data[0]['file_url'];
+                        personalForm.profile_photo = myFileUrl
+                        uploadLoadingStatus.value = false;
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
+
+            if (isInChina === 'no') {
+                formData.append('file', file, file.name)
+                UPLOAD_BY_SERVICE(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.message.file_path;
+                        personalForm.profile_photo = myFileUrl
+                        uploadLoadingStatus.value = false;
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
+
+        },
+        error(err) {
+            console.log(err.message)
+        }
+
+    })
+
+}
+
+const beforeProfilePhotoUpload = (file) => {
+    uploadLoadingStatus.value = true;
+    const isLt2M = file.size / 1024 / 1024 < 20
+
+    if (!isLt2M) {
+        ElMessage.error('Avatar picture size can not exceed 20MB')
+    }
+    return isLt2M
+}
+
+
+const backgroundHttpRequest = (options) => {
+
+    // console.log(options)
+    new ImageCompressor(options.file, {
+        quality: 0.6,
+        success(file) {
+            // console.log(file)
+            const formData = new FormData();
+
+            formData.append('token', localStorage.getItem('token'))
+            // console.log(file)
+            let isInChina = process.env.VUE_APP_CHINA
+            if (isInChina === 'yes') {
+                formData.append('file[]', file, file.name)
+                UPLOAD_BY_ALI_OSS(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.data[0]['file_url'];
+                        uploadLoadingStatus.value = false;
+                        mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
+                        mediaForm.background_image = myFileUrl
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+
+            }
+
+            if (isInChina === 'no') {
+                formData.append('file', file, file.name)
+                UPLOAD_BY_SERVICE(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.message.file_path;
+                        uploadLoadingStatus.value = false;
+                        mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
+                        mediaForm.background_image = myFileUrl
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+
+            }
+
+        },
+        error(err) {
+            console.log(err.message)
+        }
+
+    })
+
+}
+
+const beforeBackgroundPhotoUpload = (file) => {
+    uploadLoadingStatus.value = true;
+    const isLt2M = file.size / 1024 / 1024 < 20
+    if (!isLt2M) {
+        ElMessage.error('Avatar picture size can not exceed 20MB')
+    }
+    return isLt2M
+}
+
+
+const videoHttpRequest = (options) => {
+
+    // console.log(options)
+    const formData = new FormData();
+    let file = options.file;
+
+    formData.append('token', localStorage.getItem('token'))
+    // console.log(file)
+    let isInChina = process.env.VUE_APP_CHINA
+    if (isInChina === 'yes') {
+        formData.append('file[]', file, file.name)
+        UPLOAD_BY_ALI_OSS(formData).then(res => {
+            // console.log(res)
+            if (res.code == 200) {
+                let myFileUrl = res.data[0]['file_url'];
+                uploadLoadingStatus.value = false;
+                mediaForm.video_name = myFileUrl.substring(myFileUrl.length - 10)
+                mediaForm.video_url = myFileUrl
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+
+    }
+
+    if (isInChina === 'no') {
+        formData.append('file', file, file.name)
+        UPLOAD_BY_SERVICE(formData).then(res => {
+            // console.log(res)
+            if (res.code == 200) {
+                let myFileUrl = res.message.file_path;
+                uploadLoadingStatus.value = false;
+                mediaForm.video_name = myFileUrl.substring(myFileUrl.length - 10)
+                mediaForm.video_url = myFileUrl
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+
+    }
+
+}
+
+const beforeIntroVideoUpload = (file) => {
+    console.log(file)
+    uploadLoadingStatus.value = true;
+}
+
+const resumePdfHttpRequest = (options) => {
+
+    // console.log(options)
+    const formData = new FormData();
+
+    formData.append('token', localStorage.getItem('token'))
+    // console.log(file)
+    let isInChina = process.env.VUE_APP_CHINA
+    if (isInChina === 'yes') {
+        formData.append('file[]', options.file, options.file.name)
+        UPLOAD_BY_ALI_OSS(formData).then(res => {
+            // console.log(res)
+            if (res.code == 200) {
+                let myFileUrl = res.data[0]['file_url'];
+                uploadLoadingStatus.value = false;
+                mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
+                mediaForm.resume_pdf = myFileUrl
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+
+    }
+
+    if (isInChina === 'no') {
+        formData.append('file', options.file, options.file.name)
+        UPLOAD_BY_SERVICE(formData).then(res => {
+            // console.log(res)
+            if (res.code == 200) {
+                let myFileUrl = res.message.file_path;
+                uploadLoadingStatus.value = false;
+                mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
+                mediaForm.resume_pdf = myFileUrl
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+
+    }
+
+}
+const beforeResumePdfUpload = (file) => {
+    uploadLoadingStatus.value = true;
+
+    const isLt2M = file.size / 1024 / 1024 < 20
+
+    if (!isLt2M) {
+        ElMessage.error('Avatar picture size can not exceed 20MB')
+    }
+    return isLt2M
+}
+
+
+const accountFilesData = ref([])
+// const editAccountFilesStatus = ref(true)
+
+const beforeAccountImageUpload = (file) => {
+    uploadLoadingStatus.value = true;
+    const isJpeg = file.type === 'image/png' || file.type === 'image/jpg'
+    if (!isJpeg) {
+        return ElMessage.error('Please select the correct file format to upload')
+    }
+    return isJpeg
+}
+
+const handleAccountImageChange = (file, fileList) => {
+    console.log(file)
+    console.log(fileList)
+    uploadLoadingStatus.value = true;
+    let imgParams = new FormData();
+    let token = localStorage.getItem('token')
+    imgParams.append('token', token)
+    imgParams.append('platform', 4)
+    imgParams.append('file[]', file.raw)
+
+    UPLOAD_BY_SERVICE_MORE(imgParams).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            let imgData = res.message;
+            // let imgArr = [];
+            imgData.forEach(item => {
+                let obj = {
+                    name: '',
+                    url: item
+                }
+                accountFilesData.value.push(obj)
+
+            })
+            uploadLoadingStatus.value = false;
+        }
+
+    }).catch(err => {
+        uploadLoadingStatus.value = false;
+        console.log(err)
+    })
+
+}
+
+const handleAccountFilesRequest = () => {
+    console.log('account files http request')
+}
+const handleAccountImageRemove = (file, i) => {
+    console.log(file, i)
+    accountFilesData.value.splice(i, 1)
+}
+
+const uploadAccountImages = () => {
+
+    let oldData = []
+
+    if (accountFilesData.value.length > 0) {
+        accountFilesData.value.forEach(file => {
+            oldData.push(file.url)
+        })
+    }
+
+    let params = {
+        identity: 1,
+        company_id: companyId.value,
+        img: oldData
+    }
+
+    ADD_USER_IMG_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            console.log('account images ----')
+        }
+    }).catch(err => {
+        console.log(err)
+        ElMessage.error(err.msg)
+    })
+
+}
+
+// const accountImagePreview = (url)=>{
+//     dialogAccountImageVisible.value = true;
+//     dialogAccountImageUrl.value = url;
+// }
+
+const dialogSingleImageUrl = ref('')
+const dialogSingleImageVisible = ref(false)
+const dialogSingleField = ref('')
+const handleSingleImagePreview = (url, field) => {
+    dialogSingleImageVisible.value = true
+    dialogSingleImageUrl.value = url
+    dialogSingleField.value = field
+}
+
+const handleSingleImageRemove = (field) => {
+    if (field === 'background_image') {
+        mediaForm.background_image = ''
+        mediaForm.background_image_name = ''
+    }
+    if (field === 'video_url') {
+        mediaForm.video_url = ''
+        mediaForm.video_name = ''
+    }
+
+}
+
+const editBackgroundImageStatus = ref(true)
+const editVideoStatus = ref(true)
+const editResumeStatus = ref(true)
+const handleEditMedia = (field) => {
+    if (field === 'background_image') {
+        editBackgroundImageStatus.value = false
+    }
+    if (field === 'video_url') {
+        editVideoStatus.value = false
+    }
+    if (field === 'resume_pdf') {
+        editResumeStatus.value = false
+    }
+
+}
+const stepOneStatus = ref(true)
+const stepTwoStatus = ref(true)
+const stepThreeStatus = ref(true)
+const stepFourStatus = ref(true)
+const stepFiveStatus = ref(true)
+
+const stepOneLoadingStatus = ref(false)
+const stepTwoLoadingStatus = ref(false)
+const stepThreeLoadingStatus = ref(false)
+const stepFourLoadingStatus = ref(false)
+const stepFiveLoadingStatus = ref(false)
+
+const editStepOne = () => {
+    stepOneStatus.value = false
+}
+
+const editStepTwo = () => {
+    stepTwoStatus.value = false
+}
+
+const editStepThree = () => {
+    stepThreeStatus.value = false
+}
+
+const editStepFour = () => {
+    stepFourStatus.value = false
+}
+
+const editStepFive = () => {
+    stepFiveStatus.value = false
+}
+
+const cancelStepOne = () => {
+    stepOneStatus.value = true
+}
+
+const cancelStepTwo = () => {
+    stepTwoStatus.value = true
+}
+const cancelStepThree = () => {
+    stepThreeStatus.value = true
+}
+const cancelStepFour = () => {
+    stepFourStatus.value = true
+}
+
+const cancelStepFive = () => {
+    stepFiveStatus.value = true
+}
+
+const saveUserContactInfo = (params) => {
+    USER_CONTACT_EDIT_V2(params).then(res => {
+        console.log(res)
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const profileAction = ref('edit')
+
+const saveStepOne = (formEl) => {
+    formEl.validate((valid) => {
+        if (valid) {
+            stepOneLoadingStatus.value = true
+            let name = personalForm.first_name + ' ' + personalForm.last_name
+            let phone = personalForm.phone_code + '#' + personalForm.phone
+
+            let params = {
+                name: name,
+                email: personalForm.email,
+                nationality: personalForm.nationality,
+                is_visible: personalForm.is_visible,
+                phone: phone,
+                is_seeking: personalForm.is_seeking,
+
+            }
+
+            if (personalForm.sub_categories.length) {
+                let subCategoryIdArr = []
+                let subCategoryNameEnArr = []
+                let subCategoryNameCnArr = []
+
+                personalForm.sub_categories.forEach(item => {
+                    subCategoryIdArr.push(item.id)
+                    subCategoryNameEnArr.push(item.identity_name)
+                    subCategoryNameCnArr.push(item.identity_name_cn)
+                })
+
+                params.sub_identity_id = subCategoryIdArr.join(',')
+                params.sub_identity_name_en = subCategoryNameEnArr.join(',')
+                params.sub_identity_name_cn = subCategoryNameCnArr.join(',')
+            }
+
+            EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
+                if (res.code === 200) {
+                    // console.log(res)
+                    if(profileAction.value === 'add'){
+                        companyId.value = res.message.educator_id
+                        store.commit('currentCompanyId', res.message.educator_id)
+                        store.commit('allIdentityChanged', true)
+                        changeIdentity(res.message.educator_id, res.message.user_id, 2)
+                    }
+                    store.commit('username', name)
+
+                    saveUserContactInfo({
+                        first_name: personalForm.first_name,
+                        last_name: personalForm.last_name,
+                        headimgurl: personalForm.profile_photo
+                    })
+                    stepOneLoadingStatus.value = false
+                    stepOneStatus.value = true
+                    getBasicInfo()
+                }
+            }).catch(err => {
+                console.log(err)
+                stepOneLoadingStatus.value = false
+            })
+
+        } else {
+            stepOneLoadingStatus.value = false
+            console.log('submit error')
+        }
+    })
+}
+
+const saveStepTwo = (formEl) => {
+    formEl.validate((valid) => {
+        if (valid) {
+
+            stepTwoLoadingStatus.value = true
+
+            if (interestsValue.value && interestsValue.value.length) {
+                professionForm.hobbies = interestsValue.value.join(',')
+            }
+
+            let params = Object.assign({}, professionForm)
+
+            EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
+                if (res.code === 200) {
+                    console.log(res)
+
+                    if(profileAction.value === 'add'){
+                        companyId.value = res.message.educator_id
+                        store.commit('currentCompanyId', res.message.educator_id)
+                        store.commit('allIdentityChanged', true)
+                        changeIdentity(res.message.educator_id, res.message.user_id, 2)
+                    }
+
                     if (workDestinationValue.value && workDestinationValue.value.length) {
                         workDestinationConfirm()
                     }
                     if (jobTypeValue.value && jobTypeValue.value.length) {
                         jobTypeConfirm()
                     }
-                    if (workScheduleTypeValue.value && workScheduleTypeValue.value.length) {
+
+                    if (selectedLanguageList.value && selectedLanguageList.value.length) {
+                        languageConfirm()
+                    }
+
+                    if (workScheduleTypeValue.value) {
                         workScheduleTypeConfirm()
                     }
                     if (benefitsValue.value && benefitsValue.value.length) {
@@ -1303,939 +3495,190 @@ export default {
                         ageToTeachConfirm()
                     }
 
-
-                    console.log('submit')
-                } else {
-                    console.log('submit error')
-                }
-            })
-        }
-
-        const savePastExp = (formEl) => {
-            formEl.validate((valid) => {
-                if (valid) {
-                    if (teachExpValue.value && teachExpValue.value.length) {
-                        teachExpConfirm()
-                    }
-                    if (placesTraveledValue.value && placesTraveledValue.value.length) {
-                        placesTraveledConfirm()
-                    }
-                    if (placesLivedValue.value && placesLivedValue.value.length) {
-                        placesLivedConfirm()
-                    }
-
-                    console.log('submit')
-                } else {
-                    console.log('submit error')
-                }
-            })
-        }
-
-        const jobTypeConfirm = () => {
-
-            let expand = [];
-            let objectArr = [];
-
-            jobTypeValue.value.forEach(item => {
-                objectArr.push(item.id);
-            })
-
-            let data = {
-                object_pid: 3,
-                object_id: objectArr,
-                expand: expand,
-                company_id: companyId
-            }
-
-            ADD_PROFILE_V2(data).then(res => {
-                if (res.code == 200) {
-                    console.log('job type--submit--' + res.data);
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        const workScheduleTypeConfirm = () => {
-
-            let expand = [];
-            let objectArr = [workScheduleTypeValue.value];
-
-            let data = {
-                object_pid: 184,
-                object_id: objectArr,
-                expand: expand,
-                company_id: companyId
-            }
-
-            ADD_PROFILE_V2(data).then(res => {
-                if (res.code == 200) {
-                    console.log('Work Schedule Type--submit--' + res.data);
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        const workDestinationConfirm = () => {
-
-            let expand = [];
-            let objectArr = [];
-
-            workDestinationValue.value.forEach(item => {
-                objectArr.push(item.id);
-            })
-
-            let data = {
-                object_pid: 155,
-                object_id: objectArr,
-                expand: expand,
-                company_id: companyId
-            }
-
-            ADD_PROFILE_V2(data).then(res => {
-                if (res.code == 200) {
-                    console.log('work destination--submit--' + res.data);
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        const ageToTeachConfirm = () => {
-
-            let expand = [];
-            let objectArr = [];
-
-            ageToTeachValue.value.forEach(item => {
-
-                if (typeof item === 'string') {
-                    expand.push(item)
-                } else {
-                    objectArr.push(item.id);
-                }
-
-            })
-
-            let data = {
-                object_pid: 4,
-                object_id: objectArr,
-                expand: expand,
-                company_id: companyId
-            }
-
-            ADD_PROFILE_V2(data).then(res => {
-                if (res.code == 200) {
-                    console.log('age to teach--submit--' + res.data);
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        const benefitsConfirm = () => {
-
-            let expand = [];
-            let objectArr = [];
-            benefitsValue.value.forEach(item => {
-
-                if (typeof item === 'string') {
-                    expand.push(item);
-                } else {
-                    objectArr.push(item.id);
-                }
-
-            })
-
-            let data = {
-                object_pid: 6,
-                object_id: objectArr,
-                expand: expand,
-                company_id: companyId
-            }
-
-            ADD_PROFILE_V2(data).then(res => {
-                if (res.code == 200) {
-                    console.log('benefits--submit--' + res.data);
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-
-        }
-
-        const subjectConfirm = () => {
-
-            let expand = [];
-            let objectArr = [];
-            subjectValue.value.forEach(item => {
-
-                if (typeof item === 'string') {
-                    expand.push(item)
-                } else {
-                    objectArr.push(item.id);
-                }
-            })
-
-            let data = {
-                object_pid: 1,
-                object_id: objectArr,
-                expand: expand,
-                company_id: companyId
-            }
-
-            ADD_PROFILE_V2(data).then(res => {
-                if (res.code == 200) {
-                    console.log('subject--submit--' + res.data);
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-
-        }
-
-        const teachExpConfirm = () => {
-
-            let expand = [];
-            let objectArr = [teachExpValue.value];
-
-            let data = {
-                object_pid: 120,
-                object_id: objectArr,
-                expand: expand,
-                company_id: companyId
-            }
-
-            ADD_PROFILE_V2(data).then(res => {
-                if (res.code == 200) {
-                    console.log('years of experience success -------')
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        const placesTraveledConfirm = () => {
-
-            let expand = [];
-            let objectArr = [];
-            placesTraveledOptions.value.forEach(item => {
-                objectArr.push(item.id);
-            })
-
-            let data = {
-                object_pid: 8,
-                object_id: objectArr,
-                expand: expand,
-                company_id: companyId
-            }
-
-            ADD_PROFILE_V2(data).then(res => {
-                if (res.code == 200) {
-                    console.log('place traveled --submit--' + res.data);
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-
-        }
-
-        const placesLivedConfirm = () => {
-
-            let expand = [];
-            let objectArr = [];
-            placesLivedOptions.value.forEach(item => {
-                objectArr.push(item.id);
-            })
-
-            let data = {
-                object_pid: 9,
-                object_id: objectArr,
-                expand: expand,
-                company_id: companyId
-            }
-
-            ADD_PROFILE_V2(data).then(res => {
-                if (res.code == 200) {
-                    console.log('place lived --submit--' + res.data);
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-
-        }
-
-        const workExpData = ref([])
-        const workExpTempData = ref([])
-        const editWorkExpIndex = ref(-1)
-        const editExistWorkExpStatus = ref(false)
-
-        const workExpDialogVisible = ref(false)
-        const submitWorkExpLoadingValue = ref(false)
-        const workExpDialogWidth = ref('600px')
-
-        const workExpForms = ref(null)
-        const workExpForm = reactive({
-            company_name: '',
-            title: '',
-            location: '',
-            teaching_times: '',
-            teaching_experience: '',
-            work_time_from: '',
-            work_time_to: '',
-            date: ''
-        })
-
-        const workExpRules = reactive({
-            title: [
-                {
-                    required: true,
-                    message: 'Please enter your job title',
-                    trigger: 'blur',
-                }
-            ],
-            company_name: [
-                {
-                    required: true,
-                    message: "Please enter your company name",
-                    trigger: 'blur',
-                },
-            ],
-            date: [
-                {
-                    required: true,
-                    validator: (rule, value, callback) => {
-                        let workTimeFrom = workExpForm.work_time_from;
-                        let workTimeTo = workExpForm.work_time_to;
-
-                        if (!workTimeFrom) {
-                            return callback(new Error('Please select start date'))
-                        }
-
-                        if (!workTimeTo) {
-                            return callback(new Error('Please select end date'))
-                        }
-                        if (workTimeTo <= workTimeFrom) {
-                            return callback(new Error('End date is less than start date'))
-                        }
-
-                        callback()
-
-                    },
-                    trigger: 'change',
-                },
-            ]
-
-        })
-
-        const showWorkExpDialog = () => {
-            workExpDialogVisible.value = true;
-        }
-
-        const saveWorkExpTemp = (formEl) => {
-            submitWorkExpForm(formEl)
-
-            // let existsStatus = this.editExistWorkExpStatus
-            // if(existsStatus){
-            //   this.submitWorkExpForm('workExpForm')
-            //
-            // }else{
-            //   let editWorkExpIndex = this.editWorkExpIndex;
-            //
-            //   let obj = Object.assign({},this.workExpForm)
-            //
-            //   this.workExpDialogVisible = false
-            //
-            //   if(editWorkExpIndex !== -1){
-            //     return this.workExpTempData.splice(editWorkExpIndex,1,obj)
-            //   }
-            //   this.workExpTempData.push(obj)
-            // }
-        }
-
-        const getBasicInfo = async () => {
-
-            let params = {
-                identity: 1
-            }
-
-            await USER_INFO_BY_TOKEN_V2(params).then(res => {
-
-                if (res.code == 200) {
-
-                    let educatorContact = res.message.user_contact.educator_contact;
-                    // let userContact = res.message.user_contact;
-                    // this.educatorContact = educatorContact;
-                    //
-                    // if (educatorContact.name) {
-                    //     this.basicForm.name = educatorContact.name;
-                    // } else {
-                    //     this.basicForm.name = userContact.first_name + ' ' + userContact.last_name;
-                    // }
-                    //
-                    // if (educatorContact.resume_pdf) {
-                    //     this.resumePdfUrl = educatorContact.resume_pdf
-                    //     this.basicForm.resume_pdf = educatorContact.resume_pdf
-                    // }
-                    //
-                    //
-                    // if (educatorContact.background_image) {
-                    //     this.backgroundPhotoUrl = educatorContact.background_image
-                    //     this.basicForm.background_image = educatorContact.background_image
-                    // }
-                    //
-                    // if (userContact.headimgurl) {
-                    //     this.profilePhotoUrl = userContact.headimgurl
-                    // }
-                    //
-                    // if (educatorContact.video_url) {
-                    //     this.introVideoUrl = educatorContact.video_url
-                    //     this.basicForm.video_url = educatorContact.video_url
-                    // }
-                    //
-                    // if (educatorContact.phone) {
-                    //     let phone = educatorContact.phone;
-                    //     let phoneArr = phone.split('#')
-                    //     // console.log(phoneArr)
-                    //     if (phoneArr.length > 1) {
-                    //         this.countryCode = phoneArr[0]
-                    //         this.phoneNumber = phoneArr[1]
-                    //     } else {
-                    //         this.phoneNumber = phoneArr[0]
-                    //     }
-                    //     this.basicForm.phone = educatorContact.phone
-                    // }
-                    //
-                    // if (educatorContact.desc) {
-                    //     this.basicForm.desc = educatorContact.desc
-                    // }
-                    //
-                    // if (educatorContact.email) {
-                    //     this.basicForm.educator_email = educatorContact.email;
-                    // } else {
-                    //     this.basicForm.educator_email = userContact.email;
-                    // }
-                    //
-                    // if (educatorContact.address) {
-                    //     this.basicForm.address = educatorContact.address
-                    // }
-                    //
-                    // if (educatorContact.bio) {
-                    //     this.basicForm.bio = educatorContact.bio
-                    // }
-                    //
-                    // if (educatorContact.is_seeking) {
-                    //     this.basicForm.is_seeking = educatorContact.is_seeking;
-                    // }
-                    //
-                    // if (educatorContact.is_public) {
-                    //     this.basicForm.is_public = educatorContact.is_public;
-                    // }
-                    //
-                    // if (educatorContact.job_title) {
-                    //     this.basicForm.job_title = educatorContact.job_title;
-                    // }
-                    //
-                    // if (educatorContact.hobbies) {
-                    //     this.basicForm.hobbies = educatorContact.hobbies;
-                    //     this.selectHobbyInfoList = educatorContact.hobbies.split(',');
-                    // }
-                    //
-                    // if (educatorContact.nationality) {
-                    //     this.basicForm.nationality = educatorContact.nationality;
-                    // }
-
-
-                    let subIdentityStr = educatorContact.sub_identity_id
-                    if (subIdentityStr) {
-                        if (subIdentityStr.length > 1) {
-                            let subIdentityArr = subIdentityStr.split(',')
-                            let subData = []
-                            subIdentityArr.forEach(item => {
-                                let cateValue = subCategoryOptions.value.filter(value => value.id == item)
-                                subData.push(cateValue[0])
-                            })
-                            subCategoryValue.value = subData
-                        }
-                    }
-
-                    // if (educatorContact.Teaching_certificate) {
-                    //     let certificationArr = educatorContact.Teaching_certificate;
-                    //     certificationArr.forEach((item) => {
-                    //         if (item.object_id == 0) {
-                    //             this.selectCertificationsList.push(item.object_en)
-                    //         } else {
-                    //             let obj = {
-                    //                 id: item.object_id,
-                    //                 pid: item.object_pid,
-                    //                 object_en: item.object_en,
-                    //                 object_cn: item.object_cn
-                    //             }
-                    //             this.selectCertificationsList.push(obj)
-                    //         }
-                    //     })
-                    // }
-
-                    // if (educatorContact.education_info) {
-                    //     this.educationData = educatorContact.education_info;
-                    // }
-                    //
-                    // if (educatorContact.Job_Seeking_Status) {
-                    //     let objArr = educatorContact.Job_Seeking_Status;
-                    //     objArr.forEach((item) => {
-                    //         this.selectedJobSeekingValue = item.object_id;
-                    //     })
-                    // }
-                    //
-                    // if (educatorContact.Profile_Status) {
-                    //     let objArr = educatorContact.Profile_Status;
-                    //     objArr.forEach((item) => {
-                    //         this.selectedProfileStatusValue = item.object_id;
-                    //     })
-                    // }
-                    if (educatorContact.Teaching_experience) {
-                        let expArr = educatorContact.Teaching_experience
-                        expArr.forEach((item) => {
-                            teachExpValue.value = item.object_id;
-                        })
-                    }
-
-                    if (educatorContact.places_lived) {
-                        let livedArr = educatorContact.places_lived;
-                        let obj = {}
-                        livedArr.forEach((item) => {
-                            obj = {
-                                id: item.object_id,
-                                pid: item.object_pid,
-                                object_en: item.object_en,
-                                object_cn: item.object_cn
-                            }
-                            placesLivedValue.value.push(obj)
-                        })
-                    }
-
-                    if (educatorContact.places_traveled) {
-                        let travelArr = educatorContact.places_traveled;
-                        let obj = {}
-                        travelArr.forEach((item) => {
-                            obj = {
-                                id: item.object_id,
-                                pid: item.object_pid,
-                                object_en: item.object_en,
-                                object_cn: item.object_cn
-                            }
-                            placesTraveledValue.value.push(obj)
-                        })
-                    }
-
-                    // if (educatorContact.languages) {
-                    //     let languagesArr = educatorContact.languages
-                    //     let languagesOptionsData = this.languageOptionsData
-                    //     let a = []
-                    //     languagesArr.forEach(item => {
-                    //         let b = languagesOptionsData.filter(option => item.object_id == option.id)
-                    //
-                    //         if (item.object_score) {
-                    //             b[0]['level'] = item.object_score;
-                    //             if (item.object_score == 1) {
-                    //                 b[0]['level_name'] = 'Native';
-                    //             }
-                    //             if (item.object_score == 2) {
-                    //                 b[0]['level_name'] = 'Fluent';
-                    //             }
-                    //             if (item.object_score == 3) {
-                    //                 b[0]['level_name'] = 'Conversational';
-                    //             }
-                    //             if (item.object_score == 4) {
-                    //                 b[0]['level_name'] = 'Beginner';
-                    //             }
-                    //
-                    //         }
-                    //
-                    //         a = a.concat(b)
-                    //
-                    //     })
-                    //
-                    //     this.selectedLanguageList = a
-                    //
-                    // }
-
-                    // if (educatorContact.Location) {
-                    //     let locationArr = educatorContact.Location;
-                    //
-                    //     locationArr.forEach((item) => {
-                    //
-                    //         if (item.object_id == 0) {
-                    //
-                    //             this.selectLocationList.push(item.object_en)
-                    //
-                    //         } else {
-                    //             let obj = {
-                    //                 id: item.object_id,
-                    //                 pid: item.object_pid,
-                    //                 object_en: item.object_en,
-                    //                 object_cn: item.object_cn
-                    //             }
-                    //             this.selectLocationList.push(obj)
-                    //
-                    //         }
-                    //
-                    //     })
-                    //
-                    // }
-
-                    if (educatorContact.Prefered_Work_Destination) {
-                        let objArr = educatorContact.Prefered_Work_Destination;
-                        let obj = {}
-                        objArr.forEach((item) => {
-                            obj = {
-                                id: item.object_id,
-                                pid: item.object_pid,
-                                object_en: item.object_en,
-                                object_cn: item.object_cn
-                            }
-                            workDestinationValue.value.push(obj)
-                        })
-                    }
-
-                    if (educatorContact.job_type) {
-                        let objArr = educatorContact.job_type;
-                        let obj = {}
-                        objArr.forEach((item) => {
-                            obj = {
-                                id: item.object_id,
-                                pid: item.object_pid,
-                                object_en: item.object_en,
-                                object_cn: item.object_cn
-                            }
-                            jobTypeValue.value.push(obj)
-                        })
-                    }
-
-                    if (educatorContact.Prefered_Work_Schedule_Type) {
-                        let objArr = educatorContact.Prefered_Work_Schedule_Type;
-                        objArr.forEach((item) => {
-                            workScheduleTypeValue.value = item.object_id
-                        })
-                    }
-
-                    if (educatorContact.age_to_teach) {
-                        let ageToTeachArr = educatorContact.age_to_teach;
-                        ageToTeachArr.forEach((item) => {
-                            if (item.object_id == 0) {
-                                ageToTeachValue.value.push(item.object_en)
-                            } else {
-                                let obj = {
-                                    id: item.object_id,
-                                    pid: item.object_pid,
-                                    object_en: item.object_en,
-                                    object_cn: item.object_cn
-                                }
-                                ageToTeachValue.value.push(obj)
-                            }
-                        })
-
-                    }
-
-                    // if (educatorContact.region) {
-                    //
-                    //     let regionArr = educatorContact.region;
-                    //
-                    //     regionArr.forEach((item) => {
-                    //
-                    //         if (item.object_id == 0) {
-                    //             this.selectRegionList.push(item.object_en)
-                    //         } else {
-                    //             let obj = {
-                    //                 id: item.object_id,
-                    //                 pid: item.object_pid,
-                    //                 object_en: item.object_en,
-                    //                 object_cn: item.object_cn
-                    //             }
-                    //             this.selectRegionList.push(obj)
-                    //         }
-                    //
-                    //     })
-                    // }
-
-                    if (educatorContact.benefits) {
-                        let benefitsArr = educatorContact.benefits;
-                        benefitsArr.forEach((item) => {
-                            if (item.object_id == 0) {
-                                benefitsValue.value.push(item.object_en)
-                            } else {
-                                let obj = {
-                                    id: item.object_id,
-                                    pid: item.object_pid,
-                                    object_en: item.object_en,
-                                    object_cn: item.object_cn
-                                }
-                                benefitsValue.value.push(obj)
-                            }
-                        })
-                    }
-
-                    if (educatorContact.subject) {
-                        let subjectArr = educatorContact.subject
-                        let obj = {}
-                        subjectArr.forEach((item) => {
-                            if (item.object_id == 0) {
-                                subjectValue.value.push(item.object_en)
-                            } else {
-                                obj = {
-                                    id: item.object_id,
-                                    pid: item.object_pid,
-                                    object_en: item.object_en,
-                                    object_cn: item.object_cn
-                                }
-                            }
-                            subjectValue.value.push(obj)
-                        })
-                    }
-
-                    // if (educatorContact.images) {
-                    //     console.log(educatorContact.images)
-                    //
-                    //     let userImages = educatorContact.images
-                    //     if (userImages.length > 0) {
-                    //         let userImagesArr = []
-                    //         userImages.forEach(item => {
-                    //             let userImageObj = {
-                    //                 name: '',
-                    //                 url: item.url
-                    //             }
-                    //             userImagesArr.push(userImageObj)
-                    //         })
-                    //         this.accountImageFileList = []
-                    //         this.accountImageFileList = userImagesArr
-                    //         console.log(this.accountImageFileList)
-                    //
-                    //     }
-                    //
-                    // }
-
-                    if (educatorContact.work_info) {
-                        workExpData.value = educatorContact.work_info
-                    }
-
-
-                    // this.initProfileLoadingStatus = false;
-
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-
-        }
-
-        const deleteWorkExp = (item) => {
-
-            let params = {
-                id: item.id
-            }
-
-            EDUCATOR_DELETE_WORK_ITEM(params).then(res => {
-                console.log(res)
-                if (res.code == 200) {
+                    stepTwoLoadingStatus.value = false
+                    stepTwoStatus.value = true
                     getBasicInfo()
                 }
             }).catch(err => {
                 console.log(err)
+                stepTwoLoadingStatus.value = false
             })
 
+        } else {
+            console.log('submit error')
         }
-        const editWorkExp = (item) => {
+    })
+}
+const saveStepThree = (formEl) => {
+    formEl.validate((valid) => {
+        if (valid) {
+            stepThreeLoadingStatus.value = true
 
-            workExpForm.company_name = item.company_name
-            workExpForm.title = item.title
-            workExpForm.location = item.location
-            workExpForm.teaching_times = item.teaching_times
-            workExpForm.teaching_experience = item.teaching_experience
-
-            workExpForm.date = item.date
-
-            let workTimeFrom = item.work_time_from
-            let workTimeTo = item.work_time_to
-
-            // this.workExpForm.date = [workTimeFrom * 1000, workTimeTo * 1000]
-
-            workExpForm.work_time_from = workTimeFrom * 1000;
-            workExpForm.work_time_to = workTimeTo * 1000;
-            workExpForm.work_id = item.id
-
-            editExistWorkExpStatus.value = true
-            workExpDialogVisible.value = true
-
-        }
-
-        const deleteTempWorkExp = (item, i) => {
-            console.log(item)
-            let temp = this.workExpTempData
-            temp.splice(i, 1)
-        }
-
-        const editTempWorkExp = (item, i) => {
-            editWorkExpIndex.value = i;
-            workExpDialogVisible.value = true;
-        }
-
-        const submitWorkExpForm = (formEl) => {
-            formEl.validate((valid) => {
-                if (valid) {
-                    workExpForm.work_time_from = Math.floor(workExpForm.work_time_from / 1000)
-                    workExpForm.work_time_to = Math.floor(workExpForm.work_time_to / 1000)
-                    let params = Object.assign({}, workExpForm)
-                    ADD_USER_WORK_V2(params).then(res => {
-                        // console.log(res)
-                        if (res.code == 200) {
-                            editExistWorkExpStatus.value = false;
-                            workExpDialogVisible.value = false;
-                            getBasicInfo()
-                        }
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                } else {
-                    console.log('error submit!!')
-                }
-            })
-        }
-
-        const subCategoryOptions = ref([])
-        const subCategoryValue = ref()
-        const loadSubCategoryData = async () => {
-
-            let params = {
-                pid: 1,
-                tree: 1
+            if (teachExpValue.value) {
+                teachExpConfirm()
             }
-
-            await USER_SUB_IDENTITY_V2(params).then(res => {
-                console.log(res)
-                if (res.code == 200) {
-                    subCategoryOptions.value = res.message
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        const birthdayDisabledDate = (date) => {
-            let myDate = new Date();
-            return date.getTime() >= myDate.getTime();
-        }
-
-        const educationDialogWidth = ref('454px')
-
-        onMounted(() => {
-            loadUserObjectData()
-            loadSubCategoryData()
-
-            let screenWidth = document.body.clientWidth
-            let screenWidthFloor = Math.floor(screenWidth)
-
-            if (screenWidthFloor <= 768) {
-                updateWindowHeight()
-                workExpDialogWidth.value = '90%'
-                educationDialogWidth.value = '90%'
+            if (placesTraveledValue.value && placesTraveledValue.value.length) {
+                placesTraveledConfirm()
             }
-
-            window.onresize = () => {
-                if (screenWidthFloor <= 768) {
-                    updateWindowHeight()
-                    workExpDialogWidth.value = '90%'
-                    educationDialogWidth.value = '90%'
-                }
+            if (placesLivedValue.value && placesLivedValue.value.length) {
+                placesLivedConfirm()
             }
 
             getBasicInfo()
 
-        })
+            setTimeout(function () {
+                stepThreeLoadingStatus.value = false
+                stepThreeStatus.value = true
+            }, 1500)
 
-        const verificationVisible = ref(false)
-
-        function confirmDelete() {
-            verificationVisible.value = true
+        } else {
+            stepThreeLoadingStatus.value = false
+            console.log('submit error')
         }
+    })
+}
 
-        return {
-            personalForms,
-            personalForm,
-            personalRules,
+const saveStepFour = (formEl) => {
+    formEl.validate((valid) => {
+        if (valid) {
+            stepFourLoadingStatus.value = true
 
-            profileForms,
-            profileForm,
-            profileRules,
-            verificationVisible,
-            confirmDelete,
-            expandKeysData,
-            addExpandKeys,
-            nationalityOptions,
-            phoneCodeOptions,
-            jobSeekingOptions,
-            jobSeekingValue,
-            subCategoryOptions,
-            subCategoryValue,
-            professionForms,
-            professionForm,
-            professionRules,
-            workDestinationValue,
-            workDestinationOptions,
-            workScheduleTypeValue,
-            workScheduleTypeOptions,
-            jobTypeValue,
-            jobTypeOptions,
-            benefitsValue,
-            benefitsOptions,
-            subjectValue,
-            subjectOptions,
-            ageToTeachValue,
-            ageToTeachOptions,
-            saveProfession,
-            teachExpValue,
-            teachExpOptions,
-            placesTraveledValue,
-            placesTraveledOptions,
-            placesLivedValue,
-            placesLivedOptions,
-            workExpData,
-            workExpTempData,
-            editWorkExpIndex,
-            editExistWorkExpStatus,
-            workExpDialogVisible,
-            submitWorkExpLoadingValue,
-            workExpForms,
-            workExpForm,
-            workExpRules,
-            workExpDialogWidth,
-            showWorkExpDialog,
-            saveWorkExpTemp,
-            deleteWorkExp,
-            editWorkExp,
-            deleteTempWorkExp,
-            editTempWorkExp,
-            submitWorkExpForm,
-            educationDialogWidth,
-            birthdayDisabledDate,
-            savePastExp,
-            pastExpForms,
-            pastExpForm,
-            pastExpRules,
-            certificationsValue,
-            certificationsOptions
+            if(certificationsValue.value && certificationsValue.value.length){
+                certificationsConfirm()
+            }
+            getBasicInfo()
+            setTimeout(function () {
+                stepFourLoadingStatus.value = false
+                stepFourStatus.value = true
+            }, 1500)
+
+        } else {
+            stepFourLoadingStatus.value = false
+            console.log('error submit!!')
+        }
+    })
+
+}
+
+const saveStepFive = (formEl) => {
+
+    formEl.validate((valid) => {
+        if (valid) {
+            stepFiveLoadingStatus.value = true
+
+            let params = Object.assign({}, mediaForm)
+
+            EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
+                if (res.code === 200) {
+                    console.log(res)
+                    if(profileAction.value === 'add'){
+                        companyId.value = res.message.educator_id
+                        store.commit('currentCompanyId', res.message.educator_id)
+                        store.commit('allIdentityChanged', true)
+                        changeIdentity(res.message.educator_id, res.message.user_id, 2)
+                    }
+
+                    store.commit('username', personalForm.name)
+                    uploadAccountImages()
+                    getBasicInfo()
+                    setTimeout(function () {
+                        stepFiveLoadingStatus.value = false
+                        stepFiveStatus.value = true
+                    }, 1500)
+
+                }
+            }).catch(err => {
+                console.log(err)
+                stepFiveLoadingStatus.value = false
+            })
+
+        } else {
+            stepFiveLoadingStatus.value = false
+            console.log('error submit!!')
+        }
+    })
+
+}
+
+const changeIdentity = (companyId, companyContactId, language)=> {
+
+    let params = {
+        identity: 1,
+        company_id: companyId,
+        company_contact_id: companyContactId,
+        language: language
+    }
+    SWITCH_IDENTITY_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+
+            let str = JSON.stringify(res.message)
+            localStorage.setItem('identity', 1)
+            localStorage.setItem('menuData', str)
+
+            store.commit('username', personalForm.name)
+            store.commit('allIdentityChanged', true)
+            store.commit('identity', 1)
+            store.commit('menuData', res.message)
+            store.commit('currentCompanyId', companyId)
+
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const handleDownloadMedia = (url) => {
+    window.open(url, '_blank')
+}
+
+const cancelUploadProfile = () => {
+    uploadLoadingStatus.value = false;
+}
+
+onMounted(async () => {
+    await loadUserObjectData()
+    await loadSubCategoryData()
+    await getAllLanguageProficiencyList()
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+        workExpDialogWidth.value = '90%'
+        educationDialogWidth.value = '90%'
+    }
+
+    window.onresize = () => {
+        if (screenWidthFloor <= 768) {
+            updateWindowHeight()
+            workExpDialogWidth.value = '90%'
+            educationDialogWidth.value = '90%'
         }
     }
-}
+
+    let str = route.query.s
+
+    if (str) {
+        let strObj = JSON.parse(decode(str))
+        // this.i = strObj.i;
+        // this.id = strObj.id;
+        // this.cid = strObj.cid;
+        // this.action = strObj.action;
+
+        if(str.action){
+            profileAction.value = strObj.action
+        }
+    }
+
+    if (profileAction.value === 'edit') {
+        await getBasicInfo()
+    }
+
+
+})
+
 </script>
 
 <style scoped>
@@ -2247,7 +3690,7 @@ export default {
 }
 
 .profile-scrollbar {
-    height: calc(var(--i-window-height) - 220px);;
+    height: calc(var(--i-window-height) - 220px);
 }
 
 .profile-collapse {
@@ -2318,34 +3761,7 @@ export default {
 }
 
 .delete-container {
-    border-top: 1px solid #D0D5DD;
     margin: auto 40px 40px 40px;
-    padding: 27px 27px 0 0;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.delete-label {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 28px;
-
-    color: #101828;
-}
-
-.delete-tips {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-
-    color: #667085;
 }
 
 .profile-picture-r {
@@ -2354,8 +3770,65 @@ export default {
     align-items: flex-start;
 }
 
+/deep/ .el-upload-dragger {
+    padding: 16px 40px;
+    border-style: solid;
+}
+
+/deep/ .el-radio__label, /deep/ .el-checkbox__label {
+    color: #667085;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.profile-avatar-img {
+    width: 70px;
+    height: 70px;
+}
+
+.profile-upload-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.profile-upload-text {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #667085;
+}
+
+.profile-upload-text span {
+    font-weight: 700;
+    color: #5C41E6;
+}
+
 .profile-picture-upload {
     margin-left: 20px;
+
+}
+
+.attachment-btn {
+    width: 388px;
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #d0d5dd;
+    padding: 1px 11px;
+    border-radius: 4px;
+}
+
+.attachment-btn span {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #667085;
 }
 
 .profile-picture-tips {
@@ -2365,6 +3838,11 @@ export default {
     font-size: 12px;
     line-height: 16px;
     color: #667085;
+}
+
+.media-show-img {
+    width: 245px;
+    height: auto;
 }
 
 .work-form-item {
@@ -2458,6 +3936,116 @@ export default {
 
 /deep/ .el-date-editor {
     --el-date-editor-width: auto;
+}
+
+.attachment-xll {
+
+}
+
+.attachment-xll-btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.attachment-xll-btn {
+    width: 388px;
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #d0d5dd;
+    padding: 1px 11px;
+    border-radius: 4px;
+}
+
+.attachment-xll-btn span {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #667085;
+}
+
+.attachment-xll-btn-edit, .attachment-xll-btn-download {
+    height: 44px;
+    border: 1px solid #D0D5DD;
+    border-radius: 5px;
+    padding: 0 16px;
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attachment-xll-icon {
+    cursor: pointer;
+}
+
+.attachment-xll-image {
+    width: 245px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.attachment-xll-img {
+    width: 100%;
+    height: 100%;
+}
+
+.attachment-xll-image-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: none;
+}
+
+.attachment-xll-image:hover .attachment-xll-image-mask {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.language-add-container {
+    width: 100%;
+    position: relative;
+    margin-top: 10px;
+}
+
+.language-checkbox-item {
+    width: calc(100% - 80px);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.language-checkbox-item-l {
+    font-size: 12px;
+    font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    margin-right: 10px;
+    color: #667085;
+    font-weight: 400;
+}
+
+.language-checkbox-item-r {
+    font-size: 12px;
+    font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    margin-right: 10px;
+    color: #667085;
+    font-weight: 400;
 }
 
 

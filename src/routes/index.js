@@ -338,8 +338,48 @@ const routes = [
                         component: () => import('@/views/setting/profile/educator.vue'),
                         name: 'settingProfileEducator',
                         meta: {
-                            titleC: 'Setting Profile Educator',
-                            titleG: 'Setting Profile Educator',
+                            titleC: 'Setting Educator Profile',
+                            titleG: 'Setting Educator Profile ',
+                            requireAuth: true
+                        },
+                    },
+                    {
+                        path: 'profile/recruiter',
+                        component: () => import('@/views/setting/profile/recruiter.vue'),
+                        name: 'settingProfileRecruiter',
+                        meta: {
+                            titleC: 'Setting Recruiter Profile',
+                            titleG: 'Setting Recruiter Profile',
+                            requireAuth: true
+                        },
+                    },
+                    {
+                        path: 'profile/school',
+                        component: () => import('@/views/setting/profile/school.vue'),
+                        name: 'settingProfileSchool',
+                        meta: {
+                            titleC: 'Setting School Profile',
+                            titleG: 'Setting School Profile',
+                            requireAuth: true
+                        },
+                    },
+                    {
+                        path: 'profile/other',
+                        component: () => import('@/views/setting/profile/other.vue'),
+                        name: 'settingProfileOther',
+                        meta: {
+                            titleC: 'Setting Other Profile',
+                            titleG: 'Setting Other Profile',
+                            requireAuth: true
+                        },
+                    },
+                    {
+                        path: 'profile/vendor',
+                        component: () => import('@/views/setting/profile/vendor.vue'),
+                        name: 'settingProfileVendor',
+                        meta: {
+                            titleC: 'Setting Vendor Profile',
+                            titleG: 'Setting Vendor Profile',
                             requireAuth: true
                         },
                     },

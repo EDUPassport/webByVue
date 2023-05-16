@@ -56,7 +56,7 @@
                         <el-select v-model="basicForm.nationality"
                                    filterable
                                    fit-input-width
-                                   :teleported="false"
+                                   
                                    placeholder="Select your nationality">
                           <el-option v-for="(item,i) in nationalityOptions" :key="i" :label="item.name"
                                      :value="item.name"></el-option>
@@ -104,7 +104,7 @@
                         <div class="contact-phone-container">
                           <div class="contact-phone-l">
                             <!--                    @onChange="onDefaultChange"-->
-                            <el-select v-model="countryCode" :teleported="false" filterable class="m-2"
+                            <el-select v-model="countryCode"  filterable class="m-2"
                                        placeholder="Select">
                               <el-option
                                   v-for="item in phoneCodeData"
@@ -165,7 +165,7 @@
 
                         <el-select
                             v-model="selectHobbyInfoList"
-                            :teleported="false"
+                            
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -262,7 +262,7 @@
                               class="demo-ruleForm"
                           >
                             <el-form-item label="Language">
-                              <el-select v-model="languageValue" :teleported="false" value-key="id">
+                              <el-select v-model="languageValue"  value-key="id">
                                 <el-option v-for="(item,i) in languageOptionsData" :key="i"
                                            :label="item.object_en"
                                            :value="item"
@@ -274,7 +274,7 @@
                             </el-form-item>
 
                             <el-form-item class="work-form-item" label="Proficiency">
-                              <el-select v-model="languageLevelValue" :teleported="false" value-key="value">
+                              <el-select v-model="languageLevelValue"  value-key="value">
                                 <el-option
                                     v-for="(level,ii) in languageLevelOptionsData" :key="ii"
                                     :label="level.label"
@@ -338,7 +338,7 @@
 
                         <el-select v-model="checkedYearExpValue"
                                    filterable
-                                   :teleported="false"
+                                   
                                    placeholder="Years of experience"
                                    value-key="id"
                         >
@@ -552,7 +552,7 @@
 
                         <el-select
                             filterable
-                            :teleported="false"
+                            
                             v-model="selectCountriesTraveledList"
                             multiple
                             collapse-tags
@@ -576,7 +576,7 @@
 
                         <el-select
                             filterable
-                            :teleported="false"
+                            
                             v-model="selectCountriesLivedList"
                             multiple
                             collapse-tags
@@ -673,7 +673,7 @@
                             </el-form-item>
                             <el-form-item label="Degree" prop="degree">
                               <el-select v-model="educationDegreeObj"
-                                         :teleported="false"
+                                         
                                          value-key="id"
                                          placeholder="Doctorate, Master's, Bachelor's, etc...">
                                 <el-option v-for="(degree,i) in degreeOptionsData" :key="i"
@@ -762,7 +762,7 @@
                       <el-form-item label="Certifications">
 
                         <el-select
-                            :teleported="false"
+                            
                             v-model="selectCertificationsList"
                             multiple
                             collapse-tags
@@ -801,7 +801,6 @@
 
                         <el-select
                             filterable
-                            :teleported="false"
                             v-model="selectWorkDestinationList"
                             multiple
                             collapse-tags
@@ -826,7 +825,7 @@
 
                         <el-select
                             filterable
-                            :teleported="false"
+                            
                             multiple
                             v-model="selectJobTypeList"
                             collapse-tags
@@ -849,7 +848,7 @@
                       <el-form-item label="Work schedule type">
 
                         <el-select v-model="checkedWorkScheduleTypeValue"
-                                   :teleported="false"
+                                   
                                    filterable
                                    collapse-tags
                                    placeholder="Select work schedule type"
@@ -870,7 +869,7 @@
 
                         <el-select
                             v-model="selectBenefitsList"
-                            :teleported="false"
+                            
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
@@ -899,7 +898,7 @@
                       <el-form-item label="Subject(s) to teach">
 
                         <el-select
-                            :teleported="false"
+                            
                             v-model="selectSubjectList"
                             multiple
                             collapse-tags
@@ -925,7 +924,7 @@
                       <el-form-item label=" Preferred Age To Teach">
 
                         <el-select
-                            :teleported="false"
+                            
                             v-model="selectAgeToTeachList"
                             multiple
                             collapse-tags

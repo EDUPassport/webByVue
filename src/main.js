@@ -77,6 +77,11 @@ app.use(VueClipboard)
 
 app.config.globalProperties.$store = store
 app.config.globalProperties.$filters = {
+    substringFromEnd(value, length){
+      if(value){
+          return value.substring(value.length - length)
+      }
+    },
     formatPriceDescription(value){
       if(value){
           return value.split('||')
