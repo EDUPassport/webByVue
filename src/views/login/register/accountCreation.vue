@@ -131,7 +131,7 @@ import {useRouter, useRoute} from 'vue-router'
 import {ref, reactive, onMounted} from 'vue'
 import {useStore} from 'vuex'
 import stepComponent from "@/components/register/stepComponent.vue";
-import {encodeByJsBase64, decodeByJsBase64} from "@/utils/utils";
+import {decodeByJsBase64} from "@/utils/utils";
 // ElMessageBox
 import {ElMessage  } from 'element-plus'
 import {
@@ -150,6 +150,16 @@ export default {
     data() {
         return {
             imgLogo
+        }
+    },
+    computed: {
+        signForm: {
+            get() {
+                return this.$store.state.SignUpForm.form;
+            },
+            set(val) {
+                this.$store.commit('SignUpForm/setForm', val);
+            }
         }
     },
     setup() {
@@ -172,13 +182,13 @@ export default {
         }
 
         const signForms = ref(null)
-        const signForm = reactive({
-            email: ''
-        })
+        // const signForm = reactive({
+        //     email: ''
+        // })
 
         const signRules = reactive({
             email: [
-                {type: 'email', required: true, message: 'Enter a valid email address', trigger: 'blur'}
+                { type: 'email', required: true, message: 'Enter a valid email address', trigger: 'blur' }
             ]
         })
 
@@ -453,23 +463,21 @@ export default {
                 if (valid) {
 
                     confirmLoadingStatus.value = true
-
                     let emailParams = {
-                        email: signForm.email
+                        email: store.state.SignUpForm.form.email
                     }
-
                     SEND_EMAIL_CODE(emailParams).then(res => {
                         if (res.code == 200) {
 
-                            let routeFormInfo = decodeByJsBase64(route.query.formInfo)
-                            let formDecode = JSON.parse(routeFormInfo)
+                            // let routeFormInfo = decodeByJsBase64(route.query.formInfo)
+                            // let formDecode = JSON.parse(routeFormInfo)
 
-                            let params = Object.assign(formDecode, signForm)
-                            let formInfo = encodeByJsBase64(JSON.stringify(params))
+                            // let params = Object.assign(formDecode, this.signForm)
+                            // let formInfo = encodeByJsBase64(JSON.stringify(params))
 
                             router.push({
                                 path: '/signup/accountVerification',
-                                query: {type: userType, formInfo: formInfo}
+                                query: { type: userType}
                             })
 
                             confirmLoadingStatus.value = false
@@ -521,7 +529,7 @@ export default {
         return {
             userStepIndex,
             signForms,
-            signForm,
+            // signForm,
             signRules,
             userType,
             confirmLoadingStatus,
@@ -693,5 +701,4 @@ export default {
         max-width: 1400px;
     }
 }
-
 </style>

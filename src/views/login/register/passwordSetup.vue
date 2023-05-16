@@ -114,10 +114,11 @@ import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Ligh
 import {useRouter, useRoute} from 'vue-router'
 import {ref, reactive,onMounted} from 'vue'
 import stepComponent from "@/components/register/stepComponent.vue";
-import {decodeByJsBase64} from "@/utils/utils";
+// import {decodeByJsBase64} from "@/utils/utils";
 import {ElMessage,ElMessageBox } from 'element-plus'
 import {EMAIL_REGISTER_V2} from "@/api/api";
-
+// import store from '../../../store';
+import { useStore } from 'vuex';
 export default {
   name: "passwordSetup",
   components: {
@@ -132,7 +133,7 @@ export default {
 
     const router = useRouter()
     const route = useRoute()
-
+    const store = useStore();
     const userType = route.query.type;
     const userStepIndex = ref(4)
     const confirmLoadingStatus = ref(false)
@@ -177,26 +178,31 @@ export default {
 
     function confirmForm(formName) {
 
+      
+
       formName.validate((valid)=>{
         if(valid){
           confirmLoadingStatus.value = true
-
-          let routeFormInfo = decodeByJsBase64(route.query.formInfo)
-          let formDecode = JSON.parse(routeFormInfo)
-
+          const { educatorForm, schoolForm, recruiterForm,otherForm,vendorForm,form } = store.state.SignUpForm;
+          let formDecode
           if(userType === 'educator'){
             signForm.identity = 1
+            formDecode = educatorForm
           }else if(userType === 'school'){
             signForm.identity = 3
+            formDecode = schoolForm
           }else if(userType === 'recruiter'){
             signForm.identity = 2
+            formDecode = recruiterForm
           }else if(userType === 'other'){
             signForm.identity = 4
+            formDecode = otherForm
           }else if(userType === 'vendor'){
             signForm.identity = 5
+            formDecode = vendorForm
           }
 
-          let params = Object.assign(formDecode,signForm)
+          let params = Object.assign( Object.assign(form,formDecode),signForm)
 
           console.log(params)
 
@@ -205,8 +211,8 @@ export default {
             if (res.code == 200) {
 
               confirmLoadingStatus.value = false
-
-              ElMessageBox({
+              store.commit('clearSingUpData')
+                ElMessageBox({
                 title: "All Set",
                 message: "Let's get you logged in!",
                 dangerouslyUseHTMLString: false,

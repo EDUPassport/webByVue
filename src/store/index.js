@@ -1,6 +1,10 @@
 import {createStore} from "vuex";
+import SignUpForm from "./signup-form";
+import createPersistedState from 'vuex-persistedstate';
+
 
 const store = createStore({
+    namespaced: true,
     state() {
 
         let currentUserStr = localStorage.getItem('currentUser')
@@ -27,7 +31,7 @@ const store = createStore({
             imUnreadTotal:0,
             profilePercentage:profilePercentage,
             axiosPromiseArr:[],
-            userObjectData:[]
+            userObjectData:[],
         }
     },
     getters:{
@@ -91,12 +95,40 @@ const store = createStore({
         setAxiosPromiseArr(state, value) {
             state.axiosPromiseArr = value;
         },
+        setCode(state, code) {
+            state.SignUpForm.form.code = code
+        },
+        
+        clearSingUpData(state) {
+            state.SignUpForm.educatorForm = {},
+            state.SignUpForm.form = {},
+            state.SignUpForm.schoolForm = {}      
+            state.SignUpForm.recuiterForm = {}      
+            state.SignUpForm.otherForm = {}      
+            state.SignUpForm.vendorForm = {}         
+        },
+        setState(state){
+            state.SignUpForm.schoolForm.state_id=''
+        },
+        setTown(state){
+            state.SignUpForm.schoolForm.town_id=''
 
+        },
 
+        
     },
     actions:{
 
-    }
+    },
+    
+    modules: {
+       'SignUpForm':SignUpForm,
+    },
+    plugins: [
+        createPersistedState({
+          paths: ['SignUpForm']
+        })
+      ],
 
 })
 

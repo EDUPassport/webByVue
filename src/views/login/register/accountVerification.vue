@@ -87,9 +87,11 @@ import {ref, reactive,onMounted} from 'vue'
 import stepComponent from "@/components/register/stepComponent.vue";
 import sixInputVerificationCode from "@/components/register/sixInputVerificationCode.vue";
 import checkCodeButton from "@/components/register/checkCodeButton.vue";
-import {decodeByJsBase64, encodeByJsBase64} from "@/utils/utils";
+// import {decodeByJsBase64} from "@/utils/utils";
 import {REGISTER_EMAIL_CHECK} from "@/api/api";
 import {ElMessage} from 'element-plus'
+import { useStore } from 'vuex';
+
 
 export default {
   name: "accountVerification",
@@ -100,7 +102,11 @@ export default {
   },
   data() {
     return {
-      imgLogo
+      imgLogo,
+
+      formInfoDecode:{
+        email:this.$store.state.SignUpForm.form.email
+      }
     }
   },
   setup() {
@@ -111,6 +117,7 @@ export default {
     const userStepIndex = ref(3)
     const nextLoadingStatus = ref(false)
     const nextDisabledStatus = ref(true)
+    const store = useStore()
 
     function turnHome() {
       return router.push('/')
@@ -120,10 +127,9 @@ export default {
       return router.push('/login')
     }
 
-    const routeFormInfo = route.query.formInfo
-    const formInfoDecode = JSON.parse(decodeByJsBase64(routeFormInfo))
-
-
+    // const routeFormInfo = route.query.formInfo
+    // const formInfoDecode = JSON.parse(decodeByJsBase64(routeFormInfo))
+    
     const signForms = ref(null)
     const signForm = reactive({
         code:''
@@ -152,7 +158,7 @@ export default {
     }
 
     function continueNextStep(){
-      console.log(formInfoDecode)
+      // console.log(formInfoDecode)
       console.log(signForm)
 
       if(!signForm.code || signForm.code === ''){
@@ -166,21 +172,22 @@ export default {
       nextLoadingStatus.value =true
 
       let emailParams = {
-        email:formInfoDecode.email,
+        email:store.state.SignUpForm.form.email,
         code:signForm.code
       }
+      store.commit('setCode', signForm.code);
 
       REGISTER_EMAIL_CHECK(emailParams).then(res=>{
         if(res.code == 200){
           // console.log(res)
 
-          let routeFormInfo = decodeByJsBase64(route.query.formInfo)
-          let formDecode = JSON.parse(routeFormInfo)
+          // let routeFormInfo = decodeByJsBase64(route.query.formInfo)
+          // let formDecode = JSON.parse(routeFormInfo)
 
-          let params = Object.assign(formDecode,signForm)
-          let formInfo = encodeByJsBase64(JSON.stringify(params))
+          // let params = Object.assign(formDecode,signForm)
+          // let formInfo = encodeByJsBase64(JSON.stringify(params))
 
-          router.push({path: '/signup/passwordSetup', query: { type: userType,formInfo:formInfo}})
+          router.push({path: '/signup/passwordSetup', query: { type: userType}})
 
           nextLoadingStatus.value = false
 
@@ -219,7 +226,7 @@ export default {
     return {
       userStepIndex,
       nextDisabledStatus,
-      formInfoDecode,
+      // formInfoDecode,
       signForms,
       signForm,
       signRules,
