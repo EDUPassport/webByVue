@@ -565,7 +565,7 @@ export default {
     },
     unreadChanged(newValue) {
       console.log('---- unread ------' + newValue)
-      if (this.token) {
+      if (this.token && this.$store.state.username) {
         this.inAppNotificationData = []
         this.getUserUnreadList(1, this.inAppLimit)
         this.getUserUnread()
