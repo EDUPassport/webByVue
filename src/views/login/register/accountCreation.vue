@@ -127,8 +127,8 @@
 <script>
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
 
-import {useRouter, useRoute} from 'vue-router'
-import {ref, reactive, onMounted} from 'vue'
+import {useRouter, useRoute, onBeforeRouteLeave} from 'vue-router'
+import {ref, reactive, onMounted, onActivated} from 'vue'
 import {useStore} from 'vuex'
 import stepComponent from "@/components/register/stepComponent.vue";
 import {encodeByJsBase64, decodeByJsBase64} from "@/utils/utils";
@@ -511,6 +511,27 @@ export default {
             })
 
         }
+        const setKeepPage = (targetPages, toName, fromName) =>{
+            if(targetPages === 'all'){
+                return store.dispatch('addKeepAliveInclude',fromName)
+            }
+            if (!targetPages.includes(toName)) {
+                // 当前页面不需要缓存目标页面，则就移除在 include 中移除目标页面
+                store.dispatch('removeKeepAliveInclude', fromName)
+            } else {
+                // 当前面需要缓存目标页面，则就在 include 中添加目标页面
+                store.dispatch('addKeepAliveInclude',fromName)
+            }
+
+        }
+
+        onBeforeRouteLeave((to,from)=>{
+            setKeepPage(['accountVerification'], to.name, from.name)
+        })
+
+        onActivated(()=>{
+            console.log('on activated')
+        })
 
         onMounted(() => {
             if (userType === 'school' || userType === 'recruiter' || userType === 'other') {

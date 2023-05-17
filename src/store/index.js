@@ -27,7 +27,9 @@ const store = createStore({
             imUnreadTotal:0,
             profilePercentage:profilePercentage,
             axiosPromiseArr:[],
-            userObjectData:[]
+            userObjectData:[],
+            keepAliveIncludeData:[]
+
         }
     },
     getters:{
@@ -91,10 +93,23 @@ const store = createStore({
         setAxiosPromiseArr(state, value) {
             state.axiosPromiseArr = value;
         },
-
+        setKeepAlivePage(state, value){
+            if(!state.keepAliveIncludeData.includes(value)){
+                state.keepAliveIncludeData.push(value)
+            }
+        },
+        unsetKeepAlivePage(state, value){
+             state.keepAliveIncludeData =  state.keepAliveIncludeData.filter((item) => item !== value)
+        }
 
     },
     actions:{
+        addKeepAliveInclude(context,pageName){
+            context.commit('setKeepAlivePage', pageName)
+        },
+        removeKeepAliveInclude(context,pageName) {
+            context.commit('unsetKeepAlivePage', pageName)
+        }
 
     }
 

@@ -324,8 +324,8 @@
 
 <script>
 import imgLogo from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
-import {useRouter, useRoute} from 'vue-router'
-import {ref, reactive, onMounted} from 'vue'
+import {useRouter, useRoute,onBeforeRouteLeave} from 'vue-router'
+import {ref, reactive, onMounted,onActivated } from 'vue'
 import {useStore} from 'vuex'
 import {countriesData} from "@/utils/data";
 import stepComponent from "@/components/register/stepComponent.vue";
@@ -341,7 +341,7 @@ import {
 // import {ElMessageBox} from 'element-plus'
 
 export default {
-    name: "accountCreation",
+    name: "signupFillOutInfo",
     components: {
         stepComponent
     },
@@ -540,7 +540,7 @@ export default {
                             // methodJson.email = 'test' + Math.random() + '@gmail.com'
 
                             let registerParams = Object.assign({code: methodJson.code,redirect_uri:methodJson.redirect_uri}, params)
-                            console.log(registerParams)
+                            // console.log(registerParams)
 
                             GOOGLE_CALLBACK_API(registerParams).then(res => {
                                 console.log(res)
@@ -984,6 +984,28 @@ export default {
         function turnBack() {
             router.go(-1)
         }
+
+        const setKeepPage = (targetPages, toName, fromName) =>{
+            if(targetPages === 'all'){
+                return store.dispatch('addKeepAliveInclude',fromName)
+            }
+            if (!targetPages.includes(toName)) {
+                // 当前页面不需要缓存目标页面，则就移除在 include 中移除目标页面
+                store.dispatch('removeKeepAliveInclude', fromName)
+            } else {
+                // 当前面需要缓存目标页面，则就在 include 中添加目标页面
+                store.dispatch('addKeepAliveInclude',fromName)
+            }
+
+        }
+
+        onBeforeRouteLeave((to,from)=>{
+            setKeepPage(['accountCreation'], to.name, from.name)
+        })
+
+        onActivated(()=>{
+            console.log('on activated')
+        })
 
         onMounted(() => {
             if (userType === 'school' || userType === 'recruiter' || userType === 'other') {
