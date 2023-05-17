@@ -1470,7 +1470,8 @@ export default {
           let params = Object.assign({
             identity: identity,
             company_id: companyId,
-            menu_id: sMenuData.join(',')
+            menu_id: sMenuData.join(','),
+            display_name:localStorage.getItem('first_name').concat(" ", localStorage.getItem('last_name')) 
           }, this.contributorForm)
 
           USER_ADD_MENU(params).then(res => {
