@@ -1,7 +1,19 @@
 <template>
 
     <div style="max-width:1920px;margin:0 auto;">
-        <router-view></router-view>
+
+        <router-view v-slot="{Component}">
+
+            <keep-alive :include="includePages">
+                <component
+                    :is="Component"
+                    :key="$route.fullPath"
+                >
+                </component>
+            </keep-alive>
+
+        </router-view>
+
         <div v-if="showCookiePopup" class="cookie-popup">
             <p>We use cookies to provide the best user experience. Click the button below to accept our cookie policy.</p>
             <el-button type="success" @click="acceptCookie">Accept Cookies</el-button>
@@ -13,11 +25,20 @@
 
 <script>
 import VueCookies from 'vue-cookies'
-import {ref, onBeforeUnmount, onMounted} from 'vue'
+import {ref, onBeforeUnmount, onMounted, watch} from 'vue'
+import {useStore} from 'vuex'
 const version = require('../public/verison.json')
+
 export default {
     name: 'App',
     setup() {
+        const store = useStore()
+        const includePages = ref(store.state.keepAliveIncludeData)
+
+        watch(()=>includePages.value, (newValue,oldValue)=>{
+            console.log(newValue,oldValue)
+        })
+
         const showCookiePopup = ref(false)
         // 检查是否已经接受了cookie
         const checkCookie = ()=>{
@@ -78,7 +99,8 @@ export default {
 
         return {
             showCookiePopup,
-            acceptCookie
+            acceptCookie,
+            includePages
         }
 
     }

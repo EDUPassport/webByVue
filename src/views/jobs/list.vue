@@ -315,6 +315,10 @@ export default {
         params.payment_period = e.payment_period
       }
 
+      if(e.c_time){
+          params.c_time = e.c_time
+      }
+
       this.jobLoadingValue = true;
       JOB_LIST(params).then(res => {
         // console.log(res)
