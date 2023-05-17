@@ -81,10 +81,10 @@
                                 </el-form-item>
                                 <el-form-item label="Displayed Name" prop="display_name">
                                     <el-input
-                                        class="form-width-388"
-                                        :disabled="stepOneStatus"
-                                        v-model="personalForm.display_name"
-                                        placeholder="Name that will be visible to others">
+                                            class="form-width-388"
+                                            :disabled="stepOneStatus"
+                                            v-model="personalForm.display_name"
+                                            placeholder="Name that will be visible to others">
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item label="E-mail Address" prop="">
@@ -257,17 +257,17 @@
                             >
                                 <el-form-item label="Profession Title" prop="profession_title">
                                     <el-input
-                                        class="form-width-388"
-                                        :disabled="stepTwoStatus"
-                                        v-model="professionForm.profession_title"
-                                        placeholder="Enter Profession title here"></el-input>
+                                            class="form-width-388"
+                                            :disabled="stepTwoStatus"
+                                            v-model="professionForm.profession_title"
+                                            placeholder="Enter Profession title here"></el-input>
                                 </el-form-item>
                                 <el-form-item label="Company Name" prop="company_name">
                                     <el-input
-                                        class="form-width-388"
-                                        :disabled="stepTwoStatus"
-                                        v-model="professionForm.company_name"
-                                        placeholder="Enter your Company Name"></el-input>
+                                            class="form-width-388"
+                                            :disabled="stepTwoStatus"
+                                            v-model="professionForm.company_name"
+                                            placeholder="Enter your Company Name"></el-input>
                                 </el-form-item>
                                 <el-form-item label="Job Title" prop="job_title">
                                     <el-input
@@ -285,6 +285,84 @@
                                             type="textarea"
                                             :rows="6"
                                             placeholder="Description*">
+                                    </el-input>
+                                </el-form-item>
+
+                                <el-form-item label="Location">
+
+                                    <div class="xll-form-location-exist" v-if="haveLocationStatus">
+
+                                        <span>{{ $filters.countryInfoFormat(countryInfo) }}</span>
+                                        <el-button
+                                                link
+                                                :disabled="stepTwoStatus"
+                                                @click="changeEditLocation()">
+                                            Edit
+                                        </el-button>
+
+                                    </div>
+
+                                    <div class="xll-form-location-no-exist" v-else>
+                                        <el-select v-model="countryObj"
+                                                   class="form-width-388 form-margin-bottom-18"
+                                                   :disabled="stepTwoStatus"
+                                                   @change="countryChange"
+                                                   value-key="id"
+                                                   filterable
+                                                   placeholder="Select Country">
+                                            <el-option v-for="(item,i) in countryOptions"
+                                                       :key="i"
+                                                       :label="item.name"
+                                                       :value="item">
+                                            </el-option>
+                                        </el-select>
+                                        <template v-if="provinceOptions.length>0">
+                                            <el-select v-model="provinceObj"
+                                                       class="form-width-388 form-margin-bottom-18"
+                                                       :disabled="stepTwoStatus"
+                                                       value-key="id"
+                                                       filterable
+                                                       @change="provinceChange"
+                                                       placeholder="Select Province">
+                                                <el-option v-for="(item,i) in provinceOptions"
+                                                           :key="i"
+                                                           :label="item.name"
+                                                           :value="item">
+                                                </el-option>
+                                            </el-select>
+                                        </template>
+                                        <template v-if="cityOptions.length>0">
+                                            <el-select v-model="cityObj"
+                                                       :disabled="stepTwoStatus"
+                                                       class="form-width-388 form-margin-bottom-18"
+                                                       value-key="id"
+                                                       filterable
+                                                       @change="cityChange"
+                                                       placeholder="Select City">
+                                                <el-option v-for="(item,i) in cityOptions"
+                                                           :key="i"
+                                                           :label="item.name"
+                                                           :value="item">
+                                                </el-option>
+                                            </el-select>
+                                        </template>
+
+                                        <el-button
+                                                v-if="changeCancelLocation"
+                                                link
+                                                :disabled="stepTwoStatus"
+                                                @click="changeCancelLocation()">
+                                            Cancel
+                                        </el-button>
+
+                                    </div>
+
+                                </el-form-item>
+                                <el-form-item label="Address">
+                                    <el-input v-model="professionForm.address"
+                                              :disabled="stepTwoStatus"
+                                              class="form-width-388"
+                                              placeholder="Street name,building,apartment">
                                     </el-input>
                                 </el-form-item>
 
@@ -359,7 +437,7 @@
                                 <el-form-item label="Category">
 
                                     <el-checkbox-group :disabled="stepThreeStatus"
-                                                       v-model="businessForm.sub_categories"
+                                                       v-model="businessForm.sub_category"
                                                        class="form-width-388"
                                                        :max="1">
                                         <template v-for="(item,i) in subCategoryOptions" :key="i">
@@ -379,16 +457,120 @@
 
                                 </el-form-item>
 
+                                <el-form-item label="License">
+                                    <template #label>
+                                        <div>
+                                            <div>
+                                                License
+                                            </div>
+                                            <div class="profile-picture-tips">
+                                                License for Company
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div class="profile-picture-r">
+
+                                        <template v-if="businessForm.license && editLicenseStatus">
+
+                                            <div class="attachment-xll">
+                                                <div class="attachment-xll-btns">
+                                                    <div class="attachment-xll-btn">
+                                                        <div class="attachment-xll-btn-l">
+                                                            <el-icon color="#667085">
+                                                                <IconIcomoonFreeAttachment/>
+                                                            </el-icon>
+                                                            {{ businessForm.license_name }}
+                                                        </div>
+                                                        <div class="attachment-xll-btn-r">
+                                                            <el-icon class="attachment-xll-icon"
+                                                                     @click="handleSingleImageRemove('license')"
+                                                                     color="#F97066">
+                                                                <Delete></Delete>
+                                                            </el-icon>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="attachment-xll-btn-edit"
+                                                         @click="handleEditMedia('license')"
+                                                    >
+                                                        <el-icon class="attachment-xll-icon">
+                                                            <IconUilEdit/>
+                                                        </el-icon>
+                                                    </div>
+                                                    <div class="attachment-xll-btn-download"
+                                                         @click="handleDownloadMedia(businessForm.license)"
+                                                    >
+                                                        <el-icon class="attachment-xll-icon">
+                                                            <IconUisDownloadAlt/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                                <div class="attachment-xll-image">
+                                                    <el-image class="attachment-xll-img"
+                                                              :src="businessForm.license"
+                                                              fit="cover"
+                                                    >
+                                                    </el-image>
+                                                    <div class="attachment-xll-image-mask">
+                                                        <el-icon
+                                                                style="cursor: pointer;"
+                                                                @click="handleSingleImagePreview(businessForm.license,'license')"
+                                                                color="#ffffff"
+                                                                :size="20">
+                                                            <zoom-in/>
+                                                        </el-icon>
+
+                                                        <el-icon
+                                                                style="cursor: pointer;margin-left: 15px;"
+                                                                @click="handleSingleImageRemove('license')"
+                                                                color="#F97066"
+                                                                :size="20">
+                                                            <Delete/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </template>
+                                        <template v-else>
+                                            <el-upload
+                                                    :disabled="stepThreeStatus"
+                                                    action=""
+                                                    :limit="1"
+                                                    :headers="uploadHeaders"
+                                                    :show-file-list="false"
+                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                    :http-request="licensePhotoHttpRequest"
+                                                    :before-upload="beforeLicensePhotoUpload"
+                                            >
+                                                <template #trigger>
+                                                    <div class="attachment-btn">
+                                                        <span>Attach files</span>
+                                                        <el-icon color="#667085">
+                                                            <IconIcomoonFreeAttachment/>
+                                                        </el-icon>
+                                                    </div>
+                                                </template>
+
+                                            </el-upload>
+                                        </template>
+                                    </div>
+
+                                </el-form-item>
+
                                 <el-form-item label="Year of establishment">
                                     <el-date-picker
-                                        v-model="businessForm.year_founded"
-                                        :disabled="stepThreeStatus"
-                                        type="year"
-                                        format="YYYY"
-                                        value-format="YYYY"
-                                        placeholder="eg, 1890"
-                                        :disabledDate="birthdayDisabledDate"
-                                        style="width: 100%"
+                                            v-model="businessForm.year_founded"
+                                            :disabled="stepThreeStatus"
+                                            type="year"
+                                            format="YYYY"
+                                            value-format="YYYY"
+                                            placeholder="eg, 1890"
+                                            :disabledDate="birthdayDisabledDate"
+                                            class="form-width-388"
                                     ></el-date-picker>
                                 </el-form-item>
 
@@ -460,6 +642,115 @@
                                     label-position="left"
                                     class="demo-ruleForm"
                             >
+                                <el-form-item label="Logo">
+                                    <template #label>
+                                        <div>
+                                            <div>
+                                                Logo
+                                            </div>
+                                            <div class="profile-picture-tips">
+                                                Attach Image for Logo
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div class="profile-picture-r">
+
+                                        <template v-if="mediaForm.logo && editLogoStatus">
+
+                                            <div class="attachment-xll">
+                                                <div class="attachment-xll-btns">
+                                                    <div class="attachment-xll-btn">
+                                                        <div class="attachment-xll-btn-l">
+                                                            <el-icon color="#667085">
+                                                                <IconIcomoonFreeAttachment/>
+                                                            </el-icon>
+                                                            {{ mediaForm.logo_name }}
+                                                        </div>
+                                                        <div class="attachment-xll-btn-r">
+                                                            <el-icon class="attachment-xll-icon"
+                                                                     v-if="!stepFourStatus"
+                                                                     @click="handleSingleImageRemove('logo')"
+                                                                     color="#F97066">
+                                                                <Delete></Delete>
+                                                            </el-icon>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="attachment-xll-btn-edit"
+                                                         v-if="!stepFourStatus"
+                                                         @click="handleEditMedia('logo')"
+                                                    >
+                                                        <el-icon class="attachment-xll-icon">
+                                                            <IconUilEdit/>
+                                                        </el-icon>
+                                                    </div>
+                                                    <div class="attachment-xll-btn-download"
+                                                         @click="handleDownloadMedia(mediaForm.logo)"
+                                                    >
+                                                        <el-icon class="attachment-xll-icon">
+                                                            <IconUisDownloadAlt/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                                <div class="attachment-xll-image">
+                                                    <el-image class="attachment-xll-img"
+                                                              :src="mediaForm.logo"
+                                                              fit="cover"
+                                                    >
+                                                    </el-image>
+                                                    <div class="attachment-xll-image-mask"
+                                                         v-if="!stepFourStatus"
+                                                    >
+                                                        <el-icon
+                                                                style="cursor: pointer;"
+                                                                @click="handleSingleImagePreview(mediaForm.logo,'logo')"
+                                                                color="#ffffff"
+                                                                :size="20">
+                                                            <zoom-in/>
+                                                        </el-icon>
+
+                                                        <el-icon
+                                                                style="cursor: pointer;margin-left: 15px;"
+                                                                @click="handleSingleImageRemove('logo')"
+                                                                color="#F97066"
+                                                                :size="20">
+                                                            <Delete/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </template>
+                                        <template v-else>
+                                            <el-upload
+                                                    :disabled="stepFourStatus"
+                                                    action=""
+                                                    :limit="1"
+                                                    :headers="uploadHeaders"
+                                                    :show-file-list="false"
+                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                    :http-request="logoHttpRequest"
+                                                    :before-upload="beforeLogoUpload"
+                                            >
+
+                                                <template #trigger>
+                                                    <div class="attachment-btn">
+                                                        <span>Attach files</span>
+                                                        <el-icon color="#667085">
+                                                            <IconIcomoonFreeAttachment/>
+                                                        </el-icon>
+                                                    </div>
+                                                </template>
+
+                                            </el-upload>
+                                        </template>
+                                    </div>
+
+                                </el-form-item>
+
                                 <el-form-item label="Background Image">
                                     <template #label>
                                         <div>
@@ -487,6 +778,7 @@
                                                         </div>
                                                         <div class="attachment-xll-btn-r">
                                                             <el-icon class="attachment-xll-icon"
+                                                                     v-if="!stepFourStatus"
                                                                      @click="handleSingleImageRemove('background_image')"
                                                                      color="#F97066">
                                                                 <Delete></Delete>
@@ -495,6 +787,7 @@
 
                                                     </div>
                                                     <div class="attachment-xll-btn-edit"
+                                                         v-if="!stepFourStatus"
                                                          @click="handleEditMedia('background_image')"
                                                     >
                                                         <el-icon class="attachment-xll-icon">
@@ -516,7 +809,7 @@
                                                               fit="cover"
                                                     >
                                                     </el-image>
-                                                    <div class="attachment-xll-image-mask">
+                                                    <div class="attachment-xll-image-mask" v-if="!stepFourStatus">
                                                         <el-icon
                                                                 style="cursor: pointer;"
                                                                 @click="handleSingleImagePreview(mediaForm.background_image,'background_image')"
@@ -592,6 +885,7 @@
                                                         </div>
                                                         <div class="attachment-xll-btn-r">
                                                             <el-icon class="attachment-xll-icon"
+                                                                     v-if="!stepFourStatus"
                                                                      @click="handleSingleImageRemove('video_url')"
                                                                      color="#F97066">
                                                                 <Delete></Delete>
@@ -600,6 +894,7 @@
 
                                                     </div>
                                                     <div class="attachment-xll-btn-edit"
+                                                         v-if="!stepFourStatus"
                                                          @click="handleEditMedia('video_url')"
                                                     >
                                                         <el-icon class="attachment-xll-icon">
@@ -621,7 +916,7 @@
                                                            controls
                                                     >
                                                     </video>
-                                                    <div class="attachment-xll-image-mask">
+                                                    <div class="attachment-xll-image-mask" v-if="!stepFourStatus">
                                                         <el-icon
                                                                 style="cursor: pointer;"
                                                                 @click="handleSingleImagePreview(mediaForm.video_url,'video_url')"
@@ -728,6 +1023,7 @@
                                                         </div>
                                                         <div class="attachment-xll-btn-r">
                                                             <el-icon class="attachment-xll-icon"
+                                                                     v-if="!stepFourStatus"
                                                                      @click="handleAccountImageRemove(item,i)"
                                                                      color="#F97066">
                                                                 <Delete></Delete>
@@ -751,7 +1047,7 @@
                                                               fit="cover"
                                                     >
                                                     </el-image>
-                                                    <div class="attachment-xll-image-mask">
+                                                    <div class="attachment-xll-image-mask" v-if="!stepFourStatus">
                                                         <el-icon
                                                                 style="cursor: pointer;"
                                                                 @click="handleSingleImagePreview(item.url,'account_files')"
@@ -778,87 +1074,6 @@
 
                                 </el-form-item>
 
-                                <el-form-item label="Resume PDF">
-                                    <template #label>
-                                        <div>
-                                            <div>
-                                                Resume PDF
-                                            </div>
-                                            <div class="profile-picture-tips">
-                                                Attach Resume PDF for your profile
-                                            </div>
-                                        </div>
-                                    </template>
-
-                                    <div class="profile-picture-r">
-
-                                        <template v-if="mediaForm.resume_pdf && editResumeStatus">
-
-                                            <div class="attachment-xll">
-                                                <div class="attachment-xll-btns">
-                                                    <div class="attachment-xll-btn">
-                                                        <div class="attachment-xll-btn-l">
-                                                            <el-icon color="#667085">
-                                                                <IconIcomoonFreeAttachment/>
-                                                            </el-icon>
-                                                            {{ mediaForm.resume_name }}
-                                                        </div>
-                                                        <div class="attachment-xll-btn-r">
-                                                            <el-icon class="attachment-xll-icon"
-                                                                     @click="handleSingleImageRemove('resume_pdf')"
-                                                                     color="#F97066">
-                                                                <Delete></Delete>
-                                                            </el-icon>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="attachment-xll-btn-edit"
-                                                         @click="handleEditMedia('resume_pdf')"
-                                                    >
-                                                        <el-icon class="attachment-xll-icon">
-                                                            <IconUilEdit/>
-                                                        </el-icon>
-                                                    </div>
-                                                    <div class="attachment-xll-btn-download"
-                                                         @click="handleDownloadMedia(mediaForm.resume_pdf)"
-                                                    >
-                                                        <el-icon class="attachment-xll-icon">
-                                                            <IconUisDownloadAlt/>
-                                                        </el-icon>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                        </template>
-                                        <template v-else>
-                                            <el-upload
-                                                    action=""
-                                                    :disabled="stepFourStatus"
-                                                    :limit="1"
-                                                    :headers="uploadHeaders"
-                                                    :show-file-list="false"
-                                                    accept=".pdf,.PDF"
-                                                    :http-request="resumePdfHttpRequest"
-                                                    :before-upload="beforeResumePdfUpload"
-                                            >
-
-                                                <template #trigger>
-                                                    <div class="attachment-btn">
-                                                        <span>Attach files</span>
-                                                        <el-icon color="#667085">
-                                                            <IconIcomoonFreeAttachment/>
-                                                        </el-icon>
-                                                    </div>
-                                                </template>
-
-                                            </el-upload>
-                                        </template>
-                                    </div>
-
-                                </el-form-item>
-
-
                             </el-form>
                         </div>
 
@@ -875,7 +1090,8 @@
         </div>
 
         <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
-            <template v-if="dialogSingleField === 'background_image'">
+            <template v-if="dialogSingleField === 'background_image' ||
+            dialogSingleField === 'license' || dialogSingleField === 'logo' ">
                 <el-image :src="dialogSingleImageUrl"></el-image>
             </template>
             <template v-if="dialogSingleField === 'video_url' ">
@@ -900,7 +1116,7 @@ import arrowUpIcon from '@/assets/newHome/arrow-circle-up.svg'
 import {countriesData} from "@/utils/data";
 import {phoneCodeData} from "@/utils/phoneCode";
 import {
-    ADD_USER_IMG_V2,
+    ADD_USER_IMG_V2, GET_COUNTRY_LIST,
     RECRUITER_COMPANY_EDIT_V2, SWITCH_IDENTITY_V2,
     UPLOAD_BY_ALI_OSS,
     UPLOAD_BY_SERVICE,
@@ -957,10 +1173,15 @@ const personalRules = reactive({
 
 const professionForms = ref(null)
 const professionForm = reactive({
-    profession_title:'',
+    profession_title: '',
     job_title: '',
     company_name: '',
     desc: '',
+    country_id: '',
+    state_id: '',
+    town_id: '',
+    country_info: '',
+    address: ''
 })
 
 const professionRules = reactive({
@@ -971,11 +1192,13 @@ const professionRules = reactive({
 
 const businessForms = ref(null)
 const businessForm = reactive({
-    license:'',
-    sub_categories: [],
-    sub_identity_id: '',
-    sub_identity_name_cn: '',
-    sub_identity_name_en: '',
+    license_name: '',
+    license: '',
+    year_founded: '',
+    sub_category: [],
+    category_id: '',
+    category_name_cn: '',
+    category_name_en: '',
 })
 
 const businessRules = reactive({
@@ -989,12 +1212,12 @@ const businessRules = reactive({
 
 const mediaForms = ref(null)
 const mediaForm = reactive({
+    logo: '',
+    logo_name: '',
     background_image_name: '',
     background_image: '',
     video_name: '',
-    video_url: '',
-    resume_name: '',
-    resume_pdf: ''
+    video_url: ''
 })
 
 const mediaRules = reactive({
@@ -1018,7 +1241,7 @@ const phoneCodeOptions = ref(phoneCodeData)
 const loadUserObjectData = async () => {
 
     if (
-         localStorageService.getItem('teachExp')
+        localStorageService.getItem('teachExp')
     ) {
 
 
@@ -1045,6 +1268,123 @@ const loadUserObjectData = async () => {
 
 }
 
+const countryOptions = ref([])
+const provinceOptions = ref([])
+const cityOptions = ref([])
+const countryName = ref('')
+const countryNameCn = ref('')
+const provinceName = ref('')
+const provinceNameCn = ref('')
+const cityName = ref('')
+const cityNameCn = ref('')
+
+const countryObj = ref({})
+const provinceObj = ref({})
+const cityObj = ref({})
+
+const haveLocationStatus = ref(false)
+const showLocationCancelStatus = ref(false)
+const countryInfo = ref({})
+const changeEditLocation = () => {
+    haveLocationStatus.value = false;
+    showLocationCancelStatus.value = true;
+
+    countryName.value = '';
+    countryNameCn.value = '';
+
+    provinceName.value = '';
+    provinceNameCn.value = '';
+
+    cityName.value = '';
+    cityNameCn.value = '';
+}
+
+const changeCancelLocation = () => {
+    haveLocationStatus.value = true;
+    showLocationCancelStatus.value = false;
+
+    // let companyInfo = this.companyInfo;
+    //
+    // if (companyInfo.country_info) {
+    //     let countryInfoArr = JSON.parse(companyInfo.country_info)
+    //     countryName.value = countryInfoArr.country_name_en;
+    //     countryNameCn.value = countryInfoArr.country_name_cn;
+    //     provinceName.value = countryInfoArr.province_name_en;
+    //     provinceNameCn.value = countryInfoArr.province_name_cn;
+    //     cityName.value = countryInfoArr.city_name_en;
+    //     cityNameCn.value = countryInfoArr.city_name_cn;
+    //     professionForm.country_info = companyInfo.country_info;
+    // }
+}
+
+const countryChange = (e) => {
+    professionForm.state_id = undefined
+    professionForm.town_id = undefined
+
+    provinceOptions.value = []
+    cityOptions.value = []
+
+    professionForm.country_id = e.id
+    countryName.value = e.name
+    countryNameCn.value = e.name
+    getAllProvinces(e.id)
+}
+
+const provinceChange = (e) => {
+    professionForm.town_id = undefined
+    cityOptions.value = []
+
+    professionForm.state_id = e.id
+    provinceName.value = e.name
+    provinceNameCn.value = e.name
+
+    getAllCitys(professionForm.country_id, e.id)
+}
+
+const cityChange = (e) => {
+    professionForm.town_id = e.id
+    cityName.value = e.name
+    cityNameCn.value = e.name
+}
+
+const getAllCountry = async () => {
+    let params = {}
+    await GET_COUNTRY_LIST(params).then(res => {
+        if (res.code == 200) {
+            countryOptions.value = res.message;
+        }
+    }).catch(err => {
+        ElMessage.error(err.msg)
+    })
+}
+
+const getAllProvinces = (countryId) => {
+    let params = {
+        country_id: countryId
+    }
+    GET_COUNTRY_LIST(params).then(res => {
+        if (res.code == 200) {
+            provinceOptions.value = res.message;
+        }
+    }).catch(err => {
+        ElMessage.error(err.msg)
+    })
+}
+
+const getAllCitys = (countryId, stateId) => {
+    let params = {
+        country_id: countryId,
+        state_id: stateId
+    }
+    GET_COUNTRY_LIST(params).then(res => {
+        if (res.code == 200) {
+            cityOptions.value = res.message;
+        }
+    }).catch(err => {
+        ElMessage.error(err.msg)
+    })
+}
+
 const getBasicInfo = async () => {
 
     let params = {
@@ -1056,7 +1396,10 @@ const getBasicInfo = async () => {
         if (res.code == 200) {
             let userContact = res.message.user_contact;
             let companyInfo = res.message.user_contact.company;
-            
+
+            personalForm.first_name = userContact.first_name
+            personalForm.last_name = userContact.last_name
+
             if (companyInfo.display_name) {
                 personalForm.display_name = companyInfo.display_name;
             }
@@ -1064,7 +1407,7 @@ const getBasicInfo = async () => {
                 personalForm.work_email = companyInfo.work_email;
             }
 
-            if(companyInfo.country_code){
+            if (companyInfo.country_code) {
                 personalForm.country_code = companyInfo.country_code;
             }
 
@@ -1076,7 +1419,6 @@ const getBasicInfo = async () => {
                 personalForm.profile_photo = companyInfo.profile_photo
             }
 
-
             if (companyInfo.company_name) {
                 professionForm.company_name = companyInfo.company_name;
             }
@@ -1084,6 +1426,11 @@ const getBasicInfo = async () => {
             if (companyInfo.job_title) {
                 professionForm.job_title = companyInfo.job_title;
             }
+
+            if (companyInfo.address) {
+                professionForm.address = companyInfo.address;
+            }
+
             if (companyInfo.website) {
                 professionForm.website = companyInfo.website;
             }
@@ -1102,26 +1449,53 @@ const getBasicInfo = async () => {
             // if(companyInfo.lat && companyInfo.lng){
             //     this.mapCenterValue = [companyInfo.lng, companyInfo.lat]
             // }
-            
 
-            // step one form 第一部分
-            personalForm.first_name = userContact.first_name
-            personalForm.last_name = userContact.last_name
+            if (companyInfo.country_info) {
+                professionForm.country_info = companyInfo.country_info;
 
-            personalForm.sub_categories = []
-            let subIdentityStr = companyInfo.sub_identity_id
-            if (subIdentityStr) {
-                if (subIdentityStr.length > 1) {
-                    let subIdentityArr = subIdentityStr.split(',')
-                    let subData = []
-                    subIdentityArr.forEach(item => {
-                        let cateValue = subCategoryOptions.value.filter(value => value.id == item)
-                        subData.push(cateValue[0])
-                    })
-                    personalForm.sub_categories = subData
-                }
+                let countryInfoArr = JSON.parse(companyInfo.country_info)
+
+                countryName.value = countryInfoArr.country_name_en;
+                countryNameCn.value = countryInfoArr.country_name_cn;
+                provinceName.value = countryInfoArr.province_name_en;
+                provinceNameCn.value = countryInfoArr.province_name_cn;
+                cityName.value = countryInfoArr.city_name_en;
+                cityNameCn.value = countryInfoArr.city_name_cn;
+
+                countryInfo.value = companyInfo.country_info;
+
+                haveLocationStatus.value = true;
             }
 
+            if (companyInfo.country_id) {
+                professionForm.country_id = companyInfo.country_id;
+            }
+            if (companyInfo.state_id) {
+                professionForm.state_id = companyInfo.state_id;
+            }
+            if (companyInfo.town_id) {
+                professionForm.town_id = companyInfo.town_id;
+            }
+
+            businessForm.sub_category = []
+            let cateValue = subCategoryOptions.value.filter(value => value.id == companyInfo.category_id)
+            businessForm.sub_category = cateValue
+
+            let licenseImg = companyInfo.license
+            if (licenseImg) {
+                businessForm.license = licenseImg
+                businessForm.license_name = licenseImg.substring(licenseImg.length - 10)
+            }
+
+            if (companyInfo.year_founded) {
+                businessForm.year_founded = companyInfo.year_founded.toString();
+            }
+
+            let logoImg = companyInfo.logo
+            if (logoImg) {
+                mediaForm.logo = logoImg
+                mediaForm.logo_name = logoImg.substring(logoImg.length - 10)
+            }
 
             let backgroundImage = companyInfo.background_image
             if (backgroundImage) {
@@ -1130,7 +1504,7 @@ const getBasicInfo = async () => {
             }
 
             let videoUrl = companyInfo.video_url
-            if(videoUrl){
+            if (videoUrl) {
                 mediaForm.video_url = videoUrl
                 mediaForm.video_name = videoUrl.substring(videoUrl.length - 10)
             }
@@ -1142,7 +1516,7 @@ const getBasicInfo = async () => {
                     let userImagesArr = []
                     userImages.forEach(item => {
                         let userImageObj = {
-                            name:  item.url.substring(item.url.length - 10),
+                            name: item.url.substring(item.url.length - 10),
                             url: item.url
                         }
                         userImagesArr.push(userImageObj)
@@ -1152,14 +1526,6 @@ const getBasicInfo = async () => {
                 }
 
             }
-
-            let resume = companyInfo.resume_pdf
-            if(resume){
-                mediaForm.resume_pdf = resume
-                mediaForm.resume_name = resume.substring(resume.length - 10)
-            }
-
-            // this.initProfileLoadingStatus = false;
 
         }
     }).catch(err => {
@@ -1245,11 +1611,137 @@ const beforeProfilePhotoUpload = (file) => {
     const isLt2M = file.size / 1024 / 1024 < 20
 
     if (!isLt2M) {
-        ElMessage.error('Avatar picture size can not exceed 20MB')
+        ElMessage.error('File size can not exceed 20MB')
     }
     return isLt2M
 }
 
+const licensePhotoHttpRequest = (options) => {
+    uploadLoadingStatus.value = true;
+    // console.log(options)
+    new ImageCompressor(options.file, {
+        quality: 0.6,
+        success(file) {
+            // console.log(file)
+            const formData = new FormData();
+
+            formData.append('token', localStorage.getItem('token'))
+            // console.log(file)
+            let isInChina = process.env.VUE_APP_CHINA
+            if (isInChina === 'yes') {
+                formData.append('file[]', file, file.name)
+                UPLOAD_BY_ALI_OSS(formData).then(res => {
+                    // console.log(res)
+                    if (res.code === 200) {
+                        let myFileUrl = res.data[0]['file_url']
+                        businessForm.license = myFileUrl
+                        businessForm.license_name = myFileUrl.substring(myFileUrl.length - 10)
+                        uploadLoadingStatus.value = false;
+                        editLicenseStatus.value = true
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
+
+            if (isInChina === 'no') {
+                formData.append('file', file, file.name)
+                UPLOAD_BY_SERVICE(formData).then(res => {
+                    // console.log(res)
+                    if (res.code === 200) {
+                        let myFileUrl = res.data[0]['file_url']
+                        businessForm.license = myFileUrl
+                        businessForm.license_name = myFileUrl.substring(myFileUrl.length - 10)
+                        uploadLoadingStatus.value = false;
+                        editLicenseStatus.value = true
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
+
+        },
+        error(err) {
+            console.log(err.message)
+        }
+
+    })
+
+}
+
+const beforeLicensePhotoUpload = (file) => {
+    uploadLoadingStatus.value = true;
+    const isLt2M = file.size / 1024 / 1024 < 20
+
+    if (!isLt2M) {
+        ElMessage.error('File size can not exceed 20MB')
+    }
+    return isLt2M
+}
+
+const logoHttpRequest = (options) => {
+
+    // console.log(options)
+    new ImageCompressor(options.file, {
+        quality: 0.6,
+        success(file) {
+            // console.log(file)
+            const formData = new FormData();
+
+            formData.append('token', localStorage.getItem('token'))
+            // console.log(file)
+            let isInChina = process.env.VUE_APP_CHINA
+            if (isInChina === 'yes') {
+                formData.append('file[]', file, file.name)
+                UPLOAD_BY_ALI_OSS(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.data[0]['file_url'];
+                        uploadLoadingStatus.value = false;
+                        editLogoStatus.value = true
+                        mediaForm.logo_name = myFileUrl.substring(myFileUrl.length - 10)
+                        mediaForm.logo = myFileUrl
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+
+            }
+
+            if (isInChina === 'no') {
+                formData.append('file', file, file.name)
+                UPLOAD_BY_SERVICE(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.message.file_path;
+                        uploadLoadingStatus.value = false;
+                        editLogoStatus.value = true
+                        mediaForm.logo_name = myFileUrl.substring(myFileUrl.length - 10)
+                        mediaForm.logo = myFileUrl
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+
+            }
+
+        },
+        error(err) {
+            console.log(err.message)
+        }
+
+    })
+
+}
+
+const beforeLogoUpload = (file) => {
+    uploadLoadingStatus.value = true;
+    const isLt2M = file.size / 1024 / 1024 < 20
+    if (!isLt2M) {
+        ElMessage.error('File size can not exceed 20MB')
+    }
+    return isLt2M
+}
 
 const backgroundHttpRequest = (options) => {
 
@@ -1270,6 +1762,7 @@ const backgroundHttpRequest = (options) => {
                     if (res.code == 200) {
                         let myFileUrl = res.data[0]['file_url'];
                         uploadLoadingStatus.value = false;
+                        editBackgroundImageStatus.value = true
                         mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
                         mediaForm.background_image = myFileUrl
                     }
@@ -1286,6 +1779,7 @@ const backgroundHttpRequest = (options) => {
                     if (res.code == 200) {
                         let myFileUrl = res.message.file_path;
                         uploadLoadingStatus.value = false;
+                        editBackgroundImageStatus.value = true
                         mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
                         mediaForm.background_image = myFileUrl
                     }
@@ -1308,7 +1802,7 @@ const beforeBackgroundPhotoUpload = (file) => {
     uploadLoadingStatus.value = true;
     const isLt2M = file.size / 1024 / 1024 < 20
     if (!isLt2M) {
-        ElMessage.error('Avatar picture size can not exceed 20MB')
+        ElMessage.error('File size can not exceed 20MB')
     }
     return isLt2M
 }
@@ -1329,6 +1823,7 @@ const videoHttpRequest = (options) => {
             if (res.code == 200) {
                 let myFileUrl = res.data[0]['file_url'];
                 uploadLoadingStatus.value = false;
+                editVideoStatus.value = true
                 mediaForm.video_name = myFileUrl.substring(myFileUrl.length - 10)
                 mediaForm.video_url = myFileUrl
             }
@@ -1345,6 +1840,7 @@ const videoHttpRequest = (options) => {
             if (res.code == 200) {
                 let myFileUrl = res.message.file_path;
                 uploadLoadingStatus.value = false;
+                editVideoStatus.value = true
                 mediaForm.video_name = myFileUrl.substring(myFileUrl.length - 10)
                 mediaForm.video_url = myFileUrl
             }
@@ -1361,59 +1857,6 @@ const beforeIntroVideoUpload = (file) => {
     uploadLoadingStatus.value = true;
 }
 
-const resumePdfHttpRequest = (options) => {
-
-    // console.log(options)
-    const formData = new FormData();
-
-    formData.append('token', localStorage.getItem('token'))
-    // console.log(file)
-    let isInChina = process.env.VUE_APP_CHINA
-    if (isInChina === 'yes') {
-        formData.append('file[]', options.file, options.file.name)
-        UPLOAD_BY_ALI_OSS(formData).then(res => {
-            // console.log(res)
-            if (res.code == 200) {
-                let myFileUrl = res.data[0]['file_url'];
-                uploadLoadingStatus.value = false;
-                mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
-                mediaForm.resume_pdf = myFileUrl
-            }
-        }).catch(err => {
-            console.log(err)
-        })
-
-    }
-
-    if (isInChina === 'no') {
-        formData.append('file', options.file, options.file.name)
-        UPLOAD_BY_SERVICE(formData).then(res => {
-            // console.log(res)
-            if (res.code == 200) {
-                let myFileUrl = res.message.file_path;
-                uploadLoadingStatus.value = false;
-                mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
-                mediaForm.resume_pdf = myFileUrl
-            }
-        }).catch(err => {
-            console.log(err)
-        })
-
-    }
-
-}
-const beforeResumePdfUpload = (file) => {
-    uploadLoadingStatus.value = true;
-
-    const isLt2M = file.size / 1024 / 1024 < 20
-
-    if (!isLt2M) {
-        ElMessage.error('Avatar picture size can not exceed 20MB')
-    }
-    return isLt2M
-}
-
-
 const accountFilesData = ref([])
 // const editAccountFilesStatus = ref(true)
 
@@ -1427,7 +1870,7 @@ const beforeAccountImageUpload = (file) => {
 }
 
 const handleAccountImageChange = (file, fileList) => {
-    console.log(file)
+    // console.log(file)
     console.log(fileList)
     uploadLoadingStatus.value = true;
     let imgParams = new FormData();
@@ -1478,7 +1921,7 @@ const uploadAccountImages = () => {
     }
 
     let params = {
-        identity: 1,
+        identity: 2,
         company_id: companyId.value,
         img: oldData
     }
@@ -1510,10 +1953,22 @@ const handleSingleImagePreview = (url, field) => {
 }
 
 const handleSingleImageRemove = (field) => {
+
+    if (field === 'license') {
+        businessForm.license = ''
+        businessForm.license_name = ''
+    }
+
+    if (field === 'logo') {
+        mediaForm.logo = ''
+        mediaForm.logo_name = ''
+    }
+
     if (field === 'background_image') {
         mediaForm.background_image = ''
         mediaForm.background_image_name = ''
     }
+
     if (field === 'video_url') {
         mediaForm.video_url = ''
         mediaForm.video_name = ''
@@ -1525,11 +1980,18 @@ const birthdayDisabledDate = (date) => {
     let myDate = new Date();
     return date.getTime() >= myDate.getTime();
 }
-
+const editLicenseStatus = ref(true)
+const editLogoStatus = ref(true)
 const editBackgroundImageStatus = ref(true)
 const editVideoStatus = ref(true)
 const editResumeStatus = ref(true)
 const handleEditMedia = (field) => {
+    if (field === 'license') {
+        editLicenseStatus.value = false
+    }
+    if (field === 'logo') {
+        editLogoStatus.value = false
+    }
     if (field === 'background_image') {
         editBackgroundImageStatus.value = false
     }
@@ -1541,6 +2003,7 @@ const handleEditMedia = (field) => {
     }
 
 }
+
 const stepOneStatus = ref(true)
 const stepTwoStatus = ref(true)
 const stepThreeStatus = ref(true)
@@ -1563,7 +2026,6 @@ const editStepThree = () => {
     stepThreeStatus.value = false
 }
 
-
 const editStepFour = () => {
     stepFourStatus.value = false
 }
@@ -1575,6 +2037,7 @@ const cancelStepOne = () => {
 const cancelStepTwo = () => {
     stepTwoStatus.value = true
 }
+
 const cancelStepThree = () => {
     stepThreeStatus.value = true
 }
@@ -1597,14 +2060,14 @@ const saveStepOne = (formEl) => {
                 profile_photo: personalForm.profile_photo
             }
 
-            if(profileAction.value === 'edit'){
+            if (profileAction.value === 'edit') {
                 params.id = companyId.value
             }
 
             RECRUITER_COMPANY_EDIT_V2(params).then(res => {
                 if (res.code === 200) {
                     console.log(res)
-                    if(profileAction.value === 'add'){
+                    if (profileAction.value === 'add') {
                         companyId.value = res.message.recruiting_company_id
                         store.commit('currentCompanyId', res.message.recruiting_company_id)
                         store.commit('allIdentityChanged', true)
@@ -1628,17 +2091,41 @@ const saveStepOne = (formEl) => {
 }
 
 const saveStepTwo = (formEl) => {
+
     formEl.validate((valid) => {
         if (valid) {
 
             stepTwoLoadingStatus.value = true
 
+            if (countryName.value || countryNameCn.value
+                || provinceName.value || provinceNameCn
+                || cityName.value || cityNameCn.value) {
+                professionForm.country_info = JSON.stringify({
+                    country_name_en: countryName.value,
+                    country_name_cn: countryNameCn.value,
+                    province_name_en: provinceName.value,
+                    province_name_cn: provinceNameCn.value,
+                    city_name_en: cityName.value,
+                    city_name_cn: cityNameCn.value
+                })
+            }
 
             let params = Object.assign({}, professionForm)
+
+            if (profileAction.value === 'edit') {
+                params.id = companyId.value
+            }
 
             RECRUITER_COMPANY_EDIT_V2(params).then(res => {
                 if (res.code === 200) {
                     console.log(res)
+
+                    if (profileAction.value === 'add') {
+                        companyId.value = res.message.recruiting_company_id
+                        store.commit('currentCompanyId', res.message.recruiting_company_id)
+                        store.commit('allIdentityChanged', true)
+                        changeIdentity(res.message.recruiting_company_id, 2)
+                    }
 
                     stepTwoLoadingStatus.value = false
                     stepTwoStatus.value = true
@@ -1659,12 +2146,46 @@ const saveStepThree = (formEl) => {
         if (valid) {
             stepThreeLoadingStatus.value = true
 
-            getBasicInfo()
+            let categoryArr = businessForm.sub_category
+            if (categoryArr && categoryArr.length) {
 
-            setTimeout(function () {
+                categoryArr.forEach(item => {
+                    businessForm.category_id = item.id;
+                    businessForm.category_name_en = item.identity_name;
+                    businessForm.category_name_cn = item.identity_name_cn;
+                })
+
+            }
+
+            let params = Object.assign({}, businessForm)
+
+            if (profileAction.value === 'edit') {
+                params.id = companyId.value
+            }
+
+            RECRUITER_COMPANY_EDIT_V2(params).then(res => {
+                if (res.code === 200) {
+                    console.log(res)
+
+                    if (profileAction.value === 'add') {
+                        companyId.value = res.message.recruiting_company_id
+                        store.commit('currentCompanyId', res.message.recruiting_company_id)
+                        store.commit('allIdentityChanged', true)
+                        changeIdentity(res.message.recruiting_company_id, 2)
+                    }
+
+                    getBasicInfo()
+
+                    setTimeout(function () {
+                        stepThreeLoadingStatus.value = false
+                        stepThreeStatus.value = true
+                    }, 1500)
+
+                }
+            }).catch(err => {
+                console.log(err)
                 stepThreeLoadingStatus.value = false
-                stepThreeStatus.value = true
-            }, 1500)
+            })
 
         } else {
             stepThreeLoadingStatus.value = false
@@ -1672,7 +2193,6 @@ const saveStepThree = (formEl) => {
         }
     })
 }
-
 
 
 const saveStepFour = (formEl) => {
@@ -1683,9 +2203,20 @@ const saveStepFour = (formEl) => {
 
             let params = Object.assign({}, mediaForm)
 
+            if (profileAction.value === 'edit') {
+                params.id = companyId.value
+            }
+
             RECRUITER_COMPANY_EDIT_V2(params).then(res => {
                 if (res.code === 200) {
                     console.log(res)
+                    if (profileAction.value === 'add') {
+                        companyId.value = res.message.recruiting_company_id
+                        store.commit('currentCompanyId', res.message.recruiting_company_id)
+                        store.commit('allIdentityChanged', true)
+                        changeIdentity(res.message.recruiting_company_id, 2)
+                    }
+
                     uploadAccountImages()
                     getBasicInfo()
                     setTimeout(function () {
@@ -1714,7 +2245,7 @@ const cancelUploadProfile = () => {
     uploadLoadingStatus.value = false;
 }
 
-const changeIdentity = (companyId, language) =>{
+const changeIdentity = (companyId, language) => {
 
     let params = {
         identity: 2,
@@ -1727,12 +2258,12 @@ const changeIdentity = (companyId, language) =>{
         if (res.code == 200) {
             let str = JSON.stringify(res.message)
 
-            localStorage.setItem('menuData',str)
+            localStorage.setItem('menuData', str)
             localStorage.setItem('identity', 2)
             localStorage.setItem('company_id', companyId)
 
             store.commit('identity', 2)
-            store.commit('allIdentityChanged',true )
+            store.commit('allIdentityChanged', true)
             store.commit('menuData', res.message)
             store.commit('currentCompanyId', companyId)
 
@@ -1745,6 +2276,7 @@ const changeIdentity = (companyId, language) =>{
 }
 
 onMounted(async () => {
+    await getAllCountry()
     await loadUserObjectData()
     await loadSubCategoryData()
 
@@ -1770,7 +2302,7 @@ onMounted(async () => {
         // this.cid = strObj.cid;
         // this.action = strObj.action;
 
-        if(str.action){
+        if (str.action) {
             profileAction.value = strObj.action
         }
     }
@@ -2026,9 +2558,27 @@ onMounted(async () => {
     justify-content: center;
 }
 
+.xll-form-location-exist {
 
+}
+
+.xll-form-location-exist span {
+    font-size: 14px;
+    font-weight: 400;
+    font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color: #667085;
+}
+
+.xll-form-location-no-exist {
+    flex-direction: column;
+    display: flex;
+}
 
 /*forms*/
+.form-margin-bottom-18 {
+    margin-bottom: 18px;
+}
+
 .form-width-388 {
     width: 388px;
 }

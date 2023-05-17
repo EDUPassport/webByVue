@@ -126,7 +126,10 @@ export default {
         const alertCheckedData = ref([])
 
         const getAlertsDataByIdentity = async () => {
-            await PRIVACY_CATEGORY_LIST().then(res => {
+            let params = {
+                identity: parseInt(identity)
+            }
+            await PRIVACY_CATEGORY_LIST(params).then(res => {
                 console.log(res)
                 if (res.code === 200) {
                     alertsData.value = res.message

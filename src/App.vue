@@ -1,7 +1,13 @@
 <template>
 
     <div style="max-width:1920px;margin:0 auto;">
-        <router-view></router-view>
+
+        <router-view v-slot="{Component}">
+            <keep-alive>
+                <component :is="Component"></component>
+            </keep-alive>
+        </router-view>
+
         <div v-if="showCookiePopup" class="cookie-popup">
             <p>We use cookies to provide the best user experience. Click the button below to accept our cookie policy.</p>
             <el-button type="success" @click="acceptCookie">Accept Cookies</el-button>
