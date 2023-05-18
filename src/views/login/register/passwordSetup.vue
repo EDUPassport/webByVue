@@ -119,7 +119,7 @@ import {ElMessage,ElMessageBox } from 'element-plus'
 import {EMAIL_REGISTER_V2} from "@/api/api";
 
 export default {
-  name: "passwordSetup",
+  name: "signupPasswordSetup",
   components: {
     stepComponent
   },

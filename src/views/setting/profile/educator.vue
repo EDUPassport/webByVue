@@ -3031,7 +3031,7 @@ const beforeProfilePhotoUpload = (file) => {
     const isLt2M = file.size / 1024 / 1024 < 20
 
     if (!isLt2M) {
-        ElMessage.error('Avatar picture size can not exceed 20MB')
+        ElMessage.error('File size can not exceed 20MB')
     }
     return isLt2M
 }
@@ -3056,6 +3056,7 @@ const backgroundHttpRequest = (options) => {
                     if (res.code == 200) {
                         let myFileUrl = res.data[0]['file_url'];
                         uploadLoadingStatus.value = false;
+                        editBackgroundImageStatus.value = true
                         mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
                         mediaForm.background_image = myFileUrl
                     }
@@ -3072,6 +3073,7 @@ const backgroundHttpRequest = (options) => {
                     if (res.code == 200) {
                         let myFileUrl = res.message.file_path;
                         uploadLoadingStatus.value = false;
+                        editBackgroundImageStatus.value = true
                         mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
                         mediaForm.background_image = myFileUrl
                     }
@@ -3094,7 +3096,7 @@ const beforeBackgroundPhotoUpload = (file) => {
     uploadLoadingStatus.value = true;
     const isLt2M = file.size / 1024 / 1024 < 20
     if (!isLt2M) {
-        ElMessage.error('Avatar picture size can not exceed 20MB')
+        ElMessage.error('File size can not exceed 20MB')
     }
     return isLt2M
 }
@@ -3116,6 +3118,7 @@ const videoHttpRequest = (options) => {
             if (res.code == 200) {
                 let myFileUrl = res.data[0]['file_url'];
                 uploadLoadingStatus.value = false;
+                editVideoStatus.value = true
                 mediaForm.video_name = myFileUrl.substring(myFileUrl.length - 10)
                 mediaForm.video_url = myFileUrl
             }
@@ -3132,6 +3135,7 @@ const videoHttpRequest = (options) => {
             if (res.code == 200) {
                 let myFileUrl = res.message.file_path;
                 uploadLoadingStatus.value = false;
+                editVideoStatus.value = true
                 mediaForm.video_name = myFileUrl.substring(myFileUrl.length - 10)
                 mediaForm.video_url = myFileUrl
             }
@@ -3163,6 +3167,7 @@ const resumePdfHttpRequest = (options) => {
             if (res.code == 200) {
                 let myFileUrl = res.data[0]['file_url'];
                 uploadLoadingStatus.value = false;
+                editResumeStatus.value =true
                 mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
                 mediaForm.resume_pdf = myFileUrl
             }
@@ -3179,6 +3184,7 @@ const resumePdfHttpRequest = (options) => {
             if (res.code == 200) {
                 let myFileUrl = res.message.file_path;
                 uploadLoadingStatus.value = false;
+                editResumeStatus.value = true
                 mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
                 mediaForm.resume_pdf = myFileUrl
             }
@@ -3195,7 +3201,7 @@ const beforeResumePdfUpload = (file) => {
     const isLt2M = file.size / 1024 / 1024 < 20
 
     if (!isLt2M) {
-        ElMessage.error('Avatar picture size can not exceed 20MB')
+        ElMessage.error('File size can not exceed 20MB')
     }
     return isLt2M
 }

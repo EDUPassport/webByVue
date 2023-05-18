@@ -12,7 +12,7 @@
     </div>
     <div class="un-profile-r">
       <el-progress class="un-profile-progress-mobile" :percentage="percent" :stroke-width="8" color="#F9B019" />
-      <el-button  class="complete-btn"  @click="editUserProfile(identity,id)">
+      <el-button  class="complete-btn"  @click="editUserProfile()">
         Complete Profile
       </el-button>
     </div>
@@ -20,75 +20,44 @@
 </div>
 </template>
 
-<script>
-import {encode} from "js-base64";
+<script setup>
+import {defineProps,toRefs} from 'vue'
+import {useRouter} from 'vue-router'
 
-export default {
-  name: "unCompleteProfilePrompt",
-  props:['percent'],
+const props = defineProps({
+    percent:Number
+})
 
-  data(){
-    return{
-       id:null,
-       identity:null,
-       number:null,
+const {percent} = toRefs(props)
+const identity = parseInt(localStorage.getItem('identity')) 
+const router = useRouter()
+const editUserProfile = ()=>{
+
+    if (identity === 1) {
+        router.push({path: '/setting/profile/educator', query: { }})
     }
-  },
+    
+    if (identity === 2) {
+        router.push({path: '/setting/profile/recruiter', query: { }})
+    }
+    
+    if (identity === 3) {
+        router.push({path: '/setting/profile/school', query: { }})
+    }
+    
+    if (identity === 4) {
+        router.push({path: '/setting/profile/other', query: { }})
+    }
+    
+    if (identity === 5) {
+        router.push({path: '/setting/profile/vendor', query: { }})
+    }
 
-  mounted(){
-
-    this.id=localStorage.getItem('identity')
-    this.identity=localStorage.getItem('company_id')   
-               
-    },
-  methods:{
-    editUserProfile(companyId, roleValue) {
-
-      if (roleValue == 1) {
-        let strObj = {
-          i: companyId,
-          action: 'edit'
-        }
-        let str = encode(JSON.stringify(strObj))
-        this.$router.push({path: '/educator/edit/home', query: {s: str}})
-      }
-      if (roleValue == 2) {
-        let strObj = {
-          cid: companyId,
-          action: 'edit'
-        }
-        let str = encode(JSON.stringify(strObj))
-        this.$router.push({path: '/business/edit/recruiter', query: {s: str}})
-      }
-      if (roleValue == 3) {
-        let strObj = {
-          cid: companyId,
-          action: 'edit'
-        }
-        let str = encode(JSON.stringify(strObj))
-        this.$router.push({path: '/business/edit/school', query: {s: str}})
-      }
-      if (roleValue == 4) {
-        let strObj = {
-          cid: companyId,
-          action: 'edit'
-        }
-        let str = encode(JSON.stringify(strObj))
-        this.$router.push({path: '/business/edit/other', query: {s: str}})
-      }
-      if (roleValue == 5) {
-        let strObj = {
-          cid: companyId,
-          action: 'edit'
-        }
-        let str = encode(JSON.stringify(strObj))
-        this.$router.push({path: '/vendor/edit/vendor', query: {s: str}})
-
-      }
-    },
-  }
 }
+
 </script>
+
+
 
 <style scoped>
 .un-profile-container{

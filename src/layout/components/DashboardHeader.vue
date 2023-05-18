@@ -984,6 +984,7 @@ export default {
       this.$loading({
         text: 'Loading...'
       })
+
       if (identity == 1) {
         this.$loading().close()
         let strObj = {
