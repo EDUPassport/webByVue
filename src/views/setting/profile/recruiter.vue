@@ -1203,11 +1203,8 @@ const businessForm = reactive({
 
 const businessRules = reactive({
     category: [
-        {required: true, message: 'Please fill out your code.', trigger: 'blur'}
-    ],
-    email: [
-        {type: 'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
-    ],
+        {required: true, message: 'Please select', trigger: 'blur'}
+    ]
 })
 
 const mediaForms = ref(null)
@@ -1221,18 +1218,7 @@ const mediaForm = reactive({
 })
 
 const mediaRules = reactive({
-    email_code: [
-        {required: true, message: 'Please fill out your code.', trigger: 'blur'}
-    ],
-    email: [
-        {type: 'email', required: true, message: 'Please fill out your email address.', trigger: 'blur'}
-    ],
-    password: [
-        {required: true, message: 'Please enter your password', trigger: 'blur'}
-    ],
-    confirm_password: [
-        {required: true, message: 'Please enter your password again', trigger: 'blur'}
-    ]
+
 })
 
 const nationalityOptions = ref(countriesData)
@@ -1649,7 +1635,7 @@ const licensePhotoHttpRequest = (options) => {
                 UPLOAD_BY_SERVICE(formData).then(res => {
                     // console.log(res)
                     if (res.code === 200) {
-                        let myFileUrl = res.data[0]['file_url']
+                        let myFileUrl = res.message.file_path
                         businessForm.license = myFileUrl
                         businessForm.license_name = myFileUrl.substring(myFileUrl.length - 10)
                         uploadLoadingStatus.value = false;
@@ -2069,14 +2055,19 @@ const saveStepOne = (formEl) => {
                     console.log(res)
                     if (profileAction.value === 'add') {
                         companyId.value = res.message.recruiting_company_id
-                        store.commit('currentCompanyId', res.message.recruiting_company_id)
-                        store.commit('allIdentityChanged', true)
                         changeIdentity(res.message.recruiting_company_id, 2)
+                        setTimeout(function (){
+                            stepOneLoadingStatus.value = false
+                            stepOneStatus.value = true
+                        }, 1500)
+                        return;
                     }
 
-                    stepOneLoadingStatus.value = false
-                    stepOneStatus.value = true
                     getBasicInfo()
+                    setTimeout(function (){
+                        stepOneLoadingStatus.value = false
+                        stepOneStatus.value = true
+                    }, 1500)
                 }
             }).catch(err => {
                 console.log(err)
@@ -2122,14 +2113,19 @@ const saveStepTwo = (formEl) => {
 
                     if (profileAction.value === 'add') {
                         companyId.value = res.message.recruiting_company_id
-                        store.commit('currentCompanyId', res.message.recruiting_company_id)
-                        store.commit('allIdentityChanged', true)
                         changeIdentity(res.message.recruiting_company_id, 2)
+                        setTimeout(function () {
+                            stepTwoLoadingStatus.value = false
+                            stepTwoStatus.value = true
+                        }, 1500)
+                        return;
                     }
 
-                    stepTwoLoadingStatus.value = false
-                    stepTwoStatus.value = true
                     getBasicInfo()
+                    setTimeout(function () {
+                        stepTwoLoadingStatus.value = false
+                        stepTwoStatus.value = true
+                    }, 1500)
                 }
             }).catch(err => {
                 console.log(err)
@@ -2169,9 +2165,12 @@ const saveStepThree = (formEl) => {
 
                     if (profileAction.value === 'add') {
                         companyId.value = res.message.recruiting_company_id
-                        store.commit('currentCompanyId', res.message.recruiting_company_id)
-                        store.commit('allIdentityChanged', true)
                         changeIdentity(res.message.recruiting_company_id, 2)
+                        setTimeout(function () {
+                            stepThreeLoadingStatus.value = false
+                            stepThreeStatus.value = true
+                        }, 1500)
+                        return;
                     }
 
                     getBasicInfo()
@@ -2212,9 +2211,13 @@ const saveStepFour = (formEl) => {
                     console.log(res)
                     if (profileAction.value === 'add') {
                         companyId.value = res.message.recruiting_company_id
-                        store.commit('currentCompanyId', res.message.recruiting_company_id)
-                        store.commit('allIdentityChanged', true)
                         changeIdentity(res.message.recruiting_company_id, 2)
+                        uploadAccountImages()
+                        setTimeout(function () {
+                            stepFourLoadingStatus.value = false
+                            stepFourStatus.value = true
+                        }, 1500)
+                        return;
                     }
 
                     uploadAccountImages()
@@ -2267,6 +2270,9 @@ const changeIdentity = (companyId, language) => {
             store.commit('menuData', res.message)
             store.commit('currentCompanyId', companyId)
 
+            getBasicInfo()
+            history.pushState({},'','/setting/profile/recruiter')
+
         }
 
     }).catch(err => {
@@ -2297,12 +2303,7 @@ onMounted(async () => {
 
     if (str) {
         let strObj = JSON.parse(decode(str))
-        // this.i = strObj.i;
-        // this.id = strObj.id;
-        // this.cid = strObj.cid;
-        // this.action = strObj.action;
-
-        if (str.action) {
+        if (strObj.action) {
             profileAction.value = strObj.action
         }
     }

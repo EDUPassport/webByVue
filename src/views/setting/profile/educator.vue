@@ -3422,25 +3422,37 @@ const saveStepOne = (formEl) => {
                 params.sub_identity_name_cn = subCategoryNameCnArr.join(',')
             }
 
+            if (profileAction.value === 'edit') {
+                params.id = companyId.value
+            }
+
             EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
                 if (res.code === 200) {
                     // console.log(res)
+                    store.commit('username', name)
+
                     if(profileAction.value === 'add'){
                         companyId.value = res.message.educator_id
-                        store.commit('currentCompanyId', res.message.educator_id)
-                        store.commit('allIdentityChanged', true)
                         changeIdentity(res.message.educator_id, res.message.user_id, 2)
+                        setTimeout(function () {
+                            stepOneLoadingStatus.value = false
+                            stepOneStatus.value = true
+                        }, 1500)
+                        return;
                     }
-                    store.commit('username', name)
 
                     saveUserContactInfo({
                         first_name: personalForm.first_name,
                         last_name: personalForm.last_name,
                         headimgurl: personalForm.profile_photo
                     })
-                    stepOneLoadingStatus.value = false
-                    stepOneStatus.value = true
+
                     getBasicInfo()
+                    setTimeout(function () {
+                        stepOneLoadingStatus.value = false
+                        stepOneStatus.value = true
+                    }, 1500)
+
                 }
             }).catch(err => {
                 console.log(err)
@@ -3465,16 +3477,47 @@ const saveStepTwo = (formEl) => {
             }
 
             let params = Object.assign({}, professionForm)
-
+            if (profileAction.value === 'edit') {
+                params.id = companyId.value
+            }
             EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
                 if (res.code === 200) {
                     console.log(res)
 
                     if(profileAction.value === 'add'){
                         companyId.value = res.message.educator_id
-                        store.commit('currentCompanyId', res.message.educator_id)
-                        store.commit('allIdentityChanged', true)
+
+                        if (workDestinationValue.value && workDestinationValue.value.length) {
+                            workDestinationConfirm()
+                        }
+                        if (jobTypeValue.value && jobTypeValue.value.length) {
+                            jobTypeConfirm()
+                        }
+
+                        if (selectedLanguageList.value && selectedLanguageList.value.length) {
+                            languageConfirm()
+                        }
+
+                        if (workScheduleTypeValue.value) {
+                            workScheduleTypeConfirm()
+                        }
+                        if (benefitsValue.value && benefitsValue.value.length) {
+                            benefitsConfirm()
+                        }
+                        if (subjectValue.value && subjectValue.value.length) {
+                            subjectConfirm()
+                        }
+                        if (ageToTeachValue.value && ageToTeachValue.value.length) {
+                            ageToTeachConfirm()
+                        }
+
                         changeIdentity(res.message.educator_id, res.message.user_id, 2)
+
+                        setTimeout(function () {
+                            stepTwoLoadingStatus.value = false
+                            stepTwoStatus.value = true
+                        }, 1500)
+                        return;
                     }
 
                     if (workDestinationValue.value && workDestinationValue.value.length) {
@@ -3501,9 +3544,12 @@ const saveStepTwo = (formEl) => {
                         ageToTeachConfirm()
                     }
 
-                    stepTwoLoadingStatus.value = false
-                    stepTwoStatus.value = true
                     getBasicInfo()
+                    setTimeout(function () {
+                        stepTwoLoadingStatus.value = false
+                        stepTwoStatus.value = true
+                    }, 1500)
+
                 }
             }).catch(err => {
                 console.log(err)
@@ -3518,6 +3564,7 @@ const saveStepTwo = (formEl) => {
 const saveStepThree = (formEl) => {
     formEl.validate((valid) => {
         if (valid) {
+
             stepThreeLoadingStatus.value = true
 
             if (teachExpValue.value) {
@@ -3573,18 +3620,24 @@ const saveStepFive = (formEl) => {
             stepFiveLoadingStatus.value = true
 
             let params = Object.assign({}, mediaForm)
-
+            if (profileAction.value === 'edit') {
+                params.id = companyId.value
+            }
             EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
                 if (res.code === 200) {
                     console.log(res)
                     if(profileAction.value === 'add'){
                         companyId.value = res.message.educator_id
-                        store.commit('currentCompanyId', res.message.educator_id)
-                        store.commit('allIdentityChanged', true)
+                        uploadAccountImages()
                         changeIdentity(res.message.educator_id, res.message.user_id, 2)
+                        setTimeout(function () {
+                            stepFiveLoadingStatus.value = false
+                            stepFiveStatus.value = true
+                        }, 1500)
+
+                        return;
                     }
 
-                    store.commit('username', personalForm.name)
                     uploadAccountImages()
                     getBasicInfo()
                     setTimeout(function () {
@@ -3614,6 +3667,7 @@ const changeIdentity = (companyId, companyContactId, language)=> {
         company_contact_id: companyContactId,
         language: language
     }
+
     SWITCH_IDENTITY_V2(params).then(res => {
         console.log(res)
         if (res.code == 200) {
@@ -3627,6 +3681,9 @@ const changeIdentity = (companyId, companyContactId, language)=> {
             store.commit('identity', 1)
             store.commit('menuData', res.message)
             store.commit('currentCompanyId', companyId)
+
+            getBasicInfo()
+            history.pushState({},'','/setting/profile/educator')
 
         }
     }).catch(err => {
@@ -3673,7 +3730,7 @@ onMounted(async () => {
         // this.cid = strObj.cid;
         // this.action = strObj.action;
 
-        if(str.action){
+        if(strObj.action){
             profileAction.value = strObj.action
         }
     }
