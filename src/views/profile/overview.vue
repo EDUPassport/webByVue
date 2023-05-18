@@ -401,6 +401,7 @@ export default {
         }
 
         function updateApplicationIndex(i, value) {
+            getAllJobResumeList()
             myApplicationsData[i]['status'] = value;
         }
 
