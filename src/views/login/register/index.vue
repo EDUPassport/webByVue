@@ -9,6 +9,7 @@
       <el-col :xs="2" :sm="4" :md="4" :lg="4" :xl="4">
         <div class="login-l" @click="turnHome()">
           <el-image class="login-l-logo" :src="logoImgLight"></el-image>
+          <div class="logo-new-beta">Beta</div>
         </div>
       </el-col>
       <el-col class="login-m-col" :xs="20" :sm="16" :md="16" :lg="16" :xl="16">
@@ -997,6 +998,19 @@ export default {
 </script>
 
 <style scoped>
+
+.logo-new-beta {
+  position: relative;
+  top: -84px;
+  left: 67px;
+  background-color: #49397f;
+  padding: 2px 10px;
+  border-radius: 10px;
+  color: #EEEEEE;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  width: 22px;
+}
 
 .login-bg {
   min-height: 100vh;
