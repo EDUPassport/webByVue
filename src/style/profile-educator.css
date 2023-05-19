@@ -1,0 +1,120 @@
+
+.language-add-container {
+    width: 100%;
+    position: relative;
+    margin-top: 10px;
+}
+
+.language-checkbox-item {
+    width: calc(100% - 80px);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.language-checkbox-item-l {
+    font-size: 12px;
+    font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    margin-right: 10px;
+    color: #667085;
+    font-weight: 400;
+}
+
+.language-checkbox-item-r {
+    font-size: 12px;
+    font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    margin-right: 10px;
+    color: #667085;
+    font-weight: 400;
+}
+
+.work-form-item {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.work-form-item-l {
+    width: 110px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+
+    color: #101828;
+}
+
+
+.work-form-item-r {
+    width: calc(100% - 120px);
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #667085;
+}
+
+.work-exp-btn-container {
+    text-align: right;
+    margin-top: 30px;
+}
+
+.work-experience {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.work-exp-temp-container {
+    width: 100%;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.work-exp-temp-item {
+    width: 314px;
+    padding: 16px;
+    background: #FFFFFF;
+    border: 1px solid #D0D5DD;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 0 24px 24px 0;
+}
+
+.work-exp-temp-btn-container {
+    text-align: right;
+    margin-top: 14px;
+}
+
+.work-exp-temp-btn {
+    /*font-size: 20px;*/
+}
+
+
+.duration-mobile-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.duration-mobile-item {
+    width: 45%;
+}
+
+.duration-mobile-item-to {
+    font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}

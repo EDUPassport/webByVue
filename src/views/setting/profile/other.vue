@@ -284,71 +284,74 @@
 
                                 <el-form-item label="Location">
 
-                                    <div class="xll-form-location-exist" v-if="haveLocationStatus">
+                                    <div class="xll-form-location">
 
-                                        <span>{{ $filters.countryInfoFormat(countryInfo) }}</span>
-                                        <el-button
+                                        <div class="xll-form-location-text" v-if="haveLocationStatus">
+                                            <span>{{ $filters.countryInfoFormat(countryInfo) }}</span>
+                                        </div>
+                                        <div class="xll-form-location-select" v-if="!haveLocationStatus">
+                                            <el-select v-model="countryObj"
+                                                       class="form-width-388 form-margin-bottom-18"
+                                                       :disabled="stepTwoStatus"
+                                                       @change="countryChange"
+                                                       value-key="id"
+                                                       filterable
+                                                       placeholder="Select Country">
+                                                <el-option v-for="(item,i) in countryOptions"
+                                                           :key="i"
+                                                           :label="item.name"
+                                                           :value="item">
+                                                </el-option>
+                                            </el-select>
+                                            <template v-if="provinceOptions.length>0">
+                                                <el-select v-model="provinceObj"
+                                                           class="form-width-388 form-margin-bottom-18"
+                                                           :disabled="stepTwoStatus"
+                                                           value-key="id"
+                                                           filterable
+                                                           @change="provinceChange"
+                                                           placeholder="Select Province">
+                                                    <el-option v-for="(item,i) in provinceOptions"
+                                                               :key="i"
+                                                               :label="item.name"
+                                                               :value="item">
+                                                    </el-option>
+                                                </el-select>
+                                            </template>
+                                            <template v-if="cityOptions.length>0">
+                                                <el-select v-model="cityObj"
+                                                           :disabled="stepTwoStatus"
+                                                           class="form-width-388 form-margin-bottom-18"
+                                                           value-key="id"
+                                                           filterable
+                                                           @change="cityChange"
+                                                           placeholder="Select City">
+                                                    <el-option v-for="(item,i) in cityOptions"
+                                                               :key="i"
+                                                               :label="item.name"
+                                                               :value="item">
+                                                    </el-option>
+                                                </el-select>
+                                            </template>
+
+                                        </div>
+                                        <div class="xll-form-location-action" v-if="haveLocationStatus">
+                                            <el-button
                                                 link
+                                                icon="Edit"
                                                 :disabled="stepTwoStatus"
                                                 @click="changeEditLocation()">
-                                            Edit
-                                        </el-button>
+                                            </el-button>
+                                        </div>
 
-                                    </div>
-
-                                    <div class="xll-form-location-no-exist" v-else>
-                                        <el-select v-model="countryObj"
-                                                   class="form-width-388 form-margin-bottom-18"
-                                                   :disabled="stepTwoStatus"
-                                                   @change="countryChange"
-                                                   value-key="id"
-                                                   filterable
-                                                   placeholder="Select Country">
-                                            <el-option v-for="(item,i) in countryOptions"
-                                                       :key="i"
-                                                       :label="item.name"
-                                                       :value="item">
-                                            </el-option>
-                                        </el-select>
-                                        <template v-if="provinceOptions.length>0">
-                                            <el-select v-model="provinceObj"
-                                                       class="form-width-388 form-margin-bottom-18"
-                                                       :disabled="stepTwoStatus"
-                                                       value-key="id"
-                                                       filterable
-                                                       @change="provinceChange"
-                                                       placeholder="Select Province">
-                                                <el-option v-for="(item,i) in provinceOptions"
-                                                           :key="i"
-                                                           :label="item.name"
-                                                           :value="item">
-                                                </el-option>
-                                            </el-select>
-                                        </template>
-                                        <template v-if="cityOptions.length>0">
-                                            <el-select v-model="cityObj"
-                                                       :disabled="stepTwoStatus"
-                                                       class="form-width-388 form-margin-bottom-18"
-                                                       value-key="id"
-                                                       filterable
-                                                       @change="cityChange"
-                                                       placeholder="Select City">
-                                                <el-option v-for="(item,i) in cityOptions"
-                                                           :key="i"
-                                                           :label="item.name"
-                                                           :value="item">
-                                                </el-option>
-                                            </el-select>
-                                        </template>
-
-                                        <el-button
-                                                v-if="changeCancelLocation"
+                                        <div class="xll-form-location-action" v-if="showLocationCancelStatus">
+                                            <el-button
                                                 link
+                                                icon="Close"
                                                 :disabled="stepTwoStatus"
                                                 @click="changeCancelLocation()">
-                                            Cancel
-                                        </el-button>
-
+                                            </el-button>
+                                        </div>
                                     </div>
 
                                 </el-form-item>
@@ -1441,21 +1444,9 @@ const changeEditLocation = () => {
 }
 
 const changeCancelLocation = () => {
+    getBasicInfo()
     haveLocationStatus.value = true;
     showLocationCancelStatus.value = false;
-
-    // let companyInfo = this.companyInfo;
-    //
-    // if (companyInfo.country_info) {
-    //     let countryInfoArr = JSON.parse(companyInfo.country_info)
-    //     countryName.value = countryInfoArr.country_name_en;
-    //     countryNameCn.value = countryInfoArr.country_name_cn;
-    //     provinceName.value = countryInfoArr.province_name_en;
-    //     provinceNameCn.value = countryInfoArr.province_name_cn;
-    //     cityName.value = countryInfoArr.city_name_en;
-    //     cityNameCn.value = countryInfoArr.city_name_cn;
-    //     professionForm.country_info = companyInfo.country_info;
-    // }
 }
 
 const countryChange = (e) => {
@@ -2351,17 +2342,21 @@ const editStepFive = () => {
 }
 
 const cancelStepOne = () => {
+    getBasicInfo()
     stepOneStatus.value = true
 }
 
 const cancelStepTwo = () => {
+    getBasicInfo()
     stepTwoStatus.value = true
 }
 const cancelStepThree = () => {
+    getBasicInfo()
     stepThreeStatus.value = true
 }
 
 const cancelStepFive = () => {
+    getBasicInfo()
     stepFiveStatus.value = true
 }
 
@@ -2653,94 +2648,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-
-.profile-bg {
-    height: calc(var(--i-window-height) - 144px);
-    display: flex;
-    flex-direction: column;
-}
-
-.profile-scrollbar {
-    height: calc(var(--i-window-height) - 220px);
-}
-
-.profile-collapse {
-
-}
-
-.profile-collapse-t {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin: 40px 40px 0 40px;;
-    cursor: pointer;
-}
-
-.profile-collapse-t-label span {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 18px;
-    color: #101828;
-}
-
-.profile-collapse-t-line {
-    width: calc(100% - 200px);
-    height: 1px;
-    background-color: #D0D5DD;
-}
-
-.profile-top-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin: 40px 40px 0 40px;
-    border-bottom: 1px solid #D0D5DD;
-}
-
-.profile-label {
-
-}
-
-.profile-label span {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 28px;
-    color: #101828;
-}
-
-.profile-tips {
-    padding-bottom: 24px;
-}
-
-.profile-tips span {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    color: #667085;
-}
-
-.profile-form {
-    margin: 24px 40px;
-}
-
-.delete-container {
-    margin: auto 40px 40px 40px;
-}
-
-.profile-picture-r {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-}
-
+@import "@/style/profile-business.css";
 /deep/ .el-upload-dragger {
     padding: 16px 40px;
     border-style: solid;
@@ -2750,282 +2658,6 @@ onMounted(async () => {
     color: #667085;
     font-weight: 400;
     font-size: 14px;
-}
-
-.profile-avatar-img {
-    width: 70px;
-    height: 70px;
-}
-
-.profile-upload-icon {
-    width: 40px;
-    height: 40px;
-}
-
-.profile-upload-text {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 18px;
-    color: #667085;
-}
-
-.profile-upload-text span {
-    font-weight: 700;
-    color: #5C41E6;
-}
-
-.profile-picture-upload {
-    margin-left: 20px;
-
-}
-
-.attachment-btn {
-    width: 388px;
-    height: 44px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid #d0d5dd;
-    padding: 1px 11px;
-    border-radius: 4px;
-}
-
-.attachment-btn span {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 24px;
-    color: #667085;
-}
-
-.profile-picture-tips {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
-    color: #667085;
-}
-
-.media-show-img {
-    width: 245px;
-    height: auto;
-}
-
-.work-form-item {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.work-form-item-l {
-    width: 110px;
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 18px;
-
-    color: #101828;
-}
-
-
-.work-form-item-r {
-    width: calc(100% - 120px);
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 18px;
-    color: #667085;
-}
-
-.work-exp-btn-container {
-    text-align: right;
-    margin-top: 30px;
-}
-
-.work-experience {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.work-exp-temp-container {
-    width: 100%;
-    margin-top: 24px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-}
-
-.work-exp-temp-item {
-    width: 314px;
-    padding: 16px;
-    background: #FFFFFF;
-    border: 1px solid #D0D5DD;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    margin: 0 24px 24px 0;
-}
-
-.work-exp-temp-btn-container {
-    text-align: right;
-    margin-top: 14px;
-}
-
-.work-exp-temp-btn {
-    /*font-size: 20px;*/
-}
-
-
-.duration-mobile-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-}
-
-.duration-mobile-item {
-    width: 45%;
-}
-
-.duration-mobile-item-to {
-    font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-    font-size: 12px;
-}
-
-/deep/ .el-date-editor {
-    --el-date-editor-width: auto;
-}
-
-.attachment-xll {
-
-}
-
-.attachment-xll-btns {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.attachment-xll-btn {
-    width: 388px;
-    height: 44px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid #d0d5dd;
-    padding: 1px 11px;
-    border-radius: 4px;
-}
-
-.attachment-xll-btn span {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 24px;
-    color: #667085;
-}
-
-.attachment-xll-btn-edit, .attachment-xll-btn-download {
-    height: 44px;
-    border: 1px solid #D0D5DD;
-    border-radius: 5px;
-    padding: 0 16px;
-    margin-left: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.attachment-xll-icon {
-    cursor: pointer;
-}
-
-.attachment-xll-image {
-    width: 245px;
-    position: relative;
-    margin-top: 10px;
-}
-
-.attachment-xll-img {
-    width: 100%;
-    height: 100%;
-}
-
-.attachment-xll-image-mask {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    display: none;
-}
-
-.attachment-xll-image:hover .attachment-xll-image-mask {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.xll-form-location-exist {
-
-}
-
-.xll-form-location-exist span {
-    font-size: 14px;
-    font-weight: 400;
-    font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-    color: #667085;
-}
-
-.xll-form-location-no-exist {
-    flex-direction: column;
-    display: flex;
-}
-
-/*forms*/
-.form-margin-bottom-18 {
-    margin-bottom: 18px;
-}
-
-/*forms*/
-.form-width-388 {
-    width: 388px;
-}
-
-.form-width-100 {
-    width: 100px;
-}
-
-.form-width-percent-100 {
-    width: 100%;
-}
-
-.form-item-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
 }
 
 </style>
