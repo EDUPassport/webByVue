@@ -504,7 +504,7 @@ export default {
         this.$message.error(err.msg)
       })
     },
-    getDealsList(page, limit) {
+    async getDealsList(page, limit) {
 
       let filterResult = this.filterResultData;
 
@@ -515,7 +515,7 @@ export default {
 
       let params = Object.assign(paramsA, filterResult)
 
-      DEALS_LIST(params).then(res => {
+      await DEALS_LIST(params).then(res => {
         console.log(res)
         if (res.code == 200) {
           this.dealsListData = res.message.data;
@@ -541,10 +541,10 @@ export default {
     dealPageSizeChange(e) {
       console.log(e)
     },
-    dealPageChange(e) {
+    async dealPageChange(e) {
       this.showLoadingStatus = true
       this.dealPage = e
-      this.getDealsList(e, this.dealLimit)
+      await this.getDealsList(e, this.dealLimit)
       this.$refs.dealScroll.scrollTo(0,0)
       this.$router.push({path:'/deals',query:{page:e}})
       // document.documentElement.scrollTop = 200
