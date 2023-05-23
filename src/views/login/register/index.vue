@@ -652,6 +652,9 @@ export default {
       let self = this;
       let email = this.registerForm.email
 
+      if (this.checkCodeBtn.disabled) {
+        return;
+      }
       this.$refs[formName].validateField('email',(valid) => {
         if (valid) {
 
