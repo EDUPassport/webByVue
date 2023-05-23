@@ -42,4 +42,13 @@ export default {
   width: 100%;
 }
 
+.dashboard-layout >>> .profile-r-bg-container {
+  box-shadow: none;
+  border-radius: 0;
+  height: calc(100vh - 120px);
+}
+.dashboard-layout >>> .profile-r-container{
+  width: 100%;
+}
+
 </style>

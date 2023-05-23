@@ -14,14 +14,14 @@
                 </template>
 
 
-                <div class="dashboard-t-actions" v-if="identity == 2 || identity == 3 || identity == 4">
+                <div class="dashboard-t-actions" v-if="identity == 2 || identity == 3 || identity == 4 || identity == 5">
                     <el-button plain @click="turnUserManagement()">User Management</el-button>
-                    <el-button type="primary" icon="Plus" @click="postJob()">Post a Job</el-button>
+                    <el-button v-if="identity == 2 || identity == 3 || identity == 4" type="primary" icon="Plus" @click="postJob()">Post a Job</el-button>
                 </div>
 
                 <un-complete-profile-prompt
                     :percent="profilePercentage"
-                    v-if="(identity == 1 && profilePercentage <= 80 ) || (identity == 2 && profilePercentage <= 60)">
+                    v-if="(identity == 1 && profilePercentage <= 80 ) || (identity == 2 && profilePercentage <= 60) || (identity == 5 && profilePercentage <= 60)">
                 </un-complete-profile-prompt>
 
                 <template v-if="identity == 1">
@@ -153,25 +153,64 @@
 
                 <template v-if="identity == 5">
 
-                    <div class="dashboard-1-container">
+                    <!-- <div class="dashboard-1-container">
                         <div class="dashboard-1">
                   <span>
                     More awesome widgets are coming soon...
                   </span>
                         </div>
-                    </div>
+                    </div> -->
+                    <div class="dashboard-t-container">
 
-                    <div class="container-4">
-                        <div class="container-4-l">
-                            <activeDealsDashboard
-                                    :listData="dealsData"
-                            ></activeDealsDashboard>
+                    <div class="dashboard-t-item-vendor dashboard-t-item-gap">
+                            <div class="dashboard-t-item-t">Deal Posted</div>
+                            <compareUpDownPercentageTwo
+                                    :now-value="vendorDealPostedCountForNow"                            >
+                            </compareUpDownPercentageTwo>
+                           
+                            <div class="dashboard-t-item-chart">
+                                <vsLastMonthChartsTwo :percent="vendorDealPostedPercent" color="#12B76A"
+                                                   areaColor="#ecfdf3"></vsLastMonthChartsTwo>
+                            </div>
                         </div>
-                        <div class="container-4-r">
-                            <activeEventsDashboard
-                                    :list-data="eventsData"
-                            ></activeEventsDashboard>
+                        <div class="dashboard-t-item-vendor dashboard-t-item-gap">
+                            <div class="dashboard-t-item-t">Redeemed Codes</div>
+                            <compareUpDownPercentageTwo
+                                    :now-value="13"                            >
+                            </compareUpDownPercentageTwo>
+                           
+                            <div class="dashboard-t-item-chart">
+                                <vsLastMonthChartsTwo :percent="0" color="#12B76A"
+                                                   areaColor="#ecfdf3"></vsLastMonthChartsTwo>
+                            </div>
                         </div>
+                        <div class="dashboard-t-item-vendor dashboard-t-item-gap">
+                            <div class="dashboard-t-item-t">Total Views</div>
+                            <compareUpDownPercentageTwo
+                                    :now-value="vendorTotalViewsForNow"                            >
+                            </compareUpDownPercentageTwo>
+                           
+                            <div class="dashboard-t-item-chart">
+                                <vsLastMonthChartsTwo :percent="vendorTotalViewsPercent" color="#12B76A"
+                                                   areaColor="#ecfdf3"></vsLastMonthChartsTwo>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    <div class="dashboard-b-container">
+                        <div class="dashboard-b-item">
+                            <dealUpdates :deals="recentDealData"
+                                            >
+                            </dealUpdates>
+                        </div>
+                        <div class="dashboard-b-item">
+                            <metricsComponent :options="VendorMetricsOptions"
+                                              :show="false"
+                                              @dateChange="customDateChange"
+                                              @howLongChange="changeHowLong">
+                            </metricsComponent>
+                        </div>
+
                     </div>
 
                 </template>
@@ -190,7 +229,7 @@ import {
     HOME_JOB_SHORTLISTED,
     HOME_USER_METRICS,
     MY_DEALS,
-    USER_INFO_BY_TOKEN_V2, USER_POST_JOB_COUNT
+    USER_INFO_BY_TOKEN_V2, USER_POST_JOB_COUNT,VENDOR_INDEX_DATA
 } from '@/api/api';
 
 // import {onBeforeRouteUpdate} from "vue-router";
@@ -202,8 +241,10 @@ import NewApplications from "@/components/business/newApplications";
 import dailyJobMatch from "@/components/educator/dailyJobMatch";
 import applicationsUpdates from "@/components/educator/applicationsUpdates";
 import favoritedJobsDashboard from "@/components/educator/favoritedJobsDashboard";
-import activeDealsDashboard from "@/components/vendor/activeDealsDashboard";
-import activeEventsDashboard from "@/components/vendor/activeEventsDashboard";
+// import activeDealsDashboard from "@/components/vendor/activeDealsDashboard";
+// import activeEventsDashboard from "@/components/vendor/activeEventsDashboard";
+import dealUpdates from "@/components/vendor/dealUpdates";
+
 import {randomString} from "@/utils";
 import {
     nowValueFormat,
@@ -218,7 +259,11 @@ import metricsComponent from "@/components/metrics/metrics.vue";
 import vsLastMonthCharts from "@/components/metrics/vsLastMonthCharts.vue";
 import unCompleteProfilePrompt from "@/components/unCompleteProfilePrompt.vue";
 import compareUpDownPercentage from "@/components/metrics/compareUpDownPercentage.vue";
-import {ElMessage} from 'element-plus'
+import compareUpDownPercentageTwo from "@/components/metrics/compareUpDownPercentageTwo.vue";
+import vsLastMonthChartsTwo from "@/components/metrics/vsLastMonthChartsTwo.vue";
+
+
+import {ElMessage, ElNotification} from 'element-plus'
 
 export default {
     name: "index",
@@ -227,12 +272,15 @@ export default {
         dailyJobMatch,
         applicationsUpdates,
         favoritedJobsDashboard,
-        activeDealsDashboard,
-        activeEventsDashboard,
+        // activeDealsDashboard,
+        // activeEventsDashboard,
         metricsComponent,
         vsLastMonthCharts,
         unCompleteProfilePrompt,
-        compareUpDownPercentage
+        compareUpDownPercentage,
+        compareUpDownPercentageTwo,
+        vsLastMonthChartsTwo,
+        dealUpdates
     },
     setup() {
         const store = useStore()
@@ -404,6 +452,46 @@ export default {
             getAllJobResumeList()
             myApplicationsData[i]['status'] = value;
         }
+
+        const vendorDealPostedPercent = ref(0)
+        const vendorDealPostedCountForNow = ref(0)
+        const vendorTotalViewsPercent = ref(0)
+        const vendorTotalViewsForNow = ref(0)
+        const recentDealData = ref([])
+
+
+
+        function getVendorIndexData(){
+
+            VENDOR_INDEX_DATA().then(res => {
+                if (res.code === 200) {
+                    if (res.msg === 10000) {
+                        let message = res.message;
+
+                        recentDealData.value = message.recent_deals
+
+                        if (message.deal_posted_count) {
+                            vendorDealPostedCountForNow.value = nowValueFormat(message.deal_posted_count.now_deal_posted_count)
+                            vendorDealPostedPercent.value = getPercentByNowAndPrev(message.deal_posted_count.now_deal_posted_count, message.deal_posted_count.prev_deal_posted_count)
+                        }
+
+                        if (message.total_views_count) {
+                            vendorTotalViewsForNow.value = nowValueFormat(message.total_views_count.now_total_view_count)
+                            vendorTotalViewsPercent.value = getPercentByNowAndPrev(message.total_views_count.now_total_view_count, message.total_views_count.prev_total_view_count);
+                        }
+
+
+                    }
+                }
+            }).catch(err => {
+                ElNotification({
+                    title: 'Error',
+                    message: err,
+                })
+            })
+            
+        }
+
 
         const educatorJobApplyCountPercent = ref(0)
         const educatorJobApplyCountForNow = ref(0)
@@ -600,6 +688,83 @@ export default {
             ],
 
         })
+
+        const VendorMetricsOptions = ref({
+            title: {
+                // text: "参与情况",
+                textStyle: {
+                    color: "#667085",
+                    fontSize: 12,
+                    fontWeight: 400,
+                    fontFamily: "Inter, PingFang SC",
+                },
+            },
+            tooltip: {
+                trigger: "axis",
+            },
+            color: ["#F9B019", "#7F56D9"], // 设置折线颜色
+            legend: {
+                data: ["Total Views", "Total Clicks"],
+                right: "2%",
+            },
+            grid: {
+                left: "3%",
+                right: "1%",
+                bottom: "0%",
+                containLabel: true, // 是否居中显示图表
+            },
+            xAxis: [
+                {
+                    type: "time",
+                    axisLabel: {
+                        interval: 'auto', // 让横坐标每一项都显示
+                        margin: 10,
+                        hideOverlap: true
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#667085'
+                        }
+                    },
+                    axisTick: {
+                        length: 8,
+                        alignWithLabel: true, // 将刻度显示在中间
+                    },
+
+                },
+            ],
+            yAxis: [
+                {
+                    type: "value",
+                    nameLocation: 'start',
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            // 设置坐标轴刻度设置为虚线
+                            type: "dashed",
+                        },
+                    },
+                }
+            ],
+            series: [
+        {
+            name: "Total Views",
+            type: "line",
+            symbol: "circle",
+            symbolSize: 5,
+            data: [100, 200, 150, 300, 250] // Add dummy values for Total Views
+        },
+        {
+            name: "Total Clicks",
+            type: "line",
+            symbol: "circle",
+            symbolSize: 5,
+            data: [50, 100, 80, 120, 90] // Add dummy values for Total Clicks
+        },
+    ],
+
+        })
+
 
         const howLong = ref(7)
 
@@ -902,8 +1067,14 @@ export default {
             }
 
             if (identity.value == 5) {
+
+
+                getVendorIndexData()
+
                 getDealsList(1, 1000)
                 getEventsList(1, 1000)
+
+
             }
 
         })
@@ -946,7 +1117,13 @@ export default {
             howLong,
             changeHowLong,
             customDateChange,
-            viewDeals
+            viewDeals,
+            vendorDealPostedPercent,
+            vendorDealPostedCountForNow,
+            vendorTotalViewsPercent,
+            vendorTotalViewsForNow,
+            recentDealData,
+            VendorMetricsOptions
 
         }
 
@@ -1011,6 +1188,23 @@ export default {
 
     width: 252px;
     height: 188px;
+    background: #FFFFFF;
+    border: 1px solid #EAECF0;
+    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+    border-radius: 8px;
+
+    margin: 20px 20px 20px 0;
+}
+
+.dashboard-t-item-vendor {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+
+    width: 271px;
+    height: 147px;
     background: #FFFFFF;
     border: 1px solid #EAECF0;
     box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);

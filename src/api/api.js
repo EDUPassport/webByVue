@@ -481,3 +481,6 @@ export const PRIVACY_USER_SELECTED_LIST = (params) => get('home/user/selected/pr
 export const EDUCATOR_VISIBLE_LIST = (params) => get('home/educator/visible/list', params)
 export const EDUCATOR_VISIBLE_EDIT = (params) => post('home/educator/edit/visible', params)
 export const EDUCATOR_VISIBLE_STATUS = (params) => get('home/educator/visible/status', params)
+
+//vendorIndeData
+export const VENDOR_INDEX_DATA = (params) => get('home/vendor/index',params)

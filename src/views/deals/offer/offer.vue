@@ -2,9 +2,6 @@
   <div class="bg">
     <div class="profile-container">
 
-      <div class="profile-l-container">
-        <meSideMenu></meSideMenu>
-      </div>
       <div class="profile-r-container">
 
         <div class="new-deal-t">
@@ -247,7 +244,6 @@
 
 <script>
 
-import meSideMenu from "@/components/meSideMenu";
 import {TAG_LIST, ADD_DEALS, GET_COUNTRY_LIST, DEALS_DEAL_DETAIL} from '@/api/api';
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -259,7 +255,6 @@ import {updateWindowHeight} from "@/utils/tools";
 export default {
   name: "jobs",
   components: {
-    meSideMenu,
     submitMessage
   },
   data() {
@@ -710,7 +705,6 @@ export default {
               this.dealSuccessDesc = 'Your Deal offer Submission ' + this.basicForm.title + ' has been successfully sent.'
               this.dealSuccessVisible = true;
 
-
             }
           }).catch(err => {
             console.log(err)
@@ -739,7 +733,9 @@ export default {
     },
     submitDealSuccess() {
       this.dealSuccessVisible = false
-      this.$router.push('/deals/myDeals')
+      this.$router.push({
+        path: this.$route.name === 'verdorDealsOffer' ? '/vendor-deals/myDeals' : '/deals/myDeals'
+      })
 
     },
     resetForm(formName) {
