@@ -74,6 +74,20 @@ export default {
 
 <style>
 
+
+@media only screen and (max-width: 768px) {
+
+    .siq_bR {
+    bottom: 84px !important;
+    }
+
+    body .zsiq_floatmain {
+    z-index: 224 !important;
+    }
+}
+
+
+
 :root {
     --i-window-height: 100vh;
 }
