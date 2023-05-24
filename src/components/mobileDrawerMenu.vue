@@ -73,6 +73,12 @@
 
           </div>
 
+          <div class="menu-item menu-item-margin">
+            <template v-if="envBlog === 'yes'">
+            <el-link :underline=false href="https://blog.edupassport.io" target="_blank" class="edublog-link">EDU Blog</el-link>
+          </template>
+          </div>
+
         </div>
 
         <div class="menu-bottom-container">
@@ -369,6 +375,17 @@ export default {
 </script>
 
 <style scoped>
+
+.edublog-link{
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  font-family: Inter, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  color: #ffffff;
+  position: relative;
+  left: 12px;
+}
+
 /deep/ .el-drawer{
   overflow: unset;
 }
