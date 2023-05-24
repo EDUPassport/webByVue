@@ -12,6 +12,7 @@ import version from "../../public/verison.json";
 import vueCookies from "vue-cookies";
 
 const routes = [
+
   {
     path: "/events",
     component: layout,
@@ -519,6 +520,7 @@ const routes = [
           titleC: "My Profile",
           titleG: "My Profile",
         },
+
       },
       {
         path: "edit/home",
@@ -1030,7 +1032,23 @@ router.beforeEach((to, from, next) => {
         next();
       }
     } else {
-      next();
+        // console.log(to)
+        if (to.matched.some(record => record.meta.noAccessTokenExists)) {
+            const token = localStorage.getItem('token')
+            if (token) {
+                if(to.path==='/login' && to.query.register_key){
+                    next({path:'/overview',query:to.query})
+                }else{
+                    next(from)
+                }
+
+            } else {
+                next()
+            }
+        } else {
+            next()
+        }
+
     }
   }
 });

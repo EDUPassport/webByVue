@@ -480,7 +480,13 @@ export const PRIVACY_CATEGORY_LIST = (params) => get('home/privacy/category/list
 export const PRIVACY_USER_SELECTED_LIST = (params) => get('home/user/selected/privacy/list', params)
 export const EDUCATOR_VISIBLE_LIST = (params) => get('home/educator/visible/list', params)
 export const EDUCATOR_VISIBLE_EDIT = (params) => post('home/educator/edit/visible', params)
+export const USER_CONTRIBUTOR_LIST = (params) => get('home/user/contributor/list', params)
 export const EDUCATOR_VISIBLE_STATUS = (params) => get('home/educator/visible/status', params)
 
 //vendorIndeData
 export const VENDOR_INDEX_DATA = (params) => get('home/vendor/index',params)
+
+export const SEND_CONTRIBUTOR_EMAIL = (params) => post('home/send/contributor/email', params)
+export const USER_CONTRIBUTOR_COMPANY_ADD = (params) => post('home/user/contributor/company/add', params)
+export const USER_CONTRIBUTOR_DELETE = (params) => post('home/user/contributor/delete', params)
+export const USER_CONTRIBUTOR_RESEND_EMAIL = (params) => post('home/user/contributor/resend/email', params)
