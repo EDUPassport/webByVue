@@ -1,133 +1,122 @@
 <template>
-  <div class="bg">
-    <div class="profile-container">
-      <div class="profile-l-container">
-        <meSideMenu></meSideMenu>
-      </div>
-      <div class="profile-r-container">
+    
+      <el-scrollbar class="profile-r-bg-container">
 
-        <el-scrollbar class="profile-r-bg-container">
+        <div class="deals-list-container">
 
-          <div class="deals-list-container">
-
-            <div class="deals-list-t">
-              <div class="deals-list-label">My Deals</div>
-              <div class="deals-list-t-r">
-                <el-button type="primary"
-                           class="post-deal-btn"
-                           round
-                           @click="postDeal()">
-                  Offer a Deal
-                </el-button>
-              </div>
+          <div class="deals-list-t">
+            <div class="deals-list-label">My Deals</div>
+            <div class="deals-list-t-r">
+              <el-button type="primary"
+                          class="post-deal-btn"
+                          round
+                          @click="postDeal()">
+                Offer a Deal
+              </el-button>
             </div>
+          </div>
 
-            <div class="deals-list-content" v-if="dealsListData.length > 0">
+          <div class="deals-list-content" v-if="dealsListData.length > 0">
 
-              <div class="deals-item-container"
-                   v-for="(item,index) in dealsListData" :key="index"
-              >
+            <div class="deals-item-container"
+                  v-for="(item,index) in dealsListData" :key="index"
+            >
 
-                <div class="deals-item">
-                  <div class="deals-item-bg">
-                    <el-image
-                        class="deals-item-background-img"
-                        :src="item.company_info && item.company_info.background_image ? item.company_info.background_image : ''"
-                        fit="cover"
-                    >
-                      <template #error>
-                        <div class="img-slot-background">
-                          <el-icon :size="80" color="#808080">
-                            <Picture/>
-                          </el-icon>
-                        </div>
-                      </template>
-                    </el-image>
-
-                    <div class="list-item-tag actived-0" v-if="item.status==0">
-                      Pending
-                    </div>
-                    <div class="list-item-tag actived-1" v-if="item.status==1">
-                      Active
-                    </div>
-                    <div class="list-item-tag actived-2" v-if="item.status==2">
-                      Rejected
-                    </div>
-
-                  </div>
-                  <div class="deals-item-c">
-                    <div class="deals-item-c-l">
-                      <el-avatar class="deals-logo" :src="item.company_logo"></el-avatar>
-                    </div>
-                    <div class="deals-item-c-r">
-                      <div class="deals-item-c-r-1">
-                        {{ item.company_name }}
+              <div class="deals-item">
+                <div class="deals-item-bg">
+                  <el-image
+                      class="deals-item-background-img"
+                      :src="item.company_info && item.company_info.background_image ? item.company_info.background_image : ''"
+                      fit="cover"
+                  >
+                    <template #error>
+                      <div class="img-slot-background">
+                        <el-icon :size="80" color="#808080">
+                          <Picture/>
+                        </el-icon>
                       </div>
-                      <div class="deals-item-c-r-2">
-                        {{ item.title }}
-                      </div>
-                    </div>
+                    </template>
+                  </el-image>
+
+                  <div class="list-item-tag actived-0" v-if="item.status==0">
+                    Pending
+                  </div>
+                  <div class="list-item-tag actived-1" v-if="item.status==1">
+                    Active
+                  </div>
+                  <div class="list-item-tag actived-2" v-if="item.status==2">
+                    Rejected
                   </div>
 
-                  <div class="deals-item-b">
-                    <div class="deals-item-b-l">
-
-                      <template v-if="item.company_info && item.company_info.category_name_en && item.company_info.category_name_en != '0'">
-                        {{ item.company_info.category_name_en }}
-                      </template>
-                      <template v-else>
-                        unknown
-                      </template>
-
+                </div>
+                <div class="deals-item-c">
+                  <div class="deals-item-c-l">
+                    <el-avatar class="deals-logo" :src="item.company_logo"></el-avatar>
+                  </div>
+                  <div class="deals-item-c-r">
+                    <div class="deals-item-c-r-1">
+                      {{ item.company_name }}
                     </div>
-                    <div class="deals-item-b-r">
-                      <el-button link @click="turnEditDeal(item.id)">
-                        EDIT
-                      </el-button>
-                      <el-button link @click="turnDealDetail(item.id)">
-                        DETAILS
-                      </el-button>
+                    <div class="deals-item-c-r-2">
+                      {{ item.title }}
                     </div>
                   </div>
+                </div>
 
+                <div class="deals-item-b">
+                  <div class="deals-item-b-l">
+
+                    <template v-if="item.company_info && item.company_info.category_name_en && item.company_info.category_name_en != '0'">
+                      {{ item.company_info.category_name_en }}
+                    </template>
+                    <template v-else>
+                      unknown
+                    </template>
+
+                  </div>
+                  <div class="deals-item-b-r">
+                    <el-button link @click="turnEditDeal(item.id)">
+                      EDIT
+                    </el-button>
+                    <el-button link @click="turnDealDetail(item.id)">
+                      DETAILS
+                    </el-button>
+                  </div>
                 </div>
 
               </div>
 
             </div>
-            <div class="deals-list-content-empty" v-else>
-              <el-empty description="-"></el-empty>
-            </div>
 
           </div>
-
-          <div class="deals-pagination" v-if="dealsListData.length > 0">
-            <el-pagination layout="prev, pager, next" :default-current-page="1"
-                           @size-change="dealPageSizeChange"
-                           @current-change="dealPageChange"
-                           :current-page="dealPage" :page-size="dealLimit"
-                           :total="dealTotalNum">
-            </el-pagination>
+          <div class="deals-list-content-empty" v-else>
+            <el-empty description="-"></el-empty>
           </div>
 
-        </el-scrollbar>
+        </div>
 
-      </div>
+        <div class="deals-pagination" v-if="dealsListData.length > 0">
+          <el-pagination layout="prev, pager, next" :default-current-page="1"
+                          @size-change="dealPageSizeChange"
+                          @current-change="dealPageChange"
+                          :current-page="dealPage" :page-size="dealLimit"
+                          :total="dealTotalNum">
+          </el-pagination>
+        </div>
 
-    </div>
-  </div>
+      </el-scrollbar>
+
 </template>
 
 <script>
 
-import meSideMenu from "@/components/meSideMenu";
 import {MY_DEALS} from '@/api/api';
 import {updateWindowHeight} from "@/utils/tools";
 
 export default {
   name: "deals",
   components: {
-    meSideMenu
+    
   },
   data() {
     return {
@@ -165,7 +154,7 @@ export default {
   methods: {
     postDeal() {
       this.$router.push({
-        path: '/deals/offer', query: {}
+        path: this.$route.name === 'vendorMyDeals' ? '/vendor-deals/offer' : '/deals/offer', query: {}
       })
     },
     turnDealDetail(id) {
@@ -176,7 +165,7 @@ export default {
       })
     },
     turnEditDeal(id) {
-      this.$router.push({path: '/deals/offer', query: {deal_id: id}})
+      this.$router.push({path: this.$route.name === 'vendorMyDeals' ? '/vendor-deals/offer' : '/deals/offer', query: {deal_id: id}})
     },
     dealPageSizeChange(e) {
       console.log(e)
@@ -218,26 +207,7 @@ export default {
 </script>
 
 <style scoped>
-.bg {
-  background-color: #f5f6f7;
-}
 
-.profile-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-.profile-l-container {
-
-}
-
-.profile-r-container {
-  padding: 50px;
-  width: calc(100% - 260px);
-  height: calc(100vh - 240px);
-}
 
 .profile-r-bg-container {
   width: 100%;

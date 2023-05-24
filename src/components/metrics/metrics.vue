@@ -2,8 +2,8 @@
 <div class="metrics-container">
   <div class="metrics-t">
     <div class="metrics-t-label">Metrics</div>
-    <div class="metrics-t-actions" v-if="(percentage >= 80 && identity == 1) || (identity == 2) || (identity == 3) || (identity == 4)">
-      <div class="metrics-t-actions-top">
+    <div class="metrics-t-actions" v-if="(percentage >= 80 && identity == 1) || (identity == 2) || (identity == 3) || (identity == 4) || (identity == 5)">
+      <div class="metrics-t-actions-top" v-if="show">
 <!--        <el-button class="action-btn"-->
 <!--                   plain-->
 <!--                   :loading="pdfLoadingStatus"-->
@@ -56,7 +56,7 @@
     </div>
 
   </div>
-  <div class="metrics-chart" id="metrics-chart" v-if="(percentage >= 80 && identity == 1) || identity == 2 || identity == 3 || identity == 4">
+  <div class="metrics-chart" id="metrics-chart" v-if="(percentage >= 80 && identity == 1) || identity == 2 || identity == 3 || identity == 4 || identity == 5">
     <v-chart class="chart" :option="options" />
   </div>
   <template v-else>
@@ -95,8 +95,18 @@ use([
 ]);
 
 export default {
-  name: "metrics",
-  props:['options'],
+  name: "metrics", 
+  props:{
+    options: {
+      type: Object,
+      default: ()=> {}
+    },
+    show: {
+      type: Boolean,
+      default: true,
+    }
+
+  },
   components:{
     VChart
   },
