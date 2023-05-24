@@ -1004,6 +1004,7 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         // console.log(to)
+        //console.log('abcccccccccccccc)
         if (to.matched.some(record => record.meta.noAccessTokenExists)) {
             const token = localStorage.getItem('token')
             if (token) {
