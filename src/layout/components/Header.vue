@@ -782,6 +782,9 @@ export default {
                     if(res.message){
                         this.showSurveyStatus = true;
                     }
+                    else{
+                        this.showSurveyStatus = false;
+                    }
                 }
             }).catch(err=>{
                 console.log(err)
@@ -1502,6 +1505,7 @@ export default {
                     this.inAppNotificationData = []
                     this.getUserUnreadList(1, this.inAppLimit)
                     this.getUserUnread()
+                    this.getUserQuestionList()
                 }
             }).catch(err => {
                 console.log(err)
