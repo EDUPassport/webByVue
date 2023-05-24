@@ -782,6 +782,8 @@ export default {
                 if(res.code === 200){
                     if(res.message){
                         this.showSurveyStatus = true;
+                    } else {
+                        this.showSurveyStatus = false;
                     }
                 }
             }).catch(err=>{
@@ -1498,11 +1500,11 @@ export default {
             }
 
             SET_READ_ALL(params).then(res => {
-                console.log(res)
                 if (res.code == 200) {
                     this.inAppNotificationData = []
                     this.getUserUnreadList(1, this.inAppLimit)
                     this.getUserUnread()
+                    this.getUserQuestionList();
                 }
             }).catch(err => {
                 console.log(err)
