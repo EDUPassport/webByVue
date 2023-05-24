@@ -398,6 +398,15 @@ const routes = [
         ]
     },
     {
+        path: '/setting/contributor/profile',
+        name: 'settingContributorProfile',
+        component: () => import('@/views/setting/contributor/profile.vue'),
+        meta: {
+            titleC: 'Setting Contributor Profile',
+            titleG: 'Setting Contributor Profile'
+        },
+    },
+    {
         path: '/favorites',
         component: layout,
         children: [
@@ -847,24 +856,6 @@ const routes = [
         },
     },
     {
-        path: '/login/linkedin',
-        name: 'linkedinLogin',
-        component: () => import('@/views/login/linkedin'),
-        meta: {
-            titleC: 'Linkedin Login',
-            titleG: 'Linkedin Login',
-        }
-    },
-    {
-        path: '/login/google',
-        name: 'googleLogin',
-        component: () => import('@/views/login/google'),
-        meta: {
-            titleC: 'Google Login',
-            titleG: 'Google Login',
-        }
-    },
-    {
         path: '/forgot/password',
         name: 'forgotPassword',
         component: () => import('@/views/login/forgot/password.vue'),
@@ -1012,11 +1003,16 @@ router.beforeEach((to, from, next) => {
             next({path: '/login'})
         }
     } else {
-
+        // console.log(to)
         if (to.matched.some(record => record.meta.noAccessTokenExists)) {
             const token = localStorage.getItem('token')
             if (token) {
-                next(from)
+                if(to.path==='/login' && to.query.register_key){
+                    next({path:'/overview',query:to.query})
+                }else{
+                    next(from)
+                }
+
             } else {
                 next()
             }
