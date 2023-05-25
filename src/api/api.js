@@ -490,3 +490,4 @@ export const SEND_CONTRIBUTOR_EMAIL = (params) => post('home/send/contributor/em
 export const USER_CONTRIBUTOR_COMPANY_ADD = (params) => post('home/user/contributor/company/add', params)
 export const USER_CONTRIBUTOR_DELETE = (params) => post('home/user/contributor/delete', params)
 export const USER_CONTRIBUTOR_RESEND_EMAIL = (params) => post('home/user/contributor/resend/email', params)
+export const USER_CONTRIBUTOR_ACTIVATION = (params) => post('home/user/contributor/activation', params)

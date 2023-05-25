@@ -439,18 +439,20 @@
                                                        v-model="businessForm.sub_category"
                                                        class="form-width-388"
                                                        :max="1">
-                                        <template v-for="(item,i) in subCategoryOptions" :key="i">
 
-                                            <el-checkbox v-if="item['children'].length === 0" :label="item">
-                                                {{ item.identity_name }}
-                                            </el-checkbox>
+                                        <div style="display: flex;flex-direction: row;flex-wrap:wrap;" >
 
-                                            <el-checkbox v-for="(child,key) in item['children']" :key="key"
-                                                         :label="item">
-                                                {{ child.identity_name }}
-                                            </el-checkbox>
+                                            <div style="flex-basis: 50%;" v-for="(item,i) in subCategoryOptions" :key="i" >
+                                                <el-checkbox v-if="item['children'].length === 0" :label="item">
+                                                    {{ item.identity_name }}
+                                                </el-checkbox>
+                                                <el-checkbox  v-for="(child,key) in item['children']" :key="key"
+                                                              :label="item">
+                                                    {{ child.identity_name }}
+                                                </el-checkbox>
+                                            </div>
 
-                                        </template>
+                                        </div>
 
                                     </el-checkbox-group>
 

@@ -1,0 +1,139 @@
+.contributor-dashboard{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.c-d-items{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    margin-left: 40px;
+}
+
+.c-d-items-dialog{
+    width: 100%;
+    height: 400px;
+}
+
+.c-d-item-dialog{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+
+    width: 100%;
+    height: 105px;
+    background: #FFFFFF;
+    border: 1px solid #EAECF0;
+    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+    border-radius: 8px;
+
+    margin: 0 0 20px 0;
+
+}
+
+.c-d-item{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+
+    width: 272px;
+    height: 105px;
+    background: #FFFFFF;
+    border: 1px solid #EAECF0;
+    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+    border-radius: 8px;
+
+    margin: 20px 32px 0 0;
+
+}
+
+.c-d-item:hover{
+    border: 1px solid #856DFF;
+}
+
+.c-d-item-t{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+.c-d-item-t span{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    color: #101828;
+
+}
+
+.c-d-circle{
+    width: 4px;
+    height:4px;
+    border: 6px solid #D0D5DD;
+    border-radius: 50%;
+    background: transparent;
+    margin-right: 7px;
+}
+
+.c-d-circle-active{
+    border: 6px solid #6648FF;
+}
+
+.c-d-item-m{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #101828;
+    margin-top: 8px;
+}
+
+.c-d-item-b{
+    width: 100%;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.c-d-item-b-l{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    /* identical to box height, or 133% */
+
+    letter-spacing: -0.02em;
+}
+
+.c-d-item-b-r{
+
+}
+
+.c-d-more{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    /* identical to box height, or 150% */
+
+
+    /* Grey/400 */
+
+    color: #98A2B3;
+
+}
+

@@ -93,7 +93,7 @@
                                                :disabled="stepOneStatus"
                                                filterable
                                                fit-input-width
-                                               
+
                                                placeholder="Enter your nationality">
                                         <el-option v-for="(item,i) in nationalityOptions"
                                                    :key="i"
@@ -123,7 +123,7 @@
                                                 <el-select v-model="personalForm.phone_code"
                                                            :disabled="stepOneStatus"
                                                            class="form-width-100"
-                                                           
+
                                                            filterable
                                                            placeholder="Select">
                                                     <el-option
@@ -152,31 +152,6 @@
                                         </template>
                                     </el-radio-group>
                                 </el-form-item>
-
-                                <el-form-item label="Educator Type(Up to 3)">
-
-                                    <el-checkbox-group :disabled="stepOneStatus"
-                                                       v-model="personalForm.sub_categories"
-                                                       class="form-width-388"
-                                                       :min="1"
-                                                       :max="3">
-                                        <template v-for="(item,i) in subCategoryOptions" :key="i">
-
-                                            <el-checkbox v-if="item['children'].length === 0" :label="item">
-                                                {{ item.identity_name }}
-                                            </el-checkbox>
-
-                                            <el-checkbox v-for="(child,key) in item['children']" :key="key"
-                                                         :label="item">
-                                                {{ child.identity_name }}
-                                            </el-checkbox>
-
-                                        </template>
-
-                                    </el-checkbox-group>
-
-                                </el-form-item>
-
 
                                 <el-form-item label="Profile Picture">
                                     <template #label>
@@ -314,27 +289,54 @@
                                     </el-input>
                                 </el-form-item>
 
+                                <el-form-item label="Educator Type(Up to 3)">
+
+                                    <el-checkbox-group :disabled="stepOneStatus"
+                                                       v-model="personalForm.sub_categories"
+                                                       class="form-width-388"
+                                                       :min="1"
+                                                       :max="3">
+
+                                        <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
+
+                                            <div style="flex-basis: 50%;" v-for="(item,i) in subCategoryOptions"
+                                                 :key="i">
+                                                <el-checkbox v-if="item['children'].length === 0" :label="item">
+                                                    {{ item.identity_name }}
+                                                </el-checkbox>
+                                                <el-checkbox v-for="(child,key) in item['children']" :key="key"
+                                                             :label="item">
+                                                    {{ child.identity_name }}
+                                                </el-checkbox>
+                                            </div>
+
+                                        </div>
+
+                                    </el-checkbox-group>
+
+                                </el-form-item>
+
                                 <el-form-item label="Work destination ">
                                     <template #label>
                                         <div>
                                             <div>
-                                                Work destination
+                                                Preferred Job Location
                                             </div>
                                             <div class="profile-picture-tips">
-                                                (Type to add new)
+
                                             </div>
                                         </div>
                                     </template>
                                     <el-select
                                             class="form-width-388"
                                             filterable
-                                            
+
                                             :disabled="stepTwoStatus"
                                             v-model="workDestinationValue"
                                             multiple
                                             collapse-tags
                                             collapse-tags-tooltip
-                                            placeholder="Select work destination"
+                                            placeholder="Select your Location"
                                             value-key="id"
 
                                     >
@@ -348,12 +350,12 @@
 
                                 </el-form-item>
 
-                                <el-form-item label="Job type">
+                                <el-form-item label="Preferred Job type">
 
                                     <el-select
                                             class="form-width-388"
                                             filterable
-                                            
+
                                             multiple
                                             :disabled="stepTwoStatus"
                                             v-model="jobTypeValue"
@@ -378,7 +380,7 @@
                                             class="form-width-388"
                                             v-model="interestsValue"
                                             :disabled="stepTwoStatus"
-                                            
+
                                             multiple
                                             collapse-tags
                                             collapse-tags-tooltip
@@ -398,58 +400,11 @@
 
                                 </el-form-item>
 
-                                <el-form-item label="Work schedule type">
-
-                                    <el-select
-                                            class="form-width-388"
-                                            :disabled="stepTwoStatus"
-                                            v-model="workScheduleTypeValue"
-                                            
-                                            filterable
-                                            collapse-tags
-                                            placeholder="Select work schedule type"
-                                            value-key="id"
-                                    >
-                                        <el-option v-for="(item,i) in workScheduleTypeOptions"
-                                                   :key="i"
-                                                   :label="item.object_en"
-                                                   :value="item.id">
-                                        </el-option>
-                                    </el-select>
-
-                                </el-form-item>
-
-                                <el-form-item label="Benefits">
-
-                                    <el-select
-                                            class="form-width-388"
-                                            :disabled="stepTwoStatus"
-                                            v-model="benefitsValue"
-                                            
-                                            multiple
-                                            collapse-tags
-                                            collapse-tags-tooltip
-                                            placeholder="Select benefits"
-                                            filterable
-                                            allow-create
-                                            value-key="id"
-                                    >
-                                        <el-option
-                                                v-for="(item,index) in benefitsOptions"
-                                                :key="index"
-                                                :label="item.object_en"
-                                                :value="item"
-                                        />
-
-                                    </el-select>
-
-                                </el-form-item>
-
                                 <el-form-item label="Subject(s) to teach">
 
                                     <el-select
                                             class="form-width-388"
-                                            
+
                                             :disabled="stepTwoStatus"
                                             v-model="subjectValue"
                                             multiple
@@ -471,23 +426,97 @@
 
                                 </el-form-item>
 
-                                <el-form-item label=" Preferred Age To Teach">
+
+                                <!--                                <el-form-item label="Work schedule type">-->
+
+                                <!--                                    <el-select-->
+                                <!--                                            class="form-width-388"-->
+                                <!--                                            :disabled="stepTwoStatus"-->
+                                <!--                                            v-model="workScheduleTypeValue"-->
+                                <!--                                            -->
+                                <!--                                            filterable-->
+                                <!--                                            collapse-tags-->
+                                <!--                                            placeholder="Select work schedule type"-->
+                                <!--                                            value-key="id"-->
+                                <!--                                    >-->
+                                <!--                                        <el-option v-for="(item,i) in workScheduleTypeOptions"-->
+                                <!--                                                   :key="i"-->
+                                <!--                                                   :label="item.object_en"-->
+                                <!--                                                   :value="item.id">-->
+                                <!--                                        </el-option>-->
+                                <!--                                    </el-select>-->
+
+                                <!--                                </el-form-item>-->
+
+                                <el-form-item label="Preferred Language">
 
                                     <el-select
                                             class="form-width-388"
-                                            
                                             :disabled="stepTwoStatus"
-                                            v-model="ageToTeachValue"
+                                            v-model="preferredLanguageValue"
+
                                             multiple
                                             collapse-tags
                                             collapse-tags-tooltip
-                                            placeholder="Select preferred age to teach"
+                                            placeholder="Select Language"
                                             filterable
                                             allow-create
                                             value-key="id"
                                     >
                                         <el-option
-                                                v-for="(item,index) in ageToTeachOptions"
+                                                v-for="(item,index) in languageOptionsData"
+                                                :key="index"
+                                                :label="item.object_en"
+                                                :value="item"
+                                        />
+
+                                    </el-select>
+
+                                </el-form-item>
+
+                                <el-form-item label="Benefits">
+
+                                    <el-select
+                                            class="form-width-388"
+                                            :disabled="stepTwoStatus"
+                                            v-model="benefitsValue"
+
+                                            multiple
+                                            collapse-tags
+                                            collapse-tags-tooltip
+                                            placeholder="Select benefits"
+                                            filterable
+                                            allow-create
+                                            value-key="id"
+                                    >
+                                        <el-option
+                                                v-for="(item,index) in benefitsOptions"
+                                                :key="index"
+                                                :label="item.object_en"
+                                                :value="item"
+                                        />
+
+                                    </el-select>
+
+                                </el-form-item>
+
+                                <el-form-item label="Students Age">
+
+                                    <el-select
+                                            class="form-width-388"
+
+                                            :disabled="stepTwoStatus"
+                                            v-model="studentsAgeValue"
+                                            multiple
+                                            collapse-tags
+                                            collapse-tags-tooltip
+                                            placeholder="Select Students Age"
+                                            filterable
+                                            allow-create
+                                            value-key="id"
+                                    >
+                                        <el-option
+                                                v-for="(item,index) in studentsAgeOptions"
                                                 :key="index"
                                                 :label="item.object_en"
                                                 :value="item"
@@ -610,7 +639,7 @@
                                                :disabled="stepThreeStatus"
                                                class="form-width-388"
                                                filterable
-                                               
+
                                                placeholder="Years of Experience"
                                                value-key="id"
                                     >
@@ -627,7 +656,7 @@
                                             class="form-width-388"
                                             filterable
                                             clearable
-                                            
+
                                             v-model="placesTraveledValue"
                                             :disabled="stepThreeStatus"
                                             multiple
@@ -651,7 +680,7 @@
                                             class="form-width-388"
                                             filterable
                                             clearable
-                                            
+
                                             v-model="placesLivedValue"
                                             :disabled="stepThreeStatus"
                                             multiple
@@ -801,7 +830,7 @@
                                 <el-form-item label="Certifications">
 
                                     <el-select
-                                            
+
                                             v-model="certificationsValue"
                                             :disabled="stepFourStatus"
                                             multiple
@@ -956,10 +985,10 @@
                                     <template #label>
                                         <div>
                                             <div>
-                                                Background Image
+                                                Image(s)
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach Image for background banner
+                                                Attach Image for Profile(up to 3Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -1015,18 +1044,18 @@
                                                     </el-image>
                                                     <div class="attachment-xll-image-mask" v-if="!stepFiveStatus">
                                                         <el-icon
-                                                            style="cursor: pointer;"
-                                                            @click="handleSingleImagePreview(mediaForm.background_image,'background_image')"
-                                                            color="#ffffff"
-                                                            :size="20">
+                                                                style="cursor: pointer;"
+                                                                @click="handleSingleImagePreview(mediaForm.background_image,'background_image')"
+                                                                color="#ffffff"
+                                                                :size="20">
                                                             <zoom-in/>
                                                         </el-icon>
 
                                                         <el-icon
-                                                            style="cursor: pointer;margin-left: 15px;"
-                                                            @click="handleSingleImageRemove('background_image')"
-                                                            color="#F97066"
-                                                            :size="20">
+                                                                style="cursor: pointer;margin-left: 15px;"
+                                                                @click="handleSingleImageRemove('background_image')"
+                                                                color="#F97066"
+                                                                :size="20">
                                                             <Delete/>
                                                         </el-icon>
                                                     </div>
@@ -1037,22 +1066,23 @@
                                         </template>
                                         <template v-else>
                                             <el-upload
-                                                :disabled="stepFiveStatus"
-                                                action=""
-                                                :limit="1"
-                                                :headers="uploadHeaders"
-                                                :show-file-list="false"
-                                                accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
-                                                :http-request="backgroundHttpRequest"
-                                                :before-upload="beforeBackgroundPhotoUpload"
+                                                    class="form-width-388"
+                                                    drag
+                                                    :disabled="stepFiveStatus"
+                                                    action=""
+                                                    :limit="1"
+                                                    :headers="uploadHeaders"
+                                                    :show-file-list="false"
+                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                    :http-request="backgroundHttpRequest"
+                                                    :before-upload="beforeBackgroundPhotoUpload"
                                             >
 
                                                 <template #trigger>
-                                                    <div class="attachment-btn">
-                                                        <span>Attach files</span>
-                                                        <el-icon color="#667085">
-                                                            <IconIcomoonFreeAttachment/>
-                                                        </el-icon>
+                                                    <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
+                                                    <div class="profile-upload-text">
+                                                        <span>Click to Upload</span> Or Drag your photo <br>
+                                                        SVG,PNG,JPEG(400x400)
                                                     </div>
                                                 </template>
 
@@ -1066,10 +1096,10 @@
                                     <template #label>
                                         <div>
                                             <div>
-                                                Video
+                                                Video(s)
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach Introduction video for your profile
+                                                Attach Introduction video for your profile(up to 10Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -1122,7 +1152,7 @@
                                                            controls
                                                     >
                                                     </video>
-                                                    <div class="attachment-xll-image-mask"  v-if="!stepFiveStatus">
+                                                    <div class="attachment-xll-image-mask" v-if="!stepFiveStatus">
                                                         <el-icon
                                                                 style="cursor: pointer;"
                                                                 @click="handleSingleImagePreview(mediaForm.video_url,'video_url')"
@@ -1146,6 +1176,8 @@
                                         </template>
                                         <template v-else>
                                             <el-upload
+                                                    class="form-width-388"
+                                                    drag
                                                     action=""
                                                     :disabled="stepFiveStatus"
                                                     :limit="1"
@@ -1157,11 +1189,10 @@
                                             >
 
                                                 <template #trigger>
-                                                    <div class="attachment-btn">
-                                                        <span>Attach files</span>
-                                                        <el-icon color="#667085">
-                                                            <IconIcomoonFreeAttachment/>
-                                                        </el-icon>
+                                                    <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
+                                                    <div class="profile-upload-text">
+                                                        <span>Click to Upload</span> Or Drag your Video <br>
+                                                        MP4,MOV,AVI OR WebM
                                                     </div>
                                                 </template>
 
@@ -1172,14 +1203,14 @@
 
                                 </el-form-item>
 
-                                <el-form-item label="Account Files">
+                                <el-form-item label="Other Files">
                                     <template #label>
                                         <div>
                                             <div>
-                                                Account Files
+                                                Other Files
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach your account files for your profile
+                                                Attach your account files for your profile(up to 5Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -1187,6 +1218,8 @@
                                     <div style="flex-direction: column;" class="profile-picture-r">
 
                                         <el-upload
+                                                class="form-width-388"
+                                                drag
                                                 action=""
                                                 :disabled="stepFiveStatus"
                                                 :multiple="true"
@@ -1195,18 +1228,17 @@
                                                 :limit="6"
                                                 :headers="uploadHeaders"
                                                 name="file[]"
-                                                accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                accept=".jpg,.jpeg,.png,.pdf,.JPG,.JPEG,.PNG,.PDF"
                                                 :before-upload="beforeAccountImageUpload"
                                                 :on-change="handleAccountImageChange"
                                                 :http-request="handleAccountFilesRequest"
                                         >
 
                                             <template #trigger>
-                                                <div class="attachment-btn">
-                                                    <span>Attach files</span>
-                                                    <el-icon color="#667085">
-                                                        <IconIcomoonFreeAttachment/>
-                                                    </el-icon>
+                                                <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
+                                                <div class="profile-upload-text">
+                                                    <span>Click to Upload</span> Or Drag your PDF <br>
+                                                    Resume, cover letter, transcripts, certificates
                                                 </div>
                                             </template>
 
@@ -1254,7 +1286,7 @@
                                                               fit="cover"
                                                     >
                                                     </el-image>
-                                                    <div class="attachment-xll-image-mask"  v-if="!stepFiveStatus">
+                                                    <div class="attachment-xll-image-mask" v-if="!stepFiveStatus">
                                                         <el-icon
                                                                 style="cursor: pointer;"
                                                                 @click="handleSingleImagePreview(item.url,'account_files')"
@@ -1281,89 +1313,89 @@
 
                                 </el-form-item>
 
-                                <el-form-item label="Resume PDF">
-                                    <template #label>
-                                        <div>
-                                            <div>
-                                                Resume PDF
-                                            </div>
-                                            <div class="profile-picture-tips">
-                                                Attach Resume PDF for your profile
-                                            </div>
-                                        </div>
-                                    </template>
+<!--                                <el-form-item label="Resume PDF">-->
+<!--                                    <template #label>-->
+<!--                                        <div>-->
+<!--                                            <div>-->
+<!--                                                Resume PDF-->
+<!--                                            </div>-->
+<!--                                            <div class="profile-picture-tips">-->
+<!--                                                Attach Resume PDF for your profile-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </template>-->
 
-                                    <div class="profile-picture-r">
+<!--                                    <div class="profile-picture-r">-->
 
-                                        <template v-if="mediaForm.resume_pdf && editResumeStatus">
+<!--                                        <template v-if="mediaForm.resume_pdf && editResumeStatus">-->
 
-                                            <div class="attachment-xll">
-                                                <div class="attachment-xll-btns">
-                                                    <div class="attachment-xll-btn">
-                                                        <div class="attachment-xll-btn-l">
-                                                            <el-icon color="#667085">
-                                                                <IconIcomoonFreeAttachment/>
-                                                            </el-icon>
-                                                            {{ mediaForm.resume_name }}
-                                                        </div>
-                                                        <div class="attachment-xll-btn-r">
-                                                            <el-icon class="attachment-xll-icon"
-                                                                     v-if="!stepFiveStatus"
-                                                                     @click="handleSingleImageRemove('resume_pdf')"
-                                                                     color="#F97066">
-                                                                <Delete></Delete>
-                                                            </el-icon>
-                                                        </div>
+<!--                                            <div class="attachment-xll">-->
+<!--                                                <div class="attachment-xll-btns">-->
+<!--                                                    <div class="attachment-xll-btn">-->
+<!--                                                        <div class="attachment-xll-btn-l">-->
+<!--                                                            <el-icon color="#667085">-->
+<!--                                                                <IconIcomoonFreeAttachment/>-->
+<!--                                                            </el-icon>-->
+<!--                                                            {{ mediaForm.resume_name }}-->
+<!--                                                        </div>-->
+<!--                                                        <div class="attachment-xll-btn-r">-->
+<!--                                                            <el-icon class="attachment-xll-icon"-->
+<!--                                                                     v-if="!stepFiveStatus"-->
+<!--                                                                     @click="handleSingleImageRemove('resume_pdf')"-->
+<!--                                                                     color="#F97066">-->
+<!--                                                                <Delete></Delete>-->
+<!--                                                            </el-icon>-->
+<!--                                                        </div>-->
 
-                                                    </div>
-                                                    <template  v-if="!stepFiveStatus">
-                                                        <div class="attachment-xll-btn-edit"
-                                                             @click="handleEditMedia('resume_pdf')"
-                                                        >
-                                                            <el-icon class="attachment-xll-icon">
-                                                                <IconUilEdit/>
-                                                            </el-icon>
-                                                        </div>
-                                                        <div class="attachment-xll-btn-download"
-                                                             @click="handleDownloadMedia(mediaForm.resume_pdf)"
-                                                        >
-                                                            <el-icon class="attachment-xll-icon">
-                                                                <IconUisDownloadAlt/>
-                                                            </el-icon>
-                                                        </div>
-                                                    </template>
+<!--                                                    </div>-->
+<!--                                                    <template v-if="!stepFiveStatus">-->
+<!--                                                        <div class="attachment-xll-btn-edit"-->
+<!--                                                             @click="handleEditMedia('resume_pdf')"-->
+<!--                                                        >-->
+<!--                                                            <el-icon class="attachment-xll-icon">-->
+<!--                                                                <IconUilEdit/>-->
+<!--                                                            </el-icon>-->
+<!--                                                        </div>-->
+<!--                                                        <div class="attachment-xll-btn-download"-->
+<!--                                                             @click="handleDownloadMedia(mediaForm.resume_pdf)"-->
+<!--                                                        >-->
+<!--                                                            <el-icon class="attachment-xll-icon">-->
+<!--                                                                <IconUisDownloadAlt/>-->
+<!--                                                            </el-icon>-->
+<!--                                                        </div>-->
+<!--                                                    </template>-->
 
-                                                </div>
+<!--                                                </div>-->
 
-                                            </div>
+<!--                                            </div>-->
 
-                                        </template>
-                                        <template v-else>
-                                            <el-upload
-                                                    action=""
-                                                    :disabled="stepFiveStatus"
-                                                    :limit="1"
-                                                    :headers="uploadHeaders"
-                                                    :show-file-list="false"
-                                                    accept=".pdf,.PDF"
-                                                    :http-request="resumePdfHttpRequest"
-                                                    :before-upload="beforeResumePdfUpload"
-                                            >
+<!--                                        </template>-->
+<!--                                        <template v-else>-->
+<!--                                            <el-upload-->
+<!--                                                    action=""-->
+<!--                                                    :disabled="stepFiveStatus"-->
+<!--                                                    :limit="1"-->
+<!--                                                    :headers="uploadHeaders"-->
+<!--                                                    :show-file-list="false"-->
+<!--                                                    accept=".pdf,.PDF"-->
+<!--                                                    :http-request="resumePdfHttpRequest"-->
+<!--                                                    :before-upload="beforeResumePdfUpload"-->
+<!--                                            >-->
 
-                                                <template #trigger>
-                                                    <div class="attachment-btn">
-                                                        <span>Attach files</span>
-                                                        <el-icon color="#667085">
-                                                            <IconIcomoonFreeAttachment/>
-                                                        </el-icon>
-                                                    </div>
-                                                </template>
+<!--                                                <template #trigger>-->
+<!--                                                    <div class="attachment-btn">-->
+<!--                                                        <span>Attach files</span>-->
+<!--                                                        <el-icon color="#667085">-->
+<!--                                                            <IconIcomoonFreeAttachment/>-->
+<!--                                                        </el-icon>-->
+<!--                                                    </div>-->
+<!--                                                </template>-->
 
-                                            </el-upload>
-                                        </template>
-                                    </div>
+<!--                                            </el-upload>-->
+<!--                                        </template>-->
+<!--                                    </div>-->
 
-                                </el-form-item>
+<!--                                </el-form-item>-->
 
 
                             </el-form>
@@ -1398,7 +1430,7 @@
                     <el-select
                             class="form-width-388"
                             v-model="languageValue"
-                            
+
                             value-key="id">
                         <el-option v-for="(item,i) in languageOptionsData" :key="i"
                                    :label="item.object_en"
@@ -1414,7 +1446,7 @@
                     <el-select
                             class="form-width-388"
                             v-model="languageLevelValue"
-                            
+
                             value-key="value">
                         <el-option
                                 v-for="(level,ii) in languageLevelOptionsData" :key="ii"
@@ -1544,7 +1576,7 @@
                 </el-form-item>
                 <el-form-item label="Degree" prop="degree">
                     <el-select v-model="educationDegreeObj"
-                               
+
                                value-key="id"
                                placeholder="Doctorate, Master's, Bachelor's, etc...">
                         <el-option v-for="(degree,i) in degreeOptions" :key="i"
@@ -1631,7 +1663,7 @@ import defaultAvatarIcon from '@/assets/newHome/profile/default-avatar.svg'
 import deleteAccountComponent from "@/components/deleteAccountComponent.vue";
 import {ref, reactive, onMounted} from 'vue'
 import {useStore} from 'vuex'
-import {useRoute } from 'vue-router'
+import {useRoute} from 'vue-router'
 import arrowDownIcon from '@/assets/newHome/arrow-circle-down.svg'
 import arrowUpIcon from '@/assets/newHome/arrow-circle-up.svg'
 import {countriesData} from "@/utils/data";
@@ -1831,9 +1863,13 @@ const benefitsOptions = ref([])
 const subjectValue = ref([])
 const subjectOptions = ref([])
 
+const studentsAgeValue = ref([])
+const studentsAgeOptions = ref([])
+
 const ageToTeachValue = ref([])
 const ageToTeachOptions = ref([])
 
+const preferredLanguageValue = ref([])
 const selectedLanguageList = ref([])
 const languageDialogVisible = ref(false)
 const languageOptionsData = ref([])
@@ -1941,12 +1977,20 @@ const certificationsValue = ref([])
 const certificationsOptions = ref([])
 
 const degreeOptions = ref([])
+
+const initLoadUserObject = () => {
+    USER_OBJECT_LIST({
+        pid: 0
+    }).then(res => {
+        console.log(res)
+    })
+}
 const loadUserObjectData = async () => {
 
     if (localStorageService.getItem('jobSeeking') && localStorageService.getItem('workDestination') &&
         localStorageService.getItem('workScheduleType') && localStorageService.getItem('jobType')
         && localStorageService.getItem('benefits') && localStorageService.getItem('subject') &&
-        localStorageService.getItem('ageToTeach')
+        localStorageService.getItem('ageToTeach') && localStorageService.getItem('studentsAge')
         && localStorageService.getItem('teachExp') && localStorageService.getItem('placesTraveled')
         && localStorageService.getItem('placesLived') && localStorageService.getItem('certifications')
         && localStorageService.getItem('degree') && localStorageService.getItem('languages')
@@ -1959,6 +2003,7 @@ const loadUserObjectData = async () => {
         benefitsOptions.value = JSON.parse(localStorageService.getItem('benefits'))
         subjectOptions.value = JSON.parse(localStorageService.getItem('subject'))
         ageToTeachOptions.value = JSON.parse(localStorageService.getItem('ageToTeach'))
+        studentsAgeOptions.value = JSON.parse(localStorageService.getItem('studentsAge'))
         teachExpOptions.value = JSON.parse(localStorageService.getItem('teachExp'))
         placesTraveledOptions.value = JSON.parse(localStorageService.getItem('placesTraveled'))
         placesLivedOptions.value = JSON.parse(localStorageService.getItem('placesLived'))
@@ -2014,6 +2059,12 @@ const loadUserObjectData = async () => {
                 localStorageService.setItem('ageToTeach', JSON.stringify(ageToTeachArr), 60)
             }
 
+            let studentsArr = res.message.filter(item => item.pid === 73);
+            studentsAgeOptions.value = ageToTeachArr
+            if (!localStorageService.getItem('studentsAge')) {
+                localStorageService.setItem('studentsAge', JSON.stringify(studentsArr), 60)
+            }
+
             let teachExpArr = res.message.filter(item => item.pid === 120)
             teachExpOptions.value = teachExpArr
             if (!localStorageService.getItem('teachExp')) {
@@ -2066,6 +2117,33 @@ const loadUserObjectData = async () => {
     })
 
 }
+
+const preferredLanguageConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+
+    preferredLanguageValue.value.forEach(item => {
+        objectArr.push(item.id);
+    })
+
+    let data = {
+        object_pid: 2,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('preferred language--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
 
 const jobTypeConfirm = () => {
 
@@ -2166,6 +2244,38 @@ const ageToTeachConfirm = () => {
     ADD_PROFILE_V2(data).then(res => {
         if (res.code == 200) {
             console.log('age to teach--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const studentsAgeConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+
+    studentsAgeValue.value.forEach(item => {
+
+        if (typeof item === 'string') {
+            expand.push(item)
+        } else {
+            objectArr.push(item.id);
+        }
+
+    })
+
+    let data = {
+        object_pid: 73,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('students age--submit--' + res.data);
         }
 
     }).catch(err => {
@@ -2572,6 +2682,24 @@ const getBasicInfo = async () => {
 
             }
 
+            studentsAgeValue.value = []
+            if (educatorContact.Student_Age) {
+                let studentsAgeArr = educatorContact.Student_Age;
+                studentsAgeArr.forEach((item) => {
+                    if (item.object_id == 0) {
+                        studentsAgeValue.value.push(item.object_en)
+                    } else {
+                        let obj = {
+                            id: item.object_id,
+                            pid: item.object_pid,
+                            object_en: item.object_en,
+                            object_cn: item.object_cn
+                        }
+                        studentsAgeValue.value.push(obj)
+                    }
+                })
+
+            }
 
             let languagesArr = educatorContact.languages
             if (languagesArr && languagesArr.length) {
@@ -2677,7 +2805,7 @@ const getBasicInfo = async () => {
             }
 
             let videoUrl = educatorContact.video_url
-            if(videoUrl){
+            if (videoUrl) {
                 mediaForm.video_url = videoUrl
                 mediaForm.video_name = videoUrl.substring(videoUrl.length - 10)
             }
@@ -2689,7 +2817,7 @@ const getBasicInfo = async () => {
                     let userImagesArr = []
                     userImages.forEach(item => {
                         let userImageObj = {
-                            name:  item.url.substring(item.url.length - 10),
+                            name: item.url.substring(item.url.length - 10),
                             url: item.url
                         }
                         userImagesArr.push(userImageObj)
@@ -2701,7 +2829,7 @@ const getBasicInfo = async () => {
             }
 
             let resume = educatorContact.resume_pdf
-            if(resume){
+            if (resume) {
                 mediaForm.resume_pdf = resume
                 mediaForm.resume_name = resume.substring(resume.length - 10)
             }
@@ -3152,59 +3280,59 @@ const beforeIntroVideoUpload = (file) => {
     uploadLoadingStatus.value = true;
 }
 
-const resumePdfHttpRequest = (options) => {
-
-    // console.log(options)
-    const formData = new FormData();
-
-    formData.append('token', localStorage.getItem('token'))
-    // console.log(file)
-    let isInChina = process.env.VUE_APP_CHINA
-    if (isInChina === 'yes') {
-        formData.append('file[]', options.file, options.file.name)
-        UPLOAD_BY_ALI_OSS(formData).then(res => {
-            // console.log(res)
-            if (res.code == 200) {
-                let myFileUrl = res.data[0]['file_url'];
-                uploadLoadingStatus.value = false;
-                editResumeStatus.value =true
-                mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
-                mediaForm.resume_pdf = myFileUrl
-            }
-        }).catch(err => {
-            console.log(err)
-        })
-
-    }
-
-    if (isInChina === 'no') {
-        formData.append('file', options.file, options.file.name)
-        UPLOAD_BY_SERVICE(formData).then(res => {
-            // console.log(res)
-            if (res.code == 200) {
-                let myFileUrl = res.message.file_path;
-                uploadLoadingStatus.value = false;
-                editResumeStatus.value = true
-                mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
-                mediaForm.resume_pdf = myFileUrl
-            }
-        }).catch(err => {
-            console.log(err)
-        })
-
-    }
-
-}
-const beforeResumePdfUpload = (file) => {
-    uploadLoadingStatus.value = true;
-
-    const isLt2M = file.size / 1024 / 1024 < 20
-
-    if (!isLt2M) {
-        ElMessage.error('File size can not exceed 20MB')
-    }
-    return isLt2M
-}
+// const resumePdfHttpRequest = (options) => {
+//
+//     // console.log(options)
+//     const formData = new FormData();
+//
+//     formData.append('token', localStorage.getItem('token'))
+//     // console.log(file)
+//     let isInChina = process.env.VUE_APP_CHINA
+//     if (isInChina === 'yes') {
+//         formData.append('file[]', options.file, options.file.name)
+//         UPLOAD_BY_ALI_OSS(formData).then(res => {
+//             // console.log(res)
+//             if (res.code == 200) {
+//                 let myFileUrl = res.data[0]['file_url'];
+//                 uploadLoadingStatus.value = false;
+//                 editResumeStatus.value = true
+//                 mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
+//                 mediaForm.resume_pdf = myFileUrl
+//             }
+//         }).catch(err => {
+//             console.log(err)
+//         })
+//
+//     }
+//
+//     if (isInChina === 'no') {
+//         formData.append('file', options.file, options.file.name)
+//         UPLOAD_BY_SERVICE(formData).then(res => {
+//             // console.log(res)
+//             if (res.code == 200) {
+//                 let myFileUrl = res.message.file_path;
+//                 uploadLoadingStatus.value = false;
+//                 editResumeStatus.value = true
+//                 mediaForm.resume_name = myFileUrl.substring(myFileUrl.length - 10)
+//                 mediaForm.resume_pdf = myFileUrl
+//             }
+//         }).catch(err => {
+//             console.log(err)
+//         })
+//
+//     }
+//
+// }
+// const beforeResumePdfUpload = (file) => {
+//     uploadLoadingStatus.value = true;
+//
+//     const isLt2M = file.size / 1024 / 1024 < 20
+//
+//     if (!isLt2M) {
+//         ElMessage.error('File size can not exceed 20MB')
+//     }
+//     return isLt2M
+// }
 
 
 const accountFilesData = ref([])
@@ -3436,7 +3564,7 @@ const saveStepOne = (formEl) => {
                     // console.log(res)
                     store.commit('username', name)
 
-                    if(profileAction.value === 'add'){
+                    if (profileAction.value === 'add') {
                         companyId.value = res.message.educator_id
                         changeIdentity(res.message.educator_id, res.message.user_id, 2)
                         setTimeout(function () {
@@ -3489,7 +3617,7 @@ const saveStepTwo = (formEl) => {
                 if (res.code === 200) {
                     console.log(res)
 
-                    if(profileAction.value === 'add'){
+                    if (profileAction.value === 'add') {
                         companyId.value = res.message.educator_id
 
                         if (workDestinationValue.value && workDestinationValue.value.length) {
@@ -3512,8 +3640,17 @@ const saveStepTwo = (formEl) => {
                         if (subjectValue.value && subjectValue.value.length) {
                             subjectConfirm()
                         }
+
+                        if (preferredLanguageValue.value && preferredLanguageValue.value.length) {
+                            preferredLanguageConfirm()
+                        }
+
                         if (ageToTeachValue.value && ageToTeachValue.value.length) {
                             ageToTeachConfirm()
+                        }
+
+                        if (studentsAgeValue.value && studentsAgeValue.value.length) {
+                            studentsAgeConfirm()
                         }
 
                         changeIdentity(res.message.educator_id, res.message.user_id, 2)
@@ -3545,8 +3682,16 @@ const saveStepTwo = (formEl) => {
                     if (subjectValue.value && subjectValue.value.length) {
                         subjectConfirm()
                     }
+                    if (preferredLanguageValue.value && preferredLanguageValue.value.length) {
+                        preferredLanguageConfirm()
+                    }
+
                     if (ageToTeachValue.value && ageToTeachValue.value.length) {
                         ageToTeachConfirm()
+                    }
+
+                    if (studentsAgeValue.value && studentsAgeValue.value.length) {
+                        studentsAgeConfirm()
                     }
 
                     getBasicInfo()
@@ -3601,7 +3746,7 @@ const saveStepFour = (formEl) => {
         if (valid) {
             stepFourLoadingStatus.value = true
 
-            if(certificationsValue.value && certificationsValue.value.length){
+            if (certificationsValue.value && certificationsValue.value.length) {
                 certificationsConfirm()
             }
             getBasicInfo()
@@ -3631,7 +3776,7 @@ const saveStepFive = (formEl) => {
             EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
                 if (res.code === 200) {
                     console.log(res)
-                    if(profileAction.value === 'add'){
+                    if (profileAction.value === 'add') {
                         companyId.value = res.message.educator_id
                         uploadAccountImages()
                         changeIdentity(res.message.educator_id, res.message.user_id, 2)
@@ -3664,7 +3809,7 @@ const saveStepFive = (formEl) => {
 
 }
 
-const changeIdentity = (companyId, companyContactId, language)=> {
+const changeIdentity = (companyId, companyContactId, language) => {
 
     let params = {
         identity: 1,
@@ -3688,7 +3833,7 @@ const changeIdentity = (companyId, companyContactId, language)=> {
             store.commit('currentCompanyId', companyId)
 
             getBasicInfo()
-            history.pushState({},'','/setting/profile/educator')
+            history.pushState({}, '', '/setting/profile/educator')
 
         }
     }).catch(err => {
@@ -3705,6 +3850,8 @@ const cancelUploadProfile = () => {
 }
 
 onMounted(async () => {
+    initLoadUserObject()
+
     await loadUserObjectData()
     await loadSubCategoryData()
     await getAllLanguageProficiencyList()
@@ -3735,7 +3882,7 @@ onMounted(async () => {
         // this.cid = strObj.cid;
         // this.action = strObj.action;
 
-        if(strObj.action){
+        if (strObj.action) {
             profileAction.value = strObj.action
         }
     }

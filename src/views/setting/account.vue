@@ -66,7 +66,8 @@
                         <div class="profile-picture-r">
 
                             <el-avatar class="profile-avatar-img"
-                                       :src="personalForm.headimgurl"></el-avatar>
+                                       :src="personalForm.headimgurl">
+                            </el-avatar>
 
                             <el-upload
                                 class="profile-picture-upload"
@@ -138,7 +139,7 @@
                 </el-form>
             </div>
 
-            <div class="ctb-container">
+            <div class="ctb-container" v-if="identity != 1 && identity != 6">
                 <div class="ctb-t">
                     <span>Current Contributors</span>
                     <el-button type="primary"
@@ -263,7 +264,7 @@
 
 import {ref, reactive, onMounted} from 'vue'
 import deleteAccountComponent from '@/components/deleteAccountComponent.vue'
-// import {useStore} from 'vuex'
+import {useStore} from 'vuex'
 import {
     SEND_CONTRIBUTOR_EMAIL, UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE,
     USER_CHANGE_PASSWORD, USER_CONTRIBUTOR_DELETE, USER_CONTRIBUTOR_LIST, USER_CONTRIBUTOR_RESEND_EMAIL
@@ -272,12 +273,13 @@ import {ElMessage, ElMessageBox, ElLoading} from 'element-plus'
 import ImageCompressor from "compressorjs";
 import uploadIcon from '@/assets/newHome/profile/upload-icon.svg'
 import defaultAvatarIcon from '@/assets/newHome/profile/default-avatar.svg'
-// const store = useStore()
+
+const store = useStore()
 // const identity = store.state.identity;
 // const currentCompanyId = store.state.currentCompanyId;
+const identity = ref(store.state.identity)
 
 const addContributorDisabledStatus = ref(true)
-
 const contributorForms = ref(null)
 const contributorForm = reactive({
     first_name: '',

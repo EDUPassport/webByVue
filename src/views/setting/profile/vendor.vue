@@ -404,18 +404,20 @@
                                                        v-model="businessForm.sub_category"
                                                        class="form-width-388"
                                                        :max="1">
-                                        <template v-for="(item,i) in subCategoryOptions" :key="i">
 
-                                            <el-checkbox v-if="item['children'].length === 0" :label="item">
-                                                {{ item.identity_name }}
-                                            </el-checkbox>
+                                        <div style="display: flex;flex-direction: row;flex-wrap:wrap;" >
 
-                                            <el-checkbox v-for="(child,key) in item['children']" :key="key"
-                                                         :label="item">
-                                                {{ child.identity_name }}
-                                            </el-checkbox>
+                                            <div style="flex-basis: 50%;" v-for="(item,i) in subCategoryOptions" :key="i" >
+                                                <el-checkbox v-if="item['children'].length === 0" :label="item">
+                                                    {{ item.identity_name }}
+                                                </el-checkbox>
+                                                <el-checkbox  v-for="(child,key) in item['children']" :key="key"
+                                                              :label="item">
+                                                    {{ child.identity_name }}
+                                                </el-checkbox>
+                                            </div>
 
-                                        </template>
+                                        </div>
 
                                     </el-checkbox-group>
 
@@ -716,7 +718,7 @@
                                     class="demo-ruleForm"
                             >
 
-                                <el-form-item label="Description">
+                                <el-form-item label="Introduction">
                                     <el-input
                                         class="form-width-388"
                                         :disabled="stepFiveStatus"
@@ -734,211 +736,38 @@
                                                Company Logo
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach Image for Logo
+                                                This picture display on your Profile account
                                             </div>
                                         </div>
                                     </template>
 
                                     <div class="profile-picture-r">
+                                        <el-avatar class="profile-avatar-img"
+                                                   :src="mediaForm.logo"></el-avatar>
 
-                                        <template v-if="mediaForm.logo && editLogoStatus">
+                                        <el-upload
+                                            drag
+                                            class="form-width-388 profile-picture-upload"
+                                            :disabled="stepFiveStatus"
+                                            action=""
+                                            :limit="1"
+                                            :headers="uploadHeaders"
+                                            :show-file-list="false"
+                                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                            :http-request="logoHttpRequest"
+                                            :before-upload="beforeLogoUpload"
+                                        >
 
-                                            <div class="attachment-xll">
-                                                <div class="attachment-xll-btns">
-                                                    <div class="attachment-xll-btn">
-                                                        <div class="attachment-xll-btn-l">
-                                                            <el-icon color="#667085">
-                                                                <IconIcomoonFreeAttachment/>
-                                                            </el-icon>
-                                                            {{ mediaForm.logo_name }}
-                                                        </div>
-                                                        <div class="attachment-xll-btn-r">
-                                                            <el-icon class="attachment-xll-icon"
-                                                                     v-if="!stepFiveStatus"
-                                                                     @click="handleSingleImageRemove('logo')"
-                                                                     color="#F97066">
-                                                                <Delete></Delete>
-                                                            </el-icon>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="attachment-xll-btn-edit"
-                                                         v-if="!stepFiveStatus"
-                                                         @click="handleEditMedia('logo')"
-                                                    >
-                                                        <el-icon class="attachment-xll-icon">
-                                                            <IconUilEdit/>
-                                                        </el-icon>
-                                                    </div>
-                                                    <div class="attachment-xll-btn-download"
-                                                         @click="handleDownloadMedia(mediaForm.logo)"
-                                                    >
-                                                        <el-icon class="attachment-xll-icon">
-                                                            <IconUisDownloadAlt/>
-                                                        </el-icon>
-                                                    </div>
+                                            <template #trigger>
+                                                <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
+                                                <div class="profile-upload-text">
+                                                    <span>Click to Upload</span> Or Drag your photo <br>
+                                                    SVG,PNG,JPEG OR GIF (400x400)
                                                 </div>
+                                            </template>
 
-                                                <div class="attachment-xll-image">
-                                                    <el-image class="attachment-xll-img"
-                                                              :src="mediaForm.logo"
-                                                              fit="cover"
-                                                    >
-                                                    </el-image>
-                                                    <div class="attachment-xll-image-mask"
-                                                         v-if="!stepFiveStatus"
-                                                    >
-                                                        <el-icon
-                                                                style="cursor: pointer;"
-                                                                @click="handleSingleImagePreview(mediaForm.logo,'logo')"
-                                                                color="#ffffff"
-                                                                :size="20">
-                                                            <zoom-in/>
-                                                        </el-icon>
+                                        </el-upload>
 
-                                                        <el-icon
-                                                                style="cursor: pointer;margin-left: 15px;"
-                                                                @click="handleSingleImageRemove('logo')"
-                                                                color="#F97066"
-                                                                :size="20">
-                                                            <Delete/>
-                                                        </el-icon>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                        </template>
-                                        <template v-else>
-                                            <el-upload
-                                                    :disabled="stepFiveStatus"
-                                                    action=""
-                                                    :limit="1"
-                                                    :headers="uploadHeaders"
-                                                    :show-file-list="false"
-                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
-                                                    :http-request="logoHttpRequest"
-                                                    :before-upload="beforeLogoUpload"
-                                            >
-
-                                                <template #trigger>
-                                                    <div class="attachment-btn">
-                                                        <span>Attach files</span>
-                                                        <el-icon color="#667085">
-                                                            <IconIcomoonFreeAttachment/>
-                                                        </el-icon>
-                                                    </div>
-                                                </template>
-
-                                            </el-upload>
-                                        </template>
-                                    </div>
-
-                                </el-form-item>
-
-                                <el-form-item label="Background Image">
-                                    <template #label>
-                                        <div>
-                                            <div>
-                                                Background Image
-                                            </div>
-                                            <div class="profile-picture-tips">
-                                                Attach Image for background banner
-                                            </div>
-                                        </div>
-                                    </template>
-
-                                    <div class="profile-picture-r">
-
-                                        <template v-if="mediaForm.background_image && editBackgroundImageStatus">
-
-                                            <div class="attachment-xll">
-                                                <div class="attachment-xll-btns">
-                                                    <div class="attachment-xll-btn">
-                                                        <div class="attachment-xll-btn-l">
-                                                            <el-icon color="#667085">
-                                                                <IconIcomoonFreeAttachment/>
-                                                            </el-icon>
-                                                            {{ mediaForm.background_image_name }}
-                                                        </div>
-                                                        <div class="attachment-xll-btn-r">
-                                                            <el-icon class="attachment-xll-icon"
-                                                                     v-if="!stepFiveStatus"
-                                                                     @click="handleSingleImageRemove('background_image')"
-                                                                     color="#F97066">
-                                                                <Delete></Delete>
-                                                            </el-icon>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="attachment-xll-btn-edit"
-                                                         v-if="!stepFiveStatus"
-                                                         @click="handleEditMedia('background_image')"
-                                                    >
-                                                        <el-icon class="attachment-xll-icon">
-                                                            <IconUilEdit/>
-                                                        </el-icon>
-                                                    </div>
-                                                    <div class="attachment-xll-btn-download"
-                                                         @click="handleDownloadMedia(mediaForm.background_image)"
-                                                    >
-                                                        <el-icon class="attachment-xll-icon">
-                                                            <IconUisDownloadAlt/>
-                                                        </el-icon>
-                                                    </div>
-                                                </div>
-
-                                                <div class="attachment-xll-image">
-                                                    <el-image class="attachment-xll-img"
-                                                              :src="mediaForm.background_image"
-                                                              fit="cover"
-                                                    >
-                                                    </el-image>
-                                                    <div class="attachment-xll-image-mask" v-if="!stepFiveStatus">
-                                                        <el-icon
-                                                                style="cursor: pointer;"
-                                                                @click="handleSingleImagePreview(mediaForm.background_image,'background_image')"
-                                                                color="#ffffff"
-                                                                :size="20">
-                                                            <zoom-in/>
-                                                        </el-icon>
-
-                                                        <el-icon
-                                                                style="cursor: pointer;margin-left: 15px;"
-                                                                @click="handleSingleImageRemove('background_image')"
-                                                                color="#F97066"
-                                                                :size="20">
-                                                            <Delete/>
-                                                        </el-icon>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                        </template>
-                                        <template v-else>
-                                            <el-upload
-                                                    :disabled="stepFiveStatus"
-                                                    action=""
-                                                    :limit="1"
-                                                    :headers="uploadHeaders"
-                                                    :show-file-list="false"
-                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
-                                                    :http-request="backgroundHttpRequest"
-                                                    :before-upload="beforeBackgroundPhotoUpload"
-                                            >
-
-                                                <template #trigger>
-                                                    <div class="attachment-btn">
-                                                        <span>Attach files</span>
-                                                        <el-icon color="#667085">
-                                                            <IconIcomoonFreeAttachment/>
-                                                        </el-icon>
-                                                    </div>
-                                                </template>
-
-                                            </el-upload>
-                                        </template>
                                     </div>
 
                                 </el-form-item>
@@ -1025,6 +854,8 @@
                                         </template>
                                         <template v-else>
                                             <el-upload
+                                                    class="form-width-388"
+                                                    drag
                                                     action=""
                                                     :disabled="stepFiveStatus"
                                                     :limit="1"
@@ -1036,11 +867,10 @@
                                             >
 
                                                 <template #trigger>
-                                                    <div class="attachment-btn">
-                                                        <span>Attach files</span>
-                                                        <el-icon color="#667085">
-                                                            <IconIcomoonFreeAttachment/>
-                                                        </el-icon>
+                                                    <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
+                                                    <div class="profile-upload-text">
+                                                        <span>Click to Upload</span> Or Drag your Video <br>
+                                                        MP4,MOV,AVI OR WebM
                                                     </div>
                                                 </template>
 
@@ -1051,14 +881,122 @@
 
                                 </el-form-item>
 
+                                <el-form-item label="Background Image">
+                                    <template #label>
+                                        <div>
+                                            <div>
+                                                Background Image
+                                            </div>
+                                            <div class="profile-picture-tips">
+                                                Attach Image for Profile(up to 3Mb)
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div class="profile-picture-r">
+
+                                        <template v-if="mediaForm.background_image && editBackgroundImageStatus">
+
+                                            <div class="attachment-xll">
+                                                <div class="attachment-xll-btns">
+                                                    <div class="attachment-xll-btn">
+                                                        <div class="attachment-xll-btn-l">
+                                                            <el-icon color="#667085">
+                                                                <IconIcomoonFreeAttachment/>
+                                                            </el-icon>
+                                                            {{ mediaForm.background_image_name }}
+                                                        </div>
+                                                        <div class="attachment-xll-btn-r">
+                                                            <el-icon class="attachment-xll-icon"
+                                                                     v-if="!stepFiveStatus"
+                                                                     @click="handleSingleImageRemove('background_image')"
+                                                                     color="#F97066">
+                                                                <Delete></Delete>
+                                                            </el-icon>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="attachment-xll-btn-edit"
+                                                         v-if="!stepFiveStatus"
+                                                         @click="handleEditMedia('background_image')"
+                                                    >
+                                                        <el-icon class="attachment-xll-icon">
+                                                            <IconUilEdit/>
+                                                        </el-icon>
+                                                    </div>
+                                                    <div class="attachment-xll-btn-download"
+                                                         @click="handleDownloadMedia(mediaForm.background_image)"
+                                                    >
+                                                        <el-icon class="attachment-xll-icon">
+                                                            <IconUisDownloadAlt/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                                <div class="attachment-xll-image">
+                                                    <el-image class="attachment-xll-img"
+                                                              :src="mediaForm.background_image"
+                                                              fit="cover"
+                                                    >
+                                                    </el-image>
+                                                    <div class="attachment-xll-image-mask" v-if="!stepFiveStatus">
+                                                        <el-icon
+                                                            style="cursor: pointer;"
+                                                            @click="handleSingleImagePreview(mediaForm.background_image,'background_image')"
+                                                            color="#ffffff"
+                                                            :size="20">
+                                                            <zoom-in/>
+                                                        </el-icon>
+
+                                                        <el-icon
+                                                            style="cursor: pointer;margin-left: 15px;"
+                                                            @click="handleSingleImageRemove('background_image')"
+                                                            color="#F97066"
+                                                            :size="20">
+                                                            <Delete/>
+                                                        </el-icon>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </template>
+                                        <template v-else>
+                                            <el-upload
+                                                drag
+                                                class="form-width-388"
+                                                :disabled="stepFiveStatus"
+                                                action=""
+                                                :limit="1"
+                                                :headers="uploadHeaders"
+                                                :show-file-list="false"
+                                                accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                :http-request="backgroundHttpRequest"
+                                                :before-upload="beforeBackgroundPhotoUpload"
+                                            >
+
+                                                <template #trigger>
+                                                    <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
+                                                    <div class="profile-upload-text">
+                                                        <span>Click to Upload</span> Or Drag your photo <br>
+                                                        SVG,PNG,JPEG(400x400)
+                                                    </div>
+                                                </template>
+
+                                            </el-upload>
+                                        </template>
+                                    </div>
+
+                                </el-form-item>
+
                                 <el-form-item label="Account Files">
                                     <template #label>
                                         <div>
                                             <div>
-                                                Account Files
+                                                Other Files
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach your account files for your profile
+                                                Attach your account files License and other documents for your profile (up to 5Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -1066,6 +1004,8 @@
                                     <div style="flex-direction: column;" class="profile-picture-r">
 
                                         <el-upload
+                                                class="form-width-388"
+                                                drag
                                                 action=""
                                                 :disabled="stepFiveStatus"
                                                 :multiple="true"
@@ -1081,11 +1021,10 @@
                                         >
 
                                             <template #trigger>
-                                                <div class="attachment-btn">
-                                                    <span>Attach files</span>
-                                                    <el-icon color="#667085">
-                                                        <IconIcomoonFreeAttachment/>
-                                                    </el-icon>
+                                                <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
+                                                <div class="profile-upload-text">
+                                                    <span>Click to Upload</span> Or Drag your PDF <br>
+                                                    License & Other Documents
                                                 </div>
                                             </template>
 
@@ -1460,8 +1399,10 @@ const getBasicInfo = async () => {
                 cityNameCn.value = countryInfoArr.city_name_cn;
 
                 countryInfo.value = companyInfo.country_info;
+                if (countryName.value || provinceName.value || cityName.value) {
+                    haveLocationStatus.value = true;
+                }
 
-                haveLocationStatus.value = true;
             }
 
             if (companyInfo.display_name) {

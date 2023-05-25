@@ -128,22 +128,11 @@ const submit = (formEl)=>{
                 console.log(err)
                 loading.close()
 
-                if(err.msg){
-                    ElMessage({
-                        message:err.msg,
-                        type:'warning',
-                        grouping:true
-                    })
-                    return;
-                }
-                if(err.message){
-                    ElMessage({
-                        message:err.message,
-                        type:'warning',
-                        grouping:true
-                    })
-
-                }
+                ElMessage({
+                    message:err,
+                    type:'warning',
+                    grouping:true
+                })
 
             })
 

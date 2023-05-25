@@ -1,7 +1,63 @@
 <template>
     <div class="bg">
-
         <el-scrollbar class="overview-container">
+
+            <div class="contributor-dashboard" v-if="identity == 6">
+                <div class="c-d-items">
+                    <template v-for="(item,i) in contributorCompanyData" :key="i">
+                        <div class="c-d-item" v-if="i<2">
+                            <div class="c-d-item-t">
+                                <div class="c-d-circle"></div>
+                                <span>{{item.company_name ? item.company_name : item.company_id}}</span>
+                            </div>
+                            <div class="c-d-item-m">
+                                Jobs Posted
+                            </div>
+                            <div class="c-d-item-b">
+                                <div class="c-d-item-b-l">1</div>
+                                <div class="c-d-item-b-r">
+                                    <el-button type="info" icon="setting" >Setting</el-button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </template>
+                </div>
+
+                <div class="c-d-more">
+                    <el-button link @click="contributorSwitchBusinessVisible=true" >See More</el-button>
+                </div>
+
+            </div>
+
+            <el-dialog
+                v-model="contributorSwitchBusinessVisible"
+                title="Business Accounts"
+                :width="contributorSwitchBusinessDialogWidth"
+                align-center
+            >
+                <el-scrollbar class="c-d-items-dialog">
+                    <template v-for="(item,i) in contributorCompanyData" :key="i">
+                        <div class="c-d-item-dialog"  >
+                            <div class="c-d-item-t">
+                                <div class="c-d-circle"></div>
+                                <span>{{item.company_name ? item.company_name : item.company_id}}</span>
+                            </div>
+                            <div class="c-d-item-m">
+                                Jobs Posted
+                            </div>
+                            <div class="c-d-item-b">
+                                <div class="c-d-item-b-l">1</div>
+                                <div class="c-d-item-b-r">
+                                    <el-button type="info" icon="setting">Setting</el-button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </template>
+                </el-scrollbar>
+
+            </el-dialog>
 
             <div class="dashboard-container">
                 <template v-if="identity === 10">
@@ -12,7 +68,6 @@
                         <favoritedJobsDashboard></favoritedJobsDashboard>
                     </div>
                 </template>
-
 
                 <div class="dashboard-t-actions" v-if="identity == 2 || identity == 3 || identity == 4 || identity == 5">
                     <el-button plain @click="turnUserManagement()">User Management</el-button>
@@ -221,21 +276,21 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import {
     ALL_JOB_RESUME, BUSINESS_JOB_SHORTLISTED, BUSINESS_JOB_VIEWS,
     EDUCATOR_STATIC_DATA,
     EVENTS_MY_EVENT,
     HOME_JOB_SHORTLISTED,
     HOME_USER_METRICS,
-    MY_DEALS,
-    USER_INFO_BY_TOKEN_V2, USER_POST_JOB_COUNT,VENDOR_INDEX_DATA
+    MY_DEALS, USER_CONTRIBUTOR_ACTIVATION,
+    USER_INFO_BY_TOKEN_V2, USER_POST_JOB_COUNT, VENDOR_INDEX_DATA
 } from '@/api/api';
 
 // import {onBeforeRouteUpdate} from "vue-router";
-import {ref, computed, onMounted, watch, onUnmounted} from "vue";
+import {ref, onMounted, watch, onUnmounted} from "vue";
 import {useStore} from 'vuex'
-import {useRouter} from 'vue-router'
+import {useRouter, useRoute} from 'vue-router'
 
 import NewApplications from "@/components/business/newApplications";
 import dailyJobMatch from "@/components/educator/dailyJobMatch";
@@ -262,491 +317,480 @@ import compareUpDownPercentage from "@/components/metrics/compareUpDownPercentag
 import compareUpDownPercentageTwo from "@/components/metrics/compareUpDownPercentageTwo.vue";
 import vsLastMonthChartsTwo from "@/components/metrics/vsLastMonthChartsTwo.vue";
 
+import {ElMessage, ElNotification,ElMessageBox} from 'element-plus'
+import vueCookies from 'vue-cookies'
 
-import {ElMessage, ElNotification} from 'element-plus'
+const store = useStore()
+const router = useRouter()
+const route = useRoute()
+// const currentUser = computed(() => store.state.currentUser)
+const identity = ref(store.state.identity)
 
-export default {
-    name: "index",
-    components: {
-        NewApplications,
-        dailyJobMatch,
-        applicationsUpdates,
-        favoritedJobsDashboard,
-        // activeDealsDashboard,
-        // activeEventsDashboard,
-        metricsComponent,
-        vsLastMonthCharts,
-        unCompleteProfilePrompt,
-        compareUpDownPercentage,
-        compareUpDownPercentageTwo,
-        vsLastMonthChartsTwo,
-        dealUpdates
+// const isThirdCompanyStatus = ref(store.state.isThirdCompanyStatus)
+const allIdentityChanged = ref(store.state.allIdentityChanged)
+
+const dealsData = ref([])
+const eventsData = ref([])
+
+const contributorActived = (params)=>{
+    USER_CONTRIBUTOR_ACTIVATION(params).then(res=>{
+        console.log(res)
+        if(res.code === 200){
+            console.log('激活contributor成功')
+        }
+    }).catch(err=>{
+        ElMessage({
+            type:'error',
+            message:err,
+            grouping:true
+        })
+    })
+}
+
+
+
+const contributorCompanyData = ref([])
+
+const contributorSwitchBusinessVisible = ref(false)
+const contributorSwitchBusinessDialogWidth = ref('600px')
+function getDealsList(page, limit) {
+
+    let params = {
+        status: 1,
+        page: page,
+        limit: limit
+    }
+
+    MY_DEALS(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            dealsData.value = res.message.data;
+        }
+    }).catch(err => {
+        console.log(err)
+        ElMessage({
+            type: 'error',
+            message: err,
+            grouping: true
+        })
+
+    })
+}
+
+function getEventsList(page, limit) {
+
+    let params = {
+        status: 1,
+        page: page,
+        limit: limit
+    }
+
+    EVENTS_MY_EVENT(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            eventsData.value = res.message.data;
+        }
+
+    }).catch(err => {
+        console.log(err)
+        ElMessage({
+            type: 'error',
+            message: err,
+            grouping: true
+        })
+    })
+
+}
+
+const myApplicationsData = ref([])
+
+function getAllJobResumeList(page, limit) {
+    let params = {
+        token: localStorage.getItem('token'),
+        page: page,
+        limit: limit
+    }
+    ALL_JOB_RESUME(params).then(res => {
+
+        if (res.code == 200) {
+            myApplicationsData.value = res.message.data
+        }
+    }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+            ElMessage({
+                type: 'error',
+                message: err,
+                grouping: true
+            })
+        }
+
+    })
+
+}
+
+const contributorWidth = ref('50%')
+const versionTime = randomString()
+
+function postJob() {
+    router.push({path: '/jobs/post', query: {version_time: versionTime}})
+}
+
+const userContact = ref({})
+const educatorContact = ref({})
+const companyInfo = ref({})
+
+function getBasicInfo(identity) {
+
+    let params = {
+        identity: identity
+    }
+
+    USER_INFO_BY_TOKEN_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            let userContactValue = res.message.user_contact;
+
+            let companyValue = {};
+            let educatorContactValue = {};
+
+            if (userContactValue) {
+                userContact.value = userContactValue
+            }
+
+            if (identity == 1) {
+
+                educatorContactValue = res.message.user_contact.educator_contact;
+
+                if (educatorContactValue) {
+                    educatorContact.value = educatorContactValue
+                }
+            }
+
+            if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
+
+                companyValue = res.message.user_contact.company;
+
+                if (companyValue) {
+                    companyInfo.value = companyValue
+                }
+
+            }
+
+
+        }
+    }).catch(err => {
+        console.log(err)
+        if (err.msg) {
+            ElMessage({
+                type: 'error',
+                message: err,
+                grouping: true
+            })
+        }
+
+    })
+
+}
+
+function updateApplicationIndex(i, value) {
+    getAllJobResumeList()
+    myApplicationsData[i]['status'] = value;
+}
+
+const vendorDealPostedPercent = ref(0)
+const vendorDealPostedCountForNow = ref(0)
+const vendorTotalViewsPercent = ref(0)
+const vendorTotalViewsForNow = ref(0)
+const recentDealData = ref([])
+
+
+function getVendorIndexData(){
+
+    VENDOR_INDEX_DATA().then(res => {
+        if (res.code === 200) {
+            if (res.msg === 10000) {
+                let message = res.message;
+
+                recentDealData.value = message.recent_deals
+
+                if (message.deal_posted_count) {
+                    vendorDealPostedCountForNow.value = nowValueFormat(message.deal_posted_count.now_deal_posted_count)
+                    vendorDealPostedPercent.value = getPercentByNowAndPrev(message.deal_posted_count.now_deal_posted_count, message.deal_posted_count.prev_deal_posted_count)
+                }
+
+                if (message.total_views_count) {
+                    vendorTotalViewsForNow.value = nowValueFormat(message.total_views_count.now_total_view_count)
+                    vendorTotalViewsPercent.value = getPercentByNowAndPrev(message.total_views_count.now_total_view_count, message.total_views_count.prev_total_view_count);
+                }
+
+
+            }
+        }
+    }).catch(err => {
+        ElNotification({
+            title: 'Error',
+            message: err,
+        })
+    })
+
+}
+
+
+const educatorJobApplyCountPercent = ref(0)
+const educatorJobApplyCountForNow = ref(0)
+const educatorEventRegisterPercent = ref(0)
+const educatorEventRegisterForNow = ref(0)
+
+function getEducatorStaticData() {
+    EDUCATOR_STATIC_DATA().then(res => {
+        console.log(res)
+        if (res.code === 200) {
+            if (res.msg === 10000) {
+                let message = res.message;
+                if (message.job_apply_count) {
+                    educatorJobApplyCountForNow.value = nowValueFormat(message.job_apply_count.now_job_apply_count)
+                    educatorJobApplyCountPercent.value = getPercentByNowAndPrev(message.job_apply_count.now_job_apply_count, message.job_apply_count.prev_job_apply_count)
+                }
+
+                if (message.getUserRegisterEventLog) {
+                    educatorEventRegisterForNow.value = nowValueFormat(message.getUserRegisterEventLog.now_event_apply_count)
+                    educatorEventRegisterPercent.value = getPercentByNowAndPrev(message.getUserRegisterEventLog.now_event_apply_count, message.getUserRegisterEventLog.prev_event_apply_count);
+                }
+
+            }
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+watch(identity, (newValue, oldValue) => {
+    console.log(newValue, oldValue)
+})
+
+watch(allIdentityChanged, (newValue, oldValue) => {
+    if (newValue) {
+        console.log('old value --- ' + oldValue)
+        getBasicInfo(newValue)
+    }
+}, {
+    immediate: true
+})
+
+const profilePercentage = ref(Number(store.state.profilePercentage))
+
+const educatorMetricsOptions = ref({
+    title: {
+        // text: "参与情况",
+        textStyle: {
+            color: "#667085",
+            fontSize: 12,
+            fontWeight: 400,
+            fontFamily: "Inter, PingFang SC",
+        },
     },
-    setup() {
-        const store = useStore()
-        const router = useRouter()
-        const currentUser = computed(() => store.state.currentUser)
-        const identity = ref(store.state.identity)
-
-        const isThirdCompanyStatus = ref(store.state.isThirdCompanyStatus)
-        const allIdentityChanged = ref(store.state.allIdentityChanged)
-
-        const dealsData = ref([])
-        const eventsData = ref([])
-
-        function getDealsList(page, limit) {
-
-            let params = {
-                status: 1,
-                page: page,
-                limit: limit
-            }
-
-            MY_DEALS(params).then(res => {
-                console.log(res)
-                if (res.code == 200) {
-                    dealsData.value = res.message.data;
+    tooltip: {
+        trigger: "axis",
+    },
+    color: ["#F9B019", "#7F56D9"], // 设置折线颜色
+    legend: {
+        data: ["Profile Visits", "Jobs Shortlisted"],
+        right: "2%",
+    },
+    grid: {
+        left: "3%",
+        right: "1%",
+        bottom: "0%",
+        containLabel: true, // 是否居中显示图表
+    },
+    xAxis: [
+        {
+            type: "time",
+            axisLabel: {
+                interval: 'auto', // 让横坐标每一项都显示
+                margin: 10,
+                hideOverlap: true
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#667085'
                 }
-            }).catch(err => {
-                console.log(err)
-                ElMessage({
-                    type: 'error',
-                    message: err.msg,
-                    grouping: true
-                })
+            },
+            axisTick: {
+                length: 8,
+                alignWithLabel: true, // 将刻度显示在中间
+            },
 
-            })
-        }
-
-        function getEventsList(page, limit) {
-
-            let params = {
-                status: 1,
-                page: page,
-                limit: limit
-            }
-
-            EVENTS_MY_EVENT(params).then(res => {
-                console.log(res)
-                if (res.code == 200) {
-                    eventsData.value = res.message.data;
-                }
-
-            }).catch(err => {
-                console.log(err)
-                ElMessage({
-                    type: 'error',
-                    message: err.msg,
-                    grouping: true
-                })
-            })
 
         }
-
-        const myApplicationsData = ref([])
-
-        function getAllJobResumeList(page, limit) {
-            let params = {
-                token: localStorage.getItem('token'),
-                page: page,
-                limit: limit
-            }
-            ALL_JOB_RESUME(params).then(res => {
-
-                if (res.code == 200) {
-                    myApplicationsData.value = res.message.data
-                }
-            }).catch(err => {
-                console.log(err)
-                if (err.msg) {
-                    ElMessage({
-                        type: 'error',
-                        message: err.msg,
-                        grouping: true
-                    })
-                    return;
-                }
-                if (err.message) {
-                    ElMessage({
-                        type: 'error',
-                        message: err.message,
-                        grouping: true
-                    })
-                }
-            })
-
+    ],
+    yAxis: [
+        {
+            type: "value",
+            nameLocation: 'start',
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    // 设置坐标轴刻度设置为虚线
+                    type: "dashed",
+                },
+            },
         }
+    ],
+    series: [
+        {
+            name: "Profile Visits",
+            type: "line",
+            symbol: "circle", //将小圆点改成实心 不写symbol默认空心
+            symbolSize: 5, //小圆点的大小
+            data: []
+        },
+        {
+            name: "Jobs Shortlisted",
+            type: "line",
+            symbol: "circle", //将小圆点改成实心 不写symbol默认空心
+            symbolSize: 5, //小圆点的大小
+            data: []
+        },
+    ],
 
-        const contributorWidth = ref('50%')
-        const versionTime = randomString()
+})
 
-        function postJob() {
-            router.push({path: '/jobs/post', query: {version_time: versionTime}})
+const businessMetricsOptions = ref({
+    title: {
+        // text: "参与情况",
+        textStyle: {
+            color: "#667085",
+            fontSize: 12,
+            fontWeight: 400,
+            fontFamily: "Inter, PingFang SC",
+        },
+    },
+    tooltip: {
+        trigger: "axis",
+    },
+    color: ["#F9B019", "#7F56D9"], // 设置折线颜色
+    legend: {
+        data: ["Job Views", "Candidates Shortlisted"],
+        right: "2%",
+    },
+    grid: {
+        left: "3%",
+        right: "1%",
+        bottom: "0%",
+        containLabel: true, // 是否居中显示图表
+    },
+    xAxis: [
+        {
+            type: "time",
+            axisLabel: {
+                interval: 'auto', // 让横坐标每一项都显示
+                margin: 10,
+                hideOverlap: true
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#667085'
+                }
+            },
+            axisTick: {
+                length: 8,
+                alignWithLabel: true, // 将刻度显示在中间
+            },
+
+        },
+    ],
+    yAxis: [
+        {
+            type: "value",
+            nameLocation: 'start',
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    // 设置坐标轴刻度设置为虚线
+                    type: "dashed",
+                },
+            },
         }
+    ],
+    series: [
+        {
+            name: "Job Views",
+            type: "line",
+            symbol: "circle", //将小圆点改成实心 不写symbol默认空心
+            symbolSize: 5, //小圆点的大小
+            data: []
+        },
+        {
+            name: "Candidates Shortlisted",
+            type: "line",
+            symbol: "circle", //将小圆点改成实心 不写symbol默认空心
+            symbolSize: 5, //小圆点的大小
+            data: []
+        },
+    ],
 
-        const userContact = ref({})
-        const educatorContact = ref({})
-        const companyInfo = ref({})
+})
 
-        function getBasicInfo(identity) {
-
-            let params = {
-                identity: identity
-            }
-
-            USER_INFO_BY_TOKEN_V2(params).then(res => {
-                console.log(res)
-                if (res.code == 200) {
-                    let userContactValue = res.message.user_contact;
-
-                    let companyValue = {};
-                    let educatorContactValue = {};
-
-                    if (userContactValue) {
-                        userContact.value = userContactValue
-                    }
-
-                    if (identity == 1) {
-
-                        educatorContactValue = res.message.user_contact.educator_contact;
-
-                        if (educatorContactValue) {
-                            educatorContact.value = educatorContactValue
-                        }
-                    }
-
-                    if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
-
-                        companyValue = res.message.user_contact.company;
-
-                        if (companyValue) {
-                            companyInfo.value = companyValue
-                        }
-
-                    }
-
-
+const VendorMetricsOptions = ref({
+    title: {
+        // text: "参与情况",
+        textStyle: {
+            color: "#667085",
+            fontSize: 12,
+            fontWeight: 400,
+            fontFamily: "Inter, PingFang SC",
+        },
+    },
+    tooltip: {
+        trigger: "axis",
+    },
+    color: ["#F9B019", "#7F56D9"], // 设置折线颜色
+    legend: {
+        data: ["Total Views", "Total Clicks"],
+        right: "2%",
+    },
+    grid: {
+        left: "3%",
+        right: "1%",
+        bottom: "0%",
+        containLabel: true, // 是否居中显示图表
+    },
+    xAxis: [
+        {
+            type: "time",
+            axisLabel: {
+                interval: 'auto', // 让横坐标每一项都显示
+                margin: 10,
+                hideOverlap: true
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#667085'
                 }
-            }).catch(err => {
-                console.log(err)
-                if (err.msg) {
-                    ElMessage({
-                        type: 'error',
-                        message: err.msg,
-                        grouping: true
-                    })
-                    return;
-                }
-                if (err.message) {
-                    ElMessage({
-                        type: 'error',
-                        message: err.message,
-                        grouping: true
-                    })
-                }
-            })
+            },
+            axisTick: {
+                length: 8,
+                alignWithLabel: true, // 将刻度显示在中间
+            },
 
+        },
+    ],
+    yAxis: [
+        {
+            type: "value",
+            nameLocation: 'start',
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    // 设置坐标轴刻度设置为虚线
+                    type: "dashed",
+                },
+            },
         }
-
-        function updateApplicationIndex(i, value) {
-            getAllJobResumeList()
-            myApplicationsData[i]['status'] = value;
-        }
-
-        const vendorDealPostedPercent = ref(0)
-        const vendorDealPostedCountForNow = ref(0)
-        const vendorTotalViewsPercent = ref(0)
-        const vendorTotalViewsForNow = ref(0)
-        const recentDealData = ref([])
-
-
-
-        function getVendorIndexData(){
-
-            VENDOR_INDEX_DATA().then(res => {
-                if (res.code === 200) {
-                    if (res.msg === 10000) {
-                        let message = res.message;
-
-                        recentDealData.value = message.recent_deals
-
-                        if (message.deal_posted_count) {
-                            vendorDealPostedCountForNow.value = nowValueFormat(message.deal_posted_count.now_deal_posted_count)
-                            vendorDealPostedPercent.value = getPercentByNowAndPrev(message.deal_posted_count.now_deal_posted_count, message.deal_posted_count.prev_deal_posted_count)
-                        }
-
-                        if (message.total_views_count) {
-                            vendorTotalViewsForNow.value = nowValueFormat(message.total_views_count.now_total_view_count)
-                            vendorTotalViewsPercent.value = getPercentByNowAndPrev(message.total_views_count.now_total_view_count, message.total_views_count.prev_total_view_count);
-                        }
-
-
-                    }
-                }
-            }).catch(err => {
-                ElNotification({
-                    title: 'Error',
-                    message: err,
-                })
-            })
-            
-        }
-
-
-        const educatorJobApplyCountPercent = ref(0)
-        const educatorJobApplyCountForNow = ref(0)
-        const educatorEventRegisterPercent = ref(0)
-        const educatorEventRegisterForNow = ref(0)
-
-        function getEducatorStaticData() {
-            EDUCATOR_STATIC_DATA().then(res => {
-                console.log(res)
-                if (res.code === 200) {
-                    if (res.msg === 10000) {
-                        let message = res.message;
-                        if (message.job_apply_count) {
-                            educatorJobApplyCountForNow.value = nowValueFormat(message.job_apply_count.now_job_apply_count)
-                            educatorJobApplyCountPercent.value = getPercentByNowAndPrev(message.job_apply_count.now_job_apply_count, message.job_apply_count.prev_job_apply_count)
-                        }
-
-                        if (message.getUserRegisterEventLog) {
-                            educatorEventRegisterForNow.value = nowValueFormat(message.getUserRegisterEventLog.now_event_apply_count)
-                            educatorEventRegisterPercent.value = getPercentByNowAndPrev(message.getUserRegisterEventLog.now_event_apply_count, message.getUserRegisterEventLog.prev_event_apply_count);
-                        }
-
-                    }
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        watch(identity, (newValue, oldValue) => {
-            console.log(newValue, oldValue)
-        })
-
-        watch(allIdentityChanged, (newValue, oldValue) => {
-            if (newValue) {
-                console.log('old value --- ' + oldValue)
-                getBasicInfo(newValue)
-            }
-        }, {
-            immediate: true
-        })
-
-        const profilePercentage = ref(Number(store.state.profilePercentage))
-
-        const educatorMetricsOptions = ref({
-            title: {
-                // text: "参与情况",
-                textStyle: {
-                    color: "#667085",
-                    fontSize: 12,
-                    fontWeight: 400,
-                    fontFamily: "Inter, PingFang SC",
-                },
-            },
-            tooltip: {
-                trigger: "axis",
-            },
-            color: ["#F9B019", "#7F56D9"], // 设置折线颜色
-            legend: {
-                data: ["Profile Visits", "Jobs Shortlisted"],
-                right: "2%",
-            },
-            grid: {
-                left: "3%",
-                right: "1%",
-                bottom: "0%",
-                containLabel: true, // 是否居中显示图表
-            },
-            xAxis: [
-                {
-                    type: "time",
-                    axisLabel: {
-                        interval: 'auto', // 让横坐标每一项都显示
-                        margin: 10,
-                        hideOverlap: true
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#667085'
-                        }
-                    },
-                    axisTick: {
-                        length: 8,
-                        alignWithLabel: true, // 将刻度显示在中间
-                    },
-
-
-                }
-            ],
-            yAxis: [
-                {
-                    type: "value",
-                    nameLocation: 'start',
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            // 设置坐标轴刻度设置为虚线
-                            type: "dashed",
-                        },
-                    },
-                }
-            ],
-            series: [
-                {
-                    name: "Profile Visits",
-                    type: "line",
-                    symbol: "circle", //将小圆点改成实心 不写symbol默认空心
-                    symbolSize: 5, //小圆点的大小
-                    data: []
-                },
-                {
-                    name: "Jobs Shortlisted",
-                    type: "line",
-                    symbol: "circle", //将小圆点改成实心 不写symbol默认空心
-                    symbolSize: 5, //小圆点的大小
-                    data: []
-                },
-            ],
-
-        })
-
-        const businessMetricsOptions = ref({
-            title: {
-                // text: "参与情况",
-                textStyle: {
-                    color: "#667085",
-                    fontSize: 12,
-                    fontWeight: 400,
-                    fontFamily: "Inter, PingFang SC",
-                },
-            },
-            tooltip: {
-                trigger: "axis",
-            },
-            color: ["#F9B019", "#7F56D9"], // 设置折线颜色
-            legend: {
-                data: ["Job Views", "Candidates Shortlisted"],
-                right: "2%",
-            },
-            grid: {
-                left: "3%",
-                right: "1%",
-                bottom: "0%",
-                containLabel: true, // 是否居中显示图表
-            },
-            xAxis: [
-                {
-                    type: "time",
-                    axisLabel: {
-                        interval: 'auto', // 让横坐标每一项都显示
-                        margin: 10,
-                        hideOverlap: true
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#667085'
-                        }
-                    },
-                    axisTick: {
-                        length: 8,
-                        alignWithLabel: true, // 将刻度显示在中间
-                    },
-
-                },
-            ],
-            yAxis: [
-                {
-                    type: "value",
-                    nameLocation: 'start',
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            // 设置坐标轴刻度设置为虚线
-                            type: "dashed",
-                        },
-                    },
-                }
-            ],
-            series: [
-                {
-                    name: "Job Views",
-                    type: "line",
-                    symbol: "circle", //将小圆点改成实心 不写symbol默认空心
-                    symbolSize: 5, //小圆点的大小
-                    data: []
-                },
-                {
-                    name: "Candidates Shortlisted",
-                    type: "line",
-                    symbol: "circle", //将小圆点改成实心 不写symbol默认空心
-                    symbolSize: 5, //小圆点的大小
-                    data: []
-                },
-            ],
-
-        })
-
-        const VendorMetricsOptions = ref({
-            title: {
-                // text: "参与情况",
-                textStyle: {
-                    color: "#667085",
-                    fontSize: 12,
-                    fontWeight: 400,
-                    fontFamily: "Inter, PingFang SC",
-                },
-            },
-            tooltip: {
-                trigger: "axis",
-            },
-            color: ["#F9B019", "#7F56D9"], // 设置折线颜色
-            legend: {
-                data: ["Total Views", "Total Clicks"],
-                right: "2%",
-            },
-            grid: {
-                left: "3%",
-                right: "1%",
-                bottom: "0%",
-                containLabel: true, // 是否居中显示图表
-            },
-            xAxis: [
-                {
-                    type: "time",
-                    axisLabel: {
-                        interval: 'auto', // 让横坐标每一项都显示
-                        margin: 10,
-                        hideOverlap: true
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#667085'
-                        }
-                    },
-                    axisTick: {
-                        length: 8,
-                        alignWithLabel: true, // 将刻度显示在中间
-                    },
-
-                },
-            ],
-            yAxis: [
-                {
-                    type: "value",
-                    nameLocation: 'start',
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            // 设置坐标轴刻度设置为虚线
-                            type: "dashed",
-                        },
-                    },
-                }
-            ],
-            series: [
+    ],
+    series: [
         {
             name: "Total Views",
             type: "line",
@@ -763,384 +807,385 @@ export default {
         },
     ],
 
-        })
+})
 
 
-        const howLong = ref(7)
+const howLong = ref(7)
 
-        function getUserMetrics(howLong) {
-            let endTime = nowDateYmd()
-            let startTime = dateYmdAgo(howLong)
+function getUserMetrics(howLong) {
+    let endTime = nowDateYmd()
+    let startTime = dateYmdAgo(howLong)
 
-            let params = {
-                start_time: startTime,
-                end_time: endTime
-            }
+    let params = {
+        start_time: startTime,
+        end_time: endTime
+    }
 
-            HOME_USER_METRICS(params).then(res => {
-                if (res.code === 200) {
-                    let resMessage = res.message;
-                    if (resMessage.length > 0) {
-                        educatorMetricsOptions.value.series[0].data = res.message;
-                    } else {
-                        educatorMetricsOptions.value.series[0].data = dateYmdAndNumber(howLong);
-                    }
-
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-
-        }
-
-        function getJobShortListed(howLong) {
-
-            let endTime = nowDateYmd()
-            let startTime = dateYmdAgo(howLong)
-
-            let params = {
-                start_time: startTime,
-                end_time: endTime
-            }
-            HOME_JOB_SHORTLISTED(params).then(res => {
-                if (res.code === 200) {
-                    let resMessage = res.message;
-                    if (resMessage.length > 0) {
-                        educatorMetricsOptions.value.series[1].data = res.message;
-                    } else {
-                        educatorMetricsOptions.value.series[1].data = dateYmdAndNumber(howLong);
-                    }
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        function getUserMetricsByTime(startTime, endTime) {
-
-            let params = {
-                start_time: startTime,
-                end_time: endTime
-            }
-
-            HOME_USER_METRICS(params).then(res => {
-                if (res.code === 200) {
-                    let resMessage = res.message;
-                    if (resMessage.length > 0) {
-                        educatorMetricsOptions.value.series[0].data = res.message;
-                    } else {
-                        educatorMetricsOptions.value.series[0].data = dateYmdAndNumber(7);
-                    }
-
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-
-        }
-
-        function getJobShortListedByTime(startTime, endTime) {
-
-            let params = {
-                start_time: startTime,
-                end_time: endTime
-            }
-
-            HOME_JOB_SHORTLISTED(params).then(res => {
-                if (res.code === 200) {
-                    let resMessage = res.message;
-                    if (resMessage.length > 0) {
-                        educatorMetricsOptions.value.series[1].data = res.message;
-                    } else {
-                        educatorMetricsOptions.value.series[1].data = dateYmdAndNumber(7);
-                    }
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        const businessJobsPostedPercent = ref(0)
-        const businessJobsPostedForNow = ref(0)
-        const businessEventsPostedPercent = ref(0)
-        const businessEventsPostedForNow = ref(0)
-        const businessJobViewsPercent = ref(0)
-        const businessJobViewsForNow = ref(0)
-        const businessFillRatePercent = ref(0)
-        const businessFillRateForNow = ref(0)
-
-        function getUserPostCount() {
-
-            USER_POST_JOB_COUNT().then(res => {
-                console.log(res)
-                if (res.code === 200) {
-                    let message = res.message;
-                    if (message.event_post_result) {
-                        businessEventsPostedForNow.value = nowValueFormat(message.event_post_result.now_event_post_count)
-                        businessEventsPostedPercent.value = getPercentByNowAndPrev(message.event_post_result.now_event_post_count, message.event_post_result.prev_event_post_count)
-                    }
-                    if (message.job_post_result) {
-                        businessJobsPostedForNow.value = nowValueFormat(message.job_post_result.now_job_post_count)
-                        businessJobsPostedPercent.value = getPercentByNowAndPrev(message.job_post_result.now_job_post_count, message.job_post_result.prev_job_post_count)
-                    }
-                    if (message.job_views) {
-                        businessJobViewsForNow.value = nowValueFormat(message.job_views.now_job_views_count)
-                        businessJobViewsPercent.value = getPercentByNowAndPrev(message.job_views.now_job_views_count, message.job_views.prev_job_views_count)
-                    }
-
-                    if (message.fill_rate) {
-                        businessFillRateForNow.value = nowValueFormat(message.fill_rate.now_job_fill_rate)
-                        businessFillRatePercent.value = getPercentByNowAndPrev(message.fill_rate.now_job_fill_rate, message.fill_rate.prev_job_fill_rate)
-                    }
-
-
-                }
-
-            }).catch(err => {
-                console.log(err)
-            })
-
-        }
-
-        function getBusinessJobViews(howLong) {
-
-            let endTime = nowDateYmd()
-            let startTime = dateYmdAgo(howLong)
-
-            let params = {
-                start_time: startTime,
-                end_time: endTime
-            }
-
-            BUSINESS_JOB_VIEWS(params).then(res => {
-                if (res.code === 200) {
-                    let message = res.message
-                    if (message.length > 0) {
-                        businessMetricsOptions.value.series[0].data = res.message;
-                    } else {
-                        businessMetricsOptions.value.series[0].data = dateYmdAndNumber(howLong)
-                    }
-
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        function getBusinessJobShortlisted(howLong) {
-            let endTime = nowDateYmd()
-            let startTime = dateYmdAgo(howLong)
-
-            let params = {
-                start_time: startTime,
-                end_time: endTime
-            }
-
-            BUSINESS_JOB_SHORTLISTED(params).then(res => {
-                if (res.code === 200) {
-                    let resMessage = res.message
-                    if (resMessage.length > 0) {
-                        businessMetricsOptions.value.series[1].data = res.message;
-                    } else {
-                        businessMetricsOptions.value.series[1].data = dateYmdAndNumber(howLong)
-                    }
-
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        function getBusinessJobViewsByTime(startTime, endTime) {
-
-            let params = {
-                start_time: startTime,
-                end_time: endTime
-            }
-
-            BUSINESS_JOB_VIEWS(params).then(res => {
-                if (res.code === 200) {
-                    let message = res.message
-                    if (message.length > 0) {
-                        businessMetricsOptions.value.series[0].data = res.message;
-                    } else {
-                        businessMetricsOptions.value.series[0].data = dateYmdAndNumber(7)
-                    }
-
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        function getBusinessJobShortlistedByTime(startTime, endTime) {
-
-            let params = {
-                start_time: startTime,
-                end_time: endTime
-            }
-
-            BUSINESS_JOB_SHORTLISTED(params).then(res => {
-                if (res.code === 200) {
-                    let resMessage = res.message
-                    if (resMessage.length > 0) {
-                        businessMetricsOptions.value.series[1].data = res.message;
-                    } else {
-                        businessMetricsOptions.value.series[1].data = dateYmdAndNumber(7)
-                    }
-
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
-        function changeHowLong(e) {
-            // console.log(e)
-            if (identity.value == 1) {
-                getUserMetrics(e)
-                getJobShortListed(e)
-            }
-
-            if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
-                getBusinessJobViews(e)
-                getBusinessJobShortlisted(e)
-
-            }
-        }
-
-        function customDateChange(startTime, endTime) {
-
-            if (identity.value == 1) {
-                getUserMetricsByTime(startTime, endTime)
-                getJobShortListedByTime(startTime, endTime)
-            }
-
-            if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
-                getBusinessJobViewsByTime(startTime, endTime)
-                getBusinessJobShortlistedByTime(startTime, endTime)
-
+    HOME_USER_METRICS(params).then(res => {
+        if (res.code === 200) {
+            let resMessage = res.message;
+            if (resMessage.length > 0) {
+                educatorMetricsOptions.value.series[0].data = res.message;
+            } else {
+                educatorMetricsOptions.value.series[0].data = dateYmdAndNumber(howLong);
             }
 
         }
+    }).catch(err => {
+        console.log(err)
+    })
 
-        function turnUserManagement() {
-            router.push({path: '/setting/account'})
+}
+
+function getJobShortListed(howLong) {
+
+    let endTime = nowDateYmd()
+    let startTime = dateYmdAgo(howLong)
+
+    let params = {
+        start_time: startTime,
+        end_time: endTime
+    }
+    HOME_JOB_SHORTLISTED(params).then(res => {
+        if (res.code === 200) {
+            let resMessage = res.message;
+            if (resMessage.length > 0) {
+                educatorMetricsOptions.value.series[1].data = res.message;
+            } else {
+                educatorMetricsOptions.value.series[1].data = dateYmdAndNumber(howLong);
+            }
         }
+    }).catch(err => {
+        console.log(err)
+    })
+}
 
-        function viewDeals(){
-            router.push('/deals')
-        }
+function getUserMetricsByTime(startTime, endTime) {
 
-        onMounted(() => {
+    let params = {
+        start_time: startTime,
+        end_time: endTime
+    }
 
-            let screenWidth = document.body.clientWidth
-            let screenWidthFloor = Math.floor(screenWidth)
-
-            if (screenWidthFloor <= 768) {
-                updateWindowHeight()
-                contributorWidth.value = '80%'
+    HOME_USER_METRICS(params).then(res => {
+        if (res.code === 200) {
+            let resMessage = res.message;
+            if (resMessage.length > 0) {
+                educatorMetricsOptions.value.series[0].data = res.message;
+            } else {
+                educatorMetricsOptions.value.series[0].data = dateYmdAndNumber(7);
             }
-
-            window.onresize = () => {
-                if (screenWidthFloor <= 768) {
-                    contributorWidth.value = '80%'
-                    updateWindowHeight()
-                }
-            }
-
-            if (identity.value == 1) {
-                getEducatorStaticData()
-
-                getUserMetrics(howLong.value)
-                getJobShortListed(howLong.value)
-
-            }
-
-            if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
-                getAllJobResumeList(1, 100)
-                getUserPostCount()
-
-                getBusinessJobViews(howLong.value)
-                getBusinessJobShortlisted(howLong.value)
-
-            }
-
-            if (identity.value == 5) {
-
-
-                getVendorIndexData()
-
-                getDealsList(1, 1000)
-                getEventsList(1, 1000)
-
-
-            }
-
-        })
-
-        onUnmounted(() => {
-            updateWindowHeight()
-            window.onresize = null
-        })
-
-        return {
-            identity,
-            currentUser,
-            dealsData,
-            eventsData,
-            isThirdCompanyStatus,
-            allIdentityChanged,
-            contributorWidth,
-            myApplicationsData,
-            postJob,
-            turnUserManagement,
-            updateApplicationIndex,
-            userContact,
-            companyInfo,
-            educatorContact,
-            profilePercentage,
-            educatorJobApplyCountPercent,
-            educatorJobApplyCountForNow,
-            educatorEventRegisterPercent,
-            educatorEventRegisterForNow,
-            educatorMetricsOptions,
-            businessMetricsOptions,
-            businessJobsPostedPercent,
-            businessJobsPostedForNow,
-            businessEventsPostedPercent,
-            businessEventsPostedForNow,
-            businessJobViewsPercent,
-            businessJobViewsForNow,
-            businessFillRateForNow,
-            businessFillRatePercent,
-            howLong,
-            changeHowLong,
-            customDateChange,
-            viewDeals,
-            vendorDealPostedPercent,
-            vendorDealPostedCountForNow,
-            vendorTotalViewsPercent,
-            vendorTotalViewsForNow,
-            recentDealData,
-            VendorMetricsOptions
 
         }
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+function getJobShortListedByTime(startTime, endTime) {
+
+    let params = {
+        start_time: startTime,
+        end_time: endTime
+    }
+
+    HOME_JOB_SHORTLISTED(params).then(res => {
+        if (res.code === 200) {
+            let resMessage = res.message;
+            if (resMessage.length > 0) {
+                educatorMetricsOptions.value.series[1].data = res.message;
+            } else {
+                educatorMetricsOptions.value.series[1].data = dateYmdAndNumber(7);
+            }
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const businessJobsPostedPercent = ref(0)
+const businessJobsPostedForNow = ref(0)
+const businessEventsPostedPercent = ref(0)
+const businessEventsPostedForNow = ref(0)
+const businessJobViewsPercent = ref(0)
+const businessJobViewsForNow = ref(0)
+const businessFillRatePercent = ref(0)
+const businessFillRateForNow = ref(0)
+
+function getUserPostCount() {
+
+    USER_POST_JOB_COUNT().then(res => {
+        console.log(res)
+        if (res.code === 200) {
+            let message = res.message;
+            if (message.event_post_result) {
+                businessEventsPostedForNow.value = nowValueFormat(message.event_post_result.now_event_post_count)
+                businessEventsPostedPercent.value = getPercentByNowAndPrev(message.event_post_result.now_event_post_count, message.event_post_result.prev_event_post_count)
+            }
+            if (message.job_post_result) {
+                businessJobsPostedForNow.value = nowValueFormat(message.job_post_result.now_job_post_count)
+                businessJobsPostedPercent.value = getPercentByNowAndPrev(message.job_post_result.now_job_post_count, message.job_post_result.prev_job_post_count)
+            }
+            if (message.job_views) {
+                businessJobViewsForNow.value = nowValueFormat(message.job_views.now_job_views_count)
+                businessJobViewsPercent.value = getPercentByNowAndPrev(message.job_views.now_job_views_count, message.job_views.prev_job_views_count)
+            }
+
+            if (message.fill_rate) {
+                businessFillRateForNow.value = nowValueFormat(message.fill_rate.now_job_fill_rate)
+                businessFillRatePercent.value = getPercentByNowAndPrev(message.fill_rate.now_job_fill_rate, message.fill_rate.prev_job_fill_rate)
+            }
+
+
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+function getBusinessJobViews(howLong) {
+
+    let endTime = nowDateYmd()
+    let startTime = dateYmdAgo(howLong)
+
+    let params = {
+        start_time: startTime,
+        end_time: endTime
+    }
+
+    BUSINESS_JOB_VIEWS(params).then(res => {
+        if (res.code === 200) {
+            let message = res.message
+            if (message.length > 0) {
+                businessMetricsOptions.value.series[0].data = res.message;
+            } else {
+                businessMetricsOptions.value.series[0].data = dateYmdAndNumber(howLong)
+            }
+
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+function getBusinessJobShortlisted(howLong) {
+    let endTime = nowDateYmd()
+    let startTime = dateYmdAgo(howLong)
+
+    let params = {
+        start_time: startTime,
+        end_time: endTime
+    }
+
+    BUSINESS_JOB_SHORTLISTED(params).then(res => {
+        if (res.code === 200) {
+            let resMessage = res.message
+            if (resMessage.length > 0) {
+                businessMetricsOptions.value.series[1].data = res.message;
+            } else {
+                businessMetricsOptions.value.series[1].data = dateYmdAndNumber(howLong)
+            }
+
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+function getBusinessJobViewsByTime(startTime, endTime) {
+
+    let params = {
+        start_time: startTime,
+        end_time: endTime
+    }
+
+    BUSINESS_JOB_VIEWS(params).then(res => {
+        if (res.code === 200) {
+            let message = res.message
+            if (message.length > 0) {
+                businessMetricsOptions.value.series[0].data = res.message;
+            } else {
+                businessMetricsOptions.value.series[0].data = dateYmdAndNumber(7)
+            }
+
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+function getBusinessJobShortlistedByTime(startTime, endTime) {
+
+    let params = {
+        start_time: startTime,
+        end_time: endTime
+    }
+
+    BUSINESS_JOB_SHORTLISTED(params).then(res => {
+        if (res.code === 200) {
+            let resMessage = res.message
+            if (resMessage.length > 0) {
+                businessMetricsOptions.value.series[1].data = res.message;
+            } else {
+                businessMetricsOptions.value.series[1].data = dateYmdAndNumber(7)
+            }
+
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+function changeHowLong(e) {
+    // console.log(e)
+    if (identity.value == 1) {
+        getUserMetrics(e)
+        getJobShortListed(e)
+    }
+
+    if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
+        getBusinessJobViews(e)
+        getBusinessJobShortlisted(e)
+
+    }
+}
+
+function customDateChange(startTime, endTime) {
+
+    if (identity.value == 1) {
+        getUserMetricsByTime(startTime, endTime)
+        getJobShortListedByTime(startTime, endTime)
+    }
+
+    if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
+        getBusinessJobViewsByTime(startTime, endTime)
+        getBusinessJobShortlistedByTime(startTime, endTime)
 
     }
 
-
 }
+
+function turnUserManagement() {
+    router.push({path: '/setting/account'})
+}
+
+function viewDeals(){
+    router.push('/deals')
+}
+
+onMounted(() => {
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+        contributorWidth.value = '80%'
+        contributorSwitchBusinessDialogWidth.value = '80%'
+    }
+
+    window.onresize = () => {
+        if (screenWidthFloor <= 768) {
+            contributorWidth.value = '80%'
+            contributorSwitchBusinessDialogWidth.value = '80%'
+            updateWindowHeight()
+        }
+    }
+
+    if(route.query.register_key){
+        contributorActived({register_key:route.query.register_key})
+        history.pushState({}, '', '/overview')
+    }
+
+    let contributorCompany = localStorage.getItem('contributorCompany')
+    if(contributorCompany){
+        contributorCompanyData.value = JSON.parse(contributorCompany)
+    }
+
+    if(!vueCookies.isKey('contributor_login')){
+        console.log('contributor first login')
+        let customHtml = '<div class="box-avatar-setting"></div>' +
+            '<div class="box-label">Update your Account Information</div>' +
+            '<div class="box-tips">For your safety and security, please update your account information including your name and password in the account settings.</div>'
+
+        ElMessageBox.confirm(customHtml,
+            '',
+            {
+                customClass: 'contributor-setting-account-box',
+                confirmButtonClass: 'box-cancel-button',
+                confirmButtonText: 'Update Account Settings',
+                buttonSize: 'large',
+                showCancelButton: false,
+                center: true,
+                dangerouslyUseHTMLString: true
+            }
+        )
+            .then(() => {
+                router.push('/setting/account')
+                console.log('closed success')
+                // ElMessage({
+                //     type: 'success',
+                //     message: 'Closed Success',
+                // })
+            })
+            .catch(() => {
+
+                console.log('cancel close sent')
+            })
+
+    }
+
+    if (identity.value == 1) {
+        getEducatorStaticData()
+
+        getUserMetrics(howLong.value)
+        getJobShortListed(howLong.value)
+
+    }
+
+    if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
+        getAllJobResumeList(1, 100)
+        getUserPostCount()
+
+        getBusinessJobViews(howLong.value)
+        getBusinessJobShortlisted(howLong.value)
+
+    }
+
+    if (identity.value == 5) {
+
+
+        getVendorIndexData()
+
+        getDealsList(1, 1000)
+        getEventsList(1, 1000)
+
+
+    }
+
+})
+
+onUnmounted(() => {
+    updateWindowHeight()
+    window.onresize = null
+})
+
+
 </script>
 
 <style scoped>
+@import "@/style/contributor-dashboard.css";
+
 .bg {
     background-color: #FFFFFF;
 }
 
 .overview-container {
     width: 100%;
-    height: calc(100vh - 120px);
+    height: calc(var(--i-window-height) - 120px);
 }
 
 .dashboard-container {
@@ -1333,6 +1378,19 @@ export default {
 
 .container-4-r {
     margin-left: 50px;
+}
+/deep/ .el-dialog__title{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    /* identical to box height, or 133% */
+
+
+    /* Grey/900 */
+
+    color: #101828;
 }
 
 @media screen and (max-width: 768px) {

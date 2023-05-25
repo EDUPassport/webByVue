@@ -1,486 +1,462 @@
 <template>
   <div class="bg">
-    <div class="account-container">
-      <div class="account-l-container">
-
-      </div>
       <el-scrollbar class="account-r-container">
-        <div class="account-r-container-bg">
-          <div class="account-container-1">
-            <div class="account-basic-info">
-              <div class="account-basic-info-label">
-                <span>Your account</span>
-                <el-button link class="account-basic-info-edit-btn"
-                           @click="editAccount()"
-                >
-                  EDIT
-                </el-button>
-              </div>
-
-              <div :class="editAccountStatus ? 'account-basic-info-c-edit' : 'account-basic-info-c'">
-
-                <div class="account-basic-info-c-l">
-
-                  <el-avatar class="account-basic-info-c-avatar"
-                             :src="headImgUrl ? headImgUrl : defaultAvatar "
-                  ></el-avatar>
-
-                  <el-upload
-                      v-if="editAccountStatus"
-                      class="profile-uploader"
-                      action=""
-                      accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
-                      :headers="uploadHeaders"
-                      :show-file-list="false"
-                      :http-request="profilePhotoHttpRequest"
-                      :before-upload="beforeProfilePhotoUpload"
-                  >
-                    <el-button class="account-basic-info-c-change-btn" link>
-                      CHANGE
-                    </el-button>
-                  </el-upload>
-
-                </div>
-                <div class="account-basic-info-c-r">
-                  <template v-if="editAccountStatus">
-                    <el-form
-                        ref="basicForms"
-                        :model="basicForm"
-                        :rules="basicRules"
-                        label-width="120px"
-                        label-position="top"
-                        class="demo-ruleForm"
-                    >
-
-                      <div class="account-first-last-name">
-
-                        <div class="account-first-name">
-                          <el-form-item label="FIRST NAME" prop="first_name">
-                            <el-input size="small" v-model="basicForm.first_name" placeholder="First name"></el-input>
-                          </el-form-item>
-                        </div>
-
-                        <div class="account-last-name">
-                          <el-form-item label="LAST NAME" prop="last_name">
-                            <el-input size="small" v-model="basicForm.last_name" placeholder="Last name"></el-input>
-                          </el-form-item>
-                        </div>
-
+          <div class="account-r-container-bg">
+              <div class="account-container-1">
+                  <div class="account-basic-info">
+                      <div class="account-basic-info-label">
+                          <span>Your account</span>
+                          <el-button link class="account-basic-info-edit-btn"
+                                     @click="editAccount()"
+                          >
+                              EDIT
+                          </el-button>
                       </div>
 
-                      <div class="account-change-email-container">
-                        <div class="account-change-email-t">
-                          <div class="account-change-email-t-t">
-                            <div class="account-change-email-t-t-l">
-                              <span>E-MAIL ADDRESS</span>
-                            </div>
-                            <div class="account-change-email-t-t-r">
-                              <el-button class="account-change-email-edit-btn"
-                                         type="primary"
-                                         link
-                                         @click="editAccountEmail()">
-                                Edit
-                              </el-button>
-                            </div>
-                          </div>
-                          <div class="account-change-email-t-b">
+                      <div :class="editAccountStatus ? 'account-basic-info-c-edit' : 'account-basic-info-c'">
+
+                          <div class="account-basic-info-c-l">
+
+                              <el-avatar class="account-basic-info-c-avatar"
+                                         :src="headImgUrl ? headImgUrl : defaultAvatar "
+                              ></el-avatar>
+
+                              <el-upload
+                                      v-if="editAccountStatus"
+                                      class="profile-uploader"
+                                      action=""
+                                      accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                      :headers="uploadHeaders"
+                                      :show-file-list="false"
+                                      :http-request="profilePhotoHttpRequest"
+                                      :before-upload="beforeProfilePhotoUpload"
+                              >
+                                  <el-button class="account-basic-info-c-change-btn" link>
+                                      CHANGE
+                                  </el-button>
+                              </el-upload>
 
                           </div>
-                        </div>
-                        <div class="account-change-email-b">
-                          <el-input size="small" disabled v-model="basicForm.email"
-                                    placeholder="E-mail address"></el-input>
-                        </div>
-                      </div>
+                          <div class="account-basic-info-c-r">
+                              <template v-if="editAccountStatus">
+                                  <el-form
+                                          ref="basicForms"
+                                          :model="basicForm"
+                                          :rules="basicRules"
+                                          label-width="120px"
+                                          label-position="top"
+                                          class="demo-ruleForm"
+                                  >
 
-                      <el-dialog class="dialog-custom-css" :width="accountEmailWith"
-                                 v-model="accountEmailDialogVisible">
-                        <template #header="{ titleId, titleClass }">
-                          <div class="my-header">
-                            <h3 :id="titleId" :class="titleClass">
-                              Editing this will change your login email
-                            </h3>
-                          </div>
-                        </template>
+                                      <div class="account-first-last-name">
 
-                        <el-form
-                            ref="accountEmailForms"
-                            :model="accountEmailForm"
-                            :rules="accountEmailRules"
-                            label-width="120px"
-                            label-position="top"
-                            class="demo-ruleForm"
-                        >
-                          <el-form-item label="E-MAIL ADDRESS" prop="email">
-                            <div class="xll-form-email-tips"></div>
-                            <div class="xll-email-input">                           
-                              <el-input v-model="accountEmailForm.email" placeholder="E-mail address"></el-input>
-                              <div class="send-code-btn" @click="sendEmailCode('accountEmailForms')">
-                                {{ checkCodeBtn.text }}
-                              </div>
-                            </div>
-                          </el-form-item>
+                                          <div class="account-first-name">
+                                              <el-form-item label="FIRST NAME" prop="first_name">
+                                                  <el-input size="small" v-model="basicForm.first_name" placeholder="First name"></el-input>
+                                              </el-form-item>
+                                          </div>
 
-                          <el-form-item label="VERIFICATION CODE" prop="code" required>
-                            <el-input v-model="accountEmailForm.code" placeholder="Activation code"></el-input>
-                          </el-form-item>
+                                          <div class="account-last-name">
+                                              <el-form-item label="LAST NAME" prop="last_name">
+                                                  <el-input size="small" v-model="basicForm.last_name" placeholder="Last name"></el-input>
+                                              </el-form-item>
+                                          </div>
 
-                        </el-form>
+                                      </div>
 
-                        <template #footer>
+                                      <div class="account-change-email-container">
+                                          <div class="account-change-email-t">
+                                              <div class="account-change-email-t-t">
+                                                  <div class="account-change-email-t-t-l">
+                                                      <span>E-MAIL ADDRESS</span>
+                                                  </div>
+                                                  <div class="account-change-email-t-t-r">
+                                                      <el-button class="account-change-email-edit-btn"
+                                                                 type="primary"
+                                                                 link
+                                                                 @click="editAccountEmail()">
+                                                          Edit
+                                                      </el-button>
+                                                  </div>
+                                              </div>
+                                              <div class="account-change-email-t-b">
+
+                                              </div>
+                                          </div>
+                                          <div class="account-change-email-b">
+                                              <el-input size="small" disabled v-model="basicForm.email"
+                                                        placeholder="E-mail address"></el-input>
+                                          </div>
+                                      </div>
+
+                                      <el-dialog class="dialog-custom-css" :width="accountEmailWith"
+                                                 v-model="accountEmailDialogVisible">
+                                          <template #header="{ titleId, titleClass }">
+                                              <div class="my-header">
+                                                  <h3 :id="titleId" :class="titleClass">
+                                                      Editing this will change your login email
+                                                  </h3>
+                                              </div>
+                                          </template>
+
+                                          <el-form
+                                                  ref="accountEmailForms"
+                                                  :model="accountEmailForm"
+                                                  :rules="accountEmailRules"
+                                                  label-width="120px"
+                                                  label-position="top"
+                                                  class="demo-ruleForm"
+                                          >
+                                              <el-form-item label="E-MAIL ADDRESS" prop="email">
+                                                  <div class="xll-form-email-tips"></div>
+                                                  <div class="xll-email-input">
+                                                      <el-input v-model="accountEmailForm.email" placeholder="E-mail address"></el-input>
+                                                      <div class="send-code-btn" @click="sendEmailCode('accountEmailForms')">
+                                                          {{ checkCodeBtn.text }}
+                                                      </div>
+                                                  </div>
+                                              </el-form-item>
+
+                                              <el-form-item label="VERIFICATION CODE" prop="code" required>
+                                                  <el-input v-model="accountEmailForm.code" placeholder="Activation code"></el-input>
+                                              </el-form-item>
+
+                                          </el-form>
+
+                                          <template #footer>
                             <span class="dialog-footer">
                               <el-button plain round @click="accountEmailDialogVisible = false">Cancel</el-button>
                               <el-button type="primary" round @click="saveEmailChange('accountEmailForms')">
                                 Save
                               </el-button>
                             </span>
-                        </template>
+                                          </template>
 
-                      </el-dialog>
+                                      </el-dialog>
 
-                      <el-form-item label="BIRTH DATE" prop="birthday">
-                        <el-date-picker
-                            size="small"
-                            v-model="basicForm.birthday"
-                            type="date"
-                            format="YYYY-MM-DD"
-                            value-format="YYYY-MM-DD"
-                            placeholder="Pick a date"
-                            :disabledDate="birthdayDisabledDate"
-                            style="width: 100%"
-                        ></el-date-picker>
-                      </el-form-item>
+                                      <el-form-item label="BIRTH DATE" prop="birthday">
+                                          <el-date-picker
+                                                  size="small"
+                                                  v-model="basicForm.birthday"
+                                                  type="date"
+                                                  format="YYYY-MM-DD"
+                                                  value-format="YYYY-MM-DD"
+                                                  placeholder="Pick a date"
+                                                  :disabledDate="birthdayDisabledDate"
+                                                  style="width: 100%"
+                                          ></el-date-picker>
+                                      </el-form-item>
 
-                      <el-form-item label="GENDER" prop="sex">
-                        <el-select v-model="basicForm.sex" size="small" placeholder="Select one">
-                          <el-option v-for="(item,i) in sexOptions" :key="i"
-                                     :label="item.object_en"
-                                     :value="item.value">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
+                                      <el-form-item label="GENDER" prop="sex">
+                                          <el-select v-model="basicForm.sex" size="small" placeholder="Select one">
+                                              <el-option v-for="(item,i) in sexOptions" :key="i"
+                                                         :label="item.object_en"
+                                                         :value="item.value">
+                                              </el-option>
+                                          </el-select>
+                                      </el-form-item>
 
-                      <el-form-item label="PASSWORD">
-                        <el-button plain round @click="resetPassword()">
-                          RESET PASSWORD
-                        </el-button>
-                      </el-form-item>
+                                      <el-form-item label="PASSWORD">
+                                          <el-button plain round @click="resetPassword()">
+                                              RESET PASSWORD
+                                          </el-button>
+                                      </el-form-item>
 
-                      <ForgotPassword :isShow="forgotDialogVisible"
-                                      :showPhone="false"
-                                      @close="closeForgotDialog()">
-                      </ForgotPassword>
+                                      <ForgotPassword :isShow="forgotDialogVisible"
+                                                      :showPhone="false"
+                                                      @close="closeForgotDialog()">
+                                      </ForgotPassword>
 
-                      <div class="save-form-container">
-                        <el-button class="save-form-discard-btn" link
-                                   @click="discardAccount()"
-                        >
-                          DISCARD
-                        </el-button>
-                        <el-button class="save-form-save-btn" type="primary" round
-                                   :loading="submitLoadingValue"
-                                   @click="saveAccount('basicForms')"
-                        >
-                          SAVE
-                        </el-button>
+                                      <div class="save-form-container">
+                                          <el-button class="save-form-discard-btn" link
+                                                     @click="discardAccount()"
+                                          >
+                                              DISCARD
+                                          </el-button>
+                                          <el-button class="save-form-save-btn" type="primary" round
+                                                     :loading="submitLoadingValue"
+                                                     @click="saveAccount('basicForms')"
+                                          >
+                                              SAVE
+                                          </el-button>
+                                      </div>
+
+                                  </el-form>
+
+                              </template>
+
+                              <template v-if="!editAccountStatus">
+                                  <div class="account-basic-info-c-name">
+                                      {{ userContact.first_name }} {{ userContact.last_name }}
+                                  </div>
+                                  <div class="account-basic-info-c-email">
+                                      {{ userContact.email }}
+                                  </div>
+                              </template>
+
+                          </div>
                       </div>
 
-                    </el-form>
+                  </div>
 
-                  </template>
-
-                  <template v-if="!editAccountStatus">
-                    <div class="account-basic-info-c-name">
-                      {{ userContact.first_name }} {{ userContact.last_name }}
-                    </div>
-                    <div class="account-basic-info-c-email">
-                      {{ userContact.email }}
-                    </div>
-                  </template>
-
-                </div>
-              </div>
-
-            </div>
-
-            <!--            <div class="account-refer-container">-->
-            <!--              <div class="account-refer-label">-->
-            <!--                Refer someone you know & earn credits-->
-            <!--              </div>-->
-            <!--              <div class="account-refer-c">-->
-            <!--                <div class="account-refer-c-l">-->
-            <!--                  <el-input class="account-refer-c-l-input" size="default"-->
-            <!--                            placeholder="Email address of someone you know"></el-input>-->
-            <!--                </div>-->
-            <!--                <div class="account-refer-c-r">-->
-            <!--                  <el-button class="account-refer-send-btn" link>-->
-            <!--                    SEND-->
-            <!--                  </el-button>-->
-            <!--                </div>-->
-
-            <!--              </div>-->
-
-            <!--            </div>-->
-
-            <div class="account-perks-container">
-              <div class="account-perks-label">
-                Get the best perks
-              </div>
-              <div class="account-perks-tips">
-                Check our plans to save more
-              </div>
-              <div class="account-perks-btn-container">
-                <el-button class="account-perks-upgrade-btn"
-                           @click="upgrade()"
-                           type="primary" round>
-                  UPGRADE
-                </el-button>
-              </div>
-            </div>
-
-          </div>
-          <div class="account-container-2">
-            <div class="account-profile-container">
-
-              <div class="account-profile-t">
-
-                <div class="account-profile-label">
-                  Your profiles
-                </div>
-                <div class="account-add-profile" v-if="identity != 1">
-                  <el-button class="account-add-profile-btn" type="primary" round
-                             @click="turnAddProfile()"
-                  >
-                    ADD PROFILE
-                  </el-button>
-                </div>
+                  <div class="account-perks-container">
+                      <div class="account-perks-label">
+                          Get the best perks
+                      </div>
+                      <div class="account-perks-tips">
+                          Check our plans to save more
+                      </div>
+                      <div class="account-perks-btn-container">
+                          <el-button class="account-perks-upgrade-btn"
+                                     @click="upgrade()"
+                                     type="primary" round>
+                              UPGRADE
+                          </el-button>
+                      </div>
+                  </div>
 
               </div>
+              <div class="account-container-2">
+                  <div class="account-profile-container">
 
-              <el-scrollbar class="account-profile-c"
-                            ref="switchAccountScroll"
-                            max-height="400px">
-                <template v-if="companyData && companyData.length > 0">
-                  <div class="account-profile-c-item"
-                       v-for="(item,i) in companyData" :key="i"
-                  >
-                    <div class="account-profile-c-item-t">
-                      <div class="account-profile-c-item-l">
-                        <div class="account-profile-name">
+                      <div class="account-profile-t">
+
+                          <div class="account-profile-label">
+                              Your profiles
+                          </div>
+                          <div class="account-add-profile" v-if="identity != 1">
+                              <el-button class="account-add-profile-btn" type="primary" round
+                                         @click="turnAddProfile()"
+                              >
+                                  ADD PROFILE
+                              </el-button>
+                          </div>
+
+                      </div>
+
+                      <el-scrollbar class="account-profile-c"
+                                    ref="switchAccountScroll"
+                                    max-height="400px">
+                          <template v-if="companyData && companyData.length > 0">
+                              <div class="account-profile-c-item"
+                                   v-for="(item,i) in companyData" :key="i"
+                              >
+                                  <div class="account-profile-c-item-t">
+                                      <div class="account-profile-c-item-l">
+                                          <div class="account-profile-name">
                           <span v-if="item.identity == 1">
                             {{ item.name ? item.name : 'Unknown' }}
                           </span>
-                          <span v-else>
+                                              <span v-else>
                             {{ item.company_name ? item.company_name : 'Unknown' }}
                           </span>
-                          <el-tag type="success"
-                                  style="margin-left: 10px;"
-                                  v-if="item.identity == identity && item.id == currentCompanyId">
-                            current
-                          </el-tag>
-                        </div>
-                        <div class="account-profile-identity">
-                          <span v-if="item.identity == 1">Educator</span>
-                          <span v-if="item.identity == 2">Recruiter</span>
-                          <span v-if="item.identity == 3">School</span>
-                          <span v-if="item.identity == 4">Other</span>
-                          <span v-if="item.identity == 5">Vendor</span>
-                        </div>
+                                              <el-tag type="success"
+                                                      style="margin-left: 10px;"
+                                                      v-if="item.identity == identity && item.id == currentCompanyId">
+                                                  current
+                                              </el-tag>
+                                          </div>
+                                          <div class="account-profile-identity">
+                                              <span v-if="item.identity == 1">Educator</span>
+                                              <span v-if="item.identity == 2">Recruiter</span>
+                                              <span v-if="item.identity == 3">School</span>
+                                              <span v-if="item.identity == 4">Other</span>
+                                              <span v-if="item.identity == 5">Vendor</span>
+                                          </div>
 
-                      </div>
+                                      </div>
 
-                      <div class="account-profile-c-item-b-mobile">
-                        <el-progress :text-inside="false" :stroke-width="3"
-                                     :percentage="item.completion <= 100 ? item.completion : 100"/>
-                      </div>
+                                      <div class="account-profile-c-item-b-mobile">
+                                          <el-progress :text-inside="false" :stroke-width="3"
+                                                       :percentage="item.completion <= 100 ? item.completion : 100"/>
+                                      </div>
 
-                      <div class="account-profile-c-item-r">
-                        <div class="account-profile-c-item-r-1">
-                          <span v-if="item.identity == 1">Complete at least 80% of your profile to apply jobs</span>
-                          <span v-if="item.identity == 2">Complete at least 60% of your profile to post jobs</span>
-                          <span v-if="item.identity == 3">Complete at least 60% of your profile to post jobs</span>
-                          <span v-if="item.identity == 4">Complete at least 60% of your profile to post jobs</span>
-                          <span v-if="item.identity == 5">Complete at least 60% of your profile to offer a deal or post event</span>
-                        </div>
-                        <div class="account-profile-c-item-r-mobile">
-                          <div class="account-profile-c-item-r-2">
+                                      <div class="account-profile-c-item-r">
+                                          <div class="account-profile-c-item-r-1">
+                                              <span v-if="item.identity == 1">Complete at least 80% of your profile to apply jobs</span>
+                                              <span v-if="item.identity == 2">Complete at least 60% of your profile to post jobs</span>
+                                              <span v-if="item.identity == 3">Complete at least 60% of your profile to post jobs</span>
+                                              <span v-if="item.identity == 4">Complete at least 60% of your profile to post jobs</span>
+                                              <span v-if="item.identity == 5">Complete at least 60% of your profile to offer a deal or post event</span>
+                                          </div>
+                                          <div class="account-profile-c-item-r-mobile">
+                                              <div class="account-profile-c-item-r-2">
 
-                            <template v-if="item.identity == identity && item.id == currentCompanyId">
+                                                  <template v-if="item.identity == identity && item.id == currentCompanyId">
 
-                              <el-button
-                                  v-if="item.identity == 1"
-                                  class="account-profile-c-item-r-2-btn"
-                                  @click="searchJobs()"
-                                  :disabled="item.identity != identity || item.id != currentCompanyId"
-                                  type="primary" round>
-                                SEARCH JOBS
-                              </el-button>
-                              <el-button
-                                  v-if="item.identity == 2  || item.identity == 3 || item.identity == 4"
-                                  class="account-profile-c-item-r-2-btn"
-                                  :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
-                                  @click="postJob()"
-                                  type="primary" round>
-                                POST A JOB
-                              </el-button>
-                              <el-button
-                                  v-if="item.identity == 5"
-                                  class="account-profile-c-item-r-2-btn"
-                                  :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
-                                  @click="postDeal()"
-                                  type="primary" round>
-                                OFFER A Deal
-                              </el-button>
-                              <el-button
-                                  class="account-profile-c-item-r-2-btn"
-                                  :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
-                                  @click="postEvent()"
-                                  type="primary" round>
-                                POST AN EVENT
-                              </el-button>
-                            </template>
+                                                      <el-button
+                                                              v-if="item.identity == 1"
+                                                              class="account-profile-c-item-r-2-btn"
+                                                              @click="searchJobs()"
+                                                              :disabled="item.identity != identity || item.id != currentCompanyId"
+                                                              type="primary" round>
+                                                          SEARCH JOBS
+                                                      </el-button>
+                                                      <el-button
+                                                              v-if="item.identity == 2  || item.identity == 3 || item.identity == 4"
+                                                              class="account-profile-c-item-r-2-btn"
+                                                              :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
+                                                              @click="postJob()"
+                                                              type="primary" round>
+                                                          POST A JOB
+                                                      </el-button>
+                                                      <el-button
+                                                              v-if="item.identity == 5"
+                                                              class="account-profile-c-item-r-2-btn"
+                                                              :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
+                                                              @click="postDeal()"
+                                                              type="primary" round>
+                                                          OFFER A Deal
+                                                      </el-button>
+                                                      <el-button
+                                                              class="account-profile-c-item-r-2-btn"
+                                                              :disabled="item.identity != identity || item.id != currentCompanyId || item.completion < 60"
+                                                              @click="postEvent()"
+                                                              type="primary" round>
+                                                          POST AN EVENT
+                                                      </el-button>
+                                                  </template>
 
-                          </div>
-                          <div class="account-profile-c-item-r-3">
+                                              </div>
+                                              <div class="account-profile-c-item-r-3">
 
-                            <template v-if="item.identity == identity && item.id == currentCompanyId">
-                              <el-button
-                                  class="account-profile-c-item-r-3-btn account-profile-c-item-r-3-btn-mobile"
-                                  @click="editUserProfile(item.id,item.identity)"
-                                  plain round>
-                                EDIT
-                              </el-button>
-                            </template>
-                            <template v-else>
-                              <el-button
-                                  class="account-profile-c-item-r-3-btn"
-                                  @click="makeCurrent(item.id,item.identity,2)"
-                                  plain round>
-                                MAKE CURRENT
-                              </el-button>
-                            </template>
+                                                  <template v-if="item.identity == identity && item.id == currentCompanyId">
+                                                      <el-button
+                                                              class="account-profile-c-item-r-3-btn account-profile-c-item-r-3-btn-mobile"
+                                                              @click="editUserProfile(item.id,item.identity)"
+                                                              plain round>
+                                                          EDIT
+                                                      </el-button>
+                                                  </template>
+                                                  <template v-else>
+                                                      <el-button
+                                                              class="account-profile-c-item-r-3-btn"
+                                                              @click="makeCurrent(item.id,item.identity,2)"
+                                                              plain round>
+                                                          MAKE CURRENT
+                                                      </el-button>
+                                                  </template>
 
-                          </div>
-                          <div class="account-profile-c-item-r-4"
-                               v-if="item.identity == identity && item.id == currentCompanyId">
-                            <el-dropdown :hide-on-click="false" trigger="click">
+                                              </div>
+                                              <div class="account-profile-c-item-r-4"
+                                                   v-if="item.identity == identity && item.id == currentCompanyId">
+                                                  <el-dropdown :hide-on-click="false" trigger="click">
                           <span class="account-profile-c-item-r-4-btn">
                             MORE
                             <el-icon class="el-icon--right">
                               <arrow-down/>
                             </el-icon>
                           </span>
-                              <template #dropdown>
-                                <el-dropdown-menu>
+                                                      <template #dropdown>
+                                                          <el-dropdown-menu>
 
-                                  <el-dropdown-item>
-                                    <el-button link @click="viewUserProfile(item.id,item.user_id,item.identity)">
-                                      VIEW PROFILE
-                                    </el-button>
-                                  </el-dropdown-item>
+                                                              <el-dropdown-item>
+                                                                  <el-button link @click="viewUserProfile(item.id,item.user_id,item.identity)">
+                                                                      VIEW PROFILE
+                                                                  </el-button>
+                                                              </el-dropdown-item>
 
-                                  <el-dropdown-item v-if="item.identity != 1">
-                                    <el-button link
-                                               @click="showContributorDialog(item.id,item.user_id,item.identity,item.company_name)">
-                                      ADD A CONTRIBUTOR
-                                    </el-button>
-                                  </el-dropdown-item>
-                                  <!--                                <el-dropdown-item v-if="item.identity == 3">-->
-                                  <!--                                    &lt;!&ndash;                                  CONVERT TO A RECRUITER&ndash;&gt;-->
-                                  <!--                                  <el-button link @click="schoolConvertToRecruiter(item.id,item.user_id,item.identity)">-->
-                                  <!--                                    COPY AS A RECRUITER-->
-                                  <!--                                  </el-button>-->
-                                  <!--                                </el-dropdown-item>-->
-                                  <el-dropdown-item>
-                                    <el-button link @click="editUserProfile(item.id,item.identity)">
-                                      EDIT PROFILE
-                                    </el-button>
-                                  </el-dropdown-item>
-                                  <el-dropdown-item>
-                                    <el-popconfirm
-                                        title="Are you sure to delete this?"
-                                        @confirm="removeProfile(item.id, item.identity)"
-                                    >
-                                      <template #reference>
-                                        <el-button link>REMOVE</el-button>
-                                      </template>
-                                    </el-popconfirm>
+                                                              <el-dropdown-item v-if="item.identity != 1">
+                                                                  <el-button link
+                                                                             @click="showContributorDialog(item.id,item.user_id,item.identity,item.company_name)">
+                                                                      ADD A CONTRIBUTOR
+                                                                  </el-button>
+                                                              </el-dropdown-item>
+                                                              <!--                                <el-dropdown-item v-if="item.identity == 3">-->
+                                                              <!--                                    &lt;!&ndash;                                  CONVERT TO A RECRUITER&ndash;&gt;-->
+                                                              <!--                                  <el-button link @click="schoolConvertToRecruiter(item.id,item.user_id,item.identity)">-->
+                                                              <!--                                    COPY AS A RECRUITER-->
+                                                              <!--                                  </el-button>-->
+                                                              <!--                                </el-dropdown-item>-->
+                                                              <el-dropdown-item>
+                                                                  <el-button link @click="editUserProfile(item.id,item.identity)">
+                                                                      EDIT PROFILE
+                                                                  </el-button>
+                                                              </el-dropdown-item>
+                                                              <el-dropdown-item>
+                                                                  <el-popconfirm
+                                                                          title="Are you sure to delete this?"
+                                                                          @confirm="removeProfile(item.id, item.identity)"
+                                                                  >
+                                                                      <template #reference>
+                                                                          <el-button link>REMOVE</el-button>
+                                                                      </template>
+                                                                  </el-popconfirm>
 
-                                  </el-dropdown-item>
-                                </el-dropdown-menu>
-                              </template>
-                            </el-dropdown>
+                                                              </el-dropdown-item>
+                                                          </el-dropdown-menu>
+                                                      </template>
+                                                  </el-dropdown>
 
-                          </div>
-                        </div>
+                                              </div>
+                                          </div>
 
-                      </div>
+                                      </div>
 
-                    </div>
+                                  </div>
 
-                    <div class="account-profile-c-item-b">
-                      <el-progress :text-inside="false" :stroke-width="3"
-                                   :percentage="item.completion <= 100 ? item.completion : 100"/>
-                    </div>
+                                  <div class="account-profile-c-item-b">
+                                      <el-progress :text-inside="false" :stroke-width="3"
+                                                   :percentage="item.completion <= 100 ? item.completion : 100"/>
+                                  </div>
 
-                    <div v-if="i===0">
-                      <el-row :gutter="0" justify="space-between" align="middle"
-                              class="admin-contributor-item-container"
-                              v-for="(item,i) in assignUserData" :key="i">
-                        <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-                          <div class="admin-item-container">
-                            <div class="admin-item-img-container">
-                              <el-avatar class="admin-item-img"
-                                         :src="item.headimgurl ? item.headimgurl : defaultAvatar ">
-                              </el-avatar>
-                            </div>
-                            <div class="admin-item-r-container">
-                              <div class="admin-item-name">{{ item.first_name }} {{ item.last_name }}</div>
-                              <div class="admin-item-role">
-                                Contributor
-                                <!-- <template v-if="item.identity === 1">Educator</template>
-                                <template v-if="item.identity === 2">Recruiter</template>
-                                <template v-if="item.identity === 3">School</template>
-                                <template v-if="item.identity === 4">Other</template>
-                                <template v-if="item.identity === 5">Vendor</template> -->
+                                  <div v-if="i===0">
+                                      <el-row :gutter="0" justify="space-between" align="middle"
+                                              class="admin-contributor-item-container"
+                                              v-for="(item,i) in assignUserData" :key="i">
+                                          <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+                                              <div class="admin-item-container">
+                                                  <div class="admin-item-img-container">
+                                                      <el-avatar class="admin-item-img"
+                                                                 :src="item.headimgurl ? item.headimgurl : defaultAvatar ">
+                                                      </el-avatar>
+                                                  </div>
+                                                  <div class="admin-item-r-container">
+                                                      <div class="admin-item-name">{{ item.first_name }} {{ item.last_name }}</div>
+                                                      <div class="admin-item-role">
+                                                          Contributor
+                                                          <!-- <template v-if="item.identity === 1">Educator</template>
+                                                          <template v-if="item.identity === 2">Recruiter</template>
+                                                          <template v-if="item.identity === 3">School</template>
+                                                          <template v-if="item.identity === 4">Other</template>
+                                                          <template v-if="item.identity === 5">Vendor</template> -->
+                                                      </div>
+                                                  </div>
+
+                                              </div>
+                                          </el-col>
+                                          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="admin-item-btn-container">
+                                              <el-button plain round class="admin-item-btn"
+                                                         @click="editAdmin(item)"
+                                              >
+                                                  EDIT PERMISSIONS
+                                              </el-button>
+                                              <!--                        <el-button link round class="admin-item-btn">-->
+                                              <!--                          DELETE-->
+                                              <!--                        </el-button>-->
+                                          </el-col>
+                                      </el-row>
+                                  </div>
+
                               </div>
-                            </div>
 
-                          </div>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="admin-item-btn-container">
-                          <el-button plain round class="admin-item-btn"
-                                     @click="editAdmin(item)"
-                          >
-                            EDIT PERMISSIONS
-                          </el-button>
-                          <!--                        <el-button link round class="admin-item-btn">-->
-                          <!--                          DELETE-->
-                          <!--                        </el-button>-->
-                        </el-col>
-                      </el-row>
-                    </div>
+                          </template>
+                          <template v-else>
+                              <el-empty description="-"></el-empty>
+                          </template>
 
+                      </el-scrollbar>
                   </div>
 
-                </template>
-                <template v-else>
-                  <el-empty description="-"></el-empty>
-                </template>
 
-              </el-scrollbar>
-            </div>
-
+              </div>
 
           </div>
 
-        </div>
-
       </el-scrollbar>
 
-    </div>
 
-    <el-dialog :width="contributorWidth" v-model="contributorDialogVisible">
+      <el-dialog :width="contributorWidth" v-model="contributorDialogVisible">
       <template #header="{ titleId, titleClass }">
         <div class="my-header">
           <h3 :id="titleId" :class="titleClass">Add a contributor for {{ contributorCompanyName }}</h3>
@@ -1852,57 +1828,52 @@ export default {
 
 <style scoped>
 .bg {
-  background-color: #F0F2F5;
-}
-
-.account-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-.account-l-container {
-
+  background-color: #ffffff;
 }
 
 .account-r-container {
   width: 100%;
-  height: calc(var(--i-window-height) - 140px);
+  height: calc(var(--i-window-height) - 120px);
 }
 
 .account-r-container-bg {
-  padding: 30px 50px 50px 50px;
+    margin: 0 38px;
 }
 
 .account-container-1 {
   display: flex;
   flex-direction: row;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: flex-start;
   flex-wrap: wrap;
 
 }
 
 .account-basic-info {
-  background-color: #FFFFFF;
-  width: 490px;
-  padding: 20px;
-  border-radius: 18px;
-  margin-right: 20px;
-  margin-top: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+
+    width:  490px;
+    /*min-height: 188px;*/
+    background: #FFFFFF;
+    border: 1px solid #EAECF0;
+    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+    border-radius: 8px;
+
+    margin: 20px 32px 0 0;
 }
 
 .account-basic-info-label {
-  font-size: 30px;
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+    font-weight: 500;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
 .account-basic-info-edit-btn {
-  font-size: 20px;
-  font-weight: 500;
-  color: #6650B3;
   margin-left: 15px;
 }
 
@@ -1912,7 +1883,7 @@ export default {
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .account-basic-info-c {
@@ -1921,7 +1892,7 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .account-basic-info-c-l {
@@ -1932,9 +1903,9 @@ export default {
 }
 
 .account-basic-info-c-avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 100px;
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
 }
 
 .account-basic-info-c-change-btn {
@@ -1947,78 +1918,44 @@ export default {
 }
 
 .account-basic-info-c-name {
-  font-size: 26px;
+  font-size: 16px;
   font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 500;
   color: #262626;
 }
 
 .account-basic-info-c-email {
-  font-size: 23px;
+  font-size: 14px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 400;
   color: #262626;
 }
 
-.account-refer-container {
-  background-color: #FFFFFF;
-  padding: 20px;
-  border-radius: 18px;
-  margin-right: 20px;
-  margin-top: 20px;
-}
-
-.account-refer-label {
-  font-size: 30px;
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #262626;
-}
-
-.account-refer-c {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 20px;
-}
-
-.account-refer-c-l {
-  width: 310px;
-  height: 50px;
-}
-
-/deep/ .account-refer-c-l .el-input__wrapper {
-  height: 50px;
-  border-radius: 50px;
-}
-
-.account-refer-c-r {
-
-}
-
-.account-refer-send-btn {
-  margin-left: 15px;
-  font-size: 25px;
-  font-weight: 500;
-  color: #262626;
-}
-
 .account-perks-container {
-  background-color: #FFFFFF;
-  padding: 20px;
-  border-radius: 18px;
-  margin-right: 20px;
-  margin-top: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+
+    width:  auto;
+
+    background: #FFFFFF;
+    border: 1px solid #EAECF0;
+    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+    border-radius: 8px;
+
+    margin: 20px 32px 0 0;
 }
 
 .account-perks-label {
-  font-size: 30px;
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
 .account-perks-tips {
-  font-size: 23px;
+  font-size: 14px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 400;
   color: #262626;
@@ -2042,9 +1979,18 @@ export default {
 }
 
 .account-profile-container {
-  background-color: #ffffff;
-  padding: 40px 0;
-  border-radius: 18px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+
+    width:  auto;
+
+    background: #FFFFFF;
+    border: 1px solid #EAECF0;
+    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+    border-radius: 8px;
 
 }
 
@@ -2053,12 +1999,12 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0 40px;
+
 }
 
 .account-profile-label {
-  font-size: 30px;
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #262626;
 }
@@ -2073,11 +2019,12 @@ export default {
 
 
 .account-profile-c {
+    width: 100%;
   margin: 15px 0 0 0;
 }
 
 .account-profile-c-item {
-  margin: 30px 40px;
+  margin: 10px 20px;
 }
 
 .account-profile-c-item-t {
@@ -2085,7 +2032,6 @@ export default {
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
-
 }
 
 .account-profile-c-item-l {
@@ -2093,15 +2039,15 @@ export default {
 }
 
 .account-profile-name {
-  font-size: 26px;
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 500;
   color: #262626;
 }
 
 .account-profile-identity {
-  font-size: 23px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 400;
   color: #262626;
 }
@@ -2115,7 +2061,7 @@ export default {
 }
 
 .account-profile-c-item-r-1 {
-  font-size: 23px;
+  font-size: 14px;
   font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 400;
   color: #262626;
@@ -2303,7 +2249,7 @@ export default {
 }
 
 .admin-item-btn {
-  font-size: 20px;
+
 }
 
 .xll-contributor-c-update-container {

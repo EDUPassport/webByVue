@@ -209,6 +209,13 @@
     font-family: Inter;
 
 }
+
+.contributor-setting-account-box{
+    padding: 25px 25px 50px 25px !important;
+    width: 510px;
+    max-width: none !important;
+}
+
 .edu-msg-box{
     padding: 25px 25px 50px 25px !important;
     width: auto !important;
@@ -296,7 +303,16 @@
     margin: 0 auto;
 }
 
-.edu-msg-box .box-label{
+.contributor-setting-account-box .box-avatar-setting{
+    background-image: url("@/assets/newHome/contributor-account-setting.svg");
+    background-position: center;
+    background-size: 100%;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto;
+}
+
+.edu-msg-box .box-label, .contributor-setting-account-box .box-label{
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
@@ -308,7 +324,7 @@
 
 }
 
-.edu-msg-box .box-tips{
+.edu-msg-box .box-tips, .contributor-setting-account-box .box-tips{
     font-family: 'Inter';
     font-style: normal;
     width: 90%;
@@ -320,7 +336,7 @@
     margin-top: 12px;
 }
 
-.edu-msg-box .box-cancel-button{
+.edu-msg-box .box-cancel-button, .contributor-setting-account-box .box-cancel-button{
     background-color: #6941C6;
     color: #FFFFFF;
     border: transparent;
@@ -328,7 +344,7 @@
     margin: 40px auto 0;
 }
 
-.edu-msg-box .box-prompt-confirm-button{
+.edu-msg-box .box-prompt-confirm-button, .contributor-setting-account-box .box-prompt-confirm-button{
     background-color: #6941C6;
     color: #FFFFFF;
     border: transparent;
@@ -336,7 +352,7 @@
     margin: 10px auto 0;
 }
 
-.edu-msg-box .box-form-label{
+.edu-msg-box .box-form-label, .contributor-setting-account-box .box-form-label{
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;

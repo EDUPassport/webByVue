@@ -385,7 +385,7 @@ import {
     RECRUITER_PERCENTAGE_V2,
     SCHOOL_PERCENTAGE_V2,
     OTHER_PERCENTAGE_V2,
-    VENDOR_PERCENTAGE_V2, GOOGLE_CALLBACK_LOGIN
+    VENDOR_PERCENTAGE_V2, GOOGLE_CALLBACK_LOGIN, USER_CONTRIBUTOR_ACTIVATION
 } from "@/api/api";
 
 import {useRoute, useRouter} from "vue-router";
@@ -480,6 +480,20 @@ export default {
             ]
         })
 
+        const contributorActived = (params)=>{
+            USER_CONTRIBUTOR_ACTIVATION(params).then(res=>{
+                console.log(res)
+                if(res.code === 200){
+                    console.log('激活contributor成功')
+                }
+            }).catch(err=>{
+                ElMessage({
+                    type:'error',
+                    message:err,
+                    grouping:true
+                })
+            })
+        }
         const getParams = () => {
             // console.log(route.query)
             return route.query;
@@ -859,6 +873,10 @@ export default {
                             console.log(res)
                             if (res.code == 200) {
                                 rememberMeAction(params, 1)
+
+                                if(route.query.register_key){
+                                    contributorActived({register_key:route.query.register_key})
+                                }
 
                                 let resMessage = res.message;
 

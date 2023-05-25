@@ -1015,34 +1015,23 @@ router.beforeEach((to, from, next) => {
             next({path: "/login"});
         }
     } else {
-        if (to.matched.some((record) => record.meta.noAccessTokenExists)) {
-            const token = localStorage.getItem("token");
+        if (to.matched.some(record => record.meta.noAccessTokenExists)) {
+            const token = localStorage.getItem('token')
             if (token) {
-                next(from);
-            } else {
-                next();
-            }
-        } else {
-            // console.log(to)
-            if (to.matched.some(record => record.meta.noAccessTokenExists)) {
-                const token = localStorage.getItem('token')
-                if (token) {
-                    if (to.path === '/login' && to.query.register_key) {
-                        next({path: '/overview', query: to.query})
-                    } else {
-                        next(from)
-                    }
-
+                if (to.path === '/login' && to.query.register_key) {
+                    next({path: '/overview', query: to.query})
                 } else {
-                    next()
+                    next(from)
                 }
+
             } else {
                 next()
             }
-
+        } else {
+            next()
         }
     }
-});
+})
 
 router.afterEach(() => {
     NProgress.done();

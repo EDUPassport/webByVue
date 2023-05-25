@@ -3,27 +3,35 @@
         <div class="setting-label">
             Setting
         </div>
-        <div class="switch-container">
-            <div class="switch-item switch-item-l"
-                 :class="sPathName === '/setting/account' ? 'switch-item-active' : '' "
-                 @click="turnAccount()">
-                <span>Account</span>
-            </div>
-            <div class="switch-item switch-item-m"
-                 :class="sPathName === '/setting/profile/educator' ||
+        <div class="switch-container" >
+            <template v-if="identity == 6">
+                <div class="switch-contributor">
+                    Update your Account Information
+                </div>
+
+            </template>
+            <template v-else>
+                <div class="switch-item switch-item-l"
+                     :class="sPathName === '/setting/account' ? 'switch-item-active' : '' "
+                     @click="turnAccount()">
+                    <span>Account</span>
+                </div>
+                <div class="switch-item switch-item-m"
+                     :class="sPathName === '/setting/profile/educator' ||
          sPathName === '/setting/profile/recruiter' ||
          sPathName === '/setting/profile/school' ||
          sPathName === '/setting/profile/other' ||
          sPathName === '/setting/profile/vendor'
          ? 'switch-item-active' : '' "
-                 @click="turnProfile()">
-                <span>Profile</span>
-            </div>
-            <div class="switch-item switch-item-r"
-                 :class="sPathName === '/setting/privacy' ? 'switch-item-active' : '' "
-                 @click="turnPrivacy()">
-                <span>Privacy</span>
-            </div>
+                     @click="turnProfile()">
+                    <span>Profile</span>
+                </div>
+                <div class="switch-item switch-item-r"
+                     :class="sPathName === '/setting/privacy' ? 'switch-item-active' : '' "
+                     @click="turnPrivacy()">
+                    <span>Privacy</span>
+                </div>
+            </template>
 
         </div>
 
@@ -115,7 +123,15 @@ export default {
     justify-content: flex-start;
     margin: 30px 0 0 40px;
 }
+.switch-contributor{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #667085;
 
+}
 .switch-item {
     box-sizing: border-box;
     display: flex;

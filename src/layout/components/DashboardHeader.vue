@@ -358,7 +358,43 @@
 
                           </el-dropdown-item>
 
-                          <el-dropdown-item @click="loginOut()">
+                            <el-dropdown-item class="xll-dropdown-item"  v-if="contributorCompanyData.length>0">
+                                <el-icon><Refresh /></el-icon>
+                                <el-dropdown size="large"
+                                             placement="left-start"
+                                             :max-height="400">
+
+                                          <span class="el-dropdown-link-sp">
+                                              Switch Contributor
+                                          </span>
+                                    <template #dropdown>
+                                        <el-dropdown-menu>
+                                            <div class="xll-sub-dropdown">
+                                                <el-dropdown-item
+                                                        class="xll-dropdown-item"
+                                                        v-for="(item,i) in contributorCompanyData"
+                                                        :key="i"
+                                                        @click="changeIdentity(item.id,1,2)">
+
+                                                    <template v-if="item.company_name">
+                                                        <span class="el-dropdown-link">{{ item.company_name }}</span>
+                                                    </template>
+                                                    <template v-else>
+                                                        <span class="el-dropdown-link">{{item.company_id}}</span>
+                                                    </template>
+
+                                                </el-dropdown-item>
+                                            </div>
+
+                                        </el-dropdown-menu>
+
+                                    </template>
+                                </el-dropdown>
+
+                            </el-dropdown-item>
+
+
+                            <el-dropdown-item @click="loginOut()">
                             <el-icon>
                               <IconIcBaselineLogout/>
                             </el-icon>
@@ -534,6 +570,7 @@ export default {
       schoolCompanyData: [],
       otherCompanyData: [],
       vendorCompanyData: [],
+      contributorCompanyData:[],
       educatorContactData: {},
       educatorContactStatus: false,
 
@@ -700,6 +737,7 @@ export default {
           let recruitingCompany = []
           let schoolCompany = []
           let otherCompany = []
+          let contributorCompany = []
 
           let userContact = res.message.user_contact
 
@@ -718,6 +756,7 @@ export default {
               recruitingCompany = res.message.user_contact.recruiting_company
               schoolCompany = res.message.user_contact.school_company
               otherCompany = res.message.user_contact.other_company
+                contributorCompany = res.message.user_contact.contributor_company
             }
 
             if (vendorCompany) {
@@ -736,12 +775,18 @@ export default {
               this.otherCompanyData = otherCompany
             }
 
+            if(contributorCompany){
+                localStorage.setItem('contributorCompany', JSON.stringify(contributorCompany))
+                this.contributorCompanyData = contributorCompany
+            }
+
           } else {
             this.educatorContactData = []
             this.vendorCompanyData = []
             this.recruiterCompanyData = []
             this.schoolCompanyData = []
             this.otherCompanyData = []
+              this.contributorCompanyData = []
           }
 
         }
