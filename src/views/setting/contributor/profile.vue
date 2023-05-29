@@ -50,6 +50,7 @@
                     </div>
                     <div class="box-btns">
                         <el-button type="primary"
+                                   :disabled="token && token != '' "
                                    class="box-btn"
                                    size="large"
                                    @click="submit(contributorForms)">
@@ -78,7 +79,7 @@ import {useRouter,useRoute} from 'vue-router'
 import {USER_CONTRIBUTOR_COMPANY_ADD} from "@/api/api";
 const router = useRouter()
 const route = useRoute()
-import {ElLoading,ElMessage} from 'element-plus'
+import {ElLoading,ElMessage,ElMessageBox} from 'element-plus'
 
 
 const turnHome = ()=>{
@@ -175,10 +176,41 @@ const submit = (formEl)=>{
         }
     })
 }
+const token = localStorage.getItem('token')
 
 onMounted(() => {
+    if(token && registerKey){
+        let customHtml = '<div class="box-avatar-setting"></div>' +
+            '<div class="box-label">Accept the Invitation</div>' +
+            '<div class="box-tips">Hello, you are currently logged in. Please log out of your current account or switch to a new browser.</div>'
 
+        ElMessageBox.confirm(customHtml,
+            '',
+            {
+                customClass: 'contributor-setting-account-box',
+                confirmButtonClass: 'box-cancel-button',
+                confirmButtonText: 'Update Account Settings',
+                buttonSize: 'large',
+                showCancelButton: false,
+                showConfirmButton:false,
+                center: true,
+                dangerouslyUseHTMLString: true
+            }
+        )
+            .then(() => {
+                router.push('/setting/account')
+                console.log('closed success')
+                // ElMessage({
+                //     type: 'success',
+                //     message: 'Closed Success',
+                // })
+            })
+            .catch(() => {
 
+                console.log('cancel close sent')
+            })
+
+    }
 
 })
 
