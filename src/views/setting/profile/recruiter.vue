@@ -89,25 +89,10 @@
                                 <!--                                </el-form-item>-->
                                 <el-form-item label="E-mail Address" prop="">
                                     <el-input class="form-width-388"
-                                              v-model="personalForm.email"
-                                              disabled
+                                              v-model="personalForm.work_email"
+                                              :disabled="stepOneStatus"
                                               placeholder="Enter your E-mail">
                                     </el-input>
-                                </el-form-item>
-
-                                <el-form-item label="Profile Type" prop="">
-                                    <el-select v-model="personalForm.nationality"
-                                               class="form-width-388"
-                                               :disabled="stepOneStatus"
-                                               filterable
-                                               fit-input-width
-                                               placeholder="Select Profile Type">
-                                        <el-option v-for="(item,i) in nationalityOptions"
-                                                   :key="i"
-                                                   :label="item.name"
-                                                   :value="item.name">
-                                        </el-option>
-                                    </el-select>
                                 </el-form-item>
 
                                 <el-form-item label="Phone No">
@@ -1060,7 +1045,7 @@ import {useStore} from 'vuex'
 import {useRoute} from 'vue-router'
 import arrowDownIcon from '@/assets/newHome/arrow-circle-down.svg'
 import arrowUpIcon from '@/assets/newHome/arrow-circle-up.svg'
-import {countriesData} from "@/utils/data";
+// import {countriesData} from "@/utils/data";
 import {phoneCodeData} from "@/utils/phoneCode";
 import {
     ADD_USER_IMG_V2, GET_COUNTRY_LIST,
@@ -1166,7 +1151,7 @@ const mediaForm = reactive({
 
 const mediaRules = reactive({})
 
-const nationalityOptions = ref(countriesData)
+// const nationalityOptions = ref(countriesData)
 const phoneCodeOptions = ref(phoneCodeData)
 
 const loadUserObjectData = async () => {
@@ -1320,12 +1305,17 @@ const getBasicInfo = async () => {
             personalForm.last_name = userContact.last_name
             personalForm.email = userContact.email
 
-            // if (companyInfo.display_name) {
-            //     personalForm.display_name = companyInfo.display_name;
-            // }
-            // if (companyInfo.work_email) {
-            //     personalForm.work_email = companyInfo.work_email;
-            // }
+            if (companyInfo.display_name) {
+                personalForm.display_name = companyInfo.display_name;
+            }else {
+                personalForm.display_name = userContact.first_name + ' ' + userContact.last_name
+            }
+
+            if (companyInfo.work_email) {
+                personalForm.work_email = companyInfo.work_email;
+            }else{
+                personalForm.work_email = userContact.email
+            }
 
             if (companyInfo.country_code) {
                 personalForm.country_code = companyInfo.country_code;
@@ -1980,6 +1970,8 @@ const saveStepOne = (formEl) => {
             stepOneLoadingStatus.value = true
 
             let params = {
+                display_name: personalForm.display_name,
+                work_email: personalForm.work_email,
                 country_code: personalForm.country_code,
                 work_phone: personalForm.work_phone,
                 profile_photo: personalForm.profile_photo

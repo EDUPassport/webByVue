@@ -69,12 +69,12 @@
                                 <el-form-item label="Name" prop="first_name">
                                     <div class="form-item-container">
                                         <el-input style="margin-right: 20px;"
-                                                  :disabled="stepOneStatus"
+                                                  disabled
                                                   v-model="personalForm.first_name"
                                                   placeholder="Enter First Name">
                                         </el-input>
                                         <el-input v-model="personalForm.last_name"
-                                                  :disabled="stepOneStatus"
+                                                  disabled
                                                   placeholder="Enter Second Name">
                                         </el-input>
                                     </div>
@@ -82,7 +82,7 @@
                                 <el-form-item label="E-mail Address" prop="email">
                                     <el-input class="form-width-388"
                                               v-model="personalForm.email"
-                                              :disabled="stepOneStatus"
+                                              disabled
                                               placeholder="Enter your E-mail">
                                     </el-input>
                                 </el-form-item>

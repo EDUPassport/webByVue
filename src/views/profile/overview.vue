@@ -5,9 +5,13 @@
             <div class="contributor-dashboard" v-if="identity == 6">
                 <div class="c-d-items">
                     <template v-for="(item,i) in contributorCompanyData" :key="i">
-                        <div class="c-d-item" v-if="i<2">
-                            <div class="c-d-item-t">
-                                <div class="c-d-circle"></div>
+                        <div class="c-d-item"
+                             :class="switchContributorCompanyId === item.id ? 'c-d-item-active' : '' "
+                             v-if="i<2">
+                            <div class="c-d-item-t" @click="switchContributor(item.id, 6, 2)">
+                                <div class="c-d-circle"
+                                     :class="switchContributorCompanyId === item.id ? 'c-d-circle-active' : '' "
+                                ></div>
                                 <span>{{item.company_name ? item.company_name : item.company_id}}</span>
                             </div>
                             <div class="c-d-item-m">
@@ -222,7 +226,7 @@
                             <compareUpDownPercentageTwo
                                     :now-value="vendorDealPostedCountForNow"                            >
                             </compareUpDownPercentageTwo>
-                           
+
                             <div class="dashboard-t-item-chart">
                                 <vsLastMonthChartsTwo :percent="vendorDealPostedPercent" color="#12B76A"
                                                    areaColor="#ecfdf3"></vsLastMonthChartsTwo>
@@ -233,7 +237,7 @@
                             <compareUpDownPercentageTwo
                                     :now-value="13"                            >
                             </compareUpDownPercentageTwo>
-                           
+
                             <div class="dashboard-t-item-chart">
                                 <vsLastMonthChartsTwo :percent="0" color="#12B76A"
                                                    areaColor="#ecfdf3"></vsLastMonthChartsTwo>
@@ -244,14 +248,14 @@
                             <compareUpDownPercentageTwo
                                     :now-value="vendorTotalViewsForNow"                            >
                             </compareUpDownPercentageTwo>
-                           
+
                             <div class="dashboard-t-item-chart">
                                 <vsLastMonthChartsTwo :percent="vendorTotalViewsPercent" color="#12B76A"
                                                    areaColor="#ecfdf3"></vsLastMonthChartsTwo>
                             </div>
                         </div>
                     </div>
-                  
+
                     <div class="dashboard-b-container">
                         <div class="dashboard-b-item">
                             <dealUpdates :deals="recentDealData"
@@ -283,12 +287,12 @@ import {
     EVENTS_MY_EVENT,
     HOME_JOB_SHORTLISTED,
     HOME_USER_METRICS,
-    MY_DEALS, USER_CONTRIBUTOR_ACTIVATION,
+    MY_DEALS, SWITCH_IDENTITY_V2, USER_ALL_IDENTITY_V2, USER_CONTRIBUTOR_ACTIVATION,
     USER_INFO_BY_TOKEN_V2, USER_POST_JOB_COUNT, VENDOR_INDEX_DATA
 } from '@/api/api';
 
 // import {onBeforeRouteUpdate} from "vue-router";
-import {ref, onMounted, watch, onUnmounted} from "vue";
+import {ref, inject,onMounted, watch, onUnmounted, computed} from "vue";
 import {useStore} from 'vuex'
 import {useRouter, useRoute} from 'vue-router'
 
@@ -324,10 +328,10 @@ const store = useStore()
 const router = useRouter()
 const route = useRoute()
 // const currentUser = computed(() => store.state.currentUser)
-const identity = ref(store.state.identity)
+const identity = computed(()=>store.state.identity)
 
 // const isThirdCompanyStatus = ref(store.state.isThirdCompanyStatus)
-const allIdentityChanged = ref(store.state.allIdentityChanged)
+const allIdentityChangedVisible = computed(()=>store.state.allIdentityChanged)
 
 const dealsData = ref([])
 const eventsData = ref([])
@@ -347,12 +351,90 @@ const contributorActived = (params)=>{
     })
 }
 
-
-
 const contributorCompanyData = ref([])
 
 const contributorSwitchBusinessVisible = ref(false)
 const contributorSwitchBusinessDialogWidth = ref('600px')
+
+const goEasy = inject('goEasy');
+const disconnectIm = ()=> {
+
+    //connected
+    if(goEasy.getConnectionStatus() === 'connected'){
+
+        goEasy.disconnect({
+            onSuccess: () => {
+                console.log('Disconnect GoEasy successful')
+                store.commit('setImUnreadTotal', 0)
+            },
+            onFailed: (error) => {
+                console.log("Failed to disconnect GoEasy, code:" + error.code + ",error:" + error.content);
+            }
+        })
+
+    }
+
+}
+
+const switchContributorCompanyId = ref(0)
+const switchContributor = (companyId, identity,language)=>{
+    let params = {
+        company_id: companyId,
+        language: language,
+        identity: identity
+    }
+
+    SWITCH_IDENTITY_V2(params).then(res => {
+        // console.log(res)
+        if (res.code == 200) {
+            switchContributorCompanyId.value = companyId
+            disconnectIm()
+
+            let str = JSON.stringify(res.message)
+
+            localStorage.setItem('menuData', str)
+            store.commit('menuData', res.message)
+
+            USER_INFO_BY_TOKEN_V2({
+                identity: identity
+            }).then(res => {
+                // console.log(res)
+                if (res.code == 200) {
+
+                    let userContact = res.message.user_contact;
+
+                    localStorage.setItem('is_third_company', userContact.is_third_company)
+                    localStorage.setItem('company_id', userContact.company_id)
+                    localStorage.setItem('identity', userContact.identity)
+
+                    store.commit('identity', userContact.identity)
+                    store.commit('currentCompanyId', userContact.company_id)
+                    store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
+                    store.commit('allIdentityChanged', true)
+
+                }
+            }).catch(err => {
+                console.log(err)
+                ElMessage({
+                    type:'error',
+                    message:err,
+                    grouping:true
+                })
+            })
+
+        }
+    }).catch(err => {
+        console.log(err)
+        ElMessage({
+            type:'error',
+            message:err,
+            grouping:true
+        })
+    })
+
+}
+
+
 function getDealsList(page, limit) {
 
     let params = {
@@ -436,62 +518,62 @@ function postJob() {
     router.push({path: '/jobs/post', query: {version_time: versionTime}})
 }
 
-const userContact = ref({})
-const educatorContact = ref({})
-const companyInfo = ref({})
+// const userContact = ref({})
+// const educatorContact = ref({})
+// const companyInfo = ref({})
 
-function getBasicInfo(identity) {
-
-    let params = {
-        identity: identity
-    }
-
-    USER_INFO_BY_TOKEN_V2(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-            let userContactValue = res.message.user_contact;
-
-            let companyValue = {};
-            let educatorContactValue = {};
-
-            if (userContactValue) {
-                userContact.value = userContactValue
-            }
-
-            if (identity == 1) {
-
-                educatorContactValue = res.message.user_contact.educator_contact;
-
-                if (educatorContactValue) {
-                    educatorContact.value = educatorContactValue
-                }
-            }
-
-            if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
-
-                companyValue = res.message.user_contact.company;
-
-                if (companyValue) {
-                    companyInfo.value = companyValue
-                }
-
-            }
-
-
-        }
-    }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-            ElMessage({
-                type: 'error',
-                message: err,
-                grouping: true
-            })
-        }
-
-    })
-
-}
+// function getBasicInfo(identity) {
+//
+//     let params = {
+//         identity: identity
+//     }
+//
+//     USER_INFO_BY_TOKEN_V2(params).then(res => {
+//         console.log(res)
+//         if (res.code == 200) {
+//             let userContactValue = res.message.user_contact;
+//
+//             let companyValue = {};
+//             let educatorContactValue = {};
+//
+//             if (userContactValue) {
+//                 userContact.value = userContactValue
+//             }
+//
+//             if (identity == 1) {
+//
+//                 educatorContactValue = res.message.user_contact.educator_contact;
+//
+//                 if (educatorContactValue) {
+//                     educatorContact.value = educatorContactValue
+//                 }
+//             }
+//
+//             if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
+//
+//                 companyValue = res.message.user_contact.company;
+//
+//                 if (companyValue) {
+//                     companyInfo.value = companyValue
+//                 }
+//
+//             }
+//
+//
+//         }
+//     }).catch(err => {
+//         console.log(err)
+//         if (err.msg) {
+//             ElMessage({
+//                 type: 'error',
+//                 message: err,
+//                 grouping: true
+//             })
+//         }
+//
+//     })
+//
+// }
 
 function updateApplicationIndex(i, value) {
     getAllJobResumeList()
@@ -564,19 +646,6 @@ function getEducatorStaticData() {
         console.log(err)
     })
 }
-
-watch(identity, (newValue, oldValue) => {
-    console.log(newValue, oldValue)
-})
-
-watch(allIdentityChanged, (newValue, oldValue) => {
-    if (newValue) {
-        console.log('old value --- ' + oldValue)
-        getBasicInfo(newValue)
-    }
-}, {
-    immediate: true
-})
 
 const profilePercentage = ref(Number(store.state.profilePercentage))
 
@@ -1076,8 +1145,49 @@ function viewDeals(){
     router.push('/deals')
 }
 
-onMounted(() => {
 
+const getAllIdentity = ()=>{
+
+    let params = {}
+    USER_ALL_IDENTITY_V2(params).then(res => {
+        // console.log(res)
+        if (res.code == 200) {
+
+            let contributorCompany = []
+
+            let userContact = res.message.user_contact
+
+            if (userContact) {
+
+                contributorCompany = res.message.user_contact.contributor_company
+
+                if(contributorCompany){
+                    localStorage.setItem('contributorCompany', JSON.stringify(contributorCompany))
+                    contributorCompanyData.value = contributorCompany
+                }
+
+            } else {
+                contributorCompanyData.value = []
+            }
+
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+watch(identity, (newValue, oldValue) => {
+    console.log(newValue, oldValue)
+})
+
+watch(allIdentityChangedVisible, (newValue, oldValue) => {
+    console.log(newValue, oldValue )
+    switchContributorCompanyId.value = 0
+    initLoadingData()
+})
+
+const initLoadingData = ()=>{
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
 
@@ -1100,12 +1210,15 @@ onMounted(() => {
         history.pushState({}, '', '/overview')
     }
 
-    let contributorCompany = localStorage.getItem('contributorCompany')
-    if(contributorCompany){
-        contributorCompanyData.value = JSON.parse(contributorCompany)
-    }
+    getAllIdentity()
+
+    // let contributorCompany = localStorage.getItem('contributorCompany')
+    // if(contributorCompany){
+    //     contributorCompanyData.value = JSON.parse(contributorCompany)
+    // }
 
     if(!vueCookies.isKey('contributor_login')){
+
         console.log('contributor first login')
         let customHtml = '<div class="box-avatar-setting"></div>' +
             '<div class="box-label">Update your Account Information</div>' +
@@ -1124,6 +1237,7 @@ onMounted(() => {
             }
         )
             .then(() => {
+                vueCookies.set('contributor_login',1)
                 router.push('/setting/account')
                 console.log('closed success')
                 // ElMessage({
@@ -1140,32 +1254,26 @@ onMounted(() => {
 
     if (identity.value == 1) {
         getEducatorStaticData()
-
         getUserMetrics(howLong.value)
         getJobShortListed(howLong.value)
-
     }
 
     if (identity.value == 2 || identity.value == 3 || identity.value == 4) {
         getAllJobResumeList(1, 100)
         getUserPostCount()
-
         getBusinessJobViews(howLong.value)
         getBusinessJobShortlisted(howLong.value)
 
     }
 
     if (identity.value == 5) {
-
-
         getVendorIndexData()
-
         getDealsList(1, 1000)
         getEventsList(1, 1000)
-
-
     }
-
+}
+onMounted(() => {
+    initLoadingData()
 })
 
 onUnmounted(() => {

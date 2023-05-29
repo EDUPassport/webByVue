@@ -89,8 +89,8 @@
 <!--                                </el-form-item>-->
                                 <el-form-item label="E-mail Address" prop="work_email">
                                     <el-input class="form-width-388"
-                                              disabled
-                                              v-model="personalForm.email"
+                                              :disabled="stepOneStatus"
+                                              v-model="personalForm.work_email"
                                               placeholder="Enter your E-mail">
                                     </el-input>
                                 </el-form-item>
@@ -252,25 +252,7 @@
                                               placeholder="https://">
                                     </el-input>
                                 </el-form-item>
-                                <el-form-item label="Job title" prop="job_title">
-                                    <el-input
-                                            class="form-width-388"
-                                            :disabled="stepTwoStatus"
-                                            v-model="professionForm.job_title"
-                                            placeholder="Enter Job title here"></el-input>
-                                </el-form-item>
-
-                                <el-form-item label="School Description">
-                                    <el-input
-                                            class="form-width-388"
-                                            :disabled="stepTwoStatus"
-                                            v-model="professionForm.desc"
-                                            type="textarea"
-                                            :rows="6"
-                                            placeholder="Write a couple of paragraphs about your school and why educators would want to teach there.">
-                                    </el-input>
-                                </el-form-item>
-                                <el-form-item label="Preferred Location">
+                                <el-form-item label="Location">
 
                                     <div class="xll-form-location">
 
@@ -342,7 +324,53 @@
                                         </div>
                                     </div>
                                 </el-form-item>
-<!--                                <el-form-item label="Address">-->
+
+                                <el-form-item label="Job title" prop="job_title">
+                                    <el-input
+                                            class="form-width-388"
+                                            :disabled="stepTwoStatus"
+                                            v-model="professionForm.job_title"
+                                            placeholder="Enter Job title here"></el-input>
+                                </el-form-item>
+
+                                <el-form-item label="School Description">
+                                    <el-input
+                                            class="form-width-388"
+                                            :disabled="stepTwoStatus"
+                                            v-model="professionForm.desc"
+                                            type="textarea"
+                                            :rows="6"
+                                            placeholder="Write a couple of paragraphs about your school and why educators would want to teach there.">
+                                    </el-input>
+                                </el-form-item>
+
+                                <el-form-item label="Preferred Location">
+
+                                    <el-select
+                                        class="form-width-388"
+                                        :disabled="stepTwoStatus"
+                                        v-model="preferredLocationValue"
+
+                                        multiple
+                                        collapse-tags
+                                        collapse-tags-tooltip
+                                        placeholder="Select your Location"
+                                        filterable
+                                        allow-create
+                                        value-key="id"
+                                    >
+                                        <el-option
+                                            v-for="(item,index) in preferredLocationOptionsData"
+                                            :key="index"
+                                            :label="item.object_en"
+                                            :value="item"
+                                        />
+
+                                    </el-select>
+
+                                </el-form-item>
+
+                                <!--                                <el-form-item label="Address">-->
 <!--                                    <el-input v-model="professionForm.address"-->
 <!--                                              :disabled="stepTwoStatus"-->
 <!--                                              class="form-width-388"-->
@@ -1506,6 +1534,8 @@ const availableTeachValue = ref([])
 const availableTeachOptions = ref([])
 const facilitiesValue = ref([])
 const facilitiesOptions = ref([])
+const preferredLocationValue = ref([])
+const preferredLocationOptionsData = ref()
 
 const currencyOptions = ref([])
 
@@ -1814,13 +1844,17 @@ const getBasicInfo = async () => {
             personalForm.last_name = userContact.last_name
             personalForm.email = userContact.email
 
-            // if (companyInfo.display_name) {
-            //     personalForm.display_name = companyInfo.display_name;
-            // }
+            if (companyInfo.display_name) {
+                personalForm.display_name = companyInfo.display_name;
+            }else{
+                personalForm.display_name = userContact.first_name + ' ' + userContact.last_name;
+            }
 
-            // if (companyInfo.work_email) {
-            //     personalForm.work_email = companyInfo.work_email;
-            // }
+            if (companyInfo.work_email) {
+                personalForm.work_email = companyInfo.work_email;
+            }else{
+                personalForm.work_email = userContact.email;
+            }
 
             if (companyInfo.country_code) {
                 personalForm.country_code = companyInfo.country_code;
@@ -2671,6 +2705,8 @@ const saveStepOne = (formEl) => {
             stepOneLoadingStatus.value = true
 
             let params = {
+                display_name:personalForm.display_name,
+                work_email:personalForm.work_email,
                 country_code: personalForm.country_code,
                 work_phone: personalForm.work_phone,
                 profile_photo: personalForm.profile_photo

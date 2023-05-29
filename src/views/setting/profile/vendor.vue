@@ -423,111 +423,111 @@
 
                                 </el-form-item>
 
-                                <el-form-item label="Registration Certificate">
-                                    <template #label>
-                                        <div>
-                                            <div>
-                                                Registration Certificate
-                                            </div>
-                                            <div class="profile-picture-tips">
-                                                Registration Certificate for Company
-                                            </div>
-                                        </div>
-                                    </template>
+<!--                                <el-form-item label="Registration Certificate">-->
+<!--                                    <template #label>-->
+<!--                                        <div>-->
+<!--                                            <div>-->
+<!--                                                Registration Certificate-->
+<!--                                            </div>-->
+<!--                                            <div class="profile-picture-tips">-->
+<!--                                                Registration Certificate for Company-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </template>-->
 
-                                    <div class="profile-picture-r">
+<!--                                    <div class="profile-picture-r">-->
 
-                                        <template v-if="businessForm.business_reg_img && editBusinessRegImgStatus">
+<!--                                        <template v-if="businessForm.business_reg_img && editBusinessRegImgStatus">-->
 
-                                            <div class="attachment-xll">
-                                                <div class="attachment-xll-btns">
-                                                    <div class="attachment-xll-btn">
-                                                        <div class="attachment-xll-btn-l">
-                                                            <el-icon color="#667085">
-                                                                <IconIcomoonFreeAttachment/>
-                                                            </el-icon>
-                                                            {{ businessForm.business_reg_img_name }}
-                                                        </div>
-                                                        <div class="attachment-xll-btn-r">
-                                                            <el-icon class="attachment-xll-icon"
-                                                                     v-if="!stepThreeStatus"
-                                                                     @click="handleSingleImageRemove('business_reg_img')"
-                                                                     color="#F97066">
-                                                                <Delete></Delete>
-                                                            </el-icon>
-                                                        </div>
+<!--                                            <div class="attachment-xll">-->
+<!--                                                <div class="attachment-xll-btns">-->
+<!--                                                    <div class="attachment-xll-btn">-->
+<!--                                                        <div class="attachment-xll-btn-l">-->
+<!--                                                            <el-icon color="#667085">-->
+<!--                                                                <IconIcomoonFreeAttachment/>-->
+<!--                                                            </el-icon>-->
+<!--                                                            {{ businessForm.business_reg_img_name }}-->
+<!--                                                        </div>-->
+<!--                                                        <div class="attachment-xll-btn-r">-->
+<!--                                                            <el-icon class="attachment-xll-icon"-->
+<!--                                                                     v-if="!stepThreeStatus"-->
+<!--                                                                     @click="handleSingleImageRemove('business_reg_img')"-->
+<!--                                                                     color="#F97066">-->
+<!--                                                                <Delete></Delete>-->
+<!--                                                            </el-icon>-->
+<!--                                                        </div>-->
 
-                                                    </div>
-                                                    <div class="attachment-xll-btn-edit"
-                                                         v-if="!stepThreeStatus"
-                                                         @click="handleEditMedia('business_reg_img')"
-                                                    >
-                                                        <el-icon class="attachment-xll-icon">
-                                                            <IconUilEdit/>
-                                                        </el-icon>
-                                                    </div>
-                                                    <div class="attachment-xll-btn-download"
-                                                         @click="handleDownloadMedia(businessForm.business_reg_img)"
-                                                    >
-                                                        <el-icon class="attachment-xll-icon">
-                                                            <IconUisDownloadAlt/>
-                                                        </el-icon>
-                                                    </div>
-                                                </div>
+<!--                                                    </div>-->
+<!--                                                    <div class="attachment-xll-btn-edit"-->
+<!--                                                         v-if="!stepThreeStatus"-->
+<!--                                                         @click="handleEditMedia('business_reg_img')"-->
+<!--                                                    >-->
+<!--                                                        <el-icon class="attachment-xll-icon">-->
+<!--                                                            <IconUilEdit/>-->
+<!--                                                        </el-icon>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="attachment-xll-btn-download"-->
+<!--                                                         @click="handleDownloadMedia(businessForm.business_reg_img)"-->
+<!--                                                    >-->
+<!--                                                        <el-icon class="attachment-xll-icon">-->
+<!--                                                            <IconUisDownloadAlt/>-->
+<!--                                                        </el-icon>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
 
-                                                <div class="attachment-xll-image">
-                                                    <el-image class="attachment-xll-img"
-                                                              :src="businessForm.business_reg_img"
-                                                              fit="cover"
-                                                    >
-                                                    </el-image>
-                                                    <div class="attachment-xll-image-mask" v-if="!stepThreeStatus">
-                                                        <el-icon
-                                                                style="cursor: pointer;"
-                                                                @click="handleSingleImagePreview(businessForm.business_reg_img,'business_reg_img')"
-                                                                color="#ffffff"
-                                                                :size="20">
-                                                            <zoom-in/>
-                                                        </el-icon>
+<!--                                                <div class="attachment-xll-image">-->
+<!--                                                    <el-image class="attachment-xll-img"-->
+<!--                                                              :src="businessForm.business_reg_img"-->
+<!--                                                              fit="cover"-->
+<!--                                                    >-->
+<!--                                                    </el-image>-->
+<!--                                                    <div class="attachment-xll-image-mask" v-if="!stepThreeStatus">-->
+<!--                                                        <el-icon-->
+<!--                                                                style="cursor: pointer;"-->
+<!--                                                                @click="handleSingleImagePreview(businessForm.business_reg_img,'business_reg_img')"-->
+<!--                                                                color="#ffffff"-->
+<!--                                                                :size="20">-->
+<!--                                                            <zoom-in/>-->
+<!--                                                        </el-icon>-->
 
-                                                        <el-icon
-                                                                style="cursor: pointer;margin-left: 15px;"
-                                                                @click="handleSingleImageRemove('business_reg_img')"
-                                                                color="#F97066"
-                                                                :size="20">
-                                                            <Delete/>
-                                                        </el-icon>
-                                                    </div>
-                                                </div>
+<!--                                                        <el-icon-->
+<!--                                                                style="cursor: pointer;margin-left: 15px;"-->
+<!--                                                                @click="handleSingleImageRemove('business_reg_img')"-->
+<!--                                                                color="#F97066"-->
+<!--                                                                :size="20">-->
+<!--                                                            <Delete/>-->
+<!--                                                        </el-icon>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
 
-                                            </div>
+<!--                                            </div>-->
 
-                                        </template>
-                                        <template v-else>
-                                            <el-upload
-                                                    :disabled="stepThreeStatus"
-                                                    action=""
-                                                    :limit="1"
-                                                    :headers="uploadHeaders"
-                                                    :show-file-list="false"
-                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
-                                                    :http-request="businessRegImgHttpRequest"
-                                                    :before-upload="beforeBusinessRegImgUpload"
-                                            >
-                                                <template #trigger>
-                                                    <div class="attachment-btn">
-                                                        <span>Attach files</span>
-                                                        <el-icon color="#667085">
-                                                            <IconIcomoonFreeAttachment/>
-                                                        </el-icon>
-                                                    </div>
-                                                </template>
+<!--                                        </template>-->
+<!--                                        <template v-else>-->
+<!--                                            <el-upload-->
+<!--                                                    :disabled="stepThreeStatus"-->
+<!--                                                    action=""-->
+<!--                                                    :limit="1"-->
+<!--                                                    :headers="uploadHeaders"-->
+<!--                                                    :show-file-list="false"-->
+<!--                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"-->
+<!--                                                    :http-request="businessRegImgHttpRequest"-->
+<!--                                                    :before-upload="beforeBusinessRegImgUpload"-->
+<!--                                            >-->
+<!--                                                <template #trigger>-->
+<!--                                                    <div class="attachment-btn">-->
+<!--                                                        <span>Attach files</span>-->
+<!--                                                        <el-icon color="#667085">-->
+<!--                                                            <IconIcomoonFreeAttachment/>-->
+<!--                                                        </el-icon>-->
+<!--                                                    </div>-->
+<!--                                                </template>-->
 
-                                            </el-upload>
-                                        </template>
-                                    </div>
+<!--                                            </el-upload>-->
+<!--                                        </template>-->
+<!--                                    </div>-->
 
-                                </el-form-item>
+<!--                                </el-form-item>-->
 
                                 <el-form-item label="License">
                                     <template #label>
@@ -1362,7 +1362,7 @@ const getBasicInfo = async () => {
     await USER_INFO_BY_TOKEN_V2(params).then(res => {
 
         if (res.code == 200) {
-
+            let userContact = res.message.user_contact;
             let companyInfo = res.message.user_contact.company;
             if (companyInfo.company_name) {
                 basicForm.company_name = companyInfo.company_name;
@@ -1407,12 +1407,17 @@ const getBasicInfo = async () => {
 
             if (companyInfo.display_name) {
                 contactForm.display_name = companyInfo.display_name;
+            }else{
+                contactForm.display_name = userContact.first_name + ' ' + userContact.last_name
             }
+
             if (companyInfo.job_title) {
                 contactForm.job_title = companyInfo.job_title;
             }
             if (companyInfo.work_email) {
                 contactForm.work_email = companyInfo.work_email;
+            }else{
+                contactForm.work_email = userContact.email;
             }
 
             if (companyInfo.country_code) {
@@ -1535,68 +1540,68 @@ const uploadLoadingStatus = ref(false)
 const uploadHeaders = {
     platform: 4
 }
-const businessRegImgHttpRequest = (options) => {
-    uploadLoadingStatus.value = true;
-    // console.log(options)
-    new ImageCompressor(options.file, {
-        quality: 0.6,
-        success(file) {
-            // console.log(file)
-            const formData = new FormData();
-
-            formData.append('token', localStorage.getItem('token'))
-            // console.log(file)
-            let isInChina = process.env.VUE_APP_CHINA
-            if (isInChina === 'yes') {
-                formData.append('file[]', file, file.name)
-                UPLOAD_BY_ALI_OSS(formData).then(res => {
-                    // console.log(res)
-                    if (res.code == 200) {
-                        let myFileUrl = res.data[0]['file_url'];
-                        businessForm.business_reg_img = myFileUrl
-                        businessForm.business_reg_img_name = myFileUrl.substring(myFileUrl.length - 10)
-                        uploadLoadingStatus.value = false;
-                        editBusinessRegImgStatus.value = true
-                    }
-                }).catch(err => {
-                    console.log(err)
-                })
-            }
-
-            if (isInChina === 'no') {
-                formData.append('file', file, file.name)
-                UPLOAD_BY_SERVICE(formData).then(res => {
-                    // console.log(res)
-                    if (res.code == 200) {
-                        let myFileUrl = res.message.file_path;
-                        businessForm.business_reg_img = myFileUrl
-                        businessForm.business_reg_img_name = myFileUrl.substring(myFileUrl.length - 10)
-                        uploadLoadingStatus.value = false;
-                        editBusinessRegImgStatus.value = true
-                    }
-                }).catch(err => {
-                    console.log(err)
-                })
-            }
-
-        },
-        error(err) {
-            console.log(err.message)
-        }
-
-    })
-
-}
-
-const beforeBusinessRegImgUpload = (file) => {
-    uploadLoadingStatus.value = true;
-    const isLt2M = file.size / 1024 / 1024 < 20
-
-    if (!isLt2M) {
-        ElMessage.error('File size can not exceed 20MB')
-    }
-    return isLt2M
-}
+// const businessRegImgHttpRequest = (options) => {
+//     uploadLoadingStatus.value = true;
+//     // console.log(options)
+//     new ImageCompressor(options.file, {
+//         quality: 0.6,
+//         success(file) {
+//             // console.log(file)
+//             const formData = new FormData();
+//
+//             formData.append('token', localStorage.getItem('token'))
+//             // console.log(file)
+//             let isInChina = process.env.VUE_APP_CHINA
+//             if (isInChina === 'yes') {
+//                 formData.append('file[]', file, file.name)
+//                 UPLOAD_BY_ALI_OSS(formData).then(res => {
+//                     // console.log(res)
+//                     if (res.code == 200) {
+//                         let myFileUrl = res.data[0]['file_url'];
+//                         businessForm.business_reg_img = myFileUrl
+//                         businessForm.business_reg_img_name = myFileUrl.substring(myFileUrl.length - 10)
+//                         uploadLoadingStatus.value = false;
+//                         editBusinessRegImgStatus.value = true
+//                     }
+//                 }).catch(err => {
+//                     console.log(err)
+//                 })
+//             }
+//
+//             if (isInChina === 'no') {
+//                 formData.append('file', file, file.name)
+//                 UPLOAD_BY_SERVICE(formData).then(res => {
+//                     // console.log(res)
+//                     if (res.code == 200) {
+//                         let myFileUrl = res.message.file_path;
+//                         businessForm.business_reg_img = myFileUrl
+//                         businessForm.business_reg_img_name = myFileUrl.substring(myFileUrl.length - 10)
+//                         uploadLoadingStatus.value = false;
+//                         editBusinessRegImgStatus.value = true
+//                     }
+//                 }).catch(err => {
+//                     console.log(err)
+//                 })
+//             }
+//
+//         },
+//         error(err) {
+//             console.log(err.message)
+//         }
+//
+//     })
+//
+// }
+//
+// const beforeBusinessRegImgUpload = (file) => {
+//     uploadLoadingStatus.value = true;
+//     const isLt2M = file.size / 1024 / 1024 < 20
+//
+//     if (!isLt2M) {
+//         ElMessage.error('File size can not exceed 20MB')
+//     }
+//     return isLt2M
+// }
 
 const licensePhotoHttpRequest = (options) => {
     uploadLoadingStatus.value = true;

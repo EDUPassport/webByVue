@@ -18,6 +18,9 @@
                         <el-form
                             :model="contributorForm"
                             :rules="contributorRules"
+                            hide-required-asterisk
+                            inline-message
+                            scroll-to-error
                             ref="contributorForms"
                             label-position="top"
                             @submit.prevent
@@ -92,6 +95,31 @@ const contributorForm = reactive({
     confirm_password:''
 })
 
+const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+const validatePassword = (rule,value,callback)=>{
+    if(value === ''){
+        callback(new Error('Enter your Password'))
+    }else if(!passwordRegex.test(value) ){
+        callback(new Error('Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.'))
+    }else if(contributorForm.confirm_password && value !== contributorForm.confirm_password){
+        callback(new Error("Two inputs don't match!"))
+    }else{
+        callback()
+    }
+}
+
+const validateConfirmPassword = (rule,value,callback)=>{
+    if(value === ''){
+        callback(new Error('Confirm your New Password'))
+    }else if(!passwordRegex.test(value) ){
+        callback(new Error('Password must contain at least 8 characters including uppercase and lowercase letters, and at least one special character or number.'))
+    }else if(contributorForm.password && value !== contributorForm.password){
+        callback(new Error("Two inputs don't match!"))
+    }else{
+        callback()
+    }
+}
+
 const contributorRules = reactive({
     first_name: [
         {required: true, message: 'Enter your first name', trigger: 'blur'}
@@ -102,6 +130,12 @@ const contributorRules = reactive({
     email: [
         {type: 'email', required: true, message: 'Enter a invalid email address', trigger: 'blur'}
     ],
+    password: [
+        {required: true, validator: validatePassword, trigger: 'blur'}
+    ],
+    confirm_password: [
+        {required: true, validator: validateConfirmPassword, trigger: 'blur'}
+    ]
 })
 
 const registerKey = route.query.register_key

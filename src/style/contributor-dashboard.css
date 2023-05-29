@@ -57,15 +57,16 @@
 
 }
 
-.c-d-item:hover{
-    border: 1px solid #856DFF;
-}
-
 .c-d-item-t{
     display: flex;
     flex-direction: row;
     cursor: pointer;
 }
+
+.c-d-item-active{
+    border: 1px solid #856DFF;
+}
+
 .c-d-item-t span{
     font-family: 'Inter';
     font-style: normal;
@@ -73,7 +74,6 @@
     font-size: 14px;
     line-height: 18px;
     color: #101828;
-
 }
 
 .c-d-circle{

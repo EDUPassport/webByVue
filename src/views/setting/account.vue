@@ -11,9 +11,9 @@
                         <span>Update your personal Information and Photo Here</span>
                     </div>
                 </div>
+<!--                @click="cancelPersonalForm(personalForms)"-->
                 <div class="account-top-r">
-                    <el-button type="info"
-                               @click="cancelPersonalForm(personalForms)">
+                    <el-button type="info">
                         Cancel
                     </el-button>
                     <el-button type="primary"
@@ -22,7 +22,6 @@
                         Save & Continue
                     </el-button>
                 </div>
-
             </div>
 
             <div class="account-form">
@@ -30,6 +29,10 @@
                     ref="personalForms"
                     :model="personalForm"
                     :rules="personalRules"
+                    hide-required-asterisk
+                    inline-message
+                    scroll-to-error
+                    @submit.prevent
                     label-width="220px"
                     label-position="left"
                     class="demo-ruleForm"
@@ -47,6 +50,7 @@
                     </el-form-item>
                     <el-form-item label="E-mail Address" prop="email">
                         <el-input class="form-width-388"
+                                  disabled
                                   v-model="personalForm.email"
                                   placeholder="Enter your E-mail">
                         </el-input>
@@ -116,6 +120,10 @@
                         ref="accountForms"
                         :model="accountForm"
                         :rules="accountRules"
+                        hide-required-asterisk
+                        inline-message
+                        scroll-to-error
+                        @submit.prevent
                         label-width="220px"
                         label-position="left"
                         class="demo-ruleForm"
@@ -266,8 +274,14 @@ import {ref, reactive, onMounted} from 'vue'
 import deleteAccountComponent from '@/components/deleteAccountComponent.vue'
 import {useStore} from 'vuex'
 import {
-    SEND_CONTRIBUTOR_EMAIL, UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE,
-    USER_CHANGE_PASSWORD, USER_CONTRIBUTOR_DELETE, USER_CONTRIBUTOR_LIST, USER_CONTRIBUTOR_RESEND_EMAIL
+    SEND_CONTRIBUTOR_EMAIL,
+    UPLOAD_BY_ALI_OSS,
+    UPLOAD_BY_SERVICE,
+    USER_CHANGE_PASSWORD, USER_CONTACT_EDIT_V2,
+    USER_CONTRIBUTOR_DELETE,
+    USER_CONTRIBUTOR_LIST,
+    USER_CONTRIBUTOR_RESEND_EMAIL,
+    USER_INFO_BY_TOKEN_V2
 } from "@/api/api";
 import {ElMessage, ElMessageBox, ElLoading} from 'element-plus'
 import ImageCompressor from "compressorjs";
@@ -310,7 +324,7 @@ const personalForm = reactive({
 const personalRules = reactive({
 
 })
-const uploadLoadingStatus = false
+const uploadLoadingStatus = ref(false)
 const cancelUploadProfile = () => {
     uploadLoadingStatus.value = false;
 }
@@ -379,23 +393,63 @@ const uploadHeaders = {
     platform: 4
 }
 
-const submitPersonalLoading = false
+const submitPersonalLoading = ref(false)
 
 const submitPersonalForm = (formEl)=>{
     formEl.validate((valid)=>{
         if(valid){
-            console.log('submit')
+            submitPersonalLoading.value = true;
+            let params = Object.assign({}, personalForm)
+            USER_CONTACT_EDIT_V2(params).then(res => {
+                console.log(res)
+                getBasicInfo()
+                submitPersonalLoading.value =false;
+            }).catch(err => {
+                console.log(err)
+            })
         }else{
             console.log('error submit')
         }
     })
 }
 
-const cancelPersonalForm = (formEl)=>{
-    if (!formEl) return
-    formEl.resetFields()
-}
+// const cancelPersonalForm = (formEl)=>{
+//     if (!formEl) return
+//     formEl.resetFields()
+// }
 
+const getBasicInfo = () => {
+
+    let params = {
+        identity: identity.value
+    }
+
+    USER_INFO_BY_TOKEN_V2(params).then(res => {
+
+        if (res.code == 200) {
+            let userContact = res.message.user_contact;
+
+            if (userContact.first_name) {
+                personalForm.first_name = userContact.first_name;
+            }
+
+            if (userContact.last_name) {
+                personalForm.last_name = userContact.last_name;
+            }
+
+            if (userContact.email) {
+                personalForm.email = userContact.email;
+            }
+            if (userContact.headimgurl) {
+                personalForm.headimgurl = userContact.headimgurl
+            }
+
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
 
 const accountForms = ref(null)
 const accountForm = reactive({
@@ -743,7 +797,7 @@ const resendForContributor = (row) => {
     // addContributorsDialogVisible.value = true;
     const loading = ElLoading.service({
         lock: true,
-        text: 'sending',
+        text: 'Sending...',
         background: 'rgba(255, 255, 255, 0.7)',
     })
 
@@ -802,6 +856,7 @@ const getAllAssignUsers = () => {
 }
 
 onMounted(() => {
+    getBasicInfo()
     getAllAssignUsers()
 
 })
