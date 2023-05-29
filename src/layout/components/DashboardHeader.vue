@@ -9,7 +9,7 @@
                             Dashboard
                         </div>
                         <div class="header-welcome-name">
-                            Welcome, {{ companyNameValue }}!
+                            Welcome, {{ userInfo.companyName }}!
                         </div>
                     </el-col>
 
@@ -158,7 +158,7 @@
                                     >
                      <span class="el-dropdown-link">
                        <el-avatar class="user-avatar-img"
-                                  :src="companyAvatar !='' ? companyAvatar : defaultAvatar"></el-avatar>
+                                  :src="userInfo.avatar !='' ? userInfo.avatar : defaultAvatar"></el-avatar>
                      </span>
 
                                         <template #dropdown>
@@ -190,7 +190,7 @@
                                                             <IconMaterialSymbolsDashboardOutlineRounded/>
                                                         </el-icon>
 
-                                                        <span class="el-dropdown-link-1">DASHBOARD</span>
+                                                        <span class="el-dropdown-link-1">Dashboard</span>
 
                                                     </el-dropdown-item>
                                                     <el-dropdown-item @click="turnEditProfile()">
@@ -198,7 +198,7 @@
                                                             <IconIconoirProfileCircled/>
                                                         </el-icon>
 
-                                                        <span class="el-dropdown-link-1"> MY PROFILE</span>
+                                                        <span class="el-dropdown-link-1"> My Profile</span>
                                                     </el-dropdown-item>
 
                                                     <div class="el-dropdown-tips">switch profile</div>
@@ -213,10 +213,10 @@
                                                             <template #dropdown>
                                                                 <el-dropdown-menu>
                                                                     <div class="xll-sub-dropdown"
-                                                                         v-if="educatorContactData.length>0">
+                                                                         v-if="educatorIdentities.length>0">
                                                                         <el-dropdown-item
                                                                                 class="xll-dropdown-item"
-                                                                                v-for="(item,i) in educatorContactData"
+                                                                                v-for="(item,i) in educatorIdentities"
                                                                                 :key="i"
                                                                                 @click="changeIdentity(item.id,1,2)">
 
@@ -263,10 +263,10 @@
                                                             <template #dropdown>
                                                                 <el-dropdown-menu>
                                                                     <div class="xll-sub-dropdown"
-                                                                         v-if="recruiterCompanyData.length>0">
+                                                                         v-if="recruiterIdentities.length>0">
                                                                         <el-dropdown-item
                                                                                 class="xll-dropdown-item"
-                                                                                v-for="(item,i) in recruiterCompanyData"
+                                                                                v-for="(item,i) in recruiterIdentities"
                                                                                 :key="i"
                                                                                 @click="changeIdentity(item.id,2,2)">
 
@@ -282,10 +282,10 @@
                                                                     </div>
 
                                                                     <div class="xll-sub-dropdown"
-                                                                         v-if="schoolCompanyData.length>0">
+                                                                         v-if="schoolIdentities.length>0">
                                                                         <el-dropdown-item
                                                                                 class="xll-dropdown-item"
-                                                                                v-for="(item,i) in schoolCompanyData"
+                                                                                v-for="(item,i) in schoolIdentities"
                                                                                 :key="i"
                                                                                 @click="changeIdentity(item.id,3,2)">
                                                                             <template v-if="item.company_name">
@@ -300,9 +300,9 @@
                                                                         </el-dropdown-item>
                                                                     </div>
                                                                     <div class="xll-sub-dropdown"
-                                                                         v-if="otherCompanyData.length>0">
+                                                                         v-if="otherIdentities.length>0">
                                                                         <el-dropdown-item
-                                                                                v-for="(item,i) in otherCompanyData"
+                                                                                v-for="(item,i) in otherIdentities"
                                                                                 :key="i"
                                                                                 class="xll-dropdown-item"
                                                                                 @click="changeIdentity(item.id,4,2)">
@@ -346,11 +346,11 @@
                                   </span>
                                                             <template #dropdown>
                                                                 <el-dropdown-menu>
-                                                                    <template v-if="vendorCompanyData.length>0">
+                                                                    <template v-if="vendorIdentities.length>0">
 
                                                                         <el-dropdown-item
                                                                                 class="xll-dropdown-item"
-                                                                                v-for="(item,i) in vendorCompanyData"
+                                                                                v-for="(item,i) in vendorIdentities"
                                                                                 :key="i"
                                                                                 @click="changeIdentity(item.id,5,2)">
                                                                             <template v-if="item.company_name">
@@ -383,7 +383,7 @@
                                                     </el-dropdown-item>
 
                                                     <el-dropdown-item class="xll-dropdown-item"
-                                                                      v-if="contributorCompanyData.length>0">
+                                                                      v-if="contributorIdentities.length>0">
                                                         <el-icon>
                                                             <Refresh/>
                                                         </el-icon>
@@ -399,7 +399,7 @@
                                                                     <div class="xll-sub-dropdown">
                                                                         <el-dropdown-item
                                                                                 class="xll-dropdown-item"
-                                                                                v-for="(item,i) in contributorCompanyData"
+                                                                                v-for="(item,i) in contributorIdentities"
                                                                                 :key="i"
                                                                                 @click="switchContributor(item.id,6,2)">
 
@@ -427,7 +427,7 @@
                                                         <el-icon>
                                                             <IconIcBaselineLogout/>
                                                         </el-icon>
-                                                        <span class="el-dropdown-link-1">  LOG OUT</span>
+                                                        <span class="el-dropdown-link-1">  Log Out</span>
 
                                                     </el-dropdown-item>
                                                 </template>
@@ -463,7 +463,7 @@
                             Dashboard
                         </div>
                         <div class="header-welcome-name">
-                            Welcome, {{ companyNameValue }}!
+                            Welcome, {{ userInfo.companyName }}!
                         </div>
                     </el-col>
 
@@ -564,12 +564,7 @@ const dialogDiscountCardVisible = ref(false)
 
 // const envName = process.env.VUE_APP_ENV_NAME
 const envBlog = process.env.VUE_APP_BLOG
-const recruiterCompanyData = ref([])
-const schoolCompanyData = ref([])
-const otherCompanyData = ref([])
-const vendorCompanyData = ref([])
-const contributorCompanyData = ref([])
-const educatorContactData = ref({})
+
 const educatorContactStatus = ref(false)
 
 const inAppNotificationData = ref([])
@@ -611,12 +606,31 @@ onMounted(() => {
 
 const allIdentityChangedValue = computed(() => store.state.allIdentityChanged)
 
-const companyAvatar = computed(() => store.state.userAvatar)
-const companyNameValue = computed(() => store.state.companyName)
 const identityStore = computed(() => store.state.identity)
 const isThirdCompanyVisible = computed(()=>store.state.isThirdCompanyStatus)
 
 const unreadTotal = computed(() => store.state.imUnreadTotal)
+
+const userInfo = computed(()=>store.state.userInfo)
+const switchIdentityStatus = computed(()=>store.state.switchIdentityStatus)
+const educatorIdentities = computed(()=>store.state.educatorIdentities)
+const recruiterIdentities = computed(()=>store.state.recruiterIdentities)
+const schoolIdentities = computed(()=>store.state.schoolIdentities)
+const otherIdentities = computed(()=>store.state.otherIdentities)
+const vendorIdentities = computed(()=>store.state.vendorIdentities)
+const contributorIdentities = computed(()=>store.state.contributorIdentities)
+
+
+watch(switchIdentityStatus, (newValue, oldValue)=>{
+    console.log('switch identity status=>'+ newValue + '=>' + oldValue)
+    if(newValue){
+        getBasicInfo(identityStore.value)
+        getAllIdentity()
+        inAppNotificationData.value = []
+        getUserUnreadList(1, inAppLimit.value)
+        getUserUnread()
+    }
+})
 
 watch(allIdentityChangedValue, (newValue, oldValue) => {
     console.log(newValue,oldValue)
@@ -648,8 +662,7 @@ const getAllIdentity = () => {
         // console.log(res)
         if (res.code == 200) {
 
-            store.commit('allIdentityChanged', false)
-
+            // store.commit('allIdentityChanged', false)
             let vendorCompany = []
             let recruitingCompany = []
             let schoolCompany = []
@@ -663,47 +676,43 @@ const getAllIdentity = () => {
 
                 if (educatorContact) {
                     educatorContactStatus.value = true;
-                    educatorContactData.value = educatorContact
+                    localStorage.setItem('educatorIdentities', JSON.stringify(educatorContact))
+                    store.commit('setEducatorIdentities', educatorContact)
                 } else {
                     educatorContactStatus.value = false;
                 }
 
-                if (res.message.user_contact) {
-                    vendorCompany = res.message.user_contact.vendor_company
-                    recruitingCompany = res.message.user_contact.recruiting_company
-                    schoolCompany = res.message.user_contact.school_company
-                    otherCompany = res.message.user_contact.other_company
-                    contributorCompany = res.message.user_contact.contributor_company
-                }
+                vendorCompany = userContact.vendor_company
+                recruitingCompany = userContact.recruiting_company
+                schoolCompany = userContact.school_company
+                otherCompany = userContact.other_company
+                contributorCompany = userContact.contributor_company
 
                 if (vendorCompany) {
-                    vendorCompanyData.value = vendorCompany
+                    localStorage.setItem('vendorIdentities', JSON.stringify(vendorCompany))
+                    store.commit('setVendorIdentities',vendorCompany)
                 }
 
                 if (recruitingCompany) {
-                    recruiterCompanyData.value = recruitingCompany
+                    localStorage.setItem('recruiterIdentities', JSON.stringify(recruitingCompany))
+                    store.commit('setRecruiterIdentities',recruitingCompany)
                 }
 
                 if (schoolCompany) {
-                     schoolCompanyData.value = schoolCompany
+                    localStorage.setItem('schoolIdentities', JSON.stringify(schoolCompany))
+                     store.commit('setSchoolIdentities', schoolCompany)
                 }
 
                 if (otherCompany) {
-                     otherCompanyData.value = otherCompany
+                    localStorage.setItem('otherIdentities', JSON.stringify(otherCompany))
+                     store.commit('setOtherIdentities', otherCompany)
                 }
 
                 if (contributorCompany) {
-                    localStorage.setItem('contributorCompany', JSON.stringify(contributorCompany))
-                     contributorCompanyData.value = contributorCompany
+                    localStorage.setItem('contributorIdentities', JSON.stringify(contributorCompany))
+                    store.commit('setContributorIdentities', contributorCompany)
                 }
 
-            } else {
-                educatorContactData.value = []
-                vendorCompanyData.value = []
-                recruiterCompanyData.value = []
-                schoolCompanyData.value = []
-                otherCompanyData.value = []
-                contributorCompanyData.value = []
             }
 
         }
@@ -778,19 +787,20 @@ const getBasicInfo = (identity) => {
 
             handleSetCurrentUser(userContact.id, identity, userContact.company_id, name, avatar)
 
-            console.log(identity)
-            console.log('---------- user info -------------')
-            console.log(avatar)
+            let userInfoObj = {
+                name:name,
+                avatar:avatar,
+                companyName:companyName
+            }
 
-            localStorage.setItem('name', name)
-            localStorage.setItem('avatar', avatar)
-            localStorage.setItem('is_third_company', res.message.user_contact.is_third_company)
+            localStorage.setItem('userInfo', JSON.stringify(userInfoObj))
+            localStorage.setItem('is_third_company', userContact.is_third_company)
             localStorage.setItem('profile_percentage', percentageValue)
 
-            store.commit('userAvatar', avatar)
-            store.commit('companyName', companyName)
-            store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
+            store.commit('setUserInfo', userInfoObj)
+            store.commit('changeThirdCompanyStatus', userContact.is_third_company)
             store.commit('setProfilePercentage', percentageValue)
+            store.commit('setSwitchIdentityStatus', false)
 
         }
     }).catch(err => {
@@ -818,15 +828,14 @@ const returnMySelf = () => {
             let identityValue = res.message.return_identity
             let companyIdValue = res.message.return_company_id
 
-            store.commit('identity', identityValue)
-            store.commit('allIdentityChanged', true)
-            store.commit('currentCompanyId', companyIdValue)
-            store.commit('changeThirdCompanyStatus', 0)
-
             localStorage.setItem('identity', identityValue)
             localStorage.setItem('company_id', companyIdValue)
 
-            // getBasicInfo(identityValue)
+            store.commit('identity', identityValue)
+            store.commit('setSwitchIdentityStatus', true)
+            store.commit('currentCompanyId', companyIdValue)
+            store.commit('changeThirdCompanyStatus', 0)
+
             getAllIdentity()
             getUserMenuList(uid, identityValue, companyIdValue, uid)
 
@@ -859,8 +868,7 @@ const loginOut = () => {
     LOGOUT_V2(params).then(res => {
         if (res.code == 200) {
             localStorage.clear()
-
-            store.commit('userAvatar', '')
+            store.commit('setUserInfo', {})
             router.push('/')
             loading.close()
         }
@@ -955,7 +963,6 @@ const turnEditProfile = () => {
 
 }
 const selectBusinessRole = () => {
-    console.log('select business role')
     dialogBusinessAccountVisible.value = true;
 }
 
@@ -1067,7 +1074,7 @@ const switchContributor = (companyId, identity,language)=>{
                     store.commit('identity', userContact.identity)
                     store.commit('currentCompanyId', userContact.company_id)
                     store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
-                    store.commit('allIdentityChanged', true)
+                    store.commit('setSwitchIdentityStatus', true)
 
                 }
             }).catch(err => {
@@ -1107,8 +1114,7 @@ const changeIdentity = (companyId, identity, language) => {
         if (res.code == 200) {
 
             disconnectIm()
-
-            store.commit('allIdentityChanged', true)
+            // store.commit('allIdentityChanged', true)
 
             localStorage.setItem('company_id', companyId)
             localStorage.setItem('identity', identity)
@@ -1120,60 +1126,7 @@ const changeIdentity = (companyId, identity, language) => {
             store.commit('currentCompanyId', companyId)
             store.commit('menuData', res.message)
 
-            let nowMenuData = res.message;
-
-            USER_INFO_BY_TOKEN_V2({
-                identity: identity
-            }).then(res => {
-                // console.log(res)
-                if (res.code == 200) {
-
-                    let userContact = res.message.user_contact;
-
-                    let companyInfo = {};
-                    let name = userContact.first_name + ' ' + userContact.last_name;
-                    let companyName = ''
-                    let avatar = 'https://oss.esl-passport.cn/educator.png';
-
-                    if (identity == 1) {
-                        avatar = userContact.headimgurl;
-                        companyName = name;
-                    }
-
-                    if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
-
-                        if (userContact.company) {
-                            companyInfo = userContact.company;
-                            avatar = companyInfo.logo;
-                            // name = companyInfo.company_name;
-                            companyName = companyInfo.company_name;
-                        }
-
-                    }
-
-                    handleSetCurrentUser(userContact.id, identity, userContact.company_id, name, avatar)
-
-                    localStorage.setItem('name', name)
-                    localStorage.setItem('avatar', avatar)
-                    localStorage.setItem('is_third_company', res.message.user_contact.is_third_company)
-
-
-                    store.commit('userAvatar', avatar)
-                    store.commit('companyName', companyName)
-                    store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
-
-                    if (res.message.user_contact.is_third_company) {
-                        let nowPath = nowMenuData[0]['link']
-                        router.push({path: nowPath})
-                    } else {
-                        router.push('/account/home')
-                    }
-
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-
+            store.commit('setSwitchIdentityStatus', true)
             loading.close()
 
         }

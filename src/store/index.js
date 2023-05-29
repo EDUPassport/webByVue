@@ -9,7 +9,28 @@ const store = createStore({
         let companyId = localStorage.getItem('company_id')
         let profilePercentage = localStorage.getItem('profile_percentage')
 
+        let userInfoObj = {
+            name:'',
+            avatar:'',
+            companyName:''
+        }
+        let userInfoStorage = localStorage.getItem('userInfo')
+        let educatorIdentitiesStorage = localStorage.getItem('educatorIdentitiesStorage')
+        let recruiterIdentitiesStorage = localStorage.getItem('recruiterIdentitiesStorage')
+        let schoolIdentitiesStorage = localStorage.getItem('schoolIdentitiesStorage')
+        let otherIdentitiesStorage = localStorage.getItem('otherIdentitiesStorage')
+        let vendorIdentitiesStorage = localStorage.getItem('vendorIdentitiesStorage')
+        let contributorIdentitiesStorage = localStorage.getItem('contributorIdentitiesStorage')
+
         return {
+            userInfo: userInfoStorage ? JSON.parse(userInfoStorage) : userInfoObj,
+            educatorIdentities: educatorIdentitiesStorage ? JSON.parse(educatorIdentitiesStorage) : {},
+            recruiterIdentities: recruiterIdentitiesStorage ? JSON.parse(recruiterIdentitiesStorage) : [],
+            schoolIdentities: schoolIdentitiesStorage ? JSON.parse(schoolIdentitiesStorage) : [],
+            otherIdentities: otherIdentitiesStorage ? JSON.parse(otherIdentitiesStorage) : [],
+            vendorIdentities: vendorIdentitiesStorage ? JSON.parse(vendorIdentitiesStorage) : [],
+            contributorIdentities: contributorIdentitiesStorage ? JSON.parse(contributorIdentitiesStorage) : [],
+            switchIdentityStatus:false,
             username: localStorage.getItem('name'),
             userAvatar: localStorage.getItem('avatar'),
             companyName: '',
@@ -38,6 +59,30 @@ const store = createStore({
         }
     },
     mutations: {
+        setUserInfo(state,data){
+          state.userInfo = data
+        },
+        setSwitchIdentityStatus(state,data){
+          state.switchIdentityStatus = data
+        },
+        setEducatorIdentities(state,data){
+          state.educatorIdentities = data
+        },
+        setRecruiterIdentities(state,data){
+          state.recruiterIdentities = data
+        },
+        setSchoolIdentities(state,data){
+          state.schoolIdentities = data
+        },
+        setOtherIdentities(state, data){
+          state.otherIdentities = data
+        },
+        setVendorIdentities(state,data){
+          state.vendorIdentities = data
+        },
+        setContributorIdentities(state,data){
+          state.contributorIdentities = data
+        },
         username(state, data) {
             state.username = data
         },

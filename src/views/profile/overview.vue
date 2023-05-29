@@ -2,9 +2,9 @@
     <div class="bg">
         <el-scrollbar class="overview-container">
 
-            <div class="contributor-dashboard" v-if="identity == 6">
+            <div class="contributor-dashboard" v-if="identity == 6 && contributorIdentities.length>0">
                 <div class="c-d-items">
-                    <template v-for="(item,i) in contributorCompanyData" :key="i">
+                    <template v-for="(item,i) in contributorIdentities" :key="i">
                         <div class="c-d-item"
                              :class="switchContributorCompanyId === item.id ? 'c-d-item-active' : '' "
                              v-if="i<2">
@@ -41,7 +41,7 @@
                 align-center
             >
                 <el-scrollbar class="c-d-items-dialog">
-                    <template v-for="(item,i) in contributorCompanyData" :key="i">
+                    <template v-for="(item,i) in contributorIdentities" :key="i">
                         <div class="c-d-item-dialog"  >
                             <div class="c-d-item-t">
                                 <div class="c-d-circle"></div>
@@ -287,7 +287,7 @@ import {
     EVENTS_MY_EVENT,
     HOME_JOB_SHORTLISTED,
     HOME_USER_METRICS,
-    MY_DEALS, SWITCH_IDENTITY_V2, USER_ALL_IDENTITY_V2, USER_CONTRIBUTOR_ACTIVATION,
+    MY_DEALS, SWITCH_IDENTITY_V2, USER_CONTRIBUTOR_ACTIVATION,
     USER_INFO_BY_TOKEN_V2, USER_POST_JOB_COUNT, VENDOR_INDEX_DATA
 } from '@/api/api';
 
@@ -331,7 +331,6 @@ const route = useRoute()
 const identity = computed(()=>store.state.identity)
 
 // const isThirdCompanyStatus = ref(store.state.isThirdCompanyStatus)
-const allIdentityChangedVisible = computed(()=>store.state.allIdentityChanged)
 
 const dealsData = ref([])
 const eventsData = ref([])
@@ -350,8 +349,6 @@ const contributorActived = (params)=>{
         })
     })
 }
-
-const contributorCompanyData = ref([])
 
 const contributorSwitchBusinessVisible = ref(false)
 const contributorSwitchBusinessDialogWidth = ref('600px')
@@ -410,7 +407,7 @@ const switchContributor = (companyId, identity,language)=>{
                     store.commit('identity', userContact.identity)
                     store.commit('currentCompanyId', userContact.company_id)
                     store.commit('changeThirdCompanyStatus', res.message.user_contact.is_third_company)
-                    store.commit('allIdentityChanged', true)
+                    store.commit('setSwitchIdentityStatus', true)
 
                 }
             }).catch(err => {
@@ -499,14 +496,11 @@ function getAllJobResumeList(page, limit) {
         }
     }).catch(err => {
         console.log(err)
-        if (err.msg) {
-            ElMessage({
-                type: 'error',
-                message: err,
-                grouping: true
-            })
-        }
-
+        ElMessage({
+            type: 'error',
+            message: err,
+            grouping: true
+        })
     })
 
 }
@@ -518,63 +512,6 @@ function postJob() {
     router.push({path: '/jobs/post', query: {version_time: versionTime}})
 }
 
-// const userContact = ref({})
-// const educatorContact = ref({})
-// const companyInfo = ref({})
-
-// function getBasicInfo(identity) {
-//
-//     let params = {
-//         identity: identity
-//     }
-//
-//     USER_INFO_BY_TOKEN_V2(params).then(res => {
-//         console.log(res)
-//         if (res.code == 200) {
-//             let userContactValue = res.message.user_contact;
-//
-//             let companyValue = {};
-//             let educatorContactValue = {};
-//
-//             if (userContactValue) {
-//                 userContact.value = userContactValue
-//             }
-//
-//             if (identity == 1) {
-//
-//                 educatorContactValue = res.message.user_contact.educator_contact;
-//
-//                 if (educatorContactValue) {
-//                     educatorContact.value = educatorContactValue
-//                 }
-//             }
-//
-//             if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
-//
-//                 companyValue = res.message.user_contact.company;
-//
-//                 if (companyValue) {
-//                     companyInfo.value = companyValue
-//                 }
-//
-//             }
-//
-//
-//         }
-//     }).catch(err => {
-//         console.log(err)
-//         if (err.msg) {
-//             ElMessage({
-//                 type: 'error',
-//                 message: err,
-//                 grouping: true
-//             })
-//         }
-//
-//     })
-//
-// }
-
 function updateApplicationIndex(i, value) {
     getAllJobResumeList()
     myApplicationsData[i]['status'] = value;
@@ -585,7 +522,6 @@ const vendorDealPostedCountForNow = ref(0)
 const vendorTotalViewsPercent = ref(0)
 const vendorTotalViewsForNow = ref(0)
 const recentDealData = ref([])
-
 
 function getVendorIndexData(){
 
@@ -1145,77 +1081,27 @@ function viewDeals(){
     router.push('/deals')
 }
 
-
-const getAllIdentity = ()=>{
-
-    let params = {}
-    USER_ALL_IDENTITY_V2(params).then(res => {
-        // console.log(res)
-        if (res.code == 200) {
-
-            let contributorCompany = []
-
-            let userContact = res.message.user_contact
-
-            if (userContact) {
-
-                contributorCompany = res.message.user_contact.contributor_company
-
-                if(contributorCompany){
-                    localStorage.setItem('contributorCompany', JSON.stringify(contributorCompany))
-                    contributorCompanyData.value = contributorCompany
-                }
-
-            } else {
-                contributorCompanyData.value = []
-            }
-
-        }
-
-    }).catch(err => {
-        console.log(err)
-    })
-}
+const contributorIdentities = computed(()=>store.state.contributorIdentities)
+const switchIdentityStatus = computed(()=>store.state.switchIdentityStatus)
 
 watch(identity, (newValue, oldValue) => {
     console.log(newValue, oldValue)
 })
 
-watch(allIdentityChangedVisible, (newValue, oldValue) => {
-    console.log(newValue, oldValue )
-    switchContributorCompanyId.value = 0
-    initLoadingData()
+watch(switchIdentityStatus, (newValue, oldValue) => {
+    console.log('---- dashboard ---- switch -- identity -- ' + newValue, oldValue )
+    if(newValue){
+        switchContributorCompanyId.value = 0
+        initLoadingData()
+    }
+
 })
-
-const initLoadingData = ()=>{
-    let screenWidth = document.body.clientWidth
-    let screenWidthFloor = Math.floor(screenWidth)
-
-    if (screenWidthFloor <= 768) {
-        updateWindowHeight()
-        contributorWidth.value = '80%'
-        contributorSwitchBusinessDialogWidth.value = '80%'
-    }
-
-    window.onresize = () => {
-        if (screenWidthFloor <= 768) {
-            contributorWidth.value = '80%'
-            contributorSwitchBusinessDialogWidth.value = '80%'
-            updateWindowHeight()
-        }
-    }
+const initLoadingStepTwo = ()=>{
 
     if(route.query.register_key){
         contributorActived({register_key:route.query.register_key})
         history.pushState({}, '', '/overview')
     }
-
-    getAllIdentity()
-
-    // let contributorCompany = localStorage.getItem('contributorCompany')
-    // if(contributorCompany){
-    //     contributorCompanyData.value = JSON.parse(contributorCompany)
-    // }
 
     if(!vueCookies.isKey('contributor_login')){
 
@@ -1252,6 +1138,26 @@ const initLoadingData = ()=>{
 
     }
 
+}
+const initLoadingData = ()=>{
+
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+        updateWindowHeight()
+        contributorWidth.value = '80%'
+        contributorSwitchBusinessDialogWidth.value = '80%'
+    }
+
+    window.onresize = () => {
+        if (screenWidthFloor <= 768) {
+            contributorWidth.value = '80%'
+            contributorSwitchBusinessDialogWidth.value = '80%'
+            updateWindowHeight()
+        }
+    }
+
     if (identity.value == 1) {
         getEducatorStaticData()
         getUserMetrics(howLong.value)
@@ -1271,9 +1177,12 @@ const initLoadingData = ()=>{
         getDealsList(1, 1000)
         getEventsList(1, 1000)
     }
+
 }
+
 onMounted(() => {
     initLoadingData()
+    initLoadingStepTwo()
 })
 
 onUnmounted(() => {

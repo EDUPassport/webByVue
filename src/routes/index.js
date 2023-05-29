@@ -987,7 +987,7 @@ router.beforeEach((to, from, next) => {
         window.location.reload();
     }
 
-    // 路由跳转之前， 中指还在等待中的请求
+    // 路由跳转之前， 终止还在等待中的请求
     store.getters.axiosPromiseArr.forEach((cancel) => cancel());
     store.commit("setAxiosPromiseArr", []);
 

@@ -46,7 +46,7 @@ axios.interceptors.request.use(config => {
     config.headers.platform = 4;
     return config
 }, error => {
-    // 可以安装elementui等ui组件，将错误信息输出到界面。
+    // 可以安装element ui等ui组件，将错误信息输出到界面。
     // console.log(error)
     return Promise.error(error)
 })
@@ -64,18 +64,17 @@ axios.interceptors.response.use(response => {
     if(response && response.data){
         return Promise.resolve(response.data)
     }else{
-        console.log('--------------------- 响应拦截response-------------------- ')
-        // location.reload()
         return Promise.reject();
     }
+    // if(response && response.data){
+    //     return Promise.resolve(response.data)
+    // }else{
+    //     return Promise.reject();
+    // }
 
 }, error => {
     // 我们可以在这里对异常状态作统一处理
-
     let errResponse = error.response
-
-    // console.log(errResponse)
-
     if(errResponse){
         let status = errResponse.status
 
@@ -87,7 +86,7 @@ axios.interceptors.response.use(response => {
             setTimeout(function () {
                 loadingInstance.close()
                 window.location.href = '/login'
-            },1000)
+            },500)
 
             return Promise.reject();
         } else {
@@ -98,8 +97,6 @@ axios.interceptors.response.use(response => {
 
     // 对响应错误做点什么
     if (!errResponse) {
-        console.log('--------------------- 响应错误response-------------------- ')
-        // location.reload()
         return Promise.reject();
     }
 })

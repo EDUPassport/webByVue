@@ -89,76 +89,86 @@
                                 </el-form-item>
                                 <el-form-item label="Location">
 
-                                    <div class="xll-form-location">
-
-                                        <div class="xll-form-location-text" v-if="haveLocationStatus">
-                                            <span>{{ $filters.countryInfoFormat(countryInfo) }}</span>
+                                    <div>
+                                        <div>
+                                            <el-radio-group :disabled="stepOneStatus" v-model="locationType">
+                                                <el-radio label="on_site">On Site</el-radio>
+                                                <el-radio label="on_line">Online</el-radio>
+                                            </el-radio-group>
                                         </div>
-                                        <div class="xll-form-location-select" v-if="!haveLocationStatus">
-                                            <el-select v-model="countryObj"
-                                                       class="form-width-388 form-margin-bottom-18"
-                                                       :disabled="stepOneStatus"
-                                                       @change="countryChange"
-                                                       value-key="id"
-                                                       filterable
-                                                       placeholder="Select Country">
-                                                <el-option v-for="(item,i) in countryOptions"
-                                                           :key="i"
-                                                           :label="item.name"
-                                                           :value="item">
-                                                </el-option>
-                                            </el-select>
-                                            <template v-if="provinceOptions.length>0">
-                                                <el-select v-model="provinceObj"
+                                        <div class="xll-form-location" v-if="locationType === 'on_site'" >
+
+                                            <div class="xll-form-location-text" v-if="haveLocationStatus">
+                                                <span>{{ $filters.countryInfoFormat(countryInfo) }}</span>
+                                            </div>
+                                            <div class="xll-form-location-select" v-if="!haveLocationStatus">
+                                                <el-select v-model="countryObj"
                                                            class="form-width-388 form-margin-bottom-18"
                                                            :disabled="stepOneStatus"
+                                                           @change="countryChange"
                                                            value-key="id"
                                                            filterable
-                                                           @change="provinceChange"
-                                                           placeholder="Select Province">
-                                                    <el-option v-for="(item,i) in provinceOptions"
+                                                           placeholder="Select Country">
+                                                    <el-option v-for="(item,i) in countryOptions"
                                                                :key="i"
                                                                :label="item.name"
                                                                :value="item">
                                                     </el-option>
                                                 </el-select>
-                                            </template>
-                                            <template v-if="cityOptions.length>0">
-                                                <el-select v-model="cityObj"
-                                                           :disabled="stepOneStatus"
-                                                           class="form-width-388 form-margin-bottom-18"
-                                                           value-key="id"
-                                                           filterable
-                                                           @change="cityChange"
-                                                           placeholder="Select City">
-                                                    <el-option v-for="(item,i) in cityOptions"
-                                                               :key="i"
-                                                               :label="item.name"
-                                                               :value="item">
-                                                    </el-option>
-                                                </el-select>
-                                            </template>
+                                                <template v-if="provinceOptions.length>0">
+                                                    <el-select v-model="provinceObj"
+                                                               class="form-width-388 form-margin-bottom-18"
+                                                               :disabled="stepOneStatus"
+                                                               value-key="id"
+                                                               filterable
+                                                               @change="provinceChange"
+                                                               placeholder="Select Province">
+                                                        <el-option v-for="(item,i) in provinceOptions"
+                                                                   :key="i"
+                                                                   :label="item.name"
+                                                                   :value="item">
+                                                        </el-option>
+                                                    </el-select>
+                                                </template>
+                                                <template v-if="cityOptions.length>0">
+                                                    <el-select v-model="cityObj"
+                                                               :disabled="stepOneStatus"
+                                                               class="form-width-388 form-margin-bottom-18"
+                                                               value-key="id"
+                                                               filterable
+                                                               @change="cityChange"
+                                                               placeholder="Select City">
+                                                        <el-option v-for="(item,i) in cityOptions"
+                                                                   :key="i"
+                                                                   :label="item.name"
+                                                                   :value="item">
+                                                        </el-option>
+                                                    </el-select>
+                                                </template>
 
-                                        </div>
-                                        <div class="xll-form-location-action" v-if="haveLocationStatus">
-                                            <el-button
-                                                link
-                                                icon="Edit"
-                                                :disabled="stepOneStatus"
-                                                @click="changeEditLocation()">
-                                            </el-button>
-                                        </div>
+                                            </div>
+                                            <div class="xll-form-location-action" v-if="haveLocationStatus">
+                                                <el-button
+                                                    link
+                                                    icon="Edit"
+                                                    :disabled="stepOneStatus"
+                                                    @click="changeEditLocation()">
+                                                </el-button>
+                                            </div>
 
-                                        <div class="xll-form-location-action" v-if="showLocationCancelStatus">
-                                            <el-button
-                                                link
-                                                icon="Close"
-                                                :disabled="stepOneStatus"
-                                                @click="changeCancelLocation()">
-                                            </el-button>
+                                            <div class="xll-form-location-action" v-if="showLocationCancelStatus">
+                                                <el-button
+                                                    link
+                                                    icon="Close"
+                                                    :disabled="stepOneStatus"
+                                                    @click="changeCancelLocation()">
+                                                </el-button>
+                                            </div>
+
                                         </div>
 
                                     </div>
+
 
                                 </el-form-item>
 
@@ -1258,6 +1268,7 @@ const countryObj = ref({})
 const provinceObj = ref({})
 const cityObj = ref({})
 
+const locationType = ref('on_site')
 const haveLocationStatus = ref(false)
 const showLocationCancelStatus = ref(false)
 const countryInfo = ref({})
@@ -2395,9 +2406,11 @@ onMounted(async () => {
 }
 
 /deep/ .el-radio__label, /deep/ .el-checkbox__label {
-    color: #667085;
+    font-family: 'Inter';
+    font-style: normal;
     font-weight: 400;
     font-size: 14px;
+    color: #667085;
 }
 
 </style>
