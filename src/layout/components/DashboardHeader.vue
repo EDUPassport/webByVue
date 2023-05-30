@@ -396,7 +396,7 @@
                                           </span>
                                                             <template #dropdown>
                                                                 <el-dropdown-menu>
-                                                                    <div class="xll-sub-dropdown">
+                                                                    <div class="xll-sub-dropdown" v-if="identityStore==6">
                                                                         <el-dropdown-item
                                                                                 class="xll-dropdown-item"
                                                                                 v-for="(item,i) in contributorIdentities"
@@ -414,6 +414,13 @@
 
                                                                         </el-dropdown-item>
                                                                     </div>
+                                                                    <template v-else>
+                                                                        <el-dropdown-item
+                                                                            class="xll-dropdown-item"
+                                                                            @click="switchAndShowContributor()">
+                                                                                <span class="el-dropdown-link">Show Contributors</span>
+                                                                        </el-dropdown-item>
+                                                                    </template>
 
                                                                 </el-dropdown-menu>
 
@@ -517,7 +524,14 @@ import {
     USER_INFO_BY_TOKEN_V2,
     SWITCH_IDENTITY_V2,
     USER_ALL_IDENTITY_V2,
-    LOGOUT_V2, USER_MENU_LIST, COMEBACK_MYSELF, USER_UNREAD_LIST, SET_READ, SET_READ_ALL, USER_UNREAD
+    LOGOUT_V2,
+    USER_MENU_LIST,
+    COMEBACK_MYSELF,
+    USER_UNREAD_LIST,
+    SET_READ,
+    SET_READ_ALL,
+    USER_UNREAD,
+    HOME_USER_CHANGE_IDENTITY
 } from '@/api/api'
 
 import defaultAvatar from '@/assets/default/avatar.png'
@@ -530,7 +544,7 @@ import {useStore} from 'vuex';
 import MobileDrawerMenu from "@/components/mobileDrawerMenu.vue";
 import menuLineHorizontalImg from '@/assets/newHome/dashboard/menu-line-horizontal.svg'
 import logoMobileImg from '@/assets/newHome/dashboard/logo-mobile.svg'
-import {ElMessage, ElLoading} from 'element-plus'
+import {ElMessage, ElLoading,ElNotification} from 'element-plus'
 
 let unreadChanged = ref(0)
 
@@ -1040,6 +1054,38 @@ const createRole = (identity) => {
     }
 
 
+}
+const switchAndShowContributor = ()=>{
+
+    const loading = ElLoading.service({
+        text:'Loading...'
+    })
+
+    HOME_USER_CHANGE_IDENTITY().then(res=>{
+        console.log(res)
+        if(res.code === 200){
+            let uid = localStorage.getItem('uid')
+
+            localStorage.setItem('identity', 6)
+            store.commit('identity', 6)
+            store.commit('setSwitchIdentityStatus', true)
+
+            getUserMenuList(uid, 6, 0, uid)
+
+            setTimeout(function () {
+                router.push({path: '/overview', query: {}})
+                loading.close()
+            }, 1500)
+        }
+    }).catch(err=>{
+        console.log(err)
+        ElNotification({
+            title:'Err',
+            message:err,
+            grouping:true
+        })
+        loading.close()
+    })
 }
 
 const switchContributor = (companyId, identity,language)=>{

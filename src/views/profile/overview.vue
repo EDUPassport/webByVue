@@ -285,10 +285,10 @@ import {
     ALL_JOB_RESUME, BUSINESS_JOB_SHORTLISTED, BUSINESS_JOB_VIEWS,
     EDUCATOR_STATIC_DATA,
     EVENTS_MY_EVENT,
-    HOME_JOB_SHORTLISTED,
+    HOME_JOB_SHORTLISTED, HOME_USER_CHANGE_IDENTITY,
     HOME_USER_METRICS,
     MY_DEALS, SWITCH_IDENTITY_V2, USER_CONTRIBUTOR_ACTIVATION,
-    USER_INFO_BY_TOKEN_V2, USER_POST_JOB_COUNT, VENDOR_INDEX_DATA
+    USER_INFO_BY_TOKEN_V2, USER_MENU_LIST, USER_POST_JOB_COUNT, VENDOR_INDEX_DATA
 } from '@/api/api';
 
 // import {onBeforeRouteUpdate} from "vue-router";
@@ -335,11 +335,54 @@ const identity = computed(()=>store.state.identity)
 const dealsData = ref([])
 const eventsData = ref([])
 
+const getUserMenuList = (uid, identity, companyId, cId) => {
+
+    let params = {
+        user_id: uid,
+        identity: identity,
+        company_id: companyId,
+        create_user_id: cId,
+        page: 1,
+        limit: 1000
+    }
+    USER_MENU_LIST(params).then(res => {
+        // console.log(res)
+        if (res.code === 200) {
+            let str = JSON.stringify(res.message)
+            localStorage.setItem('menuData', str)
+            store.commit('menuData', res.message)
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const switchAndShowContributor = ()=>{
+
+    HOME_USER_CHANGE_IDENTITY().then(res=>{
+        console.log(res)
+        if(res.code === 200){
+            let uid = localStorage.getItem('uid')
+
+            localStorage.setItem('identity', 6)
+            store.commit('identity', 6)
+            store.commit('setSwitchIdentityStatus', true)
+
+            getUserMenuList(uid, 6, 0, uid)
+
+        }
+    }).catch(err=>{
+        console.log(err)
+    })
+}
+
+
 const contributorActived = (params)=>{
     USER_CONTRIBUTOR_ACTIVATION(params).then(res=>{
         console.log(res)
         if(res.code === 200){
             console.log('激活contributor成功')
+            switchAndShowContributor()
         }
     }).catch(err=>{
         ElMessage({

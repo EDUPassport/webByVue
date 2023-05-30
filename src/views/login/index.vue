@@ -385,7 +385,7 @@ import {
     RECRUITER_PERCENTAGE_V2,
     SCHOOL_PERCENTAGE_V2,
     OTHER_PERCENTAGE_V2,
-    VENDOR_PERCENTAGE_V2, GOOGLE_CALLBACK_LOGIN, USER_CONTRIBUTOR_ACTIVATION
+    VENDOR_PERCENTAGE_V2, GOOGLE_CALLBACK_LOGIN, USER_CONTRIBUTOR_ACTIVATION, HOME_USER_CHANGE_IDENTITY
 } from "@/api/api";
 
 import {useRoute, useRouter} from "vue-router";
@@ -480,11 +480,31 @@ export default {
             ]
         })
 
+        const switchAndShowContributor = ()=>{
+
+            HOME_USER_CHANGE_IDENTITY().then(res=>{
+                console.log(res)
+                if(res.code === 200){
+                    let uid = localStorage.getItem('uid')
+
+                    localStorage.setItem('identity', 6)
+                    store.commit('identity', 6)
+                    store.commit('setSwitchIdentityStatus', true)
+
+                    getUserMenuList(uid, 6, 0, uid)
+
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
+        }
+
         const contributorActived = (params)=>{
             USER_CONTRIBUTOR_ACTIVATION(params).then(res=>{
                 console.log(res)
                 if(res.code === 200){
                     console.log('激活contributor成功')
+                    switchAndShowContributor()
                 }
             }).catch(err=>{
                 ElMessage({

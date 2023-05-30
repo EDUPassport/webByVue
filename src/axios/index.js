@@ -23,6 +23,8 @@ axios.interceptors.request.use(config => {
         'home/user/school/company/calculate',
         'home/user/other/company/calculate',
         'home/user/vendor/company/calculate',
+        'home/user/contributor/activation',
+        'home/user/change/identity'
     ]
 
     if(reqWhiteList.indexOf(config.url) === -1){
