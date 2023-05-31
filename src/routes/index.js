@@ -203,6 +203,22 @@ const routes = [
         ],
     },
     {
+        path:'/job/pool',
+        component: dashboardLayout,
+        children: [
+            {
+                path: "",
+                name: "jobPool",
+                component: () => import("@/views/pool/job.vue"),
+                meta: {
+                    titleC: "Job Listing",
+                    titleG: "Job Listing",
+                    requireAuth: true
+                },
+            }
+        ]
+    },
+    {
         path: "/jobs",
         component: layout,
         children: [

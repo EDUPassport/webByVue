@@ -166,6 +166,7 @@ input {
     left: 0;
     width: 100%;
     background: #FFFFFF;
+    z-index: 2000;
     border-top: 1px solid #f0f0f0;
 
     text-align: center;
