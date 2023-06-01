@@ -244,6 +244,7 @@ export const LOGIN_PHONE_PWD_V2 = (params)=>post('home/login/phone/pwd',params)
 export const USER_CONTACT_EDIT_V2 = (params) => post('home/user/contact/edit',params)
 // 更新 educator contact 信息
 export const EDUCATOR_CONTACT_EDIT_V2 = (params) => post('home/educator/profile/edit',params)
+export const EDUCATOR_CONTACT_EDIT_V3 = (params) => post('home/educator/profile/update',params)
 // 用户添加 company contact
 export const COMPANY_CONTACT_EDIT_V2 = (params) => post('home/user/company/contact/edit',params)
 // 新增 编辑 certification

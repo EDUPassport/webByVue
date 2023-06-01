@@ -1673,7 +1673,7 @@ import {
     ADD_PROFILE_V2,
     ADD_USER_EDUCATION_V2,
     ADD_USER_IMG_V2,
-    ADD_USER_WORK_V2, ALL_LANGUAGE_PROFICIENCY, EDUCATOR_CONTACT_EDIT_V2,
+    ADD_USER_WORK_V2, ALL_LANGUAGE_PROFICIENCY, EDUCATOR_CONTACT_EDIT_V3,
     EDUCATOR_DELETE_EDUCATION_ITEM,
     EDUCATOR_DELETE_WORK_ITEM, SWITCH_IDENTITY_V2,
     UPLOAD_BY_ALI_OSS,
@@ -3559,7 +3559,7 @@ const saveStepOne = (formEl) => {
                 params.id = companyId.value
             }
 
-            EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
+            EDUCATOR_CONTACT_EDIT_V3(params).then(res => {
                 if (res.code === 200) {
                     // console.log(res)
                     store.commit('username', name)
@@ -3613,7 +3613,7 @@ const saveStepTwo = (formEl) => {
             if (profileAction.value === 'edit') {
                 params.id = companyId.value
             }
-            EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
+            EDUCATOR_CONTACT_EDIT_V3(params).then(res => {
                 if (res.code === 200) {
                     console.log(res)
 
@@ -3773,7 +3773,7 @@ const saveStepFive = (formEl) => {
             if (profileAction.value === 'edit') {
                 params.id = companyId.value
             }
-            EDUCATOR_CONTACT_EDIT_V2(params).then(res => {
+            EDUCATOR_CONTACT_EDIT_V3(params).then(res => {
                 if (res.code === 200) {
                     console.log(res)
                     if (profileAction.value === 'add') {

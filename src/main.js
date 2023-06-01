@@ -131,6 +131,21 @@ app.config.globalProperties.$filters = {
             return  startHour+':'+startMin + '' + startHourTag + ' - '+ endHour+':'+endMin+''+endHourTag;
         }
     },
+    monthFormatEvent(timeStr){
+        let monthArr = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SPT", "OCT", "NOV", "DEC"];
+
+        if(timeStr){
+            let time = new Date(timeStr.replace(/-/g,"/"))
+            return  monthArr[time.getMonth()];
+        }
+
+    },
+    dayFormatEvent(timeStr){
+        if(timeStr){
+            let time = new Date(timeStr.replace(/-/g,"/"))
+            return time.getDate();
+        }
+    },
     compareTimeWithCurrentTime(time){
         let timeStr = time.replace(/-/g,"/")
 

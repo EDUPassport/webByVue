@@ -43,62 +43,76 @@
                                     </el-image>
                                 </div>
                                 <div class="events-item-b">
-                                    <div class="events-item-item">
-                                        <el-space :size="5" wrap spacer="·">
-                                            <span>{{ $filters.ymdFormatEvent(item.date) }}</span>
-                                            <span>{{ $filters.timeFormatEvent(item.start_time, item.end_time) }}</span>
-                                            <span v-if="item.is_online == 1">online</span>
-                                            <span v-if="item.is_online == 2">offline</span>
-                                            <span v-if="item.is_online == 3">both</span>
-                                        </el-space>
+
+                                    <div class="events-item-b-l">
+                                        <div class="events-item-b-month">{{ $filters.monthFormatEvent(item.date) }}</div>
+                                        <div class="events-item-b-day">{{ $filters.dayFormatEvent(item.date) }}</div>
                                     </div>
-                                    <!--                    <div class="events-item-location">-->
-                                    <!--                      <span v-if="item.is_online == 2 || item.is_online == 3">-->
-                                    <!--                          {{item.location}}-->
-                                    <!--                      </span>-->
-                                    <!--                      <span v-else>online</span>-->
-                                    <!--                    </div>-->
-                                    <el-scrollbar class="events-item-name" always @click="showEventDialog(item)">
-                                        {{ item.name }}
-                                    </el-scrollbar>
-                                    <el-scrollbar class="events-item-desc" always>
-                                        {{ item.desc }}
-                                    </el-scrollbar>
+                                    <div class="events-item-b-r">
+<!--                                        <div class="events-item-item">-->
+<!--                                            <el-space :size="5" wrap spacer="·">-->
+<!--                                                <span>{{ $filters.ymdFormatEvent(item.date) }}</span>-->
+<!--                                                <span>{{ $filters.timeFormatEvent(item.start_time, item.end_time) }}</span>-->
+<!--                                                <span v-if="item.is_online == 1">online</span>-->
+<!--                                                <span v-if="item.is_online == 2">offline</span>-->
+<!--                                                <span v-if="item.is_online == 3">both</span>-->
+<!--                                            </el-space>-->
+<!--                                        </div>-->
 
-                                    <!--                    <div>-->
-                                    <!--                      <el-link>{{item.online_url}}</el-link>-->
-                                    <!--                    </div>-->
+                                        <div class="events-item-name" @click="showEventDialog(item)">
+                                            {{ item.name }}
+                                        </div>
+                                        <div class="events-item-desc">
+                                            {{ item.desc }}
+                                        </div>
+                                        <div class="events-item-posted">
+                                            Posted by {{item.company_name}}
+                                        </div>
+                                        <div class="events-item-identity">
+                                            <span v-if="item.identity == 1">Educator</span>
+                                            <span v-if="item.identity == 2">Recruiter</span>
+                                            <span v-if="item.identity == 3">School</span>
+                                            <span v-if="item.identity == 4">Other</span>
+                                            <span v-if="item.identity == 5">Vendor</span>
+                                        </div>
+                                        <div class="events-item-see-more">
+                                            See more
+                                        </div>
+<!--                                        <div class="events-item-action-container">-->
+<!--                                            <div class="events-item-action-l">-->
+<!--                                                <div class="share-r">-->
+<!--                                                    <el-popover-->
+<!--                                                        placement="top-start"-->
+<!--                                                        :width="40"-->
+<!--                                                        trigger="click"-->
+<!--                                                        content="link copied!"-->
+<!--                                                    >-->
+<!--                                                        <template #reference>-->
+<!--                                                            <el-button link @click="copyLink(item)">-->
+<!--                                                                <el-icon :size="20">-->
+<!--                                                                    <IconAntDesignLinkOutlined/>-->
+<!--                                                                </el-icon>-->
+<!--                                                                Copy Link-->
+<!--                                                            </el-button>-->
+<!--                                                        </template>-->
+<!--                                                    </el-popover>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="events-item-action-r">-->
+<!--                                                <el-button link @click="showBookEvent(item)">-->
+<!--                                                    <el-icon :size="20">-->
+<!--                                                        <CollectionTag/>-->
+<!--                                                    </el-icon>-->
+<!--                                                    Rsvp-->
+<!--                                                </el-button>-->
+<!--                                            </div>-->
 
-                                    <div class="events-item-action-container">
-                                        <div class="events-item-action-l">
-                                            <div class="share-r">
-                                                <el-popover
-                                                    placement="top-start"
-                                                    :width="40"
-                                                    trigger="click"
-                                                    content="link copied!"
-                                                >
-                                                    <template #reference>
-                                                        <el-button link @click="copyLink(item)">
-                                                            <el-icon :size="20">
-                                                                <IconAntDesignLinkOutlined/>
-                                                            </el-icon>
-                                                            Copy Link
-                                                        </el-button>
-                                                    </template>
-                                                </el-popover>
-                                            </div>
-                                        </div>
-                                        <div class="events-item-action-r">
-                                            <el-button link @click="showBookEvent(item)">
-                                                <el-icon :size="20">
-                                                    <CollectionTag/>
-                                                </el-icon>
-                                                Rsvp
-                                            </el-button>
-                                        </div>
+<!--                                        </div>-->
 
                                     </div>
+
+
+
                                 </div>
 
                             </div>
@@ -469,80 +483,144 @@ export default {
 }
 
 .events-item {
-    min-width: 290px;
+    width: 290px;
     margin: 0 0 20px 23px;
-    box-shadow: 0px 3px 10px #0000001A;
-    background: #FFFFFF;
-
     overflow: hidden;
-    border-bottom-right-radius: 40px;
-    border-bottom-left-radius: 40px;
+
+    background: #FFFFFF;
+    border: 1px solid #D0D5DD;
+    border-radius: 8px;
 }
 
 .events-item-t {
-    max-height: 700px;
+    width: 100%;
+    max-height: 170px;
     overflow: hidden;
 }
 
 .events-item-banner {
     width: 100%;
-    aspect-ratio: 2 / 3;
-    border: 1px solid #ffffff;
+    /*aspect-ratio: 2 / 3;*/
     background-color: #ececec;
-    box-shadow: 0 0 8px 0 rgba(100, 100, 100, 0.1);
     cursor: pointer;
 }
 
 .events-item-b {
-    padding: 25px;
+    margin: 16px 24px 33px 24px;
+    display: flex;
+    flex-direction: row;
 }
 
-.events-item-item {
+.events-item-b-l{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
+}
+
+.events-item-b-month{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+    color: #6648FF;
+}
+
+.events-item-b-day{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+    color: #1D2939;
+
+}
+
+.events-item-b-r{
+    margin-left: 20px;
 }
 
 .events-item-item span {
     font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #262626;
-
 }
 
 .events-item-desc {
-    margin-top: 25px;
-    font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    min-height: 40px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
     font-size: 14px;
-    color: #262626;
+    line-height: 140%;
+    color: #667085;
 
-    height: 66px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 
-    /*overflow: hidden;*/
-    /*text-overflow: ellipsis;*/
-    /*display: -webkit-box;*/
-    /*-webkit-line-clamp: 3;*/
-    /*-webkit-box-orient: vertical;*/
-
-}
-
-.events-item-location {
-    margin-top: 25px;
-    font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    color: #262626;
 }
 
 .events-item-name {
-    margin-top: 25px;
-    font-family: BCM, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
     font-size: 18px;
-    color: #262626;
+    line-height: 24px;
+    color: #1D2939;
     cursor: pointer;
-    height: 24px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+
 }
 
 .events-item-name:hover {
     color: #000000;
-    text-decoration: underline;
+}
+
+.events-item-posted{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 24px;
+    color: #1D2939;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.events-item-identity{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 140%;
+    color: #667085;
+
+}
+
+.events-item-see-more{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+
+    text-decoration-line: underline;
+    color: #6648FF;
+    cursor: pointer;
 
 }
 
@@ -603,7 +681,7 @@ export default {
     }
 
     .events-item-t {
-        max-height: 700px;
+        max-height: 170px;
     }
 
     .events-item-banner {
