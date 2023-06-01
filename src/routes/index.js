@@ -769,6 +769,15 @@ const routes = [
         },
     },
     {
+        path: '/latest-education-news',
+        name: 'landingPage',
+        component: () => import(/* webpackChunkName: "landingPage" */ '@/views/landingPage.vue'),
+        meta: {
+            titleC: 'Landing Page',
+            titleG: 'Landing Page',
+        },
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'noFound',
         component: () => import(/* webpackChunkName: "noFound" */ '@/views/noFound.vue'),
