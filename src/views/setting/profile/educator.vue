@@ -62,6 +62,7 @@
                                     ref="personalForms"
                                     :model="personalForm"
                                     :rules="personalRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -146,8 +147,8 @@
                                 <el-form-item label="Job Seeking Status">
                                     <el-radio-group :disabled="stepOneStatus" v-model="personalForm.is_seeking">
                                         <template v-for="(item,i) in jobSeekingOptions" :key="i">
-                                            <el-radio class="form-width-percent-100" :label="item.id">
-                                                {{ item.object_en }}
+                                            <el-radio class="form-width-percent-100" :label="item.value">
+                                                {{ item.name }}
                                             </el-radio>
                                         </template>
                                     </el-radio-group>
@@ -260,6 +261,7 @@
                                     ref="professionForms"
                                     :model="professionForm"
                                     :rules="professionRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -275,7 +277,7 @@
                                     <el-input
                                             class="form-width-388"
                                             :disabled="stepTwoStatus"
-                                            v-model="professionForm.q_level"
+                                            v-model="professionForm.education_level"
                                             placeholder="Enter your Qualification"></el-input>
                                 </el-form-item>
                                 <el-form-item label="Professional Description">
@@ -291,7 +293,7 @@
 
                                 <el-form-item label="Educator Type(Up to 3)">
 
-                                    <el-checkbox-group :disabled="stepOneStatus"
+                                    <el-checkbox-group :disabled="stepTwoStatus"
                                                        v-model="personalForm.sub_categories"
                                                        class="form-width-388"
                                                        :min="1"
@@ -464,7 +466,7 @@
                                             value-key="id"
                                     >
                                         <el-option
-                                                v-for="(item,index) in languageOptionsData"
+                                                v-for="(item,index) in preferredLanguageOptions"
                                                 :key="index"
                                                 :label="item.object_en"
                                                 :value="item"
@@ -630,6 +632,7 @@
                                     ref="pastExpForms"
                                     :model="pastExpForm"
                                     :rules="pastExpRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -823,6 +826,7 @@
                                     ref="educationsForms"
                                     :model="educationsForm"
                                     :rules="educationsRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -977,6 +981,7 @@
                                     ref="mediaForms"
                                     :model="mediaForm"
                                     :rules="mediaRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -1423,6 +1428,7 @@
                     label-width="120px"
                     :model="languageForm"
                     :rules="languageRules"
+                    require-asterisk-position="right"
                     label-position="left"
                     class="demo-ruleForm"
             >
@@ -1481,6 +1487,7 @@
                         ref="workExpForms"
                         :model="workExpForm"
                         :rules="workExpRules"
+                        require-asterisk-position="right"
                         label-width="160px"
                         label-position="left"
                         class="demo-ruleForm"
@@ -1566,6 +1573,7 @@
                     ref="educationForms"
                     :model="educationForm"
                     :rules="educationRules"
+                    require-asterisk-position="right"
                     label-width="120px"
                     label-position="top"
                     class="demo-ruleForm"
@@ -1679,7 +1687,7 @@ import {
     UPLOAD_BY_ALI_OSS,
     UPLOAD_BY_SERVICE,
     UPLOAD_BY_SERVICE_MORE,
-    USER_CONTACT_EDIT_V2,
+    USER_CONTACT_EDIT_V3,
     USER_INFO_BY_TOKEN_V2,
     USER_OBJECT_LIST,
     USER_SUB_IDENTITY_V2
@@ -1742,7 +1750,7 @@ const personalRules = reactive({
 const professionForms = ref(null)
 const professionForm = reactive({
     job_title: '',
-    q_level: '',
+    education_level: '',
     bio: '',
     hobbies: ''
 })
@@ -1842,7 +1850,20 @@ const mediaRules = reactive({
 const nationalityOptions = ref(countriesData)
 const phoneCodeOptions = ref(phoneCodeData)
 
-const jobSeekingOptions = ref([])
+const jobSeekingOptions = ref([
+    {
+        name:'Actively Seeking',
+        value:1
+    },
+    {
+        name:'Passively Seeking',
+        value:2
+    },
+    {
+        name:'Not Currently Seeking',
+        value:3
+    }
+])
 // const jobSeekingValue = ref()
 
 const workDestinationValue = ref([])
@@ -1870,6 +1891,8 @@ const ageToTeachValue = ref([])
 const ageToTeachOptions = ref([])
 
 const preferredLanguageValue = ref([])
+const preferredLanguageOptions = ref([])
+
 const selectedLanguageList = ref([])
 const languageDialogVisible = ref(false)
 const languageOptionsData = ref([])
@@ -1978,16 +2001,10 @@ const certificationsOptions = ref([])
 
 const degreeOptions = ref([])
 
-const initLoadUserObject = () => {
-    USER_OBJECT_LIST({
-        pid: 0
-    }).then(res => {
-        console.log(res)
-    })
-}
+
 const loadUserObjectData = async () => {
 
-    if (localStorageService.getItem('jobSeeking') && localStorageService.getItem('workDestination') &&
+    if (localStorageService.getItem('workDestination') && localStorageService.getItem('preferredLanguage') &&
         localStorageService.getItem('workScheduleType') && localStorageService.getItem('jobType')
         && localStorageService.getItem('benefits') && localStorageService.getItem('subject') &&
         localStorageService.getItem('ageToTeach') && localStorageService.getItem('studentsAge')
@@ -1996,8 +2013,9 @@ const loadUserObjectData = async () => {
         && localStorageService.getItem('degree') && localStorageService.getItem('languages')
 
     ) {
-        jobSeekingOptions.value = JSON.parse(localStorageService.getItem('jobSeeking'))
+
         workDestinationOptions.value = JSON.parse(localStorageService.getItem('workDestination'))
+        preferredLanguageOptions.value = JSON.parse(localStorageService.getItem('preferredLanguage'))
         workScheduleTypeOptions.value = JSON.parse(localStorageService.getItem('workScheduleType'))
         jobTypeOptions.value = JSON.parse(localStorageService.getItem('jobType'))
         benefitsOptions.value = JSON.parse(localStorageService.getItem('benefits'))
@@ -2017,16 +2035,16 @@ const loadUserObjectData = async () => {
         // console.log(res)
         if (res.code == 200) {
 
-            let jobSeekingArr = res.message.filter(item => item.pid === 199);
-            jobSeekingOptions.value = jobSeekingArr
-            if (!localStorageService.getItem('jobSeeking')) {
-                localStorageService.setItem('jobSeeking', JSON.stringify(jobSeekingArr), 60)
-            }
-
             let workDestinationArr = res.message.filter(item => item.pid === 155)  // 71 155
             workDestinationOptions.value = workDestinationArr
             if (!localStorageService.getItem('workDestination')) {
                 localStorageService.setItem('workDestination', JSON.stringify(workDestinationArr), 60)
+            }
+
+            let preferredLanguageArr = res.message.filter(item => item.pid === 1548)  // 71 155
+            preferredLanguageOptions.value = preferredLanguageArr
+            if (!localStorageService.getItem('preferredLanguage')) {
+                localStorageService.setItem('preferredLanguage', JSON.stringify(preferredLanguageArr), 60)
             }
 
             let jobTypeArr = res.message.filter(item => item.pid === 3);
@@ -2128,7 +2146,7 @@ const preferredLanguageConfirm = () => {
     })
 
     let data = {
-        object_pid: 2,
+        object_pid: 1548,
         object_id: objectArr,
         expand: expand,
         company_id: companyId.value
@@ -2580,6 +2598,11 @@ const getBasicInfo = async () => {
             if (educatorContact.job_title) {
                 professionForm.job_title = educatorContact.job_title;
             }
+
+            if (educatorContact.education_level) {
+                professionForm.education_level = educatorContact.education_level;
+            }
+
             if (educatorContact.bio) {
                 professionForm.bio = educatorContact.bio
             }
@@ -2660,6 +2683,25 @@ const getBasicInfo = async () => {
                         }
                     }
                     subjectValue.value.push(obj)
+                })
+            }
+
+            preferredLanguageValue.value = []
+            if (educatorContact.Prefered_Language) {
+                let preferredLanguageArr = educatorContact.Prefered_Language
+                let obj = {}
+                preferredLanguageArr.forEach((item) => {
+                    if (item.object_id == 0) {
+                        preferredLanguageValue.value.push(item.object_en)
+                    } else {
+                        obj = {
+                            id: item.object_id,
+                            pid: item.object_pid,
+                            object_en: item.object_en,
+                            object_cn: item.object_cn
+                        }
+                    }
+                    preferredLanguageValue.value.push(obj)
                 })
             }
 
@@ -2833,78 +2875,6 @@ const getBasicInfo = async () => {
                 mediaForm.resume_pdf = resume
                 mediaForm.resume_name = resume.substring(resume.length - 10)
             }
-
-            // if (educatorContact.Job_Seeking_Status) {
-            //     let objArr = educatorContact.Job_Seeking_Status;
-            //     objArr.forEach((item) => {
-            //         this.selectedJobSeekingValue = item.object_id;
-            //     })
-            // }
-            //
-            // if (educatorContact.Profile_Status) {
-            //     let objArr = educatorContact.Profile_Status;
-            //     objArr.forEach((item) => {
-            //         this.selectedProfileStatusValue = item.object_id;
-            //     })
-            // }
-
-            //
-            // if (educatorContact.desc) {
-            //     this.basicForm.desc = educatorContact.desc
-            // }
-            //
-
-            // if (educatorContact.address) {
-            //     this.basicForm.address = educatorContact.address
-            // }
-
-            //
-            // if (educatorContact.Location) {
-            //     let locationArr = educatorContact.Location;
-            //
-            //     locationArr.forEach((item) => {
-            //
-            //         if (item.object_id == 0) {
-            //
-            //             this.selectLocationList.push(item.object_en)
-            //
-            //         } else {
-            //             let obj = {
-            //                 id: item.object_id,
-            //                 pid: item.object_pid,
-            //                 object_en: item.object_en,
-            //                 object_cn: item.object_cn
-            //             }
-            //             this.selectLocationList.push(obj)
-            //
-            //         }
-            //
-            //     })
-            //
-            // }
-
-            // if (educatorContact.region) {
-            //
-            //     let regionArr = educatorContact.region;
-            //
-            //     regionArr.forEach((item) => {
-            //
-            //         if (item.object_id == 0) {
-            //             this.selectRegionList.push(item.object_en)
-            //         } else {
-            //             let obj = {
-            //                 id: item.object_id,
-            //                 pid: item.object_pid,
-            //                 object_en: item.object_en,
-            //                 object_cn: item.object_cn
-            //             }
-            //             this.selectRegionList.push(obj)
-            //         }
-            //
-            //     })
-            // }
-
-            // this.initProfileLoadingStatus = false;
 
         }
     }).catch(err => {
@@ -3513,7 +3483,7 @@ const cancelStepFive = () => {
 }
 
 const saveUserContactInfo = (params) => {
-    USER_CONTACT_EDIT_V2(params).then(res => {
+    USER_CONTACT_EDIT_V3(params).then(res => {
         console.log(res)
     }).catch(err => {
         console.log(err)
@@ -3580,10 +3550,13 @@ const saveStepOne = (formEl) => {
                         headimgurl: personalForm.profile_photo
                     })
 
-                    getBasicInfo()
                     setTimeout(function () {
-                        stepOneLoadingStatus.value = false
-                        stepOneStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepOneLoadingStatus.value = false
+                            stepOneStatus.value = true
+                        },1500)
+
                     }, 1500)
 
                 }
@@ -3694,11 +3667,15 @@ const saveStepTwo = (formEl) => {
                         studentsAgeConfirm()
                     }
 
-                    getBasicInfo()
                     setTimeout(function () {
-                        stepTwoLoadingStatus.value = false
-                        stepTwoStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepTwoLoadingStatus.value = false
+                            stepTwoStatus.value = true
+                        },1500)
+
                     }, 1500)
+
 
                 }
             }).catch(err => {
@@ -3727,12 +3704,15 @@ const saveStepThree = (formEl) => {
                 placesLivedConfirm()
             }
 
-            getBasicInfo()
-
             setTimeout(function () {
-                stepThreeLoadingStatus.value = false
-                stepThreeStatus.value = true
+                getBasicInfo()
+                setTimeout(function (){
+                    stepThreeLoadingStatus.value = false
+                    stepThreeStatus.value = true
+                },1500)
+
             }, 1500)
+
 
         } else {
             stepThreeLoadingStatus.value = false
@@ -3749,10 +3729,14 @@ const saveStepFour = (formEl) => {
             if (certificationsValue.value && certificationsValue.value.length) {
                 certificationsConfirm()
             }
-            getBasicInfo()
+
             setTimeout(function () {
-                stepFourLoadingStatus.value = false
-                stepFourStatus.value = true
+                getBasicInfo()
+                setTimeout(function (){
+                    stepFourLoadingStatus.value = false
+                    stepFourStatus.value = true
+                },1500)
+
             }, 1500)
 
         } else {
@@ -3789,11 +3773,16 @@ const saveStepFive = (formEl) => {
                     }
 
                     uploadAccountImages()
-                    getBasicInfo()
+
                     setTimeout(function () {
-                        stepFiveLoadingStatus.value = false
-                        stepFiveStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepFiveLoadingStatus.value = false
+                            stepFiveStatus.value = true
+                        },1500)
+
                     }, 1500)
+
 
                 }
             }).catch(err => {
@@ -3850,7 +3839,6 @@ const cancelUploadProfile = () => {
 }
 
 onMounted(async () => {
-    initLoadUserObject()
 
     await loadUserObjectData()
     await loadSubCategoryData()

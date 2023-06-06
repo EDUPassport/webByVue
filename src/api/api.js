@@ -242,6 +242,7 @@ export const LOGIN_PHONE_PWD_V2 = (params)=>post('home/login/phone/pwd',params)
 
 // 更新 user contact 信息
 export const USER_CONTACT_EDIT_V2 = (params) => post('home/user/contact/edit',params)
+export const USER_CONTACT_EDIT_V3 = (params) => post('home/user/contact/update',params)
 // 更新 educator contact 信息
 export const EDUCATOR_CONTACT_EDIT_V2 = (params) => post('home/educator/profile/edit',params)
 export const EDUCATOR_CONTACT_EDIT_V3 = (params) => post('home/educator/profile/update',params)

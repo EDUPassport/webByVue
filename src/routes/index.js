@@ -219,6 +219,39 @@ const routes = [
         ]
     },
     {
+        path:'/jobs/post',
+        component: dashboardLayout,
+        children: [
+            {
+                path: "",
+                name: "postJob",
+                component: () =>  import("@/views/jobs/post/post"),
+                meta: {
+                    activeMenu: "/overview",
+                    titleC: "Create a Job",
+                    titleG: "Create a Job",
+                    requireAuth: true
+                },
+            }
+        ]
+    },
+    {
+        path: "/jobs/myJobs",
+        component: dashboardLayout,
+        children: [
+            {
+                path:"",
+                name: "myJobs",
+                component: () => import("@/views/jobs/my/jobs"),
+                meta: {
+                    titleC: "My Posted Jobs",
+                    titleG: "My Posted Jobs",
+                    requireAuth: true,
+                },
+            }
+        ]
+    },
+    {
         path: "/jobs",
         component: layout,
         children: [
@@ -260,27 +293,8 @@ const routes = [
                     },
                 ],
             },
-            {
-                path: "post",
-                name: "postJob",
-                component: () => import("@/views/jobs/post/post"),
-                meta: {
-                    activeMenu: "/account/home",
-                    titleC: "Post a Job",
-                    titleG: "Post a Job",
-                    requireAuth: true,
-                },
-            },
-            {
-                path: "myJobs",
-                name: "myJobs",
-                component: () => import("@/views/jobs/my/jobs"),
-                meta: {
-                    titleC: "My Posted Jobs",
-                    titleG: "My Posted Jobs",
-                    requireAuth: true,
-                },
-            },
+
+
             {
                 path: "applications",
                 name: "jobApplications",

@@ -11,6 +11,7 @@
     --el-bg-color:#ffffff;
     --el-color-danger: #F04438;
     --el-text-color-regular:#262626;
+    --el-component-size:44px;
     --el-font-family: Inter, BCM,AssiRegular,BCRegular,'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif
 }
 
@@ -113,8 +114,11 @@
 }
 
 .el-input--small .el-input__inner{
-    font-size: 18px;
-    font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    color: #667085;
 }
 
 .el-input{

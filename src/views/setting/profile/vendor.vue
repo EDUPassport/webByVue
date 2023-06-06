@@ -62,6 +62,7 @@
                                     ref="basicForms"
                                     :model="basicForm"
                                     :rules="basicRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -239,6 +240,7 @@
                                     ref="contactForms"
                                     :model="contactForm"
                                     :rules="contactRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -403,6 +405,7 @@
                                     ref="businessForms"
                                     :model="businessForm"
                                     :rules="businessRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -723,6 +726,7 @@
                                     ref="mediaForms"
                                     :model="mediaForm"
                                     :rules="mediaRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -1190,6 +1194,7 @@ const singleFieldArr = ['logo', 'business_reg_img', 'license', 'background_image
 
 const basicForms = ref(null)
 const basicForm = reactive({
+    location:'',
     company_name: '',
     address: '',
     website: '',
@@ -1387,33 +1392,42 @@ const getBasicInfo = async () => {
                 basicForm.website = companyInfo.website;
             }
 
-            if (companyInfo.country_id) {
-                basicForm.country_id = companyInfo.country_id;
-            }
-            if (companyInfo.state_id) {
-                basicForm.state_id = companyInfo.state_id;
-            }
-            if (companyInfo.town_id) {
-                basicForm.town_id = companyInfo.town_id;
+            if(companyInfo.location === 'on_line'){
+                locationType.value = 'on_line'
             }
 
-            if (companyInfo.country_info) {
-                basicForm.country_info = companyInfo.country_info;
+            if(companyInfo.location === 'on_site'){
 
-                let countryInfoArr = JSON.parse(companyInfo.country_info)
+                locationType.value = 'on_site'
 
-                countryName.value = countryInfoArr.country_name_en;
-                countryNameCn.value = countryInfoArr.country_name_cn;
-                provinceName.value = countryInfoArr.province_name_en;
-                provinceNameCn.value = countryInfoArr.province_name_cn;
-                cityName.value = countryInfoArr.city_name_en;
-                cityNameCn.value = countryInfoArr.city_name_cn;
-
-                countryInfo.value = companyInfo.country_info;
-                if (countryName.value || provinceName.value || cityName.value) {
-                    haveLocationStatus.value = true;
+                if (companyInfo.country_id) {
+                    basicForm.country_id = companyInfo.country_id;
+                }
+                if (companyInfo.state_id) {
+                    basicForm.state_id = companyInfo.state_id;
+                }
+                if (companyInfo.town_id) {
+                    basicForm.town_id = companyInfo.town_id;
                 }
 
+                if (companyInfo.country_info) {
+                    basicForm.country_info = companyInfo.country_info;
+
+                    let countryInfoArr = JSON.parse(companyInfo.country_info)
+
+                    countryName.value = countryInfoArr.country_name_en;
+                    countryNameCn.value = countryInfoArr.country_name_cn;
+                    provinceName.value = countryInfoArr.province_name_en;
+                    provinceNameCn.value = countryInfoArr.province_name_cn;
+                    cityName.value = countryInfoArr.city_name_en;
+                    cityNameCn.value = countryInfoArr.city_name_cn;
+
+                    countryInfo.value = companyInfo.country_info;
+                    if (countryName.value || provinceName.value || cityName.value) {
+                        haveLocationStatus.value = true;
+                    }
+
+                }
             }
 
             if (companyInfo.display_name) {
@@ -1520,7 +1534,6 @@ const getBasicInfo = async () => {
     })
 
 }
-
 
 const subCategoryOptions = ref([])
 
@@ -2136,6 +2149,12 @@ const saveStepOne = (formEl) => {
                     city_name_cn: cityNameCn.value
                 })
             }
+            if(locationType.value === 'on_site'){
+                basicForm.location = 'on_site'
+            }
+            if(locationType.value === 'on_line'){
+                basicForm.location = 'on_line'
+            }
 
             let params =  Object.assign({}, basicForm)
 
@@ -2158,10 +2177,13 @@ const saveStepOne = (formEl) => {
                         return;
                     }
 
-                    getBasicInfo()
                     setTimeout(function () {
-                        stepOneLoadingStatus.value = false
-                        stepOneStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepOneLoadingStatus.value = false
+                            stepOneStatus.value = true
+                        },1500)
+
                     }, 1500)
 
                 }
@@ -2205,10 +2227,13 @@ const saveStepTwo = (formEl) => {
                         return;
                     }
 
-                    getBasicInfo()
                     setTimeout(function () {
-                        stepTwoLoadingStatus.value = false
-                        stepTwoStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepTwoLoadingStatus.value = false
+                            stepTwoStatus.value = true
+                        },1500)
+
                     }, 1500)
 
                 }
@@ -2257,12 +2282,15 @@ const saveStepThree = (formEl) => {
                         return;
                     }
 
-                    getBasicInfo()
-
                     setTimeout(function () {
-                        stepThreeLoadingStatus.value = false
-                        stepThreeStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepThreeLoadingStatus.value = false
+                            stepThreeStatus.value = true
+                        },1500)
+
                     }, 1500)
+
                 }
             }).catch(err => {
                 console.log(err)
@@ -2302,11 +2330,16 @@ const saveStepFive = (formEl) => {
                     }
 
                     uploadAccountImages()
-                    getBasicInfo()
+
                     setTimeout(function () {
-                        stepFiveLoadingStatus.value = false
-                        stepFiveStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepFiveLoadingStatus.value = false
+                            stepFiveStatus.value = true
+                        },1500)
+
                     }, 1500)
+
 
                 }
             }).catch(err => {

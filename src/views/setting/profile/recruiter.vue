@@ -62,6 +62,7 @@
                                     ref="personalForms"
                                     :model="personalForm"
                                     :rules="personalRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -236,6 +237,7 @@
                                     ref="professionForms"
                                     :model="professionForm"
                                     :rules="professionRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -419,6 +421,7 @@
                                     ref="businessForms"
                                     :model="businessForm"
                                     :rules="businessRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -630,6 +633,7 @@
                                     ref="mediaForms"
                                     :model="mediaForm"
                                     :rules="mediaRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -1329,6 +1333,9 @@ const getBasicInfo = async () => {
                 personalForm.profile_photo = companyInfo.profile_photo
             }
 
+            if(companyInfo.profession_title){
+                professionForm.profession_title = companyInfo.profession_title
+            }
             if (companyInfo.company_name) {
                 professionForm.company_name = companyInfo.company_name;
             }
@@ -1994,11 +2001,15 @@ const saveStepOne = (formEl) => {
                         return;
                     }
 
-                    getBasicInfo()
                     setTimeout(function () {
-                        stepOneLoadingStatus.value = false
-                        stepOneStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepOneLoadingStatus.value = false
+                            stepOneStatus.value = true
+                        },1500)
+
                     }, 1500)
+
                 }
             }).catch(err => {
                 console.log(err)
@@ -2052,11 +2063,16 @@ const saveStepTwo = (formEl) => {
                         return;
                     }
 
-                    getBasicInfo()
                     setTimeout(function () {
-                        stepTwoLoadingStatus.value = false
-                        stepTwoStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepTwoLoadingStatus.value = false
+                            stepTwoStatus.value = true
+                        },1500)
+
                     }, 1500)
+
+
                 }
             }).catch(err => {
                 console.log(err)
@@ -2104,12 +2120,15 @@ const saveStepThree = (formEl) => {
                         return;
                     }
 
-                    getBasicInfo()
-
                     setTimeout(function () {
-                        stepThreeLoadingStatus.value = false
-                        stepThreeStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepThreeLoadingStatus.value = false
+                            stepThreeStatus.value = true
+                        },1500)
+
                     }, 1500)
+
 
                 }
             }).catch(err => {
@@ -2152,11 +2171,17 @@ const saveStepFour = (formEl) => {
                     }
 
                     uploadAccountImages()
-                    getBasicInfo()
+
                     setTimeout(function () {
-                        stepFourLoadingStatus.value = false
-                        stepFourStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepFourLoadingStatus.value = false
+                            stepFourStatus.value = true
+                        },1500)
+
                     }, 1500)
+
+
                 }
             }).catch(err => {
                 console.log(err)

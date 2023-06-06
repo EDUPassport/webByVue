@@ -5,67 +5,78 @@
 
             <div class="filter-container">
 
-                <div class="filter-item">
-                    <div class="filter-label">Location</div>
-                    <el-select class="filter-select"
-                               v-model="locationValue"
-                               filterable
-                               clearable
-                               placeholder="Filter by location"
-                               size="default"
-                               @change="locationChange"
-                    >
-                        <el-option
-                            v-for="item in locationData"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id"
-                        >
-                        </el-option>
-                    </el-select>
+                <div class="filter-t">
+                    <span>Filter</span>
+                    <el-button link >Clear all</el-button>
                 </div>
 
-                <div class="filter-item">
-                    <el-checkbox @change="selectIsOnline" v-model="filterIsOnlineValue" label="Online"/>
-                </div>
+                <div class="filter-c">
 
-                <div class="filter-item">
-                    <div class="filter-label">Tags</div>
-                    <el-select class="filter-select"
-                               v-model="tagValue"
-                               clearable multiple
-                               placeholder="Filter by tag"
-                               size="default"
-                               @change="tagChange"
-                    >
-                        <el-option
-                            v-for="item in tagsData"
-                            :key="item.id"
-                            :label="item.name_en"
-                            :value="item.id"
-                        >
-                        </el-option>
-                    </el-select>
-                </div>
-
-                <div class="filter-item">
-                    <div class="filter-label">Event type</div>
-
-                    <div class="filter-checkbox-container">
-
-                        <el-checkbox-group @change="eventTypeChange" v-model="checkedCateData" :max="1">
-
-                            <el-checkbox v-for="(item,i) in categoryData" :key="i"
-                                         :label="item.id"
-                            >
-                                {{ item.name_en }}
-                            </el-checkbox>
-
-                        </el-checkbox-group>
-
+                    <div class="filter-item">
+                        <div class="filter-label">Search</div>
+                        <el-input size="small" placeholder="Search for events name"></el-input>
                     </div>
 
+                    <div class="filter-item">
+                        <div class="filter-label">Location</div>
+                        <el-select class="filter-select"
+                                   v-model="locationValue"
+                                   filterable
+                                   clearable
+                                   placeholder="Filter by location"
+                                   size="default"
+                                   @change="locationChange"
+                        >
+                            <el-option
+                                v-for="item in locationData"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id"
+                            >
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div class="filter-item">
+                        <el-checkbox @change="selectIsOnline" v-model="filterIsOnlineValue" label="Online"/>
+                    </div>
+                    <div class="filter-item">
+                        <div class="filter-label">Tags</div>
+                        <el-select class="filter-select"
+                                   v-model="tagValue"
+                                   clearable multiple
+                                   placeholder="Filter by tag"
+                                   size="default"
+                                   @change="tagChange"
+                        >
+                            <el-option
+                                v-for="item in tagsData"
+                                :key="item.id"
+                                :label="item.name_en"
+                                :value="item.id"
+                            >
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div class="filter-item">
+                        <div class="filter-label">Event type</div>
+
+                        <div class="filter-checkbox-container">
+
+                            <el-checkbox-group @change="eventTypeChange" v-model="checkedCateData" :max="1">
+
+                                <el-checkbox v-for="(item,i) in categoryData" :key="i"
+                                             :label="item.id"
+                                >
+                                    {{ item.name_en }}
+                                </el-checkbox>
+
+                            </el-checkbox-group>
+
+                        </div>
+
+                    </div>
                 </div>
+
 
             </div>
             <div class="filter-search-btn-container">
@@ -314,8 +325,7 @@ export default {
 
 .container {
     width: 100%;
-    border: 1px solid #D0D5DD;
-    border-radius: 8px;
+
 }
 
 .filter-bg-container {
@@ -324,23 +334,52 @@ export default {
 }
 
 .filter-container {
-    margin-top: 20px;
+    background: #FFFFFF;
+    border: 1px solid #D0D5DD;
+    border-radius: 11px;
+}
+
+.filter-t{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    border-bottom: 1px solid #D0D5DD;
+    padding: 0 20px;
+}
+.filter-t span{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #667085;
+}
+
+.filter-c{
+    padding: 16px;
+}
+
+
+.filter-item {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #D0D5DD;
 }
 
 .filter-label {
-    text-align: left;
-    font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-    font-size: 20px;
-    color: #262626;
-    margin-bottom: 10px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #344054;
+
 }
 
 .filter-select {
     width: 100%;
-}
-
-.filter-item {
-    margin-top: 25px;
 }
 
 .filter-search-btn-container {

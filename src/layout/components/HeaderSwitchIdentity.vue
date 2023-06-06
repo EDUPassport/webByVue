@@ -687,7 +687,7 @@ const getBasicInfo = (identity) => {
             if (identity == 1) {
                 avatar = userContact.headimgurl;
                 companyName = name;
-                percentageValue = userContact.is_educator;
+                percentageValue = userContact.educator_contact.completion;
             }
 
             if (identity == 2 || identity == 3 || identity == 4 || identity == 5) {
@@ -696,18 +696,7 @@ const getBasicInfo = (identity) => {
                     companyInfo = userContact.company;
                     avatar = companyInfo.logo;
                     companyName = companyInfo.company_name;
-                }
-                if (identity == 2) {
-                    percentageValue = userContact.is_recruiting
-                }
-                if (identity == 3) {
-                    percentageValue = userContact.is_school
-                }
-                if (identity == 4) {
-                    percentageValue = userContact.is_other
-                }
-                if (identity == 5) {
-                    percentageValue = userContact.is_vendor
+                    percentageValue = companyInfo.completion
                 }
 
             }
@@ -739,6 +728,8 @@ const getBasicInfo = (identity) => {
         // })
     })
 }
+
+
 
 const login = () => {
     router.push('/login')

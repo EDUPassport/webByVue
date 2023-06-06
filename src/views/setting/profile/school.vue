@@ -62,6 +62,7 @@
                                     ref="personalForms"
                                     :model="personalForm"
                                     :rules="personalRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -234,6 +235,7 @@
                                     ref="professionForms"
                                     :model="professionForm"
                                     :rules="professionRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -443,6 +445,7 @@
                                     ref="businessForms"
                                     :model="businessForm"
                                     :rules="businessRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -761,6 +764,7 @@
                                     ref="ccForms"
                                     :model="ccForm"
                                     :rules="ccRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -978,6 +982,7 @@
                                     ref="mediaForms"
                                     :model="mediaForm"
                                     :rules="mediaRules"
+                                    require-asterisk-position="right"
                                     label-width="220px"
                                     label-position="left"
                                     class="demo-ruleForm"
@@ -1522,9 +1527,7 @@ const mediaRules = reactive({
 
 })
 
-
 const phoneCodeOptions = ref(phoneCodeData)
-
 
 const subjectValue = ref([])
 const subjectOptions = ref([])
@@ -1543,13 +1546,14 @@ const loadUserObjectData = async () => {
 
     if (localStorageService.getItem('studentAge') && localStorageService.getItem('subject') &&
         localStorageService.getItem('facilities') && localStorageService.getItem('availableTeach')
-        && localStorageService.getItem('currency')
+        && localStorageService.getItem('currency') && localStorageService.getItem('preferredLocation')
     ) {
         studentAgeOptions.value = JSON.parse(localStorageService.getItem('studentAge'))
         subjectOptions.value = JSON.parse(localStorageService.getItem('subject'))
         facilitiesOptions.value = JSON.parse(localStorageService.getItem('facilities'))
         availableTeachOptions.value = JSON.parse(localStorageService.getItem('availableTeach'))
         currencyOptions.value = JSON.parse(localStorageService.getItem('currency'))
+        preferredLocationOptionsData.value = JSON.parse(localStorageService.getItem('preferredLocation'))
         return;
     }
 
@@ -1585,6 +1589,12 @@ const loadUserObjectData = async () => {
             currencyOptions.value = currencyArr
             if (!localStorageService.getItem('currency')) {
                 localStorageService.setItem('currency', JSON.stringify(currencyArr), 60)
+            }
+
+            let preferredLocationArr = res.message.filter(item => item.pid === 1556);
+            preferredLocationOptionsData.value = preferredLocationArr
+            if (!localStorageService.getItem('preferredLocation')) {
+                localStorageService.setItem('preferredLocation', JSON.stringify(preferredLocationArr), 60)
             }
 
         }
@@ -1960,6 +1970,31 @@ const getBasicInfo = async () => {
                     }
                     subjectValue.value.push(obj)
                 })
+            }
+
+            if (companyInfo.Prefered_Work_Destination) {
+                let preferredLocationArr = companyInfo.Prefered_Work_Destination
+
+                preferredLocationArr.forEach((item)=>{
+
+                    if (item.object_id == 0) {
+
+                        preferredLocationValue.value.push(item.object_en)
+
+                    } else {
+
+                        let obj = {
+                            id: item.object_id,
+                            pid: item.object_pid,
+                            object_en: item.object_en,
+                            object_cn: item.object_cn
+                        }
+
+                        preferredLocationValue.value.push(obj)
+
+                    }
+                })
+
             }
 
             if (companyInfo.Student_Age) {
@@ -2731,11 +2766,15 @@ const saveStepOne = (formEl) => {
                         return;
                     }
 
-                    getBasicInfo()
                     setTimeout(function () {
-                        stepOneLoadingStatus.value = false
-                        stepOneStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepOneLoadingStatus.value = false
+                            stepOneStatus.value = true
+                        },1500)
+
                     }, 1500)
+
 
                 }
             }).catch(err => {
@@ -2747,6 +2786,38 @@ const saveStepOne = (formEl) => {
             stepOneLoadingStatus.value = false
             console.log('submit error')
         }
+    })
+}
+
+const preferredLocationConfirm = () => {
+
+    let expand = [];
+    let objectArr = [];
+
+    preferredLocationValue.value.forEach(item => {
+
+        if (typeof item === 'string') {
+            expand.push(item)
+        } else {
+            objectArr.push(item.id);
+        }
+
+    })
+
+    let data = {
+        object_pid: 1556,
+        object_id: objectArr,
+        expand: expand,
+        company_id: companyId.value
+    }
+
+    ADD_PROFILE_V2(data).then(res => {
+        if (res.code == 200) {
+            console.log('preferred location--submit--' + res.data);
+        }
+
+    }).catch(err => {
+        console.log(err)
     })
 }
 
@@ -2781,6 +2852,11 @@ const saveStepTwo = (formEl) => {
 
                     if (profileAction.value === 'add') {
                         companyId.value = res.message.school_company_id
+
+                        if (preferredLocationValue.value && preferredLocationValue.value.length) {
+                            preferredLocationConfirm()
+                        }
+
                         changeIdentity(res.message.school_company_id, res.message.user_id, 2)
 
                         setTimeout(function (){
@@ -2791,11 +2867,19 @@ const saveStepTwo = (formEl) => {
                         return;
                     }
 
-                    getBasicInfo()
-                    setTimeout(function (){
-                        stepTwoLoadingStatus.value = false
-                        stepTwoStatus.value = true
+                    if (preferredLocationValue.value && preferredLocationValue.value.length) {
+                        preferredLocationConfirm()
+                    }
+
+                    setTimeout(function () {
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepTwoLoadingStatus.value = false
+                            stepTwoStatus.value = true
+                        },1500)
+
                     }, 1500)
+
 
                 }
             }).catch(err => {
@@ -2843,12 +2927,15 @@ const saveStepThree = (formEl) => {
                         return;
                     }
 
-                    getBasicInfo()
-
                     setTimeout(function () {
-                        stepThreeLoadingStatus.value = false
-                        stepThreeStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepThreeLoadingStatus.value = false
+                            stepThreeStatus.value = true
+                        },1500)
+
                     }, 1500)
+
                 }
             }).catch(err => {
                 console.log(err)
@@ -2918,12 +3005,15 @@ const saveStepFour = (formEl) => {
                         subjectConfirm()
                     }
 
-                    getBasicInfo()
-
                     setTimeout(function () {
-                        stepFourLoadingStatus.value = false
-                        stepFourStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepFourLoadingStatus.value = false
+                            stepFourStatus.value = true
+                        },1500)
+
                     }, 1500)
+
 
                 }
             }).catch(err => {
@@ -2966,10 +3056,14 @@ const saveStepFive = (formEl) => {
                     }
 
                     uploadAccountImages()
-                    getBasicInfo()
+
                     setTimeout(function () {
-                        stepFiveLoadingStatus.value = false
-                        stepFiveStatus.value = true
+                        getBasicInfo()
+                        setTimeout(function (){
+                            stepFiveLoadingStatus.value = false
+                            stepFiveStatus.value = true
+                        },1500)
+
                     }, 1500)
 
                 }

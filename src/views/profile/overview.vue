@@ -75,7 +75,32 @@
 
                 <div class="dashboard-t-actions" v-if="identity == 2 || identity == 3 || identity == 4 || identity == 5">
                     <el-button plain @click="turnUserManagement()">User Management</el-button>
-                    <el-button v-if="identity == 2 || identity == 3 || identity == 4" type="primary" icon="Plus" @click="postJob()">Post a Job</el-button>
+                    <template v-if="profilePercentage <= 60">
+                        <el-tooltip
+                            effect="light"
+                            content="Finish setting up profile to post a job"
+                            placement="bottom"
+                        >
+                            <el-button
+                                v-if="identity == 2 || identity == 3 || identity == 4"
+                                type="info"
+                                icon="Plus"
+                            >
+                                Post a Job
+                            </el-button>
+                        </el-tooltip>
+                    </template>
+                    <template v-else>
+                        <el-button
+                            v-if="identity == 2 || identity == 3 || identity == 4"
+                            type="primary"
+                            icon="Plus"
+                            :disabled="profilePercentage <= 60"
+                            @click="postJob()">
+                            Post a Job
+                        </el-button>
+                    </template>
+
                 </div>
 
                 <un-complete-profile-prompt
@@ -597,7 +622,6 @@ function getVendorIndexData(){
 
 }
 
-
 const educatorJobApplyCountPercent = ref(0)
 const educatorJobApplyCountForNow = ref(0)
 const educatorEventRegisterPercent = ref(0)
@@ -626,7 +650,7 @@ function getEducatorStaticData() {
     })
 }
 
-const profilePercentage = ref(Number(store.state.profilePercentage))
+const profilePercentage = computed(()=> parseInt(store.state.profilePercentage) )
 
 const educatorMetricsOptions = ref({
     title: {
