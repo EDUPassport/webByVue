@@ -503,34 +503,6 @@ const token = localStorage.getItem('token')
 // const showEarthStatus = ref(false)
 // const nowMenuData = ref([])
 
-onUnmounted(() => {
-    window.onresize = null
-})
-
-onMounted(() => {
-    let screenWidth = document.body.clientWidth
-    let screenWidthFloor = Math.floor(screenWidth)
-
-    if (screenWidthFloor <= 768) {
-        dialogBusinessAccountWidth.value = '80%'
-    }
-
-    window.onresize = () => {
-        if (screenWidthFloor <= 768) {
-            dialogBusinessAccountWidth.value = '80%'
-        }
-    }
-
-    if (token) {
-        console.log('----- on mounted -------------')
-        getBasicInfo(identityStore.value)
-        getAllIdentity()
-        getUserUnreadList(inAppPage.value, inAppLimit.value)
-        getUserUnread()
-    }
-
-})
-
 const allIdentityChangedValue = computed(() => store.state.allIdentityChanged)
 
 const identityStore = computed(() => store.state.identity)
@@ -740,7 +712,7 @@ const returnMySelf = () => {
     })
 
     COMEBACK_MYSELF().then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code == 200) {
             let uid = localStorage.getItem('uid')
             let identityValue = res.message.return_identity
@@ -966,7 +938,7 @@ const switchAndShowContributor = ()=>{
     })
 
     HOME_USER_CHANGE_IDENTITY().then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.code === 200){
             let uid = localStorage.getItem('uid')
 
@@ -1123,7 +1095,7 @@ const getUserUnreadList = (page, limit) => {
         limit: limit
     }
     USER_UNREAD_LIST(params).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code == 200) {
             inAppNotificationData.value = inAppNotificationData.value.concat(res.message.data);
             inAppLastPage.value = res.message.last_page;
@@ -1140,7 +1112,7 @@ const setInAppRead = (id, identity, index) => {
         status: 1
     }
     SET_READ(params).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code == 200) {
             inAppNotificationData.value[index]['is_read'] = 1
             getUserUnread()
@@ -1157,7 +1129,7 @@ const setInAppReadAll = () => {
     }
 
     SET_READ_ALL(params).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code == 200) {
             inAppNotificationData.value = []
             getUserUnreadList(1, inAppLimit.value)
@@ -1173,7 +1145,7 @@ const getUserUnread = () => {
         identity: localStorage.getItem('identity')
     }
     USER_UNREAD(params).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code == 200) {
             inAppUnreadTotal.value = res.message.count;
         }
@@ -1195,6 +1167,33 @@ onBeforeRouteUpdate(() => {
 
 onBeforeRouteLeave(() => {
     unreadChanged.value++
+})
+
+onUnmounted(() => {
+    window.onresize = null
+})
+
+onMounted(() => {
+    let screenWidth = document.body.clientWidth
+    let screenWidthFloor = Math.floor(screenWidth)
+
+    if (screenWidthFloor <= 768) {
+        dialogBusinessAccountWidth.value = '80%'
+    }
+
+    window.onresize = () => {
+        if (screenWidthFloor <= 768) {
+            dialogBusinessAccountWidth.value = '80%'
+        }
+    }
+
+    if (token) {
+        getBasicInfo(identityStore.value)
+        getAllIdentity()
+        getUserUnreadList(inAppPage.value, inAppLimit.value)
+        getUserUnread()
+    }
+
 })
 
 </script>

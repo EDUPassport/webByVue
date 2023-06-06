@@ -1044,7 +1044,7 @@ import ImageCompressor from "compressorjs";
 import uploadIcon from '@/assets/newHome/profile/upload-icon.svg'
 import defaultAvatarIcon from '@/assets/newHome/profile/default-avatar.svg'
 import defaultLogoIcon from '@/assets/newHome/profile/image-rectangle.svg'
-import {onMounted, reactive, ref} from 'vue'
+import {onMounted, reactive, ref,computed} from 'vue'
 import {useStore} from 'vuex'
 import {useRoute} from 'vue-router'
 import arrowDownIcon from '@/assets/newHome/arrow-circle-down.svg'
@@ -1070,7 +1070,7 @@ const store = useStore()
 const route = useRoute()
 
 const profileAction = ref('edit')
-const companyId = ref(store.state.currentCompanyId)
+const companyId = computed(()=>store.state.currentCompanyId)
 
 const expandKeysData = ref([2, 3, 4, 5])
 
