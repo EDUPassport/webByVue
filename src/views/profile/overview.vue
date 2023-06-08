@@ -7,8 +7,10 @@
                     <template v-for="(item,i) in contributorIdentities" :key="i">
                         <div class="c-d-item"
                              :class="switchContributorCompanyId === item.id ? 'c-d-item-active' : '' "
-                             v-if="i<2">
-                            <div class="c-d-item-t" @click="switchContributor(item.id, 6, 2)">
+                             v-if="i<2"
+                             @click="switchContributor(item.id, 6, 2)"
+                             >
+                            <div class="c-d-item-t">
                                 <div class="c-d-circle"
                                      :class="switchContributorCompanyId === item.id ? 'c-d-circle-active' : '' "
                                 ></div>
