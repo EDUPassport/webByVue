@@ -42,7 +42,7 @@
 
 <script>
 import {onBeforeRouteUpdate, useRouter} from 'vue-router'
-import {ref} from 'vue'
+import {ref,computed} from 'vue'
 import {useStore} from 'vuex'
 
 export default {
@@ -50,7 +50,7 @@ export default {
     setup() {
         const router = useRouter()
         const store = useStore()
-        const identity = ref(store.state.identity)
+        const identity = computed(() => store.state.identity)
 
         const sPathName = ref(window.location.pathname)
         // console.log(sPathName)
@@ -64,7 +64,6 @@ export default {
         }
 
         function turnProfile() {
-            console.log(identity)
 
             if (identity.value == 1) {
                 router.push({path: '/setting/profile/educator'})

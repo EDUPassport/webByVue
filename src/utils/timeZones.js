@@ -1,5 +1,9 @@
 export const timeZones = [
     {
+        "name": "GMT",
+        "offset": "+00:00"
+    },
+    {
         "name": "UTC",
         "offset": "+00:00"
     },

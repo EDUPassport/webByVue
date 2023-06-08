@@ -82,8 +82,7 @@ const menuDrawerStatus = ref(false)
 // const envName = process.env.VUE_APP_ENV_NAME
 const envBlog = process.env.VUE_APP_BLOG
 const userInfo = computed(()=>store.state.userInfo)
-const identity = computed(()=>store.state.identity)
-console.log(identity)
+
 const token = localStorage.getItem('token')
 
 const  postEventWhenEmpty = ()=> {

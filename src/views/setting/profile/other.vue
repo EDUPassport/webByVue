@@ -1223,7 +1223,7 @@ import ImageCompressor from "compressorjs";
 import uploadIcon from '@/assets/newHome/profile/upload-icon.svg'
 import defaultAvatarIcon from '@/assets/newHome/profile/default-avatar.svg'
 import deleteAccountComponent from "@/components/deleteAccountComponent.vue";
-import {ref, reactive, onMounted} from 'vue'
+import {ref, reactive, onMounted,computed} from 'vue'
 import {useStore} from 'vuex'
 import {useRoute} from 'vue-router'
 import arrowDownIcon from '@/assets/newHome/arrow-circle-down.svg'
@@ -1249,7 +1249,7 @@ import {decode} from 'js-base64'
 const store = useStore()
 const route = useRoute()
 
-const companyId = ref(store.state.currentCompanyId)
+const companyId = computed(()=>store.state.currentCompanyId)
 
 const expandKeysData = ref([2, 3, 5])
 

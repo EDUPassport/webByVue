@@ -874,7 +874,7 @@ const jobForm = reactive({
     employment_type: '',
     version_time: '',
     sex: '',
-    identity:identity
+    identity:identity.value
 })
 
 // const jobForm1 = reactive(
@@ -938,7 +938,7 @@ const validateEmploymentType = (rule, value, callback)=>{
 }
 
 const validateWorkingHours = (rule, value, callback)=>{
-    if(jobForm.working_nums_start && jobForm.working_nums_end && jobForm.working_time_zone){
+    if(jobForm.working_hours_start && jobForm.working_hours_end && jobForm.working_time_zone){
         callback()
     }else{
         return callback(new Error('Please complete working hours'))

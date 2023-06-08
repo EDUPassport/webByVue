@@ -152,44 +152,49 @@ const getMyJobs = (page, limit) => {
     }
 
     MY_JOBS(params).then(res => {
-
         if (res.code == 200) {
             let jobData = res.message.data
-
             jobTotalNum.value = res.message.total
-
-            let unread_data = {
-                identity: identity,
-                token: token
-            }
-
-            USER_UNREAD(unread_data).then(res => {
-                if (res.code == 200) {
-                    let unreadListData = res.message.list;
-                    jobData.forEach(item => {
-                        // console.log(item)
-                        let a = unreadListData.filter(function (element) {
-                            return element.type == 1 && element.type_id == item.id
-                        })
-                        if (a.length > 0) {
-                            item.unread_status = true;
-                            item.unread_id = a[0].id;
-                        } else {
-                            item.unread_status = false;
-                        }
-
-                    })
-                    jobListData.value = jobData
-
-                } else {
-                    console.log('unread:' + res.msg)
-                }
-
-            })
-
+            // jobListData.value = jobData
+            filterUserUnreadAndJobList(jobData)
         }
 
     }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const filterUserUnreadAndJobList = (jobData)=>{
+
+    let params = {
+        identity:identity.value
+    }
+
+    USER_UNREAD(params).then(res=>{
+        let unreadListData = res.message.list;
+
+        jobData.forEach(item => {
+
+            if(unreadListData &&  unreadListData.length> 0){
+                let a = unreadListData.filter(function (element) {
+                    return element.type == 1 && element.type_id == item.id
+                })
+                if (a.length > 0) {
+                    item.unread_status = true;
+                    item.unread_id = a[0].id;
+                } else {
+                    item.unread_status = false;
+                }
+            }else{
+                item.unread_status = false;
+            }
+
+        })
+
+        jobListData.value = jobData
+
+    }).catch(err=>{
         console.log(err)
     })
 
