@@ -364,6 +364,7 @@
                                                 <template v-else>
                                                     <el-dropdown-item
                                                             class="xll-dropdown-item"
+                                                            :disabled="contributorIdentities.length == 0"
                                                             @click="switchAndShowContributor()">
                                                         <span class="el-dropdown-link">Show Contributors</span>
                                                     </el-dropdown-item>
@@ -688,7 +689,7 @@ const getBasicInfo = (identity) => {
             store.commit('setUserInfo', userInfoObj)
             store.commit('changeThirdCompanyStatus', userContact.is_third_company)
             store.commit('setProfilePercentage', percentageValue)
-            store.commit('setSwitchIdentityStatus', false)
+            // store.commit('setSwitchIdentityStatus', false)
 
         }
     }).catch(err => {
@@ -722,7 +723,7 @@ const returnMySelf = () => {
             localStorage.setItem('company_id', companyIdValue)
 
             store.commit('identity', identityValue)
-            store.commit('setSwitchIdentityStatus', true)
+            store.commit('setSwitchIdentityStatus', false)
             store.commit('currentCompanyId', companyIdValue)
             store.commit('changeThirdCompanyStatus', 0)
 
@@ -954,10 +955,9 @@ const switchAndShowContributor = ()=>{
             }, 1500)
         }
     }).catch(err=>{
-        console.log(err)
         ElNotification({
-            title:'Err',
-            message:err,
+            title:'Error',
+            message:err.message,
             grouping:true
         })
         loading.close()

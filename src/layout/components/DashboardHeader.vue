@@ -12,7 +12,7 @@
                         </div>
                         <div class="header-welcome-name">
                             <template v-if="currentRoutePath === '/overview' ">
-                                Welcome, {{ userInfo.companyName }}!
+                                Welcome, {{ userInfo.companyName ?  userInfo.companyName : userInfo.name }}!
                             </template>
                             <template v-if="currentRoutePath === '/job/pool' ">Job Listing</template>
 
@@ -55,7 +55,7 @@
                             Dashboard
                         </div>
                         <div class="header-welcome-name">
-                            Welcome, {{ userInfo.companyName }}!
+                            Welcome, {{ userInfo.companyName ?  userInfo.companyName : userInfo.name }}!
                         </div>
                     </el-col>
 

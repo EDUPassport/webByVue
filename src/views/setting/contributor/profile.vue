@@ -12,7 +12,7 @@
                     <div class="box-avatar-person"></div>
                     <div class="box-label">Setup your profile</div>
                     <div class="box-tips">
-                        Setup your Contributor Profile for {Company Name}
+                        Setup your Contributor Profile for {{actualName ? actualName : contributorForm.company_name}}
                     </div>
                     <div class="box-form">
                         <el-form
@@ -87,13 +87,16 @@ const turnHome = ()=>{
 }
 
 const contributorForms = ref(null)
+const actualName = route.query.actual_name
 
 const contributorForm = reactive({
     first_name: route.query.first_name,
     last_name: route.query.last_name,
     email: route.query.email,
     password:"",
-    confirm_password:''
+    confirm_password:'',
+    display_name: route.query.first_name.concat(" ",route.query.last_name),
+    company_name: route.query.company_name,
 })
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;

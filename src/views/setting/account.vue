@@ -777,7 +777,11 @@ const sendInvite = (formEl) => {
 
                 }
             }).catch(err => {
-                console.log(err)
+                ElMessage({
+                    type: 'error',
+                    message: err.msg,
+                    grouping: true
+                });           
                 loading.close()
 
             })
