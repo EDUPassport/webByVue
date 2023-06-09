@@ -239,6 +239,14 @@ app.config.globalProperties.$filters = {
             return value.length > len;
         }
 
+    },
+    formatJobTemplateFieldDesc(value){
+        if(value){
+            let obj = JSON.parse(value)
+            return this.doRepAdvance(obj.desc)
+        }else{
+            return '...'
+        }
     }
 
 }

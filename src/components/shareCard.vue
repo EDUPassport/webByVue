@@ -1,163 +1,158 @@
 <template>
   <div>
     <el-dialog :model-value="visible"
-               width="auto"
-               center
-               :show-close="false"
+               width="410px"
+               :title="shareTitle"
                :before-close="beforeClose"
     >
+        <div class="share-container">
+            <div class="share-t">
+                <div class="share-item">
+                    <ShareNetwork
+                        network="Telegram"
+                        :url="url"
+                        :title="title"
+                        :description="description"
+                        :quote="quote"
+                    >
+                        <el-image class="share-item-img" :src="telegramImg"></el-image>
+                        <br>
+                        <span>Telegram</span>
+                    </ShareNetwork>
+                </div>
 
-      <div class="dialog-container">
+                <div class="share-item">
+                    <ShareNetwork
+                            network="Twitter"
+                            :url="url"
+                            :title="title"
+                    >
+                        <el-image class="share-item-img" :src="twitterImg"></el-image>
+                        <br>
+                        <span>Twitter</span>
+                    </ShareNetwork>
+                </div>
 
-        <div class="dialog-label">
-          Share
+                <div class="share-item">
+                    <ShareNetwork
+                        network="Tumblr"
+                        :url="url"
+                        :title="title"
+                        :description="description"
+                    >
+                        <el-image class="share-item-img" :src="tumblrImg"></el-image>
+                        <br>
+                        <span>Tumblr</span>
+                    </ShareNetwork>
+                </div>
+
+                <div class="share-item">
+                    <ShareNetwork
+                        network="WhatsApp"
+                        :url="url"
+                        :title="title"
+                        :description="description"
+                    >
+                        <el-image class="share-item-img" :src="whatsappImg"></el-image>
+                        <br>
+                        <span>WhatsApp</span>
+                    </ShareNetwork>
+                </div>
+
+                <div class="share-item"  @click="copyLink(url)">
+                    <el-image class="share-item-img" :src="copyImg"></el-image>
+                    <br>
+                    <span>Copy Link</span>
+                </div>
+
+            </div>
         </div>
-
-        <div class="share">
-
-          <div class="share-l">
-            <ShareNetwork
-                style="margin-right: 10px;"
-                network="Facebook"
-                :url="url"
-                :title="title"
-                :description="description"
-                :quote="quote"
-            >
-              <el-icon :size="40">
-                <IconLogosFacebook />
-              </el-icon>
-            </ShareNetwork>
-            <ShareNetwork
-                style="margin-right: 10px;"
-                network="LinkedIn"
-                :url="url"
-                :title="title"
-            >
-              <el-icon :size="40">
-                <IconLogosLinkedinIcon />
-              </el-icon>
-            </ShareNetwork>
-
-            <ShareNetwork
-                style="margin-right: 10px;"
-                network="Twitter"
-                :url="url"
-                :title="title"
-            >
-              <el-icon :size="40">
-                <IconLogosTwitter />
-              </el-icon>
-            </ShareNetwork>
-          </div>
-
-          <div class="share-r" >
-            <el-popover
-                placement="top-start"
-                :width="40"
-                trigger="click"
-                content="link copied!"
-            >
-              <template #reference>
-                <el-icon :size="40" @click="copyLink(url)">
-                  <IconAntDesignLinkOutlined />
-                </el-icon>
-              </template>
-            </el-popover>
-          </div>
-
-        </div>
-
-        <div class="action">
-          <el-button link @click="close()">
-            CANCEL
-          </el-button>
-        </div>
-
-
-      </div>
 
     </el-dialog>
 
   </div>
 </template>
 
-<script>
+<script setup>
+import telegramImg from '@/assets/socialMedia/telegram.svg'
+import tumblrImg from '@/assets/socialMedia/tumblr.svg'
+import whatsappImg from '@/assets/socialMedia/whatsapp.svg'
+import twitterImg from '@/assets/socialMedia/twitter.svg'
+import copyImg from '@/assets/socialMedia/copy.svg'
 
-export default {
-  name: "shareCard",
-  props:['title','description','quote','url','visible'],
+import {defineProps, defineEmits} from 'vue'
+import useClipboard from 'vue-clipboard3'
+import {ElMessage} from 'element-plus'
 
-  methods:{
-    close(){
-      this.$emit('close')
-    },
-    beforeClose(done){
-      this.$emit('close')
-      done()
-    },
-    readMoreDeal(){
+defineProps(['title','description','quote','url','visible','shareTitle'])
+const emit = defineEmits(['close'])
 
-    },
-    copyLink(val) {
+const {toClipboard} = useClipboard()
 
-      this.$copyText(val).then(function (e) {
-        console.log('copied')
-        console.log(e)
-      }, function (e) {
-         console.log(e)
-      })
-    },
+const beforeClose = (done)=>{
+    emit('close')
+    done()
+}
 
+const copyLink =async  (val)=> {
 
-
-  }
+    try {
+        await toClipboard(val)
+        console.log('Copied to clipboard')
+        ElMessage({
+            type:'success',
+            message:'Link Copied!',
+            grouping:true
+        })
+    } catch (e) {
+        console.error(e)
+    }
 
 }
+
 </script>
 
 <style scoped>
-
-.dialog-container{
-
-  background-color: #FFFFFF;
-  box-shadow: 0 3px 10px #0000001A;
-
-  width:  260px;
-
-  border-radius: 40px;
-  margin: 50px auto;
-  position: relative;
-
-  padding: 50px;
+/deep/ .el-dialog__title{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    color: #000000;
 }
 
-/deep/ .el-dialog{
-  --el-dialog-bg-color: none;
-  --el-dialog-box-shadow: none;
+/deep/ .el-dialog__body{
+    padding: 24px;
 }
 
-.dialog-label{
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 26px;
-  color: #262626;
+.share-t{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.share{
-  margin-top: 25px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+.share-item{
+    cursor: pointer;
 }
 
-.share-r{
-  cursor: pointer;
+.share-item a {
+    text-decoration: none;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #667085;
 }
 
-.action{
-  margin-top: 25px;
-  text-align: right;
+.share-item span{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #667085;
 }
 
 </style>

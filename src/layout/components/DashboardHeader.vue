@@ -8,7 +8,9 @@
                         <div class="header-page-name">
                             <template v-if="currentRoutePath === '/overview' ">Dashboard</template>
                             <template v-if="currentRoutePath === '/job/pool' ">Pool</template>
-
+                            <template v-if="currentRoutePath === '/jobs/post' || currentRoutePath === '/jobs/myJobs'" >
+                                <el-button link icon="back" @click="turnBackToDashboard()" >Back to Dashboard</el-button>
+                            </template>
                         </div>
                         <div class="header-welcome-name">
                             <template v-if="currentRoutePath === '/overview' ">
@@ -73,7 +75,7 @@
 
 <script setup>
 import HeaderSwitchIdentity from "@/layout/components/HeaderSwitchIdentity.vue";
-import {useRoute} from 'vue-router'
+import {useRoute,useRouter} from 'vue-router'
 import {ref,computed} from 'vue'
 import {useStore} from 'vuex'
 import MobileDrawerMenu from "@/components/mobileDrawerMenu.vue";
@@ -81,6 +83,7 @@ import menuLineHorizontalImg from '@/assets/newHome/dashboard/menu-line-horizont
 import logoMobileImg from '@/assets/newHome/dashboard/logo-mobile.svg'
 
 const route = useRoute()
+const router = useRouter()
 const store = useStore()
 const currentRoutePath = route.path
 const menuDrawerStatus = ref(false)
@@ -89,6 +92,9 @@ const menuDrawerStatus = ref(false)
 const envBlog = process.env.VUE_APP_BLOG
 const userInfo = computed(()=>store.state.userInfo)
 
+const turnBackToDashboard = ()=>{
+    router.push({path:'/overview'})
+}
 
 </script>
 

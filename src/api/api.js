@@ -494,3 +494,8 @@ export const USER_CONTRIBUTOR_DELETE = (params) => post('home/user/contributor/d
 export const USER_CONTRIBUTOR_RESEND_EMAIL = (params) => post('home/user/contributor/resend/email', params)
 export const USER_CONTRIBUTOR_ACTIVATION = (params) => post('home/user/contributor/activation', params)
 export const HOME_USER_CHANGE_IDENTITY = (params) => post('home/user/change/identity', params)
+export const HOME_JOB_TEMPLATE_ADD = (params) => post('home/job/template/add', params)
+export const JOB_TEMPLATE_LIST = (params) => get('home/job/template/list',params)
+export const HOME_JOB_TEMPLATE_DELETE = (params) => post('home/job/template/delete', params)
+export const HOME_JOB_DELETE = (params) => post('home/job/delete', params)
+export const HOME_JOB_CLOSE = (params) => post('home/job/close', params)

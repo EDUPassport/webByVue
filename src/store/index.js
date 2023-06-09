@@ -49,7 +49,8 @@ const store = createStore({
             profilePercentage:profilePercentage,
             axiosPromiseArr:[],
             userObjectData:[],
-            keepAliveIncludeData:[]
+            keepAliveIncludeData:[],
+            jobTemplateDetail:{}
 
         }
     },
@@ -145,6 +146,9 @@ const store = createStore({
         },
         unsetKeepAlivePage(state, value){
              state.keepAliveIncludeData =  state.keepAliveIncludeData.filter((item) => item !== value)
+        },
+        setJobTemplateDetail(state, value){
+            state.jobTemplateDetail = value
         }
 
     },

@@ -1,140 +1,238 @@
 <template>
-    <div class="bg">
-        <div class="jobs-list-container">
-            <div class="jobs-list-t">
-                <div class="jobs-list-label">My Posted Jobs</div>
-                <div class="jobs-list-t-r">
-                    <el-button type="default" round class="post-job-btn" @click="postJob()">Post a Job
-                    </el-button>
+    <div>
+        <el-scrollbar class="bg">
+            <div class="t-container">
+                <div class="t-label">My Jobs</div>
+                <div class="t-tips">
+                    Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet.
                 </div>
             </div>
 
-            <div class="jobs-list-content">
-                <div class="jobs-list-item" v-for="(item,index) in jobListData" :key="index">
-                    <div class="jobs-list-item-l">
-                        <el-image class="jobs-item-logo"
-                                  :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
-                                  fit="contain">
-                        </el-image>
-                    </div>
-                    <div class="jobs-list-item-r">
-                        <div class="jobs-list-item-title">
-                            <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">{{
-                                    item.job_title
-                                }}
-                            </router-link>
-                        </div>
-                        <div class="jobs-list-item-name">
-                            {{ item.company_name }}
-                        </div>
-                        <div class="jobs-list-item-address">
-                            {{ item.address }}
-                        </div>
-                        <div class="jobs-list-item-desc">
-                            {{ item.desc }}
-                        </div>
-                        <div class="jobs-list-item-readmore">
-                            <router-link :to="{'path':'/jobs/detail',query:{id:item.id}}">Read More...
-                            </router-link>
-                        </div>
-                    </div>
+            <div class="content-container">
 
-                    <div class="jobs-list-item-b">
-                        <div class="jobs-list-item-b-l">
-                            <view class="jobs-list-item-work-type">
-                                <i class="iconfont el-icon-alishijian"></i>
-                                <template v-if="item.employment_type==1">FT</template>
-                                <template v-if="item.employment_type==2">PT</template>
-                                <template v-if="item.employment_type==3">S</template>
-                            </view>
-                            <view class="jobs-list-item-gender" v-if="item.sex == 1 || item.sex == 2">
-                                <i class="iconfont el-icon-alimale-female"></i>
-                                <template v-if="item.sex == 1">Male</template>
-                                <template v-if="item.sex == 2">Female</template>
-                            </view>
-                            <view class="jobs-list-item-work-exp">
-                                <i class="iconfont el-icon-aligongzuojingyan"></i>
-                                1-2 yrs
-                            </view>
+                <el-tabs v-model="activeTabPane" @tab-change="changeActiveTab">
+                    <el-tab-pane label="Jobs" name="jobs">
+                        <div v-loading="loadingJobsStatus">
+                            <div class="job-container" >
+                                <div class="job-item" v-for="(item,index) in jobListData" :key="index">
+                                    <div class="job-item-t">
+                                        <div class="job-item-t-l">
+                                            <el-image
+                                                :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+                                                class="job-item-avatar"></el-image>
+                                        </div>
+                                        <div class="job-item-t-r">
+                                            <div class="job-item-name">
+                                                {{ item.job_title }}
+
+                                                <span class="xll-tag xll-tag-1" v-if="item.status==0"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Pending</span>
+
+                                                <template v-if="item.status == 1">
+                                                    <span class="xll-tag xll-tag-2" v-if="item.is_open==1"><el-icon style="margin-right: 2px;"><IconElOkCircle/></el-icon>Open</span>
+                                                    <span class="xll-tag xll-tag-3" v-if="item.is_open==0"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Closed</span>
+                                                </template>
+
+                                                <span class="xll-tag xll-tag-3" v-if="item.status==2"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
+                                                <span class="xll-tag xll-tag-application"
+                                                      @click="turnApplications(item.id,item.unread_id)">
+                                                    {{ item.resume_count }} Applications
+                                                </span>
+
+                                                <span v-if="item.unread_status" class="read-star"></span>
+
+                                            </div>
+                                            <div class="job-item-desc">
+                                                {{ $filters.doRepAdvance(item.desc) }}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="job-item-b">
+                                        <el-tooltip
+                                            effect="light"
+                                            :content="item.job_location"
+                                            placement="bottom"
+                                        >
+                                            <div class="job-item-location">
+                                                <el-image class="job-item-icon-24"
+                                                          :src="locationIconImg"></el-image>
+                                                <span>{{ item.job_location }}</span>
+                                            </div>
+
+                                        </el-tooltip>
+
+                                        <div class="job-item-salary">
+                                            <el-image class="job-item-icon-24" :src="salaryIconImg"></el-image>
+                                            <span>{{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}</span>
+                                        </div>
+
+                                        <div class="job-item-salary">
+                                            <el-image class="job-item-icon-24" :src="calendarImg"></el-image>
+                                            <span> {{ $filters.howLongFormat(item.refresh_time) }}</span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="job-item-more-actions">
+                                        <span @click="shareJob(item)" style="margin-right: 8px;cursor: pointer;"><el-icon ><IconIcRoundShare/></el-icon></span>
+                                        <el-dropdown :hide-on-click="false" trigger="click">
+                                            <span class="job-item-more-text"><el-icon><IconRiMore2Fill/></el-icon></span>
+                                            <template #dropdown>
+                                                <el-dropdown-menu>
+
+                                                    <el-dropdown-item>
+                                                        <el-button link
+                                                                   @click="turnEditJobs(item.id, item.version_time)">
+                                                            Edit
+                                                        </el-button>
+                                                    </el-dropdown-item>
+                                                    <el-dropdown-item v-if="item.status == 1">
+                                                        <el-button link
+                                                                   @click="openOrCloseJob(item.id,item.is_open)">
+                                                            <span v-if="item.is_open === 1">Close Job</span>
+                                                            <span v-if="item.is_open === 0">Open Job</span>
+                                                        </el-button>
+                                                    </el-dropdown-item>
+                                                    <el-dropdown-item>
+                                                        <el-popconfirm
+                                                            title="Are you sure to delete this?"
+                                                            width="auto"
+                                                            @confirm="deleteJob(item.id)"
+                                                        >
+                                                            <template #reference>
+                                                                <el-button link>Delete</el-button>
+                                                            </template>
+                                                        </el-popconfirm>
+
+                                                    </el-dropdown-item>
+                                                </el-dropdown-menu>
+                                            </template>
+                                        </el-dropdown>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="job-pagination">
+                                <el-pagination layout="prev, pager, next"
+                                               :default-current-page="1"
+                                               @size-change="jobPageSizeChange"
+                                               @current-change="jobPageChange"
+                                               :current-page="jobPage"
+                                               :page-size="jobLimit"
+                                               :total="jobTotalNum">
+                                </el-pagination>
+                            </div>
+
                         </div>
 
-                        <div class="jobs-list-item-b-m">
-                            <el-button class="jobs-list-item-b-m-btn" type="primary" round
-                                       @click="turnApplications(item.id,item.unread_id)">
-                                Applications ( {{ item.resume_count }} ) <span v-if="item.unread_status"
-                                                                               class="read-star"></span>
-                            </el-button>
+                    </el-tab-pane>
+                    <el-tab-pane label="Templates" name="job_templates">
+                        <job-templates
+                                :job-template-data="jobTemplateData"
+                                @post-job="postJobFromTemplate"
+                                @edit="editJobTemplate"
+                                @delete="deleteJobTemplate"
+                                @turn-manual-posting="turnManualPosting()"
+                        ></job-templates>
+                    </el-tab-pane>
+                    <el-tab-pane label="Drafts" name="job_drafts">
+                        <job-drafts
+                                :drafts-data="jobDraftsData"
+                                @post="postJobFromDrafts"
+                                @edit="editJobDrafts"
+                                @delete="deleteJobDrafts"
+                                @turn-manual-posting="turnManualPosting()"
+                        ></job-drafts>
+                    </el-tab-pane>
+                </el-tabs>
 
-                            <el-button class="jobs-list-item-b-m-btn" type="warning" round
-                                       @click="turnEditJobs(item.id)">
-                                Edit
-                            </el-button>
-
-                        </div>
-
-
-                        <div class="jobs-list-item-b-r">
-                            <view class="jobs-list-item-date">
-                                <el-icon>
-                                    <Calendar/>
-                                </el-icon>&nbsp;
-                                {{ $filters.howLongFormat(item.refresh_time) }}
-                            </view>
-                            <view class="jobs-list-item-salary">
-                                {{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}
-                            </view>
-                        </div>
-                    </div>
-
-                    <div class="list-item-tag actived-0" v-if="item.status==0">
-                        Pending
-                    </div>
-                    <div class="list-item-tag actived-1" v-if="item.status==1">
-                        Active
-                    </div>
-                    <div class="list-item-tag actived-2" v-if="item.status==2">
-                        Rejected
-                    </div>
-
-                </div>
             </div>
-            <div class="jobs-list-pagination">
-                <el-pagination layout="prev, pager, next" :default-current-page="1"
-                               @size-change="jobPageSizeChange"
-                               @current-change="jobPageChange"
-                               :current-page="jobPage" :page-size="jobLimit"
-                               :total="jobTotalNum"></el-pagination>
-            </div>
 
-        </div>
+        </el-scrollbar>
+
+        <shareCard :visible="shareDialogVisible"
+                   share-title="Share Job Post"
+                   :title="shareInfo.title"
+                   :description ="shareInfo.desc"
+                   :quote = "shareInfo.desc"
+                   :url="shareLocationUrl"
+                   @close="shareDialogVisible=false"
+        >
+        </shareCard>
 
     </div>
 </template>
 
 <script setup>
 import {randomString} from "@/utils";
-import {MY_JOBS, SET_READ, USER_UNREAD} from '@/api/api';
+import {
+    HOME_JOB_CLOSE,
+    HOME_JOB_DELETE,
+    HOME_JOB_TEMPLATE_DELETE,
+    JOB_TEMPLATE_LIST,
+    MY_JOBS,
+    SET_READ,
+    USER_UNREAD
+} from '@/api/api';
 import {ref, onMounted, computed} from 'vue'
-import {useRouter} from 'vue-router'
+import {useRouter, useRoute} from 'vue-router'
 import {useStore} from 'vuex'
+import locationIconImg from "@/assets/newHome/dashboard/location_nofill.svg";
+import salaryIconImg from "@/assets/newHome/dashboard/salary_nofill.svg";
+import calendarImg from "@/assets/newHome/dashboard/calendar.svg";
+import shareCard from "@/components/shareCard.vue";
+// import emptyImg from '@/assets/newHome/dashboard/empty.svg'
 
 const store = useStore()
+const route = useRoute()
 const router = useRouter()
 const token = localStorage.getItem('token')
 const identity = computed(() => store.state.identity)
 
 const jobListData = ref([])
 const jobPage = ref(1)
-const jobLimit = ref(5)
+const jobLimit = ref(6)
 const jobTotalNum = ref(0)
 const versionTime = randomString()
 
-const postJob = () => {
-    router.push({
-        path: '/jobs/post', query: {version_time: versionTime}
-    })
+const activeTabPane = ref('jobs')
+
+const loadingJobsStatus = ref(true)
+
+const shareDialogVisible = ref(false)
+const shareInfo = ref({})
+const shareLocationUrl = ref('')
+const shareJob = (item)=>{
+    shareInfo.value = {
+        title:item.job_title,
+        desc:item.desc,
+        id:item.id
+    }
+
+    let origin  = window.location.origin
+    shareLocationUrl.value = origin + '/jobs/detail?id='+item.id;
+
+    shareDialogVisible.value = true;
 }
 
+const turnManualPosting = () => {
+    router.push({path: '/jobs/post', query: {version_time: versionTime}})
+}
+const changeActiveTab = (e) => {
+    console.log(e)
+    if(e === 'jobs'){
+        getMyJobs(jobPage.value, jobLimit.value)
+    }
+
+    if (e === 'job_templates') {
+        getJobTemplateList()
+    }
+
+    if (e === 'job_drafts') {
+        getJobDraftsList()
+    }
+
+}
 const jobPageSizeChange = (e) => {
     console.log(e)
 }
@@ -145,7 +243,7 @@ const jobPageChange = (e) => {
 }
 
 const getMyJobs = (page, limit) => {
-
+    loadingJobsStatus.value = true
     let params = {
         page: page,
         limit: limit
@@ -157,6 +255,7 @@ const getMyJobs = (page, limit) => {
             jobTotalNum.value = res.message.total
             // jobListData.value = jobData
             filterUserUnreadAndJobList(jobData)
+            loadingJobsStatus.value = false
         }
 
     }).catch(err => {
@@ -165,18 +264,18 @@ const getMyJobs = (page, limit) => {
 
 }
 
-const filterUserUnreadAndJobList = (jobData)=>{
+const filterUserUnreadAndJobList = (jobData) => {
 
     let params = {
-        identity:identity.value
+        identity: identity.value
     }
 
-    USER_UNREAD(params).then(res=>{
+    USER_UNREAD(params).then(res => {
         let unreadListData = res.message.list;
 
         jobData.forEach(item => {
 
-            if(unreadListData &&  unreadListData.length> 0){
+            if (unreadListData && unreadListData.length > 0) {
                 let a = unreadListData.filter(function (element) {
                     return element.type == 1 && element.type_id == item.id
                 })
@@ -186,7 +285,7 @@ const filterUserUnreadAndJobList = (jobData)=>{
                 } else {
                     item.unread_status = false;
                 }
-            }else{
+            } else {
                 item.unread_status = false;
             }
 
@@ -194,11 +293,108 @@ const filterUserUnreadAndJobList = (jobData)=>{
 
         jobListData.value = jobData
 
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err)
     })
 
 }
+const jobTemplateData = ref([])
+
+const getJobTemplateList = () => {
+    let params = {
+        type: 1,
+        page: 1,
+        limit: 100
+    }
+
+    JOB_TEMPLATE_LIST(params).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+            let jobTemplateArr = res.message.data;
+            jobTemplateArr.forEach(item => {
+                item.content = item.content ? JSON.parse(item.content) : {}
+            })
+            jobTemplateData.value = jobTemplateArr;
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+const editJobTemplate = (item) => {
+    store.commit('setJobTemplateDetail', item)
+    router.push({path: '/jobs/post', query: {version_time: versionTime}})
+}
+
+const postJobFromTemplate = (item) => {
+    store.commit('setJobTemplateDetail', item)
+    router.push({path: '/jobs/post', query: {version_time: versionTime}})
+}
+
+const deleteJobTemplate = (id) => {
+    let params = {
+        id: id
+    }
+    HOME_JOB_TEMPLATE_DELETE(params).then(res => {
+        if (res.code === 200) {
+            getJobTemplateList()
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const jobDraftsData = ref([])
+
+const getJobDraftsList = () => {
+    let params = {
+        type: 2,
+        page: 1,
+        limit: 100
+    }
+
+    JOB_TEMPLATE_LIST(params).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+            let jobDraftsArr = res.message.data;
+            jobDraftsArr.forEach(item => {
+                item.content = item.content ? JSON.parse(item.content) : {}
+            })
+            jobDraftsData.value = jobDraftsArr;
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
+
+
+const editJobDrafts = (item) => {
+    store.commit('setJobTemplateDetail', item)
+    router.push({path: '/jobs/post', query: {version_time: versionTime}})
+}
+
+const postJobFromDrafts = (item) => {
+    store.commit('setJobTemplateDetail', item)
+    router.push({path: '/jobs/post', query: {version_time: versionTime}})
+}
+
+const deleteJobDrafts = (id) => {
+    let params = {
+        id: id
+    }
+    HOME_JOB_TEMPLATE_DELETE(params).then(res => {
+        if (res.code === 200) {
+            getJobDraftsList()
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
 
 const turnApplications = (id, unreadId) => {
     let data = {
@@ -220,11 +416,45 @@ const turnApplications = (id, unreadId) => {
     })
 }
 
-const turnEditJobs = (jobId) => {
-    router.push({path: '/jobs/post', query: {job_id: jobId}})
+const turnEditJobs = (jobId, version_time) => {
+    router.push({path: '/jobs/post', query: {job_id: jobId,version_time:version_time}})
+}
+
+const deleteJob = (jobId)=>{
+    let params = {
+        job_id:jobId,
+        is_delete:1
+    }
+    HOME_JOB_DELETE(params).then(res=>{
+        if(res.code === 200){
+            getMyJobs(jobPage.value, jobLimit.value)
+        }
+
+    }).catch(err=>{
+        console.log(err)
+    })
+}
+
+const openOrCloseJob = (jobId,isOpen)=>{
+    let params = {
+        job_id:jobId,
+        is_open: isOpen === 1 ? 0 : 1
+    }
+
+    HOME_JOB_CLOSE(params).then(res=>{
+        if(res.code === 200){
+            getMyJobs(jobPage.value, jobLimit.value)
+        }
+
+    }).catch(err=>{
+        console.log(err)
+    })
 }
 
 onMounted(() => {
+    if (route.query.tab) {
+        activeTabPane.value = route.query.tab;
+    }
     getMyJobs(jobPage.value, jobLimit.value)
 })
 
@@ -232,194 +462,217 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.bg {
-    background-color: #f5f6f7;
-}
 
-.jobs-list-container {
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #FFFFFF;
-}
-
-.jobs-list-t {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #EEEEEE;
-}
-
-.jobs-list-label {
-    font-size: 18px;
-    font-weight: bold;
-    text-align: left;
-}
-
-.post-job-btn {
-    background-color: #0AA0A8;
-    color: #FFFFFF;
-}
-
-.jobs-list-content {
-    margin-top: 10px;
-}
-
-.jobs-list-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-top: 10px;
-    background-color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 10px;
-    text-align: left;
-    border: 1px solid #EEEEEE;
-    position: relative;
-    overflow: hidden;
-}
-
-.jobs-list-item-l {
-    width: 30%;
-    height: 180px;
-}
-
-.jobs-item-logo {
-    width: 80%;
-    height: 80%;
-    border-radius: 10px;
-}
-
-.jobs-list-item-r {
-    width: 70%;
-}
-
-.jobs-list-item-title a {
-    font-size: 18px;
-    font-weight: bold;
-    color: #000000;
-    text-decoration: none;
-}
-
-.jobs-list-item-name {
+/deep/ .el-tabs__item {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
     font-size: 16px;
-    color: #808080;
-    margin-top: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #98A2B3;
 }
 
-.jobs-list-item-address {
+/deep/ .el-tabs__item.is-active {
+    color: #6648FF;
+}
+
+/deep/ .el-tabs__active-bar {
+    background-color: #6648FF;
+}
+
+
+.bg {
+    background-color: #FFFFFF;
+    height: calc(var(--i-window-height) - 120px);
+
+}
+
+.t-container {
+    margin: 0 40px 0 40px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 32px;
+    color: #000000;
+}
+
+.t-tips {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
     font-size: 14px;
-    color: #808080;
-    margin-top: 10px;
+    line-height: 20px;
+    color: #667085;
 }
 
-.jobs-list-item-desc {
-    font-size: 12px;
-    color: #808080;
-    margin-top: 10px;
+.content-container {
+    margin: 30px 40px 40px 40px;
+
 }
 
-.jobs-list-item-readmore {
-    margin-top: 20px;
-}
-
-.jobs-list-item-readmore a {
-    font-size: 14px;
-    color: #808080;
-    text-decoration: none;
-}
-
-.jobs-list-item-b {
-    width: 100%;
+.job-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-}
-
-.jobs-list-item-work-type {
-    font-size: 12px;
-}
-
-.jobs-list-item-gender {
-    font-size: 12px;
-    margin-left: 10px;
-}
-
-.jobs-list-item-b-l {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    width: 30%;
+    flex-wrap: wrap;
+    min-height: 140px;
 }
 
 
-.jobs-list-item-b-r {
-    width: 40%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.jobs-list-item-b-m {
-    width: 30%;
-    text-align: left;
-}
-
-.jobs-list-item-b-m-btn {
+.job-item {
+    flex-basis: calc(50% - 47px);
+    margin-right: 30px;
+    margin-bottom: 24px;
+    padding: 18px 16px;
+    background: #F9FAFB;
+    border-radius: 12px;
     position: relative;
 }
 
-.jobs-list-item-work-exp {
+.job-item:nth-child(2n) {
+    margin-right: 0;
+}
+
+.job-item-t {
+    display: flex;
+    flex-direction: row;
+}
+
+.job-item-avatar {
+    width: 48px;
+    height: 48px;
+    background: #F7F5FF;
+    border-radius: 6px;
+}
+
+.job-item-t-l {
+    margin-right: 9px;
+}
+
+.job-item-name {
+    display: flex;
+    flex-direction: row;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: #000000;
+}
+
+.job-item-desc {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
     font-size: 12px;
-    margin-left: 10px;
+    line-height: 18px;
+    color: #667085;
+
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
 }
 
-.jobs-list-item-date {
+.job-item-b {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.job-item-location span {
+    width: 110px;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.job-item-location, .job-item-salary {
+    display: flex;
+    align-items: center;
+}
+
+.job-item-location span, .job-item-salary span {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
     font-size: 12px;
+    line-height: 12px;
+    color: #344054;
 }
 
-.jobs-list-item-salary {
-    font-size: 12px;
-    margin-left: 10px;
-    color: #00b3d2;
+.job-item-icon-24 {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
 }
 
-.jobs-list-pagination {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.list-item-tag {
+.job-item-more-actions {
     position: absolute;
-    top: 8px;
-    right: -60px;
-    color: #FFFFFF;
-    transform: rotate(30deg);
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 160px;
-    padding-right: 80px;
+    right: 10px;
+    top: 10px;
+}
+
+.job-item-more-text {
+    cursor: pointer;
+}
+
+.xll-tag {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 12px;
+    padding: 4px 8px;
+    gap: 2px;
+    border-radius: 4px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.xll-tag-1 {
+    color: #F79009;
+    background: #FFFAEB;
+}
+
+.xll-tag-2 {
+    color: #12B76A;
+    background: #ECFDF3;
+}
+
+
+.xll-tag-3 {
+    color: #F04438;
+    background: #FEF3F2;
+}
+
+.xll-tag-application{
+    cursor: pointer;
+    background: #E6E1FF;
+    border-radius: 4px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
     text-align: center;
-    font-size: 14px;
+    text-decoration-line: underline;
+    color: #344054;
 }
 
-.actived-0 {
-    background-color: #00B3D2;
-}
-
-.actived-1 {
-    background-color: #B1C452;
-}
-
-.actived-2 {
-    background-color: #FF2870;
+.job-pagination {
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
 }
 
 .read-star {
@@ -433,39 +686,12 @@ onMounted(() => {
 }
 
 @media screen and (min-width: 1200px) {
-    .profile-container {
-        width: 1100px;
-    }
 
 }
 
 @media screen and (max-width: 768px) {
-    .jobs-list-item-title a {
-        font-size: 14px;
-    }
 
-    .jobs-list-item-name {
-        margin-top: 4px;
-        font-size: 12px;
-    }
 
-    .jobs-list-item-desc {
-        display: none;
-    }
-
-    .jobs-list-item-readmore {
-        margin-top: 4px;
-        font-size: 14px;
-    }
-
-    .jobs-list-item-address {
-        margin-top: 4px;
-        font-size: 12px;
-    }
-
-    .jobs-list-item-l {
-        height: 100px;
-    }
 }
 
 </style>

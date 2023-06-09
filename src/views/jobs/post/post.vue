@@ -4,7 +4,7 @@
 
             <div class="post-bg" v-loading="postJobLoadingValue">
 
-                <div class="post-job-t">
+                <div class="post-job-t" v-if="!isEditing">
                     <div class="post-job-t-label">Post A Job</div>
                     <div class="post-job-tabs">
                         <div class="post-job-tab"
@@ -49,19 +49,25 @@
                     </div>
                 </div>
 
-                <div class="form-t-container">
+                <div class="form-t-container"  >
                     <template v-if="postType === 1">
                         <div class="form-t-l">
                             <div class="form-t-label">Job Post Information</div>
                             <div class="form-t-tips">Provide the information for the job posting</div>
                         </div>
                         <div class="form-t-r">
-                            <el-button icon="DocumentAdd"
-                                       plain
-                                       @click="showSaveJobTemplateVisible()">
-                                Save as Template
-                            </el-button>
-                            <el-button type="primary" @click="submitJob(jobForms)">Post Job</el-button>
+                            <template v-if="!isEditing">
+                                <el-button icon="DocumentAdd"
+                                           plain
+                                           @click="showSaveJobTemplateVisible(jobForms)">
+                                    Save as Template
+                                </el-button>
+                                <el-button type="primary" @click="submitJob(jobForms)">Post Job</el-button>
+                            </template>
+                            <template v-else>
+                                <el-button type="primary" @click="submitJob(jobForms)">Save Changes</el-button>
+                            </template>
+
                         </div>
                     </template>
                     <template v-if="postType === 2">
@@ -75,37 +81,38 @@
                 </div>
 
                 <template v-if="postType === 1">
-                    <div class="collapse-item-container">
-                        <div class="collapse-item-t" @click="addExpandKeys(1)">
-                            <div class="collapse-item-t-label"><span>Job Details</span></div>
-                            <div class="collapse-item-t-line"></div>
-                            <div class="collapse-item-t-icons">
-                                <el-image
-                                    v-if="expandKeysData.indexOf(1) === -1"
-                                    class="collapse-item-t-icon"
-                                    :src="arrowDownIcon">
-                                </el-image>
-                                <el-image
-                                    v-else
-                                    class="collapse-item-t-icon"
-                                    :src="arrowUpIcon">
-                                </el-image>
+
+                    <el-form
+                            ref="jobForms"
+                            :model="jobForm"
+                            :rules="jobRules"
+                            require-asterisk-position="right"
+                            status-icon
+                            scroll-to-error
+                            inline-message
+                            label-width="220px"
+                            label-position="left"
+                            class="demo-ruleForm"
+                    >
+                        <div class="collapse-item-container">
+                            <div class="collapse-item-t" @click="addExpandKeys(1)">
+                                <div class="collapse-item-t-label"><span>Job Details</span></div>
+                                <div class="collapse-item-t-line"></div>
+                                <div class="collapse-item-t-icons">
+                                    <el-image
+                                            v-if="expandKeysData.indexOf(1) === -1"
+                                            class="collapse-item-t-icon"
+                                            :src="arrowDownIcon">
+                                    </el-image>
+                                    <el-image
+                                            v-else
+                                            class="collapse-item-t-icon"
+                                            :src="arrowUpIcon">
+                                    </el-image>
+                                </div>
                             </div>
-                        </div>
-                        <el-collapse-transition>
-                            <div class="job-form-container">
-                                <el-form
-                                    ref="jobForms"
-                                    :model="jobForm"
-                                    :rules="jobRules"
-                                    require-asterisk-position="right"
-                                    status-icon
-                                    scroll-to-error
-                                    inline-message
-                                    label-width="220px"
-                                    label-position="left"
-                                    class="demo-ruleForm"
-                                >
+                            <el-collapse-transition>
+                                <div class="job-form-container" v-if="expandKeysData.indexOf(1) !== -1">
 
                                     <el-form-item label="Job Title" prop="job_title">
                                         <el-input type="text"
@@ -179,17 +186,17 @@
                                                 </div>
                                                 <div class="xll-form-location-action" v-if="haveLocationStatus">
                                                     <el-button
-                                                        link
-                                                        icon="Edit"
-                                                        @click="changeEditLocation()">
+                                                            link
+                                                            icon="Edit"
+                                                            @click="changeEditLocation()">
                                                     </el-button>
                                                 </div>
 
                                                 <div class="xll-form-location-action" v-if="showLocationCancelStatus">
                                                     <el-button
-                                                        link
-                                                        icon="Close"
-                                                        @click="changeCancelLocation()">
+                                                            link
+                                                            icon="Close"
+                                                            @click="changeCancelLocation()">
                                                     </el-button>
                                                 </div>
 
@@ -201,22 +208,22 @@
 
                                     <el-form-item label="Start Date" prop="entry_date">
                                         <el-date-picker
-                                            v-model="jobForm.entry_date"
-                                            type="date"
-                                            placeholder="Select Date"
-                                            format="YYYY-MM-DD"
-                                            value-format="YYYY-MM-DD"
+                                                v-model="jobForm.entry_date"
+                                                type="date"
+                                                placeholder="Select Date"
+                                                format="YYYY-MM-DD"
+                                                value-format="YYYY-MM-DD"
                                         >
                                         </el-date-picker>
                                     </el-form-item>
 
                                     <el-form-item label="Application Deadline" prop="apply_due_date">
                                         <el-date-picker
-                                            v-model="jobForm.apply_due_date"
-                                            type="date"
-                                            placeholder="Select Date"
-                                            format="YYYY-MM-DD"
-                                            value-format="YYYY-MM-DD"
+                                                v-model="jobForm.apply_due_date"
+                                                type="date"
+                                                placeholder="Select Date"
+                                                format="YYYY-MM-DD"
+                                                value-format="YYYY-MM-DD"
                                         >
                                         </el-date-picker>
                                     </el-form-item>
@@ -228,21 +235,21 @@
                                     <el-form-item label="Student Age" prop="student_age">
 
                                         <el-select
-                                            v-model="selectAgeToTeachList"
-                                            :teleported="false"
-                                            multiple
-                                            collapse-tags
-                                            collapse-tags-tooltip
-                                            placeholder="Select Student Age Group"
-                                            filterable
-                                            allow-create
-                                            value-key="id"
+                                                v-model="selectAgeToTeachList"
+                                                :teleported="false"
+                                                multiple
+                                                collapse-tags
+                                                collapse-tags-tooltip
+                                                placeholder="Select Student Age Group"
+                                                filterable
+                                                allow-create
+                                                value-key="id"
                                         >
                                             <el-option
-                                                v-for="(item,index) in ageToTeachList"
-                                                :key="index"
-                                                :label="item.object_en"
-                                                :value="item"
+                                                    v-for="(item,index) in ageToTeachList"
+                                                    :key="index"
+                                                    :label="item.object_en"
+                                                    :value="item"
                                             />
 
                                         </el-select>
@@ -251,21 +258,21 @@
                                     <el-form-item label="Subjects">
 
                                         <el-select
-                                            v-model="selectSubjectList"
-                                            :teleported="false"
-                                            multiple
-                                            collapse-tags
-                                            collapse-tags-tooltip
-                                            placeholder="Select Subjects"
-                                            filterable
-                                            allow-create
-                                            value-key="id"
+                                                v-model="selectSubjectList"
+                                                :teleported="false"
+                                                multiple
+                                                collapse-tags
+                                                collapse-tags-tooltip
+                                                placeholder="Select Subjects"
+                                                filterable
+                                                allow-create
+                                                value-key="id"
                                         >
                                             <el-option
-                                                v-for="(item,index) in subjectList"
-                                                :key="index"
-                                                :label="item.object_en"
-                                                :value="item"
+                                                    v-for="(item,index) in subjectList"
+                                                    :key="index"
+                                                    :label="item.object_en"
+                                                    :value="item"
                                             />
 
                                         </el-select>
@@ -275,20 +282,20 @@
                                     <el-form-item label="Job Type" prop="employment_type">
 
                                         <el-select
-                                            v-model="selectEmploymentTypeList"
-                                            multiple
-                                            collapse-tags
-                                            collapse-tags-tooltip
-                                            filterable
-                                            allow-create
-                                            placeholder="Select Job Type"
-                                            value-key="id"
+                                                v-model="selectEmploymentTypeList"
+                                                multiple
+                                                collapse-tags
+                                                collapse-tags-tooltip
+                                                filterable
+                                                allow-create
+                                                placeholder="Select Job Type"
+                                                value-key="id"
                                         >
                                             <el-option
-                                                v-for="(item,i) in employmentTypeList"
-                                                :key="i"
-                                                :label="item.object_en"
-                                                :value="item"
+                                                    v-for="(item,i) in employmentTypeList"
+                                                    :key="i"
+                                                    :label="item.object_en"
+                                                    :value="item"
                                             />
                                         </el-select>
 
@@ -300,25 +307,25 @@
                                         <div class="xll-salary-container">
                                             <el-time-select
 
-                                                v-model="jobForm.working_hours_start"
-                                                placeholder="9:00 AM"
-                                                format="HH:mm A"
-                                                start="00:00"
-                                                step="00:15"
-                                                end="24:00"
+                                                    v-model="jobForm.working_hours_start"
+                                                    placeholder="9:00 AM"
+                                                    format="HH:mm A"
+                                                    start="00:00"
+                                                    step="00:15"
+                                                    end="24:00"
                                             >
                                             </el-time-select>
 
                                             <div class="xll-salary-line">To</div>
                                             <el-time-select
 
-                                                v-model="jobForm.working_hours_end"
-                                                :min-time="jobForm.working_hours_start"
-                                                format="HH:mm A"
-                                                placeholder="5:00 PM"
-                                                start="00:00"
-                                                step="00:15"
-                                                end="24:00"
+                                                    v-model="jobForm.working_hours_end"
+                                                    :min-time="jobForm.working_hours_start"
+                                                    format="HH:mm A"
+                                                    placeholder="5:00 PM"
+                                                    start="00:00"
+                                                    step="00:15"
+                                                    end="24:00"
                                             >
                                             </el-time-select>
 
@@ -337,56 +344,45 @@
 
                                     </el-form-item>
 
-                                </el-form>
-                            </div>
+                                </div>
 
-                        </el-collapse-transition>
+                            </el-collapse-transition>
 
-                    </div>
-                    <div class="collapse-item-container">
-                        <div class="collapse-item-t" @click="addExpandKeys(2)">
-                            <div class="collapse-item-t-label"><span>Compensation</span></div>
-                            <div class="collapse-item-t-line"></div>
-                            <div class="collapse-item-t-icons">
-                                <el-image
-                                    v-if="expandKeysData.indexOf(2) === -1"
-                                    class="collapse-item-t-icon"
-                                    :src="arrowDownIcon">
-                                </el-image>
-                                <el-image
-                                    v-else
-                                    class="collapse-item-t-icon"
-                                    :src="arrowUpIcon">
-                                </el-image>
-                            </div>
                         </div>
-                        <el-collapse-transition>
-                            <div class="job-form-container">
-                                <el-form
-                                    ref="jobForms"
-                                    :model="jobForm"
-                                    :rules="jobRules"
-                                    require-asterisk-position="right"
-                                    status-icon
-                                    scroll-to-error
-                                    label-width="220px"
-                                    label-position="left"
-                                    class="demo-ruleForm"
-                                >
+
+                        <div class="collapse-item-container">
+                            <div class="collapse-item-t" @click="addExpandKeys(2)">
+                                <div class="collapse-item-t-label"><span>Compensation</span></div>
+                                <div class="collapse-item-t-line"></div>
+                                <div class="collapse-item-t-icons">
+                                    <el-image
+                                            v-if="expandKeysData.indexOf(2) === -1"
+                                            class="collapse-item-t-icon"
+                                            :src="arrowDownIcon">
+                                    </el-image>
+                                    <el-image
+                                            v-else
+                                            class="collapse-item-t-icon"
+                                            :src="arrowUpIcon">
+                                    </el-image>
+                                </div>
+                            </div>
+                            <el-collapse-transition>
+                                <div class="job-form-container" v-if="expandKeysData.indexOf(2) !== -1">
 
                                     <el-form-item label="Salary Range" prop="salary_range">
 
                                         <div class="xll-salary-container">
                                             <el-select
-                                                v-model="jobForm.currency"
-                                                class="xll-currency-select"
-                                                value-key="object_en"
-                                                placeholder="Select">
+                                                    v-model="jobForm.currency"
+                                                    class="xll-currency-select"
+                                                    value-key="object_en"
+                                                    placeholder="Select">
                                                 <el-option
-                                                    v-for="(item,index) in currencyList"
-                                                    :key="index"
-                                                    :label="item.object_en"
-                                                    :value="item.object_en"
+                                                        v-for="(item,index) in currencyList"
+                                                        :key="index"
+                                                        :label="item.object_en"
+                                                        :value="item.object_en"
                                                 >
                                                 </el-option>
                                             </el-select>
@@ -420,21 +416,21 @@
                                     <el-form-item label="Benefits">
 
                                         <el-select
-                                            v-model="selectBenefitsList"
-                                            class="form-width-388"
-                                            multiple
-                                            collapse-tags
-                                            collapse-tags-tooltip
-                                            placeholder="Select Benefits"
-                                            filterable
-                                            allow-create
-                                            value-key="id"
+                                                v-model="selectBenefitsList"
+                                                class="form-width-388"
+                                                multiple
+                                                collapse-tags
+                                                collapse-tags-tooltip
+                                                placeholder="Select Benefits"
+                                                filterable
+                                                allow-create
+                                                value-key="id"
                                         >
                                             <el-option
-                                                v-for="(item,index) in benefitsList"
-                                                :key="index"
-                                                :label="item.object_en"
-                                                :value="item"
+                                                    v-for="(item,index) in benefitsList"
+                                                    :key="index"
+                                                    :label="item.object_en"
+                                                    :value="item"
                                             />
 
                                         </el-select>
@@ -447,61 +443,49 @@
                                                   placeholder="Enter Number"></el-input>
                                     </el-form-item>
 
-                                </el-form>
-                            </div>
+                                </div>
 
-                        </el-collapse-transition>
+                            </el-collapse-transition>
 
-                    </div>
-                    <div class="collapse-item-container">
-                        <div class="collapse-item-t" @click="addExpandKeys(3)">
-                            <div class="collapse-item-t-label"><span>Requirements</span></div>
-                            <div class="collapse-item-t-line"></div>
-                            <div class="collapse-item-t-icons">
-                                <el-image
-                                    v-if="expandKeysData.indexOf(3) === -1"
-                                    class="collapse-item-t-icon"
-                                    :src="arrowDownIcon">
-                                </el-image>
-                                <el-image
-                                    v-else
-                                    class="collapse-item-t-icon"
-                                    :src="arrowUpIcon">
-                                </el-image>
-                            </div>
                         </div>
-                        <el-collapse-transition>
-                            <div class="job-form-container">
-                                <el-form
-                                    ref="jobForms"
-                                    :model="jobForm"
-                                    :rules="jobRules"
-                                    require-asterisk-position="right"
-                                    status-icon
-                                    scroll-to-error
-                                    label-width="220px"
-                                    label-position="left"
-                                    class="demo-ruleForm"
-                                >
+                        <div class="collapse-item-container">
+                            <div class="collapse-item-t" @click="addExpandKeys(3)">
+                                <div class="collapse-item-t-label"><span>Requirements</span></div>
+                                <div class="collapse-item-t-line"></div>
+                                <div class="collapse-item-t-icons">
+                                    <el-image
+                                            v-if="expandKeysData.indexOf(3) === -1"
+                                            class="collapse-item-t-icon"
+                                            :src="arrowDownIcon">
+                                    </el-image>
+                                    <el-image
+                                            v-else
+                                            class="collapse-item-t-icon"
+                                            :src="arrowUpIcon">
+                                    </el-image>
+                                </div>
+                            </div>
+                            <el-collapse-transition>
+                                <div class="job-form-container" v-if="expandKeysData.indexOf(3) !== -1">
 
                                     <el-form-item label="Preferred nationality">
 
                                         <el-select
-                                            v-model="selectPnationalityList"
-                                            class="form-width-388"
-                                            multiple
-                                            collapse-tags
-                                            collapse-tags-tooltip
-                                            placeholder="Select Nationality"
-                                            filterable
-                                            allow-create
-                                            value-key="id"
+                                                v-model="selectPnationalityList"
+                                                class="form-width-388"
+                                                multiple
+                                                collapse-tags
+                                                collapse-tags-tooltip
+                                                placeholder="Select Nationality"
+                                                filterable
+                                                allow-create
+                                                value-key="id"
                                         >
                                             <el-option
-                                                v-for="(item,index) in pNationalityList"
-                                                :key="index"
-                                                :label="item.object_en"
-                                                :value="item"
+                                                    v-for="(item,index) in pNationalityList"
+                                                    :key="index"
+                                                    :label="item.object_en"
+                                                    :value="item"
                                             />
 
                                         </el-select>
@@ -511,21 +495,21 @@
                                     <el-form-item label="Teaching License and Certificates">
 
                                         <el-select
-                                            v-model="selectTeachingCertificateList"
-                                            class="form-width-388"
-                                            multiple
-                                            collapse-tags
-                                            collapse-tags-tooltip
-                                            placeholder="Select Certificate"
-                                            filterable
-                                            allow-create
-                                            value-key="id"
+                                                v-model="selectTeachingCertificateList"
+                                                class="form-width-388"
+                                                multiple
+                                                collapse-tags
+                                                collapse-tags-tooltip
+                                                placeholder="Select Certificate"
+                                                filterable
+                                                allow-create
+                                                value-key="id"
                                         >
                                             <el-option
-                                                v-for="(item,index) in teachingCertificateList"
-                                                :key="index"
-                                                :label="item.object_en"
-                                                :value="item"
+                                                    v-for="(item,index) in teachingCertificateList"
+                                                    :key="index"
+                                                    :label="item.object_en"
+                                                    :value="item"
                                             />
 
                                         </el-select>
@@ -548,21 +532,21 @@
                                         <div>
                                             <div>
                                                 <el-select
-                                                    v-model="selectLanguagesList"
-                                                    class="form-width-388"
-                                                    multiple
-                                                    collapse-tags
-                                                    collapse-tags-tooltip
-                                                    placeholder="Select Languages"
-                                                    filterable
-                                                    allow-create
-                                                    value-key="id"
+                                                        v-model="selectLanguagesList"
+                                                        class="form-width-388"
+                                                        multiple
+                                                        collapse-tags
+                                                        collapse-tags-tooltip
+                                                        placeholder="Select Languages"
+                                                        filterable
+                                                        allow-create
+                                                        value-key="id"
                                                 >
                                                     <el-option
-                                                        v-for="(item,index) in languagesList"
-                                                        :key="index"
-                                                        :label="item.object_en"
-                                                        :value="item"
+                                                            v-for="(item,index) in languagesList"
+                                                            :key="index"
+                                                            :label="item.object_en"
+                                                            :value="item"
                                                     />
 
                                                 </el-select>
@@ -592,21 +576,21 @@
                                     <el-form-item label="Work schedule">
 
                                         <el-select
-                                            v-model="selectWorkTypeList"
-                                            class="form-width-388"
-                                            multiple
-                                            collapse-tags
-                                            collapse-tags-tooltip
-                                            placeholder="Select Work Type"
-                                            filterable
-                                            allow-create
-                                            value-key="id"
+                                                v-model="selectWorkTypeList"
+                                                class="form-width-388"
+                                                multiple
+                                                collapse-tags
+                                                collapse-tags-tooltip
+                                                placeholder="Select Work Type"
+                                                filterable
+                                                allow-create
+                                                value-key="id"
                                         >
                                             <el-option
-                                                v-for="(item,index) in workTypeList"
-                                                :key="index"
-                                                :label="item.object_en"
-                                                :value="item"
+                                                    v-for="(item,index) in workTypeList"
+                                                    :key="index"
+                                                    :label="item.object_en"
+                                                    :value="item"
                                             />
 
                                         </el-select>
@@ -644,108 +628,34 @@
                                             <div class="xll-salary-line">(Years)</div>
                                         </div>
                                     </el-form-item>
-                                </el-form>
-                            </div>
 
-                        </el-collapse-transition>
+                                </div>
 
-                    </div>
-                    <div class="post-job-bottom-actions">
-                        <el-button link>Save & Exit</el-button>
+                            </el-collapse-transition>
+
+                        </div>
+
+                    </el-form>
+
+                    <div class="post-job-bottom-actions" v-if="!isEditing">
+                        <el-button link @click="saveAsDrafts(jobForms)">Save & Exit</el-button>
                         <el-button plain>Cancel</el-button>
                     </div>
 
                 </template>
 
                 <template v-if="postType === 2">
-                    <div class="job-template-container">
-                        <div class="job-item">
-                            <div class="job-item-t">
-                                <div class="job-item-t-l">
-                                    <el-image :src="upgradeImg" class="job-item-avatar"></el-image>
-                                </div>
-                                <div class="job-item-t-r">
-                                    <div class="job-item-name">
-                                        Job Post Template Name
-                                    </div>
-                                    <div class="job-item-desc">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent molestie, neque id tempor tincidunt, arcu lacus imperdiet velit, eget consequat lacus erat a risus. Cras vestibulum vehicula lacinia. Duis a ultricies ex, vitae lacinia erat. Ut ipsum turpis, suscipit at congue sit amet, ornare vitae lectus. Sed ex nunc, elementum sed sapien sus
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="job-item-b">
-                                <el-tooltip
-                                    effect="light"
-                                    content="item.job_location"
-                                    placement="bottom"
-                                >
-                                    <div class="job-item-location">
-                                        <el-image class="job-item-icon-24" :src="locationIconImg"></el-image>
-                                        <span>Fatura, Japan</span>
-                                    </div>
-
-                                </el-tooltip>
-
-                                <div class="job-item-salary">
-                                    <el-image class="job-item-icon-24" :src="salaryIconImg"></el-image>
-                                    <span>USD $700 - 800</span>
-                                </div>
-                                <div class="job-item-btns">
-                                    <el-button type="primary">Post Job</el-button>
-                                </div>
-                            </div>
-
-                            <div class="job-item-more-actions">
-                                <el-dropdown :hide-on-click="false" trigger="click">
-                                    <span class="job-item-more-text"><el-icon><IconRiMore2Fill /></el-icon></span>
-                                    <template #dropdown>
-                                        <el-dropdown-menu>
-                                            <el-dropdown-item>
-                                                <el-button link @click="editJobTemplate()">
-                                                    Edit
-                                                </el-button>
-                                            </el-dropdown-item>
-                                            <el-dropdown-item>
-                                                <el-popconfirm
-                                                    title="Are you sure to delete this?"
-                                                    width="auto"
-                                                    @confirm="deleteJobTemplate()"
-                                                >
-                                                    <template #reference>
-                                                        <el-button link>Delete</el-button>
-                                                    </template>
-                                                </el-popconfirm>
-
-                                            </el-dropdown-item>
-                                        </el-dropdown-menu>
-                                    </template>
-                                </el-dropdown>
-                            </div>
-                        </div>
-
-                        <div class="upgrade-job-template-item">
-                            <div class="upgrade-job-template-item-t">
-                                <div class="upgrade-job-template-item-t-l">
-                                    <el-image :src="upgradeImg" class="upgrade-job-template-avatar"></el-image>
-                                </div>
-                                <div class="upgrade-job-template-item-t-r">
-                                    <div class="upgrade-job-template-item-label">
-                                        Upgrade to Premium for More Job Post Templates
-                                    </div>
-                                    <div class="upgrade-job-template-item-tips">
-                                        Upgrade now and get the ability to create up to 3 job post templates.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="upgrade-job-template-item-b">
-                                <el-button type="primary">
-                                    Upgrade To Premium Today!
-                                </el-button>
-                            </div>
-                        </div>
-
+                    <div style="margin: 30px 40px;">
+                        <job-templates
+                            :job-template-data="jobTemplateData"
+                            @post-job="postJobFromTemplate"
+                            @edit="editJobTemplate"
+                            @delete="deleteJobTemplate"
+                            @turn-manual-posting="postType=1"
+                        ></job-templates>
                     </div>
-                </template>
+
+                 </template>
 
             </div>
 
@@ -757,30 +667,30 @@
         </el-scrollbar>
 
         <el-dialog
-            v-model="saveJobTemplateVisible"
-            title = "Save Job Template"
-            align-center
+                v-model="saveJobTemplateVisible"
+                title="Save Job Template"
+                align-center
         >
             <el-form
-                ref="saveJobTemplateForms"
-                :model="saveJobTemplateForm"
-                :rules="saveJobTemplateRules"
-                require-asterisk-position="right"
-                status-icon
-                scroll-to-error
-                label-width="220px"
-                label-position="left"
-                class="demo-ruleForm"
+                    ref="saveJobTemplateForms"
+                    :model="saveJobTemplateForm"
+                    :rules="saveJobTemplateRules"
+                    require-asterisk-position="right"
+                    status-icon
+                    scroll-to-error
+                    label-width="220px"
+                    label-position="left"
+                    class="demo-ruleForm"
             >
                 <el-form-item label="Template Name" prop="name">
-                    <el-input placeholder="Enter Name"></el-input>
+                    <el-input v-model="saveJobTemplateForm.name" placeholder="Enter Name"></el-input>
                 </el-form-item>
 
             </el-form>
 
             <template #footer>
                 <el-button @click="saveJobTemplateVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="saveJobTemplateVisible = false">
+                <el-button type="primary" @click="submitSaveAsTemplate(saveJobTemplateForms)">
                     Save
                 </el-button>
             </template>
@@ -797,19 +707,23 @@ export default {
 }
 </script>
 <script setup>
-import upgradeImg from '@/assets/newHome/dashboard/upgrade.svg'
-import locationIconImg from '@/assets/newHome/dashboard/location_nofill.svg'
-import salaryIconImg from '@/assets/newHome/dashboard/salary_nofill.svg'
 import {timeZones} from "@/utils/timeZones";
 import Tinymce from "@/components/Tinymce";
 import arrowDownIcon from '@/assets/newHome/arrow-circle-down.svg'
 import arrowUpIcon from '@/assets/newHome/arrow-circle-up.svg'
 import {
-    USER_OBJECT_LIST, ADD_JOB, JOB_DETAIL,
-    JOB_ADD_PROFILE, GET_COUNTRY_LIST, USER_INFO_BY_TOKEN_V2
+    USER_OBJECT_LIST,
+    ADD_JOB,
+    JOB_DETAIL,
+    JOB_ADD_PROFILE,
+    GET_COUNTRY_LIST,
+    USER_INFO_BY_TOKEN_V2,
+    HOME_JOB_TEMPLATE_ADD,
+    JOB_TEMPLATE_LIST,
+    HOME_JOB_TEMPLATE_DELETE
 } from '@/api/api';
 
-import {ref, reactive, onMounted, onUnmounted, computed} from "vue";
+import {ref, reactive, onMounted, onUnmounted, computed,watch} from "vue";
 import {useStore} from 'vuex'
 import {useRoute, useRouter} from 'vue-router'
 
@@ -827,10 +741,14 @@ const identity = computed(() => store.state.identity)
 
 //1 manual posting 2. post form template
 const postType = ref(1)
-const changeJobType = (value)=>{
+const changeJobType = (value) => {
     postType.value = value
+    if (value === 2) {
+        getJobTemplateList()
+    }
 }
 
+const isEditing = ref(false)
 
 const expandKeysData = ref([1, 2, 3, 4])
 
@@ -847,20 +765,20 @@ const addExpandKeys = (value) => {
 const jobForms = ref(null)
 
 const jobForm = reactive({
-    job_title:'',
-    is_online:0,
-    job_location:'',
+    job_title: '',
+    is_online: 0,
+    job_location: '',
     country_id: '',
     state_id: '',
     town_id: '',
-    address:'',
-    entry_date:'',
-    apply_due_date:'',
-    desc:'',
-    working_hours:"",
-    working_hours_start:'',
-    working_hours_end:'',
-    working_time_zone:'GMT',
+    address: '',
+    entry_date: '',
+    apply_due_date: '',
+    desc: '',
+    working_hours: "",
+    working_hours_start: '',
+    working_hours_end: '',
+    working_time_zone: 'GMT',
     currency: "USD",
     salary_min: '',
     salary_max: '',
@@ -868,13 +786,14 @@ const jobForm = reactive({
     numbers: 1,
     age_min: '',
     age_max: '',
-    working_nums_start:'',
-    working_nums_end:'',
+    working_nums_start: '',
+    working_nums_end: '',
     is_mom_language: 0,
     employment_type: '',
     version_time: '',
     sex: '',
-    identity:identity.value
+    education: '',
+    identity: identity.value
 })
 
 // const jobForm1 = reactive(
@@ -911,44 +830,44 @@ const jobForm = reactive({
 // )
 
 const validateLocation = (rule, value, callback) => {
-    if(jobForm.is_online){
+    if (jobForm.is_online) {
         callback()
-    }else{
-        if(!jobForm.job_location){
+    } else {
+        if (!jobForm.job_location) {
             return callback(new Error('Please select job location'))
         }
         callback()
     }
 }
 
-const validateStudentAge = (rule, value, callback)=>{
-    if(selectAgeToTeachList.value && selectAgeToTeachList.value.length > 0){
+const validateStudentAge = (rule, value, callback) => {
+    if (selectAgeToTeachList.value && selectAgeToTeachList.value.length > 0) {
         callback()
-    }else{
+    } else {
         return callback(new Error('Please select student age group'))
     }
 }
 
-const validateEmploymentType = (rule, value, callback)=>{
-    if(selectEmploymentTypeList.value && selectEmploymentTypeList.value.length > 0){
+const validateEmploymentType = (rule, value, callback) => {
+    if (selectEmploymentTypeList.value && selectEmploymentTypeList.value.length > 0) {
         callback()
-    }else{
+    } else {
         return callback(new Error('Please select job type'))
     }
 }
 
-const validateWorkingHours = (rule, value, callback)=>{
-    if(jobForm.working_hours_start && jobForm.working_hours_end && jobForm.working_time_zone){
+const validateWorkingHours = (rule, value, callback) => {
+    if (jobForm.working_hours_start && jobForm.working_hours_end && jobForm.working_time_zone) {
         callback()
-    }else{
+    } else {
         return callback(new Error('Please complete working hours'))
     }
 }
 
-const validateSalaryRange = (rule, value, callback)=>{
-    if(jobForm.currency && jobForm.salary_min && jobForm.salary_max && jobForm.payment_period){
+const validateSalaryRange = (rule, value, callback) => {
+    if (jobForm.currency && jobForm.salary_min && jobForm.salary_max && jobForm.payment_period) {
         callback()
-    }else{
+    } else {
         return callback(new Error('Please complete salary range'))
     }
 }
@@ -957,99 +876,298 @@ const jobRules = reactive(
     {
         job_title: [
             {
-                required:true,
+                required: true,
                 message: 'Please input job title',
-                trigger: ['change','blur'],
+                trigger: ['change', 'blur'],
             },
         ],
         location: [
             {
-                required:true,
+                required: true,
                 validator: validateLocation,
-                trigger: ['change','blur'],
+                trigger: ['change', 'blur'],
             },
         ],
-        entry_date:[
+        entry_date: [
             {
-                required:true,
-                message:'Select Date',
+                required: true,
+                message: 'Select Date',
                 trigger: ['change', 'blur']
             }
         ],
-        apply_due_date:[
+        apply_due_date: [
             {
-                required:true,
-                message:'Select Date',
+                required: true,
+                message: 'Select Date',
                 trigger: ['change', 'blur']
             }
         ],
-        desc:[
+        desc: [
             {
-                required:true,
-                message:'Please input description',
-                trigger:['change','blur']
+                required: true,
+                message: 'Please input description',
+                trigger: ['change', 'blur']
             }
         ],
-        student_age:[
+        student_age: [
             {
-                required:true,
-                validator:validateStudentAge,
-                trigger:['change','blur']
+                required: true,
+                validator: validateStudentAge,
+                trigger: ['change', 'blur']
             }
         ],
-        employment_type:[
+        employment_type: [
             {
-                required:true,
-                validator:validateEmploymentType,
-                trigger:['change','blur']
+                required: true,
+                validator: validateEmploymentType,
+                trigger: ['change', 'blur']
             }
         ],
-        working_hours:[
+        working_hours: [
             {
-                required:true,
-                validator:validateWorkingHours,
-                trigger:['change','blur']
+                required: true,
+                validator: validateWorkingHours,
+                trigger: ['change', 'blur']
             }
         ],
-        salary_range:[
+        salary_range: [
             {
-                required:true,
-                validator:validateSalaryRange,
-                trigger:['change','blur']
+                required: true,
+                validator: validateSalaryRange,
+                trigger: ['change', 'blur']
             }
         ]
 
     }
 )
 
+const jobTemplateData = ref([])
 const saveJobTemplateVisible = ref(false)
 const saveJobTemplateForms = ref(null)
 
 const saveJobTemplateForm = reactive({
-    name:''
+    name: '',
+    content: '',
+    type: 1
 })
 
 const saveJobTemplateRules = reactive({
-    name:[
+    name: [
         {
-            required:true,
-            message:'Please enter name',
-            trigger:['change','blur']
+            required: true,
+            message: 'Please enter name',
+            trigger: ['change', 'blur']
         }
     ]
 })
 
-const showSaveJobTemplateVisible = ()=>{
-    saveJobTemplateVisible.value =true
+const showSaveJobTemplateVisible = (formEl) => {
+
+    formEl.validate((valid) => {
+        if (valid) {
+
+            let jobObj = Object.assign({
+                student_age: selectAgeToTeachList.value,
+                subject: selectSubjectList.value,
+                job_type: selectEmploymentTypeList.value,
+                benefits: selectBenefitsList.value,
+                preferred_nationality: selectPnationalityList.value,
+                certificate: selectTeachingCertificateList.value,
+                languages: selectLanguagesList.value,
+                work_type: selectWorkTypeList.value
+            }, jobForm)
+
+            saveJobTemplateForm.content = JSON.stringify(jobObj)
+            saveJobTemplateVisible.value = true
+
+        } else {
+            console.log('job form error submit')
+        }
+    })
+
 }
 
-const editJobTemplate = ()=>{
+const submitSaveAsTemplate = (formEl) => {
+    const loading = ElLoading.service({
+        text: 'Loading'
+    })
+    formEl.validate((valid) => {
+        if (valid) {
+
+            let params = Object.assign({}, saveJobTemplateForm)
+            HOME_JOB_TEMPLATE_ADD(params).then(res => {
+                if (res.code === 200) {
+                    saveJobTemplateVisible.value = false
+                    store.commit('setJobTemplateDetail', {})
+                    console.log('save template success')
+
+                    setTimeout(function (){
+                        loading.close()
+                        router.push({path:'/jobs/myJobs',query:{tab:'job_templates'}})
+                    }, 1500)
+
+                }
+            })
+
+        } else {
+            loading.close()
+            console.log('save as template error submit')
+        }
+    })
+
+}
+const saveAsDrafts = (formEl) => {
+    const loading = ElLoading.service({
+        text: 'Loading'
+    })
+    formEl.validate((valid) => {
+        if (valid) {
+
+            let jobObj = Object.assign({
+                student_age: selectAgeToTeachList.value,
+                subject: selectSubjectList.value,
+                job_type: selectEmploymentTypeList.value,
+                benefits: selectBenefitsList.value,
+                preferred_nationality: selectPnationalityList.value,
+                certificate: selectTeachingCertificateList.value,
+                languages: selectLanguagesList.value,
+                work_type: selectWorkTypeList.value
+            }, jobForm)
+
+            let params = {
+                content:JSON.stringify(jobObj),
+                type:2,
+                name:'job_drafts'
+            }
+
+            HOME_JOB_TEMPLATE_ADD(params).then(res => {
+                if (res.code === 200) {
+
+                    store.commit('setJobTemplateDetail', {})
+                    console.log('save template success')
+
+                    setTimeout(function (){
+                        loading.close()
+                        router.push({path:'/jobs/myJobs',query:{tab:'job_drafts'}})
+                    }, 1500)
+
+                }
+            })
+
+        } else {
+            loading.close()
+            console.log('save as template error submit')
+        }
+    })
 
 }
 
-const deleteJobTemplate = ()=>{
+const getJobTemplateList = () => {
+    let params = {
+        type:1,
+        page: 1,
+        limit: 100
+    }
+
+    JOB_TEMPLATE_LIST(params).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+            let jobTemplateArr = res.message.data;
+            jobTemplateArr.forEach(item => {
+                item.content = item.content ? JSON.parse(item.content) : {}
+            })
+            jobTemplateData.value = jobTemplateArr;
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
 
 }
+
+
+const loadJobTemplate = (item)=>{
+
+    saveJobTemplateForm.id = item.id;
+
+    selectAgeToTeachList.value = item.content.student_age;
+    selectSubjectList.value = item.content.subject;
+    selectEmploymentTypeList.value = item.content.job_type;
+    selectBenefitsList.value = item.content.benefits;
+    selectPnationalityList.value = item.content.preferred_nationality;
+    selectTeachingCertificateList.value = item.content.certificate;
+    selectLanguagesList.value = item.content.languages;
+    selectWorkTypeList.value = item.content.work_type;
+
+    jobForm.job_title = item.content.job_title
+    jobForm.is_online = item.content.is_online
+    jobForm.job_location = item.content.job_location
+    jobForm.country_id = item.content.country_id
+    jobForm.state_id = item.content.state_id
+    jobForm.town_id = item.content.town_id
+    jobForm.address = item.content.address
+    jobForm.entry_date = item.content.entry_date
+    jobForm.apply_due_date = item.content.apply_due_date
+    jobForm.desc = item.content.desc
+    jobForm.working_hours = item.content.working_hours
+    jobForm.working_hours_start = item.content.working_hours_start
+    jobForm.working_hours_end = item.content.working_hours_end
+    jobForm.working_time_zone = item.content.working_time_zone
+    jobForm.currency = item.content.currency
+    jobForm.salary_min = item.content.salary_min
+    jobForm.salary_max = item.content.salary_max
+    jobForm.payment_period = item.content.payment_period
+    jobForm.numbers = item.content.numbers
+    jobForm.age_min = item.content.age_min
+    jobForm.age_max = item.content.age_max
+    jobForm.working_nums_start = item.content.working_nums_start
+    jobForm.working_nums_end = item.content.working_nums_end
+    jobForm.is_mom_language = item.content.is_mom_language
+    jobForm.employment_type = item.content.employment_type
+    jobForm.version_time = item.content.version_time
+    jobForm.sex = item.content.sex
+    jobForm.education = item.content.education
+
+}
+
+const editJobTemplate = (item) => {
+    postType.value = 1
+    // saveJobTemplateForm.id = item.id;
+    store.commit('setJobTemplateDetail', item)
+}
+
+const postJobFromTemplate = (item) => {
+    postType.value = 1
+    // saveJobTemplateForm.id = item.id;
+    store.commit('setJobTemplateDetail', item)
+}
+
+const deleteJobTemplate = (id) => {
+    let params = {
+        id: id
+    }
+    HOME_JOB_TEMPLATE_DELETE(params).then(res => {
+        if (res.code === 200) {
+            getJobTemplateList()
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const jobTemplateDetailObj = computed(()=>store.state.jobTemplateDetail)
+
+// if(Object.keys(jobTemplateDetailObj.value).length !== 0 && jobTemplateDetailObj.value.constructor === Object){
+//     loadJobTemplate(jobTemplateDetailObj.value)
+// }
+
+watch(jobTemplateDetailObj, (newValue,oldValue)=>{
+    console.log(newValue,oldValue)
+    if(newValue){
+        loadJobTemplate(newValue)
+    }
+})
+
 
 const paymentPeriodList = ref([])
 
@@ -1057,13 +1175,11 @@ const employmentTypeList = ref([])
 const selectEmploymentTypeList = ref([])
 
 const jobTitleList = ref([])
-const selectJobTitleList = ref([])
 
 const benefitsList = ref([])
 const selectBenefitsList = ref([])
 
 const startDateList = ref([])
-const selectStartDateList = ref([])
 
 const ageToTeachList = ref([])
 const selectAgeToTeachList = ref([])
@@ -1112,8 +1228,6 @@ const sexOptions = [
 ]
 const teachingExpList = ref([])
 const educationList = ref([])
-const ageValue = ref([18, 60])
-const yearOfExpValue = ref([0, 20])
 
 const countryObj = ref({})
 const provinceObj = ref({})
@@ -1252,11 +1366,13 @@ const getJobDetail = (id) => {
         if (res.code == 200) {
             // detailData.value = res.message
 
-            // const workHours = res.message.working_hours
-            // if (workHours) {
-            //     // this.jobForm.working_hours = JSON.parse(workHours)
-            //     workingHoursData.value = JSON.parse(workHours)
-            // }
+            const workHours = res.message.working_hours
+            if (workHours) {
+                let workingHoursParse = JSON.parse(workHours)
+                jobForm.working_hours =  workingHoursParse
+                jobForm.working_hours_start = workingHoursParse.working_hours_start
+                jobForm.working_hours_end = workingHoursParse.working_hours_end
+            }
 
             let jobMessage = res.message;
 
@@ -1293,57 +1409,14 @@ const getJobDetail = (id) => {
             jobForm.district = jobMessage.district;
 
             jobForm.class_size = jobMessage.class_size;
-            jobForm.working_hours = jobMessage.working_hours;
 
             jobForm.address = jobMessage.address;
 
             jobForm.international = jobMessage.international;
             jobForm.nation_address = jobMessage.nation_address;
 
-            let ageMin = jobMessage.age_min
-            let ageMax = jobMessage.age_max
-            ageValue.value = [ageMin, ageMax]
-
-            let yearMin = jobMessage.working_nums_start
-            let yearMax = jobMessage.working_nums_end
-            yearOfExpValue.value = [yearMin, yearMax]
-
-            // job title
-            if (jobMessage.job_title) {
-                jobForm.job_title = jobMessage.job_title;
-
-                let arr = jobTitleList.value.filter(item => item.object_en == jobMessage.job_title);
-                let arrcn = jobTitleList.value.filter(item => item.object_cn == jobMessage.job_title);
-                if (arr.length > 0 || arrcn.length > 0) {
-                    selectJobTitleList.value = arr;
-                } else {
-                    let obj = {
-                        id: 0,
-                        object_en: jobMessage.job_title,
-                        object_pid: 6
-                    };
-                    selectJobTitleList.value.push(obj);
-                }
-            }
-
-            // start date
-            if (jobMessage.entry_date) {
-                jobForm.entry_date = jobMessage.entry_date;
-
-                let arr = startDateList.value.filter(item => item.object_en == jobMessage.entry_date);
-                let arrcn = startDateList.value.filter(item => item.object_cn == jobMessage.entry_date);
-                if (arr.length > 0 || arrcn.length > 0) {
-                    selectStartDateList.value = arr;
-                } else {
-                    let obj = {
-                        id: 0,
-                        object_en: jobMessage.entry_date,
-                        object_pid: 108
-                    };
-                    selectStartDateList.value.push(obj);
-                }
-            }
-
+            jobForm.working_nums_start = jobMessage.working_nums_start
+            jobForm.working_nums_end = jobMessage.working_nums_end
 
             if (jobMessage.job_type) {
 
@@ -1584,7 +1657,6 @@ const getJobDetail = (id) => {
 
             if (jobMessage.payment_period) {
                 jobForm.payment_period = jobMessage.payment_period;
-                jobForm.jobForm = jobMessage.payment_period_en;
             }
 
             if (jobMessage.street_address) {
@@ -1593,25 +1665,14 @@ const getJobDetail = (id) => {
 
             if (jobMessage.sex) {
                 jobForm.sex = jobMessage.sex;
-                if (jobMessage.sex == 1) {
-                    jobForm.sex_name = 'Male'
-                }
-                if (jobMessage.sex == 2) {
-                    jobForm.sex_name = 'Female'
-                }
-                if (jobMessage.sex == 3) {
-                    jobForm.sex_name = 'Both'
-                }
             }
 
             if (jobMessage.teaching_times) {
                 jobForm.teaching_times = jobMessage.teaching_times;
-                jobForm.teaching_times_str = jobMessage.teaching_times_en;
             }
 
             if (jobMessage.education) {
                 jobForm.education = jobMessage.education;
-                jobForm.education_str = jobMessage.education_en;
             }
 
         }
@@ -1973,11 +2034,11 @@ const submitJob = (formEl) => {
                 text: 'Loading...'
             })
 
-            if(jobForm.is_online){
+            if (jobForm.is_online) {
 
                 jobForm.job_location = ''
 
-            }else{
+            } else {
 
                 let jobLocationValue = ''
 
@@ -2005,7 +2066,7 @@ const submitJob = (formEl) => {
             let workingHoursObj = {
                 working_hours_start: jobForm.working_hours_start,
                 working_hours_end: jobForm.working_hours_end,
-                working_time_zone:jobForm.working_time_zone
+                working_time_zone: jobForm.working_time_zone
             }
 
             jobForm.working_hours = JSON.stringify(workingHoursObj)
@@ -2058,13 +2119,21 @@ const submitJob = (formEl) => {
                         submitAnationality(jobId)
                     }
 
-                    setTimeout(function (){
-                        loading.close()
-                        jobSuccessTitle.value = 'Success'
-                        jobSuccessDesc.value = 'Your Job Submission ' + jobForm.job_title + ' has been successfully sent.'
-                        jobSuccessVisible.value = true;
-                    }, 1500)
 
+                    setTimeout(function () {
+                        loading.close()
+                        store.commit('setJobTemplateDetail', {})
+
+                        ElMessage({
+                            type:'success',
+                            message:'Job Posted Successfully',
+                            grouping:true
+                        })
+                        router.push({path:'/jobs/myJobs'})
+                        // jobSuccessTitle.value = 'Success'
+                        // jobSuccessDesc.value = 'Your Job Submission ' + jobForm.job_title + ' has been successfully sent.'
+                        // jobSuccessVisible.value = true;
+                    }, 1500)
 
                 }
             }).catch(err => {
@@ -2115,11 +2184,16 @@ onMounted(() => {
     let jobId = route.query.job_id;
     if (jobId) {
         getJobDetail(jobId)
+        isEditing.value = true
     }
 
     setTimeout(function () {
         postJobLoadingValue.value = false
     }, 3000)
+
+    if(Object.keys(jobTemplateDetailObj.value).length !== 0 && jobTemplateDetailObj.value.constructor === Object){
+         loadJobTemplate(jobTemplateDetailObj.value)
+    }
 
 })
 
@@ -2131,7 +2205,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-@import "@/style/job-template.css";
 
 .form-width-388 {
     width: 388px;
@@ -2154,10 +2227,11 @@ onUnmounted(() => {
     display: flex;
 }
 
-.xll-form-location-action{
+.xll-form-location-action {
 
 }
-/deep/ .el-dialog__title{
+
+/deep/ .el-dialog__title {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
@@ -2165,11 +2239,13 @@ onUnmounted(() => {
     line-height: 20px;
     color: #101828;
 }
-/deep/ .el-checkbox__label{
+
+/deep/ .el-checkbox__label {
     font-weight: 400;
     font-size: 12px;
     color: #667085;
 }
+
 .form-margin-top-18 {
     margin-top: 18px;
 }
@@ -2250,7 +2326,7 @@ onUnmounted(() => {
     cursor: pointer;
 }
 
-.post-job-tab-active{
+.post-job-tab-active {
     border: 1px solid #A391FF;
 }
 
@@ -2263,7 +2339,7 @@ onUnmounted(() => {
 
 }
 
-.post-job-tab-circle-active{
+.post-job-tab-circle-active {
     border-color: #A391FF;
 }
 
@@ -2333,101 +2409,6 @@ onUnmounted(() => {
 }
 
 
-.working-hours-add {
-
-}
-
-.working-hours-container {
-    background-color: #FFFFFF;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 10px;
-}
-
-.week-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.week-item {
-    background-color: #F0F2F5;
-    color: #000000;
-    width: 40px;
-    height: 40px;
-    margin-left: 10px;
-    line-height: 40px;
-    text-align: center;
-    border-radius: 40px;
-    font-family: Inter;
-    cursor: pointer;
-}
-
-.week-item-active{
-    background-color: #3d2b99;
-    color: #FFFFFF;
-}
-
-.hours-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    margin-top: 20px;
-    width: 98%;
-}
-
-.working-hours-button {
-    margin-top: 20px;
-}
-
-.working-hours-button button {
-    width: 30%;
-    background-color: #6650B3;
-    color: #FFFFFF;
-    font-size: 14px;
-}
-
-.working-hours-show-container {
-    margin-bottom: 18px;
-}
-
-.working-hours-show-item {
-    border: 1px solid #EEEEEE;
-    padding: 10px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-
-.week-show-item {
-    width: 60px;
-
-    background-color: #6650B3;
-    color: #FFFFFF;
-    font-size: 14px;
-    text-align: center;
-    border-radius: 60px;
-    margin: 10px;
-}
-
-.hours-show-container {
-    border: 1px solid #EEEEEE;
-    padding: 10px 20px;
-    border-radius: 10px;
-    background-color: #FFFFFF;
-}
-
-.hours-show-delete {
-    margin-left: 10px;
-}
-
 .job-detail-china-tips-2 a {
     color: #00b3d2;
     font-size: 16px;
@@ -2448,7 +2429,7 @@ onUnmounted(() => {
     justify-content: flex-start;
 }
 
-.xll-currency-select{
+.xll-currency-select {
     width: 100px;
 }
 
@@ -2477,7 +2458,7 @@ onUnmounted(() => {
     margin-left: 5px;
 }
 
-.post-job-bottom-actions{
+.post-job-bottom-actions {
     text-align: right;
     margin: 80px 60px 60px 40px;
 }
