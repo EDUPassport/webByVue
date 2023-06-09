@@ -136,4 +136,8 @@
     color: #98A2B3;
 
 }
-
+.c-d-col{
+    width: 95px;
+    position: relative;
+    left: 65px;
+}
