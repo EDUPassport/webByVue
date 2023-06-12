@@ -16,22 +16,34 @@
                                 ></div>
                                 <span>{{item.company_name ? item.company_name : item.company_id}}</span>
                             </div>
-                            <div class="c-d-item-m">
-                                Jobs Posted
-                            </div>
-                            <div class="c-d-item-b">
-                                <div class="c-d-item-b-l">1</div>
-                                <div class="c-d-item-b-r">
-                                    <el-button type="info" icon="setting" >Setting</el-button>
-                                </div>
-                            </div>
+
+                            <el-row>
+                                <el-col :span="12" v-if="contributorIdentities.identity = 5">
+                                    <div class="c-d-item-m">
+                                        Deals Posted
+                                    </div>
+                                    <div class="c-d-item-b-l">{{ vendorDealPostedCountForNow }}</div>
+                                </el-col>
+                                <el-col :span="12" v-else>
+                                    <div class="c-d-item-m">
+                                        Jobs Posted
+                                    </div>
+                                    <div class="c-d-item-b-l">{{ businessJobsPostedForNow }}</div>
+                                </el-col>
+                                <el-col :span="12" class="c-d-col">
+                                    <div class="c-d-item-m">
+                                        Events Posted
+                                    </div>
+                                    <div class="c-d-item-b-l">{{ businessEventsPostedForNow }}</div>
+                                </el-col>
+                            </el-row>
                         </div>
 
                     </template>
                 </div>
 
-                <div class="c-d-more">
-                    <el-button link @click="contributorSwitchBusinessVisible=true" >See More</el-button>
+                <div class="c-d-more" v-if="contributorIdentities.length > 3">
+                    <el-button link @click="seeMore()">See More</el-button>
                 </div>
 
             </div>
@@ -502,6 +514,9 @@ const switchContributor = (companyId, identity,language)=>{
 }
 
 
+function seeMore() {
+    router.push({ path: '/' })
+}
 function getDealsList(page, limit) {
 
     let params = {
