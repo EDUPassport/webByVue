@@ -728,6 +728,7 @@ const returnMySelf = () => {
             store.commit('changeThirdCompanyStatus', 0)
 
             getAllIdentity()
+            getBasicInfo()
             getUserMenuList(uid, identityValue, companyIdValue, uid)
 
             setTimeout(function () {
