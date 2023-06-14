@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
         <el-affix :offset="0">
             <el-header class="header-container" height="auto">
                 <el-row class="header-row-container" :gutter="0" justify="start" align="middle">

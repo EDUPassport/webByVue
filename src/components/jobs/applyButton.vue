@@ -1,7 +1,6 @@
 <template>
 
   <el-button type="primary"
-             round
              :loading="applyBtnLoading"
              @click="applyJob()">
     {{btnText}}
@@ -107,10 +106,6 @@ export default {
 </script>
 
 <style scoped>
-/deep/ .el-dialog{
-  --el-dialog-bg-color: none;
-  --el-dialog-box-shadow: none;
-}
 
 @media screen and (max-width: 768px){
 

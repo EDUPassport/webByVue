@@ -1,1449 +1,1096 @@
 <template>
-  <div class="bg">
-    <div class="profile-container">
-      <div class="profile-l-container">
-        <meSideMenu></meSideMenu>
-      </div>
-      <div class="profile-r-container">
-
-        <div class="profile-r-bg-container">
-
-          <div class="new-deal-t">
-            <div class="new-deal-t-l">New event</div>
-            <div class="new-deal-t-r">
-
-              <el-button class="new-deal-btn" link round @click="discard()">
-                DISCARD
-              </el-button>
-              <!--              <el-button class="new-deal-btn" plain round>-->
-              <!--                SAVE AS DRAFT-->
-              <!--              </el-button>-->
-              <el-button class="new-deal-btn"
-                         type="primary"
-                         round
-                         :loading="submitLoadingValue"
-                         @click="submitForm('basicForm')">
-                PUBLISH
-              </el-button>
+    <div>
+        <el-scrollbar class="post-event-bg" always>
+            <div class="t-container">
+                <div class="t-l">
+                    <div class="t-l-label">
+                        Post an Event
+                    </div>
+                    <div class="t-l-tips">
+                        Provide the information for the event posting
+                    </div>
+                </div>
+                <div class="t-r">
+                    <el-button type="danger"> Cancel</el-button>
+                    <el-button plain @click="saveAsTemplate(basicForms)">Save and Exit</el-button>
+                    <el-button type="primary" @click="submitForm(basicForms)">Publish Event</el-button>
+                </div>
             </div>
-          </div>
 
-          <el-scrollbar class="basic-form">
+            <div class="form-container">
+                <el-form
+                        ref="basicForms"
+                        :model="basicForm"
+                        :rules="basicRules"
+                        scroll-to-error
+                        require-asterisk-position="right"
+                        label-width="220px"
+                        label-position="top"
+                        class="demo-ruleForm"
+                >
+                    <div class="form-content">
+                        <div class="form-content-l">
+                            <el-form-item label="Event name" prop="name">
+                                <el-input class="form-width-percent-100"
+                                          v-model="basicForm.name"
+                                          placeholder="Name of the event">
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="Event Date" prop="date">
+                                <el-date-picker
+                                        class="form-width-percent-100"
+                                        v-model="basicForm.date"
+                                        type="date"
+                                        :disabledDate="eventDisabledDate"
+                                        placeholder="Day"
+                                        value-format="YYYY-MM-DD"
+                                ></el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="Event Time" prop="event_time">
 
-            <el-form
-                ref="basicForm"
-                :model="basicForm"
-                :rules="basicRules"
-                label-width="120px"
-                label-position="top"
-                class="demo-ruleForm"
-            >
+                                <div class="event-time">
+                                    <div class="event-time-item">
+                                        <el-time-select
+                                                class="form-width-percent-100"
+                                                v-model="basicForm.start_time"
+                                                :max-time="basicForm.end_time"
+                                                format="HH:mm A"
+                                                placeholder="Start time"
+                                                start="00:00"
+                                                step="00:01"
+                                                end="23:59"
 
-              <div class="event-item-container">
-                <div class="event-item-label">
-                  1. Basic information
-                </div>
-                <div class="event-item-c">
-                  <el-row :gutter="50">
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Event Type">
+                                        />
+                                    </div>
+                                    <div class="event-time-item">
+                                        <el-time-select
+                                                class="form-width-percent-100"
+                                                v-model="basicForm.end_time"
+                                                :min-time="basicForm.start_time"
+                                                format="HH:mm A"
+                                                placeholder="End time"
+                                                start="00:00"
+                                                step="00:01"
+                                                end="23:59"
 
-                        <div class="event-type-container">
-                          <div class="event-type"
-                               :class="dealLocationTypeValue === 1 ? 'event-type-active' : '' "
-                               @click="dealLocationTypeChange(1)"
-                          >
-                            ONLINE
-                          </div>
-                          <div class="event-type"
-                               :class="dealLocationTypeValue === 2 ? 'event-type-active' : '' "
-                               @click="dealLocationTypeChange(2)"
-                          >
-                            OFFLINE
-                          </div>
-                          <div class="event-type"
-                               :class="dealLocationTypeValue === 3 ? 'event-type-active' : '' "
-                               @click="dealLocationTypeChange(3)"
-                          >
-                            BOTH
-                          </div>
+                                        />
+                                    </div>
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="Time Zone" prop="timezone">
+                                <el-select
+                                        class="form-width-percent-100"
+                                        v-model="basicForm.timezone"
+                                        filterable
+                                        value-key="id"
+                                        placeholder="Choose Time Zone">
+                                    <el-option v-for="(item,i) in timeZones"
+                                               :key="i"
+                                               :label="item.name"
+                                               :value="item.name">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+
+                            <el-form-item label="Event Format" prop="is_online">
+                                <el-radio-group
+                                        @change="eventFormatChange"
+                                        v-model="eventFormat">
+                                    <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
+                                        <div v-for="(item,i) in eventFormatOptions" :key="i" style="flex-basis: 100%;">
+                                            <el-radio :label="item.value">
+                                                {{ item.name }}
+                                            </el-radio>
+                                        </div>
+                                    </div>
+                                </el-radio-group>
+                            </el-form-item>
+
+                            <template v-if="eventFormat === 1">
+                                <el-form-item label="Event Link" prop="online_url">
+                                    <el-input class="form-width-percent-100" v-model="basicForm.online_url"
+                                              placeholder="Paste event link"></el-input>
+                                </el-form-item>
+                            </template>
+                            <template v-else>
+                                <el-form-item label="Event Location" prop="location">
+                                    <el-input
+                                            class="form-width-percent-100"
+                                            v-model="basicForm.location"
+                                            placeholder="Enter event location">
+                                    </el-input>
+                                </el-form-item>
+                                <el-form-item label="Event Venue" prop="event_place">
+                                    <el-input
+                                            class="form-width-percent-100"
+                                            v-model="basicForm.event_place"
+                                            placeholder="Enter event venue"
+                                    ></el-input>
+                                </el-form-item>
+                                <el-form-item label="Event Link" prop="online_url">
+                                    <el-input
+                                            class="form-width-percent-100"
+                                            v-model="basicForm.online_url"
+                                            placeholder="Paste event link">
+                                    </el-input>
+                                </el-form-item>
+                            </template>
+
+                            <el-form-item label="Event description" prop="desc">
+                                <el-input
+                                        class="form-width-percent-100"
+                                        v-model="basicForm.desc"
+                                        type="textarea"
+                                        :rows="5"
+                                        placeholder="Enter event description">
+                                </el-input>
+                            </el-form-item>
 
                         </div>
-                      </el-form-item>
-                    </el-col>
+                        <div class="form-content-r">
+                            <el-form-item label="Add Event Cover Image or Video" prop="file">
+                                <template v-if="basicForm.file && editFileStatus">
 
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <template v-if="dealLocationTypeValue === 2 || dealLocationTypeValue === 3">
-                        <el-form-item label="Venue" prop="event_place">
-                          <el-input v-model="basicForm.event_place" type="text"
-                                    placeholder="eg. Mercedes-Benz Arena"
-                          ></el-input>
-                        </el-form-item>
-                      </template>
-                      <template v-if="dealLocationTypeValue === 1 || dealLocationTypeValue === 3">
-                        <el-form-item label="Event Link">
-                          <el-input v-model="basicForm.online_url" placeholder="eg. eventlink.com"></el-input>
-                        </el-form-item>
-                      </template>
-                    </el-col>
+                                    <div class="attachment-xll form-width-percent-100">
+                                        <div class="attachment-xll-btns">
+                                            <div class="attachment-xll-btn">
+                                                <div class="attachment-xll-btn-l">
+                                                    <el-icon color="#667085">
+                                                        <IconIcomoonFreeAttachment/>
+                                                    </el-icon>
+                                                    {{ basicForm.file_name }}
+                                                </div>
+                                                <div class="attachment-xll-btn-r">
+                                                    <el-icon class="attachment-xll-icon"
+                                                             @click="handleSingleImageRemove('file')"
+                                                             color="#F97066">
+                                                        <Delete></Delete>
+                                                    </el-icon>
+                                                </div>
 
+                                            </div>
+                                            <div class="attachment-xll-btn-edit"
+                                                 @click="handleEditMedia('file')"
+                                            >
+                                                <el-icon class="attachment-xll-icon">
+                                                    <IconUilEdit/>
+                                                </el-icon>
+                                            </div>
+                                            <div class="attachment-xll-btn-download"
+                                                 @click="handleDownloadMedia(basicForm.file)"
+                                            >
+                                                <el-icon class="attachment-xll-icon">
+                                                    <IconUisDownloadAlt/>
+                                                </el-icon>
+                                            </div>
+                                        </div>
 
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6"
-                            v-if="dealLocationTypeValue === 2 || dealLocationTypeValue === 3">
+<!--                                        <div class="attachment-xll-image">-->
+<!-- -->
+<!--                                            <el-link :href="basicForm.file" target="_blank">Take a look</el-link>-->
+<!--                                            <div class="attachment-xll-image-mask">-->
+<!--                                                <el-icon-->
+<!--                                                        style="cursor: pointer;"-->
+<!--                                                        @click="handleSingleImagePreview(basicForm.file,'file')"-->
+<!--                                                        color="#ffffff"-->
+<!--                                                        :size="20">-->
+<!--                                                    <zoom-in/>-->
+<!--                                                </el-icon>-->
 
-                      <el-form-item label="Location">
-                        <div class="deals-location-select-container">
-                          <el-select v-model="countryObj"
-                                     :teleported="false"
-                                     @change="countryChange"
-                                     value-key="id"
-                                     filterable
-                                     placeholder="Select country">
-                            <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                                       :value="item"></el-option>
-                          </el-select>
+<!--                                                <el-icon-->
+<!--                                                        style="cursor: pointer;margin-left: 15px;"-->
+<!--                                                        @click="handleSingleImageRemove('file')"-->
+<!--                                                        color="#F97066"-->
+<!--                                                        :size="20">-->
+<!--                                                    <Delete/>-->
+<!--                                                </el-icon>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
 
-                          <template v-if="provinceOptions.length>0">
-                            <el-select v-model="provinceObj"
-                                       :teleported="false"
-                                       style="margin-top: 10px;"
-                                       value-key="id"
-                                       filterable
-                                       @change="provinceChange"
-                                       placeholder="Select state/province">
-                              <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                                         :value="item"></el-option>
-                            </el-select>
-                          </template>
-                          <template v-if="cityOptions.length>0">
-                            <el-select v-model="cityObj"
-                                       :teleported="false"
-                                       style="margin-top: 10px;"
-                                       value-key="id"
-                                       filterable
-                                       @change="cityChange"
-                                       placeholder="Select city">
-                              <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                                         :value="item">
-                              </el-option>
-                            </el-select>
-                          </template>
+                                    </div>
+
+                                </template>
+                                <template v-else>
+                                    <el-upload
+                                            class="form-width-percent-100"
+                                            drag
+                                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG,mp4,MP4"
+                                            :limit="1"
+                                            :headers="uploadHeaders"
+                                            :show-file-list="false"
+                                            :http-request="fileHttpRequest"
+                                            :before-upload="beforeFilePhotoUpload"
+                                    >
+                                        <template #trigger>
+                                            <el-image class="profile-upload-icon" :src="imageUploadIcon"></el-image>
+                                            <div class="profile-upload-text">
+                                                Drag or <span>Browse file</span>
+                                            </div>
+                                        </template>
+                                    </el-upload>
+
+                                </template>
+                            </el-form-item>
+                            <el-form-item label="Event Category" prop="category_id">
+                                <el-radio-group
+                                        @change="eventCategoryChange"
+                                        v-model="eventCategory">
+                                    <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
+                                        <div v-for="(item,i) in categoryData" :key="i" style="flex-basis: 50%;">
+                                            <el-radio :label="item.id">
+                                                {{ item.name_en }}
+                                            </el-radio>
+                                        </div>
+                                    </div>
+                                </el-radio-group>
+                            </el-form-item>
+
+                            <el-form-item label="Choose Event Type" prop="tag">
+                                <el-checkbox-group
+                                        v-model="basicForm.tag">
+                                    <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
+                                        <div v-for="(item,i) in tagsData" :key="i" style="flex-basis: 50%;">
+                                            <el-checkbox :label="item.id">
+                                                {{ item.name_en }}
+                                            </el-checkbox>
+                                        </div>
+                                    </div>
+                                </el-checkbox-group>
+                            </el-form-item>
+                            <el-form-item label="Additional Details(Optional)">
+                                <el-input v-model="basicForm.type_desc"
+                                          type="textarea"
+                                          :rows="4"
+                                          placeholder="Enter additional details">
+                                </el-input>
+                            </el-form-item>
 
                         </div>
+                    </div>
 
-                        <div class="map-container"
-                             v-loading="mapLoading">
-                          <div id="mapContainer" class="basemap"></div>
-                        </div>
+                </el-form>
 
-                      </el-form-item>
-
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Category" prop="category_id">
-                        <el-select v-model="basicForm.category_id"
-                                   :teleported="false"
-                                   placeholder="Select category"
-                        >
-                          <el-option
-                              v-for="item in categoryData"
-                              :key="item.id"
-                              :label="item.name_en"
-                              :value="item.id"
-                          />
-                        </el-select>
-                      </el-form-item>
-
-                    </el-col>
-
-                  </el-row>
-                </div>
-              </div>
-
-              <div class="event-item-container">
-                <div class="event-item-label">
-                  2. About your event
-                </div>
-                <div class="event-item-c">
-                  <el-row :gutter="50">
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Event name" prop="name">
-                        <el-input v-model="basicForm.name" placeholder="Name of the event"></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                      <el-form-item label="Event description" prop="desc">
-                        <el-input v-model="basicForm.desc"
-                                  type="textarea"
-                                  placeholder="Provide a paragraph or two about the event">
-                        </el-input>
-
-                      </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Event Date" required prop="date">
-                        <div class="event-date-container">
-                          <div class="event-date">
-                            <el-date-picker
-                                v-model="basicForm.date"
-                                @change="eventDateChange"
-                                type="date"
-                                :disabledDate="eventDisabledDate"
-                                placeholder="Day"
-                                value-format="YYYY-MM-DD"
-                            ></el-date-picker>
-                          </div>
-                          <div class="event-time">
-                            <div class="event-time-item">
-                              <el-time-select
-                                  @change="startTimeChange"
-                                  v-model="startTime"
-                                  :max-time="endTime"
-                                  placeholder="Start time"
-                                  start="00:00"
-                                  step="00:01"
-                                  end="23:59"
-                              />
-                            </div>
-                            <div class="event-time-item">
-                              <el-time-select
-                                  @change="endTimeChange"
-                                  v-model="endTime"
-                                  :min-time="startTime"
-                                  placeholder="End time"
-                                  start="00:00"
-                                  step="00:01"
-                                  end="23:59"
-                              />
-
-                            </div>
-
-                          </div>
-                        </div>
-
-                      </el-form-item>
-
-                    </el-col>
-
-                  </el-row>
-
-                  <el-row :gutter="50">
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="ESL Passport Members Get" prop="type_desc">
-                        <el-input v-model="basicForm.type_desc" type="textarea"
-                                  :rows="4"
-                                  placeholder="Enter the deal/discount you will offer our members."></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-
-                      <el-form-item label="Price" prop="pay_money">
-                        <el-row :gutter="10">
-                          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
-                            <el-select v-model="basicForm.currency"
-                                       :teleported="false"
-                                       placeholder="currency"
-                            >
-                              <el-option
-                                  v-for="(item,index) in currencyList"
-                                  :key="index"
-                                  :label="item.object_en"
-                                  :value="item.object_en"
-                              />
-                            </el-select>
-                          </el-col>
-                          <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-                            <el-input v-model="basicForm.pay_money"
-                                      oninput="value=value.replace(/[^\d]/g,'')"
-                                      placeholder="amount per ticket">
-                            </el-input>
-                          </el-col>
-                        </el-row>
-
-                      </el-form-item>
-
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Company name" prop="third_com_name">
-                        <el-input v-model="basicForm.third_com_name" type="text"
-                                  placeholder="Company name"
-                        ></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Tags">
-
-                        <el-select
-                            v-model="selectTagsValue"
-                            :teleported="false"
-                            multiple
-                            collapse-tags
-                            collapse-tags-tooltip
-                            placeholder="Select"
-                            filterable
-                            allow-create
-                            value-key="id"
-                        >
-                          <el-option
-                              v-for="(item,index) in tagsData"
-                              :key="index"
-                              :label="item.name_en"
-                              :value="item"
-                          />
-
-                        </el-select>
-
-                      </el-form-item>
-
-                    </el-col>
-                  </el-row>
-
-                  <el-row :gutter="50">
-
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Poster(2:3 ratio)" prop="file">
-                        <el-upload
-                            class="profile-uploader"
-                            action=""
-                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
-                            :headers="uploadHeaders"
-                            :show-file-list="false"
-                            :http-request="flyerHttpRequest"
-                            :before-upload="beforeFlyerPhotoUpload"
-                        >
-                          <el-icon :size="45">
-                            <IconBiPlusSquare/>
-                          </el-icon>
-                        </el-upload>
-
-                        <div class="account-xll-images">
-                          <div class="account-xll-image">
-                            <div v-if="flyerPhotoUrl">
-                              <el-image
-                                  style="width:100%;"
-                                  :src="flyerPhotoUrl">
-                              </el-image>
-                            </div>
-                            <div class="account-xll-image-mask">
-                              <span @click="handleSingleImagePreview(flyerPhotoUrl)">
-                                <el-icon color="#ffffff" :size="45">
-                                  <zoom-in/>
-                                </el-icon>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
-                          <el-image :src="dialogSingleImageUrl"></el-image>
-                        </el-dialog>
-
-                      </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                      <el-form-item label="Company Logo" prop="third_com_logo">
-                        <el-upload
-                            class="profile-uploader"
-                            action=""
-                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
-                            :headers="uploadHeaders"
-                            :show-file-list="false"
-                            :http-request="companyLogoHttpRequest"
-                            :before-upload="beforeCompanyLogoPhotoUpload"
-                        >
-                          <el-icon :size="45">
-                            <IconBiPlusSquare/>
-                          </el-icon>
-                        </el-upload>
-
-                        <div class="account-xll-images">
-                          <div class="account-xll-image">
-                            <div v-if="companyLogoPhotoUrl">
-                              <el-image
-                                  style="width:100%;"
-                                  :src="companyLogoPhotoUrl">
-                              </el-image>
-                            </div>
-                            <div class="account-xll-image-mask">
-                              <span @click="handleSingleImagePreview(companyLogoPhotoUrl)">
-                                <el-icon color="#ffffff" :size="45">
-                                  <zoom-in/>
-                                </el-icon>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
+            </div>
 
 
-                      </el-form-item>
-                    </el-col>
+        </el-scrollbar>
 
-                  </el-row>
+        <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
 
-                </div>
-              </div>
+        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
+            <template v-if="dialogSingleField === 'file'">
+                <el-image :src="dialogSingleImageUrl"></el-image>
+            </template>
+            <template v-if="dialogSingleField === 'video_url' ">
+                <video :src="dialogSingleImageUrl" controls></video>
+            </template>
 
-            </el-form>
-
-          </el-scrollbar>
-
-        </div>
-      </div>
-
+        </el-dialog>
     </div>
-
-    <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
-
-  </div>
 </template>
 
-<script>
+<script setup>
+import {timeZones} from "@/utils/timeZones";
+import {ref, reactive, onMounted, onUnmounted} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import imageUploadIcon from '@/assets/newHome/image-upload.svg'
 import xllLoading from '@/components/xllLoading'
-import meSideMenu from "@/components/meSideMenu";
 import {
-  EVENTS_ADD_EVENT,
-  EVENTS_CATEGORY,
-  EVENTS_TAGS, UPLOAD_BY_ALI_OSS, UPLOAD_BY_SERVICE, GET_COUNTRY_LIST, USER_OBJECT_LIST, EVENTS_DETAIL
+    EVENTS_ADD_EVENT,
+    EVENTS_CATEGORY,
+    UPLOAD_BY_ALI_OSS,
+    UPLOAD_BY_SERVICE,
+    USER_OBJECT_LIST,
+    EVENTS_DETAIL,
+    TAGS_LIST, HOME_EVENT_TEMPLATE_ADD
 } from '@/api/api';
-import mapboxgl from "mapbox-gl";
-import 'mapbox-gl/dist/mapbox-gl.css'
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+
 import ImageCompressor from 'compressorjs'
 // import {decode} from 'js-base64'
-// eventStartAndEndTimeFormat
 import {updateWindowHeight, eventStartAndEndTimeFormat} from "@/utils/tools";
+import {ElMessage, ElLoading} from 'element-plus'
+import {  convertTo24HourForEventTime} from "@/utils/utils";
 
-export default {
-  name: "post",
-  components: {
-    meSideMenu,
-    xllLoading
-  },
-  setup() {
-    const eventDisabledDate = (date) => {
-      let myDate = new Date();
-      let year = myDate.getFullYear()
-      let month = myDate.getMonth() + 1
-      let day = myDate.getDate()
-      let mTime = year + '-' + month + '-' + day;
-      let mDate = new Date(mTime)
-      return date.getTime() < mDate.getTime();
+const route = useRoute()
+const router = useRouter()
+
+const currencyList = ref([])
+
+const uploadLoadingStatus = ref(false)
+const uploadHeaders = {platform: 4}
+
+const flyerPhotoUrl = ref('')
+const companyLogoPhotoUrl = ref('')
+
+const dealLocationTypeValue = ref(1)
+const eventDate = ref('')
+
+const eventFormat = ref(0)
+const eventFormatOptions = [
+    {
+        name: 'Online(Virtual/Digital)',
+        value: 1
+    },
+    {
+        name: 'Offline(In-Person)',
+        value: 0
     }
+]
 
-    return {
-      eventDisabledDate
+const eventFormatChange = (e) => {
+    console.log(e)
+    basicForm.is_online = parseInt(e)
+}
+
+
+const eventDisabledDate = (date) => {
+    let myDate = new Date();
+    let year = myDate.getFullYear()
+    let month = myDate.getMonth() + 1
+    let day = myDate.getDate()
+    let mTime = year + '-' + month + '-' + day;
+    let mDate = new Date(mTime)
+    return date.getTime() < mDate.getTime();
+}
+
+const validateEventTime = (rule, value, callback) => {
+
+    if(!basicForm.start_time && !basicForm.end_time){
+        return callback(new Error('Please select time'))
     }
-  },
-  data() {
-
-    const checkEventDate = (rule, value, callback) => {
-
-      if (!value) {
-        return callback(new Error('Please select date'))
-      }
-      if (!this.startTime) {
+    if (!basicForm.start_time) {
         return callback(new Error('Please select start time'))
-      }
-      if (!this.endTime) {
-        return callback(new Error('Please select end time'))
-      }
-      callback()
     }
+    if (!basicForm.end_time) {
+        return callback(new Error('Please select end time'))
+    }
+    callback()
+}
 
-    return {
-      dialogSingleImageVisible: false,
-      dialogSingleImageUrl: '',
+const validateEventCategory = (rule, value, callback)=>{
+    if(!eventCategory.value){
+        return callback(new Error('please select category'))
+    }
+    callback()
+}
 
-      currencyList: [],
-      addCurrencyStatus: false,
-      ownCurrencyValue: '',
-      ownCurrencyList: [],
-      selectCurrencyList: [],
-      selectCurrencyArr: [],
+const basicForms = ref(null)
 
-      uploadLoadingStatus: false,
-      mapLoading: false,
-      map1Loading: false,
-      uploadActionUrl: process.env.VUE_APP_UPLOAD_ACTION_URL,
-      uploadHeaders: {
-        platform: 4
-      },
-      uploadData: {
-        token: localStorage.getItem('token')
-      },
-      flyerPhotoUrl: '',
-      companyLogoPhotoUrl: '',
-      accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
-      mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
-      dealLocationTypeValue: 1,
-      userInfo: {},
-      basicUserInfo: {},
+const basicForm = reactive({
+    user_id: localStorage.getItem('uid'),
+    name: '',
+    date: '',
+    start_time: '',
+    end_time: '',
+    timezone: '',
+    is_online: 0,
+    country_id: '',
+    state_id: '',
+    town_id: '',
+    location: '',
+    event_place: '',
+    online_url: '',
+    desc: '',
+    tag: [],
+    tags_cn: '',
+    tags_en: '',
+    file: '',
+    file_name: '',
+    type_desc: '',
+    category_id: '',
 
-      countryObj: {},
-      provinceObj: {},
-      cityObj: {},
-      countryName: '',
-      countryNameCn: '',
-      provinceName: '',
-      provinceNameCn: '',
-      cityName: '',
-      cityNameCn: '',
+    third_com_logo: '',
+    third_com_name: '',
+    pay_money: 0,
+    is_all: '1',
+    lat: '',
+    lng: '',
+    currency: 'USD'
+})
 
-      countryOptions: [],
-      provinceOptions: [],
-      cityOptions: [],
-
-      startTime: '',
-      endTime: '',
-      eventDate: '',
-      basicForm: {
-        token: localStorage.getItem('token'),
-        user_id: localStorage.getItem('uid'),
-        name: undefined,
-        desc: undefined,
-        third_com_logo: undefined,
-        third_com_name: undefined,
-        type_desc: undefined,
-        pay_money: undefined,
-        date: undefined,
-        file: undefined,
-        file_name: undefined,
-        is_all: '1',
-        event_place: undefined,
-        start_time: undefined,
-        end_time: undefined,
-        is_online: 1,
-        online_url: undefined,
-        location: undefined,
-        country_id: undefined,
-        state_id: undefined,
-        town_id: undefined,
-
-        lat: undefined,
-        lng: undefined,
-        category_id: undefined,
-        currency: 'USD',
-        tag: [],
-        tags_cn: '',
-        tags_en: ''
-      },
-      basicRules: {
+const basicRules = reactive({
         name: [
-          {
-            required: true,
-            message: 'Please input',
-            trigger: 'blur',
-          }
-        ],
-        desc: [
-          {
-            required: true,
-            message: 'Please input',
-            trigger: 'blur',
-          },
+            {
+                required: true,
+                message: 'Please input event name',
+                trigger: 'blur',
+            }
         ],
         date: [
-          {
-            required: true,
-            validator: checkEventDate,
-            trigger: 'change',
-          },
+            {
+                required: true,
+                message: 'Please select date',
+                trigger: 'change',
+            },
+        ],
+        event_time: [
+            {
+                required: true,
+                validator: validateEventTime,
+                trigger: 'change'
+            }
+        ],
+        timezone: [
+            {
+                required: true,
+                message: 'Please choose time zone',
+                trigger: 'change',
+            },
+        ],
+        is_online: [
+            {
+                required: true,
+                message: 'Please select event format',
+                trigger: 'change',
+            },
+        ],
+        location: [
+            {
+                required: true,
+                message: 'Please enter event location',
+                trigger: 'blur',
+            },
+        ],
+        event_place: [
+            {
+                required: true,
+                message: 'Please enter event venue',
+                trigger: 'blur',
+            },
+        ],
+        online_url: [
+            {
+                required: true,
+                message: 'Please enter event link',
+                trigger: 'blur',
+            },
+        ],
+        desc: [
+            {
+                required: true,
+                message: 'Please enter event description',
+                trigger: 'blur',
+            },
         ],
         file: [
-          {
-            required: true,
-            message: 'Please upload',
-            trigger: 'blur',
-          },
+            {
+                required: true,
+                message: 'Please upload',
+                trigger: 'change'
+            },
         ],
-        third_com_logo: [
-          {
-            required: false,
-            message: 'Please upload',
-            trigger: 'blur',
-          },
+        category_id: [
+            {
+                required: true,
+                validator:validateEventCategory,
+                trigger: 'change',
+            },
         ],
-        third_com_name: [
-          {
-            required: false,
-            message: 'Please input',
-            trigger: 'blur',
-          },
-        ],
+        tag: [
+            {
+                required: true,
+                message:'please choose event type',
+                trigger: 'change',
+            },
+        ]
 
-      },
-      categoryData: [],
-      tagsData: [],
-      addTagsStatus: false,
-      ownTagsValue: '',
-      ownTagsList: [],
-      selectTagsList: [],
-      selectTagsArr: [],
-      tagsCnData: [],
-      tagsEnData: [],
-      submitLoadingValue: false,
-
-      selectTagsValue: []
 
     }
-  },
-  unmounted() {
-    updateWindowHeight()
-    window.onresize = null
-  },
-  mounted() {
+)
 
+const categoryData = ref([])
+const tagsData = ref([])
+
+const eventCategory = ref(0)
+const eventCategoryChange = (e) => {
+    eventCategory.value = e;
+    basicForm.category_id = e
+}
+const getEventDetail = (id) => {
+    let params = {
+        event_id: id
+    }
+    EVENTS_DETAIL(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            let resMessage = res.message;
+
+            let startTime = resMessage.start_time;
+            let endTime = resMessage.end_time;
+
+            dealLocationTypeValue.value = resMessage.is_online;
+
+            eventDate.value = resMessage.date;
+            startTime.value = eventStartAndEndTimeFormat(startTime)
+            endTime.value = eventStartAndEndTimeFormat(endTime)
+
+            basicForm.event_id = resMessage.id;
+            flyerPhotoUrl.value = resMessage.file;
+            companyLogoPhotoUrl.value = resMessage.third_com_logo;
+
+            basicForm.token = localStorage.getItem('token')
+            basicForm.user_id = localStorage.getItem('uid')
+            basicForm.name = resMessage.name
+            basicForm.desc = resMessage.desc
+            basicForm.third_com_logo = resMessage.third_com_logo
+            basicForm.third_com_name = resMessage.third_com_name
+            basicForm.type_desc = resMessage.type_desc
+            basicForm.pay_money = resMessage.pay_money
+            basicForm.date = resMessage.date
+            basicForm.file = resMessage.file
+            basicForm.file_name = resMessage.file_name
+            basicForm.is_all = '1'
+            basicForm.event_place = resMessage.event_place
+            basicForm.start_time = resMessage.start_time
+            basicForm.end_time = resMessage.end_time
+            basicForm.is_online = 1
+            basicForm.online_url = resMessage.online_url
+            basicForm.location = resMessage.location
+            basicForm.country_id = resMessage.country_id
+            basicForm.state_id = resMessage.state_id
+            basicForm.town_id = resMessage.town_id
+            basicForm.lat = resMessage.lat
+            basicForm.lng = resMessage.lng
+            basicForm.category_id = resMessage.category_id
+            basicForm.currency = 'USD'
+            basicForm.tag = []
+            basicForm.tags_cn = resMessage.tags_cn
+            basicForm.tags_en = resMessage.tags_en
+
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+const editFileStatus = ref(false)
+const beforeFilePhotoUpload = (file) => {
+
+    uploadLoadingStatus.value = true;
+    const isLt2M = file.size / 1024 / 1024 < 20
+
+    if (!isLt2M) {
+        ElMessage.error('Avatar picture size can not exceed 20MB')
+    }
+    return isLt2M
+}
+
+const cancelUpload = () => {
+    uploadLoadingStatus.value = false;
+}
+
+const fileHttpRequest = (options) => {
+
+    new ImageCompressor(options.file, {
+        quality: 0.6,
+        success(file) {
+            // console.log(file)
+            const formData = new FormData();
+
+            formData.append('token', localStorage.getItem('token'))
+            // console.log(file)
+            let isInChina = process.env.VUE_APP_CHINA
+            if (isInChina === 'yes') {
+                formData.append('file[]', file, file.name)
+                UPLOAD_BY_ALI_OSS(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.data[0]['file_url'];
+                        uploadLoadingStatus.value = false;
+                        basicForm.file = myFileUrl
+                        basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
+                        editFileStatus.value = true
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+
+            }
+
+            if (isInChina === 'no') {
+                formData.append('file', file, file.name)
+                UPLOAD_BY_SERVICE(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.message.file_path;
+                        uploadLoadingStatus.value = false;
+                        basicForm.file = myFileUrl
+                        basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
+                        editFileStatus.value = true
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+
+            }
+
+        },
+        error(err) {
+            console.log(err)
+        }
+
+    })
+
+}
+const handleSingleImageRemove = (field) => {
+
+    if (field === 'file') {
+        basicForm.file = ''
+        basicForm.file_name = ''
+    }
+
+}
+const handleEditMedia = (field) => {
+
+    if (field === 'file') {
+        editFileStatus.value = false
+    }
+
+}
+const handleDownloadMedia = (url) => {
+    window.open(url, '_blank')
+}
+
+const dialogSingleImageUrl = ref('')
+const dialogSingleImageVisible = ref(false)
+const dialogSingleField = ref('')
+// const handleSingleImagePreview = (url, field) => {
+//     dialogSingleImageVisible.value = true
+//     dialogSingleImageUrl.value = url
+//     dialogSingleField.value = field
+// }
+
+
+const getEventCategories = () => {
+
+    let eventCategoryStorage = localStorage.getItem('eventCategory')
+    if (eventCategoryStorage) {
+        categoryData.value = JSON.parse(eventCategoryStorage)
+    } else {
+        let params = {
+            page: 1,
+            limit: 10000
+        }
+        EVENTS_CATEGORY(params).then(res => {
+            if (res.code === 200) {
+                localStorage.setItem('eventCategory', JSON.stringify(res.message.data))
+                categoryData.value = res.message.data;
+            }
+
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+}
+
+const getEventTags = () => {
+    let eventTagsStorage = localStorage.getItem('eventTags')
+    if (eventTagsStorage) {
+        tagsData.value = JSON.parse(eventTagsStorage)
+    } else {
+        let params = {
+            type: 2,
+            page: 1,
+            limit: 10000
+        }
+        TAGS_LIST(params).then(res => {
+            if (res.code == 200) {
+                localStorage.setItem('eventTags', JSON.stringify(res.message.data))
+                tagsData.value = res.message.data;
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+}
+
+const getUserObjectList = () => {
+    let data = {}
+    USER_OBJECT_LIST(data).then(res => {
+        if (res.code == 200) {
+            currencyList.value = res.message.filter(item => item.pid === 117); // currency
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+const saveAsTemplate = (formEl)=>{
+    formEl.validate((valid)=>{
+        if(valid){
+            const loading = ElLoading.service({
+                text: 'Loading...'
+            })
+
+            let contentObj = Object.assign({},  basicForm);
+
+            contentObj.start_time = convertTo24HourForEventTime(basicForm.date, basicForm.start_time)
+            contentObj.end_time = convertTo24HourForEventTime(basicForm.date, basicForm.end_time)
+
+            let tagsArr = basicForm.tag;
+            let tagsEnArr = []
+            let tagsCnArr = []
+
+            tagsArr.forEach(item=>{
+                let a = tagsData.value.filter(value=>value.id === item)
+                tagsEnArr.push(a[0].name_en)
+                tagsCnArr.push(a[0].name_cn)
+            })
+
+            contentObj.tags_en = tagsEnArr.join(',')
+            contentObj.tags_cn = tagsCnArr.join(',')
+
+            let params = {
+                type:2,
+                content:JSON.stringify(contentObj)
+            }
+
+            HOME_EVENT_TEMPLATE_ADD(params).then(res => {
+
+                if (res.code == 200) {
+                    // this.submitEventForm()
+                    loading.close()
+
+                }
+            }).catch(err => {
+                console.log(err)
+                loading.close()
+            })
+
+        }else{
+            console.log('error submit')
+        }
+    })
+}
+
+const submitForm = (formEl) => {
+    formEl.validate((valid) => {
+        if (valid) {
+
+            const loading = ElLoading.service({
+                text: 'Loading...'
+            })
+
+            let params = Object.assign({},  basicForm);
+
+            params.start_time = convertTo24HourForEventTime(basicForm.date, basicForm.start_time)
+            params.end_time = convertTo24HourForEventTime(basicForm.date, basicForm.end_time)
+
+            let tagsArr = basicForm.tag;
+            let tagsEnArr = []
+            let tagsCnArr = []
+
+            tagsArr.forEach(item=>{
+                let a = tagsData.value.filter(value=>value.id === item)
+                tagsEnArr.push(a[0].name_en)
+                tagsCnArr.push(a[0].name_cn)
+            })
+
+            params.tags_en = tagsEnArr.join(',')
+            params.tags_cn = tagsCnArr.join(',')
+
+            EVENTS_ADD_EVENT(params).then(res => {
+
+                if (res.code == 200) {
+                    // this.submitEventForm()
+                    loading.close()
+                    ElMessage({
+                        type:'success',
+                        message:'Event listing published Successfully',
+                        grouping:true,
+                        duration:30000,
+                    })
+                    setTimeout(function (){
+                        router.push('/events/myEvents')
+                    }, 1500)
+
+                }
+            }).catch(err => {
+                console.log(err)
+                loading.close()
+            })
+
+        } else {
+            console.log('error submit!!')
+            ElMessage({
+                type: 'error',
+                message: 'Complete all required fields to publish event',
+                duration:30000,
+                grouping: true
+            })
+        }
+    })
+}
+
+onMounted(() => {
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
 
     if (screenWidthFloor <= 768) {
-      updateWindowHeight()
+        updateWindowHeight()
     }
-
 
     window.onresize = () => {
-      if (screenWidthFloor <= 768) {
-        updateWindowHeight()
-      }
+        if (screenWidthFloor <= 768) {
+            updateWindowHeight()
+        }
     }
 
-    // let str = this.$route.query.str;
-    // if(str){
-    //   let editStr = JSON.parse(decode(str) )
-    //
-    //   let startTime = editStr.start_time;
-    //   let endTime = editStr.end_time;
-    //
-    //   this.dealLocationTypeValue = editStr.is_online;
-    //
-    //   this.eventDate = editStr.date;
-    //   this.startTime = eventStartAndEndTimeFormat(startTime)
-    //   this.endTime = eventStartAndEndTimeFormat(endTime)
-    //
-    //   this.basicForm = Object.assign({},editStr)
-    //   this.basicForm.event_id = editStr.id;
-    //   this.flyerPhotoUrl = editStr.file;
-    //   this.companyLogoPhotoUrl = editStr.third_com_logo;
-    //
-    // }
-
-    let eventId = this.$route.query.id;
+    let eventId = route.query.id;
 
     if (eventId) {
-      this.getEventDetail(eventId)
+        getEventDetail(eventId)
     }
 
 
-    this.getAllCountry()
-    this.getUserObjectList()
-    this.getEventCategories()
-    this.getEventsTags()
+    getUserObjectList()
+    getEventCategories()
+    getEventTags()
 
-  },
-  methods: {
-    getEventDetail(id) {
-      let params = {
-        event_id: id
-      }
-      EVENTS_DETAIL(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          let resMessage = res.message;
+})
 
-          let obj = {
-            token: localStorage.getItem('token'),
-            user_id: localStorage.getItem('uid'),
-            name: resMessage.name,
-            desc: resMessage.desc,
-            third_com_logo: resMessage.third_com_logo,
-            third_com_name: resMessage.third_com_name,
-            type_desc: resMessage.type_desc,
-            pay_money: resMessage.pay_money,
-            date: resMessage.date,
-            file: resMessage.file,
-            file_name: resMessage.file_name,
-            is_all: '1',
-            event_place: resMessage.event_place,
-            start_time: resMessage.start_time,
-            end_time: resMessage.end_time,
-            is_online: 1,
-            online_url: resMessage.online_url,
-            location: resMessage.location,
-            country_id: resMessage.country_id,
-            state_id: resMessage.state_id,
-            town_id: resMessage.town_id,
-            lat: resMessage.lat,
-            lng: resMessage.lng,
-            category_id: resMessage.category_id,
-            currency: 'USD',
-            tag: [],
-            tags_cn: resMessage.tags_cn,
-            tags_en: resMessage.tags_en
-          }
+onUnmounted(() => {
+    updateWindowHeight()
+    window.onresize = null
+})
 
-          let startTime = resMessage.start_time;
-          let endTime = resMessage.end_time;
-
-          this.dealLocationTypeValue = resMessage.is_online;
-
-          this.eventDate = resMessage.date;
-          this.startTime = eventStartAndEndTimeFormat(startTime)
-          this.endTime = eventStartAndEndTimeFormat(endTime)
-
-          this.basicForm = Object.assign({}, obj)
-          this.basicForm.event_id = resMessage.id;
-          this.flyerPhotoUrl = resMessage.file;
-          this.companyLogoPhotoUrl = resMessage.third_com_logo;
-
-
-
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    handleSingleImagePreview(file) {
-      this.dialogSingleImageUrl = file
-      this.dialogSingleImageVisible = true;
-    },
-    companyLogoHttpRequest(options) {
-      let self = this;
-      // console.log(options)
-      new ImageCompressor(options.file, {
-        quality: 0.6,
-        success(file) {
-          // console.log(file)
-          const formData = new FormData();
-
-          formData.append('token', localStorage.getItem('token'))
-          // console.log(file)
-          let isInChina = process.env.VUE_APP_CHINA
-          if (isInChina === 'yes') {
-            formData.append('file[]', file, file.name)
-            UPLOAD_BY_ALI_OSS(formData).then(res => {
-              // console.log(res)
-              if (res.code == 200) {
-                let myFileUrl = res.data[0]['file_url'];
-                self.uploadLoadingStatus = false;
-                self.companyLogoPhotoUrl = myFileUrl
-                self.basicForm.third_com_logo = myFileUrl
-
-              }
-            }).catch(err => {
-              console.log(err)
-            })
-
-          }
-
-          if (isInChina === 'no') {
-            formData.append('file', file, file.name)
-            UPLOAD_BY_SERVICE(formData).then(res => {
-              // console.log(res)
-              if (res.code == 200) {
-                let myFileUrl = res.message.file_path;
-                self.uploadLoadingStatus = false;
-                self.companyLogoPhotoUrl = myFileUrl
-                self.basicForm.third_com_logo = myFileUrl
-              }
-            }).catch(err => {
-              console.log(err)
-            })
-
-          }
-
-        },
-        error(err) {
-          console.log(err.message)
-        }
-
-      })
-
-    },
-    flyerHttpRequest(options) {
-      let self = this;
-      // console.log(options)
-      new ImageCompressor(options.file, {
-        quality: 0.6,
-        success(file) {
-          // console.log(file)
-          const formData = new FormData();
-
-          formData.append('token', localStorage.getItem('token'))
-          // console.log(file)
-          let isInChina = process.env.VUE_APP_CHINA
-          if (isInChina === 'yes') {
-            formData.append('file[]', file, file.name)
-            UPLOAD_BY_ALI_OSS(formData).then(res => {
-              // console.log(res)
-              if (res.code == 200) {
-                let myFileUrl = res.data[0]['file_url'];
-                self.uploadLoadingStatus = false;
-                self.flyerPhotoUrl = myFileUrl
-                self.basicForm.file = myFileUrl
-
-              }
-            }).catch(err => {
-              console.log(err)
-            })
-
-          }
-
-          if (isInChina === 'no') {
-            formData.append('file', file, file.name)
-            UPLOAD_BY_SERVICE(formData).then(res => {
-              // console.log(res)
-              if (res.code == 200) {
-                let myFileUrl = res.message.file_path;
-                self.uploadLoadingStatus = false;
-                self.flyerPhotoUrl = myFileUrl
-                self.basicForm.file = myFileUrl
-              }
-            }).catch(err => {
-              console.log(err)
-            })
-
-          }
-
-        },
-        error(err) {
-          console.log(err.message)
-        }
-
-      })
-
-    },
-    getEventsTags() {
-      let params = {
-        page: 1,
-        limit: 10000,
-        type: 2
-      }
-      EVENTS_TAGS(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.tagsData = res.message.data;
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    getEventCategories() {
-      let params = {
-        page: 1,
-        limit: 10000
-      }
-      EVENTS_CATEGORY(params).then(res => {
-        this.categoryData = res.message.data;
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-    },
-    dealLocationTypeChange(e) {
-
-      let self = this
-
-      this.dealLocationTypeValue = e;
-
-      self.basicForm.is_online = e;
-
-      if (e === 2) {
-        this.mapLoading = true
-        setTimeout(function () {
-          self.initMap()
-          self.mapLoading = false
-        }, 1000)
-      }
-
-      if (e === 3) {
-        this.map1Loading = true
-        setTimeout(function () {
-          self.initMap()
-          self.map1Loading = false
-        }, 1000)
-
-      }
-    },
-    beforeFlyerPhotoUpload(file) {
-      // this.$loading({
-      //   text:'Uploading...'
-      // })
-      this.uploadLoadingStatus = true;
-      const isLt2M = file.size / 1024 / 1024 < 20
-
-      if (!isLt2M) {
-        this.$message.error('Avatar picture size can not exceed 20MB')
-      }
-      return isLt2M
-    },
-    beforeCompanyLogoPhotoUpload(file) {
-      this.uploadLoadingStatus = true;
-      const isLt2M = file.size / 1024 / 1024 < 20
-
-      if (!isLt2M) {
-        this.$message.error('Avatar picture size can not exceed 20MB')
-      }
-      return isLt2M
-    },
-    cancelUpload() {
-      this.uploadLoadingStatus = false;
-    },
-    eventDateChange(e) {
-      this.eventDate = e;
-    },
-    startTimeChange(e) {
-      this.startTime = e;
-    },
-    endTimeChange(e) {
-      this.endTime = e;
-    },
-    initMap() {
-      mapboxgl.accessToken = this.accessToken;
-
-      const map = new mapboxgl.Map({
-        container: "mapContainer",
-        center: [121.472644, 31.231706],
-        style: this.mapStyle,
-        zoom: 12
-      });
-      const nav = new mapboxgl.NavigationControl();
-      map.addControl(nav, "top-right");
-      map.addControl(new mapboxgl.FullscreenControl());
-
-      const geolocate = new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      });
-
-      map.addControl(geolocate, "top-right")
-
-      const geocoder = new MapboxGeocoder({
-        "accessToken": this.accessToken,
-        "language": 'en-US',
-        "mapboxgl": mapboxgl
-      })
-
-      map.addControl(geocoder, 'top-left')
-      const marker = new mapboxgl.Marker()
-      // {
-      //   draggable:true
-      // }
-      // marker.on('dragend',(e)=>{
-      //   console.log(e)
-      // })
-      geocoder.on('result', (e) => {
-        console.log(e)
-        marker.setLngLat(e.result.center).addTo(map)
-        this.basicForm.location = e.result.place_name
-        this.basicForm.lng = e.result.center[0]
-        this.basicForm.lat = e.result.center[1]
-
-      })
-      geocoder.on('clear', (e) => {
-        console.log(e)
-        this.basicForm.location = ''
-        this.basicForm.lng = ''
-        this.basicForm.lat = ''
-      })
-
-    },
-    initMap1() {
-      mapboxgl.accessToken = this.accessToken;
-
-      const map = new mapboxgl.Map({
-        container: "mapContainer1",
-        center: [121.472644, 31.231706],
-        style: this.mapStyle,
-        zoom: 12
-      });
-      const nav = new mapboxgl.NavigationControl();
-      map.addControl(nav, "top-right");
-
-      const geolocate = new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      });
-
-      map.addControl(geolocate, "top-right")
-
-      const geocoder = new MapboxGeocoder({
-        "accessToken": this.accessToken,
-        "mapboxgl": mapboxgl
-      })
-
-      map.addControl(geocoder, 'top-left')
-      const marker = new mapboxgl.Marker()
-      // {
-      //   draggable:true
-      // }
-      // marker.on('dragend',(e)=>{
-      //   console.log(e)
-      // })
-      geocoder.on('result', (e) => {
-        console.log(e)
-        marker.setLngLat(e.result.center).addTo(map)
-        this.basicForm.location = e.result.place_name
-        this.basicForm.lng = e.result.center[0]
-        this.basicForm.lat = e.result.center[1]
-
-      })
-      geocoder.on('clear', (e) => {
-        console.log(e)
-        this.basicForm.location = ''
-        this.basicForm.lng = ''
-        this.basicForm.lat = ''
-      })
-
-    },
-    getAllCountry() {
-      let params = {}
-      GET_COUNTRY_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.countryOptions = res.message;
-        }
-      }).catch(err => {
-        this.$message.error(err.msg)
-      })
-    },
-    getAllProvinces(countryId) {
-      let params = {
-        country_id: countryId
-      }
-      GET_COUNTRY_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.provinceOptions = res.message;
-        }
-      }).catch(err => {
-        this.$message.error(err.msg)
-      })
-    },
-    getAllCitys(countryId, stateId) {
-      let params = {
-        country_id: countryId,
-        state_id: stateId
-      }
-      GET_COUNTRY_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.cityOptions = res.message;
-        }
-      }).catch(err => {
-        this.$message.error(err.msg)
-      })
-    },
-    countryChange(e) {
-
-      this.basicForm.state_id = undefined
-      this.basicForm.town_id = undefined
-
-      this.provinceOptions = []
-      this.cityOptions = []
-
-      this.basicForm.country_id = e.id
-      this.countryName = e.name
-      this.countryNameCn = e.name
-      this.getAllProvinces(e.id)
-
-    },
-    provinceChange(e) {
-
-      this.basicForm.town_id = undefined
-      this.cityOptions = []
-
-      this.basicForm.state_id = e.id
-      this.provinceName = e.name
-      this.provinceNameCn = e.name
-
-      this.getAllCitys(this.basicForm.country_id, e.id)
-
-    },
-    cityChange(e) {
-
-      this.basicForm.town_id = e.id
-      this.cityName = e.name
-      this.cityNameCn = e.name
-    },
-    getUserObjectList() {
-      let data = {
-        token: localStorage.getItem('token')
-      }
-      USER_OBJECT_LIST(data).then(res => {
-        if (res.code == 200) {
-          this.currencyList = res.message.filter(item => item.pid === 117); // currency
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-    },
-    discard() {
-      this.$router.go(-1)
-    },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-
-          let tagsValue = this.selectTagsValue
-          let tagsIdData = []
-          let tagsNameEn = []
-          let tagsNameCn = []
-
-          if (tagsValue.length > 0) {
-            tagsValue.forEach(item => {
-
-              if (typeof item === 'string') {
-                console.log('string')
-                tagsNameCn.push(item)
-                tagsNameEn.push(item)
-              }
-              if (typeof item === 'object') {
-                console.log('object')
-                tagsIdData.push(item.id)
-                tagsNameCn.push(item.name_cn)
-                tagsNameEn.push(item.name_en)
-              }
-
-            })
-          }
-
-          this.basicForm.tag = tagsIdData;
-          this.basicForm.tags_cn = tagsNameCn.join(',');
-          this.basicForm.tags_en = tagsNameEn.join(',');
-
-          if (this.eventDate) {
-            this.basicForm.date = this.eventDate
-          }
-
-          if (this.eventDate && this.startTime) {
-            this.basicForm.start_time = this.eventDate + ' ' + this.startTime + ':00'
-          }
-
-          if (this.eventDate && this.endTime) {
-            this.basicForm.end_time = this.eventDate + ' ' + this.endTime + ':00'
-          }
-
-          let countryObj = {
-            country_name_en: this.countryName,
-            country_name_cn: this.countryNameCn,
-            province_name_en: this.provinceName,
-            province_name_cn: this.provinceNameCn,
-            city_name_en: this.cityName,
-            city_name_cn: this.cityNameCn
-          }
-
-          this.basicForm.country_info = JSON.stringify(countryObj)
-
-          this.$loading({
-            text: 'Loading...'
-          })
-
-          let params = Object.assign({}, this.basicForm);
-          EVENTS_ADD_EVENT(params).then(res => {
-            console.log(res)
-            if (res.code == 200) {
-              // this.submitEventForm()
-              this.$loading().close()
-
-              this.$router.push('/events/myEvents')
-            }
-          }).catch(err => {
-            console.log(err)
-            this.$message.error(err.msg)
-            this.$loading().close()
-          })
-
-        } else {
-          console.log('error submit!!')
-          this.$message({
-            type: 'warning',
-            message: 'Please complete all required fields',
-            grouping: true
-          })
-          return false
-        }
-      })
-    },
-
-
-  }
-}
 
 </script>
 
 <style scoped>
-.bg {
-  background-color: #f5f6f7;
+.form-width-percent-100 {
+    width: 100%;
 }
 
-.profile-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
+/deep/ .el-date-editor.el-input, .el-date-editor.el-input__wrapper {
+    width: 100%;
 }
 
-.profile-l-container {
-
+.post-event-bg {
+    background-color: #ffffff;
+    height: calc(var(--i-window-height) - 120px);
 }
 
-.profile-r-container {
-  padding: 0 50px 50px 50px;
-  width: calc(100% - 260px);
-  height: calc(100vh - 190px);
+.t-container {
+    margin: 0 40px;
+    padding-bottom: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #D0D5DD;;
 }
 
-.profile-r-bg-container {
-  width: 100%;
-  height: calc(100vh - 240px);
-
+.t-l-label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    color: #101828;
 }
 
-.new-deal-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 30px 0 30px 0;
+.t-l-tips {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #667085;
 }
 
-.new-deal-t-l {
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 30px;
-  color: #262626;
-
+.form-container {
+    margin: 24px 40px 40px 40px;
 }
 
-.new-deal-t-r {
-
+.form-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.new-deal-btn {
-  font-size: 20px;
+.form-content-l {
+    flex-basis: 388px;
 }
 
-.basic-form {
-  height: calc(100vh - 340px);
+.form-content-r {
+    flex-basis: 388px;
 }
 
-.event-date-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.event-date {
-  width: 100%;
-  height: 50px;
-}
 
 .event-time {
-  width: 100%;
-
+    width: 100%;
 }
 
 .event-time-item {
-  margin-top: 15px;
+    margin-bottom: 15px;
 }
 
-.deals-tabs-container {
-  border-radius: 10px;
-  overflow: hidden;
+.event-time-item:last-child {
+    margin-bottom: 0;
 }
 
-.deals-location-select-container {
-  text-align: left;
-}
-
-.map-container {
-  margin-top: 10px;
-  width: 100%;
-  height: 300px;
-  text-align: center;
-}
-
-.basemap {
-  width: 100%;
-  height: 100%;
-}
 
 /deep/ .profile-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
+    border: 1px dashed #d9d9d9;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
 }
 
 /deep/ .profile-uploader .el-upload:hover {
-  border-color: #0AA0A8;
+    border-color: #0AA0A8;
 }
 
 /deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-
-.profile-avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-.deals-tips {
-  text-align: left;
-  font-size: 12px;
-  color: #808080;
-}
-
-
-.xll-submit-container {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.object-tags-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.object-tags {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-
-}
-
-.object-tags-item {
-  background-color: rgba(0, 179, 210, 0.1);
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin: 10px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.object-tags-add {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.object-tags-item-add {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-
-.tags-active {
-  background-color: #00CE47;
-  color: #FFFFFF;
-}
-
-.event-item-container {
-  padding: 50px;
-  border-radius: 38px;
-  background-color: #ffffff;
-  margin-bottom: 50px;
-}
-
-.event-item-label {
-  font-family: BarlowM, serif;
-  font-size: 26px;
-  color: #262626;
-}
-
-.event-item-c {
-  margin-top: 15px;
-}
-
-.event-type-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.event-type {
-  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  color: #262626;
-  padding: 2px 10px;
-  border-radius: 6px;
-  border: 1px solid #262626;
-  margin-right: 15px;
-  background-color: #F0F2F5;
-  cursor: pointer;
-}
-
-.event-type-active {
-  background-color: #6650B3;
-  color: #FFFFFF !important;
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
 }
 
 
 .account-xll-images {
-  width: 90%;
+    width: 90%;
 }
 
 .account-xll-image {
-  position: relative;
-  margin-top: 10px;
+    position: relative;
+    margin-top: 10px;
 
 }
 
 .account-xll-image-mask {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: none;
 
 }
 
 .account-xll-image:hover .account-xll-image-mask {
-  /*display: inline;*/
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+    /*display: inline;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .account-xll-image-mask span {
-  margin-right: 15px;
-  cursor: pointer;
+    margin-right: 15px;
+    cursor: pointer;
 }
 
 .account-xll-image-mask:hover {
 
+}
+
+
+.attachment-xll {
+
+}
+
+.attachment-xll-btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.attachment-xll-btn {
+    width: 100%;
+    /*width: 388px;*/
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #d0d5dd;
+    padding: 1px 11px;
+    border-radius: 4px;
+}
+
+.attachment-xll-btn span {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #667085;
+}
+
+.attachment-xll-btn-edit, .attachment-xll-btn-download {
+    height: 44px;
+    border: 1px solid #D0D5DD;
+    border-radius: 5px;
+    padding: 0 16px;
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attachment-xll-icon {
+    cursor: pointer;
+}
+
+.attachment-xll-image {
+    width: 245px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.attachment-xll-img {
+    width: 100%;
+    height: 100%;
+}
+
+.attachment-xll-image-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: none;
+}
+
+.attachment-xll-image:hover .attachment-xll-image-mask {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-upload-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.profile-upload-text {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #667085;
+}
+
+.profile-upload-text span {
+    font-weight: 700;
+    color: #5C41E6;
 }
 
 
@@ -1452,43 +1099,7 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-  .profile-r-container {
-    padding: 0;
-    height: calc(var(--i-window-height) - 160px);
-    width: 100%;
-  }
 
-  .profile-r-bg-container {
-    height: calc(var(--i-window-height) - 160px);
-
-  }
-
-  .new-deal-t {
-    padding: 15px;
-    height: 30px;
-  }
-
-  .new-deal-t-l {
-    font-size: 18px;
-  }
-
-  .new-deal-btn {
-    font-size: 12px;
-  }
-
-  .basic-form {
-    height: calc(var(--i-window-height) - 220px);
-
-  }
-
-  .event-item-container {
-    margin: 15px;
-    padding: 15px;
-  }
-
-  .event-type {
-    font-size: 12px;
-  }
 
 }
 

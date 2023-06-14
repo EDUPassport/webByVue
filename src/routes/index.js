@@ -10,46 +10,32 @@ import NProgress from "nprogress";
 import "../style/nprogress.css";
 import version from "../../public/verison.json";
 import vueCookies from "vue-cookies";
+import LayoutWrapper from "@/layout/layoutWrapper.vue";
 
 const routes = [
 
     {
         path: "/events",
-        component: layout,
+        name: "eventsList",
+        component: LayoutWrapper,
         children: [
             {
-                path: "list",
-                redirect: "/events",
-            },
-            {
-                path: "/events",
-                name: "eventsList",
+                path:'/events',
                 component: () => import("@/views/events/list"),
                 meta: {
                     titleC: "Events List",
                     titleG: "Events List",
                 },
-            },
+            }
+        ]
+
+    },
+    {
+        path: '/events/post',
+        component: dashboardLayout,
+        children: [
             {
-                path: "/post-event",
-                name: "zohoPostEvent",
-                component: () => import("@/views/events/postEvent"),
-                meta: {
-                    titleC: "Post Event",
-                    titleG: "Post Event",
-                },
-            },
-            {
-                path: "/event/event-detail",
-                name: "eventDetail",
-                component: () => import("@/views/events/EventDetailInfo.vue"),
-                meta: {
-                    titleC: "Event detail",
-                    titleG: "Event detail",
-                },
-            },
-            {
-                path: "post",
+                path: "/events/post",
                 name: "eventsPost",
                 component: () => import("@/views/events/post/post"),
                 meta: {
@@ -58,8 +44,14 @@ const routes = [
                     requireAuth: true,
                 },
             },
+        ]
+    },
+    {
+        path: '/events/myEvents',
+        component: dashboardLayout,
+        children: [
             {
-                path: "myEvents",
+                path: "/events/myEvents",
                 name: "myEvents",
                 component: () => import("@/views/events/my/events"),
                 meta: {
@@ -69,7 +61,37 @@ const routes = [
                     requireAuth: true,
                 },
             },
-        ],
+        ]
+    },
+    {
+        path: '/post-event',
+        component: layout,
+        children: [
+            {
+                path: "/post-event",
+                name: "zohoPostEvent",
+                component: () => import("@/views/events/postEvent"),
+                meta: {
+                    titleC: "Post Event",
+                    titleG: "Post Event",
+                },
+            },
+        ]
+    },
+    {
+        path: '/event/event-detail',
+        component: layout,
+        children: [
+            {
+                path: "/event/event-detail",
+                name: "eventDetail",
+                component: () => import("@/views/events/EventDetailInfo.vue"),
+                meta: {
+                    titleC: "Event detail",
+                    titleG: "Event detail",
+                },
+            }
+        ]
     },
     {
         path: "/deals",
@@ -203,7 +225,7 @@ const routes = [
         ],
     },
     {
-        path:'/job/pool',
+        path: '/job/pool',
         component: dashboardLayout,
         children: [
             {
@@ -219,13 +241,13 @@ const routes = [
         ]
     },
     {
-        path:'/jobs/post',
+        path: '/jobs/post',
         component: dashboardLayout,
         children: [
             {
                 path: "",
                 name: "postJob",
-                component: () =>  import("@/views/jobs/post/post"),
+                component: () => import("@/views/jobs/post/post"),
                 meta: {
                     activeMenu: "/overview",
                     titleC: "Create a Job",
@@ -240,7 +262,7 @@ const routes = [
         component: dashboardLayout,
         children: [
             {
-                path:"",
+                path: "",
                 name: "myJobs",
                 component: () => import("@/views/jobs/my/jobs"),
                 meta: {

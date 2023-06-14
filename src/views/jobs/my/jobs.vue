@@ -10,118 +10,155 @@
 
             <div class="content-container">
 
+                <div class="my-jobs-filter">
+
+                    <el-dropdown :hide-on-click="false" trigger="click">
+                        <span><el-image :src="filterIconImg"></el-image></span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item>
+                                    <el-button link
+                                               @click="filterMyJobsByOpenStatus(-1)">
+                                        All
+                                    </el-button>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <el-button link
+                                               @click="filterMyJobsByOpenStatus(1)">
+                                        Open
+                                    </el-button>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <el-button link
+                                               @click="filterMyJobsByOpenStatus(0)">
+                                        Close
+                                    </el-button>
+                                </el-dropdown-item>
+
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+
+                </div>
+
                 <el-tabs v-model="activeTabPane" @tab-change="changeActiveTab">
                     <el-tab-pane label="Jobs" name="jobs">
                         <div v-loading="loadingJobsStatus">
-                            <div class="job-container" >
-                                <div class="job-item" v-for="(item,index) in jobListData" :key="index">
-                                    <div class="job-item-t">
-                                        <div class="job-item-t-l">
-                                            <el-image
-                                                :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
-                                                class="job-item-avatar"></el-image>
-                                        </div>
-                                        <div class="job-item-t-r">
-                                            <div class="job-item-name">
-                                                {{ item.job_title }}
+                            <template v-if="jobTotalNum > 0">
+                                <div class="job-container" >
+                                    <div class="job-item" v-for="(item,index) in jobListData" :key="index">
+                                        <div class="job-item-t">
+                                            <div class="job-item-t-l">
+                                                <el-image
+                                                    :src="item.third_company_logo ? item.third_company_logo : item.company_logo"
+                                                    class="job-item-avatar"></el-image>
+                                            </div>
+                                            <div class="job-item-t-r">
+                                                <div class="job-item-name">
+                                                    {{ item.job_title }}
 
-                                                <span class="xll-tag xll-tag-1" v-if="item.status==0"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Pending</span>
+                                                    <span class="xll-tag xll-tag-1" v-if="item.status==0"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Pending</span>
 
-                                                <template v-if="item.status == 1">
-                                                    <span class="xll-tag xll-tag-2" v-if="item.is_open==1"><el-icon style="margin-right: 2px;"><IconElOkCircle/></el-icon>Open</span>
-                                                    <span class="xll-tag xll-tag-3" v-if="item.is_open==0"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Closed</span>
-                                                </template>
+                                                    <template v-if="item.status == 1">
+                                                        <span class="xll-tag xll-tag-2" v-if="item.is_open==1"><el-icon style="margin-right: 2px;"><IconElOkCircle/></el-icon>Open</span>
+                                                        <span class="xll-tag xll-tag-3" v-if="item.is_open==0"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Closed</span>
+                                                    </template>
 
-                                                <span class="xll-tag xll-tag-3" v-if="item.status==2"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
-                                                <span class="xll-tag xll-tag-application"
-                                                      @click="turnApplications(item.id,item.unread_id)">
+                                                    <span class="xll-tag xll-tag-3" v-if="item.status==2"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
+                                                    <span class="xll-tag xll-tag-application"
+                                                          @click="turnApplications(item.id,item.unread_id)">
                                                     {{ item.resume_count }} Applications
                                                 </span>
 
-                                                <span v-if="item.unread_status" class="read-star"></span>
+                                                    <span v-if="item.unread_status" class="read-star"></span>
+
+                                                </div>
+                                                <div class="job-item-desc">
+                                                    {{ $filters.doRepAdvance(item.desc) }}
+                                                </div>
 
                                             </div>
-                                            <div class="job-item-desc">
-                                                {{ $filters.doRepAdvance(item.desc) }}
+                                        </div>
+                                        <div class="job-item-b">
+                                            <el-tooltip
+                                                effect="light"
+                                                :content="item.job_location"
+                                                placement="bottom"
+                                            >
+                                                <div class="job-item-location">
+                                                    <el-image class="job-item-icon-24"
+                                                              :src="locationIconImg"></el-image>
+                                                    <span>{{ item.job_location }}</span>
+                                                </div>
+
+                                            </el-tooltip>
+
+                                            <div class="job-item-salary">
+                                                <el-image class="job-item-icon-24" :src="salaryIconImg"></el-image>
+                                                <span>{{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}</span>
+                                            </div>
+
+                                            <div class="job-item-salary">
+                                                <el-image class="job-item-icon-24" :src="calendarImg"></el-image>
+                                                <span> {{ $filters.howLongFormat(item.refresh_time) }}</span>
                                             </div>
 
                                         </div>
-                                    </div>
-                                    <div class="job-item-b">
-                                        <el-tooltip
-                                            effect="light"
-                                            :content="item.job_location"
-                                            placement="bottom"
-                                        >
-                                            <div class="job-item-location">
-                                                <el-image class="job-item-icon-24"
-                                                          :src="locationIconImg"></el-image>
-                                                <span>{{ item.job_location }}</span>
-                                            </div>
 
-                                        </el-tooltip>
+                                        <div class="job-item-more-actions">
+                                            <span @click="shareJob(item)" style="margin-right: 8px;cursor: pointer;"><el-icon ><IconIcRoundShare/></el-icon></span>
+                                            <el-dropdown :hide-on-click="false" trigger="click">
+                                                <span class="job-item-more-text"><el-icon><IconRiMore2Fill/></el-icon></span>
+                                                <template #dropdown>
+                                                    <el-dropdown-menu>
 
-                                        <div class="job-item-salary">
-                                            <el-image class="job-item-icon-24" :src="salaryIconImg"></el-image>
-                                            <span>{{ item.currency }} {{ item.salary_min }} - {{ item.salary_max }}</span>
+                                                        <el-dropdown-item>
+                                                            <el-button link
+                                                                       @click="turnEditJobs(item.id, item.version_time)">
+                                                                Edit
+                                                            </el-button>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item v-if="item.status == 1">
+                                                            <el-button link
+                                                                       @click="openOrCloseJob(item.id,item.is_open)">
+                                                                <span v-if="item.is_open === 1">Close Job</span>
+                                                                <span v-if="item.is_open === 0">Open Job</span>
+                                                            </el-button>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item>
+                                                            <el-popconfirm
+                                                                title="Are you sure to delete this?"
+                                                                width="auto"
+                                                                @confirm="deleteJob(item.id)"
+                                                            >
+                                                                <template #reference>
+                                                                    <el-button link>Delete</el-button>
+                                                                </template>
+                                                            </el-popconfirm>
+
+                                                        </el-dropdown-item>
+                                                    </el-dropdown-menu>
+                                                </template>
+                                            </el-dropdown>
                                         </div>
-
-                                        <div class="job-item-salary">
-                                            <el-image class="job-item-icon-24" :src="calendarImg"></el-image>
-                                            <span> {{ $filters.howLongFormat(item.refresh_time) }}</span>
-                                        </div>
-
                                     </div>
 
-                                    <div class="job-item-more-actions">
-                                        <span @click="shareJob(item)" style="margin-right: 8px;cursor: pointer;"><el-icon ><IconIcRoundShare/></el-icon></span>
-                                        <el-dropdown :hide-on-click="false" trigger="click">
-                                            <span class="job-item-more-text"><el-icon><IconRiMore2Fill/></el-icon></span>
-                                            <template #dropdown>
-                                                <el-dropdown-menu>
-
-                                                    <el-dropdown-item>
-                                                        <el-button link
-                                                                   @click="turnEditJobs(item.id, item.version_time)">
-                                                            Edit
-                                                        </el-button>
-                                                    </el-dropdown-item>
-                                                    <el-dropdown-item v-if="item.status == 1">
-                                                        <el-button link
-                                                                   @click="openOrCloseJob(item.id,item.is_open)">
-                                                            <span v-if="item.is_open === 1">Close Job</span>
-                                                            <span v-if="item.is_open === 0">Open Job</span>
-                                                        </el-button>
-                                                    </el-dropdown-item>
-                                                    <el-dropdown-item>
-                                                        <el-popconfirm
-                                                            title="Are you sure to delete this?"
-                                                            width="auto"
-                                                            @confirm="deleteJob(item.id)"
-                                                        >
-                                                            <template #reference>
-                                                                <el-button link>Delete</el-button>
-                                                            </template>
-                                                        </el-popconfirm>
-
-                                                    </el-dropdown-item>
-                                                </el-dropdown-menu>
-                                            </template>
-                                        </el-dropdown>
-                                    </div>
+                                </div>
+                                <div class="job-pagination">
+                                    <el-pagination layout="prev, pager, next"
+                                                   :default-current-page="1"
+                                                   @size-change="jobPageSizeChange"
+                                                   @current-change="jobPageChange"
+                                                   :current-page="jobPage"
+                                                   :page-size="jobLimit"
+                                                   :total="jobTotalNum">
+                                    </el-pagination>
                                 </div>
 
-                            </div>
-                            <div class="job-pagination">
-                                <el-pagination layout="prev, pager, next"
-                                               :default-current-page="1"
-                                               @size-change="jobPageSizeChange"
-                                               @current-change="jobPageChange"
-                                               :current-page="jobPage"
-                                               :page-size="jobLimit"
-                                               :total="jobTotalNum">
-                                </el-pagination>
-                            </div>
+                            </template>
+                            <template v-else>
+                                <el-empty :image="emptyImg" description="No data"></el-empty>
+                            </template>
 
                         </div>
 
@@ -181,7 +218,8 @@ import locationIconImg from "@/assets/newHome/dashboard/location_nofill.svg";
 import salaryIconImg from "@/assets/newHome/dashboard/salary_nofill.svg";
 import calendarImg from "@/assets/newHome/dashboard/calendar.svg";
 import shareCard from "@/components/shareCard.vue";
-// import emptyImg from '@/assets/newHome/dashboard/empty.svg'
+import emptyImg from '@/assets/newHome/dashboard/empty.svg'
+import filterIconImg from '@/assets/filter.svg'
 
 const store = useStore()
 const route = useRoute()
@@ -240,6 +278,31 @@ const jobPageSizeChange = (e) => {
 const jobPageChange = (e) => {
     jobPage.value = e
     getMyJobs(e, jobLimit.value)
+}
+const filterMyJobsByOpenStatus = (e) =>{
+    let params = {
+        page: jobPage.value,
+        limit: jobLimit.value
+    }
+
+    if(e !== -1){
+        params.is_open = e
+    }
+
+    loadingJobsStatus.value = true
+
+    MY_JOBS(params).then(res => {
+        if (res.code == 200) {
+            let jobData = res.message.data
+            jobTotalNum.value = res.message.total
+            // jobListData.value = jobData
+            filterUserUnreadAndJobList(jobData)
+            loadingJobsStatus.value = false
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
 }
 
 const getMyJobs = (page, limit) => {
@@ -509,7 +572,15 @@ onMounted(() => {
 
 .content-container {
     margin: 30px 40px 40px 40px;
+    position: relative;
+}
 
+.my-jobs-filter{
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    cursor: pointer;
+    z-index: 1100;
 }
 
 .job-container {

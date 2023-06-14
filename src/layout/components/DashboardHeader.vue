@@ -3,8 +3,28 @@
         <el-affix :offset="0">
             <el-header class="header-container" height="auto">
                 <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
+                    <el-col class="header-l-col" :xs="0" :sm="4" :md="12" :lg="12" :xl="12" v-if="currentRoutePath === '/events/post'">
+                        <div class="nav-events-container">
+                            <div class="nav-events-l">
+                                <el-button link icon="back" @click="turnBackToEvents()" >Back to Events</el-button>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col class="header-l-col" :xs="0" :sm="4" :md="12" :lg="12" :xl="12" v-else-if="currentRoutePath === '/events/myEvents'">
+                        <div class="nav-events-container">
+                            <div class="nav-events-l">
+                                <el-button icon="plus" type="primary" @click="turnToPostEvent()">Post Event</el-button>
+                            </div>
+                            <div class="nav-events-r">
+                                <el-breadcrumb separator-icon="ArrowRight">
+                                    <el-breadcrumb-item :to="{ path: '/events' }">EDU Events</el-breadcrumb-item>
+                                    <el-breadcrumb-item :to="{path:'/events/myEvents'}">My events</el-breadcrumb-item>
+                                </el-breadcrumb>
 
-                    <el-col class="header-l-col" :xs="0" :sm="4" :md="4" :lg="8" :xl="8">
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col class="header-l-col" :xs="0" :sm="4" :md="4" :lg="8" :xl="8" v-else>
                         <div class="header-page-name">
                             <template v-if="currentRoutePath === '/overview' ">Dashboard</template>
                             <template v-if="currentRoutePath === '/job/pool' ">Pool</template>
@@ -17,7 +37,6 @@
                                 Welcome, {{ userInfo.companyName ?  userInfo.companyName : userInfo.name }}!
                             </template>
                             <template v-if="currentRoutePath === '/job/pool' ">Job Listing</template>
-
                         </div>
                     </el-col>
 
@@ -31,7 +50,22 @@
                         <el-image class="mobile-logo-img" :src="logoMobileImg"></el-image>
                     </el-col>
 
-                    <el-col class="header-r-col" :xs="8" :sm="20" :md="20" :lg="16" :xl="16">
+                    <el-col class="header-r-col" :xs="8" :sm="20" :md="12" :lg="12" :xl="12" v-if="currentRoutePath === '/events/post' ">
+                        <div class="nav-events-r-container" >
+                            <el-button type="primary" @click="turnToMyEvents()">My Events</el-button>
+                            <el-button plain>Reserved Spots</el-button>
+                        </div>
+                        <HeaderSwitchIdentity></HeaderSwitchIdentity>
+
+                    </el-col>
+                    <el-col class="header-r-col" :xs="8" :sm="20" :md="12" :lg="12" :xl="12" v-else-if="currentRoutePath === '/events/myEvents' ">
+                        <div class="nav-events-r-container" >
+                            <el-button plain type="primary">Reserved Spots</el-button>
+                        </div>
+                        <HeaderSwitchIdentity></HeaderSwitchIdentity>
+
+                    </el-col>
+                    <el-col class="header-r-col" :xs="8" :sm="20" :md="20" :lg="16" :xl="16" v-else>
 
                         <div class="nav-link-container">
 
@@ -94,6 +128,18 @@ const userInfo = computed(()=>store.state.userInfo)
 
 const turnBackToDashboard = ()=>{
     router.push({path:'/overview'})
+}
+
+const turnBackToEvents = ()=>{
+    router.push({path:'/events'})
+}
+
+const turnToMyEvents = ()=>{
+    router.push({path:'/events/myEvents'})
+}
+
+const turnToPostEvent = ()=>{
+    router.push({path:'/events/post'})
 }
 
 </script>
@@ -167,6 +213,36 @@ const turnBackToDashboard = ()=>{
 .nav-link-container a:hover {
     color: #000000;
     text-decoration: underline;
+}
+
+.nav-events-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.nav-events-r{
+    margin-left: 12px;
+}
+
+.nav-events-r-container{
+    margin-right: 16px;
+}
+
+/deep/ .el-breadcrumb__inner.is-link{
+    font-family: 'Inter';
+    font-weight: 500;
+    font-size: 18px;
+    color: #C6C7C8;
+}
+
+
+/deep/ .el-breadcrumb__item:last-child .el-breadcrumb__inner.is-link {
+    font-family: 'Inter';
+    font-weight: 500;
+    font-size: 18px;
+    color: #6648FF;
 }
 
 @media screen and (min-width: 769px) {
