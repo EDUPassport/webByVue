@@ -17,7 +17,7 @@ import 'animate.css'
 import VTypical from 'vue-typical'
 import './assets/fonts/index.css'
 
-import {howLong, ymdFormat,ymdFormatTimestamp} from "./utils";
+import {howLong, ymdFormat, ymdFormatTimestamp} from "./utils";
 import store from "./store";
 import VueSocialSharing from 'vue-social-sharing'
 // import 'amfe-flexible';
@@ -48,8 +48,8 @@ const i18n = createI18n({
 
 const app = createApp(App)
 
-for(const [key,component] of Object.entries(ElementPlusIconsVue)){
-    app.component(key,component)
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
 }
 
 app.component(Vue3CountryIntl.name, Vue3CountryIntl)
@@ -64,7 +64,7 @@ app.use(vue3GoogleLogin, {
 
 app.use(router)
 app.use(store)
-app.use(ElementPlus, {locale: en, size:'default', zIndex: 2000})
+app.use(ElementPlus, {locale: en, size: 'default', zIndex: 2000})
 app.use(i18n)
 app.use(VTypical, {
     /* options */
@@ -77,81 +77,81 @@ app.use(VueClipboard)
 
 app.config.globalProperties.$store = store
 app.config.globalProperties.$filters = {
-    substringFromEnd(value, length){
-      if(value){
-          return value.substring(value.length - length)
-      }
-    },
-    formatPriceDescription(value){
-      if(value){
-          return value.split('||')
-      }
-    },
-    newsDateFormat(value){
-        if(value){
-            let eParse = new Date(value.replace(/-/g,"/"))
-            return ymdFormat(eParse,'en-US')
+    substringFromEnd(value, length) {
+        if (value) {
+            return value.substring(value.length - length)
         }
     },
-    ymdFormatTimestamp(value){
-        return ymdFormatTimestamp(value,'en-US')
-    },
-    howLongFormat(value){
-        if(value){
-            let eParse = Date.parse(value.replace(/-/g,"/")) / 1000
-            return howLong(eParse,'en-US')
+    formatPriceDescription(value) {
+        if (value) {
+            return value.split('||')
         }
     },
-    ymdFormatEvent(timeStr){
+    newsDateFormat(value) {
+        if (value) {
+            let eParse = new Date(value.replace(/-/g, "/"))
+            return ymdFormat(eParse, 'en-US')
+        }
+    },
+    ymdFormatTimestamp(value) {
+        return ymdFormatTimestamp(value, 'en-US')
+    },
+    howLongFormat(value) {
+        if (value) {
+            let eParse = Date.parse(value.replace(/-/g, "/")) / 1000
+            return howLong(eParse, 'en-US')
+        }
+    },
+    ymdFormatEvent(timeStr) {
         let monthArr = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Spt.", "Oct.", "Nov.", "Dec."];
 
-        if(timeStr){
-            let time = new Date(timeStr.replace(/-/g,"/"))
+        if (timeStr) {
+            let time = new Date(timeStr.replace(/-/g, "/"))
             let year = time.getFullYear();
             let month = monthArr[time.getMonth()];
             let day = time.getDate();
 
-            return  month + ' ' + day + ', ' + year;
+            return month + ' ' + day + ', ' + year;
         }
     },
-    timeFormatEvent(startTimeStr,endTimeStr){
+    timeFormatEvent(startTimeStr, endTimeStr) {
 
-        if(startTimeStr && endTimeStr){
-            let startTime =  new Date(startTimeStr.replace(/-/g,"/"));
-            let endTime =  new Date(endTimeStr.replace(/-/g,"/"));
+        if (startTimeStr && endTimeStr) {
+            let startTime = new Date(startTimeStr.replace(/-/g, "/"));
+            let endTime = new Date(endTimeStr.replace(/-/g, "/"));
 
-            let startHourTag = startTime.getHours()>11 ? 'pm' : 'am';
-            let startHour = startTime.getHours() > 12 ? startTime.getHours()-12 : startTime.getHours();
-            let startMin = startTime.getMinutes() < 10 ? "0"+startTime.getMinutes() : startTime.getMinutes();
+            let startHourTag = startTime.getHours() > 11 ? 'pm' : 'am';
+            let startHour = startTime.getHours() > 12 ? startTime.getHours() - 12 : startTime.getHours();
+            let startMin = startTime.getMinutes() < 10 ? "0" + startTime.getMinutes() : startTime.getMinutes();
 
-            let endHourTag = endTime.getHours()>11 ? 'pm' : 'am';
-            let endHour = endTime.getHours() > 12 ? endTime.getHours()-12 : endTime.getHours();
-            let endMin = endTime.getMinutes() < 10 ? "0"+endTime.getMinutes() : endTime.getMinutes();
+            let endHourTag = endTime.getHours() > 11 ? 'pm' : 'am';
+            let endHour = endTime.getHours() > 12 ? endTime.getHours() - 12 : endTime.getHours();
+            let endMin = endTime.getMinutes() < 10 ? "0" + endTime.getMinutes() : endTime.getMinutes();
 
-            return  startHour+':'+startMin + '' + startHourTag + ' - '+ endHour+':'+endMin+''+endHourTag;
+            return startHour + ':' + startMin + '' + startHourTag + ' - ' + endHour + ':' + endMin + '' + endHourTag;
         }
     },
-    monthFormatEvent(timeStr){
+    monthFormatEvent(timeStr) {
         let monthArr = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SPT", "OCT", "NOV", "DEC"];
 
-        if(timeStr){
-            let time = new Date(timeStr.replace(/-/g,"/"))
-            return  monthArr[time.getMonth()];
+        if (timeStr) {
+            let time = new Date(timeStr.replace(/-/g, "/"))
+            return monthArr[time.getMonth()];
         }
 
     },
-    dayFormatEvent(timeStr){
-        if(timeStr){
-            let time = new Date(timeStr.replace(/-/g,"/"))
+    dayFormatEvent(timeStr) {
+        if (timeStr) {
+            let time = new Date(timeStr.replace(/-/g, "/"))
             return time.getDate();
         }
     },
-    compareTimeWithCurrentTime(time){
-        let timeStr = time.replace(/-/g,"/")
+    compareTimeWithCurrentTime(time) {
+        let timeStr = time.replace(/-/g, "/")
 
         let myDate = new Date();
         let year = myDate.getFullYear()
-        let month = myDate.getMonth()  + 1
+        let month = myDate.getMonth() + 1
         let day = myDate.getDate()
         let mTime = year + '-' + month + '-' + day;
         let mDate = new Date(mTime)
@@ -160,21 +160,21 @@ app.config.globalProperties.$filters = {
         return aDate.getTime() < mDate.getTime();
 
     },
-    doRepAdvance(s){
-        if(s){
-            let str=s.replace(/(\n)/g, " ");
-            str=str.replace(/(\t)/g, " ");
-            str=str.replace(/(\r)/g, " ");
-            str=str.replace(/<\/?[^>]*>/g, " ");
+    doRepAdvance(s) {
+        if (s) {
+            let str = s.replace(/(\n)/g, " ");
+            str = str.replace(/(\t)/g, " ");
+            str = str.replace(/(\r)/g, " ");
+            str = str.replace(/<\/?[^>]*>/g, " ");
             // str=str.replace(/\s*/g, "");
-            str=str.replace(/<\/?.+?\/?>/g, "");
+            str = str.replace(/<\/?.+?\/?>/g, "");
             return str;
         }
 
     },
-    countryInfoFormat(value){
+    countryInfoFormat(value) {
         // console.log(value)
-        if(value){
+        if (value) {
             let valueParse = JSON.parse(value)
             console.log(valueParse)
             let str = ''
@@ -187,66 +187,90 @@ app.config.globalProperties.$filters = {
             let districtNameEn = valueParse.district_name_en ? valueParse.district_name_en : ''
             // let districtNameCn = valueParse.district_name_cn
 
-            if(countryNameEn){
+            if (countryNameEn) {
                 str = countryNameEn
             }
-            if(countryNameEn && provinceNameEn){
+            if (countryNameEn && provinceNameEn) {
                 str = provinceNameEn + ', ' + countryNameEn
             }
 
-            if(countryNameEn && provinceNameEn && cityNameEn){
-                str =  provinceNameEn + ', ' + cityNameEn + ', ' + countryNameEn
+            if (countryNameEn && provinceNameEn && cityNameEn) {
+                str = provinceNameEn + ', ' + cityNameEn + ', ' + countryNameEn
             }
-            if(countryNameEn && provinceNameEn && cityNameEn && districtNameEn){
-                str =  provinceNameEn + ', ' + cityNameEn + ', '+districtNameEn + ', ' + countryNameEn
+            if (countryNameEn && provinceNameEn && cityNameEn && districtNameEn) {
+                str = provinceNameEn + ', ' + cityNameEn + ', ' + districtNameEn + ', ' + countryNameEn
             }
             return str;
 
         }
     },
-    userObjectFormat(value){
-        if(value){
+    userObjectFormat(value) {
+        if (value) {
             let arr = []
-            value.forEach(item=>{
+            value.forEach(item => {
                 arr.push(item.object_en)
             })
-            if(arr.length>0){
+            if (arr.length > 0) {
                 return arr.join(', ');
-            }else{
+            } else {
                 return '';
             }
 
-        }else{
+        } else {
             return '';
         }
     },
-    textEllipsis(value,len=180){
-        if(!value){
+    textEllipsis(value, len = 180) {
+        if (!value) {
             return ''
         }
-        if(len === -1){
+        if (len === -1) {
             return value;
         }
 
-        if(value.length > len){
-            return value.slice(0,len) + '...'
+        if (value.length > len) {
+            return value.slice(0, len) + '...'
         }
 
         return value;
     },
-    textEllipsisStatus(value,len){
-        if(value){
+    textEllipsisStatus(value, len) {
+        if (value) {
             return value.length > len;
         }
 
     },
-    formatJobTemplateFieldDesc(value){
-        if(value){
+    formatJobTemplateFieldDesc(value) {
+        if (value) {
             let obj = JSON.parse(value)
             return this.doRepAdvance(obj.desc)
-        }else{
+        } else {
             return '...'
         }
+    },
+    formatJobDetailWorkingHours(value) {
+        if (value) {
+            let obj = JSON.parse(value)
+            let start = obj.working_hours_start
+            let end = obj.working_hours_end
+            let timeZone = obj.working_time_zone
+
+            return start + ' to ' + end + ' (' + timeZone + ')'
+
+        } else {
+            return '-'
+        }
+    },
+    formatEventTimeForShow(dateStr) {
+        let date = new Date(dateStr);
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        let suffix = hours >= 12 ? 'PM' : 'AM';
+        hours = ((hours + 11) % 12 + 1);  // The hour '0' should be '12'
+        if (minutes < 10) {
+            minutes = "0" + minutes;  // padding zero if minutes is less than 10
+        }
+        return hours + ':' + minutes + ' ' + suffix;
     }
 
 }
@@ -269,9 +293,9 @@ app.config.globalProperties.validForbid = function (value) {
 }
 
 const goEasy = GoEasy.getInstance({
-    host:'hangzhou.goeasy.io',//应用所在的区域地址: [hangzhou.goeasy.io, 新加坡暂不支持IM，敬请期待]
+    host: 'hangzhou.goeasy.io',//应用所在的区域地址: [hangzhou.goeasy.io, 新加坡暂不支持IM，敬请期待]
     appkey: 'BC-875758c621384be0b4072dff74c062fd',// common key
-    modules:["im"]
+    modules: ["im"]
 })
 
 app.provide('GoEasy', GoEasy)

@@ -396,14 +396,13 @@
 
         </template>
         <template v-else>
-            <el-button link @click="login()">
-                LOGIN
+            <el-button plain @click="login()">
+                Log in
             </el-button>
-            <el-button class="sign-up-btn"
-                       round
+            <el-button
                        type="primary"
                        @click="signUp()">
-                Sign Up
+                Sign up
             </el-button>
         </template>
     </div>

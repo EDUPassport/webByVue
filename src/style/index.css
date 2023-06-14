@@ -34,7 +34,7 @@
 }
 
 .el-button.is-link{
-    --el-button-text-color:#6941C6;
+    --el-button-text-color:#6648FF;
 }
 
 .el-button.is-plain{
@@ -64,7 +64,7 @@
 
     --el-button-text-color:#ffffff;
     --el-button-font-color: #ffffff;
-    --el-button-bg-color: #6650B3;
+    --el-button-bg-color: #6648FF;
     --el-button-background-color: #49397f;
     --el-button-border-color: #9173ff;
 
@@ -81,7 +81,6 @@
     --el-button-hover-bg-color: #9173ff;
     --el-button-hover-border-color:#9173ff;
 
-    font-weight: 700;
 }
 
 .el-input--large{
@@ -376,6 +375,17 @@
     --el-message-bg-color: #12B76A;
     --el-message-border-color:#12B76A;
     --el-message-text-color: #ffffff;
+}
+.el-message--error{
+    --el-message-bg-color: #F04438;
+    --el-message-border-color:#F04438;
+    --el-message-text-color: #ffffff;
+}
+
+.el-button--primary.is-plain{
+    --el-button-bg-color: #ffffff;
+    --el-button-text-color: #6648FF;
+    --el-button-border-color: #6648ff;
 }
 
 

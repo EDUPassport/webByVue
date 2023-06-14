@@ -499,3 +499,6 @@ export const JOB_TEMPLATE_LIST = (params) => get('home/job/template/list',params
 export const HOME_JOB_TEMPLATE_DELETE = (params) => post('home/job/template/delete', params)
 export const HOME_JOB_DELETE = (params) => post('home/job/delete', params)
 export const HOME_JOB_CLOSE = (params) => post('home/job/close', params)
+export const HOME_EVENT_TEMPLATE_ADD = (params) => post('home/event/template/add', params)
+export const HOME_EVENT_TEMPLATE_DELETE = (params) => post('home/event/template/delete', params)
+export const HOME_EVENT_TEMPLATE_LIST = (params) => get('home/event/template/list', params)

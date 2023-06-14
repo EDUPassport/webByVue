@@ -56,3 +56,21 @@ export function encodeByJsBase64(value){
 export function decodeByJsBase64(value){
     return decode(decodeURIComponent(value))
 }
+
+export function convertTo24HourForEventTime(eventDate,time) {
+    let hours = parseInt(time.substring(0, 2));
+    if(time.indexOf('AM') !== -1 && hours === 12) {
+        time = time.replace('12', '0');
+    }
+    if(time.indexOf('PM')  !== -1 && hours < 12) {
+        time = time.replace(hours, (hours + 12));
+    }
+    return eventDate + ' ' + time.replace(/(AM|PM)/, '').trim() + ':00';
+}
+
+export function convertTo12Hour(time) {
+    var hours = parseInt(time.substring(0, 2));
+    var suffix = hours >= 12 ? 'PM' : 'AM';
+    hours = ((hours + 11) % 12 + 1);  // The hour '0' should be '12'
+    return hours + time.substr(2, 3) + ' ' + suffix;
+}
