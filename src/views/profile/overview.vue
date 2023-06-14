@@ -7,14 +7,14 @@
                     <template v-for="(item,i) in contributorIdentities" :key="i">
                         <div class="c-d-item"
                              :class="switchContributorCompanyId === item.id ? 'c-d-item-active' : '' "
-                             v-if="i<2"
+                             v-if="i < card_limit"
                              @click="switchContributor(item.id, 6, 2)"
                              >
                             <div class="c-d-item-t">
                                 <div class="c-d-circle"
                                      :class="switchContributorCompanyId === item.id ? 'c-d-circle-active' : '' "
                                 ></div>
-                                <span>{{item.company_name ? item.company_name : item.company_id}}</span>
+                                <span>{{item.company_name ? item.company_name : item.name}}</span>
                             </div>
 
                             <el-row>
@@ -42,7 +42,7 @@
                     </template>
                 </div>
 
-                <div class="c-d-more" v-if="contributorIdentities.length > 3">
+                <div class="c-d-more" v-if="contributorIdentities.length > card_limit">
                     <el-button link @click="seeMore()">See More</el-button>
                 </div>
 
@@ -513,9 +513,9 @@ const switchContributor = (companyId, identity,language)=>{
 
 }
 
-
+const card_limit = ref(3);
 function seeMore() {
-    router.push({ path: '/' })
+    card_limit.value = 9;
 }
 function getDealsList(page, limit) {
 
