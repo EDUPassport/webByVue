@@ -183,6 +183,20 @@
                                   </el-icon>
                                 </template>
                               </el-popover>
+                              <el-popover
+                                  v-if="item.status == 3"
+                                  placement="top-start"
+                                  title="Expired"
+                                  :width="300"
+                                  trigger="hover"
+                                  :content=item.reason
+                              >
+                                <template #reference>
+                                  <el-icon :size="20" color="#F9B019">
+                                    <Warning/>
+                                  </el-icon>
+                                </template>
+                              </el-popover>
                             </div>
 
                             <div class="da-job-title-r">

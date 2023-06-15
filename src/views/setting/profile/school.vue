@@ -1971,9 +1971,8 @@ const getBasicInfo = async () => {
                     subjectValue.value.push(obj)
                 })
             }
-
-            if (companyInfo.Prefered_Work_Destination) {
-                let preferredLocationArr = companyInfo.Prefered_Work_Destination
+            if (companyInfo.Preferred_Location) {
+                let preferredLocationArr = companyInfo.Preferred_Location
 
                 preferredLocationArr.forEach((item)=>{
 
