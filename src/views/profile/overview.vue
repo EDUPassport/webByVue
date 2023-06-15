@@ -18,23 +18,24 @@
                             </div>
 
                             <el-row>
-                                <el-col :span="12" v-if="contributorIdentities.identity = 5">
-                                    <div class="c-d-item-m">
-                                        Deals Posted
-                                    </div>
-                                    <div class="c-d-item-b-l">{{ vendorDealPostedCountForNow }}</div>
-                                </el-col>
-                                <el-col :span="12" v-else>
+                               
+                                <el-col :span="12" v-if="item.identity == 2 || item.identity == 3 || item.identity == 4">
                                     <div class="c-d-item-m">
                                         Jobs Posted
                                     </div>
-                                    <div class="c-d-item-b-l">{{ businessJobsPostedForNow }}</div>
+                                    <div class="c-d-item-b-l">{{ item.count }}</div>
+                                </el-col>
+                                <el-col :span="12" v-else-if="item.identity == 5">
+                                    <div class="c-d-item-m">
+                                        Deals Posted
+                                    </div>
+                                    <div class="c-d-item-b-l">{{ item.count }}</div>
                                 </el-col>
                                 <el-col :span="12" class="c-d-col">
                                     <div class="c-d-item-m">
                                         Events Posted
                                     </div>
-                                    <div class="c-d-item-b-l">{{ businessEventsPostedForNow }}</div>
+                                    <div class="c-d-item-b-l">{{ item.event }}</div>
                                 </el-col>
                             </el-row>
                         </div>
