@@ -70,12 +70,10 @@
                                 <el-form-item label="Name" prop="first_name">
                                     <div class="form-item-container">
                                         <el-input style="margin-right: 20px;"
-                                                  disabled
                                                   v-model="personalForm.first_name"
                                                   placeholder="Enter First Name">
                                         </el-input>
                                         <el-input v-model="personalForm.last_name"
-                                                  disabled
                                                   placeholder="Enter Second Name">
                                         </el-input>
                                     </div>
@@ -468,7 +466,7 @@
 
                                         <template v-if="businessForm.license && editLicenseStatus">
 
-                                            <div class="attachment-xll">
+                                            <div  class="attachment-xll">
                                                 <div class="attachment-xll-btns">
                                                     <div class="attachment-xll-btn">
                                                         <div class="attachment-xll-btn-l">
@@ -479,6 +477,7 @@
                                                         </div>
                                                         <div class="attachment-xll-btn-r">
                                                             <el-icon class="attachment-xll-icon"
+                                                            v-if="!stepThreeStatus"
                                                                      @click="handleSingleImageRemove('license')"
                                                                      color="#F97066">
                                                                 <Delete></Delete>
@@ -487,13 +486,26 @@
 
                                                     </div>
                                                     <div class="attachment-xll-btn-edit"
-                                                         @click="handleEditMedia('license')"
+                                                    v-if="!stepThreeStatus"  
                                                     >
-                                                        <el-icon class="attachment-xll-icon">
+                                                    <el-upload
+                                                    action=""
+                                                    :limit="1"
+                                                    :headers="uploadHeaders"
+                                                    :show-file-list="false"
+                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                    :http-request="licensePhotoHttpRequest"
+                                                    :before-upload="beforeLicensePhotoUpload"
+                                            >
+                                                <template #trigger>
+                                                    <el-icon class="attachment-xll-icon">
                                                             <IconUilEdit/>
                                                         </el-icon>
+                                                </template>
+                                            </el-upload>
                                                     </div>
                                                     <div class="attachment-xll-btn-download"
+                                                        v-if="!stepThreeStatus"
                                                          @click="handleDownloadMedia(businessForm.license)"
                                                     >
                                                         <el-icon class="attachment-xll-icon">
@@ -508,7 +520,7 @@
                                                               fit="cover"
                                                     >
                                                     </el-image>
-                                                    <div class="attachment-xll-image-mask">
+                                                    <div class="attachment-xll-image-mask"  v-if="!stepThreeStatus">
                                                         <el-icon
                                                                 style="cursor: pointer;"
                                                                 @click="handleSingleImagePreview(businessForm.license,'license')"
