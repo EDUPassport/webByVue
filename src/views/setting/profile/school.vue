@@ -1995,7 +1995,7 @@ const getBasicInfo = async () => {
                 })
 
             }
-
+            studentAgeValue.value=[]
             if (companyInfo.Student_Age) {
                 let studentAgeArr = companyInfo.Student_Age
 
@@ -2020,7 +2020,7 @@ const getBasicInfo = async () => {
                 })
 
             }
-
+            availableTeachValue.value=[]
             if (companyInfo.Available_technologies) {
                 let facArr = companyInfo.Available_technologies
                 facArr.forEach((item)=>{
@@ -2043,6 +2043,7 @@ const getBasicInfo = async () => {
                 })
 
             }
+            facilitiesValue.value=[]
             if (companyInfo.Facilities) {
                 let facArr = companyInfo.Facilities
                 facArr.forEach((item)=>{
