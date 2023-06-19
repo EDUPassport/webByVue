@@ -1000,7 +1000,7 @@
 
                                     <div class="profile-picture-r">
 
-                                        <template v-if="mediaForm.background_image && editBackgroundImageStatus">
+                                        <template v-if="mediaForm.new_background_image && editBackgroundImageStatus">
 
                                             <div class="attachment-xll">
                                                 <div class="attachment-xll-btns">
@@ -1041,16 +1041,16 @@
 
                                                 </div>
 
-                                                <div class="attachment-xll-image">
-                                                    <el-image class="attachment-xll-img"
-                                                              :src="mediaForm.background_image"
+                                                <div class="attachment-xll-image" v-for="(image,index) in mediaForm.new_background_image" :key="image.background_image_name">
+                                                    <el-image class="attachment-xll-img" 
+                                                              :src="image.background_image"
                                                               fit="cover"
                                                     >
                                                     </el-image>
                                                     <div class="attachment-xll-image-mask" v-if="!stepFiveStatus">
                                                         <el-icon
                                                                 style="cursor: pointer;"
-                                                                @click="handleSingleImagePreview(mediaForm.background_image,'background_image')"
+                                                                @click="handleSingleImagePreview(image.background_image,'background_image')"
                                                                 color="#ffffff"
                                                                 :size="20">
                                                             <zoom-in/>
@@ -1058,7 +1058,7 @@
 
                                                         <el-icon
                                                                 style="cursor: pointer;margin-left: 15px;"
-                                                                @click="handleSingleImageRemove('background_image')"
+                                                                @click="handleSingleImageRemove('background_image',index)"
                                                                 color="#F97066"
                                                                 :size="20">
                                                             <Delete/>
@@ -1075,7 +1075,8 @@
                                                     drag
                                                     :disabled="stepFiveStatus"
                                                     action=""
-                                                    :limit="1"
+                                                    multiple
+                                                    :limit="10"
                                                     :headers="uploadHeaders"
                                                     :show-file-list="false"
                                                     accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
@@ -1829,7 +1830,8 @@ const mediaForm = reactive({
     video_name: '',
     video_url: '',
     resume_name: '',
-    resume_pdf: ''
+    resume_pdf: '',
+    new_background_image: []
 })
 
 const mediaRules = reactive({
@@ -2559,7 +2561,7 @@ const getBasicInfo = async () => {
             personalForm.first_name = userContact.first_name
             personalForm.last_name = userContact.last_name
 
-            personalForm.email = educatorContact.email
+            personalForm.email = userContact.email
             personalForm.nationality = educatorContact.nationality
             personalForm.is_visible = educatorContact.is_visible
 
@@ -3172,8 +3174,12 @@ const backgroundHttpRequest = (options) => {
                         let myFileUrl = res.message.file_path;
                         uploadLoadingStatus.value = false;
                         editBackgroundImageStatus.value = true
-                        mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
-                        mediaForm.background_image = myFileUrl
+                        // mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
+                        // mediaForm.background_image = myFileUrl
+                        mediaForm.new_background_image.push({
+                            background_image_name: myFileUrl.substring(myFileUrl.length - 10),
+                            background_image: myFileUrl
+                        })
                     }
                 }).catch(err => {
                     console.log(err)
@@ -3400,10 +3406,12 @@ const handleSingleImagePreview = (url, field) => {
     dialogSingleField.value = field
 }
 
-const handleSingleImageRemove = (field) => {
+const handleSingleImageRemove = (field,index) => {
+
     if (field === 'background_image') {
-        mediaForm.background_image = ''
-        mediaForm.background_image_name = ''
+        // mediaForm.background_image = ''
+        // mediaForm.background_image_name = ''
+        mediaForm.new_background_image.splice(index, 1)
     }
     if (field === 'video_url') {
         mediaForm.video_url = ''
