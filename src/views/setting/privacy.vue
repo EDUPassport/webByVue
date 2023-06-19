@@ -6,7 +6,7 @@
                 <span>Privacy</span>
             </div>
             <div class="privacy-tips">
-                <span>Privacy Privacy Privacy Privacy Privacy Privacy Privacy!</span>
+                <span>Update your privacy settings here</span>
             </div>
 
         </div>

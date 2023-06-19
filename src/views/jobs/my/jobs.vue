@@ -55,8 +55,7 @@
                                             </div>
                                             <div class="job-item-t-r">
                                                 <div class="job-item-name">
-                                                    {{ item.job_title }}
-
+                                                    <span class="text-ellipsis"> {{ item.job_title }}</span>
                                                     <span class="xll-tag xll-tag-1" v-if="item.status==0"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Pending</span>
 
                                                     <template v-if="item.status == 1">
@@ -66,7 +65,7 @@
 
                                                     <span class="xll-tag xll-tag-3" v-if="item.status==2"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
                                                     <span class="xll-tag xll-tag-application"
-                                                          @click="turnApplications(item.id,item.unread_id)">
+                                                          @click="turnApplications(item.id,item.unread_id)" v-if="item.status==1">
                                                     {{ item.resume_count }} Applications
                                                 </span>
 
@@ -102,11 +101,11 @@
                                                 <el-image class="job-item-icon-24" :src="calendarImg"></el-image>
                                                 <span> {{ $filters.howLongFormat(item.refresh_time) }}</span>
                                             </div>
+                                            <span @click="shareJob(item)" style="cursor: pointer;"><el-icon ><IconIcRoundShare/></el-icon></span>
 
                                         </div>
 
                                         <div class="job-item-more-actions">
-                                            <span @click="shareJob(item)" style="margin-right: 8px;cursor: pointer;"><el-icon ><IconIcRoundShare/></el-icon></span>
                                             <el-dropdown :hide-on-click="false" trigger="click">
                                                 <span class="job-item-more-text"><el-icon><IconRiMore2Fill/></el-icon></span>
                                                 <template #dropdown>
@@ -126,15 +125,29 @@
                                                             </el-button>
                                                         </el-dropdown-item>
                                                         <el-dropdown-item>
-                                                            <el-popconfirm
-                                                                title="Are you sure to delete this?"
-                                                                width="auto"
-                                                                @confirm="deleteJob(item.id)"
-                                                            >
-                                                                <template #reference>
-                                                                    <el-button link>Delete</el-button>
+                                                            <el-button link
+                                                            @click="centerDialogVisible = true">
+                                                                Delete
+                                                            </el-button>
+                                                            <el-dialog
+                                                             v-model="centerDialogVisible" 
+                                                              width="30%"
+                                                                align-center
+                                                                style="border-radius: 8px;">
+                                                                <template #header="{titleId, titleClass }">
+                                                                <div class="my-header">
+                                                                    <h4 :id="titleId" :class="titleClass">Delete</h4>
+                                                                </div>
                                                                 </template>
-                                                            </el-popconfirm>
+                                                                <span style="font-family: inter;">Are you sure to delete this?</span>
+                                                                    <template #footer>
+                                                                    <span class="dialog-footer">
+                                                                        <el-button style="border: 1px solid red;color: red;font-weight: 400;" @click="deleteJob(item.id)">
+                                                                        Confirm
+                                                                        </el-button>
+                                                                    </span>
+                                                                    </template> 
+                                                                 </el-dialog>
 
                                                         </el-dropdown-item>
                                                     </el-dropdown-menu>
@@ -228,6 +241,7 @@ const token = localStorage.getItem('token')
 const identity = computed(() => store.state.identity)
 
 const jobListData = ref([])
+const centerDialogVisible=ref(false) 
 const jobPage = ref(1)
 const jobLimit = ref(6)
 const jobTotalNum = ref(0)
@@ -484,6 +498,7 @@ const turnEditJobs = (jobId, version_time) => {
 }
 
 const deleteJob = (jobId)=>{
+    centerDialogVisible.value=false
     let params = {
         job_id:jobId,
         is_delete:1
@@ -525,6 +540,21 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
+.dialog-border{
+    border-radius: 10px !important;
+}
+.my-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.text-ellipsis{
+text-overflow: ellipsis;
+    overflow: hidden;
+    width: 180px;
+    white-space: nowrap
+}
 
 /deep/ .el-tabs__item {
     font-family: 'Inter';
@@ -634,6 +664,7 @@ onMounted(() => {
 }
 
 .job-item-desc {
+    width:340px;
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
@@ -646,6 +677,7 @@ onMounted(() => {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-box-orient: vertical;
+    padding-top: 6px;
 }
 
 .job-item-b {
@@ -691,6 +723,9 @@ onMounted(() => {
 }
 
 .job-item-more-text {
+    position: relative;
+    right:10px;
+    top:10px;
     cursor: pointer;
 }
 
@@ -752,8 +787,8 @@ onMounted(() => {
     height: 10px;
     border-radius: 10px;
     background-color: red;
-    top: 0;
-    right: 1px;
+    top: 10px;
+    right: 19px;
 }
 
 @media screen and (min-width: 1200px) {
