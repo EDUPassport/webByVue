@@ -23,6 +23,7 @@
           <template v-if="envBlog === 'yes'">
             <el-link :underline=false href="https://blog.edupassport.io" target="_blank">EDU BLOG</el-link>
           </template>
+         <contactForm></contactForm>
 
         </div>
 
@@ -480,6 +481,8 @@ import mobileDrawerMenu from "@/components/mobileDrawerMenu";
 // import {loadJs, removeJs} from "@/utils/tools";
 import jobProcessComponent from "@/components/landing/home/jobProcess.vue";
 import newFooter from '@/layout/components/newFooter.vue'
+import contactForm from "@/components/contactForm.vue";
+
 
 export default {
   name: "index",
@@ -487,7 +490,8 @@ export default {
     initLoadingComponent,
     mobileDrawerMenu,
     jobProcessComponent,
-    newFooter
+    newFooter,
+    contactForm
   },
   data() {
     return {

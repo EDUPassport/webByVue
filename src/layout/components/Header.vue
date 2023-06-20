@@ -81,6 +81,8 @@
                                 </el-link>
                             </template>
 
+                            <contactForm></contactForm>
+
                         </div>
                     </el-col>
 
@@ -596,11 +598,14 @@ import {onBeforeRouteUpdate, onBeforeRouteLeave} from 'vue-router'
 import {ref, inject} from 'vue'
 import {useStore} from 'vuex';
 import MobileDrawerMenu from "@/components/mobileDrawerMenu.vue";
+import contactForm from "@/components/contactForm.vue";
+
 
 export default {
     name: "Header",
     components: {
-        MobileDrawerMenu
+        MobileDrawerMenu,
+        contactForm
     },
     setup() {
         let unreadChanged = ref(0)
