@@ -28,7 +28,7 @@
                             </div>
                             <div class="detail-b-t-l-r">
                                 <div class="detail-name">{{ data.name }}</div>
-                                <div class="detail-name-time">Posted 6 mins ago</div>
+                                <div class="detail-name-time">Posted {{$filters.howLongFormat(data.c_time)}}</div>
                             </div>
                         </div>
                         <div class="detail-b-t-r">
@@ -142,18 +142,20 @@
                     <div class="events-item" v-for="(item,i) in eventsList" :key="i">
 
                         <div class="events-item-share">
-                            <el-button link @click="shareEvent(item)">
-                                <el-image :src="eventsShareIcon"></el-image>
-                            </el-button>
 
-                            <template v-if="favoriteStatus || item.is_favorite">
-                                <el-button link type="info" @click="cancelFavorite(item)">
-                                    <IconFlatColorIconsLike/>
+                            <el-button icon="share" circle @click="shareEvent(item)"></el-button>
+                            <template v-if="item.is_favorite">
+                                <el-button circle @click="cancelFavorite(item,i)">
+                                    <el-icon :size="14">
+                                        <IconFlatColorIconsLike/>
+                                    </el-icon>
                                 </el-button>
                             </template>
                             <template v-else>
-                                <el-button link @click="addFavorite(item)">
-                                    <el-image :src="eventsLikeIcon"></el-image>
+                                <el-button circle   @click="addFavorite(item,i)">
+                                    <el-icon :size="14">
+                                        <IconIconParkOutlineLike/>
+                                    </el-icon>
                                 </el-button>
                             </template>
 
@@ -204,7 +206,7 @@
 
         </el-drawer>
 
-        <shareCard :visible="shareDialogVisible"
+        <share-card-theme-two :visible="shareDialogVisible"
                    share-title="Share Job Post"
                    :title="shareInfo.title"
                    :description="shareInfo.desc"
@@ -212,17 +214,17 @@
                    :url="shareLocationUrl"
                    @close="shareDialogVisible=false"
         >
-        </shareCard>
+        </share-card-theme-two>
 
     </div>
 </template>
 
 <script setup>
 
-import eventsLikeIcon from '@/assets/newHome/events-like-icon.svg'
 import {defineProps, defineEmits, ref,onMounted} from 'vue'
 import {ADD_FAVORITE, CANCEL_FAVORITE, EVENTS_LIST} from "@/api/api";
-import eventsShareIcon from "@/assets/newHome/events-share-icon.svg";
+import {ElMessage} from 'element-plus'
+import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 
 defineProps(['visible', 'data'])
 const emit = defineEmits(['close'])
@@ -274,8 +276,7 @@ const shareEvent = (item) => {
     shareDialogVisible.value = true;
 }
 
-const favoriteStatus = ref(false)
-const addFavorite = (item) => {
+const addFavorite = (item, index) => {
 
     let params = {
         type: 3,
@@ -286,7 +287,12 @@ const addFavorite = (item) => {
     // console.log(params)
     ADD_FAVORITE(params).then(res => {
         if (res.code == 200) {
-            favoriteStatus.value = true
+            eventsList.value[index].is_favorite = 1
+            ElMessage({
+                type:'success',
+                message:'Added to Favourites',
+                grouping:true
+            })
         }
     }).catch(err => {
         console.log(err)
@@ -295,15 +301,15 @@ const addFavorite = (item) => {
 
 }
 
-const cancelFavorite = (item) => {
+const cancelFavorite = (item,index) => {
     let params = {
         type: 3,
         type_id: item.id
     }
     CANCEL_FAVORITE(params).then(res => {
-        console.log(res)
+
         if (res.code == 200) {
-            favoriteStatus.value = false
+            eventsList.value[index].is_favorite = 0
         }
     }).catch(err => {
         console.log(err)
@@ -551,6 +557,7 @@ onMounted(()=>{
 
 .events-item-banner {
     width: 100%;
+    height: 100%;
     /*aspect-ratio: 2 / 3;*/
     background-color: #ececec;
     cursor: pointer;

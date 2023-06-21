@@ -13,7 +13,9 @@
                             <el-empty style="height: 100%;"
                                       :image="emptyImage"
                                       :image-size="456"
-                                      description="Oh Sorry, There are no upcoming events">
+                                      description="You have no reserved events">
+
+                                <el-button type="primary" @click="turnToEvents()">See publish events</el-button>
                             </el-empty>
                         </template>
                         <template v-else>
@@ -23,6 +25,20 @@
 
                                     <div class="events-item-share">
                                         <el-button icon="share" circle @click="shareEvent(item)"></el-button>
+                                        <template v-if="item.is_favorite">
+                                            <el-button circle @click="cancelFavorite(item,i)">
+                                                <el-icon :size="14">
+                                                    <IconFlatColorIconsLike/>
+                                                </el-icon>
+                                            </el-button>
+                                        </template>
+                                        <template v-else>
+                                            <el-button circle   @click="addFavorite(item,i)">
+                                                <el-icon :size="14">
+                                                    <IconIconParkOutlineLike/>
+                                                </el-icon>
+                                            </el-button>
+                                        </template>
                                     </div>
 
                                     <div class="events-item-t">
@@ -33,7 +49,7 @@
                                         >
                                         </el-image>
                                     </div>
-                                    <div class="events-item-b">
+                                    <div class="events-item-b" @click="previewEvent(item)">
 
                                         <div class="events-item-b-l">
                                             <div class="events-item-b-month">
@@ -44,18 +60,7 @@
                                             </div>
                                         </div>
                                         <div class="events-item-b-r">
-                                            <div>
-                                                <template v-if="item.is_publish == 1">
-                                            <span class="xll-tag xll-tag-1" v-if="item.status == 0"><el-icon
-                                                style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Approval Pending</span>
-                                                    <span class="xll-tag xll-tag-3" v-if="item.status == 2"><el-icon
-                                                        style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
-                                                </template>
-                                                <template v-else>
-                                                    <span class="xll-tag xll-tag-2"><el-icon style="margin-right: 2px;"><IconElOkCircle/></el-icon>Unpublished</span>
-                                                </template>
 
-                                            </div>
                                             <div class="events-item-name">
                                                 {{ item.name }}
                                             </div>
@@ -66,11 +71,6 @@
 
                                         </div>
 
-                                    </div>
-
-                                    <div class="events-item-action-container">
-                                        <el-button plain @click="previewEvent(item)">Preview</el-button>
-                                        <el-button plain type="primary" @click="editListing(item)">Edit Listing</el-button>
                                     </div>
 
                                 </div>
@@ -111,11 +111,12 @@
 </template>
 
 <script setup>
-import {EVENTS_MY_EVENT} from '@/api/api';
+import {ADD_FAVORITE, CANCEL_FAVORITE, HOME_MY_APPLY_EVENT_LIST} from '@/api/api';
 // import {encode} from 'js-base64'
+import {useRouter} from 'vue-router'
 import {updateWindowHeight} from "@/utils/tools";
 import {ref, onMounted, onUnmounted} from 'vue'
-import {useRouter} from 'vue-router'
+import {ElMessage} from 'element-plus'
 import emptyImage from "@/assets/newHome/dashboard/empty.svg";
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 
@@ -154,6 +155,45 @@ const previewEvent = (item) => {
     eventDetailVisible.value = true
     eventDetailData.value = item
 }
+const addFavorite = (item,index) => {
+
+    let params = {
+        type: 3,
+        type_id: item.id,
+        type_title: item.name,
+        type_url: item.company_logo
+    }
+    // console.log(params)
+    ADD_FAVORITE(params).then(res => {
+        if (res.code == 200) {
+            eventsList.value[index].is_favorite = 1
+            ElMessage({
+                type:'success',
+                message:'Added to Favourites',
+                grouping:true
+            })
+        }
+    }).catch(err => {
+        console.log(err)
+
+    })
+
+}
+
+const cancelFavorite = (item,index) => {
+    let params = {
+        type: 3,
+        type_id: item.id
+    }
+    CANCEL_FAVORITE(params).then(res => {
+
+        if (res.code == 200) {
+            eventsList.value[index].is_favorite = 0
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
 
 const eventPageSizeChange = (e) => {
     console.log(e)
@@ -183,7 +223,7 @@ const getMyEvents = (page, limit) => {
 
     let params = Object.assign(paramsA, filterResult)
 
-    EVENTS_MY_EVENT(params).then(res => {
+    HOME_MY_APPLY_EVENT_LIST(params).then(res => {
 
         if (res.code == 200) {
             eventsList.value = res.message.data
@@ -204,8 +244,8 @@ const getMyEvents = (page, limit) => {
 
 }
 
-const editListing = (item)=>{
-    router.push({path: '/events/post', query: {id: item.id}})
+const turnToEvents = ()=>{
+    router.push({path:'/events'})
 }
 
 onMounted(() => {

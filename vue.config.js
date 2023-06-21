@@ -97,6 +97,14 @@ module.exports = {
                         '^/hcaptcha': '/'
                     }
                 },
+                '/compass': {
+                    target: 'https://www.aicompasspro.com',
+                    ws: true,
+                    changeOrigin: true,
+                    pathRewrite: {
+                        '^/compass': '/'
+                    }
+                },
                 '/crm': {
                     target: 'https://crm.zoho.com',
                     ws: true,

@@ -120,6 +120,7 @@
 
                 <un-complete-profile-prompt
                     :percent="profilePercentage"
+                    tips="Get started and complete your profile to start applying for jobs"
                     v-if="(identity == 1 && profilePercentage <= 80 ) || (identity == 2 && profilePercentage <= 60) || (identity == 5 && profilePercentage <= 60)">
                 </un-complete-profile-prompt>
 

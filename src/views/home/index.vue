@@ -604,8 +604,7 @@ export default {
   },
   mounted() {
     let self = this;
-    // loadJs('https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js')
-    // loadJs('/zoho.js')
+
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
 
@@ -627,9 +626,6 @@ export default {
 
   },
   unmounted() {
-    // console.log('home index unmounted')
-    // removeJs('https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js')
-    // removeJs('/zoho.js')
     window.onresize = null
   },
   methods: {

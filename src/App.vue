@@ -23,89 +23,87 @@
 
 </template>
 
-<script>
+<script setup>
+
 import VueCookies from 'vue-cookies'
 import {ref, onBeforeUnmount, onMounted, watch} from 'vue'
 import {useStore} from 'vuex'
-const version = require('../public/verison.json')
+import axios from 'axios'
 
-export default {
-    name: 'App',
-    setup() {
-        const store = useStore()
-        const includePages = ref(store.state.keepAliveIncludeData)
+const store = useStore()
+const includePages = ref(store.state.keepAliveIncludeData)
 
-        watch(()=>includePages.value, (newValue,oldValue)=>{
-            console.log(newValue,oldValue)
-        })
+watch(()=>includePages.value, (newValue,oldValue)=>{
+    console.log(newValue,oldValue)
+})
 
-        const showCookiePopup = ref(false)
-        // 检查是否已经接受了cookie
-        const checkCookie = ()=>{
-            if(!VueCookies.isKey('cookie_accepted')){
-                showCookiePopup.value = true;
-            }else{
-                if(!VueCookies.get('cookie_accepted')){
-                    showCookiePopup.value = true;
-                }
-            }
+const showCookiePopup = ref(false)
+// 检查是否已经接受了cookie
+const checkCookie = ()=>{
+    if(!VueCookies.isKey('cookie_accepted')){
+        showCookiePopup.value = true;
+    }else{
+        if(!VueCookies.get('cookie_accepted')){
+            showCookiePopup.value = true;
         }
+    }
+}
 
-        // 接受cookie
-        const acceptCookie = ()=>{
-            VueCookies.set('cookie_accepted',true)
-            showCookiePopup.value = false;
-        }
+// 接受cookie
+const acceptCookie = ()=>{
+    VueCookies.set('cookie_accepted',true)
+    showCookiePopup.value = false;
+}
 
-        // const instance = getCurrentInstance()
-        // const instanceData = instance.appContext.config.globalProperties
-        const checkVersion = ()=>{
+const checkVersion = ()=>{
+
+    axios.get('/api/edupassport/version',{
+        baseURL:'/compass',
+        proxy:true
+    }).then(res=>{
+        console.log(res)
+        if(res.code === 200){
+            let version = res.data.version;
 
             if(VueCookies.isKey('version')){
-                if(version.version !== VueCookies.get('version')){
-                    VueCookies.set('version',version.version)
+                if(version !== VueCookies.get('version')){
+                    VueCookies.set('version',version)
                     window.location.reload()
                 }
             }else{
-                VueCookies.set('version',version.version)
+                VueCookies.set('version',version)
                 window.location.reload()
             }
         }
-
-        function updateWindowHeight() {
-            let windowHeight = window.innerHeight;
-            let html = document.querySelector(":root");
-            if (windowHeight > 0 && html) {
-                html.style.setProperty("--i-window-height", `${windowHeight}px`);
-            }
-        }
-
-        onMounted(() => {
-            checkCookie()
-            checkVersion()
-            updateWindowHeight();
-            window.addEventListener('resize', () => {
-                updateWindowHeight();
-            })
-
-        });
-
-        onBeforeUnmount(() => {
-            window.removeEventListener('resize', () => {
-                updateWindowHeight();
-            })
-
-        });
-
-        return {
-            showCookiePopup,
-            acceptCookie,
-            includePages
-        }
-
-    }
+    })
 
 }
+
+function updateWindowHeight() {
+    let windowHeight = window.innerHeight;
+    let html = document.querySelector(":root");
+    if (windowHeight > 0 && html) {
+        html.style.setProperty("--i-window-height", `${windowHeight}px`);
+    }
+}
+
+onMounted(() => {
+    checkCookie()
+    checkVersion()
+    updateWindowHeight();
+    window.addEventListener('resize', () => {
+        updateWindowHeight();
+    })
+
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', () => {
+        updateWindowHeight();
+    })
+
+})
+
 </script>
 
 <style>

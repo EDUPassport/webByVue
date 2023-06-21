@@ -1,4 +1,5 @@
 import {encode, decode} from 'js-base64'
+
 /**
  * 格式化日期
  * @prama t 时间戳
@@ -37,40 +38,44 @@ export function formateTime(time) {
     const dayC = diffValue / day;
 
     if (dayC >= 1) {
-        return parseInt(dayC+'') + "天";
+        return parseInt(dayC + '') + "天";
     } else if (hourC >= 1) {
-        return parseInt(hourC+'') + "小时";
+        return parseInt(hourC + '') + "小时";
     } else if (minC >= 1) {
-        return parseInt(minC+'') + "分钟";
+        return parseInt(minC + '') + "分钟";
     } else if (secondC >= 1) {
-        return parseInt(secondC+'') + "秒";
+        return parseInt(secondC + '') + "秒";
     } else {
         return '0秒';
     }
 }
 
-export function encodeByJsBase64(value){
+export function encodeByJsBase64(value) {
     return encodeURIComponent(encode(value))
 }
 
-export function decodeByJsBase64(value){
+export function decodeByJsBase64(value) {
     return decode(decodeURIComponent(value))
 }
-
-export function convertTo24HourForEventTime(eventDate,time) {
+export function convertTo24HourForEventTime(eventDate, time) {
     let hours = parseInt(time.substring(0, 2));
-    if(time.indexOf('AM') !== -1 && hours === 12) {
+    if (time.indexOf('AM') !== -1 && hours === 12) {
         time = time.replace('12', '0');
     }
-    if(time.indexOf('PM')  !== -1 && hours < 12) {
+    if (time.indexOf('PM') !== -1 && hours < 12) {
         time = time.replace(hours, (hours + 12));
     }
     return eventDate + ' ' + time.replace(/(AM|PM)/, '').trim() + ':00';
 }
 
-export function convertTo12Hour(time) {
-    var hours = parseInt(time.substring(0, 2));
-    var suffix = hours >= 12 ? 'PM' : 'AM';
-    hours = ((hours + 11) % 12 + 1);  // The hour '0' should be '12'
-    return hours + time.substr(2, 3) + ' ' + suffix;
+export function formatEventTimeForShow(dateStr) {
+    const date = new Date(dateStr);
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let suffix = hours >= 12 ? 'PM' : 'AM';
+    hours = ((hours + 11) % 12 + 1);
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    return hours + ':' + minutes + ' ' + suffix;
 }

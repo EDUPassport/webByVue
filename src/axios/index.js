@@ -24,7 +24,8 @@ axios.interceptors.request.use(config => {
         'home/user/other/company/calculate',
         'home/user/vendor/company/calculate',
         'home/user/contributor/activation',
-        'home/user/change/identity'
+        'home/user/change/identity',
+        '/api/edupassport/version'
     ]
 
     if(reqWhiteList.indexOf(config.url) === -1){

@@ -12,7 +12,7 @@
                 </div>
                 <div class="t-r">
                     <el-button type="danger"> Cancel</el-button>
-                    <el-button plain @click="saveAsTemplate(basicForms)">Save and Exit</el-button>
+                    <el-button plain @click="saveAndExit(basicForms)">Save and Exit</el-button>
                     <el-button type="primary" @click="submitForm(basicForms)">Publish Event</el-button>
                 </div>
             </div>
@@ -302,14 +302,14 @@ import {
     UPLOAD_BY_SERVICE,
     USER_OBJECT_LIST,
     EVENTS_DETAIL,
-    TAGS_LIST, HOME_EVENT_TEMPLATE_ADD
+    TAGS_LIST
 } from '@/api/api';
 
 import ImageCompressor from 'compressorjs'
 // import {decode} from 'js-base64'
-import {updateWindowHeight, eventStartAndEndTimeFormat} from "@/utils/tools";
+import {updateWindowHeight} from "@/utils/tools";
 import {ElMessage, ElLoading} from 'element-plus'
-import {  convertTo24HourForEventTime} from "@/utils/utils";
+import {convertTo24HourForEventTime,formatEventTimeForShow} from "@/utils/utils";
 
 const route = useRoute()
 const router = useRouter()
@@ -318,12 +318,6 @@ const currencyList = ref([])
 
 const uploadLoadingStatus = ref(false)
 const uploadHeaders = {platform: 4}
-
-const flyerPhotoUrl = ref('')
-const companyLogoPhotoUrl = ref('')
-
-const dealLocationTypeValue = ref(1)
-const eventDate = ref('')
 
 const eventFormat = ref(0)
 const eventFormatOptions = [
@@ -510,52 +504,43 @@ const getEventDetail = (id) => {
     let params = {
         event_id: id
     }
+    basicForm.event_id = id;
+
     EVENTS_DETAIL(params).then(res => {
-        console.log(res)
+
         if (res.code == 200) {
             let resMessage = res.message;
 
-            let startTime = resMessage.start_time;
-            let endTime = resMessage.end_time;
-
-            dealLocationTypeValue.value = resMessage.is_online;
-
-            eventDate.value = resMessage.date;
-            startTime.value = eventStartAndEndTimeFormat(startTime)
-            endTime.value = eventStartAndEndTimeFormat(endTime)
-
-            basicForm.event_id = resMessage.id;
-            flyerPhotoUrl.value = resMessage.file;
-            companyLogoPhotoUrl.value = resMessage.third_com_logo;
-
-            basicForm.token = localStorage.getItem('token')
-            basicForm.user_id = localStorage.getItem('uid')
+            basicForm.user_id = resMessage.user_id
             basicForm.name = resMessage.name
-            basicForm.desc = resMessage.desc
-            basicForm.third_com_logo = resMessage.third_com_logo
-            basicForm.third_com_name = resMessage.third_com_name
-            basicForm.type_desc = resMessage.type_desc
-            basicForm.pay_money = resMessage.pay_money
             basicForm.date = resMessage.date
-            basicForm.file = resMessage.file
-            basicForm.file_name = resMessage.file_name
-            basicForm.is_all = '1'
-            basicForm.event_place = resMessage.event_place
-            basicForm.start_time = resMessage.start_time
-            basicForm.end_time = resMessage.end_time
-            basicForm.is_online = 1
-            basicForm.online_url = resMessage.online_url
+            basicForm.start_time = formatEventTimeForShow(resMessage.start_time)
+            basicForm.end_time = formatEventTimeForShow(resMessage.end_time)
+            basicForm.timezone = resMessage.timezone
+            basicForm.is_online = resMessage.is_online
             basicForm.location = resMessage.location
-            basicForm.country_id = resMessage.country_id
-            basicForm.state_id = resMessage.state_id
-            basicForm.town_id = resMessage.town_id
-            basicForm.lat = resMessage.lat
-            basicForm.lng = resMessage.lng
+            basicForm.event_place = resMessage.event_place
+            basicForm.online_url = resMessage.online_url
+            basicForm.desc = resMessage.desc
+            basicForm.file = resMessage.file
+            basicForm.file_name =  resMessage.file_name
+
             basicForm.category_id = resMessage.category_id
-            basicForm.currency = 'USD'
-            basicForm.tag = []
             basicForm.tags_cn = resMessage.tags_cn
             basicForm.tags_en = resMessage.tags_en
+            basicForm.type_desc = resMessage.type_desc
+            editFileStatus.value = true
+
+            // basicForm.third_com_logo = resMessage.third_com_logo
+            // basicForm.third_com_name = resMessage.third_com_name
+            // basicForm.pay_money = resMessage.pay_money
+            // basicForm.is_all = '1'
+            // basicForm.country_id = resMessage.country_id
+            // basicForm.state_id = resMessage.state_id
+            // basicForm.town_id = resMessage.town_id
+            // basicForm.lat = resMessage.lat
+            // basicForm.lng = resMessage.lng
+            // basicForm.currency = 'USD'
 
         }
     }).catch(err => {
@@ -715,17 +700,19 @@ const getUserObjectList = () => {
         console.log(err)
     })
 }
-const saveAsTemplate = (formEl)=>{
-    formEl.validate((valid)=>{
-        if(valid){
+
+const saveAndExit = (formEl) => {
+    formEl.validate((valid) => {
+        if (valid) {
+
             const loading = ElLoading.service({
                 text: 'Loading...'
             })
 
-            let contentObj = Object.assign({},  basicForm);
-
-            contentObj.start_time = convertTo24HourForEventTime(basicForm.date, basicForm.start_time)
-            contentObj.end_time = convertTo24HourForEventTime(basicForm.date, basicForm.end_time)
+            let params = Object.assign({},  basicForm);
+            params.is_publish = 0
+            params.start_time = convertTo24HourForEventTime(basicForm.date, basicForm.start_time)
+            params.end_time = convertTo24HourForEventTime(basicForm.date, basicForm.end_time)
 
             let tagsArr = basicForm.tag;
             let tagsEnArr = []
@@ -737,19 +724,22 @@ const saveAsTemplate = (formEl)=>{
                 tagsCnArr.push(a[0].name_cn)
             })
 
-            contentObj.tags_en = tagsEnArr.join(',')
-            contentObj.tags_cn = tagsCnArr.join(',')
+            params.tags_en = tagsEnArr.join(',')
+            params.tags_cn = tagsCnArr.join(',')
 
-            let params = {
-                type:2,
-                content:JSON.stringify(contentObj)
-            }
-
-            HOME_EVENT_TEMPLATE_ADD(params).then(res => {
+            EVENTS_ADD_EVENT(params).then(res => {
 
                 if (res.code == 200) {
                     // this.submitEventForm()
                     loading.close()
+                    ElMessage({
+                        type:'success',
+                        message:'Event listing saved Successfully',
+                        grouping:true
+                    })
+                    setTimeout(function (){
+                        router.push('/events/myEvents')
+                    }, 1500)
 
                 }
             }).catch(err => {
@@ -757,8 +747,13 @@ const saveAsTemplate = (formEl)=>{
                 loading.close()
             })
 
-        }else{
-            console.log('error submit')
+        } else {
+            console.log('error submit!!')
+            ElMessage({
+                type: 'error',
+                message: 'Complete all required fields to save event',
+                grouping: true
+            })
         }
     })
 }
@@ -798,7 +793,6 @@ const submitForm = (formEl) => {
                         type:'success',
                         message:'Event listing published Successfully',
                         grouping:true,
-                        duration:30000,
                     })
                     setTimeout(function (){
                         router.push('/events/myEvents')
@@ -815,7 +809,6 @@ const submitForm = (formEl) => {
             ElMessage({
                 type: 'error',
                 message: 'Complete all required fields to publish event',
-                duration:30000,
                 grouping: true
             })
         }
@@ -835,17 +828,13 @@ onMounted(() => {
             updateWindowHeight()
         }
     }
-
-    let eventId = route.query.id;
-
-    if (eventId) {
-        getEventDetail(eventId)
-    }
-
-
     getUserObjectList()
     getEventCategories()
     getEventTags()
+
+    if (route.query.id) {
+        getEventDetail(route.query.id)
+    }
 
 })
 

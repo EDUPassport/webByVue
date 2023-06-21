@@ -1,7 +1,12 @@
 <template>
     <el-scrollbar class="events-bg" always>
+        <un-complete-profile-prompt
+            :percent="profilePercentage"
+            tips="Get started and complete your profile to post an event"
+            v-if="(identity == 1 && profilePercentage <= 80 ) || (identity == 2 && profilePercentage <= 60) || (identity == 5 && profilePercentage <= 60)">
+        </un-complete-profile-prompt>
 
-        <div class="banner-row">
+        <div class="banner-row" :class="token ? 'banner-row-token' : ''" >
             <el-carousel style="width: 100%" trigger="click" height="200px">
                 <el-carousel-item v-for="item in 4" :key="item">
                     <el-image
@@ -11,7 +16,7 @@
             </el-carousel>
         </div>
 
-        <div class="content-row">
+        <div class="content-row" :class="token ? 'content-row-token' : ''" >
 
             <div class="content-filter">
                 <eventFilterComponent
@@ -24,33 +29,33 @@
 
                 <el-tabs v-model="activeEventStyleName" @tab-change="eventTabChange">
                     <el-tab-pane label="Featured Events" name="featured_events">
+
                         <div v-loading="featuredEventsLoadingStatus">
                             <template v-if="featuredEventsEmptyStatus">
-                                <div class="empty-post-event-btn-container">
-                                    <el-button type="primary" round @click="postEventWhenEmpty()">
-                                        Post an Event
-                                    </el-button>
-                                </div>
                                 <el-empty style="height: 100%;"
-                                          description="Sorry, there are no upcoming events at the moment..."></el-empty>
+                                          :image="emptyImage"
+                                          :image-size="456"
+                                          description="Oh Sorry, There are no upcoming events">
+                                </el-empty>
                             </template>
                             <template v-else>
                                 <div class="events-list-container" >
 
-                                    <div class="events-item" v-for="(item,i) in eventsList" :key="i">
+                                    <div :class="token ? 'events-item-token' : 'events-item'"
+                                         v-for="(item,i) in featuredEventsList" :key="i">
 
                                         <div class="events-item-share">
                                             <el-button icon="share" circle  @click="shareEvent(item)"></el-button>
 
                                             <template v-if="item.is_favorite">
-                                                <el-button circle @click="cancelFavorite(item)">
+                                                <el-button circle @click="cancelFavorite(item,i,'featured')">
                                                     <el-icon :size="14">
                                                         <IconFlatColorIconsLike/>
                                                     </el-icon>
                                                 </el-button>
                                             </template>
                                             <template v-else>
-                                                <el-button circle   @click="addFavorite(item)">
+                                                <el-button circle   @click="addFavorite(item,i,'featured')">
                                                     <el-icon :size="14">
                                                         <IconIconParkOutlineLike/>
                                                     </el-icon>
@@ -69,36 +74,43 @@
                                         </div>
                                         <div class="events-item-b">
 
-                                            <div class="events-item-b-l">
-                                                <div class="events-item-b-month">{{
-                                                        $filters.monthFormatEvent(item.date)
-                                                    }}
+                                            <div class="events-item-b-l" @click="previewEvent(item)">
+                                                <div class="events-item-b-month">
+                                                    {{$filters.monthFormatEvent(item.date) }}
                                                 </div>
-                                                <div class="events-item-b-day">{{
-                                                        $filters.dayFormatEvent(item.date)
-                                                    }}
+                                                <div class="events-item-b-day">
+                                                    {{$filters.dayFormatEvent(item.date)}}
                                                 </div>
                                             </div>
                                             <div class="events-item-b-r">
 
-                                                <div class="events-item-name" @click="showEventDialog(item)">
+                                                <div class="events-item-name" @click="previewEvent(item)">
                                                     {{ item.name }}
                                                 </div>
-                                                <div class="events-item-desc">
+                                                <div class="events-item-desc" @click="previewEvent(item)">
                                                     {{ item.desc }}
                                                 </div>
-                                                <div class="events-item-posted">
+                                                <div class="events-item-posted" v-if="!token">
                                                     Posted by {{ item.company_name }}
                                                 </div>
-                                                <div class="events-item-identity">
+                                                <div class="events-item-identity" v-if="!token">
                                                     <span v-if="item.identity == 1">Educator</span>
                                                     <span v-if="item.identity == 2">Recruiter</span>
                                                     <span v-if="item.identity == 3">School</span>
                                                     <span v-if="item.identity == 4">Other</span>
                                                     <span v-if="item.identity == 5">Vendor</span>
                                                 </div>
-                                                <div class="events-item-see-more">
-                                                    See more
+                                                <div class="events-item-see-more"
+                                                     v-if="!token"
+                                                     @click="reserveSpotForGuest(item)"
+                                                >
+                                                    Reserve Spot
+                                                </div>
+                                                <div class="events-item-action-container" v-if="token">
+                                                    <el-button type="primary"
+                                                               @click="reserveSpot(item)">
+                                                        Reserve Spot
+                                                    </el-button>
                                                 </div>
 
                                             </div>
@@ -108,14 +120,7 @@
                                     </div>
 
                                 </div>
-                                <div class="events-pagination" v-if="eventTotalNum">
-                                    <el-pagination layout="prev, pager, next"
-                                                   :default-current-page="1"
-                                                   @size-change="eventPageSizeChange"
-                                                   @current-change="eventPageChange"
-                                                   :current-page="eventPage" :page-size="eventLimit"
-                                                   :total="eventTotalNum"></el-pagination>
-                                </div>
+
                             </template>
 
                         </div>
@@ -126,18 +131,38 @@
 
                         <div v-loading="allEventsLoadingStatus">
                             <template v-if="allEventsEmptyStatus">
-                                <div class="empty-post-event-btn-container">
-                                    <el-button type="primary" round @click="postEventWhenEmpty()">
-                                        Post an Event
-                                    </el-button>
-                                </div>
                                 <el-empty style="height: 100%;"
-                                          description="Sorry, there are no upcoming events at the moment..."></el-empty>
+                                          :image="emptyImage"
+                                          :image-size="456"
+                                          description="Oh Sorry, There are no upcoming events">
+                                </el-empty>
                             </template>
                             <template v-else>
                                 <div class="events-list-container" >
 
-                                    <div class="events-item" v-for="(item,i) in eventsList" :key="i">
+                                    <div :class="token ? 'events-item-token' : 'events-item'"
+                                         v-for="(item,i) in eventsList" :key="i"
+                                    >
+                                        <div class="events-item-share">
+                                            <el-button icon="share" circle  @click="shareEvent(item)"></el-button>
+
+                                            <template v-if="item.is_favorite">
+                                                <el-button circle @click="cancelFavorite(item,i,'all')">
+                                                    <el-icon :size="14">
+                                                        <IconFlatColorIconsLike/>
+                                                    </el-icon>
+                                                </el-button>
+                                            </template>
+                                            <template v-else>
+                                                <el-button circle   @click="addFavorite(item,i,'all')">
+                                                    <el-icon :size="14">
+                                                        <IconIconParkOutlineLike/>
+                                                    </el-icon>
+                                                </el-button>
+                                            </template>
+
+                                        </div>
+
                                         <div class="events-item-t">
                                             <el-image class="events-item-banner"
                                                       fit="cover"
@@ -148,7 +173,7 @@
                                         </div>
                                         <div class="events-item-b">
 
-                                            <div class="events-item-b-l">
+                                            <div class="events-item-b-l" @click="previewEvent(item)">
                                                 <div class="events-item-b-month">{{
                                                         $filters.monthFormatEvent(item.date)
                                                     }}
@@ -160,24 +185,33 @@
                                             </div>
                                             <div class="events-item-b-r">
 
-                                                <div class="events-item-name" @click="showEventDialog(item)">
+                                                <div class="events-item-name" @click="previewEvent(item)">
                                                     {{ item.name }}
                                                 </div>
-                                                <div class="events-item-desc">
+                                                <div class="events-item-desc" @click="previewEvent(item)">
                                                     {{ item.desc }}
                                                 </div>
-                                                <div class="events-item-posted">
+                                                <div class="events-item-posted" v-if="!token">
                                                     Posted by {{ item.company_name }}
                                                 </div>
-                                                <div class="events-item-identity">
+                                                <div class="events-item-identity" v-if="!token">
                                                     <span v-if="item.identity == 1">Educator</span>
                                                     <span v-if="item.identity == 2">Recruiter</span>
                                                     <span v-if="item.identity == 3">School</span>
                                                     <span v-if="item.identity == 4">Other</span>
                                                     <span v-if="item.identity == 5">Vendor</span>
                                                 </div>
-                                                <div class="events-item-see-more">
-                                                    See more
+                                                <div class="events-item-see-more"
+                                                     v-if="!token"
+                                                     @click="reserveSpotForGuest(item)"
+                                                >
+                                                    Reserve Spot
+                                                </div>
+                                                <div class="events-item-action-container" v-if="token">
+                                                    <el-button type="primary"
+                                                               @click="reserveSpot(item)">
+                                                        Reserve Spot
+                                                    </el-button>
                                                 </div>
 
                                             </div>
@@ -193,7 +227,8 @@
                                                    @size-change="eventPageSizeChange"
                                                    @current-change="eventPageChange"
                                                    :current-page="eventPage" :page-size="eventLimit"
-                                                   :total="eventTotalNum"></el-pagination>
+                                                   :total="eventTotalNum">
+                                    </el-pagination>
                                 </div>
                             </template>
 
@@ -206,7 +241,7 @@
 
         </div>
 
-        <shareCard :visible="shareDialogVisible"
+        <share-card-theme-two :visible="shareDialogVisible"
                    share-title="Share something exciting"
                    :title="shareInfo.title"
                    :description="shareInfo.desc"
@@ -214,46 +249,43 @@
                    :url="shareLocationUrl"
                    @close="shareDialogVisible=false"
         >
-        </shareCard>
+        </share-card-theme-two>
 
-        <eventDetailCard :info="eventDetailData"
-                         :visible="eventDialogVisible"
-                         @rsvp="showBookEvent"
-                         @close="eventDialogVisible=false">
-        </eventDetailCard>
-        <bookEventForm :visible="bookEventDialogVisible"
-                       :info="eventDetailData"
-                       @close="bookEventDialogVisible=false">
-        </bookEventForm>
+        <event-detail :visible="eventDetailVisible" :data="eventDetailData"
+                      @close="eventDetailVisible=false"></event-detail>
 
-        <BookEventList :visible="bookListDialogVisible"
-                       :info="bookedListData"
-                       @close="bookListDialogVisible=false"
-        >
-        </BookEventList>
-
+        <book-event-form :visible="guestSpotVisible" :info="guestSpotInfo" @close="guestSpotVisible=false"></book-event-form>
 
     </el-scrollbar>
 
 </template>
 
 <script setup>
+import emptyImage from '@/assets/newHome/dashboard/empty.svg'
 import eventFilterComponent from "@/components/eventFilterComponent";
 import {
     ADD_FAVORITE, CANCEL_FAVORITE,
-    EVENT_LOCATION_LIST,
-    EVENTS_CATEGORY,
-    EVENTS_LIST,
-    TAGS_LIST,
+    EVENTS_ADD_APPLICANTS,
+    EVENTS_LIST, HOME_FEATURE_EVENT_LIST,
     USER_BROWSING_HISTORY_ADD
 } from "@/api/api";
-import eventDetailCard from "@/components/eventDetailCard";
-import bookEventForm from "@/components/bookEventForm";
-import BookEventList from "@/components/bookEventList";
+
 import {updateWindowHeight} from "@/utils/tools";
-import {ref, onMounted, onUnmounted} from 'vue'
-import {useRouter} from 'vue-router'
-import {ElMessage} from 'element-plus'
+import {ref, onMounted, onUnmounted,computed} from 'vue'
+// import {useRouter} from 'vue-router'
+import {useStore} from 'vuex'
+import {ElMessage, ElLoading} from 'element-plus'
+import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
+import BookEventForm from "@/components/bookEventForm.vue";
+
+const store = useStore()
+
+const identity = computed(()=>store.state.identity)
+const profilePercentage = computed(()=> parseInt(store.state.profilePercentage) )
+
+// const router = useRouter()
+
+const eventDetailVisible = ref(false)
 
 const eventPage = ref(1)
 const eventLimit = ref(6)
@@ -261,20 +293,10 @@ const eventTotalNum = ref(0)
 const showLoadingStatus = ref(false)
 const eventsList = ref([])
 
-const categoryOptions = ref([])
+const featuredEventsList = ref([])
 
-const locationOptions = ref([])
-
-const tagsData = ref([])
-
-const eventDialogVisible = ref(false)
 const eventDetailData = ref({})
 const filterResultData = ref({})
-const bookEventDialogVisible = ref(false)
-const bookListDialogVisible = ref(false)
-const bookedListData = ref([])
-
-const router = useRouter()
 
 const activeEventStyleName = ref('featured_events')
 // const copyLink = (val) => {
@@ -292,10 +314,13 @@ const featuredEventsEmptyStatus = ref(false)
 const allEventsLoadingStatus = ref(false)
 const allEventsEmptyStatus = ref(false)
 
+const token = localStorage.getItem('token')
+
 const eventTabChange = (e)=>{
     if(e === 'featured_events'){
-        getFeaturedEventsList(eventPage.value, eventLimit.value)
+        getFeaturedEventsList(1, 10000)
     }
+
     if(e === 'all_events'){
         getEventsList(eventPage.value, eventLimit.value)
     }
@@ -308,90 +333,66 @@ const addUserBrowsingHistory = (id) => {
     }
     USER_BROWSING_HISTORY_ADD(params).then(res => {
         console.log(res)
+
     }).catch(err => {
         console.log(err)
     })
 
 }
-const getEventLocationList = () => {
-    let params = {}
-    EVENT_LOCATION_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-            locationOptions.value = res.message;
-        }
-    }).catch(err => {
-        console.log(err)
-    })
-}
-const showBookEvent = (item) => {
-    addUserBrowsingHistory(item.id)
 
-    if (item.online_url) {
-        window.open(item.online_url, '_blank')
-    } else {
-        eventDetailData.value = item
-        bookEventDialogVisible.value = true
+const guestSpotVisible = ref(false)
+const guestSpotInfo = ref({})
+
+const reserveSpotForGuest = (item)=>{
+    console.log(item)
+    guestSpotVisible.value = true
+    guestSpotInfo.value = item;
+}
+
+const reserveSpot = (item)=>{
+
+    const loading = ElLoading.service({
+        text:'loading...'
+    })
+    let params = {
+        first_name: '',
+        last_name: '',
+        contact: '',
+        bookings: 1,
+        apply_user_id:localStorage.getItem('uid'),
+        user_id: item.user_id,
+        event_id: item.id
     }
 
+    EVENTS_ADD_APPLICANTS(params).then(res=>{
+        console.log(res)
+        if(res.code === 200){
+            loading.close()
+            ElMessage({
+                type:'success',
+                message:'You have successfully reserved a spot',
+                grouping:true
+            })
+        }
+    }).catch(err=>{
+        console.log(err)
+        loading.close()
+    })
 }
-// const showBookList = (item) => {
-//     bookListDialogVisible.value = true
-//
-//     let params = {
-//         event_id: item.id
-//     }
-//
-//     EVENT_APPLICATIONS(params).then(res => {
-//         if (res.code == 200) {
-//             bookedListData.value = res.message.data;
-//         }
-//     }).catch(err => {
-//         console.log(err)
-//     })
-//
-// }
+
 const confirmFilterSearch = (e) => {
     filterResultData.value = e;
     eventPage.value = 1;
     getEventsList(eventPage.value, eventLimit.value)
 }
-const showEventDialog = (item) => {
-    // console.log(item)
-    eventDetailData.value = item;
-    eventDialogVisible.value = true;
-    addUserBrowsingHistory(item.id)
-}
 
-const getEventTags = () => {
-    let params = {
-        type: 2,
-        page: 1,
-        limit: 10000
+const previewEvent = (item) => {
+    eventDetailVisible.value = true
+    eventDetailData.value = item
+    let token = localStorage.getItem('token')
+    if(token){
+        addUserBrowsingHistory(item.id)
     }
-    TAGS_LIST(params).then(res => {
-        if (res.code == 200) {
-            tagsData.value = res.message.data;
-        }
-    }).catch(err => {
-        console.log(err)
-    })
-}
-const getEventCategories = () => {
-    let params = {
-        page: 1,
-        limit: 10000
-    }
-    EVENTS_CATEGORY(params).then(res => {
-        categoryOptions.value = res.message.data;
-    }).catch(err => {
-        console.log(err)
-        ElMessage({
-            type: 'error',
-            message: err,
-            grouping: true
-        })
-    })
 }
 
 const eventPageSizeChange = (e) => {
@@ -415,17 +416,12 @@ const getFeaturedEventsList = (page, limit) => {
 
     let params = Object.assign(paramsA, filterResult)
 
-    EVENTS_LIST(params).then(res => {
+    HOME_FEATURE_EVENT_LIST(params).then(res => {
 
         if (res.code == 200) {
-            eventsList.value = res.message.data;
-            eventTotalNum.value = res.message.total;
+            featuredEventsList.value = res.message.data;
             featuredEventsLoadingStatus.value = false
-            if(res.message.total > 0 ){
-                featuredEventsEmptyStatus.value = false
-            }else{
-                featuredEventsEmptyStatus.value = true
-            }
+            featuredEventsEmptyStatus.value = res.message.total <= 0;
 
         }
     }).catch(err => {
@@ -471,20 +467,7 @@ const getEventsList = (page, limit) => {
 // const turnDetail = (id, t) => {
 //      router.push({path: '/events/detail', query: {id: id, t: t}})
 // }
-const postEventWhenEmpty = () => {
-    let token = localStorage.getItem('token')
 
-    if (token) {
-
-        router.push({path: '/events/post'})
-
-    } else {
-
-        router.push({path: '/post-event', query: {}})
-
-    }
-
-}
 const shareDialogVisible = ref(false)
 const shareInfo = ref({})
 const shareLocationUrl = ref('')
@@ -497,12 +480,10 @@ const shareEvent = (item) => {
 
     let origin = window.location.origin
     shareLocationUrl.value = origin + '/events/detail?id=' + item.id;
-
     shareDialogVisible.value = true;
 }
 
-
-const addFavorite = (item) => {
+const addFavorite = (item, index,eventType) => {
 
     let params = {
         type: 3,
@@ -514,6 +495,20 @@ const addFavorite = (item) => {
     ADD_FAVORITE(params).then(res => {
         if (res.code == 200) {
              console.log(res)
+            if(eventType === 'featured'){
+                featuredEventsList.value[index].is_favorite = 1
+            }
+
+            if(eventType === 'all'){
+                eventsList.value[index].is_favorite = 1
+            }
+
+            ElMessage({
+                type:'success',
+                message:'Added to Favourites',
+                grouping:true
+            })
+
         }
     }).catch(err => {
         console.log(err)
@@ -522,15 +517,22 @@ const addFavorite = (item) => {
 
 }
 
-const cancelFavorite = (item) => {
+const cancelFavorite = (item,index, eventType) => {
     let params = {
         type: 3,
         type_id: item.id
     }
     CANCEL_FAVORITE(params).then(res => {
-
         if (res.code == 200) {
-            console.log(res)
+
+            if(eventType === 'featured'){
+                featuredEventsList.value[index].is_favorite = 0
+            }
+
+            if(eventType === 'all'){
+                eventsList.value[index].is_favorite = 0
+            }
+
         }
     }).catch(err => {
         console.log(err)
@@ -550,10 +552,8 @@ onMounted(() => {
             updateWindowHeight()
         }
     }
-    getEventLocationList()
-    getEventCategories()
-    getEventTags()
-    getEventsList(eventPage.value, eventLimit.value)
+    getFeaturedEventsList(1, 10000)
+    // getEventsList(eventPage.value, eventLimit.value)
 })
 
 onUnmounted(() => {
@@ -591,6 +591,8 @@ onUnmounted(() => {
     background-color: #FFFFFF;
 }
 
+
+
 .banner-row {
     margin: 0 100px;
 }
@@ -600,6 +602,14 @@ onUnmounted(() => {
     flex-direction: row;
     justify-content: space-between;
     margin: 40px 100px 0 100px;
+}
+
+.banner-row-token{
+    margin: 0 40px;
+}
+
+.content-row-token{
+    margin: 40px;
 }
 
 .content-filter {
@@ -635,6 +645,23 @@ onUnmounted(() => {
     margin-right: 0;
 }
 
+.events-item-token {
+    width: calc((100% - 48px) / 2);
+    min-width: 290px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    overflow: hidden;
+
+    background: #FFFFFF;
+    border: 1px solid #D0D5DD;
+    border-radius: 8px;
+    position: relative;
+}
+
+.events-item-token:nth-child(2n) {
+    margin-right: 0;
+}
+
 .events-item-share{
     position: absolute;
     right: 20px;
@@ -649,6 +676,7 @@ onUnmounted(() => {
 
 .events-item-banner {
     width: 100%;
+    height: 100%;
     /*aspect-ratio: 2 / 3;*/
     background-color: #ececec;
     cursor: pointer;
@@ -704,6 +732,7 @@ onUnmounted(() => {
     font-size: 14px;
     line-height: 140%;
     color: #667085;
+    cursor: pointer;
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -729,10 +758,6 @@ onUnmounted(() => {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
 
-}
-
-.events-item-name:hover {
-    color: #000000;
 }
 
 .events-item-posted {

@@ -1,173 +1,163 @@
 <template>
-<div>
-  <el-dialog :model-value="visible"
-             :zIndex="4000"
-             title="RSVP"
-             :before-close="beforeClose"
-             :width="widthValue"
-  >
+    <div>
+        <el-dialog :model-value="visible"
+                   title="RSVP"
+                   :before-close="beforeClose"
+                   :width="width"
+        >
+            <el-form
+                    :model="bookForm"
+                    :rules="bookRules"
+                    ref="bookForms"
+                    require-asterisk-position="right"
+                    label-position="top"
+                    class="demo-ruleForm"
+            >
+                <div class="event-detail-form-input">
+                    <div class="event-detail-form-item2">
+                        <el-form-item label="First name" prop="first_name">
+                            <el-input placeholder="Enter first Name" v-model="bookForm.first_name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="Last name" prop="last_name">
+                            <el-input placeholder="Enter last Name" v-model="bookForm.last_name"></el-input>
+                        </el-form-item>
+                    </div>
+                    <el-form-item label="Email Address" prop="contact">
+                        <el-input placeholder="Enter email address" v-model="bookForm.contact"></el-input>
+                    </el-form-item>
+                </div>
 
-    <el-form
-        :model="bookForm"
-        :rules="bookRules"
-        ref="bookForm"
-        label-width="0"
-        label-position="top"
-        class="demo-ruleForm"
-    >
-      <div class="event-detail-form-input">
-        <div class="event-detail-form-item2">
-          <el-form-item label="First name" prop="first_name" >
-            <el-input  placeholder="First Name" v-model="bookForm.first_name"></el-input>
-          </el-form-item>
-          <el-form-item label="Last name" prop="last_name" >
-            <el-input  placeholder="Last Name" v-model="bookForm.last_name"></el-input>
-          </el-form-item>
-        </div>
-        <el-form-item label="Contact" prop="contact">
-          <el-input  placeholder="Email" v-model="bookForm.contact"></el-input>
-        </el-form-item>
-      </div>
+                <el-form-item label="No of Spots" prop="bookings">
+                    <el-input-number v-model="bookForm.bookings"/>
+                </el-form-item>
 
-      <el-form-item label="Bookings"  prop="bookings">
-        <el-input-number v-model="bookForm.bookings" />
-<!--        <span>Bookings</span>-->
-      </el-form-item>
+            </el-form>
 
-    </el-form>
+            <div class="submit-btn-container">
+                <el-button
+                        type="primary"
+                        :loading="submitLoadingStatus"
+                        @click="submitForm(bookForms)">
+                    Reserve Spot
+                </el-button>
+            </div>
 
-    <div class="submit-btn-container">
-      <el-button class="submit-btn"
-                 type="primary"
-                 round
-                 :loading="submitLoadingStatus"
-                 @click="submitForm('bookForm')">
-        Book
-      </el-button>
-<!--      <el-button class="inquire-btn"-->
-<!--                 type="primary"-->
-<!--                 round-->
-<!--                 @click="inquire()"-->
-<!--      >-->
-<!--        Inquiries-->
-<!--      </el-button>-->
+
+        </el-dialog>
+
     </div>
-
-
-  </el-dialog>
-
-</div>
 </template>
 
-<script>
-import detailBannerImg from "@/assets/events/banner.png";
+<script setup>
 import {EVENTS_ADD_APPLICANTS} from "@/api/api";
+import {defineProps, ref, reactive, onMounted, onUnmounted, defineEmits} from 'vue'
+import {ElMessage} from 'element-plus'
 
-export default {
-  name: "bookEventForm",
-  props:['visible','info'],
-  data() {
-    return {
-      widthValue:'50%',
-      bookForm: {
-        first_name: '',
-        last_name: '',
-        contact: '',
-        bookings: 1,
-        apply_user_id:undefined,
-        user_id: undefined,
-        event_id: undefined
-      },
-      bookRules: {
-        first_name: [
-          {required: true, message: 'Please input', trigger: 'blur'}
-        ],
-        last_name: [
-          {required: true, message: 'Please input', trigger: 'blur'}
-        ],
-        contact: [
-          {required: true, message: 'Please input', trigger: 'blur'}
-        ],
-        bookings: [
-          {required: true, message: 'Please input', trigger: ['blur','change']}
-        ]
-      },
-      detailBannerImg,
-      eventData: {},
-      submitLoadingStatus: false,
-      tValue:0,
-      eventApplicationsData:[]
+const props = defineProps(['visible', 'info'])
 
-    }
-  },
-  mounted() {
+const emit = defineEmits(['close'])
+const bookForms = ref(null)
 
+const bookForm = reactive({
+    first_name: '',
+    last_name: '',
+    contact: '',
+    bookings: 1,
+    apply_user_id: undefined,
+    user_id: undefined,
+    event_id: undefined
+})
+
+const bookRules = reactive({
+    first_name: [
+        {required: true, message: 'Please enter first name', trigger: 'blur'}
+    ],
+    last_name: [
+        {required: true, message: 'Please enter last name', trigger: 'blur'}
+    ],
+    contact: [
+        {required: true,type:'email', message: 'Please enter email address', trigger: 'blur'}
+    ],
+    bookings: [
+        {required: true, message: 'Please enter No of Spots', trigger: ['blur', 'change']}
+    ]
+})
+
+const width = ref('494px')
+const submitLoadingStatus = ref(false)
+const beforeClose = (done) => {
+    emit('close')
+    done()
+}
+const submitForm = (formEl) => {
+    let uid = localStorage.getItem('uid');
+    submitLoadingStatus.value = true;
+
+    formEl.validate((valid) => {
+        if (valid) {
+            if (uid) {
+                bookForm.apply_user_id = uid
+            }
+            bookForm.user_id = props.info.user_id;
+            bookForm.event_id = props.info.id;
+
+            let params = Object.assign({}, bookForm)
+            EVENTS_ADD_APPLICANTS(params).then(res => {
+
+                if (res.code == 200) {
+
+                    submitLoadingStatus.value = false;
+                    emit('close')
+                    ElMessage({
+                        type: 'success',
+                        message: 'You have successfully reserved a spot',
+                        grouping: true
+                    })
+                }
+
+            }).catch(err => {
+                console.log(err)
+
+            })
+
+        } else {
+            console.log('error submit!!')
+            submitLoadingStatus.value = false
+        }
+    })
+}
+
+onMounted(() => {
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
 
     if (screenWidthFloor <= 768) {
-      this.widthValue = '90%'
+        width.value = '90%'
     }
-
 
     window.onresize = () => {
-      if (screenWidthFloor <= 768) {
-        this.widthValue = '90%'
-      }
-    }
-
-  },
-  unmounted() {
-    window.onresize = null
-  },
-  methods:{
-    beforeClose(done){
-      this.$emit('close')
-      done()
-    },
-    inquire(){
-      this.$emit('close')
-    },
-    submitForm(formName) {
-      let uid = localStorage.getItem('uid');
-      this.submitLoadingStatus = true;
-
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          if(uid){
-            this.bookForm.apply_user_id = uid
-          }
-          this.bookForm.user_id = this.info.user_id;
-          this.bookForm.event_id = this.info.id;
-
-          let params = Object.assign({}, this.bookForm)
-          EVENTS_ADD_APPLICANTS(params).then(res => {
-            console.log(res)
-            if (res.code == 200) {
-              this.$message.success('Success')
-              this.submitLoadingStatus = false;
-              this.$emit('close')
-              // this.resetBookForm()
-            }
-
-          }).catch(err => {
-            console.log(err)
-            this.$message.error(err.msg)
-          })
-          console.log('submit')
-        } else {
-          console.log('error submit!!')
-          this.submitLoadingStatus = false
-          return false
+        if (screenWidthFloor <= 768) {
+            width.value = '90%'
         }
-      })
     }
+})
 
-
-  }
-}
+onUnmounted(() => {
+    window.onresize = null
+})
 </script>
 
 <style scoped>
+/deep/ .el-dialog__title{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #101828;
+}
 
+.submit-btn-container{
+    margin-top: 30px;
+}
 </style>

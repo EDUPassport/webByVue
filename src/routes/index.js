@@ -8,7 +8,6 @@ import store from "@/store/index";
 import chatHome from "@/views/chat/chatHome";
 import NProgress from "nprogress";
 import "../style/nprogress.css";
-import version from "../../public/verison.json";
 import vueCookies from "vue-cookies";
 import LayoutWrapper from "@/layout/layoutWrapper.vue";
 
@@ -64,6 +63,23 @@ const routes = [
         ]
     },
     {
+        path: '/events/myReservedSpots',
+        component: dashboardLayout,
+        children: [
+            {
+                path: "/events/myReservedSpots",
+                name: "myReservedSpots",
+                component: () => import("@/views/events/my/reservedSpots.vue"),
+                meta: {
+                    activeMenu: "/perks/home",
+                    titleC: "My Reserved Spots",
+                    titleG: "My Reserved Spots",
+                    requireAuth: true,
+                },
+            },
+        ]
+    },
+    {
         path: '/post-event',
         component: layout,
         children: [
@@ -79,12 +95,27 @@ const routes = [
         ]
     },
     {
+        path: '/events/detail',
+        component: layout,
+        children: [
+            {
+                path: "/events/detail",
+                name: "eventsDetail",
+                component: () => import("@/views/events/detail.vue"),
+                meta: {
+                    titleC: "Event detail",
+                    titleG: "Event detail",
+                },
+            }
+        ]
+    },
+    {
         path: '/event/event-detail',
         component: layout,
         children: [
             {
                 path: "/event/event-detail",
-                name: "eventDetail",
+                name: "event-Detail",
                 component: () => import("@/views/events/EventDetailInfo.vue"),
                 meta: {
                     titleC: "Event detail",
@@ -489,7 +520,7 @@ const routes = [
     },
     {
         path: "/favorites",
-        component: layout,
+        component: dashboardLayout,
         children: [
             {
                 path: "/favorites",
@@ -1029,13 +1060,7 @@ NProgress.configure({showSpinner: false});
 router.beforeEach((to, from, next) => {
     NProgress.start();
 
-    if (vueCookies.isKey("version")) {
-        if (version.version !== vueCookies.get("version")) {
-            vueCookies.set("version", version.version);
-            window.location.reload();
-        }
-    } else {
-        vueCookies.set("version", version.version);
+    if (!vueCookies.isKey("version")) {
         window.location.reload();
     }
 
