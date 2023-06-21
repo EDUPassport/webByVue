@@ -232,9 +232,7 @@
                                 </template>
                             </el-form-item>
                             <el-form-item label="Event Category" prop="category_id">
-                                <el-radio-group
-                                        @change="eventCategoryChange"
-                                        v-model="eventCategory">
+                                <el-radio-group  v-model="basicForm.category_id">
                                     <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
                                         <div v-for="(item,i) in categoryData" :key="i" style="flex-basis: 50%;">
                                             <el-radio :label="item.id">
@@ -246,8 +244,7 @@
                             </el-form-item>
 
                             <el-form-item label="Choose Event Type" prop="tag">
-                                <el-checkbox-group
-                                        v-model="basicForm.tag">
+                                <el-checkbox-group v-model="basicForm.tag">
                                     <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
                                         <div v-for="(item,i) in tagsData" :key="i" style="flex-basis: 50%;">
                                             <el-checkbox :label="item.id">
@@ -361,13 +358,6 @@ const validateEventTime = (rule, value, callback) => {
     callback()
 }
 
-const validateEventCategory = (rule, value, callback)=>{
-    if(!eventCategory.value){
-        return callback(new Error('please select category'))
-    }
-    callback()
-}
-
 const basicForms = ref(null)
 
 const basicForm = reactive({
@@ -476,7 +466,7 @@ const basicRules = reactive({
         category_id: [
             {
                 required: true,
-                validator:validateEventCategory,
+                message: 'Please choose event category',
                 trigger: 'change',
             },
         ],
@@ -495,11 +485,7 @@ const basicRules = reactive({
 const categoryData = ref([])
 const tagsData = ref([])
 
-const eventCategory = ref(0)
-const eventCategoryChange = (e) => {
-    eventCategory.value = e;
-    basicForm.category_id = e
-}
+
 const getEventDetail = (id) => {
     let params = {
         event_id: id
@@ -531,6 +517,14 @@ const getEventDetail = (id) => {
             basicForm.type_desc = resMessage.type_desc
             editFileStatus.value = true
 
+            if(resMessage.tags_en){
+                let tagsEnArr = resMessage.tags_en.split(',')
+                tagsEnArr.forEach(tag=>{
+                    let aa = tagsData.value.filter(item=>item.name_en === tag)
+                    basicForm.tag.push(aa[0]['id'])
+                })
+            }
+
             // basicForm.third_com_logo = resMessage.third_com_logo
             // basicForm.third_com_name = resMessage.third_com_name
             // basicForm.pay_money = resMessage.pay_money
@@ -541,12 +535,14 @@ const getEventDetail = (id) => {
             // basicForm.lat = resMessage.lat
             // basicForm.lng = resMessage.lng
             // basicForm.currency = 'USD'
-
         }
+
     }).catch(err => {
         console.log(err)
     })
+
 }
+
 const editFileStatus = ref(false)
 const beforeFilePhotoUpload = (file) => {
 

@@ -69,12 +69,13 @@ import logoutImg from '@/assets/newHome/dashboard/logout.svg'
 import logo43Img from '@/assets/newHome/dashboard/logo-43.svg'
 
 import {LOGOUT_V2} from "@/api/api";
-import {ElLoading, ElMessage} from 'element-plus'
+// ElMessage
+import {ElLoading} from 'element-plus'
 
 const store = useStore()
 const router = useRouter()
 
-const identityStatus = computed(()=>store.state.switchIdentityStatus)
+// const identityStatus = computed(()=>store.state.switchIdentityStatus)
 
 const showSideMenuStatus = ref(true)
 
@@ -87,15 +88,15 @@ const turnHome = () => {
 }
 
 const turnSetting = () => {
-    if(identityStatus.value)
-    {
-        ElMessage({
-            type:'error',
-            message:'Contributor does not have access to parent account settings',
-            grouping:true
-        })
-        return;
-    }
+    // if(identityStatus.value)
+    // {
+    //     ElMessage({
+    //         type:'error',
+    //         message:'Contributor does not have access to parent account settings',
+    //         grouping:true
+    //     })
+    //     return;
+    // }
     router.push('/setting/account')
 }
 
