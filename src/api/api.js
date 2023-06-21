@@ -504,3 +504,5 @@ export const HOME_EVENT_TEMPLATE_DELETE = (params) => post('home/event/template/
 export const HOME_EVENT_TEMPLATE_LIST = (params) => get('home/event/template/list', params)
 export const HOME_MY_APPLY_EVENT_LIST = (params) => get('home/my/apply/event/list', params)
 export const HOME_FEATURE_EVENT_LIST = (params) => get('home/feature/event/list', params)
+export const HOME_CLIENT_CANCEL_EVENT = (params) => post('home/client/cancel/event', params)
+export const HOME_PUBLISHER_CANCEL_EVENT = (params) => post('home/publisher/cancel/event', params)

@@ -65,7 +65,7 @@ export default {
   z-index: 100;
 
 }
-/deep/ .el-dialog{
+:deep(.el-dialog){
   --el-dialog-bg-color: none;
   --el-dialog-box-shadow: none;
 }
@@ -134,7 +134,7 @@ export default {
   justify-content: flex-end;
 }
 
-/deep/ .el-overlay{
+:deep(.el-overlay){
   background-color: rgba(0, 0, 0, 0.9);
 }
 

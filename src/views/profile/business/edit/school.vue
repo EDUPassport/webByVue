@@ -2646,7 +2646,7 @@ export default {
   width:40%;
 }
 
-/deep/ .el-input--default .el-input__wrapper{
+:deep(.el-input--default .el-input__wrapper){
   /*min-width: 350px;*/
 }
 

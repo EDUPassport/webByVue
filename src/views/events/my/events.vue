@@ -436,6 +436,20 @@ onUnmounted(() => {
 }
 
 @media screen and (max-width: 768px) {
+    .content-container{
+        margin: 20px;
+    }
+    .l-container{
+        display: none;
+    }
+    .r-container{
+        width: 100%;
+    }
+
+    .events-item{
+        width: 100%;
+        margin-right: 0;
+    }
 
 
 }

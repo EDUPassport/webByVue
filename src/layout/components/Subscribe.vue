@@ -286,7 +286,7 @@ export default {
   overflow: hidden;
 }
 
-/deep/ .el-input-group__append{
+:deep(.el-input-group__append){
   border:none;
   background-color: #091E77;
   padding: 0 40px;
@@ -303,7 +303,7 @@ export default {
   }
 
 }
-/deep/ .dialog-custom{
+:deep(.dialog-custom){
   border-radius: 20px;
 }
 

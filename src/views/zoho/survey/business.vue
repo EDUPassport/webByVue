@@ -220,21 +220,21 @@ export default {
     font-weight: bold;
 }
 
-/deep/ .el-form--default.el-form--label-top .el-form-item .el-form-item__label{
+:deep(.el-form--default.el-form--label-top .el-form-item .el-form-item__label){
     color: #FFFFFF !important;
 }
-/deep/ .el-radio__label{
+:deep(.el-radio__label){
     color: #FFFFFF;
 }
-/deep/ .el-radio__input.is-checked+.el-radio__label{
+:deep(.el-radio__input.is-checked+.el-radio__label) {
     color: #ed4fcb;
 }
 
-/deep/ .el-radio__input.is-checked .el-radio__inner{
+:deep(.el-radio__input.is-checked .el-radio__inner){
     border-color: #ed4fcb;
     background:#ed4fcb;
 }
-/deep/ .el-radio-group{
+:deep(.el-radio-group){
     width: 100%;
 }
 

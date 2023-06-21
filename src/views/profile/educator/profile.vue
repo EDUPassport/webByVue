@@ -1399,7 +1399,7 @@ export default {
 }
 
 @media screen and (max-width: 768px){
-    /deep/ .el-upload-dragger{
+    :deep(.el-upload-dragger){
       width:260px;
     }
 

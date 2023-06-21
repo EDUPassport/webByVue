@@ -405,12 +405,12 @@ onMounted(() => {
 
 <style scoped>
 
-/deep/ .el-checkbox__label{
+:deep(.el-checkbox__label){
     font-size: 11px;
 
 }
 
-/deep/ .el-slider__bar{
+:deep(.el-slider__bar){
     background-color: #6648FF;
 }
 

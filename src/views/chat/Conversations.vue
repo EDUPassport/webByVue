@@ -373,7 +373,7 @@ export default {
     padding: 25px 25px 0 25px;
 }
 
-.conversation-list-top /deep/ .el-select {
+.conversation-list-top :deep(.el-select) {
     display: block;
 }
 

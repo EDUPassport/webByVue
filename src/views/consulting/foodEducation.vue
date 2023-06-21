@@ -705,7 +705,7 @@ export default {
   height: 400px;
   position: relative;
 }
-/deep/ .swiper-slide{
+:deep(.swiper-slide){
   display:flex;
   align-items: center;
 }

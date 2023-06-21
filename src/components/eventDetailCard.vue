@@ -232,7 +232,7 @@ export default {
 
 }
 
-/deep/ .el-dialog{
+:deep(.el-dialog){
   --el-dialog-bg-color: none;
   --el-dialog-box-shadow: none;
 }
@@ -398,7 +398,7 @@ export default {
   color: #262626;
 }
 
-/deep/ .el-overlay{
+:deep(.el-overlay){
   background-color: rgba(0, 0, 0, 0.9);
 }
 

@@ -722,7 +722,7 @@ export default {
   font-size: 20px;
 }
 
-/deep/ .el-divider__text{
+:deep(.el-divider__text){
   background-color: #F0F2F5;
   padding: 0 50px;
 }
@@ -759,7 +759,7 @@ export default {
   .perks-r-bg-container{
     padding: 15px 0;
   }
-  /deep/ .el-divider__text{
+  :deep(.el-divider__text){
     background-color: #F0F2F5;
     padding: 0;
     font-size: 20px;

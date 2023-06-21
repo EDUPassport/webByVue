@@ -117,7 +117,7 @@ const copyLink =async  (val)=> {
 </script>
 
 <style scoped>
-/deep/ .el-dialog__title{
+:deep(.el-dialog__title){
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
@@ -126,7 +126,7 @@ const copyLink =async  (val)=> {
     color: #101828;
 }
 
-/deep/ .el-dialog__body{
+:deep(.el-dialog__body){
     padding: 24px;
 }
 
@@ -187,7 +187,7 @@ const copyLink =async  (val)=> {
 
 }
 
-.share-copy-input /deep/ .el-input__wrapper{
+.share-copy-input :deep(.el-input__wrapper){
     background-color: #F7F5FF;
     box-shadow: none;
 }

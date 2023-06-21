@@ -3831,7 +3831,7 @@ export default {
   width: 40%;
 }
 
-/deep/ .el-input--default .el-input__wrapper {
+:deep(.el-input--default .el-input__wrapper){
   /*min-width: 350px;*/
 }
 
@@ -4050,7 +4050,7 @@ export default {
   font-size: 12px;
 }
 
-/deep/ .el-date-editor {
+:deep(.el-date-editor) {
   --el-date-editor-width: auto;
 }
 

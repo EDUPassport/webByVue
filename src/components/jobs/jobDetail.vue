@@ -255,9 +255,8 @@ const cancelFavorite = (item) => {
 </script>
 
 <style scoped>
-/deep/ .el-drawer__body {
+:deep(.el-drawer__body){
     padding: 0;
-
 }
 
 .detail-container {

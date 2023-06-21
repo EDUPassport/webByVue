@@ -1482,17 +1482,12 @@ onUnmounted(() => {
 .container-4-r {
     margin-left: 50px;
 }
-/deep/ .el-dialog__title{
+:deep(.el-dialog__title){
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
     font-size: 24px;
     line-height: 32px;
-    /* identical to box height, or 133% */
-
-
-    /* Grey/900 */
-
     color: #101828;
 }
 

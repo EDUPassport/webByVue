@@ -460,7 +460,7 @@ export default {
   padding:0 20px 20px 20px;
 }
 
-/deep/ .back-btn span{
+:deep(.back-btn span) {
   display: flex;
   align-items: center;
 }

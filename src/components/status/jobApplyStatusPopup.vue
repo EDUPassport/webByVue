@@ -160,7 +160,7 @@ export default {
   position: relative;
 }
 
-/deep/ .el-dialog{
+:deep(.el-dialog){
   --el-dialog-bg-color: none;
   --el-dialog-box-shadow: none;
 }
@@ -215,7 +215,7 @@ export default {
   width: 100%;
   margin-top: 20px;
 }
-/deep/ .el-checkbox__label{
+:deep(.el-checkbox__label){
   font-family: BCM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 20px;
 }
@@ -232,7 +232,7 @@ export default {
   justify-content: flex-end;
 }
 
-/deep/ .el-overlay{
+:deep(.el-overlay){
   background-color: rgba(0, 0, 0, 0.9);
 }
 
@@ -261,7 +261,7 @@ export default {
     font-size: 14px;
   }
 
-  /deep/ .el-checkbox__label{
+  :deep(.el-checkbox__label){
     font-size: 12px;
   }
 

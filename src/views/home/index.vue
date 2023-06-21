@@ -1010,11 +1010,11 @@ export default {
 
 }
 
-/deep/ .f-c-r-img-edu .el-image__inner {
+:deep(.f-c-r-img-edu .el-image__inner)  {
   object-position: left;
 }
 
-/deep/ .f-c-r-img .el-image__inner {
+:deep(.f-c-r-img .el-image__inner)  {
   object-position: left;
 }
 
@@ -1111,7 +1111,7 @@ export default {
   width: calc(100% - 120px);
 
 }
-.s-input-l /deep/ .el-input__wrapper{
+.s-input-l  :deep(.el-input__wrapper) {
   box-shadow: none;
   border-radius: 50px;
 }

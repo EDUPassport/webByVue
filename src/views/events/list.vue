@@ -565,7 +565,7 @@ onUnmounted(() => {
 
 <style scoped>
 
-/deep/ .el-tabs__item {
+:deep(.el-tabs__item) {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 600;
@@ -575,11 +575,11 @@ onUnmounted(() => {
     color: #98A2B3;
 }
 
-/deep/ .el-tabs__item.is-active {
+:deep(.el-tabs__item.is-active)  {
     color: #6648FF;
 }
 
-/deep/ .el-tabs__active-bar {
+ :deep(.el-tabs__active-bar) {
     background-color: #6648FF;
 }
 

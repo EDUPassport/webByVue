@@ -190,7 +190,7 @@ export default {
 </script>
 
 <style scoped>
-/deep/ .el-drawer {
+:deep(.el-drawer) {
   background-color: #F0F2F5;
 }
 

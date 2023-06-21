@@ -1487,7 +1487,7 @@ export default {
     color: #6941C6;
 }
 
-/deep/ .el-checkbox__label {
+:deep(.el-checkbox__label){
     font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif !important;
     font-size: 14px;
 }
@@ -1559,7 +1559,7 @@ export default {
     width: 26%;
 }
 
-/deep/ .el-divider__text {
+:deep(.el-divider__text) {
     background-color: #FFFFFF;
     color: #D0D5DD;
     font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;

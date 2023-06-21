@@ -3159,12 +3159,12 @@ onMounted(async () => {
 <style scoped>
 @import "@/style/profile-business.css";
 
-/deep/ .el-upload-dragger {
+:deep(.el-upload-dragger){
     padding: 16px 40px;
     border-style: solid;
 }
 
-/deep/ .el-radio__label, /deep/ .el-checkbox__label {
+:deep(.el-radio__label), :deep(.el-checkbox__label){
     color: #667085;
     font-weight: 400;
     font-size: 14px;

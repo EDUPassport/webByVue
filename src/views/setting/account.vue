@@ -952,7 +952,7 @@ onMounted(() => {
     overflow: hidden;
 }
 
-/deep/ .el-table--default .el-table__header .cell {
+:deep(.el-table--default .el-table__header .cell ){
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
@@ -961,7 +961,7 @@ onMounted(() => {
     color: #475467;
 }
 
-/deep/ .el-table--default .el-table__body .cell {
+:deep(.el-table--default .el-table__body .cell){
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
@@ -1104,12 +1104,12 @@ onMounted(() => {
     align-items: flex-start;
 }
 
-/deep/ .el-upload-dragger {
+:deep(.el-upload-dragger){
     padding: 16px 40px;
     border-style: solid;
 }
 
-/deep/ .el-radio__label, /deep/ .el-checkbox__label {
+:deep(.el-radio__label), :deep(.el-checkbox__label){
     color: #667085;
     font-weight: 400;
     font-size: 14px;
@@ -1173,7 +1173,7 @@ onMounted(() => {
         margin: 24px;
     }
 
-    /deep/ .el-form-item {
+    :deep(.el-form-item) {
         flex-direction: column;
     }
 

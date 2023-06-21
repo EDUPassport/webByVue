@@ -386,10 +386,10 @@ export default {
   left: 12px;
 }
 
-/deep/ .el-drawer{
+:deep(.el-drawer){
   overflow: unset;
 }
-/deep/ .el-drawer__body {
+:deep(.el-drawer__body){
   padding: 0;
 }
 

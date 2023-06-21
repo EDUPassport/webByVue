@@ -855,7 +855,7 @@ export default {
   padding:0 20px 20px 20px;
 }
 
-/deep/ .back-btn span{
+:deep(.back-btn span) {
   display: flex;
   align-items: center;
 }
@@ -1882,7 +1882,7 @@ export default {
   text-align: center;
 }
 
-/deep/ .resume-uploader .el-upload-dragger {
+:deep(.resume-uploader .el-upload-dragger)  {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1891,7 +1891,7 @@ export default {
 }
 
 
-/deep/ .avatar-uploader-icon {
+:deep(.avatar-uploader-icon) {
   font-size: 28px;
   color: #8c939d;
   width: 178px;

@@ -88,7 +88,7 @@ export default {
 
 }
 
-/deep/ .el-dialog {
+:deep(.el-dialog ){
   --el-dialog-bg-color: none;
   --el-dialog-box-shadow: none;
 }

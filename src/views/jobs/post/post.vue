@@ -2231,7 +2231,7 @@ onUnmounted(() => {
 
 }
 
-/deep/ .el-dialog__title {
+:deep(.el-dialog__title){
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
@@ -2240,7 +2240,7 @@ onUnmounted(() => {
     color: #101828;
 }
 
-/deep/ .el-checkbox__label {
+:deep(.el-checkbox__label){
     font-weight: 400;
     font-size: 12px;
     color: #667085;
@@ -2474,7 +2474,7 @@ onUnmounted(() => {
         height: calc(var(--i-window-height) - 245px);
     }
 
-    /deep/ .mce-container * {
+    :deep(.mce-container *){
         white-space: normal;
     }
 

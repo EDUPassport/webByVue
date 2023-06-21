@@ -193,7 +193,7 @@ export default {
     position: relative;
 }
 
-/deep/ .el-dialog {
+:deep(.el-dialog){
     --el-dialog-bg-color: none;
     --el-dialog-box-shadow: none;
 }

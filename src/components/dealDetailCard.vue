@@ -142,7 +142,7 @@ export default {
   position: relative;
 }
 
-/deep/ .el-dialog{
+:deep(.el-dialog){
   --el-dialog-bg-color: none;
   --el-dialog-box-shadow: none;
 }
@@ -278,7 +278,7 @@ export default {
   height: 100%;
 }
 
-/deep/ .el-overlay{
+:deep(.el-overlay){
   background-color: rgba(0, 0, 0, 0.9);
 }
 

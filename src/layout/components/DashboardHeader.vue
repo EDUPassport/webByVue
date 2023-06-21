@@ -164,7 +164,44 @@
                 </el-row>
 
                 <el-row class="header-mobile-row-container" :gutter="0">
-                    <el-col class="header-mobile-l-col" :xs="24" :sm="0" :md="0" :lg="0" :xl="0">
+                    <el-col class="header-mobile-l-col" :xs="24" :sm="0" :md="0" :lg="0" :xl="0" v-if="currentRoutePath === '/events/myEvents'">
+                        <div class="nav-events-container">
+                            <div class="nav-events-l">
+                                <template v-if="profilePercentage <= 60">
+                                    <el-tooltip
+                                        effect="light"
+                                        content="Complete your profile to post an event"
+                                        placement="bottom"
+                                    >
+                                        <el-button icon="plus" type="info">Post Event</el-button>
+                                    </el-tooltip>
+                                </template>
+                                <template v-else>
+                                    <el-button icon="plus" type="primary" @click="turnToPostEvent()">Post Event</el-button>
+                                </template>
+                                <!--                                <el-button icon="plus" type="primary" @click="turnToPostEvent()">Post Event</el-button>-->
+                            </div>
+                            <div class="nav-events-r">
+                                <el-breadcrumb separator-icon="ArrowRight">
+                                    <el-breadcrumb-item :to="{ path: '/events' }">EDU Events</el-breadcrumb-item>
+                                    <el-breadcrumb-item :to="{path:'/events/myEvents'}">My events</el-breadcrumb-item>
+                                </el-breadcrumb>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col class="header-mobile-l-col" :xs="24" :sm="0" :md="0" :lg="0" :xl="0" v-else-if="currentRoutePath === '/events/myReservedSpots'">
+                        <div class="nav-events-container">
+
+                            <div class="nav-events-r">
+                                <el-breadcrumb separator-icon="ArrowRight">
+                                    <el-breadcrumb-item :to="{path:'/events/myEvents'}">My events</el-breadcrumb-item>
+                                    <el-breadcrumb-item :to="{path:'/events/myReservedSpots'}">Rserved Spots</el-breadcrumb-item>
+                                </el-breadcrumb>
+
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col class="header-mobile-l-col" :xs="24" :sm="0" :md="0" :lg="0" :xl="0" v-else>
                         <div class="header-page-name">
                             Dashboard
                         </div>
@@ -315,7 +352,7 @@ const turnToMyReservedSpots = ()=>{
     margin-right: 16px;
 }
 
-/deep/ .el-breadcrumb__inner.is-link{
+:deep(.el-breadcrumb__inner.is-link){
     font-family: 'Inter';
     font-weight: 500;
     font-size: 18px;
@@ -323,7 +360,7 @@ const turnToMyReservedSpots = ()=>{
 }
 
 
-/deep/ .el-breadcrumb__item:last-child .el-breadcrumb__inner.is-link {
+:deep(.el-breadcrumb__item:last-child .el-breadcrumb__inner.is-link){
     font-family: 'Inter';
     font-weight: 500;
     font-size: 18px;
@@ -388,6 +425,23 @@ const turnToMyReservedSpots = ()=>{
         font-size: 24px;
     }
 
+    :deep( .el-breadcrumb__inner.is-link) {
+        font-family: 'Inter';
+        font-weight: 500;
+        font-size: 12px;
+        color: #C6C7C8;
+    }
+
+    :deep(.el-breadcrumb__item:last-child .el-breadcrumb__inner.is-link ) {
+        font-family: 'Inter';
+        font-weight: 500;
+        font-size: 12px;
+        color: #6648FF;
+    }
+
+    .nav-events-r-container{
+        display: none;
+    }
 }
 
 

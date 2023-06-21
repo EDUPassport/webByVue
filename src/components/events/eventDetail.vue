@@ -11,10 +11,10 @@
             <div class="detail-container">
                 <div class="detail-t">
                     <div>
-                        <el-button link icon="back" @click="turnBack()">Back</el-button>
+                        <el-button style="color: #344054;" link icon="back" @click="turnBack()">Back</el-button>
                     </div>
                     <div>
-                        <el-button link type="info" @click="cancelEvent(data)">
+                        <el-button style="color: #344054;"  link  @click="cancelEvent(data)">
                             Cancel Event
                         </el-button>
                     </div>
@@ -27,12 +27,17 @@
                                 <el-image class="detail-company-logo" :src="data.company_logo"></el-image>
                             </div>
                             <div class="detail-b-t-l-r">
-                                <div class="detail-name">{{ data.name }}</div>
+                                <div class="detail-name">
+                                    {{ data.name }}
+                                    <span class="xll-tag-rec"  >Recommended by EDU 💜</span>
+                                </div>
                                 <div class="detail-name-time">Posted {{$filters.howLongFormat(data.c_time)}}</div>
                             </div>
                         </div>
                         <div class="detail-b-t-r">
-                            <el-button link type="danger">Delete Event</el-button>
+                            <template v-if="currentUserId == data.user_id">
+                                <el-button link type="danger" @click="deleteEvent(data)">Delete Event</el-button>
+                            </template>
                         </div>
                     </div>
                     <div class="detail-location">
@@ -87,7 +92,7 @@
                             100+
                         </div>
                     </div>
-                    <div class="detail-table-item">
+                    <div class="detail-table-item" v-if="data.status != 1">
                         <div class="detail-table-item-l">
                             Listing Status
                         </div>
@@ -216,18 +221,58 @@
         >
         </share-card-theme-two>
 
+        <el-dialog
+            v-model="cdDialogVisible"
+            center
+            align-center
+            width="500px"
+        >
+            <div class="cd-dialog-tips">
+                {{cdDialogObj.tips}}
+            </div>
+            <div class="cd-dialog-actions"  v-if="cdDialogObj.type === 'delete' ">
+                <el-button plain @click="cdDialogVisible=false">Cancel</el-button>
+                <el-button type="primary" @click="submitDeleteEvent()">Delete Event</el-button>
+            </div>
+            <div class="cd-dialog-actions" v-if="cdDialogObj.type === 'cancel' ">
+                <el-button
+                    type="primary"
+                    :loading="cancelEventLoadingStatus"
+                    @click="submitCancelEvent()">
+                    Cancel Event
+                </el-button>
+            </div>
+
+        </el-dialog>
+
     </div>
 </template>
 
 <script setup>
 
 import {defineProps, defineEmits, ref,onMounted} from 'vue'
-import {ADD_FAVORITE, CANCEL_FAVORITE, EVENTS_LIST} from "@/api/api";
+import {
+    ADD_FAVORITE,
+    CANCEL_FAVORITE,
+    EVENTS_LIST,
+    HOME_CLIENT_CANCEL_EVENT,
+    HOME_PUBLISHER_CANCEL_EVENT
+} from "@/api/api";
 import {ElMessage} from 'element-plus'
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 
 defineProps(['visible', 'data'])
 const emit = defineEmits(['close'])
+const currentUserId = localStorage.getItem('uid')
+const cdDialogVisible  = ref(false)
+
+const cdDialogObj =ref({
+    type:'',
+    tips:''
+})
+
+const cdEventDetail = ref({})
+const cancelEventLoadingStatus = ref(false)
 
 const closeVisible = () => {
     emit('close')
@@ -235,8 +280,92 @@ const closeVisible = () => {
 const turnBack = ()=>{
     emit('close')
 }
-const cancelEvent = ()=>{
+const cancelEvent = (item)=>{
     console.log('cancel event')
+    // console.log(item)
+    cdEventDetail.value = item
+
+    let uid = localStorage.getItem('uid')
+    if(parseInt(uid) === cdEventDetail.value.user_id){
+        cdDialogObj.value = {
+            type:'cancel',
+            tips:'Canceling this event will unpublished it and remove it from attendees list'
+        }
+        cdDialogVisible.value = true
+    }else{
+        cdDialogObj.value = {
+            type:'cancel',
+            tips:'Canceling this event will remove it from attendees list'
+        }
+        cdDialogVisible.value = true
+    }
+
+}
+
+const submitCancelEvent = ()=>{
+    let uid = localStorage.getItem('uid')
+    if(parseInt(uid) === cdEventDetail.value.user_id){
+        publisherCancelEvent(cdEventDetail.value.id)
+    }else{
+        clientCancelEvent(cdEventDetail.value.id)
+    }
+}
+
+const clientCancelEvent = (id)=>{
+    cancelEventLoadingStatus.value  = true
+
+    let params = {
+        id:id
+    }
+    HOME_CLIENT_CANCEL_EVENT(params).then(res=>{
+        console.log(res)
+        if(res.code === 200){
+            cancelEventLoadingStatus.value = false
+        }
+    }).catch(err=>{
+        console.log(err)
+        cancelEventLoadingStatus.value = false
+    })
+
+}
+
+const publisherCancelEvent = (id)=>{
+    cancelEventLoadingStatus.value  = true
+    let params = {
+        id:id
+    }
+    HOME_PUBLISHER_CANCEL_EVENT(params).then(res=>{
+        console.log(res)
+        if(res.code === 200){
+            cancelEventLoadingStatus.value = false
+        }
+    }).catch(err=>{
+        console.log(err)
+        cancelEventLoadingStatus.value = false
+    })
+
+}
+
+const deleteEvent = (item)=>{
+    console.log('delete event')
+    // console.log(item)
+    cdEventDetail.value = item
+
+    cdDialogObj.value = {
+        type:'delete',
+        tips:'Deleting this event will unpublished it. '
+    }
+    cdDialogVisible.value = true
+
+}
+
+const submitDeleteEvent = ()=>{
+    console.log('submit delete event')
+    ElMessage({
+        type:'success',
+        message:'Event listing deleted Successfully',
+        grouping:true
+    })
 }
 
 const eventsList = ref([])
@@ -322,9 +451,8 @@ onMounted(()=>{
 </script>
 
 <style scoped>
-/deep/ .el-drawer__body {
+:deep(.el-drawer__body){
     padding: 0;
-
 }
 
 .detail-container {
@@ -371,12 +499,14 @@ onMounted(()=>{
 }
 
 .detail-name {
+
     font-family: 'Inter';
     font-style: normal;
     font-weight: 600;
     font-size: 18px;
     line-height: 24px;
     color: #000000;
+
 }
 
 .detail-name-time {
@@ -473,6 +603,19 @@ onMounted(()=>{
     font-weight: 600;
     font-size: 14px;
     text-align: center;
+    color: #1D2939;
+}
+
+.xll-tag-rec{
+    padding: 4px 8px;
+    gap: 2px;
+    border-radius: 4px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    /*line-height: 18px;*/
+    background: #FFDB91;
     color: #1D2939;
 }
 
@@ -646,7 +789,21 @@ onMounted(()=>{
 
 .events-item-action-container {
     margin:16px 0 30px 0;
-
-
 }
+
+.cd-dialog-tips{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    text-align: center;
+    color: #101828;
+}
+
+.cd-dialog-actions{
+    margin-top: 16px;
+    text-align: center;
+}
+
+
 </style>

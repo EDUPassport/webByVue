@@ -344,9 +344,8 @@ onMounted(()=>{
 </script>
 
 <style scoped>
-/deep/ .el-checkbox__label{
+:deep(.el-checkbox__label){
     font-size: 11px;
-
 }
 
 .container {

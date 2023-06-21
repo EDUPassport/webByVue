@@ -148,7 +148,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/deep/ .el-dialog__title{
+ :deep(.el-dialog__title){
     font-family: 'Inter';
     font-style: normal;
     font-weight: 600;

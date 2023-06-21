@@ -851,7 +851,7 @@ onUnmounted(() => {
     width: 100%;
 }
 
-/deep/ .el-date-editor.el-input, .el-date-editor.el-input__wrapper {
+:deep(.el-date-editor.el-input, .el-date-editor.el-input__wrapper) {
     width: 100%;
 }
 
@@ -920,7 +920,7 @@ onUnmounted(() => {
 }
 
 
-/deep/ .profile-uploader .el-upload {
+:deep(.profile-uploader .el-upload) {
     border: 1px dashed #d9d9d9;
     cursor: pointer;
     position: relative;
@@ -928,11 +928,11 @@ onUnmounted(() => {
     border-radius: 10px;
 }
 
-/deep/ .profile-uploader .el-upload:hover {
+:deep(.profile-uploader .el-upload:hover)  {
     border-color: #0AA0A8;
 }
 
-/deep/ .avatar-uploader-icon {
+:deep(.avatar-uploader-icon) {
     font-size: 28px;
     color: #8c939d;
     width: 178px;

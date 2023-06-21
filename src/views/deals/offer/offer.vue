@@ -972,7 +972,7 @@ export default {
   font-size: 20px;
 }
 
-/deep/ .el-select{
+:deep(.el-select){
   width: 100%;
 }
 

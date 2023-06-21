@@ -418,14 +418,14 @@ export default {
   flex-direction: column;
 }
 
-/deep/ .el-checkbox{
+:deep(.el-checkbox){
   width: 100%;
   font-size: 18px;
   font-family: AssiRegular,"Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #262626;
 }
 
-/deep/ .el-select{
+:deep(.el-select){
   display: block;
 }
 

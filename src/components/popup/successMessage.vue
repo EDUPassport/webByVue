@@ -51,7 +51,7 @@ export default {
     text-align: left;
 }
 
-/deep/ .el-dialog__header{
+:deep(.el-dialog__header){
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;

@@ -1040,13 +1040,13 @@ export default {
     font-size: 18px;
   }
 
-  /deep/ .el-collapse-item__header{
+   :deep(.el-collapse-item__header){
     background-color: unset;
     line-height: unset;
     border-bottom: 1px solid #6650B3;
   }
 
-  /deep/ .el-collapse-item__wrap{
+  :deep(.el-collapse-item__wrap){
     background-color: unset;
 
   }

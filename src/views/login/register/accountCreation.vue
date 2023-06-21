@@ -688,7 +688,7 @@ export default {
     margin-top: 20px;
 }
 
-/deep/ .el-divider__text {
+:deep(.el-divider__text){
     background-color: #FFFFFF;
     color: #D0D5DD;
     font-family: Inter, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;

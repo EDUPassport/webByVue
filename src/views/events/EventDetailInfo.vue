@@ -424,7 +424,7 @@ export default {
     color: #262626;
 }
 
-/deep/ .el-overlay {
+:deep(.el-overlay) {
     background-color: rgba(0, 0, 0, 0.9);
 }
 
