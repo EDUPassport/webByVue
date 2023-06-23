@@ -1,27 +1,20 @@
 <template>
-  <jobDetailComponent
-      :detailData="detailData"
-      :workingHoursData="workingHoursData"
-      :adsData="jobsAdsListTop"
-      :adsHeight="adsHeight"
-      :isFavorite="isFavorite"
-      :loading="showLoadingStatus"
-      @favoriteEvent="favoriteChange"
-  ></jobDetailComponent>
-
+  <jobDetailComponent :detailData="detailData" :workingHoursData="workingHoursData" :adsData="jobsAdsListTop"
+    :adsHeight="adsHeight" :isFavorite="isFavorite" :loading="showLoadingStatus" @favoriteEvent="favoriteChange">
+  </jobDetailComponent>
 </template>
 
 <script>
 import jobDetailComponent from '@/components/jobs/detailComponent'
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import {
   ADD_JOBS_VIEWS,
   ADS_LIST,
   JOB_DETAIL
 } from "@/api/api";
-import {ref, onMounted,onUnmounted} from 'vue'
-import {ElMessage} from 'element-plus'
-import {updateWindowHeight} from "@/utils/tools";
+import { ref, onMounted, onUnmounted } from 'vue'
+import { ElMessage } from 'element-plus'
+import { updateWindowHeight } from "@/utils/tools";
 
 export default {
   name: "detailComponent",
@@ -38,7 +31,7 @@ export default {
     const detailData = ref({})
     const isFavorite = ref(0)
 
-    function  getJobDetail(id) {
+    function getJobDetail(id) {
 
       showLoadingStatus.value = true;
 
@@ -53,7 +46,7 @@ export default {
 
           let resData = res.message;
 
-          if(resData.is_favorite){
+          if (resData.is_favorite) {
             isFavorite.value = resData.is_favorite
           }
 
@@ -66,56 +59,38 @@ export default {
           }
           showLoadingStatus.value = false
 
-          if(token){
+          if (token) {
             addJobViews(id)
           }
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         showLoadingStatus.value = false
       })
 
     }
 
-    function  getAdsList() {
+    function getAdsList() {
       let ads_data = {
         page: 1,
-        limit: 10000
+        limit: 10000,
+        type: 'job'
       }
       ADS_LIST(ads_data).then(res => {
         if (res.code == 200) {
-          // console.log(rs.message)
-          let adsTopData = [];
-          let adsMidData = [];
-          let identity = localStorage.getItem('identity');
 
-          if (!identity) {
-            adsTopData = res.message.filter(item => item.name == 'guest_j2');
-            adsMidData = res.message.filter(item => item.name == 'guest_j3');
-          }
-          if (identity == 1) {
-            adsTopData = res.message.filter(item => item.name == 'educator_j2');
-            adsMidData = res.message.filter(item => item.name == 'educator_j3');
+
+          let array = res.message
+          const chunkSize = 2;
+          let resultArray = [];
+          for (let i = 0; i < array.length; i += chunkSize) {
+            const chunk = array.slice(i, i + chunkSize);
+            resultArray.push(chunk)
           }
 
-          if (identity == 2 || identity == 3 || identity == 4) {
-            adsTopData = res.message.filter(item => item.name == 'business_j2');
-            adsMidData = res.message.filter(item => item.name == 'business_j3');
-          }
-
-          if (identity == 5) {
-            adsTopData = res.message.filter(item => item.name == 'vendor_j2');
-            adsMidData = res.message.filter(item => item.name == 'vendor_j3');
-          }
-
-          if (adsTopData.length > 0) {
-             jobsAdsListTop.value = adsTopData[0].data;
-          }
-
-          if (adsMidData.length > 0) {
-             jobsAdsListMid.value = adsMidData[0].data;
-          }
+          jobsAdsListTop.value = resultArray;
+          jobsAdsListMid.value = resultArray;
 
         }
 
@@ -131,22 +106,22 @@ export default {
 
     const adsHeight = ref('190px')
 
-    function favoriteChange(e){
+    function favoriteChange(e) {
       isFavorite.value = e;
     }
 
-    function addJobViews(id){
+    function addJobViews(id) {
       let params = {
-        job_id:id
+        job_id: id
       }
-      ADD_JOBS_VIEWS(params).then(res=>{
+      ADD_JOBS_VIEWS(params).then(res => {
         console.log(res)
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
       })
     }
 
-    onMounted(()=>{
+    onMounted(() => {
 
       let screenWidth = document.body.clientWidth
       let screenWidthFloor = Math.floor(screenWidth)
@@ -166,11 +141,11 @@ export default {
       if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
         adsHeight.value = '140px'
       }
-      if(screenWidthFloor >= 1920){
+      if (screenWidthFloor >= 1920) {
         adsHeight.value = "190px"
       }
 
-      window.onresize = () =>{
+      window.onresize = () => {
         if (screenWidthFloor <= 768) {
           updateWindowHeight()
           adsHeight.value = '120px'
@@ -185,7 +160,7 @@ export default {
         if (screenWidthFloor >= 1200 && screenWidthFloor < 1920) {
           adsHeight.value = '140px'
         }
-        if(screenWidthFloor >= 1920){
+        if (screenWidthFloor >= 1920) {
           adsHeight.value = "190px"
         }
 
@@ -193,7 +168,7 @@ export default {
 
       let jobId = route.params.id;
 
-      if(jobId){
+      if (jobId) {
         getJobDetail(jobId)
       }
 
@@ -201,7 +176,7 @@ export default {
 
     })
 
-    onUnmounted(()=>{
+    onUnmounted(() => {
       updateWindowHeight()
       window.onresize = null
     })
@@ -225,6 +200,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
