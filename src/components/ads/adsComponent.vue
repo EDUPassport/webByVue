@@ -1,74 +1,98 @@
 <template>
   <div>
-    <el-carousel
-        class="xll-carousel"
-        :height="height"
-        indicator-position="none">
-
-      <el-carousel-item class="xll-ads-swiper-item"
-                        v-for="(item,i) in adsData" :key="i"
-                        @click="turnAdsDetail(item.link)"
-      >
-
+    <el-carousel class="xll-carousel" :height="height" indicator-position="none" :interval="6000">
+      <el-carousel-item class="xll-ads-swiper-item" v-for="(chunk, index) in adsData" :key="index">
         <div class="xll-ads-c">
-
-          <div class="xll-ads-l">
-
-            <el-image class="xll-ads-l-img"
-                      fit="cover"
-                      :src="item.user_url !='' ? item.user_url : item.url">
+          <template v-if="chunk.length === 1">
+            <el-image @click="turnAdsDetail(item?.id, item?.link)" class="xll-ads-l-img" fit="cover"
+              :src="chunk[0].user_url != '' ? chunk[0].user_url : chunk[0].url">
               <template #error>
                 <div class="image-ads-slot">
                   <el-icon :size="80" color="#808080">
-                    <Picture/>
+                    <Picture />
                   </el-icon>
                 </div>
               </template>
-
             </el-image>
-
-          </div>
-
-          <div class="xll-ads-r">
-            <div class="xll-ads-r-bg" v-html="item.title"></div>
-          </div>
-
+          </template>
+          <template v-else>
+            <div class="xll-ads-l" v-for="(item, itemIndex) in chunk" :key="itemIndex">
+              <el-image @click="turnAdsDetail(item?.id, item?.link)" class="xll-ads-l-img" fit="cover"
+                :src="item.user_url != '' ? item.user_url : item.url">
+                <template #error>
+                  <div class="image-ads-slot">
+                    <el-icon :size="80" color="#808080">
+                      <Picture />
+                    </el-icon>
+                  </div>
+                </template>
+              </el-image>
+            </div>
+          </template>
         </div>
-
       </el-carousel-item>
-
     </el-carousel>
 
   </div>
 </template>
 
 <script>
+import { ADD_INCREMENT, ADD_VIEWS_INCREMENT } from "@/api/api";
 export default {
   name: "adsComponent",
   props: ['adsData', 'height'],
+  mounted() {
+    console.log("this.adsData", this.adsData)
+    this.viewsIncremnt(this.adsData);
+  },
   methods: {
-    turnAdsDetail(link) {
-      window.open(link, '_blank')
+    turnAdsDetail(id, link) {
+      let params = {
+        add_id: id
+      };
+      ADD_INCREMENT(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      });
+      window.open(link, '_blank');
+    },
+
+    viewsIncremnt(adsData) {
+      let params = [];
+      let array = []
+      array = adsData.reduce((acc, chunk) => acc.concat(chunk), []);
+      array.forEach(item => {
+        params.push({
+          "add_id": item?.id,
+        });
+
+      });
+      ADD_VIEWS_INCREMENT(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      });
     }
   }
 }
 </script>
 
 <style scoped>
-
 @media screen and (min-width: 1920px) {
 
-  .xll-carousel{
-    width:calc(475px + 420px);
+  .xll-carousel {
+    width: calc(475px + 420px);
 
   }
 
   .xll-ads-l {
-     width: 475px;
-     height: 100%;
-   }
+    width: 475px;
+    height: 100%;
+    margin-right: 10px;
+  }
 
-  .xll-ads-r{
+  .xll-ads-r {
     width: 420px;
     background-color: #FFFFFF;
 
@@ -79,15 +103,15 @@ export default {
 
   }
 
-  .xll-ads-r-bg{
+  .xll-ads-r-bg {
     -webkit-line-clamp: 6;
   }
 
 }
 
 @media screen and (max-width: 1919px) and (min-width: 1200px) {
-  .xll-carousel{
-    width:calc(350px + 270px);
+  .xll-carousel {
+    width: calc(350px + 270px);
   }
 
   .xll-ads-l {
@@ -96,7 +120,7 @@ export default {
   }
 
 
-  .xll-ads-r{
+  .xll-ads-r {
     width: 240px;
     background-color: #FFFFFF;
 
@@ -106,22 +130,24 @@ export default {
     padding: 20px;
 
   }
-  .xll-ads-r-bg{
+
+  .xll-ads-r-bg {
     -webkit-line-clamp: 4;
   }
 
 }
 
 @media screen and (max-width: 1199px) and (min-width: 992px) {
-  .xll-carousel{
-    width:calc(300px + 200px);
+  .xll-carousel {
+    width: calc(300px + 200px);
   }
+
   .xll-ads-l {
     width: 300px;
     height: 100%;
   }
 
-  .xll-ads-r{
+  .xll-ads-r {
     width: 200px;
     background-color: #FFFFFF;
 
@@ -131,15 +157,15 @@ export default {
     padding: 20px;
   }
 
-  .xll-ads-r-bg{
+  .xll-ads-r-bg {
     -webkit-line-clamp: 3;
   }
 
 }
 
-.xll-carousel{
-  margin:0 auto;
-  overflow:hidden;
+.xll-carousel {
+  margin: 0 auto;
+  overflow: hidden;
 }
 
 .xll-ads-swiper-item {
@@ -190,10 +216,11 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-  .xll-ads-swiper-item{
+  .xll-ads-swiper-item {
     background-color: #F0F2F5;
   }
-  .xll-ads-r{
+
+  .xll-ads-r {
     display: none;
   }
 }

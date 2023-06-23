@@ -433,4 +433,8 @@ export const USER_QUESTION_READ = (params) => post('home/user/question/read', pa
 
 export const  ADD_REQ_FEATURE= (params) => post('home/user/contactform/add', params)
 
+// ad job view increment
+export const ADD_INCREMENT = (params) => post('home/user/adJobIncrement', params)
+export const ADD_VIEWS_INCREMENT = (params) => post('home/user/adJobIncrementViews', params)
+
 
