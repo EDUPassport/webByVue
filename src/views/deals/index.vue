@@ -5,24 +5,14 @@
       <el-row :gutter="0" align="top" justify="center">
 
         <el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <dealFilterComponent
-              :locationData="locationOptions"
-              :tagsData="tagsData"
-              :subCateData="subCateData"
-              @search="confirmFilterSearch"
-          ></dealFilterComponent>
+          <dealFilterComponent :locationData="locationOptions" :tagsData="tagsData" :subCateData="subCateData"
+            @search="confirmFilterSearch"></dealFilterComponent>
         </el-col>
 
         <el-col :xs="0" :sm="24" :md="7" :lg="7" :xl="6">
-          <featuredDealsPromoted
-              :adsData="adsDataMid"
-              :featuredData="featuredDealsData"
-              @addFavorite="addFavoriteFeatured"
-              @cancelFavorite="cancelFavoriteFeatured"
-              @viewProfile="viewProfile"
-              @detail="showDealDetailDialog"
-              @dealDetail="turnDealDetail"
-          >
+          <featuredDealsPromoted :adsData="adsDataMid" :featuredData="featuredDealsData"
+            @addFavorite="addFavoriteFeatured" @cancelFavorite="cancelFavoriteFeatured" @viewProfile="viewProfile"
+            @detail="showDealDetailDialog" @dealDetail="turnDealDetail">
           </featuredDealsPromoted>
         </el-col>
 
@@ -30,7 +20,7 @@
 
           <el-scrollbar ref="dealScroll" class="deals-list-scroll">
 
-            <div class="xll-ads-container" v-if="adsDataTop.length>0">
+            <div class="xll-ads-container" v-if="adsDataTop.length > 0">
               <adsComponent :height="adsHeight" :adsData="adsDataTop"></adsComponent>
             </div>
 
@@ -38,54 +28,45 @@
               <template v-if="dealsListData.length > 0">
                 <div class="deals-container">
 
-                  <div class="deals-item-container"
-                       v-for="(item,index) in dealsListData" :key="index"
-                  >
+                  <div class="deals-item-container" v-for="(item, index) in dealsListData" :key="index">
                     <div class="deals-item">
                       <div class="deals-item-bg">
                         <!--@click="viewProfile(item.user_id, item.identity, item.company_id)"-->
-                        <el-image
-                            v-if="item.company_info"
-                            class="deals-item-background-img"
-                            :src="item.company_info.background_image ? item.company_info.background_image : ''"
-                            fit="cover"
-                        >
+                        <el-image v-if="item.company_info" class="deals-item-background-img"
+                          :src="item.company_info.background_image ? item.company_info.background_image : ''" fit="cover">
                           <template #error>
-                          <div class="img-slot-background">
-                            <el-icon :size="45" color="#808080">
-                              <Picture/>
-                            </el-icon>
-                          </div>
-                        </template>
+                            <div class="img-slot-background">
+                              <el-icon :size="45" color="#808080">
+                                <Picture />
+                              </el-icon>
+                            </div>
+                          </template>
 
                         </el-image>
 
                         <div class="deals-item-favorite" v-if="item.is_favorite && item.is_favorite == 1"
-                             @click="cancelFavorite(2,item.id,index)">
+                          @click="cancelFavorite(2, item.id, index)">
                           <el-icon color="#6650B3" :size="25">
-                            <IconFontistoFavorite/>
+                            <IconFontistoFavorite />
                           </el-icon>
                         </div>
                         <div class="deals-item-favorite" v-else
-                             @click="addFavorite(item.id,2,item.title,item.company_logo,index)">
+                          @click="addFavorite(item.id, 2, item.title, item.company_logo, index)">
                           <el-icon :size="25">
-                            <CollectionTag/>
+                            <CollectionTag />
                           </el-icon>
                         </div>
 
                       </div>
                       <div class="deals-item-c">
                         <div class="deals-item-c-l">
-                          <el-avatar class="deals-logo"
-                                     :src="item.company_logo"
-                                     @click="viewProfile(item.user_id,item.identity,item.company_id)"
-                          >
+                          <el-avatar class="deals-logo" :src="item.company_logo"
+                            @click="viewProfile(item.user_id, item.identity, item.company_id)">
                           </el-avatar>
                         </div>
                         <div class="deals-item-c-r">
-                          <div class="deals-item-c-r-1"
-                               v-if="item.company_info"
-                               @click="viewProfile(item.user_id,item.identity, item.company_id)">
+                          <div class="deals-item-c-r-1" v-if="item.company_info"
+                            @click="viewProfile(item.user_id, item.identity, item.company_id)">
                             {{ item.company_info.company_name }}
                           </div>
                           <div class="deals-item-c-r-2" @click="showDealDetailDialog(item)">
@@ -97,8 +78,7 @@
                       <div class="deals-item-b">
                         <div class="deals-item-b-l">
 
-                          <template
-                              v-if="item.company_info && item.company_info.category_name_en != '0'">
+                          <template v-if="item.company_info && item.company_info.category_name_en != '0'">
                             {{ item.company_info.category_name_en }}
                           </template>
                           <template v-else>
@@ -122,13 +102,9 @@
 
                 </div>
                 <div class="deals-pagination">
-                  <el-pagination layout="prev, pager, next"
-                                 :default-current-page="1"
-                                 @size-change="dealPageSizeChange"
-                                 @current-change="dealPageChange"
-                                 :current-page="dealPage"
-                                 :page-size="dealLimit"
-                                 :total="dealTotalNum">
+                  <el-pagination layout="prev, pager, next" :default-current-page="1" @size-change="dealPageSizeChange"
+                    @current-change="dealPageChange" :current-page="dealPage" :page-size="dealLimit"
+                    :total="dealTotalNum">
                   </el-pagination>
                 </div>
 
@@ -139,7 +115,7 @@
 
             </div>
 
-            <div class="xll-ads-bottom-container" v-if="adsDataBottom.length>0">
+            <div class="xll-ads-bottom-container" v-if="adsDataBottom.length > 0">
               <adsComponent :height="adsHeight" :adsData="adsDataBottom"></adsComponent>
             </div>
 
@@ -151,26 +127,16 @@
 
       </el-row>
 
-      <dealDetailCard :info="dealDetailData"
-                      :qrcodeValue="qrcodeValue"
-                      @close="dealDetailDialogVisible=false"
-                      @share="shareDeal"
-                      @viewProfile="viewProfile"
-                      :visible="dealDetailDialogVisible">
+      <dealDetailCard :info="dealDetailData" :qrcodeValue="qrcodeValue" @close="dealDetailDialogVisible = false"
+        @share="shareDeal" @viewProfile="viewProfile" :visible="dealDetailDialogVisible">
       </dealDetailCard>
 
-      <shareCard :visible="shareDialogVisible"
-                 :title="shareInfo.title"
-                 :description="shareInfo.desc"
-                 :quote="shareInfo.desc"
-                 :url="shareUrl"
-                 @close="shareDialogVisible=false"
-      >
+      <shareCard :visible="shareDialogVisible" :title="shareInfo.title" :description="shareInfo.desc"
+        :quote="shareInfo.desc" :url="shareUrl" @close="shareDialogVisible = false">
       </shareCard>
 
     </div>
   </div>
-
 </template>
 
 <script>
@@ -183,7 +149,7 @@ import {
   CANCEL_FAVORITE,
   ADS_LIST, USER_INFO_VISITOR_V2, SWITCH_IDENTITY_V2, USER_SUB_IDENTITY_V2, FEATURED_DEALS_LIST, DEALS_DETAIL
 } from "@/api/api";
-import {encode} from "js-base64";
+import { encode } from "js-base64";
 
 import mapboxgl from "mapbox-gl";
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -196,7 +162,7 @@ import dealFilterComponent from "@/components/dealFilterComponent";
 
 import featuredDealsPromoted from "@/components/deals/featuredDealsPromoted";
 import adsComponent from "@/components/ads/adsComponent";
-import {updateWindowHeight} from "@/utils/tools";
+import { updateWindowHeight } from "@/utils/tools";
 
 export default {
   name: "index",
@@ -251,7 +217,7 @@ export default {
 
       shareDialogVisible: false,
       shareInfo: {},
-      shareUrl:'',
+      shareUrl: '',
 
       filterResultData: {},
       companyInfo: {}
@@ -322,12 +288,12 @@ export default {
     }
 
     let page = this.$route.query.page;
-    if(page){
+    if (page) {
       let pageNumber = Number(page);
       this.dealPage = Number(pageNumber);
       this.getDealsList(pageNumber, this.dealLimit)
 
-    }else{
+    } else {
       this.getDealsList(this.dealPage, this.dealLimit)
     }
 
@@ -354,7 +320,7 @@ export default {
     readMoreDeal(id) {
       this.showDealDetailStatus = true;
       this.dealDetailDialogVisible = false;
-      this.$router.push({path: '/deals', query: {id: id}})
+      this.$router.push({ path: '/deals', query: { id: id } })
     },
     showDealDetailDialog(item) {
 
@@ -367,13 +333,13 @@ export default {
       // console.log(e)
       this.shareDialogVisible = true;
       this.shareInfo = e;
-      this.shareUrl = this.locationUrl + '/deals/detail?id='+e.id;
+      this.shareUrl = this.locationUrl + '/deals/detail?id=' + e.id;
     },
     viewProfile(userId, identity, companyId) {
 
       // this.$loading({text:''})
 
-      this.$router.push({path: '/deals/vendor/profile', query: {uid: userId, i: identity, cid: companyId}})
+      this.$router.push({ path: '/deals/vendor/profile', query: { uid: userId, i: identity, cid: companyId } })
 
       // let params = {
       //   user_id:userId,
@@ -412,46 +378,23 @@ export default {
     getAdsList() {
       let ads_data = {
         page: 1,
-        limit: 10000
+        limit: 10000,
+        type: 'deal'
       }
       ADS_LIST(ads_data).then(res => {
         if (res.code == 200) {
-          // console.log(rs.message)
-          let adsDataTop = []
-          let adsDataMid = [];
-          let adsDataBottom = [];
-          let identity = localStorage.getItem('identity');
 
-          if (!identity) {
-            adsDataTop = res.message.filter(item => item.name == 'guest_d1');
-            adsDataMid = res.message.filter(item => item.name == 'guest_d2');
-            adsDataBottom = res.message.filter(item => item.name == 'guest_d3');
-          }
-          if (identity == 1) {
-            adsDataTop = res.message.filter(item => item.name == 'educator_d1');
-            adsDataMid = res.message.filter(item => item.name == 'educator_d2');
-            adsDataBottom = res.message.filter(item => item.name == 'educator_d3');
-          }
-          if (identity == 2 || identity == 3 || identity == 4) {
-            adsDataTop = res.message.filter(item => item.name == 'business_d1');
-            adsDataMid = res.message.filter(item => item.name == 'business_d2');
-            adsDataBottom = res.message.filter(item => item.name == 'business_d3');
-          }
-          if (identity == 5) {
-            adsDataTop = res.message.filter(item => item.name == 'vendor_d1');
-            adsDataMid = res.message.filter(item => item.name == 'vendor_d2');
-            adsDataBottom = res.message.filter(item => item.name == 'vendor_d3');
-          }
-          if (adsDataTop.length > 0) {
-            this.adsDataTop = adsDataTop[0].data;
-          }
-          if (adsDataMid.length > 0) {
-            this.adsDataMid = adsDataMid[0].data;
-          }
-          if (adsDataBottom.length > 0) {
-            this.adsDataBottom = adsDataBottom[0].data;
+          let array = res.message
+          const chunkSize = 2;
+          let resultArray = [];
+          for (let i = 0; i < array.length; i += chunkSize) {
+            const chunk = array.slice(i, i + chunkSize);
+            resultArray.push(chunk)
           }
 
+          this.adsDataTop = resultArray
+          this.adsDataMid = resultArray;
+          this.adsDataBottom = resultArray;
         }
 
       }).catch(err => {
@@ -545,8 +488,8 @@ export default {
       this.showLoadingStatus = true
       this.dealPage = e
       await this.getDealsList(e, this.dealLimit)
-      this.$refs.dealScroll.scrollTo(0,0)
-      this.$router.push({path:'/deals',query:{page:e}})
+      this.$refs.dealScroll.scrollTo(0, 0)
+      this.$router.push({ path: '/deals', query: { page: e } })
       // document.documentElement.scrollTop = 200
     },
     addFavorite(id, type, title, url, index) {
@@ -642,7 +585,7 @@ export default {
 
               let redirectParamsStr = encode(JSON.stringify(redirectParamsObj))
 
-              self.$router.push({path: '/login', query: {redirect_params: redirectParamsStr}})
+              self.$router.push({ path: '/login', query: { redirect_params: redirectParamsStr } })
             }
           }
         })
@@ -654,7 +597,7 @@ export default {
         return this.$message.error('Oops! Your current identity is not an vendor, please switch to Vendor')
       }
 
-      self.$router.push({path: '/deals/offer', query: {}})
+      self.$router.push({ path: '/deals/offer', query: {} })
     },
     selectRole(e) {
       this.$loading({
@@ -688,7 +631,7 @@ export default {
           } else {
             this.$loading().close()
             // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 1}})
+            this.$router.push({ path: '/profile/contact/user', query: { i: 1 } })
 
           }
 
@@ -706,7 +649,7 @@ export default {
           } else {
             this.$loading().close()
             // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 2}})
+            this.$router.push({ path: '/profile/contact/user', query: { i: 2 } })
 
             this.dialogBusinessAccountVisible = false
           }
@@ -723,7 +666,7 @@ export default {
           } else {
             this.$loading().close()
             // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 3}})
+            this.$router.push({ path: '/profile/contact/user', query: { i: 3 } })
 
             this.dialogBusinessAccountVisible = false
           }
@@ -740,7 +683,7 @@ export default {
           } else {
             this.$loading().close()
             // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 4}})
+            this.$router.push({ path: '/profile/contact/user', query: { i: 4 } })
 
             this.dialogBusinessAccountVisible = false
           }
@@ -757,7 +700,7 @@ export default {
           } else {
             this.$loading().close()
             // this.$message.warning('Oops!.. Your profile is incomplete. ')
-            this.$router.push({path: '/profile/contact/user', query: {i: 5}})
+            this.$router.push({ path: '/profile/contact/user', query: { i: 5 } })
 
           }
 
@@ -962,7 +905,7 @@ export default {
   height: 100%;
 }
 
-.img-slot-background{
+.img-slot-background {
   width: calc(100% - 2px);
   height: calc(100% - 2px);
 
@@ -1073,55 +1016,55 @@ export default {
   padding: 0 50px;
 }
 
-@media screen and (min-width: 1200px) {
-
-}
+@media screen and (min-width: 1200px) {}
 
 @media screen and (max-width: 768px) {
-  .deals-list-scroll{
+  .deals-list-scroll {
     width: 100%;
-    height: calc( var(--i-window-height) - 180px);
+    height: calc(var(--i-window-height) - 180px);
   }
 
-  .xll-ads-container{
+  .xll-ads-container {
     padding: 15px;
   }
 
-  .deals-bg-container{
+  .deals-bg-container {
     padding: 0;
 
   }
 
-  .deals-container{
+  .deals-container {
     flex-direction: column;
 
   }
 
-  .deals-item-container{
+  .deals-item-container {
     width: 100%;
   }
 
-  .deals-item-bg{
+  .deals-item-bg {
     height: 160px;
   }
 
 
-  .deals-logo{
-    width:40px;
+  .deals-logo {
+    width: 40px;
     height: 40px;
     border-radius: 40px;
   }
-  .deals-item-c-r-1{
+
+  .deals-item-c-r-1 {
     font-size: 14px;
   }
-  .deals-item-c-r-2{
+
+  .deals-item-c-r-2 {
     font-size: 18px;
   }
-  .deals-item-b-l{
+
+  .deals-item-b-l {
     font-size: 12px;
   }
 
 
 }
-
 </style>

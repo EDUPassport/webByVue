@@ -16,56 +16,70 @@
                 <p class="req-h2 text-style">Fill the form and someone will reach out to you.</p>
             </el-col>
         </el-row>
-        <el-row class="req-row-h">
-            <el-col :span="12">
-                <label>Enter Name</label><br>
-                <el-input class="req-input" v-model="contactForm.name" placeholder="Enter Name" />
-            </el-col>
-            <el-col :span="12">
-                <label>Email</label><br>
-                <el-input class="req-input" v-model="contactForm.email" placeholder="Enter Email" />
-            </el-col>
-        </el-row>
-        <el-row class="req-row-h">
-            <el-col :span="12">
-                <label>Profile</label><br>
 
-                <el-select class="req-input" v-model="contactForm.profile" placeholder="Select Profile">
-                    <el-option v-for="item in identity" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
-            </el-col>
-            <el-col :span="12">
+        <el-form ref="fromRef" :model="contactForm" :rules="basicRules" label-width="120px" label-position="top"
+            class="demo-ruleForm">
 
-                <label>Phone Number</label><br>
-                <el-row class="req-input">
-                    <el-col :span="6">
-                        <el-select class="phone-select" v-model="contactForm.country" placeholder="Select Country">
-                            <el-option v-for="item in countryList" :key="item.name"
-                                :label="`${item.name} (${item.phonecode})`" :value="item.phonecode" />
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="Enter Name" prop="name">
+                        <el-input class="req-input" v-model="contactForm.name" placeholder="Enter Name" />
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="Email" prop="email">
+                        <el-input class="req-input" v-model="contactForm.email" placeholder="Enter Email" />
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+
+                    <el-form-item label="Profile" prop="profile">
+                        <el-select class="req-input" filterable  v-model="contactForm.profile" placeholder="Select Profile">
+                            <el-option v-for="item in identity" :key="item.value" :label="item.label" :value="item.value"
+                                :style="{ fontFamily: 'sans-serif' }" />
                         </el-select>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-input class="phone-input" v-model="contactForm.phone_no" placeholder="xxx-xxx-xxxx" />
+                    </el-form-item>
+                </el-col>
 
-                    </el-col>
-                </el-row>
+                <el-col :span="12" style="position: relative;top: 18px;">
+                    <label>Phone Number</label><br>
+                    <el-row class="req-input">
+                        <el-col :span="6">
+                            <el-select class="phone-select" filterable v-model="contactForm.country" placeholder="Select Country">
+                                <el-option v-for="item in countryList" :key="item.name"
+                                    :label="`${item.name} (${item.phonecode})`" :value="item.phonecode"
+                                    :style="{ fontFamily: 'sans-serif' }" />
+                            </el-select>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-input class="phone-input" v-model="contactForm.phone_no" placeholder="xxx-xxx-xxxx" />
 
-            </el-col>
-        </el-row>
-        <el-row class="req-row-h">
+                        </el-col>
+                    </el-row>
 
-            <el-col :span="12">
-                <label>Request</label><br>
-                <el-select class="req-input" v-model="contactForm.request" placeholder="Select Request">
-                    <el-option v-for="item in requests" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
-            </el-col>
-            <el-col :span="12">
-                <label>Other Details</label><br>
+                </el-col>
 
-                <el-input class="req-input" v-model="contactForm.other" placeholder="Other Information" />
-            </el-col>
-        </el-row>
+            </el-row>
+            <el-row>
+
+                <el-col :span="12">
+                    <el-form-item label="Request" prop="request">
+                        <el-select class="req-input" filterable v-model="contactForm.request" placeholder="Select Request">
+                            <el-option v-for="item in requests" :key="item.value" :label="item.label" :value="item.value"
+                                :style="{ fontFamily: 'sans-serif' }" />
+                        </el-select>
+                    </el-form-item>
+
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="Other Details" prop="other">
+                        <el-input class="req-input" v-model="contactForm.other" placeholder="Other Information" />
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
         <template #footer style="padding:20px 0px 40px 0px">
             <span class="dialog-footer">
                 <el-button class="button-h" type="primary" round @click="save()">
@@ -104,7 +118,7 @@ const identity = [
         value: 2
     },
     {
-        label: 'EDU Other',
+        label: 'Other',
         value: 4
     },
     {
@@ -115,15 +129,69 @@ const identity = [
 
 const countryList = ref([])
 
+const basicRules = {
 
+    name: [
+        {
+            required: true,
+            message: 'Please enter your name',
+            trigger: 'blur',
+        },
+    ],
+    email: [
+        {
+            type: 'email',
+            required: true,
+            message: 'Please enter your email',
+            trigger: 'blur',
+        },
+    ],
+    profile: [
+        {
+            required: true,
+            message: 'Please select your profile',
+            trigger: 'blur',
+        },
+    ],
+    country: [
+        {
+            required: false,
+            message: 'Please select country',
+            trigger: 'blur',
+        },
+    ],
+    number: [
+        {
+            required: false,
+            message: 'Please enter your number',
+            trigger: 'blur',
+        },
+    ],
+    request: [
+        {
+            required: true,
+            message: 'Please select request',
+            trigger: 'blur',
+        },
+    ],
+    other: [
+        {
+            required: false,
+            message: 'Please enter the other detail',
+            trigger: 'blur',
+        },
+    ],
+
+
+}
 const contactForm = reactive({
-    name: null,
-    email: null,
-    profile: null,
-    country: null,
-    phone_no: null,
-    request: null,
-    other: null,
+    name: '',
+    email: '',
+    profile: '',
+    country: '',
+    phone_no: '',
+    request: '',
+    other: '',
 })
 
 
@@ -142,30 +210,52 @@ onMounted(() => {
     getAllCountry()
 })
 
+const fromRef = ref(null)
 function save() {
-
-    ADD_REQ_FEATURE(contactForm).then(res => {
-        if (res.code == 200) {
-            ElMessage({
-                message: 'Thank you for filling out your information! ...',
-                type: 'success',
+    fromRef.value.validate((valid) => {
+        if (valid) {
+            contactForm.phone_no = `${contactForm.country} ${contactForm.phone_no}`
+            delete contactForm.country
+            ADD_REQ_FEATURE(contactForm).then(res => {
+                if (res.code == 200) {
+                    ElMessage({
+                        message: 'Thank you for filling out your information! ...',
+                        type: 'success',
+                    })
+                    Object.keys(contactForm).forEach(key => {
+                        contactForm[key] = null;
+                    });
+                    centerDialogVisible.value = false
+                }
+            }).catch(err => {
+                ElMessage({
+                    message: err.msg,
+                    type: 'error',
+                })
             })
-            Object.keys(contactForm).forEach(key => {
-                contactForm[key] = null;
-            });
-            centerDialogVisible.value = false
+
         }
-    }).catch(err => {
-        ElMessage({
-            message: err.msg,
-            type: 'error',
-        })
     })
+
+
 }
 
 </script>
 
+<style>
+.demo-ruleForm.el-form--default.el-form--label-top .el-form-item .el-form-item__label {
+    text-transform: uppercase !important;
+    font-family: sans-serif !important;
+}
+</style>
+
 <style scoped>
+.font-family {
+    font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+    font-weight: bold !important;
+
+}
+
 .phone-select {
     width: 200px
 }
@@ -197,17 +287,14 @@ function save() {
     padding: 5px;
 }
 
-label {
-    text-transform: uppercase;
-    font-family: sans-serif;
-}
-
-.req-row-h {
-    margin-top: 12px;
-}
-
 .req-input {
     width: 23.395833rem;
-    margin-top: 12px;
+}
+
+label {
+    position: relative;
+    text-transform: uppercase !important;
+    font-family: sans-serif !important;
+    top: -9px;
 }
 </style>
