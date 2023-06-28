@@ -65,6 +65,7 @@ export default {
       array.forEach(item => {
         params.push({
           "add_id": item?.id,
+          "user_id": localStorage.getItem('uid'),
         });
 
       });
