@@ -1,31 +1,48 @@
 <template>
+    <el-scrollbar class="deals-bg" always>
+        <un-complete-profile-prompt
+                :percent="profilePercentage"
+                tips="Get started and complete your profile to post an event"
+                v-if="(identity == 1 && profilePercentage <= 80 ) || (identity == 2 && profilePercentage <= 60) || (identity == 5 && profilePercentage <= 60)">
+        </un-complete-profile-prompt>
 
-    <div>
-        <el-scrollbar class="bg">
-            <div class="t-container">
-                <div class="t-label">My Deals</div>
-                <div class="t-tips">
-                    Track, manage, and showcase your posted deals
-                </div>
+        <div class="banner-row" :class="token ? 'banner-row-token' : ''" >
+            <el-carousel style="width: 100%" trigger="click" height="200px">
+                <el-carousel-item v-for="item in 4" :key="item">
+                    <el-image
+                            src="https://cdn.staticaly.com/gh/unilei/picx-images-hosting@master/20230531/kkpansBanner.4nqwuipdtbs0.webp">
+                    </el-image>
+                </el-carousel-item>
+            </el-carousel>
+        </div>
+
+        <div class="content-row" :class="token ? 'content-row-token' : ''" >
+
+            <div class="content-filter">
+                <dealFilterComponent
+                    @search="confirmFilterSearch"
+                ></dealFilterComponent>
             </div>
-            <div class="content-container">
-                <el-tabs v-model="activeTabPane" @tab-change="changeActiveTab">
-                    <el-tab-pane label="Deal Posts" name="deal_posts">
-                        <div class="deals-loading-container"
-                             v-loading="loadingDealsStatus">
-                            <template v-if="emptyDealsStatus">
+
+            <div class="content-list">
+
+                <el-tabs v-model="activeTabName" @tab-change="dealsTabChange">
+
+                    <el-tab-pane label="Featured Deals" name="featured_deals">
+
+                        <div v-loading="featuredDealsLoadingStatus">
+                            <template v-if="featuredDealsEmptyStatus">
                                 <el-empty style="height: 100%;"
                                           :image="emptyImage"
                                           :image-size="456"
-                                          description="You have no deal at the moment">
-                                    <el-button type="primary" @click="turnToPostDeal()">Post a Deal</el-button>
+                                          description="Oh Sorry, There are no upcoming events">
                                 </el-empty>
                             </template>
                             <template v-else>
                                 <div class="deals-list-container" >
 
-                                    <div class="deals-item"
-                                         v-for="(item,i) in dealsListData" :key="i">
+                                    <div :class="token ? 'deals-item-token' : 'deals-item'"
+                                         v-for="(item,i) in featuredDealsList" :key="i">
 
                                         <div class="deals-item-share">
                                             <el-button icon="share" circle  @click="shareDeal(item)"></el-button>
@@ -89,111 +106,6 @@
 
                                     </div>
 
-                                </div>
-                                <div class="deals-pagination" v-if="dealsTotalNum">
-                                    <el-pagination layout="prev, pager, next"
-                                                   :default-current-page="1"
-                                                   @size-change="dealsPageSizeChange"
-                                                   @current-change="dealsPageChange"
-                                                   :current-page="dealsPage"
-                                                   :page-size="dealsLimit"
-                                                   :total="dealsTotalNum">
-                                    </el-pagination>
-                                </div>
-
-                            </template>
-
-                        </div>
-                    </el-tab-pane>
-                    <el-tab-pane label="Drafts" name="deal_drafts">
-                        <div class="deals-loading-container"
-                             v-loading="loadingDealsStatus">
-                            <template v-if="emptyDealsStatus">
-                                <el-empty style="height: 100%;"
-                                          :image="emptyImage"
-                                          :image-size="456"
-                                          description="You have no deal at the moment">
-                                    <el-button type="primary" @click="turnToPostDeal()">Post a Deal</el-button>
-                                </el-empty>
-                            </template>
-                            <template v-else>
-                                <div class="deals-list-container" >
-
-                                    <div class="deals-item"
-                                         v-for="(item,i) in dealsListData" :key="i">
-
-                                        <div class="deals-item-share">
-                                            <el-button icon="share" circle  @click="shareDeal(item)"></el-button>
-
-                                            <template v-if="item.is_favorite">
-                                                <el-button circle @click="cancelFavorite(item,i,'featured')">
-                                                    <el-icon :size="14">
-                                                        <IconFlatColorIconsLike/>
-                                                    </el-icon>
-                                                </el-button>
-                                            </template>
-                                            <template v-else>
-                                                <el-button circle   @click="addFavorite(item,i,'featured')">
-                                                    <el-icon :size="14">
-                                                        <IconIconParkOutlineLike/>
-                                                    </el-icon>
-                                                </el-button>
-                                            </template>
-
-                                        </div>
-
-                                        <div class="deals-item-t">
-                                            <template  v-if="item.company_info">
-                                                <el-image class="deals-item-banner"
-                                                          fit="cover"
-                                                          :src="item.company_info.background_image ? item.company_info.background_image : ''"
-                                                >
-                                                </el-image>
-                                            </template>
-                                        </div>
-                                        <div class="deals-item-b">
-
-                                            <div class="deals-item-b-l" @click="previewDeal(item,i)">
-                                                <el-avatar class="deals-logo"
-                                                           :src="item.company_logo"
-                                                >
-                                                </el-avatar>
-                                            </div>
-                                            <div class="deals-item-b-r">
-
-                                                <div class="deals-item-name" @click="previewDeal(item,i)">
-                                                    {{ item.title }}
-                                                </div>
-                                                <div class="deals-item-posted" v-if="!token">
-                                                    {{ item.company_name }}
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div class="deals-item-actions">
-                                            <span v-if="item.company_info && item.company_info.category_name_en != '0'">
-                                                {{ item.company_info.category_name_en }}
-                                            </span>
-                                            <el-button type="primary" @click="previewDeal(item,i)">
-                                                View Details
-                                            </el-button>
-                                        </div>
-
-
-                                    </div>
-
-                                </div>
-                                <div class="deals-pagination" v-if="dealsTotalNum">
-                                    <el-pagination layout="prev, pager, next"
-                                                   :default-current-page="1"
-                                                   @size-change="dealsPageSizeChange"
-                                                   @current-change="dealsPageChange"
-                                                   :current-page="dealsPage"
-                                                   :page-size="dealsLimit"
-                                                   :total="dealsTotalNum">
-                                    </el-pagination>
                                 </div>
 
                             </template>
@@ -201,36 +113,35 @@
                         </div>
 
                     </el-tab-pane>
-                    <el-tab-pane label="Archive" name="deal_archive">
 
-                        <div class="deals-loading-container"
-                             v-loading="loadingDealsStatus">
-                            <template v-if="emptyDealsStatus">
+                    <el-tab-pane label="All Deals" name="all_deals">
+
+                        <div v-loading="allDealsLoadingStatus">
+                            <template v-if="allDealsEmptyStatus">
                                 <el-empty style="height: 100%;"
                                           :image="emptyImage"
                                           :image-size="456"
-                                          description="You have no deal at the moment">
-                                    <el-button type="primary" @click="turnToPostDeal()">Post a Deal</el-button>
+                                          description="Oh Sorry, There are no upcoming events">
                                 </el-empty>
                             </template>
                             <template v-else>
                                 <div class="deals-list-container" >
 
-                                    <div class="deals-item"
-                                         v-for="(item,i) in dealsListData" :key="i">
-
+                                    <div :class="token ? 'deals-item-token' : 'deals-item'"
+                                         v-for="(item,i) in dealsList" :key="i"
+                                    >
                                         <div class="deals-item-share">
                                             <el-button icon="share" circle  @click="shareDeal(item)"></el-button>
 
                                             <template v-if="item.is_favorite">
-                                                <el-button circle @click="cancelFavorite(item,i,'featured')">
+                                                <el-button circle @click="cancelFavorite(item,i,'all')">
                                                     <el-icon :size="14">
                                                         <IconFlatColorIconsLike/>
                                                     </el-icon>
                                                 </el-button>
                                             </template>
                                             <template v-else>
-                                                <el-button circle   @click="addFavorite(item,i,'featured')">
+                                                <el-button circle   @click="addFavorite(item,i,'all')">
                                                     <el-icon :size="14">
                                                         <IconIconParkOutlineLike/>
                                                     </el-icon>
@@ -261,6 +172,7 @@
                                                 <div class="deals-item-name" @click="previewDeal(item,i)">
                                                     {{ item.title }}
                                                 </div>
+
                                                 <div class="deals-item-posted" v-if="!token">
                                                     {{ item.company_name }}
                                                 </div>
@@ -268,7 +180,6 @@
                                             </div>
 
                                         </div>
-
                                         <div class="deals-item-actions">
                                             <span v-if="item.company_info && item.company_info.category_name_en != '0'">
                                                 {{ item.company_info.category_name_en }}
@@ -277,7 +188,6 @@
                                                 View Details
                                             </el-button>
                                         </div>
-
 
                                     </div>
 
@@ -292,14 +202,16 @@
                                                    :total="dealsTotalNum">
                                     </el-pagination>
                                 </div>
-
                             </template>
 
                         </div>
+
                     </el-tab-pane>
                 </el-tabs>
+
             </div>
-        </el-scrollbar>
+
+        </div>
 
         <share-card-theme-two :visible="shareDialogVisible"
                               share-title="Share something exciting"
@@ -321,92 +233,172 @@
                         :visible="dealDetailVisible">
         </dealDetailCard>
 
-    </div>
+    </el-scrollbar>
 
 </template>
 
 <script setup>
+import emptyImage from '@/assets/newHome/dashboard/empty.svg'
+import {
+    ADD_FAVORITE, CANCEL_FAVORITE, DEALS_LIST, FEATURED_DEALS_LIST,
+    USER_BROWSING_HISTORY_ADD
+} from "@/api/api";
 
-import {ADD_FAVORITE, CANCEL_FAVORITE, MY_DEALS} from '@/api/api';
 import {updateWindowHeight} from "@/utils/tools";
-import {ref, onMounted, onUnmounted} from 'vue'
-import {useRouter} from 'vue-router'
+import {ref, onMounted, onUnmounted,computed} from 'vue'
+// import {useRouter} from 'vue-router'
+import {useStore} from 'vuex'
 import {ElMessage} from 'element-plus'
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
-import emptyImage from "@/assets/newHome/dashboard/empty-deals.svg";
+import dealDetailCard from "@/components/dealDetailCard.vue";
+import dealFilterComponent from "@/components/dealFilterComponent.vue";
 
-const router = useRouter()
-// const route = useRoute()
+const store = useStore()
+
+const identity = computed(()=>store.state.identity)
+const profilePercentage = computed(()=> parseInt(store.state.profilePercentage) )
+
+// const router = useRouter()
+
+const dealDetailVisible = ref(false)
+const dealIndex = ref(null)
+
+const dealsPage = ref(1)
+const dealsLimit = ref(6)
+const dealsTotalNum = ref(0)
+const showLoadingStatus = ref(false)
+const dealsList = ref([])
+
+const featuredDealsList = ref([])
 
 const dealDetailData = ref({})
-const activeTabName = ref('')
-const dealIndex = ref(null)
-const dealDetailVisible = ref(false)
+const filterResultData = ref({})
 
-const shareDialogVisible = ref(false)
-const shareInfo = ref({})
-const shareLocationUrl = ref('')
+const activeTabName = ref('featured_deals')
 
-const dealsListData = ref([])
-const dealsPage = ref(1)
-const dealsLimit = ref(10)
-const dealsTotalNum = ref(0)
-const loadingDealsStatus = ref(false)
-const emptyDealsStatus = ref(false)
+const featuredDealsLoadingStatus = ref(false)
+const featuredDealsEmptyStatus = ref(false)
+const allDealsLoadingStatus = ref(false)
+const allDealsEmptyStatus = ref(false)
 
-const activeTabPane = ref('deal_posts')
+const token = localStorage.getItem('token')
 
-const changeActiveTab = (e)=>{
-    // console.log(e)
-    emptyDealsStatus.value = false
-    loadingDealsStatus.value = false
-
-    if(e === 'deal_posts'){
-        console.log('deal_posts')
-        getMyDeals(dealsPage.value, dealsLimit.value)
+const dealsTabChange = (e)=>{
+    if(e === 'featured_deals'){
+        featuredDealsLoadingStatus.value = true
+        getFeaturedDealsList(1, 10000)
     }
-    if(e === 'deal_drafts'){
-        console.log('deal_drafts')
-        getMyDeals(dealsPage.value, dealsLimit.value)
-    }
-    if(e === 'deal_archive'){
-        console.log('deal_archive')
-        getMyDeals(dealsPage.value, dealsLimit.value)
+
+    if(e === 'all_deals'){
+        allDealsLoadingStatus.value = true
+        getDealsList(dealsPage.value, dealsLimit.value)
     }
 }
 
-const turnToPostDeal = ()=>{
-    router.push({path:'/deals/offer'})
+const addUserBrowsingHistory = (id) => {
+    let params = {
+        type: 2,
+        type_id: id
+    }
+    USER_BROWSING_HISTORY_ADD(params).then(res => {
+        console.log(res)
+
+    }).catch(err => {
+        console.log(err)
+    })
+
 }
+
+const confirmFilterSearch = (e) => {
+    activeTabName.value = 'all_deals'
+    filterResultData.value = e;
+    dealsPage.value = 1;
+    getDealsList(dealsPage.value, dealsLimit.value)
+}
+
+const previewDeal = (item,i) => {
+    dealDetailVisible.value = true
+    dealIndex.value = i
+    dealDetailData.value = item
+    let token = localStorage.getItem('token')
+    if(token){
+        addUserBrowsingHistory(item.id)
+    }
+}
+
 const dealsPageSizeChange = (e) => {
     console.log(e)
 }
 const dealsPageChange = (e) => {
+    showLoadingStatus.value = true
     dealsPage.value = e
-    getMyDeals(e, dealsLimit.value)
+    getDealsList(e, dealsLimit.value)
 }
-const getMyDeals = (page, limit) => {
-    loadingDealsStatus.value = true
-    let params = {
+
+const getFeaturedDealsList = (page, limit) => {
+
+    featuredDealsLoadingStatus.value = true
+    let filterResult = filterResultData.value;
+
+    let paramsA = {
         page: page,
         limit: limit
     }
-    MY_DEALS(params).then(res => {
+
+    let params = Object.assign(paramsA, filterResult)
+
+    FEATURED_DEALS_LIST(params).then(res => {
 
         if (res.code == 200) {
-            dealsListData.value = res.message.data
-            dealsTotalNum.value = res.message.total
-            loadingDealsStatus.value = false
-            emptyDealsStatus.value = res.message.total <= 0;
-        }
+            featuredDealsList.value = res.message;
+            featuredDealsLoadingStatus.value = false
+            featuredDealsEmptyStatus.value = res.message.total <= 0;
 
+        }
     }).catch(err => {
-        loadingDealsStatus.value = false
-        emptyDealsStatus.value = true
         console.log(err)
+        featuredDealsLoadingStatus.value = false
+
     })
+
 }
 
+const getDealsList = (page, limit) => {
+
+    allDealsLoadingStatus.value = true
+    let filterResult = filterResultData.value;
+
+    let paramsA = {
+        page: page,
+        limit: limit
+    }
+
+    let params = Object.assign(paramsA, filterResult)
+
+    DEALS_LIST(params).then(res => {
+
+        if (res.code == 200) {
+            dealsList.value = res.message.data;
+            dealsTotalNum.value = res.message.total;
+            allDealsLoadingStatus.value = false
+            if(res.message.total > 0 ){
+                allDealsEmptyStatus.value = false
+            }else{
+                allDealsLoadingStatus.value = true
+            }
+
+        }
+    }).catch(err => {
+        console.log(err)
+        allDealsLoadingStatus.value = false
+
+    })
+
+}
+
+const shareDialogVisible = ref(false)
+const shareInfo = ref({})
+const shareLocationUrl = ref('')
 const shareDeal = (item) => {
     shareInfo.value = {
         title: item.title,
@@ -419,7 +411,7 @@ const shareDeal = (item) => {
     shareDialogVisible.value = true;
 }
 
-const addFavorite = (item, index) => {
+const addFavorite = (item, index,dealType) => {
 
     let params = {
         type: 2,
@@ -431,7 +423,14 @@ const addFavorite = (item, index) => {
     ADD_FAVORITE(params).then(res => {
         if (res.code == 200) {
             console.log(res)
-            dealsListData.value[index].is_favorite = 1
+            if(dealType === 'featured'){
+                featuredDealsList.value[index].is_favorite = 1
+            }
+
+            if(dealType === 'all'){
+                dealsList.value[index].is_favorite = 1
+            }
+
             ElMessage({
                 type:'success',
                 message:'Added to Favourites',
@@ -446,7 +445,7 @@ const addFavorite = (item, index) => {
 
 }
 
-const cancelFavorite = (item,index) => {
+const cancelFavorite = (item,index, dealType) => {
     let params = {
         type: 2,
         type_id: item.id
@@ -454,7 +453,13 @@ const cancelFavorite = (item,index) => {
     CANCEL_FAVORITE(params).then(res => {
         if (res.code == 200) {
 
-            dealsListData.value[index].is_favorite = 1
+            if(dealType === 'featured'){
+                featuredDealsList.value[index].is_favorite = 0
+            }
+
+            if(dealType === 'all'){
+                dealsList.value[index].is_favorite = 0
+            }
 
         }
     }).catch(err => {
@@ -469,12 +474,13 @@ onMounted(() => {
     if (screenWidthFloor <= 768) {
         updateWindowHeight()
     }
+
     window.onresize = () => {
         if (screenWidthFloor <= 768) {
             updateWindowHeight()
         }
     }
-    getMyDeals(dealsPage.value, dealsLimit.value)
+    getFeaturedDealsList(1, 10000)
 
 })
 
@@ -482,31 +488,12 @@ onUnmounted(() => {
     updateWindowHeight()
     window.onresize = null
 })
+
 </script>
 
 <style scoped>
 
-
-.dialog-border{
-    border-radius: 10px !important;
-}
-.my-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-.text-ellipsis{
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: 180px;
-    white-space: nowrap
-}
-
-.deals-loading-container{
-    min-height: 300px;
-}
-
-:deep(.el-tabs__item){
+:deep(.el-tabs__item) {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 600;
@@ -516,7 +503,7 @@ onUnmounted(() => {
     color: #98A2B3;
 }
 
-:deep(.el-tabs__item.is-active){
+:deep(.el-tabs__item.is-active)  {
     color: #6648FF;
 }
 
@@ -524,37 +511,40 @@ onUnmounted(() => {
     background-color: #6648FF;
 }
 
-
-.bg {
-    background-color: #FFFFFF;
+.deals-bg {
+    width: 100%;
+    max-width: 1440px;
     height: calc(var(--i-window-height) - 120px);
-
+    margin: 0 auto;
+    background-color: #FFFFFF;
 }
 
-.t-container {
-    margin: 0 40px 0 40px;
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 28px;
-    line-height: 32px;
-    color: #000000;
+.banner-row {
+    margin: 0 100px;
 }
 
-.t-tips {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    color: #667085;
+.content-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 40px 100px 0 100px;
 }
 
-.content-container {
-    margin: 30px 40px 40px 40px;
-    position: relative;
+.banner-row-token{
+    margin: 0 40px;
 }
 
+.content-row-token{
+    margin: 40px;
+}
+
+.content-filter {
+    width: 290px;
+}
+
+.content-list {
+    width: calc(100% - 313px);
+}
 
 .deals-list-container {
     display: flex;
@@ -699,76 +689,71 @@ onUnmounted(() => {
 }
 
 
-
-.xll-tag {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: 12px;
-    padding: 4px 8px;
-    gap: 2px;
-    border-radius: 4px;
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 18px;
+.empty-post-event-btn-container {
+    text-align: right;
+    padding: 50px;
 }
 
-.xll-tag-1 {
-    color: #F79009;
-    background: #FFFAEB;
-}
-
-.xll-tag-2 {
-    color: #12B76A;
-    background: #ECFDF3;
-}
-
-
-.xll-tag-3 {
-    color: #F04438;
-    background: #FEF3F2;
-}
-
-.xll-tag-application{
-    cursor: pointer;
-    background: #E6E1FF;
-    border-radius: 4px;
-
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 18px;
-    text-align: center;
-    text-decoration-line: underline;
-    color: #344054;
-}
-
-.job-pagination {
-    margin-top: 60px;
-    display: flex;
-    justify-content: center;
-}
-
-.read-star {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-radius: 10px;
-    background-color: red;
-    top: 10px;
-    right: 19px;
-}
 
 @media screen and (min-width: 1200px) {
+
 
 }
 
 @media screen and (max-width: 768px) {
+    .deals-list-col {
+        padding-left: 0;
 
+    }
+
+    .empty-post-event-btn-container {
+        padding: 15px;
+    }
+
+    .deals-list-bg-container {
+        height: calc(var(--i-window-height) - 180px);
+        padding: 0;
+        background-color: #FFFFFF;
+    }
+
+    .deals-list-container {
+        flex-direction: column;
+    }
+
+
+    .deals-item {
+        margin: 15px;
+    }
+
+    .deals-item-t {
+        max-height: 170px;
+    }
+
+    .deals-item-banner {
+        aspect-ratio: auto;
+        height: 100%;
+    }
+
+    .deals-item-b {
+        padding: 15px;
+    }
+
+    .deals-item-item span {
+        font-size: 12px;
+    }
+
+    .deals-item-name {
+        margin-top: 15px;
+        font-size: 18px;
+        height: auto;
+    }
+
+    .deals-item-desc {
+        margin-top: 15px;
+        font-size: 14px;
+    }
 
 
 }
+
 </style>

@@ -51,7 +51,7 @@
 <script setup>
 import {EVENTS_ADD_APPLICANTS} from "@/api/api";
 import {defineProps, ref, reactive, onMounted, onUnmounted, defineEmits} from 'vue'
-import {ElMessage} from 'element-plus'
+import {ElMessage, ElLoading} from 'element-plus'
 
 const props = defineProps(['visible', 'info'])
 
@@ -106,13 +106,27 @@ const submitForm = (formEl) => {
 
                 if (res.code == 200) {
 
-                    submitLoadingStatus.value = false;
-                    emit('close')
                     ElMessage({
                         type: 'success',
-                        message: 'You have successfully reserved a spot',
+                        message: 'Congrats!Please check your email for your coupon code',
                         grouping: true
                     })
+
+                    setTimeout(function (){
+                        emit('close')
+                        submitLoadingStatus.value = false;
+
+                        const loading = ElLoading.service({
+                            text:'Redirecting'
+                        })
+                        setTimeout(function () {
+                            loading.close()
+                            window.open(props.info.online_url, '_blank')
+                        }, 1500)
+
+                    }, 1500)
+
+
                 }
 
             }).catch(err => {
@@ -140,6 +154,14 @@ onMounted(() => {
             width.value = '90%'
         }
     }
+
+    let token = localStorage.getItem('token')
+    if(token){
+        bookForm.first_name = localStorage.getItem('first_name')
+        bookForm.last_name = localStorage.getItem('last_name')
+        bookForm.contact = localStorage.getItem('email')
+    }
+
 })
 
 onUnmounted(() => {

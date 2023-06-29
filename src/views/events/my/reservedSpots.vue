@@ -23,55 +23,74 @@
 
                                 <div class="events-item" v-for="(item,i) in eventsList" :key="i">
 
-                                    <div class="events-item-share">
-                                        <el-button icon="share" circle @click="shareEvent(item)"></el-button>
-                                        <template v-if="item.is_favorite">
-                                            <el-button circle @click="cancelFavorite(item,i)">
-                                                <el-icon :size="14">
-                                                    <IconFlatColorIconsLike/>
-                                                </el-icon>
-                                            </el-button>
-                                        </template>
-                                        <template v-else>
-                                            <el-button circle   @click="addFavorite(item,i)">
-                                                <el-icon :size="14">
-                                                    <IconIconParkOutlineLike/>
-                                                </el-icon>
-                                            </el-button>
-                                        </template>
-                                    </div>
-
-                                    <div class="events-item-t">
-                                        <el-image class="events-item-banner"
-                                                  fit="cover"
-                                                  :preview-src-list="[item.file]"
-                                                  :src="item.file !='' ? item.file : '' "
-                                        >
-                                        </el-image>
-                                    </div>
-                                    <div class="events-item-b" @click="previewEvent(item)">
-
-                                        <div class="events-item-b-l">
-                                            <div class="events-item-b-month">
-                                                {{ $filters.monthFormatEvent(item.date) }}
-                                            </div>
-                                            <div class="events-item-b-day">
-                                                {{ $filters.dayFormatEvent(item.date) }}
-                                            </div>
+                                    <template v-if="item.event">
+                                        <div class="events-item-share">
+                                            <el-button icon="share" circle @click="shareEvent(item.event)"></el-button>
+                                            <template v-if="item.event.is_favorite">
+                                                <el-button circle @click="cancelFavorite(item.event,i)">
+                                                    <el-icon :size="14">
+                                                        <IconFlatColorIconsLike/>
+                                                    </el-icon>
+                                                </el-button>
+                                            </template>
+                                            <template v-else>
+                                                <el-button circle @click="addFavorite(item.event,i)">
+                                                    <el-icon :size="14">
+                                                        <IconIconParkOutlineLike/>
+                                                    </el-icon>
+                                                </el-button>
+                                            </template>
                                         </div>
-                                        <div class="events-item-b-r">
+                                        <div class="events-item-t">
 
-                                            <div class="events-item-name">
-                                                {{ item.name }}
-                                            </div>
-                                            <div class="events-item-desc">
-                                                {{ item.desc }}
-                                            </div>
-
+                                            <template v-if="item.event.file_type === 'image' ">
+                                                <el-image class="events-item-banner"
+                                                          fit="cover"
+                                                          :preview-src-list="[item.event.file]"
+                                                          :src="item.event.file !='' ? item.event.file : '' "
+                                                >
+                                                </el-image>
+                                            </template>
+                                            <template v-else-if="item.event.file_type === 'video' ">
+                                                <video style="width: 100%;" :src="item.event.file" controls></video>
+                                            </template>
+                                            <template v-else>
+                                                <el-image class="events-item-banner"
+                                                          fit="cover"
+                                                          :preview-src-list="[item.event.file]"
+                                                          :src="item.event.file !='' ? item.event.file : '' "
+                                                >
+                                                </el-image>
+                                            </template>
 
                                         </div>
+                                        <div class="events-item-b" @click="previewEvent(item.event)">
 
-                                    </div>
+                                            <div class="events-item-b-l">
+                                                <div class="events-item-b-month">
+                                                    {{ $filters.monthFormatEvent(item.event.date) }}
+                                                </div>
+                                                <div class="events-item-b-day">
+                                                    {{ $filters.dayFormatEvent(item.event.date) }}
+                                                </div>
+                                            </div>
+                                            <div class="events-item-b-r">
+
+                                                <div class="events-item-name">
+                                                    {{ item.event.name }}
+                                                </div>
+                                                <div class="events-item-desc">
+                                                    {{ item.event.desc }}
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </template>
+                                    <template v-else>
+                                        <el-empty description="not loaded"></el-empty>
+                                    </template>
 
                                 </div>
 
@@ -81,8 +100,10 @@
                                                :default-current-page="1"
                                                @size-change="eventPageSizeChange"
                                                @current-change="eventPageChange"
-                                               :current-page="eventPage" :page-size="eventLimit"
-                                               :total="eventTotalNum"></el-pagination>
+                                               :current-page="eventPage"
+                                               :page-size="eventLimit"
+                                               :total="eventTotalNum">
+                                </el-pagination>
                             </div>
 
                         </template>
@@ -95,15 +116,22 @@
 
         </el-scrollbar>
 
-        <event-detail :visible="eventDetailVisible" :data="eventDetailData"
-                      @close="eventDetailVisible=false"></event-detail>
-        <share-card-theme-two :visible="shareDialogVisible"
-                   share-title="Share something exciting"
-                   :title="shareInfo.title"
-                   :description="shareInfo.desc"
-                   :quote="shareInfo.desc"
-                   :url="shareLocationUrl"
-                   @close="shareDialogVisible=false"
+        <event-detail
+                :visible="eventDetailVisible"
+                :data="eventDetailData"
+                :show-cancel="true"
+                from="reserved-spots"
+                @cancel-success="cancelEventSuccess"
+                @close="eventDetailVisible=false">
+        </event-detail>
+        <share-card-theme-two
+                :visible="shareDialogVisible"
+                share-title="Share something exciting"
+                :title="shareInfo.title"
+                :description="shareInfo.desc"
+                :quote="shareInfo.desc"
+                :url="shareLocationUrl"
+                @close="shareDialogVisible=false"
         >
         </share-card-theme-two>
 
@@ -150,12 +178,11 @@ const shareEvent = (item) => {
     shareDialogVisible.value = true;
 }
 
-
 const previewEvent = (item) => {
     eventDetailVisible.value = true
     eventDetailData.value = item
 }
-const addFavorite = (item,index) => {
+const addFavorite = (item, index) => {
 
     let params = {
         type: 3,
@@ -166,11 +193,11 @@ const addFavorite = (item,index) => {
     // console.log(params)
     ADD_FAVORITE(params).then(res => {
         if (res.code == 200) {
-            eventsList.value[index].is_favorite = 1
+            eventsList.value[index].event.is_favorite = 1
             ElMessage({
-                type:'success',
-                message:'Added to Favourites',
-                grouping:true
+                type: 'success',
+                message: 'Added to Favourites',
+                grouping: true
             })
         }
     }).catch(err => {
@@ -180,7 +207,7 @@ const addFavorite = (item,index) => {
 
 }
 
-const cancelFavorite = (item,index) => {
+const cancelFavorite = (item, index) => {
     let params = {
         type: 3,
         type_id: item.id
@@ -188,7 +215,7 @@ const cancelFavorite = (item,index) => {
     CANCEL_FAVORITE(params).then(res => {
 
         if (res.code == 200) {
-            eventsList.value[index].is_favorite = 0
+            eventsList.value[index].event.is_favorite = 0
         }
     }).catch(err => {
         console.log(err)
@@ -229,11 +256,7 @@ const getMyEvents = (page, limit) => {
             eventsList.value = res.message.data
             eventTotalNum.value = res.message.total
             eventLoadingStatus.value = false
-            if(res.message.total > 0){
-                eventEmptyStatus.value = false
-            }else{
-                eventEmptyStatus.value = true
-            }
+            eventEmptyStatus.value = res.message.total <= 0;
 
         } else {
             console.log(res.msg)
@@ -244,8 +267,13 @@ const getMyEvents = (page, limit) => {
 
 }
 
-const turnToEvents = ()=>{
-    router.push({path:'/events'})
+const turnToEvents = () => {
+    router.push({path: '/events'})
+}
+
+const cancelEventSuccess = () => {
+    eventDetailVisible.value = false
+    getMyEvents(eventPage.value, eventLimit.value)
 }
 
 onMounted(() => {
@@ -294,7 +322,7 @@ onUnmounted(() => {
     width: calc(100% - 314px);
 }
 
-.event-loading-container{
+.event-loading-container {
     min-height: 300px;
 }
 
@@ -311,6 +339,7 @@ onUnmounted(() => {
     min-width: 290px;
     margin-right: 17px;
     margin-bottom: 16px;
+    padding-bottom: 20px;
     overflow: hidden;
 
     background: #FFFFFF;
@@ -348,6 +377,7 @@ onUnmounted(() => {
     margin: 16px 24px 0 24px;
     display: flex;
     flex-direction: row;
+    cursor: pointer;
 }
 
 .events-item-b-l {
@@ -476,17 +506,19 @@ onUnmounted(() => {
 }
 
 @media screen and (max-width: 768px) {
-    .content-container{
+    .content-container {
         margin: 20px;
     }
-    .l-container{
+
+    .l-container {
         display: none;
     }
-    .r-container{
+
+    .r-container {
         width: 100%;
     }
 
-    .events-item{
+    .events-item {
         width: 100%;
         margin-right: 0;
     }

@@ -27,12 +27,12 @@
 
                         </div>
                         <div class="post-job-tab"
-                             :class="postType === 2 ? 'post-job-tab-active' : ''"
+                             :class="(postType === 2 || postType === 3) ? 'post-job-tab-active' : ''"
                              @click="changeJobType(2)"
                         >
                             <div class="post-job-tab-l">
                                 <div class="post-job-tab-circle"
-                                     :class="postType === 2 ? 'post-job-tab-circle-active' : ''"
+                                     :class="(postType === 2 || postType === 3 )? 'post-job-tab-circle-active' : ''"
                                 ></div>
                             </div>
                             <div class="post-job-tab-r">
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="form-t-container"  >
-                    <template v-if="postType === 1">
+                    <template v-if="postType === 1 || postType === 3">
                         <div class="form-t-l">
                             <div class="form-t-label">Job Post Information</div>
                             <div class="form-t-tips">Provide the information for the job posting</div>
@@ -75,12 +75,10 @@
                             <div class="form-t-label">Job Post Templates</div>
                             <div class="form-t-tips">Select from the job templates you created and post job</div>
                         </div>
-
                     </template>
-
                 </div>
 
-                <template v-if="postType === 1">
+                <template v-if="postType === 1 || postType === 3">
 
                     <el-form
                             ref="jobForms"
@@ -132,75 +130,78 @@
                                                 </el-checkbox>
                                             </div>
 
-                                            <template v-if="!jobForm.is_online">
-                                                <div class="xll-form-location-text" v-if="haveLocationStatus">
-                                                    <span>{{ jobForm.job_location }}</span>
-                                                </div>
-                                                <div class="xll-form-location-select" v-if="!haveLocationStatus">
-                                                    <el-select v-model="countryObj"
-                                                               class="form-width-388"
-                                                               @change="countryChange"
-                                                               value-key="id"
-                                                               filterable
-                                                               placeholder="Select your Location">
-                                                        <el-option v-for="(item,i) in countryOptions"
-                                                                   :key="i"
-                                                                   :label="item.name"
-                                                                   :value="item">
-                                                        </el-option>
-                                                    </el-select>
-                                                    <template v-if="provinceOptions.length>0">
-                                                        <el-select v-model="provinceObj"
-                                                                   class="form-width-388 form-margin-top-18"
+                                            <div style="display: flex;flex-direction: row;align-items: center;">
+                                                <template v-if="!jobForm.is_online">
+                                                    <div class="xll-form-location-text" v-if="haveLocationStatus">
+                                                        <span>{{ jobForm.job_location }}</span>
+                                                    </div>
+                                                    <div class="xll-form-location-select" v-if="!haveLocationStatus">
+                                                        <el-select v-model="countryObj"
+                                                                   class="form-width-388"
+                                                                   @change="countryChange"
                                                                    value-key="id"
                                                                    filterable
-                                                                   @change="provinceChange"
-                                                                   placeholder="Select your State">
-                                                            <el-option v-for="(item,i) in provinceOptions"
+                                                                   placeholder="Select your Location">
+                                                            <el-option v-for="(item,i) in countryOptions"
                                                                        :key="i"
                                                                        :label="item.name"
                                                                        :value="item">
                                                             </el-option>
                                                         </el-select>
-                                                    </template>
-                                                    <template v-if="cityOptions.length>0">
-                                                        <el-select v-model="cityObj"
-                                                                   class="form-width-388 form-margin-top-18"
-                                                                   value-key="id"
-                                                                   filterable
-                                                                   @change="cityChange"
-                                                                   placeholder="Select your City">
-                                                            <el-option v-for="(item,i) in cityOptions"
-                                                                       :key="i"
-                                                                       :label="item.name"
-                                                                       :value="item">
-                                                            </el-option>
-                                                        </el-select>
-                                                    </template>
-                                                    <template v-if="showLocationInputStatus">
-                                                        <el-input v-model="jobForm.address"
-                                                                  class="form-margin-top-18"
-                                                                  placeholder="Enter Job Location">
-                                                        </el-input>
-                                                    </template>
-                                                </div>
-                                                <div class="xll-form-location-action" v-if="haveLocationStatus">
-                                                    <el-button
+                                                        <template v-if="provinceOptions.length>0">
+                                                            <el-select v-model="provinceObj"
+                                                                       class="form-width-388 form-margin-top-18"
+                                                                       value-key="id"
+                                                                       filterable
+                                                                       @change="provinceChange"
+                                                                       placeholder="Select your State">
+                                                                <el-option v-for="(item,i) in provinceOptions"
+                                                                           :key="i"
+                                                                           :label="item.name"
+                                                                           :value="item">
+                                                                </el-option>
+                                                            </el-select>
+                                                        </template>
+                                                        <template v-if="cityOptions.length>0">
+                                                            <el-select v-model="cityObj"
+                                                                       class="form-width-388 form-margin-top-18"
+                                                                       value-key="id"
+                                                                       filterable
+                                                                       @change="cityChange"
+                                                                       placeholder="Select your City">
+                                                                <el-option v-for="(item,i) in cityOptions"
+                                                                           :key="i"
+                                                                           :label="item.name"
+                                                                           :value="item">
+                                                                </el-option>
+                                                            </el-select>
+                                                        </template>
+                                                        <template v-if="showLocationInputStatus">
+                                                            <el-input v-model="jobForm.address"
+                                                                      class="form-margin-top-18"
+                                                                      placeholder="Enter Job Location">
+                                                            </el-input>
+                                                        </template>
+                                                    </div>
+                                                    <div class="xll-form-location-action" v-if="haveLocationStatus">
+                                                        <el-button
                                                             link
                                                             icon="Edit"
                                                             @click="changeEditLocation()">
-                                                    </el-button>
-                                                </div>
+                                                        </el-button>
+                                                    </div>
 
-                                                <div class="xll-form-location-action" v-if="showLocationCancelStatus">
-                                                    <el-button
+                                                    <div class="xll-form-location-action" v-if="showLocationCancelStatus">
+                                                        <el-button
                                                             link
                                                             icon="Close"
                                                             @click="changeCancelLocation()">
-                                                    </el-button>
-                                                </div>
+                                                        </el-button>
+                                                    </div>
 
-                                            </template>
+                                                </template>
+
+                                            </div>
 
                                         </div>
 
@@ -743,6 +744,9 @@ const identity = computed(() => store.state.identity)
 const postType = ref(1)
 const changeJobType = (value) => {
     postType.value = value
+    if(value === 1){
+        loadJobTemplate({})
+    }
     if (value === 2) {
         getJobTemplateList()
     }
@@ -795,6 +799,38 @@ const jobForm = reactive({
     education: '',
     identity: identity.value
 })
+
+const initJobForm = {
+    job_title: '',
+    is_online: 0,
+    job_location: '',
+    country_id: '',
+    state_id: '',
+    town_id: '',
+    address: '',
+    entry_date: '',
+    apply_due_date: '',
+    desc: '',
+    working_hours: "",
+    working_hours_start: '',
+    working_hours_end: '',
+    working_time_zone: 'GMT',
+    currency: "USD",
+    salary_min: '',
+    salary_max: '',
+    payment_period: '',
+    numbers: 1,
+    age_min: '',
+    age_max: '',
+    working_nums_start: '',
+    working_nums_end: '',
+    is_mom_language: 0,
+    employment_type: '',
+    version_time: '',
+    sex: '',
+    education: '',
+    identity: identity.value
+}
 
 // const jobForm1 = reactive(
 //     {
@@ -1090,43 +1126,66 @@ const loadJobTemplate = (item)=>{
 
     saveJobTemplateForm.id = item.id;
 
-    selectAgeToTeachList.value = item.content.student_age;
-    selectSubjectList.value = item.content.subject;
-    selectEmploymentTypeList.value = item.content.job_type;
-    selectBenefitsList.value = item.content.benefits;
-    selectPnationalityList.value = item.content.preferred_nationality;
-    selectTeachingCertificateList.value = item.content.certificate;
-    selectLanguagesList.value = item.content.languages;
-    selectWorkTypeList.value = item.content.work_type;
+    if(item.content){
+        selectAgeToTeachList.value = item.content.student_age;
+        selectSubjectList.value = item.content.subject;
+        selectEmploymentTypeList.value = item.content.job_type;
+        selectBenefitsList.value = item.content.benefits;
+        selectPnationalityList.value = item.content.preferred_nationality;
+        selectTeachingCertificateList.value = item.content.certificate;
+        selectLanguagesList.value = item.content.languages;
+        selectWorkTypeList.value = item.content.work_type;
 
-    jobForm.job_title = item.content.job_title
-    jobForm.is_online = item.content.is_online
-    jobForm.job_location = item.content.job_location
-    jobForm.country_id = item.content.country_id
-    jobForm.state_id = item.content.state_id
-    jobForm.town_id = item.content.town_id
-    jobForm.address = item.content.address
-    jobForm.entry_date = item.content.entry_date
-    jobForm.apply_due_date = item.content.apply_due_date
-    jobForm.desc = item.content.desc
-    jobForm.working_hours = item.content.working_hours
-    jobForm.working_hours_start = item.content.working_hours_start
-    jobForm.working_hours_end = item.content.working_hours_end
-    jobForm.working_time_zone = item.content.working_time_zone
-    jobForm.currency = item.content.currency
-    jobForm.salary_min = item.content.salary_min
-    jobForm.salary_max = item.content.salary_max
-    jobForm.payment_period = item.content.payment_period
-    jobForm.numbers = item.content.numbers
-    jobForm.age_min = item.content.age_min
-    jobForm.age_max = item.content.age_max
-    jobForm.working_nums_start = item.content.working_nums_start
-    jobForm.working_nums_end = item.content.working_nums_end
-    jobForm.is_mom_language = item.content.is_mom_language
-    jobForm.employment_type = item.content.employment_type
-    jobForm.version_time = item.content.version_time
-    jobForm.sex = item.content.sex
-    jobForm.education = item.content.education
+        if(item.content.is_online == 0){
+            haveLocationStatus.value = true
+        }
+
+        jobForm.job_title = item.content.job_title
+        jobForm.is_online = item.content.is_online
+        jobForm.job_location = item.content.job_location
+        jobForm.country_id = item.content.country_id
+        jobForm.state_id = item.content.state_id
+        jobForm.town_id = item.content.town_id
+        jobForm.address = item.content.address
+        jobForm.entry_date = item.content.entry_date
+        jobForm.apply_due_date = item.content.apply_due_date
+        jobForm.desc = item.content.desc
+        jobForm.working_hours = item.content.working_hours
+        jobForm.working_hours_start = item.content.working_hours_start
+        jobForm.working_hours_end = item.content.working_hours_end
+        jobForm.working_time_zone = item.content.working_time_zone
+        jobForm.currency = item.content.currency
+        jobForm.salary_min = item.content.salary_min
+        jobForm.salary_max = item.content.salary_max
+        jobForm.payment_period = item.content.payment_period
+        jobForm.numbers = item.content.numbers
+        jobForm.age_min = item.content.age_min
+        jobForm.age_max = item.content.age_max
+        jobForm.working_nums_start = item.content.working_nums_start
+        jobForm.working_nums_end = item.content.working_nums_end
+        jobForm.is_mom_language = item.content.is_mom_language
+        jobForm.employment_type = item.content.employment_type
+        jobForm.version_time = item.content.version_time
+        jobForm.sex = item.content.sex
+        jobForm.education = item.content.education
+    }else{
+        let keys = Object.keys(jobForm)
+        for(let i=0;i<keys.length;i++){
+            let key = keys[i]
+            jobForm[key] = initJobForm[key]
+        }
+
+        selectAgeToTeachList.value = [];
+        selectSubjectList.value = [];
+        selectEmploymentTypeList.value = [];
+        selectBenefitsList.value = [];
+        selectPnationalityList.value = [];
+        selectTeachingCertificateList.value = [];
+        selectLanguagesList.value = [];
+        selectWorkTypeList.value = [];
+
+    }
+
 
 }
 
@@ -1137,7 +1196,7 @@ const editJobTemplate = (item) => {
 }
 
 const postJobFromTemplate = (item) => {
-    postType.value = 1
+    postType.value = 3
     // saveJobTemplateForm.id = item.id;
     store.commit('setJobTemplateDetail', item)
 }
@@ -1377,6 +1436,9 @@ const getJobDetail = (id) => {
             let jobMessage = res.message;
 
             jobForm.job_title = jobMessage.job_title;
+            if(jobMessage.is_online == 0){
+                haveLocationStatus.value = true
+            }
             jobForm.job_location = jobMessage.job_location;
             jobForm.age_min = jobMessage.age_min;
             jobForm.age_max = jobMessage.age_max;
@@ -2035,31 +2097,8 @@ const submitJob = (formEl) => {
             })
 
             if (jobForm.is_online) {
-
                 jobForm.job_location = ''
-
-            } else {
-
-                let jobLocationValue = ''
-
-                if (countryName.value) {
-                    jobLocationValue = countryName.value
-                }
-                if (countryName.value && provinceName.value) {
-                    jobLocationValue = provinceName.value + ', ' + countryName.value
-                }
-
-                if (countryName.value && provinceName.value && cityName.value) {
-                    jobLocationValue = cityName.value + ', ' + provinceName.value + ', ' + countryName.value
-                }
-
-                jobForm.job_location = jobLocationValue
             }
-
-            // if (countryName.value && provinceName.value && cityName.value && districtName.value) {
-            //     jobLocationValue = districtName.value + ', ' + cityName.value + ', ' + provinceName.value + ', ' + countryName.value
-            // }
-
 
             jobForm.version_time = route.query.version_time;
 
@@ -2168,13 +2207,11 @@ onMounted(() => {
         updateWindowHeight()
     }
 
-
     window.onresize = () => {
         if (screenWidthFloor <= 768) {
             updateWindowHeight()
         }
     }
-
     // getBasicInfo(identity)
 
     getAllCountry()
@@ -2190,6 +2227,11 @@ onMounted(() => {
     setTimeout(function () {
         postJobLoadingValue.value = false
     }, 3000)
+
+    if(route.query.post_from === 'template'){
+        postType.value = 3
+        getJobTemplateList()
+    }
 
     if(Object.keys(jobTemplateDetailObj.value).length !== 0 && jobTemplateDetailObj.value.constructor === Object){
          loadJobTemplate(jobTemplateDetailObj.value)

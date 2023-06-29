@@ -5,9 +5,9 @@
                 <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
 
                     <el-col class="header-l-col" :xs="0" :sm="4" :md="4" :lg="8" :xl="8">
-                        <el-image class="pc-logo-img" :src="logoIcon" fit="contain"></el-image>
+                        <el-image class="pc-logo-img" :src="logoIcon" fit="contain" @click="turnHome()"></el-image>
                         <template v-if="currentRoutePath === '/events'">
-                            <el-button class="header-l-btn" icon="plus" type="primary" @click="postEventWhenEmpty">Post Event</el-button>
+                            <el-button class="header-l-btn" icon="plus" type="primary" :disabled="!token" @click="postEventWhenEmpty">Post Event</el-button>
                         </template>
                     </el-col>
 
@@ -25,7 +25,7 @@
 
                         <div class="nav-link-container">
 
-                            <router-link to="/jobs" exact> EDU JOBS</router-link>
+                            <router-link to="/job/pool" exact> EDU JOBS</router-link>
                             <router-link to="/deals" exact> EDU DEALS</router-link>
                             <router-link to="/events" exact> EDU EVENTS</router-link>
                             <template v-if="envBlog === 'yes'">
@@ -93,6 +93,10 @@ const  postEventWhenEmpty = ()=> {
     }
 }
 
+const turnHome = ()=>{
+    router.push({path:'/'})
+}
+
 </script>
 
 <style scoped>
@@ -115,6 +119,7 @@ const  postEventWhenEmpty = ()=> {
 
 .pc-logo-img{
     width: 160px;
+    cursor: pointer;
 }
 
 .header-l-btn{

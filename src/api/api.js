@@ -506,3 +506,5 @@ export const HOME_MY_APPLY_EVENT_LIST = (params) => get('home/my/apply/event/lis
 export const HOME_FEATURE_EVENT_LIST = (params) => get('home/feature/event/list', params)
 export const HOME_CLIENT_CANCEL_EVENT = (params) => post('home/client/cancel/event', params)
 export const HOME_PUBLISHER_CANCEL_EVENT = (params) => post('home/publisher/cancel/event', params)
+export const HOME_EVENT_DELETE = (params) => post('home/event/delete', params)
+export const HOME_PUBLISH_EVENT = (params) => post('home/publish/event', params)

@@ -1,1045 +1,845 @@
 <template>
-  <div class="bg">
-    <div class="profile-container">
-
-      <div class="profile-r-container">
-
-        <div class="new-deal-t">
-          <div class="new-deal-t-l">New deal</div>
-          <div class="new-deal-t-r">
-
-            <el-button class="new-deal-btn" link round @click="discard()">
-              DISCARD
-            </el-button>
-            <!--              <el-button class="new-deal-btn" plain round>-->
-            <!--                SAVE AS DRAFT-->
-            <!--              </el-button>-->
-            <el-button class="new-deal-btn" type="primary" round
-                       :loading="submitLoadingValue"
-                       @click="submitForm('basicForm')">
-              SUBMIT
-            </el-button>
-          </div>
-        </div>
-
-        <el-scrollbar class="profile-r-bg-container">
-
-          <div class="basic-form">
-            <div class="basic-form-label">
-              Deal information
+    <div>
+        <el-scrollbar class="post-event-bg" always>
+            <div class="t-container">
+                <div class="t-l">
+                    <div class="t-l-label">
+                        Post a Deal
+                    </div>
+                    <div class="t-l-tips">
+                        Provide the information for the deal
+                    </div>
+                </div>
+                <div class="t-r">
+                    <el-button type="danger" @click="turnMyDeals()"> Cancel</el-button>
+                    <el-button plain @click="saveAndExit(basicForms)">Save and Exit</el-button>
+                    <el-button type="primary" @click="submitForm(basicForms)">Publish Deal</el-button>
+                </div>
             </div>
-            <el-form
-                ref="basicForm"
-                :model="basicForm"
-                :rules="basicRules"
-                label-width="120px"
-                label-position="top"
-                class="deals-form"
-            >
-              <el-row :gutter="50">
 
-                <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                  <el-form-item label="Deal Name" prop="title">
-                    <el-input v-model="basicForm.title" placeholder="eg. 10% off your first class."></el-input>
-                  </el-form-item>
-                </el-col>
+            <div class="form-container">
+                <el-form
+                        ref="basicForms"
+                        :model="basicForm"
+                        :rules="basicRules"
+                        scroll-to-error
+                        require-asterisk-position="right"
+                        label-width="220px"
+                        label-position="top"
+                        class="demo-ruleForm"
+                >
+                    <div class="form-content">
+                        <div class="form-content-l">
+                            <el-form-item label="Deal name" prop="title">
+                                <el-input class="form-width-percent-100"
+                                          v-model="basicForm.title"
+                                          placeholder="Enter Deal title here">
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="Start Date" prop="start_date">
+                                <el-date-picker
+                                        class="form-width-percent-100"
+                                        v-model="basicForm.start_date"
+                                        type="date"
+                                        :disabledDate="dealDisabledDate"
+                                        placeholder="Select Date"
+                                        value-format="YYYY-MM-DD"
+                                ></el-date-picker>
+                            </el-form-item>
 
-                <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-                  <el-form-item label="Deal Description" prop="desc">
-                    <el-input v-model="basicForm.desc" type="textarea"
-                              :rows="4"
-                              placeholder="Provide a paragraph or two about the deal and how to redeem it.">
-                    </el-input>
-                  </el-form-item>
-                </el-col>
+                            <el-form-item label="End Date" prop="end_date">
+                                <el-date-picker
+                                        class="form-width-percent-100"
+                                        v-model="basicForm.end_date"
+                                        type="date"
+                                        :disabledDate="dealDisabledDate"
+                                        placeholder="Select Date"
+                                        value-format="YYYY-MM-DD"
+                                ></el-date-picker>
+                            </el-form-item>
 
-              </el-row>
+                            <el-form-item label="Deal Format" prop="is_online">
+                                <el-radio-group
+                                        @change="dealFormatChange"
+                                        v-model="dealFormat">
+                                    <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
+                                        <div v-for="(item,i) in dealFormatOptions" :key="i" style="flex-basis: 100%;">
+                                            <el-radio :label="item.value">
+                                                {{ item.name }}
+                                            </el-radio>
+                                        </div>
+                                    </div>
+                                </el-radio-group>
+                            </el-form-item>
 
-              <el-row :gutter="50">
-
-                <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                  <el-form-item label="Tags">
-                    <el-select
-                        v-model="selectedTagsValue"
-                        :teleported="false"
-                        multiple
-                        collapse-tags
-                        collapse-tags-tooltip
-                        filterable
-                        allow-create
-                        placeholder="Tags will help find your deal easier"
-                        value-key="id"
-                    >
-                      <el-option
-                          v-for="(item,i) in tagsData"
-                          :key="i"
-                          :label="item.name_en"
-                          :value="item"
-                      />
-                    </el-select>
-
-                  </el-form-item>
-
-                </el-col>
-
-                <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-
-                  <el-form-item label="Deal Location">
-
-                    <div class="deals-location-bg">
-                      <div class="deals-tabs-container">
-                        <div class="deals-tabs-l"
-                             :class="dealLocationType === 1 ? 'tags-active' : '' "
-                             @click="changeDealLocationType(1)">
-                          ONLINE
-                        </div>
-                        <div class="deals-tabs-m"
-                             :class="dealLocationType === 2 ? 'tags-active' : '' "
-                             @click="changeDealLocationType(2)">
-                          OFFLINE
-                        </div>
-                        <div class="deals-tabs-r"
-                             :class="dealLocationType === 3 ? 'tags-active' : '' "
-                             @click="changeDealLocationType(3)">
-                          BOTH
-                        </div>
-                      </div>
-
-                      <div class="deal-location-current-container" v-if="editDealStatus">
-                        {{ basicForm.location }}
-                      </div>
-
-                      <template v-if="dealLocationType === 1">
-
-                        <div class="deals-location-container">
-                          <div class="deals-tips">
-                            This deal is only available online
-                          </div>
-                        </div>
-
-                      </template>
-                      <template v-if="dealLocationType === 2">
-
-                        <div class="deals-location-container">
-                          <div class="deals-location-select-container">
-
-                            <el-select v-model="countryObj"
-                                       :teleported="false"
-                                       @change="countryChange"
-                                       value-key="id"
-                                       filterable
-                                       placeholder="Select Country">
-                              <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                                         :value="item"></el-option>
-                            </el-select>
-
-                            <template v-if="provinceOptions.length>0">
-                              <el-select v-model="provinceObj"
-                                         :teleported="false"
-                                         value-key="id"
-                                         filterable
-                                         @change="provinceChange"
-                                         placeholder="Select Province">
-                                <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                                           :value="item"></el-option>
-                              </el-select>
+                            <template v-if="dealFormat === 1">
+                                <el-form-item label="Deal Link" prop="online_url">
+                                    <el-input class="form-width-percent-100" v-model="basicForm.online_url"
+                                              placeholder="Enter Online Link here"></el-input>
+                                </el-form-item>
                             </template>
-                            <template v-if="cityOptions.length>0">
-                              <el-select v-model="cityObj"
-                                         :teleported="false"
-                                         value-key="id"
-                                         filterable
-                                         @change="cityChange"
-                                         placeholder="Select City">
-                                <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                                           :value="item"></el-option>
-                              </el-select>
+                            <template v-else>
+                                <el-form-item label="Venue Location" prop="location">
+                                    <el-input
+                                            class="form-width-percent-100"
+                                            v-model="basicForm.location"
+                                            placeholder="Enter location">
+                                    </el-input>
+                                </el-form-item>
                             </template>
 
-                          </div>
-
-                          <div class="map-container"
-                               v-loading="mapLoading">
-                            <div id="mapContainer" class="basemap"></div>
-                          </div>
-
-                        </div>
-                      </template>
-
-                      <template v-if="dealLocationType === 3">
-
-                        <div class="deals-location-container">
-                          <div class="deals-tips">
-                            This deal is available online and at the location below
-                          </div>
-                          <div class="deals-location-select-container">
-                            <el-select v-model="countryObj"
-                                       :teleported="false"
-                                       @change="countryChange"
-                                       value-key="id"
-                                       filterable
-                                       placeholder="Select Country">
-                              <el-option v-for="(item,i) in countryOptions" :key="i" :label="item.name"
-                                         :value="item"></el-option>
-                            </el-select>
-
-                            <template v-if="provinceOptions.length>0">
-                              <el-select v-model="provinceObj"
-                                         :teleported="false"
-                                         value-key="id"
-                                         filterable
-                                         @change="provinceChange"
-                                         placeholder="Select Province">
-                                <el-option v-for="(item,i) in provinceOptions" :key="i" :label="item.name"
-                                           :value="item"></el-option>
-                              </el-select>
-                            </template>
-                            <template v-if="cityOptions.length>0">
-                              <el-select v-model="cityObj"
-                                         :teleported="false"
-                                         value-key="id"
-                                         filterable
-                                         @change="cityChange"
-                                         placeholder="Select City">
-                                <el-option v-for="(item,i) in cityOptions" :key="i" :label="item.name"
-                                           :value="item"></el-option>
-                              </el-select>
-                            </template>
-                          </div>
-                          <div class="map-container"
-                               v-loading="map1Loading">
-                            <div id="mapContainer1" class="basemap"></div>
-                          </div>
+                            <el-form-item label="Deal description" prop="desc">
+                                <el-input
+                                        class="form-width-percent-100"
+                                        v-model="basicForm.desc"
+                                        type="textarea"
+                                        :rows="5"
+                                        placeholder="Enter deal description">
+                                </el-input>
+                            </el-form-item>
 
                         </div>
-                      </template>
+                        <div class="form-content-r">
 
+                            <el-form-item label="Add Deal Cover Photo" prop="file">
+                                <template v-if="basicForm.file && editFileStatus">
+
+                                    <div class="attachment-xll form-width-percent-100">
+                                        <div class="attachment-xll-btns">
+                                            <div class="attachment-xll-btn">
+                                                <div class="attachment-xll-btn-l">
+                                                    <el-icon color="#667085">
+                                                        <IconIcomoonFreeAttachment/>
+                                                    </el-icon>
+                                                    {{ basicForm.file_name }}
+                                                </div>
+                                                <div class="attachment-xll-btn-r">
+                                                    <el-icon class="attachment-xll-icon"
+                                                             @click="handleSingleImageRemove('file')"
+                                                             color="#F97066">
+                                                        <Delete></Delete>
+                                                    </el-icon>
+                                                </div>
+
+                                            </div>
+                                            <div class="attachment-xll-btn-edit"
+                                                 @click="handleEditMedia('file')"
+                                            >
+                                                <el-icon class="attachment-xll-icon">
+                                                    <IconUilEdit/>
+                                                </el-icon>
+                                            </div>
+                                            <div class="attachment-xll-btn-download"
+                                                 @click="handleDownloadMedia(basicForm.file)"
+                                            >
+                                                <el-icon class="attachment-xll-icon">
+                                                    <IconUisDownloadAlt/>
+                                                </el-icon>
+                                            </div>
+                                        </div>
+
+                                        <!--                                        <div class="attachment-xll-image">-->
+                                        <!-- -->
+                                        <!--                                            <el-link :href="basicForm.file" target="_blank">Take a look</el-link>-->
+                                        <!--                                            <div class="attachment-xll-image-mask">-->
+                                        <!--                                                <el-icon-->
+                                        <!--                                                        style="cursor: pointer;"-->
+                                        <!--                                                        @click="handleSingleImagePreview(basicForm.file,'file')"-->
+                                        <!--                                                        color="#ffffff"-->
+                                        <!--                                                        :size="20">-->
+                                        <!--                                                    <zoom-in/>-->
+                                        <!--                                                </el-icon>-->
+
+                                        <!--                                                <el-icon-->
+                                        <!--                                                        style="cursor: pointer;margin-left: 15px;"-->
+                                        <!--                                                        @click="handleSingleImageRemove('file')"-->
+                                        <!--                                                        color="#F97066"-->
+                                        <!--                                                        :size="20">-->
+                                        <!--                                                    <Delete/>-->
+                                        <!--                                                </el-icon>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+
+                                    </div>
+
+                                </template>
+                                <template v-else>
+                                    <el-upload
+                                            class="form-width-percent-100"
+                                            drag
+                                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG,mp4,MP4"
+                                            :limit="1"
+                                            :headers="uploadHeaders"
+                                            :show-file-list="false"
+                                            :http-request="fileHttpRequest"
+                                            :before-upload="beforeFilePhotoUpload"
+                                    >
+                                        <template #trigger>
+                                            <el-image class="profile-upload-icon" :src="imageUploadIcon"></el-image>
+                                            <div class="profile-upload-text">
+                                                Drag or <span>Browse file</span>
+                                            </div>
+                                        </template>
+                                    </el-upload>
+
+                                </template>
+                            </el-form-item>
+                            <el-form-item label="Deal Category" prop="category_id">
+                                <el-radio-group v-model="basicForm.category_id">
+                                    <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
+                                        <div v-for="(item,i) in subCateOptions" :key="i" style="flex-basis: 50%;">
+                                            <el-radio :label="item.id">
+                                                {{ item.identity_name }}
+                                            </el-radio>
+                                        </div>
+                                    </div>
+                                </el-radio-group>
+                            </el-form-item>
+
+                            <el-form-item label="Additional Details(Optional)">
+                                <el-input v-model="basicForm.type_desc"
+                                          type="textarea"
+                                          :rows="4"
+                                          placeholder="Enter additional details">
+                                </el-input>
+                            </el-form-item>
+
+                        </div>
                     </div>
 
+                </el-form>
 
-                  </el-form-item>
-
-                </el-col>
-              </el-row>
-
-
-            </el-form>
-
-          </div>
+            </div>
 
         </el-scrollbar>
 
-      </div>
+        <xllLoading :show="uploadLoadingStatus" @onCancel="cancelUpload()"></xllLoading>
+
+        <el-dialog width="50%" v-model="dialogSingleImageVisible" center>
+            <template v-if="dialogSingleField === 'file'">
+                <el-image :src="dialogSingleImageUrl"></el-image>
+            </template>
+            <template v-if="dialogSingleField === 'video_url' ">
+                <video :src="dialogSingleImageUrl" controls></video>
+            </template>
+
+        </el-dialog>
 
     </div>
 
-    <submitMessage :title="dealSuccessTitle"
-                   :description="dealSuccessDesc"
-                   @close="submitDealSuccess"
-                   :visible="dealSuccessVisible">
-    </submitMessage>
-
-  </div>
 </template>
 
-<script>
-
-import {TAG_LIST, ADD_DEALS, GET_COUNTRY_LIST, DEALS_DEAL_DETAIL} from '@/api/api';
-import mapboxgl from "mapbox-gl";
-import 'mapbox-gl/dist/mapbox-gl.css'
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import submitMessage from "@/components/popup/submitMessage";
+<script setup>
+import imageUploadIcon from '@/assets/newHome/image-upload.svg'
+import {
+    TAG_LIST,
+    ADD_DEALS,
+    DEALS_DEAL_DETAIL,
+    UPLOAD_BY_ALI_OSS,
+    UPLOAD_BY_SERVICE,
+    USER_SUB_IDENTITY_V2
+} from '@/api/api';
 import {updateWindowHeight} from "@/utils/tools";
+import {ref, reactive, onMounted, onUnmounted} from 'vue'
+import {useRouter,useRoute } from 'vue-router'
+import {ElMessage} from 'element-plus'
+import ImageCompressor from 'compressorjs'
 
-export default {
-  name: "jobs",
-  components: {
-    submitMessage
-  },
-  data() {
-    return {
-      submitLoadingValue: false,
-      mapLoading: false,
-      map1Loading: false,
-      accessToken: process.env.VUE_APP_MAP_BOX_ACCESS_TOKEN,
-      mapStyle: process.env.VUE_APP_MAP_BOX_STYLE,
-      dealLocationTypeValue: "1",
-      userInfo: {},
-      basicUserInfo: {},
-      tagsData: [],
-      addTagsStatus: false,
-      selectedTagsValue: [],
-      ownTagsValue: '',
-      ownTagsList: [],
-      selectTagsList: [],
-      selectOwnTagsList: [],
-      selectTagsArr: [],
-      tagsCnData: [],
-      tagsEnData: [],
+const router = useRouter()
+const route = useRoute()
 
-      countryObj: {},
-      provinceObj: {},
-      cityObj: {},
-      countryName: '',
-      countryNameCn: '',
-      provinceName: '',
-      provinceNameCn: '',
-      cityName: '',
-      cityNameCn: '',
+const uploadLoadingStatus = ref(false)
+const uploadHeaders = {platform: 4}
 
-      countryOptions: [],
-      provinceOptions: [],
-      cityOptions: [],
-
-      basicForm: {
-        token: localStorage.getItem('token'),
-        user_id: localStorage.getItem('uid'),
-        deal_id: '',
-        title: '',
-        desc: '',
-        tag: '',
-        is_online: 0,
-        location: '',
-        country_id: '',
-        state_id: '',
-        town_id: '',
-        lng: '',
-        lat: '',
-        tags_cn: '',
-        tags_en: ''
-      },
-      basicRules: {
-        title: [
-          {
-            required: true,
-            message: 'Please input',
-            trigger: 'blur',
-          }
-        ],
-        desc: [
-          {
-            required: true,
-            message: 'Please input',
-            trigger: 'blur',
-          },
-        ]
-
-      },
-
-      dealLocationType: 1,
-      editDealStatus: false,
-
-      dealSuccessTitle: '',
-      dealSuccessDesc: '',
-      dealSuccessVisible: false
-
+const dealFormat = ref(0)
+const dealFormatOptions = [
+    {
+        name: 'Online(Virtual/Digital)',
+        value: 1
+    },
+    {
+        name: 'Offline(In-Person)',
+        value: 0
     }
-  },
-  unmounted() {
-    updateWindowHeight()
-    window.onresize = null
-  },
-  mounted() {
+]
 
+const dealFormatChange = (e) => {
+    console.log(e)
+    basicForm.is_online = parseInt(e)
+}
+
+
+const dealDisabledDate = (date) => {
+    let myDate = new Date();
+    let year = myDate.getFullYear()
+    let month = myDate.getMonth() + 1
+    let day = myDate.getDate()
+    let mTime = year + '-' + month + '-' + day;
+    let mDate = new Date(mTime)
+    return date.getTime() < mDate.getTime();
+}
+
+const basicForms = ref(null)
+
+const basicForm = reactive({
+    user_id: localStorage.getItem('uid'),
+    deal_id: '',
+    title: '',
+    desc: '',
+    tag: '',
+    is_online: 0,
+    location: '',
+    category_id:'',
+    country_id: '',
+    state_id: '',
+    town_id: '',
+    lng: '',
+    lat: '',
+    tags_cn: '',
+    tags_en: ''
+})
+
+const basicRules = reactive({
+    title: [
+        {
+            required: true,
+            message: 'Please input',
+            trigger: 'blur',
+        }
+    ],
+    desc: [
+        {
+            required: true,
+            message: 'Please input',
+            trigger: 'blur',
+        },
+    ]
+
+})
+
+const editDealStatus = ref(false)
+
+const tagsOptions = ref([])
+const subCateOptions = ref([])
+
+const editFileStatus = ref(false)
+const beforeFilePhotoUpload = (file) => {
+
+    uploadLoadingStatus.value = true;
+    const isLt2M = file.size / 1024 / 1024 < 20
+
+    if (!isLt2M) {
+        ElMessage.error('Avatar picture size can not exceed 20MB')
+    }
+    return isLt2M
+}
+
+const cancelUpload = () => {
+    uploadLoadingStatus.value = false;
+}
+
+const fileHttpRequest = (options) => {
+
+    new ImageCompressor(options.file, {
+        quality: 0.6,
+        success(file) {
+            // console.log(file)
+            const formData = new FormData();
+
+            formData.append('token', localStorage.getItem('token'))
+            // console.log(file)
+            let isInChina = process.env.VUE_APP_CHINA
+            if (isInChina === 'yes') {
+                formData.append('file[]', file, file.name)
+                UPLOAD_BY_ALI_OSS(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.data[0]['file_url'];
+                        uploadLoadingStatus.value = false;
+                        basicForm.file = myFileUrl
+                        basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
+                        editFileStatus.value = true
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+
+            }
+
+            if (isInChina === 'no') {
+                formData.append('file', file, file.name)
+                UPLOAD_BY_SERVICE(formData).then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        let myFileUrl = res.message.file_path;
+                        uploadLoadingStatus.value = false;
+                        basicForm.file = myFileUrl
+                        basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
+                        editFileStatus.value = true
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+
+            }
+
+        },
+        error(err) {
+            console.log(err)
+        }
+
+    })
+
+}
+const handleSingleImageRemove = (field) => {
+
+    if (field === 'file') {
+        basicForm.file = ''
+        basicForm.file_name = ''
+    }
+
+}
+const handleEditMedia = (field) => {
+
+    if (field === 'file') {
+        editFileStatus.value = false
+    }
+
+}
+const handleDownloadMedia = (url) => {
+    window.open(url, '_blank')
+}
+
+const dialogSingleImageUrl = ref('')
+const dialogSingleImageVisible = ref(false)
+const dialogSingleField = ref('')
+
+const getDealDetail = (id) => {
+
+    let params = {
+        deal_id: id
+    }
+    DEALS_DEAL_DETAIL(params).then(res => {
+
+        if (res.code == 200) {
+            let resMessage = res.message;
+            basicForm.title = resMessage.title
+            basicForm.desc = resMessage.desc
+            basicForm.tags_cn = resMessage.tags_cn
+            basicForm.tags_en = resMessage.tags_en
+            basicForm.is_online = resMessage.is_online
+            basicForm.location = resMessage.location
+
+            // tags 返回的数据和tagslist里面的数据的id不一致
+            let tags = resMessage.tags;
+
+            let tagsData = []
+            let old = tagsData.value
+            let oldTagsEnData = []
+            let tagsEnStr = resMessage.tags_en;
+
+            if (tags && tags.length > 0 && old && old.length > 0) {
+                tags.forEach(item => {
+                    let i = old.filter(value => value.id == item.tag_name)
+                    tagsData.push(i[0])
+                    oldTagsEnData.push(i[0]['name_en'])
+                })
+
+                let abc = tagsEnStr.split(',')
+                abc.forEach(a => {
+                    let a_i = oldTagsEnData.indexOf(a)
+                    if (a_i === -1) {
+                        tagsData.push(a)
+                    }
+                })
+
+            }
+
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const getTagsList = () => {
+    let data = {
+        page: 1,
+        limit: 1000
+    }
+    TAG_LIST(data).then(res => {
+        if (res.code === 200) {
+            tagsOptions.value = res.message.data;
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+const getSubIdentityList = ()=> {
+    let params = {
+        pid: 5,
+        tree: 1
+    }
+
+    USER_SUB_IDENTITY_V2(params).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+            subCateOptions.value = res.message
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const submitForm = (formEl) => {
+
+    formEl.validate((valid) => {
+        if (valid) {
+
+            let selectedTagsData = this.selectedTagsValue;
+            let tagsIdData = []
+            let tagsEnData = []
+            let tagsCnData = []
+
+            selectedTagsData.forEach(item => {
+
+                if (typeof item === 'string') {
+                    tagsEnData.push(item)
+                    tagsCnData.push(item)
+                }
+                if (typeof item === 'object') {
+                    tagsIdData.push(item.id)
+                    tagsEnData.push(item.name_en)
+                    tagsCnData.push(item.name_cn)
+                }
+
+            })
+
+            basicForm.tag = tagsIdData;
+            if (tagsCnData.length > 0) {
+                basicForm.tags_cn = tagsCnData.join(',')
+            }
+
+            if (tagsEnData.length > 0) {
+                basicForm.tags_en = tagsEnData.join(',')
+            }
+
+            basicForm.is_online = this.dealLocationType
+
+            let params = Object.assign({}, basicForm);
+            ADD_DEALS(params).then(res => {
+
+                if (res.code == 200) {
+                    ElMessage({
+                        type: 'success',
+                        message: 'Deal Posted Successfully',
+                        grouping: true,
+                    })
+                    setTimeout(function () {
+                        router.push('/deals/myDeals')
+                    }, 1500)
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+
+        } else {
+            console.log('error submit!!')
+            ElMessage({
+                type: 'error',
+                message: 'Complete all required field to Post a Deal',
+                grouping: true,
+            })
+        }
+    })
+}
+
+const saveAndExit = ()=>{
+    console.log('save and exit')
+}
+const turnMyDeals = ()=>{
+    router.push({path:'/deals/myDeals'})
+}
+
+onMounted(() => {
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
 
     if (screenWidthFloor <= 768) {
-      updateWindowHeight()
+        updateWindowHeight()
     }
-
 
     window.onresize = () => {
-      if (screenWidthFloor <= 768) {
-        updateWindowHeight()
-      }
+        if (screenWidthFloor <= 768) {
+            updateWindowHeight()
+        }
     }
 
+    getTagsList()
+    getSubIdentityList()
 
-    this.getTagsList()
-    this.getAllCountry()
-
-    let dealId = this.$route.query.deal_id
+    let dealId = route.query.deal_id
     if (dealId) {
-      this.basicForm.deal_id = dealId
-      this.getDealDetail(dealId)
-      this.editDealStatus = true;
-
+        basicForm.deal_id = dealId
+        getDealDetail(dealId)
+        editDealStatus.value = true
     }
 
-  },
-  methods: {
-    getDealDetail(id) {
-      let self = this
+})
 
-      let params = {
-        deal_id: id
-      }
-      DEALS_DEAL_DETAIL(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          let resMessage = res.message;
-          this.basicForm.title = resMessage.title
-          this.basicForm.desc = resMessage.desc
-          this.basicForm.tags_cn = resMessage.tags_cn
-          this.basicForm.tags_en = resMessage.tags_en
-          this.basicForm.is_online = resMessage.is_online
-          this.dealLocationType = resMessage.is_online
-          this.basicForm.location = resMessage.location
+onUnmounted(() => {
+    updateWindowHeight()
+    window.onresize = null
+})
 
-          if (resMessage.is_online == 2) {
-            this.mapLoading = true
-            setTimeout(function () {
-              self.initMap()
-              self.mapLoading = false
-            }, 1000)
-          }
-
-          if (resMessage.is_online == 3) {
-            this.map1Loading = true
-            setTimeout(function () {
-              self.initMap1()
-              self.map1Loading = false
-            }, 1000)
-
-          }
-
-          // tags 返回的数据和tagslist里面的数据的id不一致
-          let tags = resMessage.tags;
-
-          let tagsData = []
-          let old = this.tagsData
-          let oldTagsEnData = []
-          let tagsEnStr = resMessage.tags_en;
-
-          if(tags && tags.length>0 && old && old.length > 0){
-            tags.forEach(item=>{
-              let i = old.filter(value=>value.id == item.tag_name)
-              tagsData.push(i[0])
-              oldTagsEnData.push(i[0]['name_en'])
-            })
-
-            let abc = tagsEnStr.split(',')
-            abc.forEach(a=>{
-              let a_i = oldTagsEnData.indexOf(a)
-              if(a_i === -1){
-                tagsData.push(a)
-              }
-            })
-            this.selectedTagsValue = tagsData
-          }
-
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    changeDealLocationType(value) {
-      this.dealLocationType = value
-      let self = this
-
-      if (value == 2) {
-        this.mapLoading = true
-        setTimeout(function () {
-          self.initMap()
-          self.mapLoading = false
-        }, 1000)
-      }
-
-      if (value == 3) {
-        this.map1Loading = true
-        setTimeout(function () {
-          self.initMap1()
-          self.map1Loading = false
-        }, 1000)
-
-      }
-    },
-    initMap() {
-      mapboxgl.accessToken = this.accessToken;
-
-      const map = new mapboxgl.Map({
-        container: "mapContainer",
-        center: [121.472644, 31.231706],
-        style: this.mapStyle,
-        zoom: 12
-      });
-      const nav = new mapboxgl.NavigationControl();
-      map.addControl(nav, "top-right");
-      map.addControl(new mapboxgl.FullscreenControl());
-
-      const geolocate = new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      });
-
-      map.addControl(geolocate, "top-right")
-
-      const geocoder = new MapboxGeocoder({
-        "accessToken": this.accessToken,
-        "language": 'en-US',
-        "mapboxgl": mapboxgl
-      })
-
-      map.addControl(geocoder, 'top-left')
-      const marker = new mapboxgl.Marker()
-
-      // {
-      //   draggable:true
-      // }
-
-      // .setLngLat([121.47, 31.23])
-      // .addTo(map);
-
-      // marker.on('dragend',(e)=>{
-      //   console.log(e)
-      // })
-      geocoder.on('result', (e) => {
-        console.log(e)
-        marker.setLngLat(e.result.center).addTo(map)
-        this.basicForm.location = e.result.place_name
-        this.basicForm.lng = e.result.center[0]
-        this.basicForm.lat = e.result.center[1]
-
-      })
-
-      geocoder.on('clear', (e) => {
-        console.log(e)
-        this.basicForm.location = ''
-        this.basicForm.lng = ''
-        this.basicForm.lat = ''
-      })
-
-    },
-    initMap1() {
-      mapboxgl.accessToken = this.accessToken;
-
-      const map = new mapboxgl.Map({
-        container: "mapContainer1",
-        center: [121.472644, 31.231706],
-        style: this.mapStyle,
-        zoom: 12
-      });
-      const nav = new mapboxgl.NavigationControl();
-      map.addControl(nav, "top-right");
-      map.addControl(new mapboxgl.FullscreenControl());
-
-      const geolocate = new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      });
-
-      map.addControl(geolocate, "top-right")
-
-      const geocoder = new MapboxGeocoder({
-        "accessToken": this.accessToken,
-        "language": 'en-US',
-        "mapboxgl": mapboxgl
-      })
-
-      map.addControl(geocoder, 'top-left')
-      const marker = new mapboxgl.Marker()
-      // {
-      //   draggable:true
-      // }
-      // marker.on('dragend',(e)=>{
-      //   console.log(e)
-      // })
-      geocoder.on('result', (e) => {
-        console.log(e)
-        marker.setLngLat(e.result.center).addTo(map)
-        this.basicForm.location = e.result.place_name
-        this.basicForm.lng = e.result.center[0]
-        this.basicForm.lat = e.result.center[1]
-
-      })
-      geocoder.on('clear', (e) => {
-        console.log(e)
-        this.basicForm.location = ''
-        this.basicForm.lng = ''
-        this.basicForm.lat = ''
-      })
-
-    },
-    getAllCountry() {
-      let params = {}
-      GET_COUNTRY_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.countryOptions = res.message;
-        }
-      }).catch(err => {
-        this.$message.error(err.msg)
-      })
-    },
-    getAllProvinces(countryId) {
-      let params = {
-        country_id: countryId
-      }
-      GET_COUNTRY_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.provinceOptions = res.message;
-        }
-      }).catch(err => {
-        this.$message.error(err.msg)
-      })
-    },
-    getAllCitys(countryId, stateId) {
-      let params = {
-        country_id: countryId,
-        state_id: stateId
-      }
-      GET_COUNTRY_LIST(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.cityOptions = res.message;
-        }
-      }).catch(err => {
-        this.$message.error(err.msg)
-      })
-    },
-    countryChange(e) {
-      console.log(e)
-      this.basicForm.state_id = undefined
-      this.basicForm.town_id = undefined
-
-      this.provinceOptions = []
-      this.cityOptions = []
-
-      this.basicForm.country_id = e.id
-      this.countryName = e.name
-      this.countryNameCn = e.name
-      this.getAllProvinces(e.id)
-
-    },
-    provinceChange(e) {
-      console.log(e)
-      this.basicForm.town_id = undefined
-      this.cityOptions = []
-
-      this.basicForm.state = e.id
-      this.provinceName = e.name
-      this.provinceNameCn = e.name
-
-      this.getAllCitys(this.basicForm.country_id, e.id)
-    },
-    cityChange(e) {
-      console.log(e)
-      this.basicForm.town_id = e.id
-      this.cityName = e.name
-      this.cityNameCn = e.name
-    },
-    getTagsList() {
-      let data = {
-        page: 1,
-        limit: 1000
-      }
-      TAG_LIST(data).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.tagsData = res.message.data;
-        }
-      }).catch(err => {
-        console.log(err)
-        if (err.msg) {
-          this.$message.error(err.msg)
-        }
-        if (err.message) {
-          this.$message.error(err.message)
-        }
-      })
-    },
-    submitForm(formName) {
-
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-
-          let selectedTagsData = this.selectedTagsValue;
-          let tagsIdData = []
-          let tagsEnData = []
-          let tagsCnData = []
-
-          selectedTagsData.forEach(item => {
-
-            if (typeof item === 'string') {
-              tagsEnData.push(item)
-              tagsCnData.push(item)
-            }
-            if (typeof item === 'object') {
-              tagsIdData.push(item.id)
-              tagsEnData.push(item.name_en)
-              tagsCnData.push(item.name_cn)
-            }
-
-          })
-
-          this.basicForm.tag = tagsIdData;
-          if(tagsCnData.length > 0){
-            this.basicForm.tags_cn = tagsCnData.join(',')
-          }
-
-          if(tagsEnData.length > 0){
-            this.basicForm.tags_en = tagsEnData.join(',')
-          }
-
-          this.basicForm.is_online = this.dealLocationType
-
-          this.$loading({
-            text: 'Loading...'
-          })
-
-          let params = Object.assign({}, this.basicForm);
-          ADD_DEALS(params).then(res => {
-            // console.log(res)
-            if (res.code == 200) {
-              // this.$router.push('/deals/myDeals')
-              this.$loading().close()
-
-              this.dealSuccessTitle = 'Success'
-              this.dealSuccessDesc = 'Your Deal offer Submission ' + this.basicForm.title + ' has been successfully sent.'
-              this.dealSuccessVisible = true;
-
-            }
-          }).catch(err => {
-            console.log(err)
-            this.$loading().close()
-
-            if (err.msg) {
-              return this.$message.error(err.msg)
-            }
-            if (err.message) {
-              return this.$message.error(err.message)
-            }
-
-          })
-
-        } else {
-          // this.$loading().close()
-          console.log('error submit!!')
-          this.$message({
-            type:'warning',
-            message:'Please complete all required fields',
-            grouping:true
-          })
-          return false
-        }
-      })
-    },
-    submitDealSuccess() {
-      this.dealSuccessVisible = false
-      this.$router.push({
-        path: this.$route.name === 'verdorDealsOffer' ? '/vendor-deals/myDeals' : '/deals/myDeals'
-      })
-
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-    },
-    discard() {
-      this.$router.go(-1)
-    }
-  }
-}
 </script>
 
 <style scoped>
-.bg {
-  background-color: #f5f6f7;
+.form-width-percent-100 {
+    width: 100%;
 }
 
-.profile-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
+.xll-currency-select {
+    width: 80px;
 }
 
-.profile-l-container {
-
+:deep(.el-date-editor.el-input, .el-date-editor.el-input__wrapper) {
+    width: 100%;
 }
 
-.profile-r-container {
-  width: calc(100% - 160px);
-  height: calc(100vh - 140px);
+.post-event-bg {
+    background-color: #ffffff;
+    height: calc(var(--i-window-height) - 120px);
 }
 
-.profile-r-bg-container {
-  height: calc(100vh - 240px);
-
+.t-container {
+    margin: 0 40px;
+    padding-bottom: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #D0D5DD;;
 }
 
-.new-deal-t {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 30px 50px;
+.t-l-label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    color: #101828;
 }
 
-.new-deal-t-l {
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 30px;
-  color: #262626;
-
+.t-l-tips {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #667085;
 }
 
-.new-deal-t-r {
-
+.form-container {
+    margin: 24px 40px 40px 40px;
 }
 
-.new-deal-btn {
-  font-size: 20px;
+.form-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-
-.basic-form {
-
-  background-color: #FFFFFF;
-  padding: 50px;
-  box-shadow: 0 3px 0 #00000012;
-  border-radius: 38px;
-  margin: 0 50px;
+.form-content-l {
+    flex-basis: 388px;
 }
 
-.basic-form-label {
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 26px;
-  color: #262626;
-}
-
-.deals-form {
-  margin-top: 25px;
-}
-
-.object-tags-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.object-tags {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-
-}
-
-.object-tags-item {
-  background-color: #F0F2F5;
-  border: 1px solid #262626;
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin: 10px;
-  font-size: 20px;
-  font-family: BCM, serif;
-  cursor: pointer;
-}
-
-.object-tags-add {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.object-tags-item-add {
-  width: 100%;
-  position: relative;
-}
-
-.object-tags-item-btn-container {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-
-}
-
-.object-tags-item-btn {
-  color: #262626;
-  font-size: 20px;
+.form-content-r {
+    flex-basis: 388px;
 }
 
 
-.tags-active {
-  background-color: #6650B3;
-  color: #FFFFFF !important;
+.event-time {
+    width: 100%;
 }
 
-.deals-location-bg {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+.event-time-item {
+    margin-bottom: 15px;
 }
 
-.deals-tabs-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+.event-time-item:last-child {
+    margin-bottom: 0;
 }
 
-.deals-tabs-l {
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #262626;
-  border: 2px solid #262626;
-  height: 44px;
-  line-height: 44px;
-  padding: 0 20px;
-  border-top-left-radius: 44px;
-  border-bottom-left-radius: 44px;
-  cursor: pointer;
+
+:deep(.profile-uploader .el-upload) {
+    border: 1px dashed #d9d9d9;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
 }
 
-.deals-tabs-m {
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #262626;
-  border-top: 2px solid #262626;
-  border-bottom: 2px solid #262626;
-  height: 44px;
-  line-height: 44px;
-  padding: 0 20px;
-  cursor: pointer;
+:deep(.profile-uploader .el-upload:hover) {
+    border-color: #0AA0A8;
 }
 
-.deals-tabs-r {
-  font-family: BarlowM, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  color: #262626;
-  border: 2px solid #262626;
-  height: 44px;
-  line-height: 44px;
-  padding: 0 20px;
-  border-top-right-radius: 44px;
-  border-bottom-right-radius: 44px;
-  cursor: pointer;
+:deep(.avatar-uploader-icon) {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
 }
 
-.deals-location-container {
-  margin-top: 25px;
+
+.account-xll-images {
+    width: 90%;
 }
 
-.deals-location-select-container {
-  text-align: left;
-}
-
-.map-container {
-  margin-top: 25px;
-  min-width: 700px;
-  width: 100%;
-  height: 300px;
-  text-align: center;
-}
-
-.basemap {
-  width: 100%;
-  height: 100%;
+.account-xll-image {
+    position: relative;
+    margin-top: 10px;
 
 }
 
-.tags-tips {
-  text-align: left;
-  font-size: 12px;
-  color: #808080;
+.account-xll-image-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: none;
+
 }
 
-.deals-tips {
-  text-align: left;
-  font-size: 12px;
-  color: #808080;
+.account-xll-image:hover .account-xll-image-mask {
+    /*display: inline;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
-.deal-location-current-container {
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  margin-top: 10px;
+.account-xll-image-mask span {
+    margin-right: 15px;
+    cursor: pointer;
 }
 
-.tags-current-container {
-  width: 100%;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  font-size: 20px;
+.account-xll-image-mask:hover {
+
 }
 
-:deep(.el-select){
-  width: 100%;
+
+.attachment-xll {
+
 }
+
+.attachment-xll-btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.attachment-xll-btn {
+    width: 100%;
+    /*width: 388px;*/
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #d0d5dd;
+    padding: 1px 11px;
+    border-radius: 4px;
+}
+
+.attachment-xll-btn span {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #667085;
+}
+
+.attachment-xll-btn-edit, .attachment-xll-btn-download {
+    height: 44px;
+    border: 1px solid #D0D5DD;
+    border-radius: 5px;
+    padding: 0 16px;
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attachment-xll-icon {
+    cursor: pointer;
+}
+
+.attachment-xll-image {
+    width: 245px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.attachment-xll-img {
+    width: 100%;
+    height: 100%;
+}
+
+.attachment-xll-image-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: none;
+}
+
+.attachment-xll-image:hover .attachment-xll-image-mask {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-upload-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.profile-upload-text {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #667085;
+}
+
+.profile-upload-text span {
+    font-weight: 700;
+    color: #5C41E6;
+}
+
 
 @media screen and (min-width: 1200px) {
 
 }
 
 @media screen and (max-width: 768px) {
-  .profile-r-container {
-    width: 100%;
-    height: calc(var(--i-window-height) - 160px);
 
-  }
-
-  .new-deal-t {
-    padding: 15px;
-    height: 30px;
-  }
-
-  .new-deal-t-l {
-    font-size: 18px;
-  }
-
-  .new-deal-btn {
-    font-size: 12px;
-  }
-
-  .profile-r-bg-container {
-    height: calc(var(--i-window-height) - 220px);
-  }
-
-  .basic-form {
-    padding: 15px;
-    margin: 15px;
-    border-radius: 18px;
-  }
-
-  .basic-form-label {
-    font-size: 18px;
-  }
-
-  .object-tags-item {
-    font-size: 12px;
-    padding: 0 6px;
-  }
-
-  .object-tags-item-btn-container {
-    top: 0px;
-  }
-
-  .deals-tabs-l {
-    font-size: 12px;
-  }
-
-  .deals-tabs-m {
-    font-size: 12px;
-  }
-
-  .deals-tabs-r {
-    font-size: 12px;
-  }
-
-  .map-container {
-    min-width: 300px;
-  }
 
 }
-
-
 </style>

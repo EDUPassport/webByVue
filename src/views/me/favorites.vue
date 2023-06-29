@@ -26,7 +26,7 @@
                                     <div class="events-item-share">
                                         <el-button icon="share" circle  @click="shareEvent(item.event_info)"></el-button>
 
-                                        <el-button circle @click="cancelFavoriteForEvent(item.event_info)">
+                                        <el-button circle @click="cancelFavoriteForEvent(item)">
                                             <el-icon :size="14">
                                                 <IconFlatColorIconsLike/>
                                             </el-icon>
@@ -168,7 +168,8 @@ const eventPageSizeChange = (e)=>{
 }
 
 const eventPageChange = (e)=>{
-    console.log(e)
+    // console.log(e)
+    eventPage.value = e;
     getFavoriteList(3,e, eventLimit.value)
 }
 
@@ -190,7 +191,7 @@ const shareEvent = (item) => {
 const cancelFavoriteForEvent = (item) => {
     let params = {
         type: 3,
-        type_id: item.id
+        type_id: item.type_id
     }
     CANCEL_FAVORITE(params).then(res => {
         if (res.code == 200) {

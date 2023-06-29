@@ -17,7 +17,7 @@
 
         <div class="nav-link-container">
           <router-link to="/" exact>HOME</router-link>
-          <router-link to="/jobs" exact>EDU JOBS</router-link>
+          <router-link to="/job/pool" exact>EDU JOBS</router-link>
           <router-link to="/deals" exact> EDU DEALS</router-link>
           <router-link to="/events" exact>EVENTS</router-link>
           <template v-if="envBlog === 'yes'">

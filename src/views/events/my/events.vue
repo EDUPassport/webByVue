@@ -26,12 +26,26 @@
                                     </div>
 
                                     <div class="events-item-t">
-                                        <el-image class="events-item-banner"
-                                                  fit="cover"
-                                                  :preview-src-list="[item.file]"
-                                                  :src="item.file !='' ? item.file : '' "
-                                        >
-                                        </el-image>
+                                        <template v-if="item.file_type === 'image' ">
+                                            <el-image class="events-item-banner"
+                                                      fit="cover"
+                                                      :preview-src-list="[item.file]"
+                                                      :src="item.file !='' ? item.file : '' "
+                                            >
+                                            </el-image>
+                                        </template>
+                                        <template v-else-if="item.file_type === 'video' ">
+                                            <video style="width: 100%;" :src="item.file" controls ></video>
+                                        </template>
+                                        <template v-else>
+                                            <el-image class="events-item-banner"
+                                                      fit="cover"
+                                                      :preview-src-list="[item.file]"
+                                                      :src="item.file !='' ? item.file : '' "
+                                            >
+                                            </el-image>
+                                        </template>
+
                                     </div>
                                     <div class="events-item-b">
 
@@ -46,10 +60,12 @@
                                         <div class="events-item-b-r">
                                             <div>
                                                 <template v-if="item.is_publish == 1">
-                                            <span class="xll-tag xll-tag-1" v-if="item.status == 0"><el-icon
-                                                style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Approval Pending</span>
-                                                    <span class="xll-tag xll-tag-3" v-if="item.status == 2"><el-icon
-                                                        style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
+                                                    <span class="xll-tag xll-tag-1" v-if="item.status == 0">
+                                                        <el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Approval Pending</span>
+                                                    <span class="xll-tag xll-tag-3" v-if="item.status == 2">
+                                                        <el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
+                                                    <span class="xll-tag xll-tag-3" v-if="item.status == 5">
+                                                        <el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Canceled</span>
                                                 </template>
                                                 <template v-else>
                                                     <span class="xll-tag xll-tag-2"><el-icon style="margin-right: 2px;"><IconElOkCircle/></el-icon>Unpublished</span>
@@ -92,11 +108,17 @@
 
             </div>
 
-
         </el-scrollbar>
 
-        <event-detail :visible="eventDetailVisible" :data="eventDetailData"
-                      @close="eventDetailVisible=false"></event-detail>
+        <event-detail :visible="eventDetailVisible"
+                      :data="eventDetailData"
+                      :show-cancel="true"
+                      @cancel-success="cancelEventSuccess"
+                      @delete-success="deleteEventSuccess"
+                      @un-publish-success="unPublishEventSuccess"
+                      @publish-success="publishEventSuccess"
+                      @close="eventDetailVisible=false">
+        </event-detail>
         <share-card-theme-two :visible="shareDialogVisible"
                    share-title="Share something exciting"
                    :title="shareInfo.title"
@@ -189,23 +211,40 @@ const getMyEvents = (page, limit) => {
             eventsList.value = res.message.data
             eventTotalNum.value = res.message.total
             eventLoadingStatus.value = false
-            if(res.message.total > 0){
-                eventEmptyStatus.value = false
-            }else{
-                eventEmptyStatus.value = true
-            }
+            eventEmptyStatus.value = res.message.total <= 0;
 
-        } else {
-            console.log(res.msg)
         }
+
     }).catch(err => {
         console.log(err)
+        eventLoadingStatus.value = false
+        eventEmptyStatus.value = true
     })
 
 }
 
 const editListing = (item)=>{
     router.push({path: '/events/post', query: {id: item.id}})
+}
+
+const cancelEventSuccess = ()=>{
+    eventDetailVisible.value = false
+    getMyEvents(eventPage.value, eventLimit.value)
+}
+
+const deleteEventSuccess = ()=>{
+    eventDetailVisible.value = false
+    getMyEvents(eventPage.value, eventLimit.value)
+}
+
+const unPublishEventSuccess = ()=>{
+    getMyEvents(eventPage.value , eventLimit.value)
+    eventDetailVisible.value = false
+}
+
+const publishEventSuccess = ()=>{
+    getMyEvents(eventPage.value , eventLimit.value)
+    eventDetailVisible.value = false
 }
 
 onMounted(() => {
@@ -405,7 +444,7 @@ onUnmounted(() => {
     display: flex;
     flex-direction: row;
     align-items: center;
-
+    width: max-content;
     padding: 4px 8px;
     gap: 2px;
     border-radius: 4px;

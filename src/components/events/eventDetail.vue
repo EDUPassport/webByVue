@@ -14,8 +14,13 @@
                         <el-button style="color: #344054;" link icon="back" @click="turnBack()">Back</el-button>
                     </div>
                     <div>
-                        <el-button style="color: #344054;"  link  @click="cancelEvent(data)">
-                            Cancel Event
+                        <el-button v-if="data.is_publish === 1 && showCancel"
+                                   style="color: #344054;"
+                                   link
+                                   :disabled="data.status === 5"
+                                   @click="cancelEvent(data)">
+                            <span v-if="from === 'reserved-spots' ">Cancel RSVP</span>
+                            <span v-else>Cancel Event</span>
                         </el-button>
                     </div>
                 </div>
@@ -24,27 +29,70 @@
                     <div class="detail-b-t">
                         <div class="detail-b-t-l">
                             <div class="detail-b-t-l-l">
-                                <el-image class="detail-company-logo" :src="data.company_logo"></el-image>
+                                <el-image
+                                        class="detail-company-logo"
+                                        fit="cover"
+                                        :src="data.company_profile_photo ? data.company_profile_photo : defaultAvatar">
+                                </el-image>
                             </div>
                             <div class="detail-b-t-l-r">
                                 <div class="detail-name">
                                     {{ data.name }}
-                                    <span class="xll-tag-rec"  >Recommended by EDU 💜</span>
+                                    <span class="xll-tag-rec">Recommended by EDU 💜</span>
                                 </div>
-                                <div class="detail-name-time">Posted {{$filters.howLongFormat(data.c_time)}}</div>
+                                <div class="detail-name-time">Posted {{ $filters.howLongFormat(data.c_time) }}</div>
                             </div>
                         </div>
                         <div class="detail-b-t-r">
-                            <template v-if="currentUserId == data.user_id">
-                                <el-button link type="danger" @click="deleteEvent(data)">Delete Event</el-button>
+                            <template v-if="from === 'reserved-spots' ">
+                                <el-button type="primary" disabled>Reserve Spot</el-button>
+                                <el-button v-if="currentUserId == data.user_id"
+                                           link
+                                           style="color:#F04438;"
+                                           type="danger"
+                                           @click="deleteEvent(data)">
+                                    Remove Event
+                                </el-button>
                             </template>
+                            <template v-else>
+                                <template v-if="currentUserId == data.user_id">
+                                    <el-button
+                                            type="primary"
+                                            @click="unPublishEvent(data.id)"
+                                            v-if="data.is_publish == 1 && data.status == 1">
+                                        Unpublish Event
+                                    </el-button>
+                                    <el-button
+                                            type="primary"
+                                            @click="publishEvent(data.id)"
+                                            v-if="data.is_publish == 0">
+                                        Publish Event
+                                    </el-button>
+
+                                    <el-button link style="color:#F04438;" type="danger" @click="deleteEvent(data)">
+                                        Delete Event
+                                    </el-button>
+                                </template>
+                                <template v-else>
+                                    <el-button type="primary" @click="reserveSpot(data)">Reserve Spot</el-button>
+                                </template>
+                            </template>
+
                         </div>
                     </div>
                     <div class="detail-location">
-                        <el-icon>
-                            <Location/>
-                        </el-icon>
-                        {{data.location}}
+                        <template v-if="data.is_online == 1">
+                            <el-icon>
+                                <Location/>
+                            </el-icon>
+                            Online
+                        </template>
+                        <template v-if="data.is_online == 0 && data.location">
+                            <el-icon>
+                                <Location/>
+                            </el-icon>
+                            {{ data.location }}
+                        </template>
                     </div>
 
                     <div class="detail-table-item">
@@ -60,7 +108,8 @@
                             Hours
                         </div>
                         <div class="detail-table-item-r">
-                            {{ $filters.formatEventTimeForShow(data.start_time) }} to {{ $filters.formatEventTimeForShow(data.end_time)}}
+                            {{ $filters.formatEventTimeForShow(data.start_time) }} to
+                            {{ $filters.formatEventTimeForShow(data.end_time) }} {{ data.timezone }}
                         </div>
                     </div>
                     <div class="detail-table-item">
@@ -68,8 +117,9 @@
                             Posted By
                         </div>
                         <div class="detail-table-item-r">
-                            <el-avatar style="width: 24px;height: 24px;margin-right: 6px;" :src="data.company_logo"></el-avatar>
-                            {{data.company_name}}
+                            <el-avatar style="width: 24px;height: 24px;margin-right: 6px;"
+                                       :src="data.company_logo"></el-avatar>
+                            {{ data.company_name }}
                         </div>
                     </div>
                     <div class="detail-table-item">
@@ -86,10 +136,18 @@
                     </div>
                     <div class="detail-table-item">
                         <div class="detail-table-item-l">
+                            Event Fee
+                        </div>
+                        <div class="detail-table-item-r">
+                            {{ data.currency }} {{ data.pay_money }}
+                        </div>
+                    </div>
+                    <div class="detail-table-item">
+                        <div class="detail-table-item-l">
                             No of Reserved Spots
                         </div>
                         <div class="detail-table-item-r">
-                            100+
+                            {{ $filters.numberOfAttendeesInTens(data.no_of_reserved_spots) }}
                         </div>
                     </div>
                     <div class="detail-table-item" v-if="data.status != 1">
@@ -97,9 +155,17 @@
                             Listing Status
                         </div>
                         <div class="detail-table-item-r">
-                            <span class="xll-tag xll-tag-1" v-if="data.status == 0" ><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Approval Pending</span>
-                            <span class="xll-tag xll-tag-2" v-if="data.status == 3" ><el-icon style="margin-right: 2px;"><IconElOkCircle/></el-icon>Unpublished</span>
-                            <span class="xll-tag xll-tag-3" v-if="data.status == 2"><el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
+                            <template v-if="data.is_publish == 0">
+                                <span class="xll-tag xll-tag-2"><el-icon style="margin-right: 2px;"><IconElOkCircle/></el-icon>Unpublished</span>
+                            </template>
+                            <template v-else>
+                                <span class="xll-tag xll-tag-1" v-if="data.status == 0"><el-icon
+                                        style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Approval Pending</span>
+                                <span class="xll-tag xll-tag-3" v-if="data.status == 2"><el-icon
+                                        style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
+                                <span class="xll-tag xll-tag-3" v-if="data.status == 5"><el-icon
+                                        style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Canceled</span>
+                            </template>
                         </div>
                     </div>
 
@@ -108,9 +174,26 @@
                     </div>
 
                     <div class="detail-table-item">
-                         <el-image :src="data.file"></el-image>
+                        <template v-if="data.file_type === 'image' ">
+                            <el-image class="events-item-banner"
+                                      fit="cover"
+                                      :preview-src-list="[data.file]"
+                                      :src="data.file !='' ? data.file : '' "
+                            >
+                            </el-image>
+                        </template>
+                        <template v-else-if="data.file_type === 'video' ">
+                            <video style="width: 100%;" :src="data.file" controls></video>
+                        </template>
+                        <template v-else>
+                            <el-image class="events-item-banner"
+                                      fit="cover"
+                                      :preview-src-list="[data.file]"
+                                      :src="data.file !='' ? data.file : '' "
+                            >
+                            </el-image>
+                        </template>
                     </div>
-
 
                     <div class="detail-item-label" v-if="data.tags_en">
                         Event Type
@@ -121,7 +204,7 @@
                              v-for="(tag,i) in data.tags_en.split(',')"
                              :key="i"
                         >
-                            {{tag}}
+                            {{ tag }}
                         </div>
                     </div>
 
@@ -142,7 +225,7 @@
                 <div class="other-events-label">
                     Other events you may be interested in
                 </div>
-                <div class="events-list-container" >
+                <div class="events-list-container">
 
                     <div class="events-item" v-for="(item,i) in eventsList" :key="i">
 
@@ -157,7 +240,7 @@
                                 </el-button>
                             </template>
                             <template v-else>
-                                <el-button circle   @click="addFavorite(item,i)">
+                                <el-button circle @click="addFavorite(item,i)">
                                     <el-icon :size="14">
                                         <IconIconParkOutlineLike/>
                                     </el-icon>
@@ -167,12 +250,25 @@
                         </div>
 
                         <div class="events-item-t">
-                            <el-image class="events-item-banner"
-                                      fit="cover"
-                                      :preview-src-list="[item.file]"
-                                      :src="item.file !='' ? item.file : '' "
-                            >
-                            </el-image>
+                            <template v-if="item.file_type === 'image' ">
+                                <el-image class="events-item-banner"
+                                          fit="cover"
+                                          :preview-src-list="[item.file]"
+                                          :src="item.file !='' ? item.file : '' "
+                                >
+                                </el-image>
+                            </template>
+                            <template v-else-if="item.file_type === 'video' ">
+                                <video style="width: 100%;" :src="item.file" controls></video>
+                            </template>
+                            <template v-else>
+                                <el-image class="events-item-banner"
+                                          fit="cover"
+                                          :preview-src-list="[item.file]"
+                                          :src="item.file !='' ? item.file : '' "
+                                >
+                                </el-image>
+                            </template>
                         </div>
                         <div class="events-item-b">
 
@@ -194,13 +290,12 @@
                                 <div class="events-item-desc">
                                     {{ item.desc }}
                                 </div>
-                                <div  class="events-item-action-container" >
-                                    <el-button type="primary" @click="reserveSpot(item)" >Reserve Spot</el-button>
+                                <div class="events-item-action-container">
+                                    <el-button type="primary" @click="reserveSpot(item)">Reserve Spot</el-button>
                                 </div>
                             </div>
 
                         </div>
-
 
 
                     </div>
@@ -212,63 +307,72 @@
         </el-drawer>
 
         <share-card-theme-two :visible="shareDialogVisible"
-                   share-title="Share Job Post"
-                   :title="shareInfo.title"
-                   :description="shareInfo.desc"
-                   :quote="shareInfo.desc"
-                   :url="shareLocationUrl"
-                   @close="shareDialogVisible=false"
+                              share-title="Share Job Post"
+                              :title="shareInfo.title"
+                              :description="shareInfo.desc"
+                              :quote="shareInfo.desc"
+                              :url="shareLocationUrl"
+                              @close="shareDialogVisible=false"
         >
         </share-card-theme-two>
 
         <el-dialog
-            v-model="cdDialogVisible"
-            center
-            align-center
-            width="500px"
+                v-model="cdDialogVisible"
+                center
+                align-center
+                width="500px"
         >
             <div class="cd-dialog-tips">
-                {{cdDialogObj.tips}}
+                {{ cdDialogObj.tips }}
             </div>
-            <div class="cd-dialog-actions"  v-if="cdDialogObj.type === 'delete' ">
+            <div class="cd-dialog-actions" v-if="cdDialogObj.type === 'delete' ">
                 <el-button plain @click="cdDialogVisible=false">Cancel</el-button>
-                <el-button type="primary" @click="submitDeleteEvent()">Delete Event</el-button>
+                <el-button
+                        type="primary"
+                        :loading="deleteEventLoadingStatus"
+                        @click="submitDeleteEvent()">
+                    Delete Event
+                </el-button>
             </div>
             <div class="cd-dialog-actions" v-if="cdDialogObj.type === 'cancel' ">
                 <el-button
-                    type="primary"
-                    :loading="cancelEventLoadingStatus"
-                    @click="submitCancelEvent()">
+                        type="primary"
+                        :loading="cancelEventLoadingStatus"
+                        @click="submitCancelEvent()">
                     Cancel Event
                 </el-button>
             </div>
 
         </el-dialog>
 
+        <book-event-form :visible="spotVisible" :info="spotInfo" @close="spotVisible=false"></book-event-form>
+
     </div>
 </template>
 
 <script setup>
 
-import {defineProps, defineEmits, ref,onMounted} from 'vue'
+import {defineProps, defineEmits, ref, onMounted} from 'vue'
 import {
     ADD_FAVORITE,
     CANCEL_FAVORITE,
     EVENTS_LIST,
-    HOME_CLIENT_CANCEL_EVENT,
+    HOME_CLIENT_CANCEL_EVENT, HOME_EVENT_DELETE, HOME_PUBLISH_EVENT,
     HOME_PUBLISHER_CANCEL_EVENT
 } from "@/api/api";
 import {ElMessage} from 'element-plus'
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
+import BookEventForm from "@/components/bookEventForm.vue";
+import defaultAvatar from "@/assets/newHome/default-business-avatar.svg";
 
-defineProps(['visible', 'data'])
-const emit = defineEmits(['close'])
+defineProps(['visible', 'data', 'showCancel', 'from'])
+const emit = defineEmits(['close', 'cancelSuccess', 'deleteSuccess', 'publishSuccess', 'unPublishSuccess'])
 const currentUserId = localStorage.getItem('uid')
-const cdDialogVisible  = ref(false)
+const cdDialogVisible = ref(false)
 
-const cdDialogObj =ref({
-    type:'',
-    tips:''
+const cdDialogObj = ref({
+    type: '',
+    tips: ''
 })
 
 const cdEventDetail = ref({})
@@ -277,103 +381,135 @@ const cancelEventLoadingStatus = ref(false)
 const closeVisible = () => {
     emit('close')
 }
-const turnBack = ()=>{
+const turnBack = () => {
     emit('close')
 }
-const cancelEvent = (item)=>{
-    console.log('cancel event')
+const cancelEvent = (item) => {
     // console.log(item)
     cdEventDetail.value = item
 
     let uid = localStorage.getItem('uid')
-    if(parseInt(uid) === cdEventDetail.value.user_id){
+    if (parseInt(uid) === cdEventDetail.value.user_id) {
         cdDialogObj.value = {
-            type:'cancel',
-            tips:'Canceling this event will unpublished it and remove it from attendees list'
+            type: 'cancel',
+            tips: 'Canceling this event will unpublished it and remove it from attendees list'
         }
         cdDialogVisible.value = true
-    }else{
+    } else {
         cdDialogObj.value = {
-            type:'cancel',
-            tips:'Canceling this event will remove it from attendees list'
+            type: 'cancel',
+            tips: 'Canceling this event will remove it from attendees list'
         }
         cdDialogVisible.value = true
     }
 
 }
 
-const submitCancelEvent = ()=>{
+const submitCancelEvent = () => {
     let uid = localStorage.getItem('uid')
-    if(parseInt(uid) === cdEventDetail.value.user_id){
+    if (parseInt(uid) === cdEventDetail.value.user_id) {
         publisherCancelEvent(cdEventDetail.value.id)
-    }else{
+    } else {
         clientCancelEvent(cdEventDetail.value.id)
     }
 }
 
-const clientCancelEvent = (id)=>{
-    cancelEventLoadingStatus.value  = true
+const clientCancelEvent = (id) => {
+    cancelEventLoadingStatus.value = true
 
     let params = {
-        id:id
+        id: id
     }
-    HOME_CLIENT_CANCEL_EVENT(params).then(res=>{
+    HOME_CLIENT_CANCEL_EVENT(params).then(res => {
         console.log(res)
-        if(res.code === 200){
+        if (res.code === 200) {
             cancelEventLoadingStatus.value = false
+
+            cdDialogVisible.value = false
+            ElMessage({
+                type: 'success',
+                message: 'Event listing canceled Successfully',
+                grouping: true
+            })
+
+            emit('cancelSuccess')
+
         }
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err)
         cancelEventLoadingStatus.value = false
     })
 
 }
 
-const publisherCancelEvent = (id)=>{
-    cancelEventLoadingStatus.value  = true
+const publisherCancelEvent = (id) => {
+    cancelEventLoadingStatus.value = true
     let params = {
-        id:id
+        id: id
     }
-    HOME_PUBLISHER_CANCEL_EVENT(params).then(res=>{
+    HOME_PUBLISHER_CANCEL_EVENT(params).then(res => {
         console.log(res)
-        if(res.code === 200){
+        if (res.code === 200) {
             cancelEventLoadingStatus.value = false
+            cdDialogVisible.value = false
+            ElMessage({
+                type: 'success',
+                message: 'Event listing canceled Successfully',
+                grouping: true
+            })
+            emit('cancelSuccess')
         }
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err)
         cancelEventLoadingStatus.value = false
     })
 
 }
-
-const deleteEvent = (item)=>{
-    console.log('delete event')
+const deleteEventLoadingStatus = ref(false)
+const deleteEvent = (item) => {
     // console.log(item)
     cdEventDetail.value = item
 
     cdDialogObj.value = {
-        type:'delete',
-        tips:'Deleting this event will unpublished it. '
+        type: 'delete',
+        tips: 'Deleting this event will unpublished it. '
     }
     cdDialogVisible.value = true
 
 }
 
-const submitDeleteEvent = ()=>{
-    console.log('submit delete event')
-    ElMessage({
-        type:'success',
-        message:'Event listing deleted Successfully',
-        grouping:true
+const submitDeleteEvent = () => {
+    deleteEventLoadingStatus.value = true;
+
+    let params = {
+        id: cdEventDetail.value.id
+    }
+    HOME_EVENT_DELETE(params).then(res => {
+        if (res.code === 200) {
+            cdDialogVisible.value = false
+            deleteEventLoadingStatus.value = false
+            ElMessage({
+                type: 'success',
+                message: 'Event listing deleted Successfully',
+                grouping: true
+            })
+            emit('deleteSuccess')
+
+        }
+    }).catch(err => {
+        console.log(err)
+        cdDialogVisible.value = false
+        deleteEventLoadingStatus.value = false
     })
+
 }
 
 const eventsList = ref([])
 
-const getEventsList = ()=>{
+const getEventsList = () => {
     let params = {
-        page:1,
-        limit:2
+        page: 1,
+        limit: 2
     }
     EVENTS_LIST(params).then(res => {
 
@@ -385,8 +521,12 @@ const getEventsList = ()=>{
     })
 }
 
-const reserveSpot = ()=>{
+const spotVisible = ref(false)
+const spotInfo = ref({})
 
+const reserveSpot = (data) => {
+    spotVisible.value = true
+    spotInfo.value = data
 }
 
 const shareDialogVisible = ref(false)
@@ -418,9 +558,9 @@ const addFavorite = (item, index) => {
         if (res.code == 200) {
             eventsList.value[index].is_favorite = 1
             ElMessage({
-                type:'success',
-                message:'Added to Favourites',
-                grouping:true
+                type: 'success',
+                message: 'Added to Favourites',
+                grouping: true
             })
         }
     }).catch(err => {
@@ -430,7 +570,7 @@ const addFavorite = (item, index) => {
 
 }
 
-const cancelFavorite = (item,index) => {
+const cancelFavorite = (item, index) => {
     let params = {
         type: 3,
         type_id: item.id
@@ -445,13 +585,43 @@ const cancelFavorite = (item,index) => {
     })
 }
 
-onMounted(()=>{
+const unPublishEvent = (id) => {
+    let params = {
+        id: id,
+        is_publish: 0
+    }
+    HOME_PUBLISH_EVENT(params).then(res => {
+        if (res.code === 200) {
+            console.log('success')
+            emit('unPublishSuccess')
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+const publishEvent = (id) => {
+    let params = {
+        id: id,
+        is_publish: 1
+    }
+    HOME_PUBLISH_EVENT(params).then(res => {
+        if (res.code === 200) {
+            console.log('success')
+            emit('publishSuccess')
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+onMounted(() => {
     getEventsList()
 })
 </script>
 
 <style scoped>
-:deep(.el-drawer__body){
+:deep(.el-drawer__body) {
     padding: 0;
 }
 
@@ -479,6 +649,7 @@ onMounted(()=>{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 .detail-b-t-l {
@@ -496,6 +667,12 @@ onMounted(()=>{
 
 .detail-b-t-l-r {
     margin-left: 12px;
+}
+
+.detail-b-t-r {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .detail-name {
@@ -587,15 +764,16 @@ onMounted(()=>{
     color: #344054;
 }
 
-.event-tags{
+.event-tags {
     display: flex;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
 }
 
-.event-tag{
+.event-tag {
     margin-right: 16px;
+    margin-bottom: 10px;
     padding: 11px 16px;
     background: #F2F4F7;
     border-radius: 8px;
@@ -606,7 +784,7 @@ onMounted(()=>{
     color: #1D2939;
 }
 
-.xll-tag-rec{
+.xll-tag-rec {
     padding: 4px 8px;
     gap: 2px;
     border-radius: 4px;
@@ -623,7 +801,7 @@ onMounted(()=>{
     display: flex;
     flex-direction: row;
     align-items: center;
-
+    width: max-content;
     padding: 4px 8px;
     gap: 2px;
     border-radius: 4px;
@@ -641,17 +819,19 @@ onMounted(()=>{
 
 .xll-tag-2 {
     color: #6648FF;
-    background:  #E6E1FF;
+    background: #E6E1FF;
 }
 
 .xll-tag-3 {
     color: #F04438;
     background: #FEF3F2;
 }
-.other-events{
+
+.other-events {
     margin: 32px 40px 40px 40px;
 }
-.other-events-label{
+
+.other-events-label {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
@@ -659,6 +839,7 @@ onMounted(()=>{
     line-height: 28px;
     color: #1D2939;
 }
+
 .events-list-container {
     display: flex;
     flex-direction: row;
@@ -681,7 +862,7 @@ onMounted(()=>{
     position: relative;
 }
 
-.events-item-share{
+.events-item-share {
     position: absolute;
     right: 20px;
     top: 13px;
@@ -788,10 +969,10 @@ onMounted(()=>{
 }
 
 .events-item-action-container {
-    margin:16px 0 30px 0;
+    margin: 16px 0 30px 0;
 }
 
-.cd-dialog-tips{
+.cd-dialog-tips {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
@@ -800,7 +981,7 @@ onMounted(()=>{
     color: #101828;
 }
 
-.cd-dialog-actions{
+.cd-dialog-actions {
     margin-top: 16px;
     text-align: center;
 }

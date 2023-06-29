@@ -1,184 +1,264 @@
 <template>
-    <div class="job-pool-bg">
-        <el-scrollbar class="job-pool-l">
-            <div class="job-pool-filter">
-                <jobs-filter @search="searchByFilter"></jobs-filter>
+    <div>
+        <el-scrollbar class="job-pool-bg" always>
+
+            <div v-if="!token" class="banner-row" >
+                <el-carousel style="width: 100%" trigger="click" height="200px">
+                    <el-carousel-item v-for="item in 4" :key="item">
+                        <el-image
+                            src="https://cdn.staticaly.com/gh/unilei/picx-images-hosting@master/20230626/kkpansBanner.1swnz0bt2nuo.jpg">
+                        </el-image>
+                    </el-carousel-item>
+                </el-carousel>
             </div>
-        </el-scrollbar>
-        <el-scrollbar class="job-pool-r-scroll" ref="jobPoolScroll">
-            <div class="job-pool-r">
 
-                <div class="pool-filter-icon-container">
-                    <el-image :src="filterIconImg" @click="showJobFilter"> </el-image>
-
-                    <div class="pool-filter-mobile" id="pool-filter-mobile">
+            <div class="job-pool-container">
+                <el-scrollbar class="job-pool-l">
+                    <div  :class="token ? 'job-pool-filter' :  'job-pool-filter-token' ">
                         <jobs-filter @search="searchByFilter"></jobs-filter>
                     </div>
+                </el-scrollbar>
+                <el-scrollbar :class="token ? 'job-pool-r-scroll' : 'job-pool-r-scroll-token' " ref="jobPoolScroll">
+                    <div :class="token ? 'job-pool-r' : 'job-pool-r-token' ">
 
-                </div>
+                        <div class="pool-filter-icon-container">
+                            <el-image :src="filterIconImg" @click="showJobFilter"> </el-image>
 
-                <el-tabs  v-model="activeTabName" @tab-change="tabChange">
-                    <el-tab-pane label="Featured Jobs" name="featured_jobs">
-                        <div class="job-pool-swiper">
-                            <el-carousel style="width: 100%" trigger="click" height="203px">
-                                <el-carousel-item v-for="item in 4" :key="item" style="background-color: #FFFFFF;border-radius: 12px;">
-                                    <el-image
-                                        style="width: 100%;background-color: #FFFFFF;border-radius: 12px;"
-                                        src="https://cdn.staticaly.com/gh/unilei/picx-images-hosting@master/20230609/kkpansGroup-342.3n9i1f0npyc0.jpg">
-                                    </el-image>
-                                </el-carousel-item>
-                            </el-carousel>
-                        </div>
-
-                        <div class="jobs-items" v-loading="allFeaturedJobsLoadingStatus">
-
-                            <div class="jobs-item" v-for="(item,i ) in jobFeaturedData" :key="i">
-                                <div class="jobs-item-t">
-                                    <div class="jobs-item-t-l">
-                                        <el-image class="jobs-item-logo" :src="item.company_logo"></el-image>
-                                    </div>
-                                    <div class="jobs-item-t-r">
-                                        <div class="jobs-item-name">
-                                            {{item.job_title}}
-                                            <span class="xll-tag xll-tag-1"  >Recommended by EDU 💜</span>
-
-                                        </div>
-                                        <div class="jobs-item-name-time">
-                                            {{item.company_name}} . Posted {{ $filters.howLongFormat(item.c_time) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="jobs-item-m">
-                                    <div class="jobs-item-desc">
-                                        {{ $filters.doRepAdvance(item.desc)  }}
-                                    </div>
-                                </div>
-                                <div class="jobs-item-b">
-                                    <el-button link @click="seeMore(item)">See More</el-button>
-<!--                                    <el-button type="primary">Apply Now</el-button>-->
-                                    <applyButton :selectJobId="item.id"
-                                                    btn-text="Apply Now"
-                                                    :job-info="item" >
-                                    </applyButton>
-                                </div>
-
-                                <div class="jobs-item-sl">
-                                    <el-button link type="info" @click="shareJob(item)">
-                                        <IconIcRoundShare/>
-                                    </el-button>
-
-                                    <template v-if="item.is_favorite">
-                                        <el-button link type="info" @click="cancelFavorite(item,i,'featured')">
-                                            <IconFlatColorIconsLike/>
-                                        </el-button>
-                                    </template>
-                                    <template v-else>
-                                        <el-button link type="info" @click="addFavorite(item,i,'featured')">
-                                            <IconIconParkOutlineLike/>
-                                        </el-button>
-                                    </template>
-                                </div>
-
+                            <div class="pool-filter-mobile" id="pool-filter-mobile">
+                                <jobs-filter @search="searchByFilter"></jobs-filter>
                             </div>
+
                         </div>
 
-                    </el-tab-pane>
+                        <el-tabs  v-model="activeTabName" @tab-change="tabChange">
+                            <el-tab-pane label="Featured Jobs" name="featured_jobs">
+                                <div class="job-pool-swiper">
+                                    <el-carousel style="width: 100%" trigger="click" height="203px">
+                                        <el-carousel-item v-for="item in 4" :key="item" style="background-color: #FFFFFF;border-radius: 12px;">
+                                            <el-image
+                                                style="width: 100%;background-color: #FFFFFF;border-radius: 12px;"
+                                                src="https://cdn.staticaly.com/gh/unilei/picx-images-hosting@master/20230609/kkpansGroup-342.3n9i1f0npyc0.jpg">
+                                            </el-image>
+                                        </el-carousel-item>
+                                    </el-carousel>
+                                </div>
 
-                    <el-tab-pane label="All Jobs" name="all_jobs">
-                        <div class="job-pool-swiper">
-                            <el-carousel style="width: 100%" trigger="click" height="203px">
-                                <el-carousel-item v-for="item in 4" :key="item" style="background-color: #FFFFFF;border-radius: 12px;">
-                                    <el-image
-                                        style="width: 100%;background-color: #FFFFFF;border-radius: 12px;"
-                                        src="https://cdn.staticaly.com/gh/unilei/picx-images-hosting@master/20230609/kkpansGroup-342.3n9i1f0npyc0.jpg">
-                                    </el-image>
-                                </el-carousel-item>
-                            </el-carousel>
-                        </div>
+                                <div class="jobs-items" v-loading="allFeaturedJobsLoadingStatus">
 
-                        <div v-loading="allJobsLoadingStatus">
-                            <div class="jobs-items">
-
-                                <div class="jobs-item" v-for="(item,i ) in jobsData" :key="i">
-                                    <div class="jobs-item-t">
-                                        <div class="jobs-item-t-l">
-                                            <el-image class="jobs-item-logo" :src="item.company_logo"></el-image>
-                                        </div>
-                                        <div class="jobs-item-t-r">
-                                            <div class="jobs-item-name">
-                                                {{item.job_title}}
+                                    <div class="jobs-item" v-for="(item,i ) in jobMatchData" :key="i+'-match'">
+                                        <div class="jobs-item-t">
+                                            <div class="jobs-item-t-l">
+                                                <el-image
+                                                    class="jobs-item-logo"
+                                                    :src="item.company_logo">
+                                                    <template #error>
+                                                        <el-image :src="defaultBusinessAvatar"></el-image>
+                                                    </template>
+                                                </el-image>
                                             </div>
-                                            <div class="jobs-item-name-time">
-                                                {{item.company_name}} . Posted {{ $filters.howLongFormat(item.c_time) }}
+                                            <div class="jobs-item-t-r">
+                                                <div class="jobs-item-name">
+                                                    {{item.job_title}}
+                                                    <span class="xll-tag xll-tag-1"  >Our Picks For You 💜</span>
+
+                                                </div>
+                                                <div class="jobs-item-name-time">
+                                                    {{item.company_name}} . Posted {{ $filters.howLongFormat(item.c_time) }}
+                                                </div>
                                             </div>
                                         </div>
-
-                                    </div>
-                                    <div class="jobs-item-m">
-                                        <div class="jobs-item-desc">
-                                            {{ $filters.doRepAdvance(item.desc)  }}
+                                        <div class="jobs-item-m">
+                                            <div class="jobs-item-desc">
+                                                {{ $filters.doRepAdvance(item.desc)  }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="jobs-item-b">
-                                        <el-button link @click="seeMore(item)">See More</el-button>
-                                        <applyButton :selectJobId="item.id"
-                                                        btn-text="Apply Now"
-                                                        :job-info="item" >
-                                        </applyButton>
-                                    </div>
+                                        <div class="jobs-item-b">
+                                            <el-button link @click="seeMore(item)">See More</el-button>
+                                            <!--                                    <el-button type="primary">Apply Now</el-button>-->
+                                            <applyButton :selectJobId="item.id"
+                                                         btn-text="Apply Now"
+                                                         :job-info="item" >
+                                            </applyButton>
+                                        </div>
 
-                                    <div class="jobs-item-sl">
-                                        <el-button link type="info" @click="shareJob(item)">
-                                            <IconIcRoundShare/>
-                                        </el-button>
-
-                                        <template v-if="item.is_favorite">
-                                            <el-button link type="info" @click="cancelFavorite(item,i,'all')">
-                                                <IconFlatColorIconsLike/>
+                                        <div class="jobs-item-sl">
+                                            <el-button link type="info" @click="shareJob(item)">
+                                                <IconIcRoundShare/>
                                             </el-button>
-                                        </template>
-                                        <template v-else>
-                                            <el-button link type="info" @click="addFavorite(item,i,'all')">
-                                                <IconIconParkOutlineLike/>
-                                            </el-button>
-                                        </template>
+
+                                            <template v-if="item.is_favorite">
+                                                <el-button link type="info" @click="cancelFavorite(item,i,'jobMatch')">
+                                                    <IconFlatColorIconsLike/>
+                                                </el-button>
+                                            </template>
+                                            <template v-else>
+                                                <el-button link type="info" @click="addFavorite(item,i,'jobMatch')">
+                                                    <IconIconParkOutlineLike/>
+                                                </el-button>
+                                            </template>
+                                        </div>
+
                                     </div>
 
+                                    <div class="jobs-item" v-for="(item,i ) in jobFeaturedData" :key="i">
+                                        <div class="jobs-item-t">
+                                            <div class="jobs-item-t-l">
+                                                <el-image class="jobs-item-logo" :src="item.company_logo">
+                                                    <template #error>
+                                                        <el-image :src="defaultBusinessAvatar"></el-image>
+                                                    </template>
+                                                </el-image>
+                                            </div>
+                                            <div class="jobs-item-t-r">
+                                                <div class="jobs-item-name">
+                                                    {{item.job_title}}
+                                                    <span class="xll-tag xll-tag-1"  >Recommended by EDU 💜</span>
+
+                                                </div>
+                                                <div class="jobs-item-name-time">
+                                                    {{item.company_name}} . Posted {{ $filters.howLongFormat(item.c_time) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="jobs-item-m">
+                                            <div class="jobs-item-desc">
+                                                {{ $filters.doRepAdvance(item.desc)  }}
+                                            </div>
+                                        </div>
+                                        <div class="jobs-item-b">
+                                            <el-button link @click="seeMore(item)">See More</el-button>
+                                            <!--                                    <el-button type="primary">Apply Now</el-button>-->
+                                            <applyButton :selectJobId="item.id"
+                                                         btn-text="Apply Now"
+                                                         :job-info="item" >
+                                            </applyButton>
+                                        </div>
+
+                                        <div class="jobs-item-sl">
+                                            <el-button link type="info" @click="shareJob(item)">
+                                                <IconIcRoundShare/>
+                                            </el-button>
+
+                                            <template v-if="item.is_favorite">
+                                                <el-button link type="info" @click="cancelFavorite(item,i,'featured')">
+                                                    <IconFlatColorIconsLike/>
+                                                </el-button>
+                                            </template>
+                                            <template v-else>
+                                                <el-button link type="info" @click="addFavorite(item,i,'featured')">
+                                                    <IconIconParkOutlineLike/>
+                                                </el-button>
+                                            </template>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </el-tab-pane>
+
+                            <el-tab-pane label="All Jobs" name="all_jobs">
+                                <div class="job-pool-swiper">
+                                    <el-carousel style="width: 100%" trigger="click" height="203px">
+                                        <el-carousel-item v-for="item in 4" :key="item" style="background-color: #FFFFFF;border-radius: 12px;">
+                                            <el-image
+                                                style="width: 100%;background-color: #FFFFFF;border-radius: 12px;"
+                                                src="https://cdn.staticaly.com/gh/unilei/picx-images-hosting@master/20230609/kkpansGroup-342.3n9i1f0npyc0.jpg">
+                                            </el-image>
+                                        </el-carousel-item>
+                                    </el-carousel>
+                                </div>
+
+                                <div v-loading="allJobsLoadingStatus">
+                                    <div class="jobs-items">
+
+                                        <div class="jobs-item" v-for="(item,i ) in jobsData" :key="i">
+                                            <div class="jobs-item-t">
+                                                <div class="jobs-item-t-l">
+                                                    <el-image class="jobs-item-logo" :src="item.company_logo">
+                                                        <template #error>
+                                                            <el-image :src="defaultBusinessAvatar"></el-image>
+                                                        </template>
+                                                    </el-image>
+                                                </div>
+                                                <div class="jobs-item-t-r">
+                                                    <div class="jobs-item-name">
+                                                        {{item.job_title}}
+                                                    </div>
+                                                    <div class="jobs-item-name-time">
+                                                        {{item.company_name}} . Posted {{ $filters.howLongFormat(item.c_time) }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="jobs-item-m">
+                                                <div class="jobs-item-desc">
+                                                    {{ $filters.doRepAdvance(item.desc)  }}
+                                                </div>
+                                            </div>
+                                            <div class="jobs-item-b">
+                                                <el-button link @click="seeMore(item)">See More</el-button>
+                                                <applyButton :selectJobId="item.id"
+                                                             btn-text="Apply Now"
+                                                             :job-info="item" >
+                                                </applyButton>
+                                            </div>
+
+                                            <div class="jobs-item-sl">
+                                                <el-button link type="info" @click="shareJob(item)">
+                                                    <IconIcRoundShare/>
+                                                </el-button>
+
+                                                <template v-if="item.is_favorite">
+                                                    <el-button link type="info" @click="cancelFavorite(item,i,'all')">
+                                                        <IconFlatColorIconsLike/>
+                                                    </el-button>
+                                                </template>
+                                                <template v-else>
+                                                    <el-button link type="info" @click="addFavorite(item,i,'all')">
+                                                        <IconIconParkOutlineLike/>
+                                                    </el-button>
+                                                </template>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                    <div class="jobs-pagination">
+                                        <el-pagination layout="prev, pager, next"
+                                                       :default-current-page="jobsPage"
+                                                       @size-change="jobsPageSizeChange"
+                                                       @current-change="jobsPageChange"
+                                                       :current-page="jobsPage"
+                                                       :page-size="jobsLimit"
+                                                       :total="jobsTotalNum">
+                                        </el-pagination>
+                                    </div>
 
                                 </div>
 
-                            </div>
-                            <div class="jobs-pagination">
-                                <el-pagination layout="prev, pager, next"
-                                               :default-current-page="jobsPage"
-                                               @size-change="jobsPageSizeChange"
-                                               @current-change="jobsPageChange"
-                                               :current-page="jobsPage"
-                                               :page-size="jobsLimit"
-                                               :total="jobsTotalNum">
-                                </el-pagination>
-                            </div>
+                            </el-tab-pane>
+                        </el-tabs>
 
-                        </div>
+                    </div>
 
-                    </el-tab-pane>
-                </el-tabs>
+                </el-scrollbar>
 
             </div>
 
+            <job-detail :visible="jobDetailVisible" :data="jobDetailData" @close="jobDetailVisible=false"></job-detail>
+
+            <shareCard :visible="shareDialogVisible"
+                       share-title="Share Job Post"
+                       :title="shareInfo.title"
+                       :description="shareInfo.desc"
+                       :quote="shareInfo.desc"
+                       :url="shareLocationUrl"
+                       @close="shareDialogVisible=false"
+            >
+            </shareCard>
+
         </el-scrollbar>
-
-        <job-detail :visible="jobDetailVisible" :data="jobDetailData" @close="jobDetailVisible=false"></job-detail>
-
-        <shareCard :visible="shareDialogVisible"
-                   share-title="Share Job Post"
-                   :title="shareInfo.title"
-                   :description="shareInfo.desc"
-                   :quote="shareInfo.desc"
-                   :url="shareLocationUrl"
-                   @close="shareDialogVisible=false"
-        >
-        </shareCard>
 
     </div>
 
@@ -186,11 +266,21 @@
 
 <script setup>
 import {ref, onMounted} from 'vue'
-import {ADD_FAVORITE, CANCEL_FAVORITE, JOB_DETAIL, JOB_FEATURED_LIST, JOB_LIST} from "@/api/api";
+import {
+    ADD_FAVORITE,
+    CANCEL_FAVORITE, EDUCATOR_JOB_MATCH_LIST,
+    EDUCATOR_MANUAL_MATCH_JOB,
+    JOB_DETAIL,
+    JOB_FEATURED_LIST,
+    JOB_LIST
+} from "@/api/api";
 import {ElLoading} from 'element-plus'
 // import {useRouter} from 'vue-router'
 import applyButton from "@/components/jobs/applyButton.vue";
 import filterIconImg from "@/assets/filter.svg";
+import defaultBusinessAvatar from '@/assets/newHome/default-business-avatar.svg'
+
+const token = localStorage.getItem('token')
 
 // const router = useRouter()
 const jobPoolScroll = ref(null)
@@ -380,6 +470,9 @@ const addFavorite = (item,index,type) => {
             if(type === 'all'){
                 jobsData.value[index]['is_favorite'] = 1
             }
+            if(type === 'jobMatch'){
+                jobMatchData.value[index]['is_favorite'] = 1
+            }
 
         }
     }).catch(err => {
@@ -398,10 +491,13 @@ const cancelFavorite = (item,index,type) => {
         console.log(res)
         if (res.code == 200) {
             if(type === 'featured'){
-                jobFeaturedData.value[index]['is_favorite'] = 1
+                jobFeaturedData.value[index]['is_favorite'] = 0
             }
             if(type === 'all'){
-                jobsData.value[index]['is_favorite'] = 1
+                jobsData.value[index]['is_favorite'] = 0
+            }
+            if(type === 'jobMatch'){
+                jobMatchData.value[index]['is_favorite'] = 0
             }
         }
     }).catch(err => {
@@ -418,7 +514,37 @@ const showJobFilter = ()=>{
     }
 }
 
+const jobMatchData = ref([])
+const manualMatchJob = ()=>{
+    let params = {}
+    EDUCATOR_MANUAL_MATCH_JOB(params).then(res=>{
+        if(res.code === 200){
+            setTimeout(function () {
+                getEducatorJobMatchingList()
+            }, 1000 * 6)
+        }
+    }).catch(err=>{
+        console.log(err)
+    })
+}
+
+const getEducatorJobMatchingList = ()=>{
+    let params = {
+        user_id:localStorage.getItem('uid')
+    }
+    EDUCATOR_JOB_MATCH_LIST(params).then(res=>{
+
+        if(res.code === 200){
+            jobMatchData.value = res.message
+        }
+    }).catch(err=>{
+        console.log(err)
+    })
+}
+
 onMounted(()=>{
+    manualMatchJob()
+    getEducatorJobMatchingList()
     getJobFeaturedList()
 })
 
@@ -444,29 +570,49 @@ onMounted(()=>{
 :deep(.el-tabs__active-bar){
     background-color: #6648FF;
 }
+.banner-row {
+    margin: 0 100px;
+}
 
 .job-pool-bg{
     width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
     height: calc(var(--i-window-height) - 120px);
     background-color: #FFFFFF;
+}
 
+.job-pool-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
+
 .job-pool-l{
     height: calc(var(--i-window-height) - 120px);
 }
 .job-pool-filter{
     margin: 20px 0 40px 40px;
 }
+.job-pool-filter-token{
+    margin: 20px 0 40px 100px;
+}
 
 .job-pool-r{
     margin: 20px 40px 40px 0;
 }
 
+.job-pool-r-token{
+    margin: 20px 100px 40px 0;
+}
+
 .job-pool-r-scroll{
     width: 780px;
+    height: calc(var(--i-window-height) - 140px);
+}
+
+.job-pool-r-scroll-token{
+    width: calc(100% - 380px);
     height: calc(var(--i-window-height) - 140px);
 }
 

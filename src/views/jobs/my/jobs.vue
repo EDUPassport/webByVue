@@ -4,7 +4,7 @@
             <div class="t-container">
                 <div class="t-label">My Jobs</div>
                 <div class="t-tips">
-                    Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet.
+                    Explore career possibilities with our curated job listings
                 </div>
             </div>
 
@@ -31,20 +31,22 @@
                                 <el-dropdown-item>
                                     <el-button link
                                                @click="filterMyJobsByOpenStatus(0)">
-                                        Close
+                                        Closed
                                     </el-button>
                                 </el-dropdown-item>
 
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-
                 </div>
 
                 <el-tabs v-model="activeTabPane" @tab-change="changeActiveTab">
                     <el-tab-pane label="Jobs" name="jobs">
                         <div v-loading="loadingJobsStatus">
-                            <template v-if="jobTotalNum > 0">
+                            <template v-if="emptyLoadingStatus">
+                                <el-empty :image="emptyImg" description="No data"></el-empty>
+                            </template>
+                            <template v-else>
                                 <div class="job-container" >
                                     <div class="job-item" v-for="(item,index) in jobListData" :key="index">
                                         <div class="job-item-t">
@@ -157,7 +159,7 @@
                                     </div>
 
                                 </div>
-                                <div class="job-pagination">
+                                <div class="job-pagination" v-if="jobTotalNum>0">
                                     <el-pagination layout="prev, pager, next"
                                                    :default-current-page="1"
                                                    @size-change="jobPageSizeChange"
@@ -168,9 +170,6 @@
                                     </el-pagination>
                                 </div>
 
-                            </template>
-                            <template v-else>
-                                <el-empty :image="emptyImg" description="No data"></el-empty>
                             </template>
 
                         </div>
@@ -250,6 +249,7 @@ const versionTime = randomString()
 const activeTabPane = ref('jobs')
 
 const loadingJobsStatus = ref(true)
+const emptyLoadingStatus = ref(false)
 
 const shareDialogVisible = ref(false)
 const shareInfo = ref({})
@@ -309,13 +309,16 @@ const filterMyJobsByOpenStatus = (e) =>{
         if (res.code == 200) {
             let jobData = res.message.data
             jobTotalNum.value = res.message.total
-            // jobListData.value = jobData
+            emptyLoadingStatus.value = res.message.total <= 0;
+
             filterUserUnreadAndJobList(jobData)
             loadingJobsStatus.value = false
         }
 
     }).catch(err => {
         console.log(err)
+        loadingJobsStatus.value = false
+        emptyLoadingStatus.value = true
     })
 }
 
@@ -330,13 +333,16 @@ const getMyJobs = (page, limit) => {
         if (res.code == 200) {
             let jobData = res.message.data
             jobTotalNum.value = res.message.total
-            // jobListData.value = jobData
+            emptyLoadingStatus.value = res.message.total <= 0;
+
             filterUserUnreadAndJobList(jobData)
             loadingJobsStatus.value = false
         }
 
     }).catch(err => {
         console.log(err)
+        loadingJobsStatus.value = false
+        emptyLoadingStatus.value = true
     })
 
 }
@@ -407,7 +413,7 @@ const editJobTemplate = (item) => {
 
 const postJobFromTemplate = (item) => {
     store.commit('setJobTemplateDetail', item)
-    router.push({path: '/jobs/post', query: {version_time: versionTime}})
+    router.push({path: '/jobs/post', query: {version_time: versionTime,post_from:'template'}})
 }
 
 const deleteJobTemplate = (id) => {
@@ -456,7 +462,7 @@ const editJobDrafts = (item) => {
 
 const postJobFromDrafts = (item) => {
     store.commit('setJobTemplateDetail', item)
-    router.push({path: '/jobs/post', query: {version_time: versionTime}})
+    router.push({path: '/jobs/post', query: {version_time: versionTime,post_from:'drafts'}})
 }
 
 const deleteJobDrafts = (id) => {
@@ -474,19 +480,17 @@ const deleteJobDrafts = (id) => {
 
 
 const turnApplications = (id, unreadId) => {
-    let data = {
+    console.log('turn applications')
+    let params = {
         id: unreadId,
         identity: identity,
         status: 1,
         token: token
     }
 
-    SET_READ(data).then(res => {
-        console.log(res)
+    SET_READ(params).then(res => {
         if (res.code == 200) {
             router.push({path: '/jobs/applications', query: {id: id}})
-        } else {
-            console.log('set read:' + res.msg)
         }
     }).catch(err => {
         console.log(err)

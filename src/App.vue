@@ -28,7 +28,7 @@
 import VueCookies from 'vue-cookies'
 import {ref, onBeforeUnmount, onMounted, watch} from 'vue'
 import {useStore} from 'vuex'
-import axios from 'axios'
+// import localStorageService from "@/utils/localStorageService";
 
 const store = useStore()
 const includePages = ref(store.state.keepAliveIncludeData)
@@ -55,30 +55,6 @@ const acceptCookie = ()=>{
     showCookiePopup.value = false;
 }
 
-const checkVersion = ()=>{
-
-    axios.get('/api/edupassport/version',{
-        baseURL:'/compass',
-        proxy:true
-    }).then(res=>{
-        console.log(res)
-        if(res.code === 200){
-            let version = res.data.version;
-
-            if(VueCookies.isKey('version')){
-                if(version !== VueCookies.get('version')){
-                    VueCookies.set('version',version)
-                    window.location.reload()
-                }
-            }else{
-                VueCookies.set('version',version)
-                window.location.reload()
-            }
-        }
-    })
-
-}
-
 function updateWindowHeight() {
     let windowHeight = window.innerHeight;
     let html = document.querySelector(":root");
@@ -89,7 +65,6 @@ function updateWindowHeight() {
 
 onMounted(() => {
     checkCookie()
-    checkVersion()
     updateWindowHeight();
     window.addEventListener('resize', () => {
         updateWindowHeight();

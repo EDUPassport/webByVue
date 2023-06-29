@@ -67,6 +67,33 @@
 
                         </div>
                     </el-col>
+                    <el-col class="header-l-col" :xs="0" :sm="4" :md="4" :lg="8" :xl="8" v-else-if="currentRoutePath === '/deals' && token ">
+                        <div class="header-page-name">
+                            <template v-if="profilePercentage <= 60">
+                                <el-tooltip
+                                    effect="light"
+                                    content="Complete your profile to post a deal"
+                                    placement="bottom"
+                                >
+                                    <el-button icon="plus" type="info">Post a Deal</el-button>
+                                </el-tooltip>
+                            </template>
+                            <template v-else>
+                                <el-button icon="plus" type="primary" @click="turnToPostDeal()">Post a Deal</el-button>
+                            </template>
+                            <el-button link @click="turnToMyDeals()">My Deals</el-button>
+                        </div>
+                        <div class="header-welcome-name">
+
+                        </div>
+                    </el-col>
+                    <el-col class="header-l-col" :xs="0" :sm="4" :md="12" :lg="12" :xl="12" v-else-if="currentRoutePath === '/deals/myDeals'">
+                        <div class="nav-events-container">
+                            <div class="nav-events-l">
+                                <el-button link icon="back" @click="turnBackToDeals()" >Back to Deals</el-button>
+                            </div>
+                        </div>
+                    </el-col>
                     <el-col class="header-l-col" :xs="0" :sm="4" :md="4" :lg="8" :xl="8" v-else>
                         <div class="header-page-name">
                             <template v-if="currentRoutePath === '/overview' ">Dashboard</template>
@@ -113,9 +140,7 @@
 
                     </el-col>
                     <el-col class="header-r-col"  :xs="8" :sm="20" :md="20" :lg="16" :xl="16" v-else-if="currentRoutePath === '/favorites' ">
-                        <div class="nav-events-r-container" >
-                            <el-button plain type="primary" @click="turnToMyReservedSpots()">Reserved Spots</el-button>
-                        </div>
+
                         <HeaderSwitchIdentity></HeaderSwitchIdentity>
 
                     </el-col>
@@ -127,7 +152,7 @@
 
                         <div class="nav-link-container">
 
-                            <router-link to="/jobs" exact> EDU JOBS</router-link>
+                            <router-link to="/job/pool" exact> EDU JOBS</router-link>
                             <router-link to="/deals" exact> EDU DEALS</router-link>
                             <router-link to="/events" exact> EDU EVENTS</router-link>
                             <template v-if="envBlog === 'yes'">
@@ -142,12 +167,14 @@
                         <HeaderSwitchIdentity></HeaderSwitchIdentity>
 
                     </el-col>
-
+                    <el-col class="header-r-col" :xs="8" :sm="20" :md="12" :lg="12" :xl="12" v-else-if="currentRoutePath === '/deals/myDeals' ">
+                        <HeaderSwitchIdentity></HeaderSwitchIdentity>
+                    </el-col>
                     <el-col class="header-r-col" :xs="8" :sm="20" :md="20" :lg="16" :xl="16" v-else>
 
                         <div class="nav-link-container">
 
-                            <router-link to="/jobs" exact> EDU JOBS</router-link>
+                            <router-link to="/job/pool" exact> EDU JOBS</router-link>
                             <router-link to="/deals" exact> EDU DEALS</router-link>
                             <router-link to="/events" exact> EDU EVENTS</router-link>
                             <template v-if="envBlog === 'yes'">
@@ -262,6 +289,18 @@ const turnToPostEvent = ()=>{
 
 const turnToMyReservedSpots = ()=>{
     router.push({path:'/events/myReservedSpots'})
+}
+
+const turnToPostDeal = ()=>{
+    router.push({path:'/deals/offer'})
+}
+
+const turnToMyDeals = ()=>{
+    router.push({path:'/deals/myDeals'})
+}
+
+const turnBackToDeals = ()=>{
+    router.push({path:'/deals'})
 }
 
 </script>

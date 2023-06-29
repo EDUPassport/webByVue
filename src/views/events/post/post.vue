@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div class="t-r">
-                    <el-button type="danger"> Cancel</el-button>
+                    <el-button type="danger" @click="turnMyEvents()"> Cancel</el-button>
                     <el-button plain @click="saveAndExit(basicForms)">Save and Exit</el-button>
                     <el-button type="primary" @click="submitForm(basicForms)">Publish Event</el-button>
                 </div>
@@ -148,6 +148,40 @@
 
                         </div>
                         <div class="form-content-r">
+
+                            <el-form-item label="Event Fee" prop="pay_money">
+                                <el-input
+                                        class="form-width-percent-100"
+                                        v-model="basicForm.pay_money"
+                                        oninput="value=value.replace(/[^\d]/g,'')"
+                                        placeholder="Enter event fee">
+                                    <template #prepend>
+                                        <el-select
+                                                v-model="basicForm.currency"
+                                                class="xll-currency-select"
+                                                value-key="object_en"
+                                                placeholder="Select">
+                                            <el-option
+                                                    v-for="(item,index) in currencyList"
+                                                    :key="index"
+                                                    :label="item.object_en"
+                                                    :value="item.object_en"
+                                            >
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-input>
+                            </el-form-item>
+
+                            <el-form-item label="Add Coupon Code">
+                                <el-input
+                                    class="form-width-percent-100"
+                                    v-model="basicForm.discount_code"
+                                    placeholder="e.g EDU0384"
+                                >
+                                </el-input>
+                            </el-form-item>
+
                             <el-form-item label="Add Event Cover Image or Video" prop="file">
                                 <template v-if="basicForm.file && editFileStatus">
 
@@ -185,27 +219,27 @@
                                             </div>
                                         </div>
 
-<!--                                        <div class="attachment-xll-image">-->
-<!-- -->
-<!--                                            <el-link :href="basicForm.file" target="_blank">Take a look</el-link>-->
-<!--                                            <div class="attachment-xll-image-mask">-->
-<!--                                                <el-icon-->
-<!--                                                        style="cursor: pointer;"-->
-<!--                                                        @click="handleSingleImagePreview(basicForm.file,'file')"-->
-<!--                                                        color="#ffffff"-->
-<!--                                                        :size="20">-->
-<!--                                                    <zoom-in/>-->
-<!--                                                </el-icon>-->
+                                        <!--                                        <div class="attachment-xll-image">-->
+                                        <!-- -->
+                                        <!--                                            <el-link :href="basicForm.file" target="_blank">Take a look</el-link>-->
+                                        <!--                                            <div class="attachment-xll-image-mask">-->
+                                        <!--                                                <el-icon-->
+                                        <!--                                                        style="cursor: pointer;"-->
+                                        <!--                                                        @click="handleSingleImagePreview(basicForm.file,'file')"-->
+                                        <!--                                                        color="#ffffff"-->
+                                        <!--                                                        :size="20">-->
+                                        <!--                                                    <zoom-in/>-->
+                                        <!--                                                </el-icon>-->
 
-<!--                                                <el-icon-->
-<!--                                                        style="cursor: pointer;margin-left: 15px;"-->
-<!--                                                        @click="handleSingleImageRemove('file')"-->
-<!--                                                        color="#F97066"-->
-<!--                                                        :size="20">-->
-<!--                                                    <Delete/>-->
-<!--                                                </el-icon>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
+                                        <!--                                                <el-icon-->
+                                        <!--                                                        style="cursor: pointer;margin-left: 15px;"-->
+                                        <!--                                                        @click="handleSingleImageRemove('file')"-->
+                                        <!--                                                        color="#F97066"-->
+                                        <!--                                                        :size="20">-->
+                                        <!--                                                    <Delete/>-->
+                                        <!--                                                </el-icon>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
 
                                     </div>
 
@@ -214,7 +248,7 @@
                                     <el-upload
                                             class="form-width-percent-100"
                                             drag
-                                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG,mp4,MP4"
+                                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG,.mp4,.MP4,.mov,.MOV,.avi,.AVI,.WebM"
                                             :limit="1"
                                             :headers="uploadHeaders"
                                             :show-file-list="false"
@@ -232,7 +266,7 @@
                                 </template>
                             </el-form-item>
                             <el-form-item label="Event Category" prop="category_id">
-                                <el-radio-group  v-model="basicForm.category_id">
+                                <el-radio-group v-model="basicForm.category_id">
                                     <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
                                         <div v-for="(item,i) in categoryData" :key="i" style="flex-basis: 50%;">
                                             <el-radio :label="item.id">
@@ -254,13 +288,13 @@
                                     </div>
                                 </el-checkbox-group>
                             </el-form-item>
-                            <el-form-item label="Additional Details(Optional)">
-                                <el-input v-model="basicForm.type_desc"
-                                          type="textarea"
-                                          :rows="4"
-                                          placeholder="Enter additional details">
-                                </el-input>
-                            </el-form-item>
+<!--                            <el-form-item label="Additional Details(Optional)">-->
+<!--                                <el-input v-model="basicForm.type_desc"-->
+<!--                                          type="textarea"-->
+<!--                                          :rows="4"-->
+<!--                                          placeholder="Enter additional details">-->
+<!--                                </el-input>-->
+<!--                            </el-form-item>-->
 
                         </div>
                     </div>
@@ -288,6 +322,7 @@
 
 <script setup>
 import {timeZones} from "@/utils/timeZones";
+import {isValidURL} from "@/utils/utils";
 import {ref, reactive, onMounted, onUnmounted} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import imageUploadIcon from '@/assets/newHome/image-upload.svg'
@@ -306,7 +341,7 @@ import ImageCompressor from 'compressorjs'
 // import {decode} from 'js-base64'
 import {updateWindowHeight} from "@/utils/tools";
 import {ElMessage, ElLoading} from 'element-plus'
-import {convertTo24HourForEventTime,formatEventTimeForShow} from "@/utils/utils";
+import {convertTo24HourForEventTime, formatEventTimeForShow} from "@/utils/utils";
 
 const route = useRoute()
 const router = useRouter()
@@ -346,7 +381,7 @@ const eventDisabledDate = (date) => {
 
 const validateEventTime = (rule, value, callback) => {
 
-    if(!basicForm.start_time && !basicForm.end_time){
+    if (!basicForm.start_time && !basicForm.end_time) {
         return callback(new Error('Please select time'))
     }
     if (!basicForm.start_time) {
@@ -354,6 +389,17 @@ const validateEventTime = (rule, value, callback) => {
     }
     if (!basicForm.end_time) {
         return callback(new Error('Please select end time'))
+    }
+    callback()
+}
+
+const validateEventLink = (rule, value, callback)=>{
+    if(!value){
+        return callback(new Error('Please enter event link'))
+    }
+
+    if(!isValidURL(value)){
+        return callback(new Error('The URL format is incorrect. e.g https://edupassport.io'))
     }
     callback()
 }
@@ -380,16 +426,19 @@ const basicForm = reactive({
     tags_en: '',
     file: '',
     file_name: '',
+    file_type:'',
     type_desc: '',
     category_id: '',
+    currency: 'USD',
+    pay_money: '',
+    discount_code:'',
 
     third_com_logo: '',
     third_com_name: '',
-    pay_money: 0,
     is_all: '1',
     lat: '',
     lng: '',
-    currency: 'USD'
+
 })
 
 const basicRules = reactive({
@@ -445,7 +494,7 @@ const basicRules = reactive({
         online_url: [
             {
                 required: true,
-                message: 'Please enter event link',
+                validator:validateEventLink,
                 trigger: 'blur',
             },
         ],
@@ -453,6 +502,13 @@ const basicRules = reactive({
             {
                 required: true,
                 message: 'Please enter event description',
+                trigger: 'blur',
+            },
+        ],
+        pay_money: [
+            {
+                required: true,
+                message: 'Please enter event fee',
                 trigger: 'blur',
             },
         ],
@@ -473,7 +529,7 @@ const basicRules = reactive({
         tag: [
             {
                 required: true,
-                message:'please choose event type',
+                message: 'please choose event type',
                 trigger: 'change',
             },
         ]
@@ -504,37 +560,43 @@ const getEventDetail = (id) => {
             basicForm.end_time = formatEventTimeForShow(resMessage.end_time)
             basicForm.timezone = resMessage.timezone
             basicForm.is_online = resMessage.is_online
+            eventFormat.value = resMessage.is_online
             basicForm.location = resMessage.location
             basicForm.event_place = resMessage.event_place
             basicForm.online_url = resMessage.online_url
             basicForm.desc = resMessage.desc
+            basicForm.currency = resMessage.currency
+            basicForm.pay_money = resMessage.pay_money
+            basicForm.discount_code = resMessage.discount_code
+
             basicForm.file = resMessage.file
-            basicForm.file_name =  resMessage.file_name
+            basicForm.file_name = resMessage.file_name
+            basicForm.file_type = resMessage.file_type
 
             basicForm.category_id = resMessage.category_id
             basicForm.tags_cn = resMessage.tags_cn
             basicForm.tags_en = resMessage.tags_en
-            basicForm.type_desc = resMessage.type_desc
+            // basicForm.type_desc = resMessage.type_desc
+
             editFileStatus.value = true
 
-            if(resMessage.tags_en){
+            if (resMessage.tags_en) {
                 let tagsEnArr = resMessage.tags_en.split(',')
-                tagsEnArr.forEach(tag=>{
-                    let aa = tagsData.value.filter(item=>item.name_en === tag)
+                tagsEnArr.forEach(tag => {
+                    let aa = tagsData.value.filter(item => item.name_en === tag)
                     basicForm.tag.push(aa[0]['id'])
                 })
             }
 
             // basicForm.third_com_logo = resMessage.third_com_logo
             // basicForm.third_com_name = resMessage.third_com_name
-            // basicForm.pay_money = resMessage.pay_money
             // basicForm.is_all = '1'
             // basicForm.country_id = resMessage.country_id
             // basicForm.state_id = resMessage.state_id
             // basicForm.town_id = resMessage.town_id
             // basicForm.lat = resMessage.lat
             // basicForm.lng = resMessage.lng
-            // basicForm.currency = 'USD'
+
         }
 
     }).catch(err => {
@@ -544,15 +606,29 @@ const getEventDetail = (id) => {
 }
 
 const editFileStatus = ref(false)
+
 const beforeFilePhotoUpload = (file) => {
 
     uploadLoadingStatus.value = true;
-    const isLt2M = file.size / 1024 / 1024 < 20
 
-    if (!isLt2M) {
-        ElMessage.error('Avatar picture size can not exceed 20MB')
+    let fileTypeArr =  file.type.split('/')
+
+    if(fileTypeArr[0] === 'video'){
+        basicForm.file_type = 'video'
+        console.log('this is a video')
     }
-    return isLt2M
+
+    if(fileTypeArr[0] === 'image'){
+        basicForm.file_type = 'image'
+        console.log('this is a image')
+        const isLt2M = file.size / 1024 / 1024 < 20
+
+        if (!isLt2M) {
+            ElMessage.error('Avatar picture size can not exceed 20MB')
+        }
+        return isLt2M
+    }
+
 }
 
 const cancelUpload = () => {
@@ -561,55 +637,100 @@ const cancelUpload = () => {
 
 const fileHttpRequest = (options) => {
 
-    new ImageCompressor(options.file, {
-        quality: 0.6,
-        success(file) {
-            // console.log(file)
-            const formData = new FormData();
+    if(basicForm.file_type === 'image'){
+        new ImageCompressor(options.file, {
+            quality: 0.6,
+            success(file) {
+                // console.log(file)
+                const formData = new FormData();
 
-            formData.append('token', localStorage.getItem('token'))
-            // console.log(file)
-            let isInChina = process.env.VUE_APP_CHINA
-            if (isInChina === 'yes') {
-                formData.append('file[]', file, file.name)
-                UPLOAD_BY_ALI_OSS(formData).then(res => {
-                    // console.log(res)
-                    if (res.code == 200) {
-                        let myFileUrl = res.data[0]['file_url'];
-                        uploadLoadingStatus.value = false;
-                        basicForm.file = myFileUrl
-                        basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
-                        editFileStatus.value = true
-                    }
-                }).catch(err => {
-                    console.log(err)
-                })
+                formData.append('token', localStorage.getItem('token'))
+                // console.log(file)
+                let isInChina = process.env.VUE_APP_CHINA
+                if (isInChina === 'yes') {
+                    formData.append('file[]', file, file.name)
+                    UPLOAD_BY_ALI_OSS(formData).then(res => {
+                        // console.log(res)
+                        if (res.code == 200) {
+                            let myFileUrl = res.data[0]['file_url'];
+                            uploadLoadingStatus.value = false;
+                            basicForm.file = myFileUrl
+                            basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
+                            editFileStatus.value = true
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                    })
 
+                }
+
+                if (isInChina === 'no') {
+                    formData.append('file', file, file.name)
+                    UPLOAD_BY_SERVICE(formData).then(res => {
+                        // console.log(res)
+                        if (res.code == 200) {
+                            let myFileUrl = res.message.file_path;
+                            uploadLoadingStatus.value = false;
+                            basicForm.file = myFileUrl
+                            basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
+                            editFileStatus.value = true
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                    })
+
+                }
+
+            },
+            error(err) {
+                console.log(err)
             }
 
-            if (isInChina === 'no') {
-                formData.append('file', file, file.name)
-                UPLOAD_BY_SERVICE(formData).then(res => {
-                    // console.log(res)
-                    if (res.code == 200) {
-                        let myFileUrl = res.message.file_path;
-                        uploadLoadingStatus.value = false;
-                        basicForm.file = myFileUrl
-                        basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
-                        editFileStatus.value = true
-                    }
-                }).catch(err => {
-                    console.log(err)
-                })
+        })
 
-            }
+    }
 
-        },
-        error(err) {
-            console.log(err)
+    if(basicForm.file_type === 'video'){
+        const formData = new FormData();
+        let file = options.file;
+
+        formData.append('token', localStorage.getItem('token'))
+        // console.log(file)
+        let isInChina = process.env.VUE_APP_CHINA
+        if (isInChina === 'yes') {
+            formData.append('file[]', file, file.name)
+            UPLOAD_BY_ALI_OSS(formData).then(res => {
+                // console.log(res)
+                if (res.code == 200) {
+                    let myFileUrl = res.data[0]['file_url'];
+                    uploadLoadingStatus.value = false;
+                    basicForm.file = myFileUrl
+                    basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
+                    editFileStatus.value = true
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+
         }
 
-    })
+        if (isInChina === 'no') {
+            formData.append('file', file, file.name)
+            UPLOAD_BY_SERVICE(formData).then(res => {
+                // console.log(res)
+                if (res.code == 200) {
+                    let myFileUrl = res.message.file_path;
+                    uploadLoadingStatus.value = false;
+                    basicForm.file = myFileUrl
+                    basicForm.file_name = myFileUrl.substring(myFileUrl.length - 10)
+                    editFileStatus.value = true
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+
+        }
+    }
 
 }
 const handleSingleImageRemove = (field) => {
@@ -705,7 +826,7 @@ const saveAndExit = (formEl) => {
                 text: 'Loading...'
             })
 
-            let params = Object.assign({},  basicForm);
+            let params = Object.assign({}, basicForm);
             params.is_publish = 0
             params.start_time = convertTo24HourForEventTime(basicForm.date, basicForm.start_time)
             params.end_time = convertTo24HourForEventTime(basicForm.date, basicForm.end_time)
@@ -714,8 +835,8 @@ const saveAndExit = (formEl) => {
             let tagsEnArr = []
             let tagsCnArr = []
 
-            tagsArr.forEach(item=>{
-                let a = tagsData.value.filter(value=>value.id === item)
+            tagsArr.forEach(item => {
+                let a = tagsData.value.filter(value => value.id === item)
                 tagsEnArr.push(a[0].name_en)
                 tagsCnArr.push(a[0].name_cn)
             })
@@ -729,11 +850,11 @@ const saveAndExit = (formEl) => {
                     // this.submitEventForm()
                     loading.close()
                     ElMessage({
-                        type:'success',
-                        message:'Event listing saved Successfully',
-                        grouping:true
+                        type: 'success',
+                        message: 'Event listing saved Successfully',
+                        grouping: true
                     })
-                    setTimeout(function (){
+                    setTimeout(function () {
                         router.push('/events/myEvents')
                     }, 1500)
 
@@ -755,6 +876,7 @@ const saveAndExit = (formEl) => {
 }
 
 const submitForm = (formEl) => {
+
     formEl.validate((valid) => {
         if (valid) {
 
@@ -762,8 +884,9 @@ const submitForm = (formEl) => {
                 text: 'Loading...'
             })
 
-            let params = Object.assign({},  basicForm);
+            let params = Object.assign({}, basicForm);
 
+            params.is_publish = 1
             params.start_time = convertTo24HourForEventTime(basicForm.date, basicForm.start_time)
             params.end_time = convertTo24HourForEventTime(basicForm.date, basicForm.end_time)
 
@@ -771,8 +894,8 @@ const submitForm = (formEl) => {
             let tagsEnArr = []
             let tagsCnArr = []
 
-            tagsArr.forEach(item=>{
-                let a = tagsData.value.filter(value=>value.id === item)
+            tagsArr.forEach(item => {
+                let a = tagsData.value.filter(value => value.id === item)
                 tagsEnArr.push(a[0].name_en)
                 tagsCnArr.push(a[0].name_cn)
             })
@@ -786,11 +909,11 @@ const submitForm = (formEl) => {
                     // this.submitEventForm()
                     loading.close()
                     ElMessage({
-                        type:'success',
-                        message:'Event listing published Successfully',
-                        grouping:true,
+                        type: 'success',
+                        message: 'Event listing published Successfully',
+                        grouping: true,
                     })
-                    setTimeout(function (){
+                    setTimeout(function () {
                         router.push('/events/myEvents')
                     }, 1500)
 
@@ -809,6 +932,11 @@ const submitForm = (formEl) => {
             })
         }
     })
+}
+
+const turnMyEvents = () => {
+    router.go(-1)
+    // router.push({path:'/events/myEvents'})
 }
 
 onMounted(() => {
@@ -845,6 +973,10 @@ onUnmounted(() => {
 <style scoped>
 .form-width-percent-100 {
     width: 100%;
+}
+
+.xll-currency-select {
+    width: 80px;
 }
 
 :deep(.el-date-editor.el-input, .el-date-editor.el-input__wrapper) {
@@ -924,7 +1056,7 @@ onUnmounted(() => {
     border-radius: 10px;
 }
 
-:deep(.profile-uploader .el-upload:hover)  {
+:deep(.profile-uploader .el-upload:hover) {
     border-color: #0AA0A8;
 }
 

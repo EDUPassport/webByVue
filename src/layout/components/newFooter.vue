@@ -110,7 +110,7 @@ export default {
       this.$router.push('/')
     },
     turnJobs(){
-      this.$router.push('/jobs')
+      this.$router.push('/job/pool')
     },
     turnDeals(){
       this.$router.push('/deals')

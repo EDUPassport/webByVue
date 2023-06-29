@@ -65,12 +65,25 @@
                                         </div>
 
                                         <div class="events-item-t">
-                                            <el-image class="events-item-banner"
-                                                      fit="cover"
-                                                      :preview-src-list="[item.file]"
-                                                      :src="item.file !='' ? item.file : '' "
-                                            >
-                                            </el-image>
+                                            <template v-if="item.file_type === 'image' ">
+                                                <el-image class="events-item-banner"
+                                                          fit="cover"
+                                                          :preview-src-list="[item.file]"
+                                                          :src="item.file !='' ? item.file : '' "
+                                                >
+                                                </el-image>
+                                            </template>
+                                            <template v-else-if="item.file_type === 'video' ">
+                                                <video style="width: 100%;" :src="item.file" controls ></video>
+                                            </template>
+                                            <template v-else>
+                                                <el-image class="events-item-banner"
+                                                          fit="cover"
+                                                          :preview-src-list="[item.file]"
+                                                          :src="item.file !='' ? item.file : '' "
+                                                >
+                                                </el-image>
+                                            </template>
                                         </div>
                                         <div class="events-item-b">
 
@@ -100,13 +113,7 @@
                                                     <span v-if="item.identity == 4">Other</span>
                                                     <span v-if="item.identity == 5">Vendor</span>
                                                 </div>
-                                                <div class="events-item-see-more"
-                                                     v-if="!token"
-                                                     @click="reserveSpotForGuest(item)"
-                                                >
-                                                    Reserve Spot
-                                                </div>
-                                                <div class="events-item-action-container" v-if="token">
+                                                <div class="events-item-action-container">
                                                     <el-button type="primary"
                                                                @click="reserveSpot(item)">
                                                         Reserve Spot
@@ -164,12 +171,26 @@
                                         </div>
 
                                         <div class="events-item-t">
-                                            <el-image class="events-item-banner"
-                                                      fit="cover"
-                                                      :preview-src-list="[item.file]"
-                                                      :src="item.file !='' ? item.file : '' "
-                                            >
-                                            </el-image>
+
+                                            <template v-if="item.file_type === 'image' ">
+                                                <el-image class="events-item-banner"
+                                                          fit="cover"
+                                                          :preview-src-list="[item.file]"
+                                                          :src="item.file !='' ? item.file : '' "
+                                                >
+                                                </el-image>
+                                            </template>
+                                            <template v-else-if="item.file_type === 'video' ">
+                                                <video style="width: 100%;" :src="item.file" controls ></video>
+                                            </template>
+                                            <template v-else>
+                                                <el-image class="events-item-banner"
+                                                          fit="cover"
+                                                          :preview-src-list="[item.file]"
+                                                          :src="item.file !='' ? item.file : '' "
+                                                >
+                                                </el-image>
+                                            </template>
                                         </div>
                                         <div class="events-item-b">
 
@@ -201,13 +222,7 @@
                                                     <span v-if="item.identity == 4">Other</span>
                                                     <span v-if="item.identity == 5">Vendor</span>
                                                 </div>
-                                                <div class="events-item-see-more"
-                                                     v-if="!token"
-                                                     @click="reserveSpotForGuest(item)"
-                                                >
-                                                    Reserve Spot
-                                                </div>
-                                                <div class="events-item-action-container" v-if="token">
+                                                <div class="events-item-action-container">
                                                     <el-button type="primary"
                                                                @click="reserveSpot(item)">
                                                         Reserve Spot
@@ -251,8 +266,10 @@
         >
         </share-card-theme-two>
 
-        <event-detail :visible="eventDetailVisible" :data="eventDetailData"
-                      @close="eventDetailVisible=false"></event-detail>
+        <event-detail :visible="eventDetailVisible"
+                      :data="eventDetailData"
+                      @close="eventDetailVisible=false">
+        </event-detail>
 
         <book-event-form :visible="guestSpotVisible" :info="guestSpotInfo" @close="guestSpotVisible=false"></book-event-form>
 
@@ -265,7 +282,6 @@ import emptyImage from '@/assets/newHome/dashboard/empty.svg'
 import eventFilterComponent from "@/components/eventFilterComponent";
 import {
     ADD_FAVORITE, CANCEL_FAVORITE,
-    EVENTS_ADD_APPLICANTS,
     EVENTS_LIST, HOME_FEATURE_EVENT_LIST,
     USER_BROWSING_HISTORY_ADD
 } from "@/api/api";
@@ -274,7 +290,7 @@ import {updateWindowHeight} from "@/utils/tools";
 import {ref, onMounted, onUnmounted,computed} from 'vue'
 // import {useRouter} from 'vue-router'
 import {useStore} from 'vuex'
-import {ElMessage, ElLoading} from 'element-plus'
+import {ElMessage} from 'element-plus'
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 import BookEventForm from "@/components/bookEventForm.vue";
 
@@ -343,44 +359,13 @@ const addUserBrowsingHistory = (id) => {
 const guestSpotVisible = ref(false)
 const guestSpotInfo = ref({})
 
-const reserveSpotForGuest = (item)=>{
-    console.log(item)
+const reserveSpot = (item)=>{
     guestSpotVisible.value = true
     guestSpotInfo.value = item;
 }
 
-const reserveSpot = (item)=>{
-
-    const loading = ElLoading.service({
-        text:'loading...'
-    })
-    let params = {
-        first_name: '',
-        last_name: '',
-        contact: '',
-        bookings: 1,
-        apply_user_id:localStorage.getItem('uid'),
-        user_id: item.user_id,
-        event_id: item.id
-    }
-
-    EVENTS_ADD_APPLICANTS(params).then(res=>{
-        console.log(res)
-        if(res.code === 200){
-            loading.close()
-            ElMessage({
-                type:'success',
-                message:'You have successfully reserved a spot',
-                grouping:true
-            })
-        }
-    }).catch(err=>{
-        console.log(err)
-        loading.close()
-    })
-}
-
 const confirmFilterSearch = (e) => {
+    activeEventStyleName.value = 'all_events'
     filterResultData.value = e;
     eventPage.value = 1;
     getEventsList(eventPage.value, eventLimit.value)

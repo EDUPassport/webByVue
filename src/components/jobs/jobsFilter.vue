@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="jobs-filter-item">
-                <div class="jobs-filter-label">Date posted</div>
+                <div class="jobs-filter-label">Date Post</div>
                 <div class="jobs-filter-c">
                     <el-select
                         size="small"
@@ -121,29 +121,29 @@
 
                 </div>
 
-                <div class="jobs-filter-c" style="margin-top: 25px;">
-                    <el-select class="jobs-filter-select"
-                               v-model="paymentPeriod"
-                               clearable
-                               @change="paymentPeriodChange"
-                               value-key="id"
-                               placeholder="Pay period"
-                               size="small"
-                    >
-                        <el-option
-                            v-for="item in paymentPeriodOptions"
-                            :key="item.id"
-                            :label="item.object_en"
-                            :value="item.id"
-                        >
-                        </el-option>
-                    </el-select>
+<!--                <div class="jobs-filter-c" style="margin-top: 25px;">-->
+<!--                    <el-select class="jobs-filter-select"-->
+<!--                               v-model="paymentPeriod"-->
+<!--                               clearable-->
+<!--                               @change="paymentPeriodChange"-->
+<!--                               value-key="id"-->
+<!--                               placeholder="Pay period"-->
+<!--                               size="small"-->
+<!--                    >-->
+<!--                        <el-option-->
+<!--                            v-for="item in paymentPeriodOptions"-->
+<!--                            :key="item.id"-->
+<!--                            :label="item.object_en"-->
+<!--                            :value="item.id"-->
+<!--                        >-->
+<!--                        </el-option>-->
+<!--                    </el-select>-->
 
-                </div>
+<!--                </div>-->
             </div>
 
             <div class="jobs-filter-item">
-                <div class="jobs-filter-label">Students' age</div>
+                <div class="jobs-filter-label">Age Group</div>
                 <div class="jobs-filter-c">
                     <el-checkbox-group @change="studentAgeChange" v-model="studentAge">
                         <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
@@ -157,20 +157,20 @@
                 </div>
             </div>
 
-            <div class="jobs-filter-item">
-                <div class="jobs-filter-label">Work schedule</div>
-                <div class="jobs-filter-c">
-                    <el-checkbox-group @change="workTypeChange" v-model="workType">
-                        <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
-                            <div v-for="(item,i) in workTypeOptions" :key="i" style="flex-basis: 100%;">
-                                <el-checkbox :label="item.id">
-                                    {{ item.object_en }}
-                                </el-checkbox>
-                            </div>
-                        </div>
-                    </el-checkbox-group>
-                </div>
-            </div>
+<!--            <div class="jobs-filter-item">-->
+<!--                <div class="jobs-filter-label">Work schedule</div>-->
+<!--                <div class="jobs-filter-c">-->
+<!--                    <el-checkbox-group @change="workTypeChange" v-model="workType">-->
+<!--                        <div style="display: flex;flex-direction: row;flex-wrap:wrap;">-->
+<!--                            <div v-for="(item,i) in workTypeOptions" :key="i" style="flex-basis: 100%;">-->
+<!--                                <el-checkbox :label="item.id">-->
+<!--                                    {{ item.object_en }}-->
+<!--                                </el-checkbox>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </el-checkbox-group>-->
+<!--                </div>-->
+<!--            </div>-->
         </el-scrollbar>
 
     </div>
@@ -360,21 +360,20 @@ const salaryChange = (e) => {
     search()
 }
 
-const paymentPeriodChange = () => {
-    search()
-}
+// const paymentPeriodChange = () => {
+//     search()
+// }
 const jobTypeChange = () => {
     search()
 }
 const studentAgeChange = () => {
     search()
 }
-const workTypeChange = () => {
+/*const workTypeChange = () => {
     search()
-}
+}*/
 
 const datePostedChange = () => {
-
     search()
 }
 
@@ -383,7 +382,7 @@ onMounted(() => {
     getUserObjectList()
     let envName = process.env.VUE_APP_ENV_NAME
     if (envName === 'development' || envName === 'production') {
-        locationPlaceholder.value = 'Country'
+        locationPlaceholder.value = 'Select Location'
         getJobCountryList()
         let countryValue = route.query.country;
         if (countryValue && countryValue != '') {
@@ -392,7 +391,7 @@ onMounted(() => {
     }
 
     if (envName === 'developmentCN' || envName === 'productionCN') {
-        locationPlaceholder.value = 'City'
+        locationPlaceholder.value = 'Select Location'
         getJobsAreaList()
         let cityValue = route.query.city;
         if (cityValue && cityValue != '') {

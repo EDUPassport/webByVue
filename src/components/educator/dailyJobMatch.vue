@@ -140,7 +140,7 @@ export default {
     this.manualMatchJob()
 
     this.getEducatorJobMatchingList()
-     this.percentage=localStorage.getItem('profile_percentage')   
+      this.percentage=localStorage.getItem('profile_percentage')
     // this.getJobFeaturedList()
   },
   methods:{

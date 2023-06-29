@@ -16,7 +16,11 @@
                 <div class="detail-b-t">
                     <div class="detail-b-t-l">
                         <div class="detail-b-t-l-l">
-                            <el-image class="detail-company-logo" :src="detailData.company_logo"></el-image>
+                            <el-image
+                                class="detail-company-logo"
+                                fit="cover"
+                                :src="detailData.company_profile_photo ? detailData.company_profile_photo : defaultAvatar">
+                            </el-image>
                         </div>
                         <div class="detail-b-t-l-r">
                             <div class="detail-name">{{ detailData.name }}</div>
@@ -28,10 +32,19 @@
                     </div>
                 </div>
                 <div class="detail-location">
-                    <el-icon>
-                        <Location/>
-                    </el-icon>
-                    {{detailData.location}}
+                    <template v-if="detailData.is_online == 1">
+                        <el-icon>
+                            <Location/>
+                        </el-icon>
+                        Online
+                    </template>
+                    <template v-if="detailData.is_online == 0 && detailData.location">
+                        <el-icon>
+                            <Location/>
+                        </el-icon>
+                        {{detailData.location}}
+                    </template>
+
                 </div>
 
                 <div class="detail-table-item">
@@ -47,7 +60,7 @@
                         Hours
                     </div>
                     <div class="detail-table-item-r">
-                        {{ $filters.formatEventTimeForShow(detailData.start_time) }} to {{ $filters.formatEventTimeForShow(detailData.end_time)}}
+                        {{ $filters.formatEventTimeForShow(detailData.start_time) }} to {{ $filters.formatEventTimeForShow(detailData.end_time)}} {{detailData.timezone}}
                     </div>
                 </div>
                 <div class="detail-table-item">
@@ -76,7 +89,7 @@
                         No of Reserved Spots
                     </div>
                     <div class="detail-table-item-r">
-                        100+
+                        {{$filters.numberOfAttendeesInTens(detailData.no_of_reserved_spots)}}
                     </div>
                 </div>
                 <div class="detail-table-item">
@@ -96,9 +109,27 @@
                 </div>
 
                 <div class="detail-table-item">
-                    <el-image :src="detailData.file"></el-image>
-                </div>
+                    <template v-if="detailData.file_type === 'image' ">
+                        <el-image class="events-item-banner"
+                                  fit="cover"
+                                  :preview-src-list="[detailData.file]"
+                                  :src="detailData.file !='' ? detailData.file : '' "
+                        >
+                        </el-image>
+                    </template>
+                    <template v-else-if="detailData.file_type === 'video' ">
+                        <video style="width: 100%;" :src="detailData.file" controls ></video>
+                    </template>
+                    <template v-else>
+                        <el-image class="events-item-banner"
+                                  fit="cover"
+                                  :preview-src-list="[detailData.file]"
+                                  :src="detailData.file !='' ? detailData.file : '' "
+                        >
+                        </el-image>
+                    </template>
 
+                </div>
 
                 <div class="detail-item-label" v-if="detailData.tags_en">
                     Event Type
@@ -209,7 +240,7 @@
 </template>
 
 <script setup>
-
+import defaultAvatar from '@/assets/newHome/default-business-avatar.svg'
 import { ref,onMounted} from 'vue'
 import {useRoute,useRouter} from 'vue-router'
 import {ADD_FAVORITE, CANCEL_FAVORITE, EVENTS_DETAIL, EVENTS_LIST} from "@/api/api";

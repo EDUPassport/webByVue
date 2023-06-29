@@ -271,6 +271,18 @@ app.config.globalProperties.$filters = {
             minutes = "0" + minutes;  // padding zero if minutes is less than 10
         }
         return hours + ':' + minutes + ' ' + suffix;
+    },
+    numberOfAttendeesInTens(value){
+        if(value){
+            if(value % 10 === 0){
+                return value.toString()
+            }else{
+                return Math.floor(value / 10) * 10 + '+';
+            }
+        }else{
+            return "0";
+        }
+
     }
 
 }

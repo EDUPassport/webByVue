@@ -3,13 +3,15 @@ import {createRouter, createWebHistory} from "vue-router";
 import appLayout from "@/layout/appLayout";
 import dashboardLayout from "@/layout/dashboardLayout.vue";
 import leftMenuLayout from "@/layout/leftMenuLayout.vue";
-import leftMenuLayoutTwo from "@/layout/leftMenuLayoutTwo.vue";
 import store from "@/store/index";
 import chatHome from "@/views/chat/chatHome";
 import NProgress from "nprogress";
 import "../style/nprogress.css";
 import vueCookies from "vue-cookies";
 import LayoutWrapper from "@/layout/layoutWrapper.vue";
+import axios from 'axios'
+import VueCookies from 'vue-cookies'
+import layoutWrapper from "@/layout/layoutWrapper.vue";
 
 const routes = [
 
@@ -126,56 +128,73 @@ const routes = [
     },
     {
         path: "/deals",
-        component: layout,
+        name: "dealsList",
+        component: LayoutWrapper,
         children: [
             {
-                path: "/deals",
-                name: "deals",
-                component: () => import("@/views/deals/index"),
+                path:'/deals',
+                component: () => import("@/views/deals/list.vue"),
                 meta: {
                     titleC: "Deals List",
                     titleG: "Deals List",
+                }
+            }
+        ]
+
+    },
+    {
+        path: '/deals/myDeals',
+        component: dashboardLayout,
+        children: [
+            {
+                path: "/deals/myDeals",
+                name: "myDeals",
+                component: () => import("@/views/deals/my/deals"),
+                meta: {
+                    titleC: "My Deals",
+                    titleG: "My Deals",
+                    requireAuth: true,
                 },
             },
+        ]
+    },
+    {
+        path: '/deals/offer',
+        component: dashboardLayout,
+        children: [
             {
-                path: "offer",
+                path: "/deals/offer",
                 name: "dealsOffer",
                 component: () => import("@/views/deals/offer/offer"),
                 meta: {
-                    activeMenu: "/perks/home",
                     titleC: "Offer a Deal",
                     titleG: "Offer a Deal",
                     requireAuth: true,
                 },
             },
+        ]
+    },
+    {
+        path: '/deals/detail',
+        component: layout,
+        children: [
             {
-                path: "",
-                component: leftMenuLayoutTwo,
-                children: [
-                    {
-                        path: "myDeals",
-                        name: "myDeals",
-                        component: () => import("@/views/deals/my/deals"),
-                        meta: {
-                            activeMenu: "/perks/home",
-                            titleC: "My Deals",
-                            titleG: "My Deals",
-                            requireAuth: true,
-                        },
-                    },
-                ],
-            },
-            {
-                path: "detail",
-                name: "dealDetail",
-                component: () => import("@/views/deals/detail"),
+                path: "/deals/detail",
+                name: "dealsDetail",
+                component: () => import("@/views/deals/detail.vue"),
                 meta: {
                     titleC: "Deal Detail",
                     titleG: "Deal Detail",
                 },
-            },
+            }
+        ]
+    },
+    {
+        path: "/deals/vendor/profile",
+        component: layout,
+        children: [
             {
-                path: "vendor/profile",
+                path: "/deals/vendor/profile",
                 name: "dealsVendorProfile",
                 component: () => import("@/views/deals/vendorProfile"),
                 meta: {
@@ -217,47 +236,9 @@ const routes = [
             },
         ],
     },
-
-    {
-        path: "/vendor-deals",
-        component: dashboardLayout,
-        children: [
-            {
-                path: "/deals",
-                name: "verdorDeals",
-                component: () => import("@/views/deals/index"),
-                meta: {
-                    titleC: "Deals List",
-                    titleG: "Deals List",
-                },
-            },
-            {
-                path: "offer",
-                name: "verdorDealsOffer",
-                component: () => import("@/views/deals/offer/offer"),
-                meta: {
-                    activeMenu: "/perks/home",
-                    titleC: "Offer a Deal",
-                    titleG: "Offer a Deal",
-                    requireAuth: true,
-                },
-            },
-            {
-                path: "myDeals",
-                name: "vendorMyDeals",
-                component: () => import("@/views/deals/my/deals"),
-                meta: {
-                    activeMenu: "/perks/home",
-                    titleC: "My Deals",
-                    titleG: "My Deals",
-                    requireAuth: true,
-                },
-            },
-        ],
-    },
     {
         path: '/job/pool',
-        component: dashboardLayout,
+        component: layoutWrapper,
         children: [
             {
                 path: "",
@@ -265,8 +246,7 @@ const routes = [
                 component: () => import("@/views/pool/job.vue"),
                 meta: {
                     titleC: "Job Listing",
-                    titleG: "Job Listing",
-                    requireAuth: true
+                    titleG: "Job Listing"
                 },
             }
         ]
@@ -346,8 +326,6 @@ const routes = [
                     },
                 ],
             },
-
-
             {
                 path: "applications",
                 name: "jobApplications",
@@ -1051,17 +1029,42 @@ const router = createRouter({
             return {top: 0};
         }
     },
-});
+})
 
 const defaultTitle = "Home";
 
 NProgress.configure({showSpinner: false});
 
+const checkVersion = ()=>{
+
+    axios.get('/api/edupassport/version',{
+        baseURL:'/compass'
+    }).then(res=>{
+        console.log(res)
+        if(res.code === 200){
+            let version = res.data.version;
+
+            if(VueCookies.isKey('version')){
+                if(version !== VueCookies.get('version')){
+                    VueCookies.set('version',version)
+                    window.location.reload()
+                }
+            }else{
+                VueCookies.set('version',version)
+                window.location.reload()
+            }
+        }
+    }).catch(err=>{
+        console.log(err)
+    })
+
+}
+
 router.beforeEach((to, from, next) => {
     NProgress.start();
 
     if (!vueCookies.isKey("version")) {
-        window.location.reload();
+        checkVersion()
     }
 
     // 路由跳转之前， 终止还在等待中的请求

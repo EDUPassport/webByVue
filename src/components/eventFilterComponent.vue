@@ -85,11 +85,8 @@
                                         </el-checkbox>
                                     </div>
                                 </div>
-
                             </el-checkbox-group>
-
                         </div>
-
                     </div>
 
                     <div class="filter-item">
@@ -101,7 +98,7 @@
                                 v-model="tag">
                                 <div style="display: flex;flex-direction: row;flex-wrap:wrap;">
                                     <div v-for="(item,i) in tagsOptions" :key="i" style="flex-basis: 50%;">
-                                        <el-checkbox :label="item.id">
+                                        <el-checkbox :label="item.name_en">
                                             {{ item.name_en }}
                                         </el-checkbox>
                                     </div>
@@ -113,29 +110,28 @@
 
                     </div>
 
-                    <div class="filter-item">
-                        <div class="filter-label">Location</div>
-                        <div class="filter-c">
-                            <el-select class="filter-select"
-                                       v-model="location"
-                                       filterable
-                                       clearable
-                                       placeholder="Filter by location"
-                                       size="small"
-                                       @change="locationChange"
-                            >
-                                <el-option
-                                    v-for="item in locationOptions"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id"
-                                >
-                                </el-option>
-                            </el-select>
-                        </div>
+<!--                    <div class="filter-item">-->
+<!--                        <div class="filter-label">Location</div>-->
+<!--                        <div class="filter-c">-->
+<!--                            <el-select class="filter-select"-->
+<!--                                       v-model="location"-->
+<!--                                       filterable-->
+<!--                                       clearable-->
+<!--                                       placeholder="Filter by location"-->
+<!--                                       size="small"-->
+<!--                                       @change="locationChange"-->
+<!--                            >-->
+<!--                                <el-option-->
+<!--                                    v-for="item in locationOptions"-->
+<!--                                    :key="item.id"-->
+<!--                                    :label="item.name"-->
+<!--                                    :value="item.id"-->
+<!--                                >-->
+<!--                                </el-option>-->
+<!--                            </el-select>-->
+<!--                        </div>-->
 
-                    </div>
-
+<!--                    </div>-->
 
                 </div>
 
@@ -217,13 +213,13 @@ const search = () => {
     let params = {}
 
     if(eventName.value){
-        params.event_name = eventName.value
+        params.event_title = eventName.value
     }
 
     if (datePosted.value) {
         let nowDate = new Date()
         nowDate.setDate(nowDate.getDate() - datePosted.value)
-        params.c_time = formatDateYmdHis(nowDate)
+        params.by_date_range_start = formatDateYmdHis(nowDate)
     }
 
     // console.log(eventFormat.value)
@@ -234,11 +230,11 @@ const search = () => {
     }
 
     if(checkedCateData.value &&  checkedCateData.value.length > 0) {
-        params.category_id = checkedCateData.value[0]
+        params.category_id = checkedCateData.value.join(',')
     }
 
     if (tag.value && tag.value.length > 0) {
-        params.tag_name = tag.value
+        params.tags_en = tag.value.join(',')
     }
 
     if (location.value) {
@@ -260,9 +256,9 @@ const eventFormatChange = ()=>{
     search()
 }
 
-const locationChange = () => {
-    search()
-}
+// const locationChange = () => {
+//     search()
+// }
 
 const tagChange = () => {
     search()

@@ -79,3 +79,9 @@ export function formatEventTimeForShow(dateStr) {
     }
     return hours + ':' + minutes + ' ' + suffix;
 }
+
+export function isValidURL(url) {
+    // 使用正则表达式进行匹配
+    let urlPattern = /^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+    return urlPattern.test(url);
+}

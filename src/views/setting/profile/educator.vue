@@ -30,7 +30,7 @@
                                     <span>Personal Information</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Update your personal Information and Photo Here</span>
+                                    <span>Update your personal information and photo here</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -230,7 +230,7 @@
                                     <span>Profession Information</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Update your personal Information and Photo Here</span>
+                                    <span>Update your professional information</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -798,7 +798,7 @@
                                     <span>Education</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Tell us about your previous work experience if any</span>
+                                    <span>Tell us about your education</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -993,14 +993,14 @@
                                                 Image(s)
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach Image for Profile(up to 3Mb)
+                                                Attach Image for Profile (up to 3Mb)
                                             </div>
                                         </div>
                                     </template>
 
                                     <div class="profile-picture-r">
 
-                                        <template v-if="mediaForm.new_background_image && editBackgroundImageStatus">
+                                        <template v-if="mediaForm.background_image && editBackgroundImageStatus">
 
                                             <div class="attachment-xll">
                                                 <div class="attachment-xll-btns">
@@ -1041,16 +1041,16 @@
 
                                                 </div>
 
-                                                <div class="attachment-xll-image" v-for="(image,index) in mediaForm.new_background_image" :key="image.background_image_name">
+                                                <div class="attachment-xll-image">
                                                     <el-image class="attachment-xll-img" 
-                                                              :src="image.background_image"
+                                                              :src="mediaForm.background_image"
                                                               fit="cover"
                                                     >
                                                     </el-image>
                                                     <div class="attachment-xll-image-mask" v-if="!stepFiveStatus">
                                                         <el-icon
                                                                 style="cursor: pointer;"
-                                                                @click="handleSingleImagePreview(image.background_image,'background_image')"
+                                                                @click="handleSingleImagePreview(mediaForm.background_image,'background_image')"
                                                                 color="#ffffff"
                                                                 :size="20">
                                                             <zoom-in/>
@@ -1058,7 +1058,7 @@
 
                                                         <el-icon
                                                                 style="cursor: pointer;margin-left: 15px;"
-                                                                @click="handleSingleImageRemove('background_image',index)"
+                                                                @click="handleSingleImageRemove('background_image')"
                                                                 color="#F97066"
                                                                 :size="20">
                                                             <Delete/>
@@ -1088,10 +1088,14 @@
                                                     <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
                                                     <div class="profile-upload-text">
                                                         <span>Click to Upload</span> Or Drag your photo <br>
-                                                        SVG,PNG,JPEG(400x400)
+                                                        SVG,PNG,JPEG(800x400)
                                                     </div>
                                                 </template>
-
+                                                <template #tip>
+                                                    <div style="text-align: right;font-size: 14px;font-family: Inter;color:#667085;">
+                                                        0/1
+                                                    </div>
+                                                </template>
                                             </el-upload>
                                         </template>
                                     </div>
@@ -1102,10 +1106,10 @@
                                     <template #label>
                                         <div>
                                             <div>
-                                                Video(s)
+                                                Video
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach Introduction video for your profile(up to 10Mb)
+                                                Attach Introduction video for your profile (up to 10 Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -1189,7 +1193,7 @@
                                                     :limit="1"
                                                     :headers="uploadHeaders"
                                                     :show-file-list="false"
-                                                    accept=".mp4,.MP4"
+                                                    accept=".mp4,.MP4,.mov,.MOV,.avi,.AVI,.WebM"
                                                     :http-request="videoHttpRequest"
                                                     :before-upload="beforeIntroVideoUpload"
                                             >
@@ -1201,7 +1205,11 @@
                                                         MP4,MOV,AVI OR WebM
                                                     </div>
                                                 </template>
-
+                                                <template #tip>
+                                                    <div style="text-align: right;font-size: 14px;font-family: Inter;color:#667085;">
+                                                        0/1
+                                                    </div>
+                                                </template>
                                             </el-upload>
 
                                         </template>
@@ -1216,7 +1224,7 @@
                                                 Other Files
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach your account files for your profile(up to 5Mb)
+                                                Attach your account files for your profile (up to 5Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -1231,7 +1239,7 @@
                                                 :multiple="true"
                                                 :auto-upload="false"
                                                 :show-file-list="false"
-                                                :limit="6"
+                                                :limit="5"
                                                 :headers="uploadHeaders"
                                                 name="file[]"
                                                 accept=".jpg,.jpeg,.png,.pdf,.JPG,.JPEG,.PNG,.PDF"
@@ -1247,7 +1255,11 @@
                                                     Resume, cover letter, transcripts, certificates
                                                 </div>
                                             </template>
-
+                                            <template #tip>
+                                                <div style="text-align: right;font-size: 14px;font-family: Inter;color:#667085;">
+                                                    {{accountFilesData.length}}/5
+                                                </div>
+                                            </template>
                                         </el-upload>
 
                                         <div style="display: flex;flex-direction: column;margin-top: 20px;"
@@ -1830,8 +1842,7 @@ const mediaForm = reactive({
     video_name: '',
     video_url: '',
     resume_name: '',
-    resume_pdf: '',
-    new_background_image: []
+    resume_pdf: ''
 })
 
 const mediaRules = reactive({
@@ -3174,12 +3185,9 @@ const backgroundHttpRequest = (options) => {
                         let myFileUrl = res.message.file_path;
                         uploadLoadingStatus.value = false;
                         editBackgroundImageStatus.value = true
-                        // mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
-                        // mediaForm.background_image = myFileUrl
-                        mediaForm.new_background_image.push({
-                            background_image_name: myFileUrl.substring(myFileUrl.length - 10),
-                            background_image: myFileUrl
-                        })
+                        mediaForm.background_image_name = myFileUrl.substring(myFileUrl.length - 10)
+                        mediaForm.background_image = myFileUrl
+
                     }
                 }).catch(err => {
                     console.log(err)
@@ -3406,13 +3414,13 @@ const handleSingleImagePreview = (url, field) => {
     dialogSingleField.value = field
 }
 
-const handleSingleImageRemove = (field,index) => {
+const handleSingleImageRemove = (field) => {
 
     if (field === 'background_image') {
-        // mediaForm.background_image = ''
-        // mediaForm.background_image_name = ''
-        mediaForm.new_background_image.splice(index, 1)
+        mediaForm.background_image = ''
+        mediaForm.background_image_name = ''
     }
+
     if (field === 'video_url') {
         mediaForm.video_url = ''
         mediaForm.video_name = ''

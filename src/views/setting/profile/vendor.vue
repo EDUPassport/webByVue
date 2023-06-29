@@ -30,7 +30,7 @@
                                     <span>Basic Information</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Update your personal Information and Photo Here</span>
+                                    <span>Update your basic information here</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -209,7 +209,7 @@
                                     <span>Contact Information</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Update your personal Information and Photo Here</span>
+                                    <span>Update your contact information here</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -375,7 +375,7 @@
                                     <span>Business Information</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Update your personal Information and Photo Here</span>
+                                    <span>Update your business information here</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -793,7 +793,7 @@
                                                 Video
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach Introduction video for your profile
+                                                Attach Introduction video for your profile (up to 10 Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -885,6 +885,12 @@
                                                     <div class="profile-upload-text">
                                                         <span>Click to Upload</span> Or Drag your Video <br>
                                                         MP4,MOV,AVI OR WebM
+                                                    </div>
+                                                </template>
+
+                                                <template #tip>
+                                                    <div style="text-align: right;font-size: 14px;font-family: Inter;color:#667085;">
+                                                        0/1
                                                     </div>
                                                 </template>
 
@@ -993,10 +999,14 @@
                                                     <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
                                                     <div class="profile-upload-text">
                                                         <span>Click to Upload</span> Or Drag your photo <br>
-                                                        SVG,PNG,JPEG(400x400)
+                                                        SVG,PNG,JPEG(800x400)
                                                     </div>
                                                 </template>
-
+                                                <template #tip>
+                                                    <div style="text-align: right;font-size: 14px;font-family: Inter;color:#667085;">
+                                                        0/1
+                                                    </div>
+                                                </template>
                                             </el-upload>
                                         </template>
                                     </div>
@@ -1010,7 +1020,7 @@
                                                 Other Files
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach your account files License and other documents for your profile (up to 5Mb)
+                                                Attach your account License and other documents for your profile (up to 5Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -1025,7 +1035,7 @@
                                                 :multiple="true"
                                                 :auto-upload="false"
                                                 :show-file-list="false"
-                                                :limit="6"
+                                                :limit="5"
                                                 :headers="uploadHeaders"
                                                 name="file[]"
                                                 accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
@@ -1039,6 +1049,11 @@
                                                 <div class="profile-upload-text">
                                                     <span>Click to Upload</span> Or Drag your PDF <br>
                                                     License & Other Documents
+                                                </div>
+                                            </template>
+                                            <template #tip>
+                                                <div style="text-align: right;font-size: 14px;font-family: Inter;color:#667085;">
+                                                    {{accountFilesData.length}}/5
                                                 </div>
                                             </template>
 

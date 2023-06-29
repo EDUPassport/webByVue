@@ -596,6 +596,7 @@ const contributorWidth = ref('50%')
 const versionTime = randomString()
 
 function postJob() {
+    store.commit('setJobTemplateDetail', {})
     router.push({path: '/jobs/post', query: {version_time: versionTime}})
 }
 

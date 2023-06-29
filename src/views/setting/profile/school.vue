@@ -30,7 +30,7 @@
                                     <span>Personal Information</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Update your personal Information and Photo Here</span>
+                                    <span>Update your personal information and photo here</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -204,7 +204,7 @@
                                     <span>Profession Information</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Update your personal Information and Photo Here</span>
+                                    <span>Update your professional information here</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -415,7 +415,7 @@
                                     <span>Business Information</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Update your personal Information and Photo Here</span>
+                                    <span>Update your business information here</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -736,7 +736,7 @@
                                     <span>Course And Classes</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Update your personal Information and Photo Here</span>
+                                    <span>Update courses, student age-group, and other necessary information</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -953,7 +953,7 @@
                                     <span>Attachment Information</span>
                                 </div>
                                 <div class="profile-tips">
-                                    <span>Attach files for your Resume</span>
+                                    <span>Attach files for your School</span>
                                 </div>
                             </div>
                             <div class="profile-top-r">
@@ -1038,7 +1038,7 @@
                                                 Video
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach Introduction video for your profile
+                                                Attach Introduction video for your profile (up to 10 Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -1120,7 +1120,7 @@
                                                 :limit="1"
                                                 :headers="uploadHeaders"
                                                 :show-file-list="false"
-                                                accept=".mp4,.MP4"
+                                                accept=".mp4,.MP4,.mov,.MOV,.avi,.AVI,.WebM"
                                                 :http-request="videoHttpRequest"
                                                 :before-upload="beforeIntroVideoUpload"
                                             >
@@ -1132,7 +1132,11 @@
                                                         MP4,MOV,AVI OR WebM
                                                     </div>
                                                 </template>
-
+                                                <template #tip>
+                                                    <div style="text-align: right;font-size: 14px;font-family: Inter;color:#667085;">
+                                                        0/1
+                                                    </div>
+                                                </template>
                                             </el-upload>
 
                                         </template>
@@ -1147,7 +1151,7 @@
                                                 Background Image
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach Image for Profile(up to 3Mb)
+                                                Attach Image for Profile (up to 3Mb)
                                             </div>
                                         </div>
                                     </template>
@@ -1238,10 +1242,14 @@
                                                     <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
                                                     <div class="profile-upload-text">
                                                         <span>Click to Upload</span> Or Drag your photo <br>
-                                                        SVG,PNG,JPEG(400x400)
+                                                        SVG,PNG,JPEG(800x400)
                                                     </div>
                                                 </template>
-
+                                                <template #tip>
+                                                    <div style="text-align: right;font-size: 14px;font-family: Inter;color:#667085;">
+                                                        0/1
+                                                    </div>
+                                                </template>
                                             </el-upload>
                                         </template>
                                     </div>
@@ -1256,7 +1264,7 @@
                                                 Image(s)
                                             </div>
                                             <div class="profile-picture-tips">
-                                                Attach Image for Profile(up to 20Mb/image)
+                                                Attach Image for Profile (up to 20Mb/image)
                                             </div>
                                         </div>
                                     </template>
@@ -1271,7 +1279,7 @@
                                             :multiple="true"
                                             :auto-upload="false"
                                             :show-file-list="false"
-                                            :limit="6"
+                                            :limit="3"
                                             :headers="uploadHeaders"
                                             name="file[]"
                                             accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
@@ -1284,10 +1292,14 @@
                                                 <el-image class="profile-upload-icon" :src="uploadIcon"></el-image>
                                                 <div class="profile-upload-text">
                                                     <span>Click to Upload</span> Or Drag your photo <br>
-                                                    SVG,PNG,JPEG(400x400)
+                                                    SVG,PNG,JPEG(800x400)
                                                 </div>
                                             </template>
-
+                                            <template #tip>
+                                                <div style="text-align: right;font-size: 14px;font-family: Inter;color:#667085;">
+                                                    {{accountFilesData.length}}/3
+                                                </div>
+                                            </template>
                                         </el-upload>
 
                                         <div style="display: flex;flex-direction: column;margin-top: 20px;"
@@ -1542,60 +1554,30 @@ const preferredLocationOptionsData = ref()
 
 const currencyOptions = ref([])
 
-const loadUserObjectData = async () => {
+const loadUserObjectData = () => {
 
-    if (localStorageService.getItem('studentAge') && localStorageService.getItem('subject') &&
-        localStorageService.getItem('facilities') && localStorageService.getItem('availableTeach')
-        && localStorageService.getItem('currency') && localStorageService.getItem('preferredLocation')
-    ) {
-        studentAgeOptions.value = JSON.parse(localStorageService.getItem('studentAge'))
-        subjectOptions.value = JSON.parse(localStorageService.getItem('subject'))
-        facilitiesOptions.value = JSON.parse(localStorageService.getItem('facilities'))
-        availableTeachOptions.value = JSON.parse(localStorageService.getItem('availableTeach'))
-        currencyOptions.value = JSON.parse(localStorageService.getItem('currency'))
-        preferredLocationOptionsData.value = JSON.parse(localStorageService.getItem('preferredLocation'))
+    if (localStorageService.getItem('userObjectData') ) {
+        let userObjectArr = JSON.parse(localStorageService.getItem('userObjectData'))
+        studentAgeOptions.value = userObjectArr.filter(item => item.pid === 73);
+        subjectOptions.value = userObjectArr.filter(item => item.pid === 1);
+        facilitiesOptions.value = userObjectArr.filter(item => item.pid === 1521);
+        availableTeachOptions.value = userObjectArr.filter(item => item.pid === 1522);
+        currencyOptions.value = userObjectArr.filter(item => item.pid === 117);
+        preferredLocationOptionsData.value = userObjectArr.filter(item => item.pid === 1556);
         return;
     }
 
-    await USER_OBJECT_LIST({}).then(res => {
+    USER_OBJECT_LIST({}).then(res => {
         // console.log(res)
         if (res.code == 200) {
+            localStorageService.setItem('studentAge', JSON.stringify(res.message), 60)
 
-            let studentAgeArr = res.message.filter(item => item.pid === 73);
-            studentAgeOptions.value = studentAgeArr
-            if (!localStorageService.getItem('studentAge')) {
-                localStorageService.setItem('studentAge', JSON.stringify(studentAgeArr), 60)
-            }
-
-            let subjectArr = res.message.filter(item => item.pid === 1);
-            subjectOptions.value = subjectArr
-            if (!localStorageService.getItem('subject')) {
-                localStorageService.setItem('subject', JSON.stringify(subjectArr), 60)
-            }
-
-            let facilitiesArr = res.message.filter(item => item.pid === 1521);
-            facilitiesOptions.value = facilitiesArr
-            if (!localStorageService.getItem('facilities')) {
-                localStorageService.setItem('facilities', JSON.stringify(facilitiesArr), 60)
-            }
-
-            let availableTeachArr = res.message.filter(item => item.pid === 1522);
-            availableTeachOptions.value = availableTeachArr
-            if (!localStorageService.getItem('availableTeach')) {
-                localStorageService.setItem('availableTeach', JSON.stringify(availableTeachArr), 60)
-            }
-
-            let currencyArr = res.message.filter(item => item.pid === 117);
-            currencyOptions.value = currencyArr
-            if (!localStorageService.getItem('currency')) {
-                localStorageService.setItem('currency', JSON.stringify(currencyArr), 60)
-            }
-
-            let preferredLocationArr = res.message.filter(item => item.pid === 1556);
-            preferredLocationOptionsData.value = preferredLocationArr
-            if (!localStorageService.getItem('preferredLocation')) {
-                localStorageService.setItem('preferredLocation', JSON.stringify(preferredLocationArr), 60)
-            }
+            studentAgeOptions.value = res.message.filter(item => item.pid === 73);
+            subjectOptions.value = res.message.filter(item => item.pid === 1);
+            facilitiesOptions.value = res.message.filter(item => item.pid === 1521);
+            availableTeachOptions.value = res.message.filter(item => item.pid === 1522);
+            currencyOptions.value = res.message.filter(item => item.pid === 117);
+            preferredLocationOptionsData.value = res.message.filter(item => item.pid === 1556);
 
         }
 
@@ -1794,17 +1776,21 @@ const cityChange = (e) => {
     cityNameCn.value = e.name
 }
 
-const getAllCountry = async () => {
+const getAllCountry = () => {
+
+    if(localStorageService.getItem('allCountryData')){
+        countryOptions.value = JSON.parse(localStorageService.getItem('allCountryData'))
+        return;
+    }
+
     let params = {}
-    await GET_COUNTRY_LIST(params).then(res => {
+    GET_COUNTRY_LIST(params).then(res => {
         if (res.code == 200) {
             countryOptions.value = res.message;
+            localStorageService.setItem('allCountryData', JSON.stringify(res.message), 60)
         }
     }).catch(err => {
         console.log(err)
-        // if(err.msg){
-        //     ElMessage.error(err.msg)
-        // }
     })
 }
 
@@ -1837,13 +1823,13 @@ const getAllCitys = (countryId, stateId) => {
     })
 }
 
-const getBasicInfo = async () => {
+const getBasicInfo = () => {
 
     let params = {
         identity: 3
     }
 
-    await USER_INFO_BY_TOKEN_V2(params).then(res => {
+    USER_INFO_BY_TOKEN_V2(params).then(res => {
 
         if (res.code == 200) {
 
@@ -2131,15 +2117,15 @@ const getBasicInfo = async () => {
 
 const subCategoryOptions = ref([])
 
-const loadSubCategoryData = async () => {
+const loadSubCategoryData = () => {
 
     let params = {
         pid: 3,
         tree: 1
     }
 
-    await USER_SUB_IDENTITY_V2(params).then(res => {
-        console.log(res)
+    USER_SUB_IDENTITY_V2(params).then(res => {
+        // console.log(res)
         if (res.code == 200) {
             subCategoryOptions.value = res.message
         }
@@ -3118,10 +3104,10 @@ const cancelUploadProfile = () => {
     uploadLoadingStatus.value = false;
 }
 
-onMounted(async () => {
-    await loadUserObjectData()
-    await loadSubCategoryData()
-    await getAllCountry()
+onMounted(() => {
+    loadUserObjectData()
+    loadSubCategoryData()
+    getAllCountry()
 
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
@@ -3148,9 +3134,8 @@ onMounted(async () => {
     }
 
     if (profileAction.value === 'edit') {
-        await getBasicInfo()
+         getBasicInfo()
     }
-
 
 })
 
