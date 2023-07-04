@@ -2089,7 +2089,7 @@ const getUserObjectList = () => {
 
 const submitJob = (formEl) => {
 
-    formEl.validate((valid) => {
+     formEl.validate((valid) => {
         if (valid) {
 
             const loading = ElLoading.service({
@@ -2165,7 +2165,7 @@ const submitJob = (formEl) => {
 
                         ElMessage({
                             type:'success',
-                            message:'Job Posted Successfully',
+                            message: route.query.job_type == 'edit' ? 'Job Edited Successfully' : 'Job Posted Successfully',
                             grouping:true
                         })
                         router.push({path:'/jobs/myJobs'})

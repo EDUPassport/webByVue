@@ -101,7 +101,8 @@
 
                                             <div class="job-item-salary">
                                                 <el-image class="job-item-icon-24" :src="calendarImg"></el-image>
-                                                <span> {{ $filters.howLongFormat(item.refresh_time) }}</span>
+                                                <!-- {{ $filters.howLongFormat(item.refresh_time) }} -->
+                                                <span>{{ timeAgo(item.refresh_time)}} ago</span>
                                             </div>
                                             <span @click="shareJob(item)" style="cursor: pointer;"><el-icon ><IconIcRoundShare/></el-icon></span>
 
@@ -232,6 +233,8 @@ import calendarImg from "@/assets/newHome/dashboard/calendar.svg";
 import shareCard from "@/components/shareCard.vue";
 import emptyImg from '@/assets/newHome/dashboard/empty.svg'
 import filterIconImg from '@/assets/filter.svg'
+import moment from 'moment';
+
 
 const store = useStore()
 const route = useRoute()
@@ -265,6 +268,11 @@ const shareJob = (item)=>{
     shareLocationUrl.value = origin + '/jobs/detail?id='+item.id;
 
     shareDialogVisible.value = true;
+}
+
+
+const timeAgo = (postedAt) => {
+     return moment(postedAt).fromNow(true);
 }
 
 const turnManualPosting = () => {
@@ -498,7 +506,7 @@ const turnApplications = (id, unreadId) => {
 }
 
 const turnEditJobs = (jobId, version_time) => {
-    router.push({path: '/jobs/post', query: {job_id: jobId,version_time:version_time}})
+    router.push({path: '/jobs/post', query: {job_id: jobId,version_time:version_time,job_type:'edit'}})
 }
 
 const deleteJob = (jobId)=>{
