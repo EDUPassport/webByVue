@@ -545,7 +545,7 @@
 
                                                 <div class="attachment-xll-image">
                                                     <el-image class="attachment-xll-img"
-                                                              :src=" `http://localhost:8000${businessForm.business_reg_img}`"
+                                                              :src=" businessForm.business_reg_img"
                                                               fit="cover"
                                                     >
                                                     </el-image>

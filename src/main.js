@@ -195,10 +195,10 @@ app.config.globalProperties.$filters = {
             }
 
             if (countryNameEn && provinceNameEn && cityNameEn) {
-                str = provinceNameEn + ', ' + cityNameEn + ', ' + countryNameEn
+                str = cityNameEn + ', ' + provinceNameEn + ', ' + countryNameEn
             }
             if (countryNameEn && provinceNameEn && cityNameEn && districtNameEn) {
-                str = provinceNameEn + ', ' + cityNameEn + ', ' + districtNameEn + ', ' + countryNameEn
+                str = cityNameEn + ', ' + provinceNameEn + ', ' + districtNameEn + ', ' + countryNameEn
             }
             return str;
 
