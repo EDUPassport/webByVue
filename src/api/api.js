@@ -204,7 +204,7 @@ export const EVENTS_LIST = (params) => get('event/eventList', params)
 export const EVENT_DETAIL = (params) => get('event/detail', params)
 
 export const EVENTS_DETAIL = (params) => get('event/detail', params)
-
+export const EVENT_VISITOR_DETAIL = (params) => get('visitor/eventInfo', params)
 export const EVENTS_ADD_APPLICANTS = (params) => post('home/addApplicants', params)
 
 export const EVENTS_ADD_EVENT = (params) => post('event/addEvent', params)

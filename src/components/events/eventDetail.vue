@@ -52,11 +52,28 @@
                     <div class="detail-b-t">
                         <div class="detail-b-t-l">
                             <div class="detail-b-t-l-l">
-                                <el-image
+                                <template v-if="data.company_info">
+                                    <el-image
+                                        v-if="data.identity == 1"
                                         class="detail-company-logo"
                                         fit="cover"
-                                        :src="data.company_logo ? data.company_logo : defaultAvatar">
-                                </el-image>
+                                        :src="photoFormat(data.company_info.user_contact.headimgurl)">
+                                    </el-image>
+                                    <el-image
+                                        v-else
+                                        class="detail-company-logo"
+                                        fit="cover"
+                                        :src="photoFormat(data.company_info.user_contact.company.logo)">
+                                    </el-image>
+                                </template>
+                                <template v-else>
+                                    <el-image
+                                        class="detail-company-logo"
+                                        fit="cover"
+                                        :src="photoFormat(data.company_logo)">
+                                    </el-image>
+                                </template>
+
                             </div>
                             <div class="detail-b-t-l-r">
                                 <div class="detail-name">
@@ -70,11 +87,11 @@
                             <template v-if="from === 'reserved-spots' ">
                                 <el-button type="primary" disabled>Reserve Spot</el-button>
                                 <el-button
-                                           link
-                                           style="color:#F04438;"
-                                           type="danger"
-                                           :loading="removeLoadingStatus"
-                                           @click="clientRemoveEvent(data.id)">
+                                        link
+                                        style="color:#F04438;"
+                                        type="danger"
+                                        :loading="removeLoadingStatus"
+                                        @click="clientRemoveEvent(data.id)">
                                     Remove Event
                                 </el-button>
                             </template>
@@ -83,17 +100,17 @@
                                 <template v-if="data.is_publish == 1">
 
                                     <el-button
-                                        type="primary"
-                                        @click="unPublishEvent(data.id)"
-                                        v-if="data.status == 1">
+                                            type="primary"
+                                            @click="unPublishEvent(data.id)"
+                                            v-if="data.status == 1">
                                         Unpublish Event
                                     </el-button>
 
                                 </template>
                                 <template v-else>
                                     <el-button
-                                        type="primary"
-                                        @click="publishEvent(data.id)"
+                                            type="primary"
+                                            @click="publishEvent(data.id)"
                                     >
                                         Publish Event
                                     </el-button>
@@ -147,9 +164,25 @@
                             Posted By
                         </div>
                         <div class="detail-table-item-r">
-                            <el-avatar style="width: 24px;height: 24px;margin-right: 6px;"
-                                       :src="data.company_profile_photo ? data.company_profile_photo : defaultAvatar">
-                            </el-avatar>
+                            <template v-if="data.company_info">
+                                <el-avatar
+                                    v-if="data.identity == 1"
+                                    style="width: 24px;height: 24px;margin-right: 6px;"
+                                    :src="photoFormat(data.company_info.user_contact.headimgurl)">
+                                </el-avatar>
+                                <el-avatar
+                                    v-else
+                                    style="width: 24px;height: 24px;margin-right: 6px;"
+                                    :src="photoFormat(data.company_info.user_contact.company.profile_photo)">
+                                </el-avatar>
+                            </template>
+                            <template v-else>
+                                <el-avatar
+                                    style="width: 24px;height: 24px;margin-right: 6px;"
+                                    :src="photoFormat(data.company_profile_photo)">
+                                </el-avatar>
+                            </template>
+
                             {{ data.company_name }}
                         </div>
                     </div>
@@ -173,7 +206,7 @@
                             {{ data.currency }} {{ data.pay_money }}
                         </div>
                     </div>
-                    <div class="detail-table-item">
+                    <div class="detail-table-item" v-if="data.is_online != 1">
                         <div class="detail-table-item-l">
                             Venue
                         </div>
@@ -407,13 +440,21 @@ import {
     HOME_CLIENT_CANCEL_EVENT, HOME_CLIENT_REMOVE_EVENT, HOME_EVENT_DELETE, HOME_PUBLISH_EVENT,
     HOME_PUBLISHER_CANCEL_EVENT
 } from "@/api/api";
-import {ElMessage,ElLoading} from 'element-plus'
+import {ElMessage, ElLoading} from 'element-plus'
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 import BookEventForm from "@/components/bookEventForm.vue";
 import defaultAvatar from "@/assets/newHome/default-business-avatar.svg";
 
-const props = defineProps(['visible', 'data', 'showCancel', 'from','rsvpCancel'])
-const emit = defineEmits(['close', 'cancelSuccess','removeSuccess', 'deleteSuccess', 'publishSuccess', 'unPublishSuccess'])
+const props = defineProps(['visible', 'data', 'showCancel', 'from', 'rsvpCancel'])
+const emit = defineEmits(['close', 'cancelSuccess', 'removeSuccess', 'deleteSuccess', 'publishSuccess', 'unPublishSuccess'])
+
+const photoFormat = (file) => {
+    if (file) {
+        return file;
+    } else {
+        return defaultAvatar
+    }
+}
 // const currentUserId = localStorage.getItem('uid')
 const cdDialogVisible = ref(false)
 
@@ -436,11 +477,11 @@ const cancelEvent = (item) => {
     // console.log(item)
     cdEventDetail.value = item
 
-    if(props.from === 'reserved-spots'){
+    if (props.from === 'reserved-spots') {
         submitCancelEvent()
     }
 
-    if(props.from === 'my-events'){
+    if (props.from === 'my-events') {
 
         cdDialogObj.value = {
             type: 'cancel',
@@ -457,19 +498,19 @@ const submitCancelEvent = () => {
         publisherCancelEvent(cdEventDetail.value.id)
     }
 
-    if(props.from === 'reserved-spots'){
+    if (props.from === 'reserved-spots') {
         clientCancelEvent(cdEventDetail.value.id)
     }
 }
 const removeLoadingStatus = ref(false)
-const clientRemoveEvent = (id)=>{
+const clientRemoveEvent = (id) => {
     removeLoadingStatus.value = true
     let params = {
-        id:id
+        id: id
     }
 
-    HOME_CLIENT_REMOVE_EVENT(params).then(res=>{
-        if(res.code === 200){
+    HOME_CLIENT_REMOVE_EVENT(params).then(res => {
+        if (res.code === 200) {
             removeLoadingStatus.value = false
 
             ElMessage({
@@ -480,7 +521,7 @@ const clientRemoveEvent = (id)=>{
 
             emit('removeSuccess')
         }
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err)
         removeLoadingStatus.value = false
     })
@@ -599,16 +640,16 @@ const spotVisible = ref(false)
 const spotInfo = ref({})
 
 const reserveSpot = (data) => {
-    if(token){
+    if (token) {
         const reservedLoading = ElLoading.service({
-            text:'Loading'
+            text: 'Loading'
         })
 
         let uid = localStorage.getItem('uid')
         let params = {
             apply_user_id: uid,
             user_id: props.data.user_id,
-            event_id:props.data.id
+            event_id: props.data.id
         }
 
         EVENTS_ADD_APPLICANTS(params).then(res => {
@@ -622,10 +663,10 @@ const reserveSpot = (data) => {
                 })
                 reservedLoading.close()
 
-                setTimeout(function (){
+                setTimeout(function () {
 
                     const loading = ElLoading.service({
-                        text:'Redirecting'
+                        text: 'Redirecting'
                     })
                     setTimeout(function () {
                         loading.close()
@@ -641,7 +682,7 @@ const reserveSpot = (data) => {
             console.log(err)
             reservedLoading.close()
         })
-    }else{
+    } else {
         spotVisible.value = true
         spotInfo.value = data
     }

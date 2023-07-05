@@ -179,7 +179,76 @@
                 <h3>
                     Join Our Vibrant Community & Unlock Limitless Possibilities For Growth and Collaboration!
                 </h3>
+                <div class="section-8-input">
+                    <el-input placeholder="Enter your email address">
+                        <template #append>
+                            <el-button class="section-8-input-btn" >Join us</el-button>
+                        </template>
+                    </el-input>
+                </div>
 
+            </div>
+        </div>
+
+        <div class="footer-bg">
+            <div class="footer-container">
+                <div class="footer-l">
+                    <div>
+                        <el-image :src="eduLogoFooterImg"></el-image>
+                    </div>
+                    <p>
+                        Copyright © 2023 EDU Passport <br>
+                        All rights reserved
+                    </p>
+                    <div class="footer-social-media">
+                        <a href="">
+                            <el-image :src="linkedinImg"></el-image>
+                        </a>
+                        <a href="">
+                            <el-image :src="instagramImg"></el-image>
+                        </a>
+                        <a href="">
+                            <el-image :src="twitterImg"></el-image>
+                        </a>
+                        <a href="">
+                            <el-image :src="facebookImg"></el-image>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-r">
+                    <div class="footer-links">
+                        <div class="footer-link">
+                            <div class="footer-link-label">Services</div>
+                            <div class="footer-link-items">
+                                <router-link :to="{path:'/job/pool'}">EDU Jobs</router-link>
+                                <router-link :to="{path:'/deals'}">EDU Deals</router-link>
+                                <router-link :to="{path:'/events'}">EDU Events</router-link>
+                            </div>
+                        </div>
+                        <div class="footer-link">
+                            <div class="footer-link-label">Company</div>
+                            <div class="footer-link-items">
+                                <router-link :to="{path:'/'}">About Us</router-link>
+                                <router-link :to="{path:'/'}">Pricing</router-link>
+                                <a href="">EDU Blog</a>
+                            </div>
+                        </div>
+                        <div class="footer-link">
+                            <div class="footer-link-label">Support</div>
+                            <div class="footer-link-items">
+                                <router-link :to="{path:'/'}">Contact us</router-link>
+                                <router-link :to="{path:'/'}">Knowledge Base</router-link>
+                            </div>
+                        </div>
+                        <div class="footer-link">
+                            <div class="footer-link-label">Legal</div>
+                            <div class="footer-link-items">
+                                <router-link :to="{path:'/'}">Terms of service</router-link>
+                                <router-link :to="{path:'/'}">Privacy policy</router-link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -190,6 +259,11 @@ import logoImg from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Ligh
 import poolJobListing from '@/assets/newHome/btns/pool-job-listing.png'
 import eventsListImg from '@/assets/newHome/btns/events-list.png'
 import messagesImg from '@/assets/newHome/btns/messages.png'
+import eduLogoFooterImg from '@/assets/newHome/edu-logo-footer.svg'
+import linkedinImg from '@/assets/socialMedia/linkedin-2.svg'
+import instagramImg from '@/assets/socialMedia/instagram-2.svg'
+import twitterImg from '@/assets/socialMedia/twitter-2-32.svg'
+import facebookImg from '@/assets/socialMedia/facebook-2.svg'
 
 import joinUsEmailImg from '@/assets/newHome/join-us-email.svg'
 import {useRouter} from 'vue-router'
@@ -493,13 +567,120 @@ const turnBlogPage = ()=>{
     justify-content: center;
 }
 
-.section-8-r{
+.section-8-l{
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.section-8-r{
+    width: 55%;
 }
 
 .section-8-r h3{
+    color: #FFFFFF;
+    font-size: 32px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 130%;
+    text-transform: capitalize;
+    margin-top: 50px;
+    margin-right: 50px;
+}
+.section-8-input{
+    margin-top: 30px;
+    margin-right: 100px;
+}
+
+.section-8-input :deep(.el-input__wrapper){
+    border-radius: 5px 0px 0px 5px;
+    background:#F4F5F7;
+}
+.section-8-input :deep(.el-input-group__append){
+    border-radius: 0px 5px 5px 0px;
+    background:  #1D2939 ;
+}
+.section-8-input-btn{
+    color: #FFFFFF !important;
+    /* Label / Medium Label */
+    font-size: 14px;
+    font-family: Manrope;
+    font-style: normal;
+    font-weight: 700;
+}
+
+
+.footer-bg{
+    background: #1D2939;
 
 }
 
+.footer-container{
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.footer-l p{
+    color:  #D9DBE1;
+    font-size: 14px;
+    font-family: Work Sans;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.footer-social-media{
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+}
+
+.footer-social-media a{
+    text-decoration: none;
+    margin-right: 16px;
+}
+
+.footer-links{
+    display: flex;
+    flex-direction: row;
+
+}
+.footer-link{
+    min-width: 160px;
+    margin-right: 30px;
+}
+
+.footer-link-label{
+    color: #FFFFFF;
+    font-size: 20px;
+    font-family: Work Sans;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 30px;
+}
+
+.footer-link-items{
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.footer-link-items a{
+    text-decoration: none;
+    margin-top: 10px;
+    color: #D9DBE1;
+    font-size: 16px;
+    font-family: Work Sans;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 26px;
+}
 
 </style>

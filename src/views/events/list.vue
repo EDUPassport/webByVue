@@ -284,7 +284,7 @@
 import emptyImage from '@/assets/newHome/dashboard/empty.svg'
 import eventFilterComponent from "@/components/eventFilterComponent";
 import {
-    ADD_FAVORITE, CANCEL_FAVORITE, EVENTS_ADD_APPLICANTS,
+    ADD_FAVORITE, CANCEL_FAVORITE, EVENT_VISITOR_DETAIL, EVENTS_ADD_APPLICANTS,
     EVENTS_LIST, HOME_FEATURE_EVENT_LIST,
     USER_BROWSING_HISTORY_ADD
 } from "@/api/api";
@@ -421,14 +421,31 @@ const confirmFilterSearch = (e) => {
 }
 
 const previewEvent = (item) => {
-    eventDetailVisible.value = true
-    eventDetailData.value = item
+    getEventDetailById(item.id)
+    // eventDetailVisible.value = true
+    // eventDetailData.value = item
     let token = localStorage.getItem('token')
     if(token){
         addUserBrowsingHistory(item.id)
     }
 }
 
+const getEventDetailById = (id)=>{
+    const loading = ElLoading.service({
+        text:'loading'
+    })
+    let params = {
+        event_id:id
+    }
+    EVENT_VISITOR_DETAIL(params).then(res=>{
+        eventDetailData.value = res.message
+        eventDetailVisible.value = true
+        loading.close()
+    }).catch(err=>{
+        console.log(err)
+        loading.close()
+    })
+}
 const eventPageSizeChange = (e) => {
     console.log(e)
 }

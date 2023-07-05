@@ -135,13 +135,14 @@
 </template>
 
 <script setup>
-import {EVENTS_MY_EVENT} from '@/api/api';
+import {EVENT_VISITOR_DETAIL, EVENTS_MY_EVENT} from '@/api/api';
 // import {encode} from 'js-base64'
 import {updateWindowHeight} from "@/utils/tools";
 import {ref, onMounted, onUnmounted} from 'vue'
 import {useRouter} from 'vue-router'
 import emptyImage from "@/assets/newHome/dashboard/empty.svg";
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
+import {ElLoading} from 'element-plus'
 
 const router = useRouter()
 
@@ -175,8 +176,27 @@ const shareEvent = (item) => {
 
 
 const previewEvent = (item) => {
-    eventDetailVisible.value = true
-    eventDetailData.value = item
+    // eventDetailVisible.value = true
+    // eventDetailData.value = item
+    getEventDetailById(item.id)
+
+}
+
+const getEventDetailById = (id)=>{
+    const loading = ElLoading.service({
+        text:'loading'
+    })
+    let params = {
+        event_id:id
+    }
+    EVENT_VISITOR_DETAIL(params).then(res=>{
+        eventDetailData.value = res.message
+        eventDetailVisible.value = true
+        loading.close()
+    }).catch(err=>{
+        console.log(err)
+        loading.close()
+    })
 }
 
 const eventPageSizeChange = (e) => {

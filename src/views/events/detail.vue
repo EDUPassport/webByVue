@@ -16,11 +16,28 @@
                 <div class="detail-b-t">
                     <div class="detail-b-t-l">
                         <div class="detail-b-t-l-l">
-                            <el-image
-                                class="detail-company-logo"
-                                fit="cover"
-                                :src="detailData.company_profile_photo ? detailData.company_profile_photo : defaultAvatar">
-                            </el-image>
+                            <template v-if="detailData.company_info">
+                                <el-image
+                                    v-if="detailData.identity == 1"
+                                    class="detail-company-logo"
+                                    fit="cover"
+                                    :src="photoFormat(detailData.company_info.user_contact.headimgurl)">
+                                </el-image>
+                                <el-image
+                                    v-else
+                                    class="detail-company-logo"
+                                    fit="cover"
+                                    :src="photoFormat(detailData.company_info.user_contact.company.logo)">
+                                </el-image>
+                            </template>
+                            <template v-else>
+                                <el-image
+                                    class="detail-company-logo"
+                                    fit="cover"
+                                    :src="photoFormat(detailData.company_logo)">
+                                </el-image>
+                            </template>
+
                         </div>
                         <div class="detail-b-t-l-r">
                             <div class="detail-name">{{ detailData.name }}</div>
@@ -68,7 +85,25 @@
                         Posted By
                     </div>
                     <div class="detail-table-item-r">
-                        <el-avatar style="width: 24px;height: 24px;margin-right: 6px;" :src="detailData.company_logo"></el-avatar>
+                        <template v-if="detailData.company_info">
+                            <el-avatar
+                                v-if="detailData.identity == 1"
+                                style="width: 24px;height: 24px;margin-right: 6px;"
+                                :src="photoFormat(detailData.company_info.user_contact.headimgurl)">
+                            </el-avatar>
+                            <el-avatar
+                                v-else
+                                style="width: 24px;height: 24px;margin-right: 6px;"
+                                :src="photoFormat(detailData.company_info.user_contact.company.profile_photo)">
+                            </el-avatar>
+                        </template>
+                        <template v-else>
+                            <el-avatar
+                                style="width: 24px;height: 24px;margin-right: 6px;"
+                                :src="photoFormat(detailData.company_profile_photo)">
+                            </el-avatar>
+                        </template>
+
                         {{detailData.company_name}}
                     </div>
                 </div>
@@ -243,13 +278,19 @@
 import defaultAvatar from '@/assets/newHome/default-business-avatar.svg'
 import { ref,onMounted} from 'vue'
 import {useRoute,useRouter} from 'vue-router'
-import {ADD_FAVORITE, CANCEL_FAVORITE, EVENTS_DETAIL, EVENTS_LIST} from "@/api/api";
+import {ADD_FAVORITE, CANCEL_FAVORITE, EVENT_VISITOR_DETAIL, EVENTS_LIST} from "@/api/api";
 import {ElMessage} from 'element-plus'
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 
 const route = useRoute()
 const router = useRouter()
-
+const photoFormat = (file) => {
+    if (file) {
+        return file;
+    } else {
+        return defaultAvatar
+    }
+}
 const turnBack = ()=>{
     router.push({path:'/events'})
 }
@@ -336,8 +377,8 @@ const getEventDetail = (id) => {
     let params = {
         event_id: id
     }
-  
-    EVENTS_DETAIL(params).then(res => {
+
+    EVENT_VISITOR_DETAIL(params).then(res => {
 
         if (res.code == 200) {
             let resMessage = res.message;

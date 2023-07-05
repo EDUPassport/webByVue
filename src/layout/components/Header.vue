@@ -109,6 +109,7 @@ const turnHome = ()=>{
     margin: 0 auto;
     height: 120px;
     padding: 40px 100px 20px 100px;
+    background-color: #FFFFFF;
 }
 
 .header-row-container {

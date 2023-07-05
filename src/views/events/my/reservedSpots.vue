@@ -141,12 +141,12 @@
 </template>
 
 <script setup>
-import {ADD_FAVORITE, CANCEL_FAVORITE, HOME_MY_APPLY_EVENT_LIST} from '@/api/api';
+import {ADD_FAVORITE, CANCEL_FAVORITE, EVENT_VISITOR_DETAIL, HOME_MY_APPLY_EVENT_LIST} from '@/api/api';
 // import {encode} from 'js-base64'
 import {useRouter} from 'vue-router'
 import {updateWindowHeight} from "@/utils/tools";
 import {ref, onMounted, onUnmounted} from 'vue'
-import {ElMessage} from 'element-plus'
+import {ElMessage,ElLoading} from 'element-plus'
 import emptyImage from "@/assets/newHome/dashboard/empty.svg";
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 
@@ -182,11 +182,31 @@ const shareEvent = (item) => {
 }
 
 const previewEvent = (item) => {
-    eventDetailVisible.value = true
-    eventDetailData.value = item.event
+    getEventDetailById(item.event.id)
+
+    // eventDetailVisible.value = true
+    // eventDetailData.value = item.event
     rsvpCancelStatus.value = item.is_delete;
 
 }
+
+const getEventDetailById = (id)=>{
+    const loading = ElLoading.service({
+        text:'loading'
+    })
+    let params = {
+        event_id:id
+    }
+    EVENT_VISITOR_DETAIL(params).then(res=>{
+        eventDetailData.value = res.message
+        eventDetailVisible.value = true
+        loading.close()
+    }).catch(err=>{
+        console.log(err)
+        loading.close()
+    })
+}
+
 const addFavorite = (item, index) => {
 
     let params = {
