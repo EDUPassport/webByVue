@@ -71,9 +71,11 @@
                                     <div class="form-item-container">
                                         <el-input style="margin-right: 20px;"
                                                   v-model="personalForm.first_name"
+                                                  :disabled="stepOneStatus"
                                                   placeholder="Enter First Name">
                                         </el-input>
                                         <el-input v-model="personalForm.last_name"
+                                        :disabled="stepOneStatus"
                                                   placeholder="Enter Second Name">
                                         </el-input>
                                     </div>

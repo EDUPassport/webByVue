@@ -513,11 +513,26 @@
                                                     </div>
                                                     <div class="attachment-xll-btn-edit"
                                                          v-if="!stepThreeStatus"
-                                                         @click="handleEditMedia('business_reg_img')"
+                                                         
                                                     >
-                                                        <el-icon class="attachment-xll-icon">
+                                                       
+                                                        <el-upload
+                                                    :disabled="stepThreeStatus"
+                                                    action=""
+                                                    :limit="10"
+                                                    :headers="uploadHeaders"
+                                                    :show-file-list="false"
+                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                    :http-request="businessRegImgHttpRequest"
+                                                    :before-upload="beforeBusinessRegImgUpload"
+                                            >
+                                                <template #trigger>
+                                                    <el-icon class="attachment-xll-icon">
                                                             <IconUilEdit/>
                                                         </el-icon>
+                                                </template>
+
+                                            </el-upload>
                                                     </div>
                                                     <div class="attachment-xll-btn-download"
                                                          @click="handleDownloadMedia(businessForm.business_reg_img)"
@@ -530,7 +545,7 @@
 
                                                 <div class="attachment-xll-image">
                                                     <el-image class="attachment-xll-img"
-                                                              :src="businessForm.business_reg_img"
+                                                              :src=" `http://localhost:8000${businessForm.business_reg_img}`"
                                                               fit="cover"
                                                     >
                                                     </el-image>
@@ -560,7 +575,7 @@
                                             <el-upload
                                                     :disabled="stepThreeStatus"
                                                     action=""
-                                                    :limit="1"
+                                                    :limit="10"
                                                     :headers="uploadHeaders"
                                                     :show-file-list="false"
                                                     accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
@@ -619,11 +634,26 @@
                                                     </div>
                                                     <div class="attachment-xll-btn-edit"
                                                          v-if="!stepThreeStatus"
-                                                         @click="handleEditMedia('license')"
+                                                        
                                                     >
-                                                        <el-icon class="attachment-xll-icon">
+                                                       
+                                                    <el-upload
+                                                    :disabled="stepThreeStatus"
+                                                    action=""
+                                                    :limit="10"
+                                                    :headers="uploadHeaders"
+                                                    :show-file-list="false"
+                                                    accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                                                    :http-request="licensePhotoHttpRequest"
+                                                    :before-upload="beforeLicensePhotoUpload"
+                                            >
+                                                <template #trigger>
+                                                    <el-icon class="attachment-xll-icon">
                                                             <IconUilEdit/>
                                                         </el-icon>
+                                                </template>
+
+                                            </el-upload>
                                                     </div>
                                                     <div class="attachment-xll-btn-download"
                                                          @click="handleDownloadMedia(businessForm.license)"
@@ -666,7 +696,7 @@
                                             <el-upload
                                                     :disabled="stepThreeStatus"
                                                     action=""
-                                                    :limit="1"
+                                                    :limit="10"
                                                     :headers="uploadHeaders"
                                                     :show-file-list="false"
                                                     accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
@@ -1959,7 +1989,7 @@ const getBasicInfo = () => {
             }
             if (companyInfo.Preferred_Location) {
                 let preferredLocationArr = companyInfo.Preferred_Location
-
+                preferredLocationValue.value = []
                 preferredLocationArr.forEach((item)=>{
 
                     if (item.object_id == 0) {
