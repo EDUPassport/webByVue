@@ -146,7 +146,7 @@
 <script setup>
 import {ref, defineProps, defineEmits,onMounted} from 'vue'
 import {EVENT_LOCATION_LIST, EVENTS_CATEGORY, TAGS_LIST} from "@/api/api";
-import {formatDateYmdHis} from "@/utils/tools";
+// import {formatDateYmdHis} from "@/utils/tools";
 
 defineProps(['identity'])
 
@@ -194,7 +194,7 @@ const eventFormatOptions = ref([
     },
     {
         name:"Offline(In-Person)",
-        value:2
+        value:0
     }
 ])
 
@@ -216,17 +216,17 @@ const search = () => {
         params.event_title = eventName.value
     }
 
+    // if (datePosted.value) {
+    //     let nowDate = new Date()
+    //     nowDate.setDate(nowDate.getDate() - datePosted.value)
+    //     params.by_date_range_start = formatDateYmdHis(nowDate)
+    // }
     if (datePosted.value) {
-        let nowDate = new Date()
-        nowDate.setDate(nowDate.getDate() - datePosted.value)
-        params.by_date_range_start = formatDateYmdHis(nowDate)
+        params.date_range = datePosted.value
     }
 
-    // console.log(eventFormat.value)
     if(eventFormat.value && eventFormat.value.length){
-        if(eventFormat.value.indexOf(1) !== -1 && eventFormat.value.length === 1){
-            params.is_online = 1
-        }
+        params.is_online = eventFormat.value.join(',')
     }
 
     if(checkedCateData.value &&  checkedCateData.value.length > 0) {

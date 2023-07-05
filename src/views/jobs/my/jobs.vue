@@ -210,6 +210,14 @@
         >
         </shareCard>
 
+        <applications
+            :visible="applicationsVisible"
+            @close="applicationsVisible=false"
+            :total-num="applicationsTotalNum"
+            :data="applicationsData"
+        >
+        </applications>
+
     </div>
 </template>
 
@@ -219,7 +227,7 @@ import {
     HOME_JOB_CLOSE,
     HOME_JOB_DELETE,
     HOME_JOB_TEMPLATE_DELETE,
-    JOB_TEMPLATE_LIST,
+    JOB_TEMPLATE_LIST, JOBS_APPLICATIONS,
     MY_JOBS,
     SET_READ,
     USER_UNREAD
@@ -233,8 +241,9 @@ import calendarImg from "@/assets/newHome/dashboard/calendar.svg";
 import shareCard from "@/components/shareCard.vue";
 import emptyImg from '@/assets/newHome/dashboard/empty.svg'
 import filterIconImg from '@/assets/filter.svg'
-import moment from 'moment';
 
+import moment from 'moment';
+import Applications from "@/components/pool/applications.vue";
 
 const store = useStore()
 const route = useRoute()
@@ -486,8 +495,33 @@ const deleteJobDrafts = (id) => {
     })
 }
 
+const applicationsData = ref([])
+const applicationsTotalNum = ref(0)
+const applicationsVisible = ref(false)
+const turnApplications = (jobId,unreadId)=>{
+    applicationsVisible.value = true
+    turnApplicationsOld(jobId,unreadId)
+    getJobResumes(jobId, 1 , 1000)
+}
 
-const turnApplications = (id, unreadId) => {
+const getJobResumes = (jobId,page,limit)=>{
+    let params = {
+        page: page,
+        limit: limit,
+        job_id: jobId
+    }
+    JOBS_APPLICATIONS(params).then(res=>{
+        console.log(res)
+        if(res.code == 200){
+            applicationsData.value = res.message.data
+            applicationsTotalNum.value = res.message.total
+        }
+    }).catch(err=>{
+        console.log(err)
+    })
+}
+
+const turnApplicationsOld = (id, unreadId) => {
     console.log('turn applications')
     let params = {
         id: unreadId,

@@ -94,6 +94,14 @@
                             </div>
                         </div>
                     </el-col>
+                    <el-col class="header-l-col" :xs="0" :sm="4" :md="12" :lg="12" :xl="12" v-else-if="currentRoutePath === '/job/applications' ">
+                        <div class="header-page-name">
+                            Job Applications
+                        </div>
+                        <div class="header-welcome-name">
+                            Access and review your submitted job application
+                        </div>
+                    </el-col>
                     <el-col class="header-l-col" :xs="0" :sm="4" :md="4" :lg="8" :xl="8" v-else>
                         <div class="header-page-name">
                             <template v-if="currentRoutePath === '/overview' ">Dashboard</template>
@@ -104,6 +112,12 @@
                             <template v-if="currentRoutePath === '/favorites' ">
                                 Favourites
                             </template>
+                            <template v-if="currentRoutePath === '/hiring/pool' ">
+                                Hiring Pool
+                            </template>
+                            <template v-if="currentRoutePath === '/job/applications' ">
+                                Job Applications
+                            </template>
                         </div>
                         <div class="header-welcome-name">
                             <template v-if="currentRoutePath === '/overview' ">
@@ -111,6 +125,8 @@
                             </template>
                             <template v-if="currentRoutePath === '/job/pool' ">Job Listing</template>
                             <template v-if="currentRoutePath === '/favorites' ">All your favourite jobs and events are here</template>
+                            <template v-if="currentRoutePath === '/hiring/pool' ">Search Candidates across the world</template>
+                            <template v-if="currentRoutePath === '/job/applications' ">Access and review your submitted job application</template>
                         </div>
                     </el-col>
 
@@ -168,6 +184,9 @@
 
                     </el-col>
                     <el-col class="header-r-col" :xs="8" :sm="20" :md="12" :lg="12" :xl="12" v-else-if="currentRoutePath === '/deals/myDeals' ">
+                        <HeaderSwitchIdentity></HeaderSwitchIdentity>
+                    </el-col>
+                    <el-col class="header-r-col" :xs="8" :sm="20" :md="12" :lg="12" :xl="12" v-else-if="currentRoutePath === '/job/applications' ">
                         <HeaderSwitchIdentity></HeaderSwitchIdentity>
                     </el-col>
                     <el-col class="header-r-col" :xs="8" :sm="20" :md="20" :lg="16" :xl="16" v-else>

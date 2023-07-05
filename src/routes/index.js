@@ -327,16 +327,6 @@ const routes = [
                 ],
             },
             {
-                path: "applications",
-                name: "jobApplications",
-                component: () => import("@/views/jobs/applications"),
-                meta: {
-                    titleC: "Applications",
-                    titleG: "Applications",
-                    requireAuth: true,
-                },
-            },
-            {
                 path: "home",
                 name: "jobsHome",
                 component: () => import("@/views/jobs/home"),
@@ -495,6 +485,38 @@ const routes = [
             titleC: 'Setting Contributor Profile',
             titleG: 'Setting Contributor Profile'
         },
+    },
+    {
+      path:'/hiring/pool',
+      component: dashboardLayout,
+      children: [
+          {
+              path:'/hiring/pool',
+              name:'hiringPool',
+              component: ()=>import("@/views/pool/hiring"),
+              meta:{
+                  titleC:"Hiring Pool Candidate Search",
+                  titleG:"Hiring Pool Candidate Search",
+                  requireAuth: true
+              }
+          }
+      ]
+    },
+    {
+        path:'/job/applications',
+        component: dashboardLayout,
+        children: [
+            {
+                path:'/job/applications',
+                name:'jobApplications',
+                component: ()=>import("@/views/jobs/applications"),
+                meta:{
+                    titleC:"Job Application",
+                    titleG:"Job Application",
+                    requireAuth: true
+                }
+            }
+        ]
     },
     {
         path: "/favorites",

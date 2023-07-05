@@ -66,6 +66,7 @@
                                                         <el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Not Approved</span>
                                                     <span class="xll-tag xll-tag-3" v-if="item.status == 5">
                                                         <el-icon style="margin-right: 2px;"><IconIcTwotoneError/></el-icon>Canceled</span>
+                                                    <span class="xll-tag"></span>
                                                 </template>
                                                 <template v-else>
                                                     <span class="xll-tag xll-tag-2"><el-icon style="margin-right: 2px;"><IconElOkCircle/></el-icon>Unpublished</span>
@@ -113,6 +114,7 @@
         <event-detail :visible="eventDetailVisible"
                       :data="eventDetailData"
                       :show-cancel="true"
+                      from="my-events"
                       @cancel-success="cancelEventSuccess"
                       @delete-success="deleteEventSuccess"
                       @un-publish-success="unPublishEventSuccess"
@@ -133,13 +135,14 @@
 </template>
 
 <script setup>
-import {EVENTS_MY_EVENT} from '@/api/api';
+import {EVENT_VISITOR_DETAIL, EVENTS_MY_EVENT} from '@/api/api';
 // import {encode} from 'js-base64'
 import {updateWindowHeight} from "@/utils/tools";
 import {ref, onMounted, onUnmounted} from 'vue'
 import {useRouter} from 'vue-router'
 import emptyImage from "@/assets/newHome/dashboard/empty.svg";
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
+import {ElLoading} from 'element-plus'
 
 const router = useRouter()
 
@@ -173,8 +176,27 @@ const shareEvent = (item) => {
 
 
 const previewEvent = (item) => {
-    eventDetailVisible.value = true
-    eventDetailData.value = item
+    // eventDetailVisible.value = true
+    // eventDetailData.value = item
+    getEventDetailById(item.id)
+
+}
+
+const getEventDetailById = (id)=>{
+    const loading = ElLoading.service({
+        text:'loading'
+    })
+    let params = {
+        event_id:id
+    }
+    EVENT_VISITOR_DETAIL(params).then(res=>{
+        eventDetailData.value = res.message
+        eventDetailVisible.value = true
+        loading.close()
+    }).catch(err=>{
+        console.log(err)
+        loading.close()
+    })
 }
 
 const eventPageSizeChange = (e) => {
@@ -347,13 +369,14 @@ onUnmounted(() => {
     margin: 16px 24px 0 24px;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 .events-item-b-l {
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    min-width: 50px;
 }
 
 .events-item-b-month {
@@ -376,7 +399,7 @@ onUnmounted(() => {
 }
 
 .events-item-b-r {
-    margin-left: 20px;
+    width: calc(100% - 70px);
 }
 
 .events-item-item span {

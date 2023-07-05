@@ -1,239 +1,242 @@
 <template>
-    <el-scrollbar class="deals-bg" always>
-        <un-complete-profile-prompt
+    <div class="deals-bg">
+        <el-scrollbar class="deals-container" always>
+            <un-complete-profile-prompt
                 :percent="profilePercentage"
                 tips="Get started and complete your profile to post an event"
                 v-if="(identity == 1 && profilePercentage <= 80 ) || (identity == 2 && profilePercentage <= 60) || (identity == 5 && profilePercentage <= 60)">
-        </un-complete-profile-prompt>
+            </un-complete-profile-prompt>
 
-        <div class="banner-row" :class="token ? 'banner-row-token' : ''" >
-            <el-carousel style="width: 100%" trigger="click" height="200px">
-                <el-carousel-item v-for="item in 4" :key="item">
-                    <el-image
+            <div class="banner-row" :class="token ? 'banner-row-token' : ''" >
+                <el-carousel style="width: 100%" trigger="click" height="200px">
+                    <el-carousel-item v-for="item in 4" :key="item">
+                        <el-image
                             src="https://cdn.staticaly.com/gh/unilei/picx-images-hosting@master/20230531/kkpansBanner.4nqwuipdtbs0.webp">
-                    </el-image>
-                </el-carousel-item>
-            </el-carousel>
-        </div>
-
-        <div class="content-row" :class="token ? 'content-row-token' : ''" >
-
-            <div class="content-filter">
-                <dealFilterComponent
-                    @search="confirmFilterSearch"
-                ></dealFilterComponent>
+                        </el-image>
+                    </el-carousel-item>
+                </el-carousel>
             </div>
 
-            <div class="content-list">
+            <div class="content-row" :class="token ? 'content-row-token' : ''" >
 
-                <el-tabs v-model="activeTabName" @tab-change="dealsTabChange">
+                <div class="content-filter">
+                    <dealFilterComponent
+                        @search="confirmFilterSearch"
+                    ></dealFilterComponent>
+                </div>
 
-                    <el-tab-pane label="Featured Deals" name="featured_deals">
+                <div class="content-list">
 
-                        <div v-loading="featuredDealsLoadingStatus">
-                            <template v-if="featuredDealsEmptyStatus">
-                                <el-empty style="height: 100%;"
-                                          :image="emptyImage"
-                                          :image-size="456"
-                                          description="Oh Sorry, There are no upcoming events">
-                                </el-empty>
-                            </template>
-                            <template v-else>
-                                <div class="deals-list-container" >
+                    <el-tabs v-model="activeTabName" @tab-change="dealsTabChange">
 
-                                    <div :class="token ? 'deals-item-token' : 'deals-item'"
-                                         v-for="(item,i) in featuredDealsList" :key="i">
+                        <el-tab-pane label="Featured Deals" name="featured_deals">
 
-                                        <div class="deals-item-share">
-                                            <el-button icon="share" circle  @click="shareDeal(item)"></el-button>
+                            <div v-loading="featuredDealsLoadingStatus">
+                                <template v-if="featuredDealsEmptyStatus">
+                                    <el-empty style="height: 100%;"
+                                              :image="emptyImage"
+                                              :image-size="456"
+                                              description="Oh Sorry, There are no upcoming events">
+                                    </el-empty>
+                                </template>
+                                <template v-else>
+                                    <div class="deals-list-container" >
 
-                                            <template v-if="item.is_favorite">
-                                                <el-button circle @click="cancelFavorite(item,i,'featured')">
-                                                    <el-icon :size="14">
-                                                        <IconFlatColorIconsLike/>
-                                                    </el-icon>
-                                                </el-button>
-                                            </template>
-                                            <template v-else>
-                                                <el-button circle   @click="addFavorite(item,i,'featured')">
-                                                    <el-icon :size="14">
-                                                        <IconIconParkOutlineLike/>
-                                                    </el-icon>
-                                                </el-button>
-                                            </template>
+                                        <div :class="token ? 'deals-item-token' : 'deals-item'"
+                                             v-for="(item,i) in featuredDealsList" :key="i">
 
-                                        </div>
+                                            <div class="deals-item-share">
+                                                <el-button icon="share" circle  @click="shareDeal(item)"></el-button>
 
-                                        <div class="deals-item-t">
-                                            <template  v-if="item.company_info">
-                                                <el-image class="deals-item-banner"
-                                                          fit="cover"
-                                                          :src="item.company_info.background_image ? item.company_info.background_image : ''"
-                                                >
-                                                </el-image>
-                                            </template>
-                                        </div>
-                                        <div class="deals-item-b">
-
-                                            <div class="deals-item-b-l" @click="previewDeal(item,i)">
-                                                <el-avatar class="deals-logo"
-                                                           :src="item.company_logo"
-                                                >
-                                                </el-avatar>
-                                            </div>
-                                            <div class="deals-item-b-r">
-
-                                                <div class="deals-item-name" @click="previewDeal(item,i)">
-                                                    {{ item.title }}
-                                                </div>
-                                                <div class="deals-item-posted" v-if="!token">
-                                                    {{ item.company_name }}
-                                                </div>
+                                                <template v-if="item.is_favorite">
+                                                    <el-button circle @click="cancelFavorite(item,i,'featured')">
+                                                        <el-icon :size="14">
+                                                            <IconFlatColorIconsLike/>
+                                                        </el-icon>
+                                                    </el-button>
+                                                </template>
+                                                <template v-else>
+                                                    <el-button circle   @click="addFavorite(item,i,'featured')">
+                                                        <el-icon :size="14">
+                                                            <IconIconParkOutlineLike/>
+                                                        </el-icon>
+                                                    </el-button>
+                                                </template>
 
                                             </div>
 
-                                        </div>
+                                            <div class="deals-item-t">
+                                                <template  v-if="item.company_info">
+                                                    <el-image class="deals-item-banner"
+                                                              fit="cover"
+                                                              :src="item.company_info.background_image ? item.company_info.background_image : ''"
+                                                    >
+                                                    </el-image>
+                                                </template>
+                                            </div>
+                                            <div class="deals-item-b">
 
-                                        <div class="deals-item-actions">
+                                                <div class="deals-item-b-l" @click="previewDeal(item,i)">
+                                                    <el-avatar class="deals-logo"
+                                                               :src="item.company_logo"
+                                                    >
+                                                    </el-avatar>
+                                                </div>
+                                                <div class="deals-item-b-r">
+
+                                                    <div class="deals-item-name" @click="previewDeal(item,i)">
+                                                        {{ item.title }}
+                                                    </div>
+                                                    <div class="deals-item-posted" v-if="!token">
+                                                        {{ item.company_name }}
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="deals-item-actions">
                                             <span v-if="item.company_info && item.company_info.category_name_en != '0'">
                                                 {{ item.company_info.category_name_en }}
                                             </span>
-                                            <el-button type="primary" @click="previewDeal(item,i)">
-                                                View Details
-                                            </el-button>
-                                        </div>
-
-
-                                    </div>
-
-                                </div>
-
-                            </template>
-
-                        </div>
-
-                    </el-tab-pane>
-
-                    <el-tab-pane label="All Deals" name="all_deals">
-
-                        <div v-loading="allDealsLoadingStatus">
-                            <template v-if="allDealsEmptyStatus">
-                                <el-empty style="height: 100%;"
-                                          :image="emptyImage"
-                                          :image-size="456"
-                                          description="Oh Sorry, There are no upcoming events">
-                                </el-empty>
-                            </template>
-                            <template v-else>
-                                <div class="deals-list-container" >
-
-                                    <div :class="token ? 'deals-item-token' : 'deals-item'"
-                                         v-for="(item,i) in dealsList" :key="i"
-                                    >
-                                        <div class="deals-item-share">
-                                            <el-button icon="share" circle  @click="shareDeal(item)"></el-button>
-
-                                            <template v-if="item.is_favorite">
-                                                <el-button circle @click="cancelFavorite(item,i,'all')">
-                                                    <el-icon :size="14">
-                                                        <IconFlatColorIconsLike/>
-                                                    </el-icon>
+                                                <el-button type="primary" @click="previewDeal(item,i)">
+                                                    View Details
                                                 </el-button>
-                                            </template>
-                                            <template v-else>
-                                                <el-button circle   @click="addFavorite(item,i,'all')">
-                                                    <el-icon :size="14">
-                                                        <IconIconParkOutlineLike/>
-                                                    </el-icon>
-                                                </el-button>
-                                            </template>
-
-                                        </div>
-
-                                        <div class="deals-item-t">
-                                            <template  v-if="item.company_info">
-                                                <el-image class="deals-item-banner"
-                                                          fit="cover"
-                                                          :src="item.company_info.background_image ? item.company_info.background_image : ''"
-                                                >
-                                                </el-image>
-                                            </template>
-                                        </div>
-                                        <div class="deals-item-b">
-
-                                            <div class="deals-item-b-l" @click="previewDeal(item,i)">
-                                                <el-avatar class="deals-logo"
-                                                           :src="item.company_logo"
-                                                >
-                                                </el-avatar>
-                                            </div>
-                                            <div class="deals-item-b-r">
-
-                                                <div class="deals-item-name" @click="previewDeal(item,i)">
-                                                    {{ item.title }}
-                                                </div>
-
-                                                <div class="deals-item-posted" v-if="!token">
-                                                    {{ item.company_name }}
-                                                </div>
-
                                             </div>
 
-                                        </div>
-                                        <div class="deals-item-actions">
-                                            <span v-if="item.company_info && item.company_info.category_name_en != '0'">
-                                                {{ item.company_info.category_name_en }}
-                                            </span>
-                                            <el-button type="primary" @click="previewDeal(item,i)">
-                                                View Details
-                                            </el-button>
+
                                         </div>
 
                                     </div>
 
-                                </div>
-                                <div class="deals-pagination" v-if="dealsTotalNum">
-                                    <el-pagination layout="prev, pager, next"
-                                                   :default-current-page="1"
-                                                   @size-change="dealsPageSizeChange"
-                                                   @current-change="dealsPageChange"
-                                                   :current-page="dealsPage"
-                                                   :page-size="dealsLimit"
-                                                   :total="dealsTotalNum">
-                                    </el-pagination>
-                                </div>
-                            </template>
+                                </template>
 
-                        </div>
+                            </div>
 
-                    </el-tab-pane>
-                </el-tabs>
+                        </el-tab-pane>
+
+                        <el-tab-pane label="All Deals" name="all_deals">
+
+                            <div v-loading="allDealsLoadingStatus">
+                                <template v-if="allDealsEmptyStatus">
+                                    <el-empty style="height: 100%;"
+                                              :image="emptyImage"
+                                              :image-size="456"
+                                              description="Oh Sorry, There are no upcoming events">
+                                    </el-empty>
+                                </template>
+                                <template v-else>
+                                    <div class="deals-list-container" >
+
+                                        <div :class="token ? 'deals-item-token' : 'deals-item'"
+                                             v-for="(item,i) in dealsList" :key="i"
+                                        >
+                                            <div class="deals-item-share">
+                                                <el-button icon="share" circle  @click="shareDeal(item)"></el-button>
+
+                                                <template v-if="item.is_favorite">
+                                                    <el-button circle @click="cancelFavorite(item,i,'all')">
+                                                        <el-icon :size="14">
+                                                            <IconFlatColorIconsLike/>
+                                                        </el-icon>
+                                                    </el-button>
+                                                </template>
+                                                <template v-else>
+                                                    <el-button circle   @click="addFavorite(item,i,'all')">
+                                                        <el-icon :size="14">
+                                                            <IconIconParkOutlineLike/>
+                                                        </el-icon>
+                                                    </el-button>
+                                                </template>
+
+                                            </div>
+
+                                            <div class="deals-item-t">
+                                                <template  v-if="item.company_info">
+                                                    <el-image class="deals-item-banner"
+                                                              fit="cover"
+                                                              :src="item.company_info.background_image ? item.company_info.background_image : ''"
+                                                    >
+                                                    </el-image>
+                                                </template>
+                                            </div>
+                                            <div class="deals-item-b">
+
+                                                <div class="deals-item-b-l" @click="previewDeal(item,i)">
+                                                    <el-avatar class="deals-logo"
+                                                               :src="item.company_logo"
+                                                    >
+                                                    </el-avatar>
+                                                </div>
+                                                <div class="deals-item-b-r">
+
+                                                    <div class="deals-item-name" @click="previewDeal(item,i)">
+                                                        {{ item.title }}
+                                                    </div>
+
+                                                    <div class="deals-item-posted" v-if="!token">
+                                                        {{ item.company_name }}
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="deals-item-actions">
+                                            <span v-if="item.company_info && item.company_info.category_name_en != '0'">
+                                                {{ item.company_info.category_name_en }}
+                                            </span>
+                                                <el-button type="primary" @click="previewDeal(item,i)">
+                                                    View Details
+                                                </el-button>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="deals-pagination" v-if="dealsTotalNum">
+                                        <el-pagination layout="prev, pager, next"
+                                                       :default-current-page="1"
+                                                       @size-change="dealsPageSizeChange"
+                                                       @current-change="dealsPageChange"
+                                                       :current-page="dealsPage"
+                                                       :page-size="dealsLimit"
+                                                       :total="dealsTotalNum">
+                                        </el-pagination>
+                                    </div>
+                                </template>
+
+                            </div>
+
+                        </el-tab-pane>
+                    </el-tabs>
+
+                </div>
 
             </div>
 
-        </div>
+            <share-card-theme-two :visible="shareDialogVisible"
+                                  share-title="Share something exciting"
+                                  :title="shareInfo.title"
+                                  :description="shareInfo.desc"
+                                  :quote="shareInfo.desc"
+                                  :url="shareLocationUrl"
+                                  @close="shareDialogVisible=false"
+            >
+            </share-card-theme-two>
 
-        <share-card-theme-two :visible="shareDialogVisible"
-                              share-title="Share something exciting"
-                              :title="shareInfo.title"
-                              :description="shareInfo.desc"
-                              :quote="shareInfo.desc"
-                              :url="shareLocationUrl"
-                              @close="shareDialogVisible=false"
-        >
-        </share-card-theme-two>
+            <dealDetailCard :info="dealDetailData"
+                            :index="dealIndex"
+                            :activeTabName="activeTabName"
+                            @add-favorite="addFavorite"
+                            @cancel-favorite="cancelFavorite"
+                            @close="dealDetailVisible=false"
+                            @share="shareDeal"
+                            :visible="dealDetailVisible">
+            </dealDetailCard>
 
-        <dealDetailCard :info="dealDetailData"
-                        :index="dealIndex"
-                        :activeTabName="activeTabName"
-                        @add-favorite="addFavorite"
-                        @cancel-favorite="cancelFavorite"
-                        @close="dealDetailVisible=false"
-                        @share="shareDeal"
-                        :visible="dealDetailVisible">
-        </dealDetailCard>
+        </el-scrollbar>
 
-    </el-scrollbar>
+    </div>
 
 </template>
 
@@ -513,6 +516,10 @@ onUnmounted(() => {
 
 .deals-bg {
     width: 100%;
+    /*background-color: #FFFFFF;*/
+}
+
+.deals-container{
     max-width: 1440px;
     height: calc(var(--i-window-height) - 120px);
     margin: 0 auto;

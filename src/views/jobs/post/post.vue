@@ -744,6 +744,7 @@ const identity = computed(() => store.state.identity)
 const postType = ref(1)
 const changeJobType = (value) => {
     postType.value = value
+    haveLocationStatus.value = false
     if(value === 1){
         loadJobTemplate({})
     }

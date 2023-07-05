@@ -64,7 +64,7 @@
                                             </template>
 
                                         </div>
-                                        <div class="events-item-b" @click="previewEvent(item.event)">
+                                        <div class="events-item-b" @click="previewEvent(item)">
 
                                             <div class="events-item-b-l">
                                                 <div class="events-item-b-month">
@@ -119,8 +119,10 @@
         <event-detail
                 :visible="eventDetailVisible"
                 :data="eventDetailData"
+                :rsvp-cancel="rsvpCancelStatus"
                 :show-cancel="true"
                 from="reserved-spots"
+                @remove-success="removeEventSuccess"
                 @cancel-success="cancelEventSuccess"
                 @close="eventDetailVisible=false">
         </event-detail>
@@ -139,12 +141,12 @@
 </template>
 
 <script setup>
-import {ADD_FAVORITE, CANCEL_FAVORITE, HOME_MY_APPLY_EVENT_LIST} from '@/api/api';
+import {ADD_FAVORITE, CANCEL_FAVORITE, EVENT_VISITOR_DETAIL, HOME_MY_APPLY_EVENT_LIST} from '@/api/api';
 // import {encode} from 'js-base64'
 import {useRouter} from 'vue-router'
 import {updateWindowHeight} from "@/utils/tools";
 import {ref, onMounted, onUnmounted} from 'vue'
-import {ElMessage} from 'element-plus'
+import {ElMessage,ElLoading} from 'element-plus'
 import emptyImage from "@/assets/newHome/dashboard/empty.svg";
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 
@@ -161,6 +163,7 @@ const eventEmptyStatus = ref(false)
 const eventDetailData = ref({})
 
 const eventDetailVisible = ref(false)
+const rsvpCancelStatus = ref(0)
 
 const shareDialogVisible = ref(false)
 const shareInfo = ref({})
@@ -179,9 +182,31 @@ const shareEvent = (item) => {
 }
 
 const previewEvent = (item) => {
-    eventDetailVisible.value = true
-    eventDetailData.value = item
+    getEventDetailById(item.event.id)
+
+    // eventDetailVisible.value = true
+    // eventDetailData.value = item.event
+    rsvpCancelStatus.value = item.is_delete;
+
 }
+
+const getEventDetailById = (id)=>{
+    const loading = ElLoading.service({
+        text:'loading'
+    })
+    let params = {
+        event_id:id
+    }
+    EVENT_VISITOR_DETAIL(params).then(res=>{
+        eventDetailData.value = res.message
+        eventDetailVisible.value = true
+        loading.close()
+    }).catch(err=>{
+        console.log(err)
+        loading.close()
+    })
+}
+
 const addFavorite = (item, index) => {
 
     let params = {
@@ -270,7 +295,10 @@ const getMyEvents = (page, limit) => {
 const turnToEvents = () => {
     router.push({path: '/events'})
 }
-
+const removeEventSuccess = ()=>{
+    eventDetailVisible.value = false
+    getMyEvents(eventPage.value, eventLimit.value)
+}
 const cancelEventSuccess = () => {
     eventDetailVisible.value = false
     getMyEvents(eventPage.value, eventLimit.value)
@@ -378,12 +406,14 @@ onUnmounted(() => {
     display: flex;
     flex-direction: row;
     cursor: pointer;
+    justify-content: space-between;
 }
 
 .events-item-b-l {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 50px;
 
 }
 
@@ -407,7 +437,7 @@ onUnmounted(() => {
 }
 
 .events-item-b-r {
-    margin-left: 20px;
+    width: calc(100% - 70px);
 }
 
 .events-item-item span {

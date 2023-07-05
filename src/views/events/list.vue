@@ -1,123 +1,126 @@
 <template>
-    <el-scrollbar class="events-bg" always>
-        <un-complete-profile-prompt
-            :percent="profilePercentage"
-            tips="Get started and complete your profile to post an event"
-            v-if="(identity == 1 && profilePercentage <= 80 ) || (identity == 2 && profilePercentage <= 60) || (identity == 5 && profilePercentage <= 60)">
-        </un-complete-profile-prompt>
+    <div class="events-bg">
+        <el-scrollbar class="events-container" always>
+            <un-complete-profile-prompt
+                :percent="profilePercentage"
+                tips="Get started and complete your profile to post an event"
+                v-if="(identity == 1 && profilePercentage <= 80 ) || (identity == 2 && profilePercentage <= 60) || (identity == 5 && profilePercentage <= 60)">
+            </un-complete-profile-prompt>
 
-        <div class="banner-row" :class="token ? 'banner-row-token' : ''" >
-            <el-carousel style="width: 100%" trigger="click" height="200px">
-                <el-carousel-item v-for="item in 4" :key="item">
-                    <el-image
-                        src="https://cdn.staticaly.com/gh/unilei/picx-images-hosting@master/20230531/kkpansBanner.4nqwuipdtbs0.webp">
-                    </el-image>
-                </el-carousel-item>
-            </el-carousel>
-        </div>
-
-        <div class="content-row" :class="token ? 'content-row-token' : ''" >
-
-            <div class="content-filter">
-                <eventFilterComponent
-                    @search="confirmFilterSearch"
-                >
-                </eventFilterComponent>
+            <div class="banner-row" :class="token ? 'banner-row-token' : ''" >
+                <el-carousel style="width: 100%" trigger="click" height="200px">
+                    <el-carousel-item v-for="item in 4" :key="item">
+                        <el-image
+                            src="https://cdn.staticaly.com/gh/unilei/picx-images-hosting@master/20230531/kkpansBanner.4nqwuipdtbs0.webp">
+                        </el-image>
+                    </el-carousel-item>
+                </el-carousel>
             </div>
 
-            <div class="content-list">
+            <div class="content-row" :class="token ? 'content-row-token' : ''" >
 
-                <el-tabs v-model="activeEventStyleName" @tab-change="eventTabChange">
-                    <el-tab-pane label="Featured Events" name="featured_events">
+                <div class="content-filter">
+                    <eventFilterComponent
+                        @search="confirmFilterSearch"
+                    >
+                    </eventFilterComponent>
+                </div>
 
-                        <div v-loading="featuredEventsLoadingStatus">
-                            <template v-if="featuredEventsEmptyStatus">
-                                <el-empty style="height: 100%;"
-                                          :image="emptyImage"
-                                          :image-size="456"
-                                          description="Oh Sorry, There are no upcoming events">
-                                </el-empty>
-                            </template>
-                            <template v-else>
-                                <div class="events-list-container" >
+                <div class="content-list">
 
-                                    <div :class="token ? 'events-item-token' : 'events-item'"
-                                         v-for="(item,i) in featuredEventsList" :key="i">
+                    <el-tabs v-model="activeEventStyleName" @tab-change="eventTabChange">
+                        <el-tab-pane label="Featured Events" name="featured_events">
 
-                                        <div class="events-item-share">
-                                            <el-button icon="share" circle  @click="shareEvent(item)"></el-button>
+                            <div v-loading="featuredEventsLoadingStatus">
+                                <template v-if="featuredEventsEmptyStatus">
+                                    <el-empty style="height: 100%;"
+                                              :image="emptyImage"
+                                              :image-size="456"
+                                              description="Oh Sorry, There are no upcoming events">
+                                    </el-empty>
+                                </template>
+                                <template v-else>
+                                    <div class="events-list-container" >
 
-                                            <template v-if="item.is_favorite">
-                                                <el-button circle @click="cancelFavorite(item,i,'featured')">
-                                                    <el-icon :size="14">
-                                                        <IconFlatColorIconsLike/>
-                                                    </el-icon>
-                                                </el-button>
-                                            </template>
-                                            <template v-else>
-                                                <el-button circle   @click="addFavorite(item,i,'featured')">
-                                                    <el-icon :size="14">
-                                                        <IconIconParkOutlineLike/>
-                                                    </el-icon>
-                                                </el-button>
-                                            </template>
+                                        <div :class="token ? 'events-item-token' : 'events-item'"
+                                             v-for="(item,i) in featuredEventsList" :key="i">
 
-                                        </div>
+                                            <div class="events-item-share">
+                                                <el-button icon="share" circle  @click="shareEvent(item)"></el-button>
 
-                                        <div class="events-item-t">
-                                            <template v-if="item.file_type === 'image' ">
-                                                <el-image class="events-item-banner"
-                                                          fit="cover"
-                                                          :preview-src-list="[item.file]"
-                                                          :src="item.file !='' ? item.file : '' "
-                                                >
-                                                </el-image>
-                                            </template>
-                                            <template v-else-if="item.file_type === 'video' ">
-                                                <video style="width: 100%;" :src="item.file" controls ></video>
-                                            </template>
-                                            <template v-else>
-                                                <el-image class="events-item-banner"
-                                                          fit="cover"
-                                                          :preview-src-list="[item.file]"
-                                                          :src="item.file !='' ? item.file : '' "
-                                                >
-                                                </el-image>
-                                            </template>
-                                        </div>
-                                        <div class="events-item-b">
-
-                                            <div class="events-item-b-l" @click="previewEvent(item)">
-                                                <div class="events-item-b-month">
-                                                    {{$filters.monthFormatEvent(item.date) }}
-                                                </div>
-                                                <div class="events-item-b-day">
-                                                    {{$filters.dayFormatEvent(item.date)}}
-                                                </div>
-                                            </div>
-                                            <div class="events-item-b-r">
-
-                                                <div class="events-item-name" @click="previewEvent(item)">
-                                                    {{ item.name }}
-                                                </div>
-                                                <div class="events-item-desc" @click="previewEvent(item)">
-                                                    {{ item.desc }}
-                                                </div>
-                                                <div class="events-item-posted" v-if="!token">
-                                                    Posted by {{ item.company_name }}
-                                                </div>
-                                                <div class="events-item-identity" v-if="!token">
-                                                    <span v-if="item.identity == 1">Educator</span>
-                                                    <span v-if="item.identity == 2">Recruiter</span>
-                                                    <span v-if="item.identity == 3">School</span>
-                                                    <span v-if="item.identity == 4">Other</span>
-                                                    <span v-if="item.identity == 5">Vendor</span>
-                                                </div>
-                                                <div class="events-item-action-container">
-                                                    <el-button type="primary"
-                                                               @click="reserveSpot(item)">
-                                                        Reserve Spot
+                                                <template v-if="item.is_favorite">
+                                                    <el-button circle @click="cancelFavorite(item,i,'featured')">
+                                                        <el-icon :size="14">
+                                                            <IconFlatColorIconsLike/>
+                                                        </el-icon>
                                                     </el-button>
+                                                </template>
+                                                <template v-else>
+                                                    <el-button circle   @click="addFavorite(item,i,'featured')">
+                                                        <el-icon :size="14">
+                                                            <IconIconParkOutlineLike/>
+                                                        </el-icon>
+                                                    </el-button>
+                                                </template>
+
+                                            </div>
+
+                                            <div class="events-item-t">
+                                                <template v-if="item.file_type === 'image' ">
+                                                    <el-image class="events-item-banner"
+                                                              fit="cover"
+                                                              :preview-src-list="[item.file]"
+                                                              :src="item.file !='' ? item.file : '' "
+                                                    >
+                                                    </el-image>
+                                                </template>
+                                                <template v-else-if="item.file_type === 'video' ">
+                                                    <video style="width: 100%;" :src="item.file" controls ></video>
+                                                </template>
+                                                <template v-else>
+                                                    <el-image class="events-item-banner"
+                                                              fit="cover"
+                                                              :preview-src-list="[item.file]"
+                                                              :src="item.file !='' ? item.file : '' "
+                                                    >
+                                                    </el-image>
+                                                </template>
+                                            </div>
+                                            <div class="events-item-b">
+
+                                                <div class="events-item-b-l" @click="previewEvent(item)">
+                                                    <div class="events-item-b-month">
+                                                        {{$filters.monthFormatEvent(item.date) }}
+                                                    </div>
+                                                    <div class="events-item-b-day">
+                                                        {{$filters.dayFormatEvent(item.date)}}
+                                                    </div>
+                                                </div>
+                                                <div class="events-item-b-r">
+
+                                                    <div class="events-item-name" @click="previewEvent(item)">
+                                                        {{ item.name }}
+                                                    </div>
+                                                    <div class="events-item-desc" @click="previewEvent(item)">
+                                                        {{ item.desc }}
+                                                    </div>
+                                                    <div class="events-item-posted" v-if="!token">
+                                                        Posted by {{ item.company_name }}
+                                                    </div>
+                                                    <div class="events-item-identity" v-if="!token">
+                                                        <span v-if="item.identity == 1">Educator</span>
+                                                        <span v-if="item.identity == 2">Recruiter</span>
+                                                        <span v-if="item.identity == 3">School</span>
+                                                        <span v-if="item.identity == 4">Other</span>
+                                                        <span v-if="item.identity == 5">Vendor</span>
+                                                    </div>
+                                                    <div class="events-item-action-container">
+                                                        <el-button type="primary"
+                                                                   @click="reserveSpot(item)">
+                                                            Reserve Spot
+                                                        </el-button>
+                                                    </div>
+
                                                 </div>
 
                                             </div>
@@ -126,107 +129,107 @@
 
                                     </div>
 
-                                </div>
+                                </template>
 
-                            </template>
+                            </div>
 
-                        </div>
+                        </el-tab-pane>
 
-                    </el-tab-pane>
+                        <el-tab-pane label="All Events" name="all_events">
 
-                    <el-tab-pane label="All Events" name="all_events">
+                            <div v-loading="allEventsLoadingStatus">
+                                <template v-if="allEventsEmptyStatus">
+                                    <el-empty style="height: 100%;"
+                                              :image="emptyImage"
+                                              :image-size="456"
+                                              description="Oh Sorry, There are no upcoming events">
+                                    </el-empty>
+                                </template>
+                                <template v-else>
+                                    <div class="events-list-container" >
 
-                        <div v-loading="allEventsLoadingStatus">
-                            <template v-if="allEventsEmptyStatus">
-                                <el-empty style="height: 100%;"
-                                          :image="emptyImage"
-                                          :image-size="456"
-                                          description="Oh Sorry, There are no upcoming events">
-                                </el-empty>
-                            </template>
-                            <template v-else>
-                                <div class="events-list-container" >
+                                        <div :class="token ? 'events-item-token' : 'events-item'"
+                                             v-for="(item,i) in eventsList" :key="i"
+                                        >
+                                            <div class="events-item-share">
+                                                <el-button icon="share" circle  @click="shareEvent(item)"></el-button>
 
-                                    <div :class="token ? 'events-item-token' : 'events-item'"
-                                         v-for="(item,i) in eventsList" :key="i"
-                                    >
-                                        <div class="events-item-share">
-                                            <el-button icon="share" circle  @click="shareEvent(item)"></el-button>
-
-                                            <template v-if="item.is_favorite">
-                                                <el-button circle @click="cancelFavorite(item,i,'all')">
-                                                    <el-icon :size="14">
-                                                        <IconFlatColorIconsLike/>
-                                                    </el-icon>
-                                                </el-button>
-                                            </template>
-                                            <template v-else>
-                                                <el-button circle   @click="addFavorite(item,i,'all')">
-                                                    <el-icon :size="14">
-                                                        <IconIconParkOutlineLike/>
-                                                    </el-icon>
-                                                </el-button>
-                                            </template>
-
-                                        </div>
-
-                                        <div class="events-item-t">
-
-                                            <template v-if="item.file_type === 'image' ">
-                                                <el-image class="events-item-banner"
-                                                          fit="cover"
-                                                          :preview-src-list="[item.file]"
-                                                          :src="item.file !='' ? item.file : '' "
-                                                >
-                                                </el-image>
-                                            </template>
-                                            <template v-else-if="item.file_type === 'video' ">
-                                                <video style="width: 100%;" :src="item.file" controls ></video>
-                                            </template>
-                                            <template v-else>
-                                                <el-image class="events-item-banner"
-                                                          fit="cover"
-                                                          :preview-src-list="[item.file]"
-                                                          :src="item.file !='' ? item.file : '' "
-                                                >
-                                                </el-image>
-                                            </template>
-                                        </div>
-                                        <div class="events-item-b">
-
-                                            <div class="events-item-b-l" @click="previewEvent(item)">
-                                                <div class="events-item-b-month">{{
-                                                        $filters.monthFormatEvent(item.date)
-                                                    }}
-                                                </div>
-                                                <div class="events-item-b-day">{{
-                                                        $filters.dayFormatEvent(item.date)
-                                                    }}
-                                                </div>
-                                            </div>
-                                            <div class="events-item-b-r">
-
-                                                <div class="events-item-name" @click="previewEvent(item)">
-                                                    {{ item.name }}
-                                                </div>
-                                                <div class="events-item-desc" @click="previewEvent(item)">
-                                                    {{ item.desc }}
-                                                </div>
-                                                <div class="events-item-posted" v-if="!token">
-                                                    Posted by {{ item.company_name }}
-                                                </div>
-                                                <div class="events-item-identity" v-if="!token">
-                                                    <span v-if="item.identity == 1">Educator</span>
-                                                    <span v-if="item.identity == 2">Recruiter</span>
-                                                    <span v-if="item.identity == 3">School</span>
-                                                    <span v-if="item.identity == 4">Other</span>
-                                                    <span v-if="item.identity == 5">Vendor</span>
-                                                </div>
-                                                <div class="events-item-action-container">
-                                                    <el-button type="primary"
-                                                               @click="reserveSpot(item)">
-                                                        Reserve Spot
+                                                <template v-if="item.is_favorite">
+                                                    <el-button circle @click="cancelFavorite(item,i,'all')">
+                                                        <el-icon :size="14">
+                                                            <IconFlatColorIconsLike/>
+                                                        </el-icon>
                                                     </el-button>
+                                                </template>
+                                                <template v-else>
+                                                    <el-button circle   @click="addFavorite(item,i,'all')">
+                                                        <el-icon :size="14">
+                                                            <IconIconParkOutlineLike/>
+                                                        </el-icon>
+                                                    </el-button>
+                                                </template>
+
+                                            </div>
+
+                                            <div class="events-item-t">
+
+                                                <template v-if="item.file_type === 'image' ">
+                                                    <el-image class="events-item-banner"
+                                                              fit="cover"
+                                                              :preview-src-list="[item.file]"
+                                                              :src="item.file !='' ? item.file : '' "
+                                                    >
+                                                    </el-image>
+                                                </template>
+                                                <template v-else-if="item.file_type === 'video' ">
+                                                    <video style="width: 100%;" :src="item.file" controls ></video>
+                                                </template>
+                                                <template v-else>
+                                                    <el-image class="events-item-banner"
+                                                              fit="cover"
+                                                              :preview-src-list="[item.file]"
+                                                              :src="item.file !='' ? item.file : '' "
+                                                    >
+                                                    </el-image>
+                                                </template>
+                                            </div>
+                                            <div class="events-item-b">
+
+                                                <div class="events-item-b-l" @click="previewEvent(item)">
+                                                    <div class="events-item-b-month">{{
+                                                            $filters.monthFormatEvent(item.date)
+                                                        }}
+                                                    </div>
+                                                    <div class="events-item-b-day">{{
+                                                            $filters.dayFormatEvent(item.date)
+                                                        }}
+                                                    </div>
+                                                </div>
+                                                <div class="events-item-b-r">
+
+                                                    <div class="events-item-name" @click="previewEvent(item)">
+                                                        {{ item.name }}
+                                                    </div>
+                                                    <div class="events-item-desc" @click="previewEvent(item)">
+                                                        {{ item.desc }}
+                                                    </div>
+                                                    <div class="events-item-posted" v-if="!token">
+                                                        Posted by {{ item.company_name }}
+                                                    </div>
+                                                    <div class="events-item-identity" v-if="!token">
+                                                        <span v-if="item.identity == 1">Educator</span>
+                                                        <span v-if="item.identity == 2">Recruiter</span>
+                                                        <span v-if="item.identity == 3">School</span>
+                                                        <span v-if="item.identity == 4">Other</span>
+                                                        <span v-if="item.identity == 5">Vendor</span>
+                                                    </div>
+                                                    <div class="events-item-action-container">
+                                                        <el-button type="primary"
+                                                                   @click="reserveSpot(item)">
+                                                            Reserve Spot
+                                                        </el-button>
+                                                    </div>
+
                                                 </div>
 
                                             </div>
@@ -234,46 +237,46 @@
                                         </div>
 
                                     </div>
+                                    <div class="events-pagination" v-if="eventTotalNum">
+                                        <el-pagination layout="prev, pager, next"
+                                                       :default-current-page="1"
+                                                       @size-change="eventPageSizeChange"
+                                                       @current-change="eventPageChange"
+                                                       :current-page="eventPage" :page-size="eventLimit"
+                                                       :total="eventTotalNum">
+                                        </el-pagination>
+                                    </div>
+                                </template>
 
-                                </div>
-                                <div class="events-pagination" v-if="eventTotalNum">
-                                    <el-pagination layout="prev, pager, next"
-                                                   :default-current-page="1"
-                                                   @size-change="eventPageSizeChange"
-                                                   @current-change="eventPageChange"
-                                                   :current-page="eventPage" :page-size="eventLimit"
-                                                   :total="eventTotalNum">
-                                    </el-pagination>
-                                </div>
-                            </template>
+                            </div>
 
-                        </div>
+                        </el-tab-pane>
+                    </el-tabs>
 
-                    </el-tab-pane>
-                </el-tabs>
+                </div>
 
             </div>
 
-        </div>
+            <share-card-theme-two :visible="shareDialogVisible"
+                                  share-title="Share something exciting"
+                                  :title="shareInfo.title"
+                                  :description="shareInfo.desc"
+                                  :quote="shareInfo.desc"
+                                  :url="shareLocationUrl"
+                                  @close="shareDialogVisible=false"
+            >
+            </share-card-theme-two>
 
-        <share-card-theme-two :visible="shareDialogVisible"
-                   share-title="Share something exciting"
-                   :title="shareInfo.title"
-                   :description="shareInfo.desc"
-                   :quote="shareInfo.desc"
-                   :url="shareLocationUrl"
-                   @close="shareDialogVisible=false"
-        >
-        </share-card-theme-two>
+            <event-detail :visible="eventDetailVisible"
+                          :data="eventDetailData"
+                          @close="eventDetailVisible=false">
+            </event-detail>
 
-        <event-detail :visible="eventDetailVisible"
-                      :data="eventDetailData"
-                      @close="eventDetailVisible=false">
-        </event-detail>
+            <book-event-form :visible="guestSpotVisible" :info="guestSpotInfo" @close="guestSpotVisible=false"></book-event-form>
 
-        <book-event-form :visible="guestSpotVisible" :info="guestSpotInfo" @close="guestSpotVisible=false"></book-event-form>
+        </el-scrollbar>
 
-    </el-scrollbar>
+    </div>
 
 </template>
 
@@ -281,7 +284,7 @@
 import emptyImage from '@/assets/newHome/dashboard/empty.svg'
 import eventFilterComponent from "@/components/eventFilterComponent";
 import {
-    ADD_FAVORITE, CANCEL_FAVORITE,
+    ADD_FAVORITE, CANCEL_FAVORITE, EVENT_VISITOR_DETAIL, EVENTS_ADD_APPLICANTS,
     EVENTS_LIST, HOME_FEATURE_EVENT_LIST,
     USER_BROWSING_HISTORY_ADD
 } from "@/api/api";
@@ -290,12 +293,12 @@ import {updateWindowHeight} from "@/utils/tools";
 import {ref, onMounted, onUnmounted,computed} from 'vue'
 // import {useRouter} from 'vue-router'
 import {useStore} from 'vuex'
-import {ElMessage} from 'element-plus'
+import {ElMessage,ElLoading} from 'element-plus'
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 import BookEventForm from "@/components/bookEventForm.vue";
 
 const store = useStore()
-
+const token = localStorage.getItem('token')
 const identity = computed(()=>store.state.identity)
 const profilePercentage = computed(()=> parseInt(store.state.profilePercentage) )
 
@@ -330,8 +333,6 @@ const featuredEventsEmptyStatus = ref(false)
 const allEventsLoadingStatus = ref(false)
 const allEventsEmptyStatus = ref(false)
 
-const token = localStorage.getItem('token')
-
 const eventTabChange = (e)=>{
     if(e === 'featured_events'){
         getFeaturedEventsList(1, 10000)
@@ -360,9 +361,57 @@ const guestSpotVisible = ref(false)
 const guestSpotInfo = ref({})
 
 const reserveSpot = (item)=>{
-    guestSpotVisible.value = true
-    guestSpotInfo.value = item;
+    if(token){
+        const reservedLoading = ElLoading.service({
+            text:'Loading'
+        })
+
+        let uid = localStorage.getItem('uid')
+        let params = {
+            apply_user_id: uid,
+            user_id:item.user_id,
+            event_id:item.id
+        }
+
+        EVENTS_ADD_APPLICANTS(params).then(res => {
+
+            if (res.code == 200) {
+
+                ElMessage({
+                    type: 'success',
+                    message: 'Congrats!Please check your email for your coupon code',
+                    grouping: true
+                })
+                reservedLoading.close()
+
+                setTimeout(function (){
+
+                    const loading = ElLoading.service({
+                        text:'Redirecting'
+                    })
+                    setTimeout(function () {
+                        loading.close()
+                        window.open(item.online_url, '_blank')
+                    }, 1500)
+
+                }, 3500)
+
+
+            }
+
+        }).catch(err => {
+            console.log(err)
+            reservedLoading.close()
+        })
+
+    }else{
+        guestSpotVisible.value = true
+        guestSpotInfo.value = item;
+    }
+
 }
+
+
 
 const confirmFilterSearch = (e) => {
     activeEventStyleName.value = 'all_events'
@@ -372,14 +421,31 @@ const confirmFilterSearch = (e) => {
 }
 
 const previewEvent = (item) => {
-    eventDetailVisible.value = true
-    eventDetailData.value = item
+    getEventDetailById(item.id)
+    // eventDetailVisible.value = true
+    // eventDetailData.value = item
     let token = localStorage.getItem('token')
     if(token){
         addUserBrowsingHistory(item.id)
     }
 }
 
+const getEventDetailById = (id)=>{
+    const loading = ElLoading.service({
+        text:'loading'
+    })
+    let params = {
+        event_id:id
+    }
+    EVENT_VISITOR_DETAIL(params).then(res=>{
+        eventDetailData.value = res.message
+        eventDetailVisible.value = true
+        loading.close()
+    }).catch(err=>{
+        console.log(err)
+        loading.close()
+    })
+}
 const eventPageSizeChange = (e) => {
     console.log(e)
 }
@@ -570,13 +636,15 @@ onUnmounted(() => {
 
 .events-bg {
     width: 100%;
+    /*background-color: #FFFFFF;*/
+}
+
+.events-container{
     max-width: 1440px;
     height: calc(var(--i-window-height) - 120px);
     margin: 0 auto;
     background-color: #FFFFFF;
 }
-
-
 
 .banner-row {
     margin: 0 100px;
@@ -671,13 +739,14 @@ onUnmounted(() => {
     margin: 16px 24px 33px 24px;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 .events-item-b-l {
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    min-width: 50px;
 }
 
 .events-item-b-month {
@@ -700,7 +769,7 @@ onUnmounted(() => {
 }
 
 .events-item-b-r {
-    margin-left: 20px;
+    width: calc(100% - 70px);
 }
 
 .events-item-item span {
