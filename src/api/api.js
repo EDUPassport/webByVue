@@ -508,3 +508,6 @@ export const HOME_CLIENT_CANCEL_EVENT = (params) => post('home/client/cancel/eve
 export const HOME_PUBLISHER_CANCEL_EVENT = (params) => post('home/publisher/cancel/event', params)
 export const HOME_EVENT_DELETE = (params) => post('home/event/delete', params)
 export const HOME_PUBLISH_EVENT = (params) => post('home/publish/event', params)
+export const HOME_CLIENT_REMOVE_EVENT = (params) => post('home/client/remove/event', params)
+export const HOME_HIRING_POOL_ADD = (params) => post('home/hiring/pool/add', params)
+export const HOME_HIRING_POOL_LIST = (params) => get('home/hiring/pool/list', params)

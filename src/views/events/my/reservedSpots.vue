@@ -64,7 +64,7 @@
                                             </template>
 
                                         </div>
-                                        <div class="events-item-b" @click="previewEvent(item.event)">
+                                        <div class="events-item-b" @click="previewEvent(item)">
 
                                             <div class="events-item-b-l">
                                                 <div class="events-item-b-month">
@@ -119,8 +119,10 @@
         <event-detail
                 :visible="eventDetailVisible"
                 :data="eventDetailData"
+                :rsvp-cancel="rsvpCancelStatus"
                 :show-cancel="true"
                 from="reserved-spots"
+                @remove-success="removeEventSuccess"
                 @cancel-success="cancelEventSuccess"
                 @close="eventDetailVisible=false">
         </event-detail>
@@ -161,6 +163,7 @@ const eventEmptyStatus = ref(false)
 const eventDetailData = ref({})
 
 const eventDetailVisible = ref(false)
+const rsvpCancelStatus = ref(0)
 
 const shareDialogVisible = ref(false)
 const shareInfo = ref({})
@@ -180,7 +183,9 @@ const shareEvent = (item) => {
 
 const previewEvent = (item) => {
     eventDetailVisible.value = true
-    eventDetailData.value = item
+    eventDetailData.value = item.event
+    rsvpCancelStatus.value = item.is_delete;
+
 }
 const addFavorite = (item, index) => {
 
@@ -270,7 +275,10 @@ const getMyEvents = (page, limit) => {
 const turnToEvents = () => {
     router.push({path: '/events'})
 }
-
+const removeEventSuccess = ()=>{
+    eventDetailVisible.value = false
+    getMyEvents(eventPage.value, eventLimit.value)
+}
 const cancelEventSuccess = () => {
     eventDetailVisible.value = false
     getMyEvents(eventPage.value, eventLimit.value)
@@ -378,12 +386,14 @@ onUnmounted(() => {
     display: flex;
     flex-direction: row;
     cursor: pointer;
+    justify-content: space-between;
 }
 
 .events-item-b-l {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 50px;
 
 }
 
@@ -407,7 +417,7 @@ onUnmounted(() => {
 }
 
 .events-item-b-r {
-    margin-left: 20px;
+    width: calc(100% - 70px);
 }
 
 .events-item-item span {

@@ -34,14 +34,14 @@
                     <template #reference>
                         <el-icon class="circle-circle" :size="24" color="#6650B3"
                                  v-if="unreadTotal>0 || inAppUnreadTotal > 0">
-                            <IconBiBellFill></IconBiBellFill>
+                            <IconBiBellFill />
                             <span class="circle-red"></span>
                         </el-icon>
                         <el-icon :size="20" v-else>
-                            <IconBiBell></IconBiBell>
+                            <IconBiBell />
                         </el-icon>
-
                     </template>
+
                     <template #default>
 
                         <div class="notification-c">
@@ -451,7 +451,7 @@ import defaultAvatar from '@/assets/default/avatar.png'
 
 import {encode} from 'js-base64'
 
-import {useRouter,onBeforeRouteUpdate, onBeforeRouteLeave} from 'vue-router'
+import {useRouter, onBeforeRouteUpdate, onBeforeRouteLeave} from 'vue-router'
 import {ref, inject, computed, watch, onMounted, onUnmounted} from 'vue'
 import {useStore} from 'vuex';
 
@@ -462,6 +462,8 @@ let unreadChanged = ref(0)
 const store = useStore();
 const router = useRouter()
 // const route = useRoute()
+// const currentRoutePath = route.path
+
 const goEasy = inject('goEasy');
 
 
@@ -499,7 +501,7 @@ const inAppPage = ref(1)
 const inAppLimit = ref(10)
 const inAppLastPage = ref(0)
 const inAppUnreadTotal = ref(0)
-const token = localStorage.getItem('token')
+const token = ref(localStorage.getItem('token'))
 // const showEarthStatus = ref(false)
 // const nowMenuData = ref([])
 
@@ -760,6 +762,7 @@ const loginOut = () => {
         if (res.code == 200) {
             localStorage.clear()
             store.commit('setUserInfo', {})
+            token.value = ''
             router.push('/')
             loading.close()
         }
@@ -1050,6 +1053,8 @@ const changeIdentity = (companyId, identity, language) => {
 
             store.commit('setSwitchIdentityStatus', true)
             loading.close()
+            // router.replace({path:currentRoutePath})
+            window.location.reload()
 
         }
     }).catch(err => {
@@ -1187,7 +1192,7 @@ onMounted(() => {
         }
     }
 
-    if (token) {
+    if (token.value) {
         getBasicInfo(identityStore.value)
         getAllIdentity()
         getUserUnreadList(inAppPage.value, inAppLimit.value)

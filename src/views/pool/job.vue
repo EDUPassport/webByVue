@@ -59,8 +59,7 @@
                                             <div class="jobs-item-t-r">
                                                 <div class="jobs-item-name">
                                                     {{item.job_title}}
-                                                    <span class="xll-tag xll-tag-1"  >Our Picks For You 💜</span>
-
+                                                    <span class="xll-tag xll-tag-1" >Our Picks For You 💜</span>
                                                 </div>
                                                 <div class="jobs-item-name-time">
                                                     {{item.company_name}} . Posted {{ $filters.howLongFormat(item.c_time) }}
@@ -74,9 +73,11 @@
                                         </div>
                                         <div class="jobs-item-b">
                                             <el-button link @click="seeMore(item)">See More</el-button>
-                                            <!--                                    <el-button type="primary">Apply Now</el-button>-->
                                             <applyButton :selectJobId="item.id"
                                                          btn-text="Apply Now"
+                                                         job-from="jobMatch"
+                                                         :job-index="i"
+                                                         @success="applySuccess"
                                                          :job-info="item" >
                                             </applyButton>
                                         </div>
@@ -130,6 +131,9 @@
                                             <!--                                    <el-button type="primary">Apply Now</el-button>-->
                                             <applyButton :selectJobId="item.id"
                                                          btn-text="Apply Now"
+                                                         job-from="jobFeatured"
+                                                         :job-index="i"
+                                                         @success="applySuccess"
                                                          :job-info="item" >
                                             </applyButton>
                                         </div>
@@ -199,6 +203,9 @@
                                                 <el-button link @click="seeMore(item)">See More</el-button>
                                                 <applyButton :selectJobId="item.id"
                                                              btn-text="Apply Now"
+                                                             job-from="jobAll"
+                                                             :job-index="i"
+                                                             @success="applySuccess"
                                                              :job-info="item" >
                                                 </applyButton>
                                             </div>
@@ -279,6 +286,7 @@ import {ElLoading} from 'element-plus'
 import applyButton from "@/components/jobs/applyButton.vue";
 import filterIconImg from "@/assets/filter.svg";
 import defaultBusinessAvatar from '@/assets/newHome/default-business-avatar.svg'
+import JobsFilter from "@/components/jobs/jobsFilter.vue";
 
 const token = localStorage.getItem('token')
 
@@ -436,6 +444,17 @@ const searchByFilter = (e)=>{
     getJobsData(1, jobsLimit.value)
 }
 
+const applySuccess = (from, index)=>{
+    if(from === 'jobMatch'){
+        jobMatchData.value[index].is_applied = 1
+    }
+    if(from === 'jobFeatured'){
+        jobFeaturedData.value[index].is_applied = 1
+    }
+    if(from === 'jobAll'){
+        jobsData.value[index].is_applied = 1
+    }
+}
 
 const shareDialogVisible = ref(false)
 const shareInfo = ref({})

@@ -1,7 +1,5 @@
 <template>
-
-    <div style="max-width:1920px;margin:0 auto;">
-
+    <div>
         <router-view v-slot="{Component}">
 
             <keep-alive :include="includePages">
@@ -18,9 +16,7 @@
             <p>We use cookies to provide the best user experience. Click the button below to accept our cookie policy.</p>
             <el-button type="success" @click="acceptCookie">Accept Cookies</el-button>
         </div>
-
     </div>
-
 </template>
 
 <script setup>

@@ -332,7 +332,6 @@
                                     <el-select
                                             class="form-width-388"
                                             filterable
-
                                             :disabled="stepTwoStatus"
                                             v-model="workDestinationValue"
                                             multiple

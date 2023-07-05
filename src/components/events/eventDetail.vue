@@ -14,14 +14,37 @@
                         <el-button style="color: #344054;" link icon="back" @click="turnBack()">Back</el-button>
                     </div>
                     <div>
-                        <el-button v-if="data.is_publish === 1 && showCancel"
-                                   style="color: #344054;"
-                                   link
-                                   :disabled="data.status === 5"
-                                   @click="cancelEvent(data)">
-                            <span v-if="from === 'reserved-spots' ">Cancel RSVP</span>
-                            <span v-else>Cancel Event</span>
-                        </el-button>
+                        <template v-if="from === 'my-events'">
+                            <el-button v-if="data.is_publish === 1 && showCancel"
+                                       style="color: #344054;"
+                                       link
+                                       :disabled="data.status === 5"
+                                       @click="cancelEvent(data)">
+                                Cancel Event
+                            </el-button>
+                        </template>
+                        <template v-if="from === 'reserved-spots' ">
+                            <template v-if="rsvpCancel === 1">
+                                <span class="xll-tag-spot-cancel">Event has been canceled</span>
+                            </template>
+                            <template v-else>
+                                <template v-if="data.status === 5">
+                                    <span class="xll-tag-spot-cancel">Event has been canceled by the organizer</span>
+                                </template>
+                                <template v-else>
+                                    <el-button v-if="data.is_publish === 1 && showCancel"
+                                               style="color: #344054;"
+                                               link
+                                               :loading="cancelRsvpLoadingStatus"
+                                               @click="cancelEvent(data)">
+                                        Cancel RSVP
+                                    </el-button>
+                                </template>
+
+                            </template>
+
+                        </template>
+
                     </div>
                 </div>
 
@@ -32,7 +55,7 @@
                                 <el-image
                                         class="detail-company-logo"
                                         fit="cover"
-                                        :src="data.company_profile_photo ? data.company_profile_photo : defaultAvatar">
+                                        :src="data.company_logo ? data.company_logo : defaultAvatar">
                                 </el-image>
                             </div>
                             <div class="detail-b-t-l-r">
@@ -46,36 +69,43 @@
                         <div class="detail-b-t-r">
                             <template v-if="from === 'reserved-spots' ">
                                 <el-button type="primary" disabled>Reserve Spot</el-button>
-                                <el-button v-if="currentUserId == data.user_id"
+                                <el-button
                                            link
                                            style="color:#F04438;"
                                            type="danger"
-                                           @click="deleteEvent(data)">
+                                           :loading="removeLoadingStatus"
+                                           @click="clientRemoveEvent(data.id)">
                                     Remove Event
                                 </el-button>
                             </template>
-                            <template v-else>
-                                <template v-if="currentUserId == data.user_id">
+                            <template v-else-if="from === 'my-events' ">
+
+                                <template v-if="data.is_publish == 1">
+
                                     <el-button
-                                            type="primary"
-                                            @click="unPublishEvent(data.id)"
-                                            v-if="data.is_publish == 1 && data.status == 1">
+                                        type="primary"
+                                        @click="unPublishEvent(data.id)"
+                                        v-if="data.status == 1">
                                         Unpublish Event
                                     </el-button>
-                                    <el-button
-                                            type="primary"
-                                            @click="publishEvent(data.id)"
-                                            v-if="data.is_publish == 0">
-                                        Publish Event
-                                    </el-button>
 
-                                    <el-button link style="color:#F04438;" type="danger" @click="deleteEvent(data)">
-                                        Delete Event
-                                    </el-button>
                                 </template>
                                 <template v-else>
-                                    <el-button type="primary" @click="reserveSpot(data)">Reserve Spot</el-button>
+                                    <el-button
+                                        type="primary"
+                                        @click="publishEvent(data.id)"
+                                    >
+                                        Publish Event
+                                    </el-button>
                                 </template>
+
+                                <el-button link style="color:#F04438;" type="danger" @click="deleteEvent(data)">
+                                    Delete Event
+                                </el-button>
+
+                            </template>
+                            <template v-else>
+                                <el-button type="primary" @click="reserveSpot(data)">Reserve Spot</el-button>
                             </template>
 
                         </div>
@@ -118,7 +148,8 @@
                         </div>
                         <div class="detail-table-item-r">
                             <el-avatar style="width: 24px;height: 24px;margin-right: 6px;"
-                                       :src="data.company_logo"></el-avatar>
+                                       :src="data.company_profile_photo ? data.company_profile_photo : defaultAvatar">
+                            </el-avatar>
                             {{ data.company_name }}
                         </div>
                     </div>
@@ -140,6 +171,22 @@
                         </div>
                         <div class="detail-table-item-r">
                             {{ data.currency }} {{ data.pay_money }}
+                        </div>
+                    </div>
+                    <div class="detail-table-item">
+                        <div class="detail-table-item-l">
+                            Venue
+                        </div>
+                        <div class="detail-table-item-r">
+                            {{ data.event_place }}
+                        </div>
+                    </div>
+                    <div class="detail-table-item" v-if="data.discount_code && from==='my-events' ">
+                        <div class="detail-table-item-l">
+                            Coupon Code
+                        </div>
+                        <div class="detail-table-item-r">
+                            {{ data.discount_code }}
                         </div>
                     </div>
                     <div class="detail-table-item">
@@ -355,19 +402,19 @@
 import {defineProps, defineEmits, ref, onMounted} from 'vue'
 import {
     ADD_FAVORITE,
-    CANCEL_FAVORITE,
+    CANCEL_FAVORITE, EVENTS_ADD_APPLICANTS,
     EVENTS_LIST,
-    HOME_CLIENT_CANCEL_EVENT, HOME_EVENT_DELETE, HOME_PUBLISH_EVENT,
+    HOME_CLIENT_CANCEL_EVENT, HOME_CLIENT_REMOVE_EVENT, HOME_EVENT_DELETE, HOME_PUBLISH_EVENT,
     HOME_PUBLISHER_CANCEL_EVENT
 } from "@/api/api";
-import {ElMessage} from 'element-plus'
+import {ElMessage,ElLoading} from 'element-plus'
 import ShareCardThemeTwo from "@/components/shareCardThemeTwo.vue";
 import BookEventForm from "@/components/bookEventForm.vue";
 import defaultAvatar from "@/assets/newHome/default-business-avatar.svg";
 
-defineProps(['visible', 'data', 'showCancel', 'from'])
-const emit = defineEmits(['close', 'cancelSuccess', 'deleteSuccess', 'publishSuccess', 'unPublishSuccess'])
-const currentUserId = localStorage.getItem('uid')
+const props = defineProps(['visible', 'data', 'showCancel', 'from','rsvpCancel'])
+const emit = defineEmits(['close', 'cancelSuccess','removeSuccess', 'deleteSuccess', 'publishSuccess', 'unPublishSuccess'])
+// const currentUserId = localStorage.getItem('uid')
 const cdDialogVisible = ref(false)
 
 const cdDialogObj = ref({
@@ -377,6 +424,7 @@ const cdDialogObj = ref({
 
 const cdEventDetail = ref({})
 const cancelEventLoadingStatus = ref(false)
+const token = localStorage.getItem('token')
 
 const closeVisible = () => {
     emit('close')
@@ -388,17 +436,15 @@ const cancelEvent = (item) => {
     // console.log(item)
     cdEventDetail.value = item
 
-    let uid = localStorage.getItem('uid')
-    if (parseInt(uid) === cdEventDetail.value.user_id) {
+    if(props.from === 'reserved-spots'){
+        submitCancelEvent()
+    }
+
+    if(props.from === 'my-events'){
+
         cdDialogObj.value = {
             type: 'cancel',
             tips: 'Canceling this event will unpublished it and remove it from attendees list'
-        }
-        cdDialogVisible.value = true
-    } else {
-        cdDialogObj.value = {
-            type: 'cancel',
-            tips: 'Canceling this event will remove it from attendees list'
         }
         cdDialogVisible.value = true
     }
@@ -406,29 +452,56 @@ const cancelEvent = (item) => {
 }
 
 const submitCancelEvent = () => {
-    let uid = localStorage.getItem('uid')
-    if (parseInt(uid) === cdEventDetail.value.user_id) {
+
+    if (props.from === 'my-events') {
         publisherCancelEvent(cdEventDetail.value.id)
-    } else {
+    }
+
+    if(props.from === 'reserved-spots'){
         clientCancelEvent(cdEventDetail.value.id)
     }
 }
+const removeLoadingStatus = ref(false)
+const clientRemoveEvent = (id)=>{
+    removeLoadingStatus.value = true
+    let params = {
+        id:id
+    }
 
+    HOME_CLIENT_REMOVE_EVENT(params).then(res=>{
+        if(res.code === 200){
+            removeLoadingStatus.value = false
+
+            ElMessage({
+                type: 'success',
+                message: 'You have successfully removed event',
+                grouping: true
+            })
+
+            emit('removeSuccess')
+        }
+    }).catch(err=>{
+        console.log(err)
+        removeLoadingStatus.value = false
+    })
+}
+
+const cancelRsvpLoadingStatus = ref(false)
 const clientCancelEvent = (id) => {
-    cancelEventLoadingStatus.value = true
+    cancelRsvpLoadingStatus.value = true
 
     let params = {
         id: id
     }
+
     HOME_CLIENT_CANCEL_EVENT(params).then(res => {
         console.log(res)
         if (res.code === 200) {
-            cancelEventLoadingStatus.value = false
+            cancelRsvpLoadingStatus.value = false
 
-            cdDialogVisible.value = false
             ElMessage({
                 type: 'success',
-                message: 'Event listing canceled Successfully',
+                message: 'You have successfully canceled reserved spot',
                 grouping: true
             })
 
@@ -437,7 +510,7 @@ const clientCancelEvent = (id) => {
         }
     }).catch(err => {
         console.log(err)
-        cancelEventLoadingStatus.value = false
+        cancelRsvpLoadingStatus.value = false
     })
 
 }
@@ -465,6 +538,7 @@ const publisherCancelEvent = (id) => {
     })
 
 }
+
 const deleteEventLoadingStatus = ref(false)
 const deleteEvent = (item) => {
     // console.log(item)
@@ -525,8 +599,53 @@ const spotVisible = ref(false)
 const spotInfo = ref({})
 
 const reserveSpot = (data) => {
-    spotVisible.value = true
-    spotInfo.value = data
+    if(token){
+        const reservedLoading = ElLoading.service({
+            text:'Loading'
+        })
+
+        let uid = localStorage.getItem('uid')
+        let params = {
+            apply_user_id: uid,
+            user_id: props.data.user_id,
+            event_id:props.data.id
+        }
+
+        EVENTS_ADD_APPLICANTS(params).then(res => {
+
+            if (res.code == 200) {
+
+                ElMessage({
+                    type: 'success',
+                    message: 'Congrats!Please check your email for your coupon code',
+                    grouping: true
+                })
+                reservedLoading.close()
+
+                setTimeout(function (){
+
+                    const loading = ElLoading.service({
+                        text:'Redirecting'
+                    })
+                    setTimeout(function () {
+                        loading.close()
+                        window.open(props.data.online_url, '_blank')
+                    }, 1500)
+
+                }, 3500)
+
+
+            }
+
+        }).catch(err => {
+            console.log(err)
+            reservedLoading.close()
+        })
+    }else{
+        spotVisible.value = true
+        spotInfo.value = data
+    }
+
 }
 
 const shareDialogVisible = ref(false)
@@ -794,6 +913,19 @@ onMounted(() => {
     font-size: 12px;
     /*line-height: 18px;*/
     background: #FFDB91;
+    color: #1D2939;
+}
+
+.xll-tag-spot-cancel {
+    padding: 4px 8px;
+    gap: 2px;
+    border-radius: 4px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    /*line-height: 18px;*/
+    background: #FEF3F2;
     color: #1D2939;
 }
 

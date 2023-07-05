@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div class="header-bg" >
         <el-affix :offset="0">
             <el-header class="header-container" height="auto">
                 <el-row class="header-row-container" :gutter="0" justify="start" align="middle">
@@ -100,12 +100,14 @@ const turnHome = ()=>{
 </script>
 
 <style scoped>
-.header-container {
+.header-bg{
     width: 100%;
+    background-color: #FFFFFF;
+}
+.header-container {
     max-width: 1440px;
     margin: 0 auto;
     height: 120px;
-    background-color: #FFFFFF;
     padding: 40px 100px 20px 100px;
 }
 
