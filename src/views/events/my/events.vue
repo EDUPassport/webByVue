@@ -13,7 +13,10 @@
                             <el-empty style="height: 100%;"
                                       :image="emptyImage"
                                       :image-size="456"
-                                      description="Oh Sorry, There are no upcoming events">
+                                      description="You have not posted an event">
+                                <el-button icon="plus" type="primary" @click="turnToPostEvent()">
+                                    Post Event
+                                </el-button>
                             </el-empty>
                         </template>
                         <template v-else>
@@ -269,6 +272,10 @@ const publishEventSuccess = ()=>{
     eventDetailVisible.value = false
 }
 
+const turnToPostEvent = ()=>{
+    router.push({path:'/events/post'})
+}
+
 onMounted(() => {
     let screenWidth = document.body.clientWidth
     let screenWidthFloor = Math.floor(screenWidth)
@@ -317,6 +324,7 @@ onUnmounted(() => {
 
 .event-loading-container{
     min-height: 300px;
+    height: calc(var(--i-window-height) - 120px);
 }
 
 .events-list-container {

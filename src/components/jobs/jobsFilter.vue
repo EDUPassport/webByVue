@@ -406,7 +406,6 @@ onMounted(() => {
 
 :deep(.el-checkbox__label){
     font-size: 11px;
-
 }
 
 :deep(.el-slider__bar){
@@ -415,7 +414,7 @@ onMounted(() => {
 
 .jobs-filter-container {
     width: 240px;
-    height: 100%;
+    height: calc(var(--i-window-height) - 180px);
     box-sizing: border-box;
     background-color: #FFFFFF;
     border: 1px solid #D0D5DD;
@@ -423,7 +422,7 @@ onMounted(() => {
 }
 
 .jobs-filter-scroll {
-    height: 740px;
+    height: calc(100% - 60px)
 }
 
 .jobs-filter-t {
