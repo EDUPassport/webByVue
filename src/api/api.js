@@ -437,4 +437,4 @@ export const  ADD_REQ_FEATURE= (params) => post('home/user/contactform/add', par
 export const ADD_INCREMENT = (params) => post('home/user/adJobIncrement', params)
 export const ADD_VIEWS_INCREMENT = (params) => post('home/user/adJobIncrementViews', params)
 
-
+export const ADD_INSIDER_PROGRAM = (params) => post('admin/addInsight', params)
