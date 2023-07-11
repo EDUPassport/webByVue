@@ -2,7 +2,6 @@
   <div class="bg">
     <el-row class="t-container" :gutter="0" align="middle" justify="center">
       <el-col :xs="12" :sm="2" :md="2" :lg="2" :xl="2">
-
         <div class="logo-new-container">
           <div class="logo-new">
             <el-image class="logo-new-logo-img" :src="logoTransparentImg" fit="contain"></el-image>
@@ -10,27 +9,22 @@
             <div class="logo-new-beta">Beta</div>
           </div>
         </div>
-
       </el-col>
 
       <el-col :xs="0" :sm="0" :md="16" :lg="16" :xl="16">
-
         <div class="nav-link-container">
           <router-link to="/" exact>HOME</router-link>
           <router-link to="/jobs" exact>EDU JOBS</router-link>
           <router-link to="/deals" exact> EDU DEALS</router-link>
           <router-link to="/events" exact>EVENTS</router-link>
           <template v-if="envBlog === 'yes'">
-            <el-link :underline=false href="https://blog.edupassport.io" target="_blank">EDU BLOG</el-link>
+            <el-link :underline="false" href="https://blog.edupassport.io" target="_blank">EDU BLOG</el-link>
           </template>
           <contactForm></contactForm>
-
         </div>
-
       </el-col>
 
       <el-col :xs="12" :sm="20" :md="0" :lg="0" :xl="0">
-
         <div class="t-mobile-btn-container">
           <div class="t-mobile-sign-up-free" v-if="!token">
             <el-button type="primary" round @click="signUp()">Sign up Free</el-button>
@@ -46,7 +40,6 @@
       </el-col>
 
       <el-col class="t-btn-container" :xs="0" :sm="0" :md="4" :lg="4" :xl="4">
-
         <template v-if="token">
           <el-button class="home-profile-btn" type="primary" link @click="turnDashboard()">
             PROFILE
@@ -56,30 +49,21 @@
           </el-button>
         </template>
         <template v-else>
-          <el-button link @click="login()">
-            Login
-          </el-button>
+          <el-button link @click="login()"> Login </el-button>
           <el-button type="primary" round @click="signUp()">
             Sign up Free
           </el-button>
         </template>
-
-
       </el-col>
-
-
     </el-row>
 
     <el-row :gutter="0" justify="center" align="middle">
-
       <el-col class="f-col-container" :span="24">
-
         <h1 class="f-label">
           The New <span>Global Go-To</span> Education hub for
         </h1>
 
         <div class="f-tabs">
-
           <div class="f-tab f-tab-e" @click="checkedIdentityType(1)"
             :class="selectIdentityType === 1 ? 'f-tab-active' : ''">
             EDUCATORS
@@ -96,22 +80,20 @@
           <div v-show="selectIdentityType === 1" class="f-tab-bg f-tab-bg-t-1"></div>
           <div v-show="selectIdentityType === 2" class="f-tab-bg f-tab-bg-t-2"></div>
           <div v-show="selectIdentityType === 3" class="f-tab-bg f-tab-bg-t-3"></div>
-
         </div>
 
         <!--        educator    -->
         <div class="f-c" :class="selectIdentityType === 1 ? 'f-c-active' : ''" v-if="selectIdentityType === 1">
           <div class="f-c-l">
-
             <div class="f-c-l-item" :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''" @click="checkedItem(1)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
                   Matching You to Your Dream Job
                 </div>
                 <p>
-                  The platform assists educators to connect to educational jobs, made just for them.
+                  The platform assists educators to connect to educational jobs,
+                  made just for them.
                 </p>
-
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 1">
                 <el-icon :size="homeArrowRightSize" color="#9173ff">
@@ -119,19 +101,16 @@
                 </el-icon>
               </div>
               <div class="f-c-l-item-mask" v-if="selectItemValue !== 1"></div>
-
             </div>
 
             <div class="f-c-l-item" :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''" @click="checkedItem(2)">
               <div class="f-c-l-item-l">
-                <div class="f-c-l-item-label">
-                  Global Savings
-                </div>
+                <div class="f-c-l-item-label">Global Savings</div>
                 <p>
-                  We believe that the best educators deserve the best deals, so we team up with local businesses to offer
-                  discounts and fun events just for our EDU Passport members.
+                  We believe that the best educators deserve the best deals, so
+                  we team up with local businesses to offer discounts and fun
+                  events just for our EDU Passport members.
                 </p>
-
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 2">
                 <el-icon :size="homeArrowRightSize" color="#9173ff">
@@ -144,14 +123,12 @@
 
             <div class="f-c-l-item" :class="selectItemValue === 3 ? 'f-c-l-item-active' : ''" @click="checkedItem(3)">
               <div class="f-c-l-item-l">
-                <div class="f-c-l-item-label">
-                  Security and Assistance
-                </div>
+                <div class="f-c-l-item-label">Security and Assistance</div>
                 <p>
-                  A dedicated account manager on our educational platform is available to help with legal and visa
-                  challenges when teaching abroad.
+                  A dedicated account manager on our educational platform is
+                  available to help with legal and visa challenges when teaching
+                  abroad.
                 </p>
-
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 3">
                 <el-icon :size="homeArrowRightSize" color="#9173ff">
@@ -160,7 +137,6 @@
               </div>
 
               <div class="f-c-l-item-mask" v-if="selectItemValue !== 3"></div>
-
             </div>
 
             <div class="f-c-btn-container" v-if="!token">
@@ -168,7 +144,6 @@
                 SIGN UP
               </el-button>
             </div>
-
           </div>
 
           <div class="f-c-r">
@@ -181,24 +156,21 @@
             <template v-if="selectItemValue === 3">
               <el-image class="f-c-r-img" fit="contain" :src="chatDemoImg"></el-image>
             </template>
-
           </div>
         </div>
 
-
         <div class="f-c" :class="selectIdentityType === 2 ? 'f-c-active' : ''" v-if="selectIdentityType === 2">
           <div class="f-c-l">
-
             <div class="f-c-l-item" :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''" @click="checkedItem(1)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
                   Helping you with the perfect match for recruitment
                 </div>
                 <p>
-                  We’re all about hooking up employers with the perfect candidate for the job, with a focus on the
-                  educational experience.
+                  We’re all about hooking up employers with the perfect
+                  candidate for the job, with a focus on the educational
+                  experience.
                 </p>
-
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 1">
                 <el-icon :size="homeArrowRightSize" color="#9173ff">
@@ -206,9 +178,7 @@
                 </el-icon>
               </div>
               <div class="f-c-l-item-mask" v-if="selectItemValue !== 1"></div>
-
             </div>
-
 
             <div class="f-c-l-item" :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''" @click="checkedItem(2)">
               <div class="f-c-l-item-l">
@@ -216,9 +186,9 @@
                   Efficient Application Tracking
                 </div>
                 <p>
-                  Our platform simplifies tracking job applications, even for a large number of resumes.
+                  Our platform simplifies tracking job applications, even for a
+                  large number of resumes.
                 </p>
-
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 2">
                 <el-icon :size="homeArrowRightSize" color="#9173ff">
@@ -236,9 +206,9 @@
                   Streamlining Recruitment Communication
                 </div>
                 <p>
-                  Our system allows direct communication with candidates for immediate hiring decisions.
+                  Our system allows direct communication with candidates for
+                  immediate hiring decisions.
                 </p>
-
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 3">
                 <el-icon :size="homeArrowRightSize" color="#9173ff">
@@ -247,17 +217,14 @@
               </div>
 
               <div class="f-c-l-item-mask" v-if="selectItemValue !== 3"></div>
-
             </div>
 
             <div class="f-c-btn-container" v-if="!token">
               <el-button type="primary" size="large" round @click="signUp()">SIGN UP</el-button>
             </div>
-
           </div>
 
           <div class="f-c-r">
-
             <template v-if="selectItemValue === 1">
               <el-image class="f-c-r-img" fit="contain" :src="applicationsDemoImg"></el-image>
             </template>
@@ -267,12 +234,10 @@
             <template v-if="selectItemValue === 3">
               <el-image class="f-c-r-img" fit="contain" :src="chatEducatorDemoImg"></el-image>
             </template>
-
           </div>
         </div>
 
         <div class="f-c" :class="selectIdentityType === 3 ? 'f-c-active' : ''" v-if="selectIdentityType === 3">
-
           <div class="f-c-l">
             <div class="f-c-l-item" :class="selectItemValue === 1 ? 'f-c-l-item-active' : ''" @click="checkedItem(1)">
               <div class="f-c-l-item-l">
@@ -280,10 +245,10 @@
                   Advancing Education with your Support
                 </div>
                 <p>
-                  We’re on a mission to make it easier for educators to live and teach abroad, and we know that having a
-                  strong community of peers is key.
+                  We’re on a mission to make it easier for educators to live and
+                  teach abroad, and we know that having a strong community of
+                  peers is key.
                 </p>
-
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 1">
                 <el-icon :size="homeArrowRightSize" color="#9173ff">
@@ -296,15 +261,12 @@
             <div class="f-c-l-item" :class="selectItemValue === 2 ? 'f-c-l-item-active' : ''" @click="checkedItem(2)">
               <div class="f-c-l-item-l">
                 <div class="f-c-l-item-label">
-
                   Strategies for Successful Promotion
                 </div>
                 <p>
-                  We assist businesses in defining educational leadership, connecting with the target audience, and
-                  growing.
-
+                  We assist businesses in defining educational leadership,
+                  connecting with the target audience, and growing.
                 </p>
-
               </div>
               <div class="f-c-l-item-r" v-if="selectItemValue === 2">
                 <el-icon :size="homeArrowRightSize" color="#9173ff">
@@ -312,27 +274,22 @@
                 </el-icon>
               </div>
               <div class="f-c-l-item-mask" v-if="selectItemValue !== 2"></div>
-
             </div>
 
             <div class="f-c-btn-container" v-if="!token">
               <el-button type="primary" size="large" round @click="signUp()">SIGN UP</el-button>
             </div>
-
           </div>
 
           <div class="f-c-r">
-
             <template v-if="selectItemValue === 1">
               <el-image class="f-c-r-img" fit="contain" :src="supportImg"></el-image>
             </template>
             <template v-if="selectItemValue === 2">
               <el-image class="f-c-r-img" fit="contain" :src="promotionImg"></el-image>
             </template>
-
           </div>
         </div>
-
       </el-col>
     </el-row>
 
@@ -347,15 +304,17 @@
     <el-row class="b-row-container" :gutter="0" justify="center" align="middle">
       <el-col :xs="22" :sm="22" :md="8" :lg="8" :xl="8">
         <div class="s-tips" v-if="selectIdentityType === 1">
-          We are just getting started! By end of 2023 we will be used by 80% of the global EDU industry.
+          We are just getting started! By end of 2023 we will be used by 80% of
+          the global EDU industry.
         </div>
         <div class="s-tips" v-if="selectIdentityType === 2">
-          We are just getting started! By end of 2023 we will be used by 80% of the global EDU industry.
+          We are just getting started! By end of 2023 we will be used by 80% of
+          the global EDU industry.
         </div>
         <div class="s-tips" v-if="selectIdentityType === 3">
-          We are just getting started! By end of 2023 we will be used by 80% of the global EDU industry.
+          We are just getting started! By end of 2023 we will be used by 80% of
+          the global EDU industry.
         </div>
-
       </el-col>
     </el-row>
 
@@ -375,10 +334,8 @@
         <!--          For a demonstration purpose only. Includes features and designs that may be in development. Actual dashboard-->
         <!--          may look differently.-->
         <!--        </div>-->
-
       </el-col>
     </el-row>
-
 
     <el-row :gutter="0" justify="center" align="middle">
       <el-col class="s-col-container" :span="24">
@@ -387,16 +344,15 @@
             Subscribe to follow <span>our journey</span>
           </div>
           <div class="s-tips">
-            As we continue to grow rapidly, new updates & releases are coming weekly! Sign up for our newsletter to stay
-            in the loop.
+            As we continue to grow rapidly, new updates & releases are coming
+            weekly! Sign up for our newsletter to stay in the loop.
           </div>
 
           <el-form ref="subscribeForm" :model="subscribeForm" :rules="subscribeRules" label-width="120px"
             label-position="top" class="demo-ruleForm">
             <div class="s-input-container">
-
               <div class="s-input-l">
-                <el-form-item prop='email'>
+                <el-form-item prop="email">
                   <el-input placeholder="Your email address" v-model="subscribeForm.email"></el-input>
                 </el-form-item>
               </div>
@@ -407,80 +363,112 @@
                   </el-button>
                 </el-form-item>
               </div>
-
             </div>
           </el-form>
-
         </div>
       </el-col>
     </el-row>
 
-    <el-row :gutter="0" align="middle" class="row-bg" style="background-color: #6648FF;padding-left: 230px;">
-      <el-col :xs="22" :sm="22" :md="10" :lg="10" :xl="10" style="position: relative;top:-300px">
+    <el-container class="row-bg">
+    <el-row :gutter="0" align="middle">
+      <el-col :xs="22" :sm="22" :md="10" :lg="10" :xl="10" >
         <el-button color="#FFC650" class="b-insider-program" round>EDU Passport Insider Program</el-button>
-        <p class="h1-text">Get Invited for Beta <br> Testing of V3.0</p>
-        <p class="p-text">No other education job board can match our <br> exceptional features! Experience <br> searching,
-          applying,and interviewing for global<br> position on our platform</p>
+        <p class="h1-text">
+          Join our Beta Testing of V3.0
+        </p>
+        <p class="p-text">
+          We invite you to be part of our one of a kind <b>EDU Passport Insiders Program!</b> Become an insider and play a pivotal role in shaping the future of our platform.
+        </p>
+
+        <el-button @click="insiderDialogVisible = true" class="b-join-now"> Join Now </el-button>
 
 
-        <div></div>
-        <h1 class="h1-text-benefits">Exclusive Benefits</h1>
+        <h2 class="h1-text-benefits">Exclusive Benefits</h2>
+
 
         <el-row>
-          <el-col :span="12">
-            <div class="div-group">
+          <el-col class="div-group" :sm="24" :md="12" :lg="12">
+            <div class="inner-div-group">
               <el-avatar>1</el-avatar>
-              <p class="dev-group-p-text">First Hand <br> Access</p>
-              <p class="dev-group-p-text-detal">with a complete profile,educators<br>can apply with just one click!</p>
+              <p class="dev-group-p-text">
+                First Hand <br />
+                Access
+              </p>
+              <p class="dev-group-p-text-detal">
+                As an insider, you will be among the first to experience and
+                explore our latest features and products.
+              </p>
             </div>
           </el-col>
-          <el-col :span="12">
-            <div class="div-group">
+          <el-col class="div-group inner-div-group-padd" :sm="24" :md="12" :lg="12" >
+            <div class="inner-div-group">
               <el-avatar>2</el-avatar>
-              <p class="dev-group-p-text">Value-Proven <br> Features</p>
-              <p class="dev-group-p-text-detal">Successful applicants will <br> beinvited for an interview</p>
+              <p class="dev-group-p-text">
+                Value-Proven <br />
+                Features
+              </p>
+              <p class="dev-group-p-text-detal">
+                By actively participating in the pilot testing phase, you can
+                contribute to creating a platform that truly caters to your
+                requirements.
+              </p>
             </div>
           </el-col>
-        </el-row>
-        <el-row style="margin-top:20px">
-          <el-col :span="12">
-            <div class="div-group">
+
+          <el-col class="div-group" :sm="24" :md="12" :lg="12">
+            <div class="inner-div-group">
               <el-avatar>3</el-avatar>
-              <p class="dev-group-p-text">6-Week Free <br> Trial</p>
-              <p class="dev-group-p-text-detal">Successful applicants will be <br> invited for an interview</p>
+              <p class="dev-group-p-text">
+                6-Week Free <br />
+                Trial
+              </p>
+              <p class="dev-group-p-text-detal">
+                This gives you enough time to explore and experience the full
+                range of benefits our platform has to offer.
+              </p>
             </div>
           </el-col>
-          <el-col :span="12">
-            <div class="div-group">
+          <el-col class="div-group inner-div-group-padd" :sm="24" :md="12" :lg="12" >
+            <div class="inner-div-group">
               <el-avatar>4</el-avatar>
-              <p class="dev-group-p-text">One-Month <br> Half Price</p>
-              <p class="dev-group-p-text-detal">Hired! (We love it when<br> this happens)</p>
+              <p class="dev-group-p-text">
+                One-Month <br />
+                Half Price
+              </p>
+              <p class="dev-group-p-text-detal">
+                After the free trial period, we will provide you with a
+                one-month half-price discount on any subscription option of your
+                choice.
+              </p>
             </div>
           </el-col>
         </el-row>
       </el-col>
-      <el-button @click="insiderDialogVisible = true" class="b-join-now">
-        Join Now
-      </el-button>
-
-      <el-dialog v-model="insiderDialogVisible" width="50%" center class="dialog-width">
-
-        <el-row >
+      <el-dialog v-model="insiderDialogVisible" width="50%" center class="dialog-width" v-loading="loading">
+        <el-row>
           <el-col :sm="24" :md="24" :lg="24">
-            <div style="display: flex; justify-content: center; align-items: center;">
-          <el-image class="dialog-logo" :src="logoTransparentImg" fit="contain"></el-image>
-        </div>
+            <div style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              ">
+              <el-image class="dialog-logo" :src="logoTransparentImg" fit="contain"></el-image>
+            </div>
           </el-col>
-        
-        <el-col :sm="24" :md="24" :lg="24"> <p class="dialog-p-text">Thank you for participating in the pilot testing program for the new version of the EDU
-          Passport app! We appreciate your involvement and look forward to gathering your valuable feedback. Please take a
-          moment to fill out this short form to help us better understand your needs and preferences.</p></el-col>
 
-       </el-row>
+          <el-col :sm="24" :md="24" :lg="24">
+            <p class="dialog-p-text">
+              Thank you for participating in the pilot testing program for the
+              new version of the EDU Passport app! We appreciate your
+              involvement and look forward to gathering your valuable feedback.
+              Please take a moment to fill out this short form to help us better
+              understand your needs and preferences.
+            </p>
+          </el-col>
+        </el-row>
 
         <el-form ref="formName" :model="contactForm" :rules="contactFormRules" label-width="120px" label-position="top"
           class="insider-program-form">
-
           <el-row>
             <el-col :sm="24" :md="12" :lg="12">
               <el-form-item label="Full Name" prop="full_name">
@@ -496,19 +484,17 @@
             <el-col :sm="24" :md="12" :lg="12">
               <el-form-item label="Phone Number" prop="phone_no">
                 <el-row class="req-input">
-                  <el-col  :md="6" :lg="6" >
+                  <el-col :md="6" :lg="6">
                     <el-select class="phone-select" filterable v-model="contactForm.country" placeholder="Select Country">
                       <el-option v-for="item in countryList" :key="item.name" :label="`${item.name} (${item.phonecode})`"
                         :value="item.phonecode" :style="{ fontFamily: 'sans-serif' }" />
                     </el-select>
                   </el-col>
-                  <el-col  :md="6" :lg="6">
+                  <el-col :md="6" :lg="6">
                     <el-input class="phone-input" v-model="contactForm.phone_no" placeholder="xxx-xxx-xxxx" />
                   </el-col>
                 </el-row>
               </el-form-item>
-
-
             </el-col>
             <el-col :sm="24" :md="12" :lg="12">
               <el-form-item label="Location" prop="location">
@@ -530,30 +516,28 @@
                 prop="expectations">
                 <el-input :rows="8" type="textarea" v-model="contactForm.expectations" />
               </el-form-item>
-
             </el-col>
             <el-col :sm="24" :md="24" :lg="24">
               <el-form-item label="Are There Any Specific Features Of Functionalities You Would Like To See In The App?"
                 prop="specific_feature">
                 <el-input :rows="8" type="textarea" v-model="contactForm.specific_feature" />
               </el-form-item>
-
             </el-col>
 
             <el-col :sm="24" :md="24" :lg="24">
               <el-form-item
-                label="Are You Available To Participate In The Pilot Testing Exercise Starting From 1St August 2023 For Five Days?"
+                label="Are You Available To Participate In The Pilot Testing Exercise Starting From 1st August 2023 For Five Days?"
                 prop="participate_in_program" class="custom-radio-container">
-                <el-radio-group v-model="contactForm.participate_in_program"
-                  style="display: flex; flex-direction: column;align-items: flex-start">
+                <el-radio-group v-model="contactForm.participate_in_program" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                  ">
                   <el-radio :label="true" class="box-radio">Yes</el-radio>
                   <el-radio :label="false" class="box-radio">No</el-radio>
                 </el-radio-group>
-
               </el-form-item>
-
             </el-col>
-
 
             <el-col :sm="24" :md="24" :lg="24">
               <el-form-item
@@ -563,53 +547,48 @@
                   <el-radio :label="true" class="box-radio">Yes</el-radio>
                   <el-radio :label="false" class="box-radio">No</el-radio>
                 </el-radio-group>
-
               </el-form-item>
-
             </el-col>
 
             <el-col :sm="24" :md="24" :lg="24">
               <el-form-item label="Additional Comments" prop="additional_comment">
                 <el-input :rows="8" type="textarea" v-model="contactForm.additional_comment" />
               </el-form-item>
-
             </el-col>
 
             <el-col :sm="24" :md="24" :lg="24" class="hidden-mobile">
               <el-form-item label="" prop="submit_form">
                 <el-radio-group v-model="contactForm.submit_form">
                   <el-radio :label="true" class="box-radio box-radio-term-condition">By Submitting This Form, I Confirm
-                    That I Agree To Participate In The Pilot Testing Program For The New<br> Version Of The EDU Passport
-                    App And Provide Feedback Based On My Experience.</el-radio>
+                    That I Agree To
+                    Participate In The Pilot Testing Program For The New<br />
+                    Version Of The EDU Passport App And Provide Feedback Based
+                    On My Experience.</el-radio>
                 </el-radio-group>
-
               </el-form-item>
-
             </el-col>
           </el-row>
         </el-form>
         <template #footer>
           <span class="dialog-footer">
-            <el-button type="primary" round @click="save('formName')" class="dialog-btn">
+            <el-button type="primary" round @click="save('formName')" class="dialog-btn" :loading="loading">
               Submit
             </el-button>
           </span>
         </template>
       </el-dialog>
 
-
       <el-dialog v-model="successDialog" width="30%" center class="success-dialog">
-
-
-        <div style="display: flex; justify-content: center; align-items: center;">
-
+        <div style="display: flex; justify-content: center; align-items: center">
           <el-image class="dialog-tick-circle" :src="TickCircle" fit="contain"></el-image>
-
         </div>
         <p class="success-dialog-heading">Form Submitted Successfully</p>
 
-        <p class="success-dialog-des">Thank you for participating in the pilot testing program for the new version of the
-          EDU Passport app! We appreciate your involvement and look forward to gathering.</p>
+        <p class="success-dialog-des">
+          Thank you for participating in the pilot testing program for the new
+          version of the EDU Passport app! We appreciate your involvement and
+          look forward to gathering.
+        </p>
         <template #footer>
           <span class="dialog-footer">
             <el-button type="primary" round @click="successDialog = false" class="success-dialog-btn">
@@ -619,54 +598,47 @@
         </template>
       </el-dialog>
     </el-row>
-
-
-
+  </el-container>
     <newFooter></newFooter>
 
     <initLoadingComponent :loadingStatus="initLoadingStatus"></initLoadingComponent>
 
     <!--    <homeDonghua></homeDonghua>-->
-
   </div>
 </template>
 
 <script>
-
-import imgLogo from '@/assets/logo.png'
-import imgOne from '@/assets/newHome/Landing_application-process.png'
-import { ref, onMounted } from 'vue'
+import imgLogo from "@/assets/logo.png";
+import imgOne from "@/assets/newHome/Landing_application-process.png";
+import { ref, onMounted } from "vue";
 // import DevicePixelRatio from '@/assets/devicePixelRatio'
-import dashboardDemoImg from '@/assets/newHome/dashboard-demo.png'
-import dashboardBDemoImg from '@/assets/newHome/dashboard-b-demo.png'
-import dashboardVDemoImg from '@/assets/newHome/dashboard-v-demo.png'
-import dealsDemoImg from '@/assets/newHome/deals-demo.png'
-import applicantMatchDemoImg from '@/assets/newHome/landing_applicant-match-demo.png'
-import applicationsDemoImg from '@/assets/newHome/landing_applications-demo.png'
-import chatDemoImg from '@/assets/newHome/landing_chat-demo.png'
-import chatEducatorDemoImg from '@/assets/newHome/landing_chat-educator-demo.png'
-import jobMatchDemoImg from '@/assets/newHome/landing_job-match-demo.png'
-import promotionImg from '@/assets/newHome/landing_promotion.png'
-import supportImg from '@/assets/newHome/landing_support.png'
+import dashboardDemoImg from "@/assets/newHome/dashboard-demo.png";
+import dashboardBDemoImg from "@/assets/newHome/dashboard-b-demo.png";
+import dashboardVDemoImg from "@/assets/newHome/dashboard-v-demo.png";
+import dealsDemoImg from "@/assets/newHome/deals-demo.png";
+import applicantMatchDemoImg from "@/assets/newHome/landing_applicant-match-demo.png";
+import applicationsDemoImg from "@/assets/newHome/landing_applications-demo.png";
+import chatDemoImg from "@/assets/newHome/landing_chat-demo.png";
+import chatEducatorDemoImg from "@/assets/newHome/landing_chat-educator-demo.png";
+import jobMatchDemoImg from "@/assets/newHome/landing_job-match-demo.png";
+import promotionImg from "@/assets/newHome/landing_promotion.png";
+import supportImg from "@/assets/newHome/landing_support.png";
 import { ADD_SUBSCRIBE_EMAIL } from "@/api/api";
 import initLoadingComponent from "@/components/initLoadingComponent";
 // import homeDonghua from "@/components/homeDonghua";
-import logoImg from "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.png"
-import logoImgLight from "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png"
-import logoImgLightH from '@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png'
-import landingPageMobileResponsiveImg from '@/assets/newHome/landing_page_mobile_responsive.png'
-import logoTransparentImg from '@/assets/newHome/logo/Logo_Transparent.png'
-import TickCircle from '@/assets/bg/tick-circle.png'
+import logoImg from "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Dark.png";
+import logoImgLight from "@/assets/newHome/logo/Full_Logo_Vertical_Transparent_Light.png";
+import logoImgLightH from "@/assets/newHome/logo/Full_Logo_Horizontal_Transparent_Light.png";
+import landingPageMobileResponsiveImg from "@/assets/newHome/landing_page_mobile_responsive.png";
+import logoTransparentImg from "@/assets/newHome/logo/Logo_Transparent.png";
+import TickCircle from "@/assets/bg/tick-circle.png";
 import mobileDrawerMenu from "@/components/mobileDrawerMenu";
 // import {loadJs, removeJs} from "@/utils/tools";
 import jobProcessComponent from "@/components/landing/home/jobProcess.vue";
-import newFooter from '@/layout/components/newFooter.vue'
+import newFooter from "@/layout/components/newFooter.vue";
 import contactForm from "@/components/contactForm.vue";
-import { GET_COUNTRY_LIST, ADD_INSIDER_PROGRAM } from '@/api/api';
-import { ElMessage } from 'element-plus'
-
-
-
+import { GET_COUNTRY_LIST, ADD_INSIDER_PROGRAM } from "@/api/api";
+import { ElMessage } from "element-plus";
 
 export default {
   name: "index",
@@ -675,10 +647,11 @@ export default {
     mobileDrawerMenu,
     jobProcessComponent,
     newFooter,
-    contactForm
+    contactForm,
   },
   data() {
     return {
+      loading:false,
       successDialog: false,
       insiderDialogVisible: false,
       envBlog: process.env.VUE_APP_BLOG,
@@ -701,156 +674,142 @@ export default {
       dashboardDemoImg,
       dashboardBDemoImg,
       dashboardVDemoImg,
-      subscribeEmailValue: '',
+      subscribeEmailValue: "",
       initLoadingStatus: false,
-      token: localStorage.getItem('token'),
+      token: localStorage.getItem("token"),
       homeArrowRightSize: 80,
       menuDrawerStatus: false,
       subscribeForm: {
-        email: ''
+        email: "",
       },
       subscribeRules: {
         email: [
           {
-            type: 'email',
+            type: "email",
             required: true,
-            message: 'Please enter your email address',
-            trigger: 'blur',
+            message: "Please enter your email address",
+            trigger: "blur",
           },
         ],
       },
       countryList: [],
       typeUsers: [
         {
-          label: 'Educator',
-          value: 1
+          label: "Educator",
+          value: 1,
         },
         {
-          label: 'EDU Busniess',
-          value: 2
+          label: "EDU Business",
+          value: 2,
         },
         {
-          label: 'Other',
-          value: 4
+          label: "Other",
+          value: 4,
         },
         {
-          label: 'Vendor',
-          value: 5
+          label: "Vendor",
+          value: 5,
         },
       ],
       contactForm: {
-        full_name: '',
-        email: '',
-        phone_no: '',
-        location: '',
-        type_of_user: '',
-        expectations: '',
+        full_name: "",
+        email: "",
+        phone_no: "",
+        location: "",
+        type_of_user: "",
+        expectations: "",
         specific_feature: null,
         participate_in_program: null,
-        detail_feedback: '',
-        additional_comment: '',
-        submit_form: '',
-        country: ''
+        detail_feedback: "",
+        additional_comment: "",
+        submit_form: "",
+        country: "",
       },
-      fromRef: '',
+      fromRef: "",
 
       contactFormRules: {
         full_name: [
           {
             required: true,
-            message: 'Please enter your full name',
-            trigger: 'blur',
+            message: "Please enter your full name",
+            trigger: "blur",
           },
         ],
         email: [
           {
-            type: 'email',
+            type: "email",
             required: true,
-            message: 'Please enter your email address',
-            trigger: 'blur',
+            message: "Please enter your email address",
+            trigger: "blur",
           },
         ],
         phone_no: [
           {
             required: true,
-            message: 'Please enter your phone number',
-            trigger: 'blur',
+            message: "Please enter your phone number",
+            trigger: "blur",
           },
         ],
         location: [
           {
             required: true,
-            message: 'Please enter your location',
-            trigger: 'blur',
+            message: "Please enter your location",
+            trigger: "blur",
           },
         ],
         type_of_user: [
           {
             required: true,
-            message: 'Please select type of user',
-            trigger: 'change',
+            message: "Please select type of user",
+            trigger: "change",
           },
         ],
         participate_in_program: [
           {
             required: true,
-            message: ' Please Choose an Option',
-            trigger: 'change',
+            message: " Please Choose an Option",
+            trigger: "change",
           },
         ],
         detail_feedback: [
           {
             required: true,
-            message: ' Please Choose an Option',
-            trigger: 'change',
+            message: " Please Choose an Option",
+            trigger: "change",
           },
         ],
-
       },
-
-
-
-
-
-
-    }
+    };
   },
   setup() {
-    const selectIdentityType = ref(1)
-    const selectItemValue = ref(1)
-    let timer = ref('')
-    let timer2 = ref('')
-    let timer3 = ref('')
+    const selectIdentityType = ref(1);
+    const selectItemValue = ref(1);
+    let timer = ref("");
+    let timer2 = ref("");
+    let timer3 = ref("");
 
     const tabSliderEvent = (stop) => {
-
       if (stop) {
-        console.log('stop slider')
-        window.clearTimeout(timer)
-        window.clearTimeout(timer2)
-        window.clearTimeout(timer3)
-
+        console.log("stop slider");
+        window.clearTimeout(timer);
+        window.clearTimeout(timer2);
+        window.clearTimeout(timer3);
       } else {
-
         timer = window.setTimeout(function () {
-          selectIdentityType.value = 2
+          selectIdentityType.value = 2;
 
           timer2 = window.setTimeout(function () {
-            selectIdentityType.value = 3
+            selectIdentityType.value = 3;
 
             timer3 = window.setTimeout(function () {
-              selectIdentityType.value = 1
+              selectIdentityType.value = 1;
 
               tabSliderEvent(false);
-
-            }, 3000)
-
-          }, 3000)
-
-        }, 3000)
-
+            }, 3000);
+          }, 3000);
+        }, 3000);
       }
-    }
+    };
 
     // let a = setInterval(function (){
     //
@@ -874,216 +833,233 @@ export default {
 
     onMounted(() => {
       // a
-      tabSliderEvent()
-    })
+      tabSliderEvent();
+    });
 
     return {
       selectIdentityType,
       selectItemValue,
       tabSliderEvent,
-      timer
+      timer,
       // clearTimer
-    }
-
+    };
   },
 
   mounted() {
-
-    this.getAllCountry()
+    this.getAllCountry();
 
     let self = this;
     // loadJs('https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js')
     // loadJs('/zoho.js')
-    let screenWidth = document.body.clientWidth
-    let screenWidthFloor = Math.floor(screenWidth)
+    let screenWidth = document.body.clientWidth;
+    let screenWidthFloor = Math.floor(screenWidth);
 
     if (screenWidthFloor <= 768) {
-      this.homeArrowRightSize = 20
+      this.homeArrowRightSize = 20;
     }
-
 
     window.onresize = () => {
       if (screenWidthFloor <= 768) {
-        this.homeArrowRightSize = 20
+        this.homeArrowRightSize = 20;
       }
-    }
+    };
 
     this.initLoadingStatus = false;
     setTimeout(function () {
       self.initLoadingStatus = false;
-    }, 3000)
+    }, 3000);
 
+    if (this.$route.query["business-insider"] !== undefined) {
+      this.insiderDialogVisible = true;
+    }
   },
   unmounted() {
     // console.log('home index unmounted')
     // removeJs('https://cdn.pagesense.io/js/edupassport/81b71de4b3744e65b9740dbe657feac5.js')
     // removeJs('/zoho.js')
-    window.onresize = null
+    window.onresize = null;
   },
   methods: {
-
     save(formName) {
-  this.$refs[formName].validate((valid) => {
-    if (valid) {
-      this.contactForm.phone_no = `${this.contactForm.country} ${this.contactForm.phone_no}`;
-      delete this.contactForm.country;
-      this.insiderDialogVisible = false;
-      ADD_INSIDER_PROGRAM(this.contactForm).then(res => {
-        if (res.code == 200) {
-          this.successDialog = true;
-          this.$refs[formName].resetFields();
-          setTimeout(() => {
-            this.successDialog = false;
-          }, 4000);
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.loading=true
+          this.contactForm.phone_no = `${this.contactForm.country} ${this.contactForm.phone_no}`;
+          delete this.contactForm.country;
+          ADD_INSIDER_PROGRAM(this.contactForm)
+            .then((res) => {
+              if (res.code == 200) {
+                this.loading=false
+                this.successDialog = true;
+                setTimeout(() => {
+                  this.insiderDialogVisible = false;
+                }, 1000);
+                this.$refs[formName].resetFields();
+                setTimeout(() => {
+                  this.successDialog = false;
+                }, 4000);
+              }
+            })
+            .catch((err) => {
+              this.loading=false
+              ElMessage({
+                message: err.msg,
+                type: "error",
+              });
+            });
         }
-      }).catch(err => {
-        ElMessage({
-          message: err.msg,
-          type: 'error',
-        });
       });
-    }
-  });
-},
+    },
 
-getAllCountry() {
-  let params = {}
-  GET_COUNTRY_LIST(params).then(res => {
-    if (res.code == 200) {
-      this.countryList = res.message;
-    }
-  }).catch(err => {
-    console.log(err)
-  })
-},
-subscribe(formName) {
-  this.$refs[formName].validate((valid) => {
-    if (valid) {
-      let params = Object.assign({}, this.subscribeForm);
+    getAllCountry() {
+      let params = {};
+      GET_COUNTRY_LIST(params)
+        .then((res) => {
+          if (res.code == 200) {
+            this.countryList = res.message;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    subscribe(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let params = Object.assign({}, this.subscribeForm);
 
-      ADD_SUBSCRIBE_EMAIL(params).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.$message.success('Thanks for signing up')
-          this.subscribeForm.email = ''
+          ADD_SUBSCRIBE_EMAIL(params)
+            .then((res) => {
+              console.log(res);
+              if (res.code == 200) {
+                this.$message.success("Thanks for signing up");
+                this.subscribeForm.email = "";
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$message.error(err.msg);
+            });
+        } else {
+          this.$message({
+            type: "warning",
+            message: "please enter your valid email",
+            grouping: true,
+          });
+
+          console.log("error submit!!");
+          return false;
         }
-      }).catch(err => {
-        console.log(err)
-        this.$message.error(err.msg)
-      })
-
-    } else {
-      this.$message({
-        type: 'warning',
-        message: 'please enter your valid email',
-        grouping: true
-      })
-
-      console.log('error submit!!')
-      return false
-    }
-  })
-
-
-},
-turnJobs() {
-  this.$router.push('/jobs')
-},
-turnDeals() {
-  this.$router.push('/deals')
-},
-turnAboutUs() {
-  this.$router.push('/about/us')
-},
-turnFeatures() {
-  this.$router.push('/login')
-},
-turnPricing() {
-  this.$router.push('/services/price')
-},
-turnContactUs() {
-  this.$router.push('/contact/us')
-},
-turnDashboard() {
-  this.$router.push('/overview')
-},
-login() {
-  this.$router.push('/login')
-},
-signUp() {
-  this.$router.push({ path: '/signup', query: {} })
-},
-checkedIdentityType(value) {
-  this.selectIdentityType = value
-  this.selectItemValue = 1
-  this.tabSliderEvent(true)
-
-},
-checkedItem(value) {
-  this.selectItemValue = value;
-  this.tabSliderEvent(true)
-
-},
-turnHome() {
-  this.$router.push('/')
-},
-searchNow() {
-  this.$router.push({ path: '/search/result', query: { keyword: this.searchKeywordsValue } })
-},
-turnArticleLink(link) {
-  window.open(link, '_blank')
-}
-
-  }
-
-}
+      });
+    },
+    turnJobs() {
+      this.$router.push("/jobs");
+    },
+    turnDeals() {
+      this.$router.push("/deals");
+    },
+    turnAboutUs() {
+      this.$router.push("/about/us");
+    },
+    turnFeatures() {
+      this.$router.push("/login");
+    },
+    turnPricing() {
+      this.$router.push("/services/price");
+    },
+    turnContactUs() {
+      this.$router.push("/contact/us");
+    },
+    turnDashboard() {
+      this.$router.push("/overview");
+    },
+    login() {
+      this.$router.push("/login");
+    },
+    signUp() {
+      this.$router.push({ path: "/signup", query: {} });
+    },
+    checkedIdentityType(value) {
+      this.selectIdentityType = value;
+      this.selectItemValue = 1;
+      this.tabSliderEvent(true);
+    },
+    checkedItem(value) {
+      this.selectItemValue = value;
+      this.tabSliderEvent(true);
+    },
+    turnHome() {
+      this.$router.push("/");
+    },
+    searchNow() {
+      this.$router.push({
+        path: "/search/result",
+        query: { keyword: this.searchKeywordsValue },
+      });
+    },
+    turnArticleLink(link) {
+      window.open(link, "_blank");
+    },
+  },
+};
 </script>
 
 <style>
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
+  .dialog-width {
+    width: 100%;
+  }
 
-.dialog-width{
+  .insider-program-form {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
 
-  width:100%
+  .phone-select {
+    width: 100% !important;
+  }
+
+  .phone-input {
+    margin-left: 0px !important;
+    margin-top: 10px !important;
+
+    width: 100% !important;
+  }
+
+  .dialog-p-text {
+    font-size: 14px !important;
+  }
+
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  .row-bg {
+    background-image: none !important;
+    padding-left: 45px !important;
+  }
+  .inner-div-group-padd{
+  padding-left:0px !important
 }
-.insider-program-form {
-    position: relative;
-    top: 4.166667rem;
-    padding-left: 0px !important; 
-     padding-right: 0px !important;
-}
-.phone-select {
-  width: 100% !important
 }
 
-.phone-input {
-  margin-left: 0px !important;
-  margin-top: 10px !important;
-
-  width: 100% !important;
-}
-.dialog-p-text{
-font-size:14px !important
-}
-.hidden-mobile{
-  display:none !important 
-}
-}
 .row-bg {
-  padding-top: 500px;
-  padding-bottom: 0px;
+  padding-top: 100px;
+  padding-bottom: 60px;
 
   background-image: url("../../assets/bg/row-bg.jpg");
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: right;
+  background-color: #6648ff;
+  padding-left: 230px;
 }
 
 .b-insider-program span {
-
   font-size: 21px;
   font-weight: bold;
-  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .b-insider-program {
@@ -1091,63 +1067,58 @@ font-size:14px !important
 }
 
 .h1-text {
-  position: relative;
-  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  padding-top:40px;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
   color: white;
   font-weight: bold;
   font-size: 41px;
-  top: 25px;
 }
 
 .p-text {
+  padding-top:40px;
   color: white;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
-  position: relative;
-  top: 60px;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica,
+    sans-serif;
   line-height: 25px;
-
 }
 
 .dialog-p-text {
-  position: relative;
-  top: 50px;
+  padding-bottom: 35px;
   line-height: 30px;
   font-family: "Assistant";
-font-size: 24px;
-font-weight: normal;
-font-style: normal;
-text-align: center;
-color: #262626;
-
+  font-size: 24px;
+  font-weight: normal;
+  font-style: normal;
+  text-align: center;
+  color: #262626;
 }
 
 .b-join-now span {
   font-weight: bold;
-  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .b-join-now {
-  position: relative;
-  top: -17.520833rem;
-  right: 43.75rem;
+  margin-top:35px;
 }
 
 .h1-text-benefits {
-
+  padding-top:40px;
+  padding-bottom:30px;
   font-size: 29px;
   color: white;
-  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  position: relative;
-  top: 180px;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .div-group {
-  position: relative;
-  top: 190px;
+  padding-bottom:35px
 }
 
-
 .div-group .el-avatar {
+  font-family: "Cabin" !important;
   --el-avatar-bg-color: #ffffff;
   color: black !important;
 }
@@ -1155,26 +1126,29 @@ color: #262626;
 .dev-group-p-text {
   padding: 18px 0px 20px 0px;
   font-size: 25px;
-  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: "Cabin" !important;
   font-weight: bold;
   color: white;
 }
 
+.inner-div-group-padd{
+  padding-left:60px
+}
+
 .dev-group-p-text-detal {
+  width:330px;
   font-size: 18px !important;
   color: white;
-  position: relative;
-  top: -7px;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
 
+  font-family: "Assistant" !important;
 }
 
 .req-input {
   width: 23.395833rem;
-
 }
+
 .phone-select {
-  width: 200px
+  width: 200px;
 }
 
 .phone-input {
@@ -1184,23 +1158,22 @@ color: #262626;
 
 .insider-program-form.el-form--default.el-form--label-top .el-form-item .el-form-item__label {
   font-family: "Cabin" !important;
-font-size: 16px !important;
-font-weight: 500 !important;
-font-style: normal !important;
-color: #262626 !important;}
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  color: #262626 !important;
+}
 
 .insider-program-form .box-radio .el-radio__label {
   font-family: "Cabin" !important;
-font-size: 20px !important;
-font-weight: 500 !important;
-font-style: normal !important;
-color: #262626 !important;  
+  font-size: 20px ;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  color: #262626 !important;
+  white-space: normal !important;
 }
 
 .insider-program-form {
-
-  position: relative;
-  top: 80px;
   padding-left: 70px;
   padding-right: 50px;
 }
@@ -1212,7 +1185,7 @@ color: #262626 !important;
 }
 
 .box-radio .el-radio__inner {
-  border: 3px solid #D6D6D6;
+  border: 3px solid #d6d6d6;
   border-radius: 0;
   width: 16px;
   height: 16px;
@@ -1227,33 +1200,30 @@ color: #262626 !important;
   padding-left: 8px;
 }
 
-
 .box-radio-term-condition .el-radio__label {
   font-family: "Cabin" !important;
-font-size: 18px !important;
-font-weight: 500 !important;
-font-style: normal !important;
-color: #262626 !important;
-  
-  padding-left: 16px;
+  font-size: 18px ;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  color: #262626 !important;
   line-height: 23px;
+
+  padding-left: 16px;
   padding-top: 20px;
 }
 
 .dialog-btn {
-  margin: 60px 0px 40px 0px !important;
-}
+  margin: 0px 0px 18px 0px !important}
 
 .dialog-radio-button {
   display: flex;
   flex-direction: column;
-  align-items: flex-start
+  align-items: flex-start;
 }
 
 .insider-program-form .el-form-item__error {
   color: red !important;
   font-family: sans-serif !important;
-
 }
 
 .insider-program-form .el-form-item.is-error .el-input__wrapper {
@@ -1266,9 +1236,8 @@ color: #262626 !important;
 
 .insider-program-form .custom-radio-container .el-form-item__error {
   position: absolute !important;
-  top: -53px !important;
+  /* top: -53px !important; */
 }
-
 
 .success-dialog-heading {
   font-family: "Assistant";
@@ -1279,12 +1248,10 @@ color: #262626 !important;
   text-align: center;
   position: relative;
   top: 37px;
-
 }
 
 .dialog-tick-circle {
-
-  width: 12%
+  width: 12%;
 }
 
 .success-dialog-des {
@@ -1298,7 +1265,6 @@ color: #262626 !important;
   color: #262626;
 }
 
-
 .success-dialog-btn {
   position: relative;
   top: 65px;
@@ -1308,10 +1274,10 @@ color: #262626 !important;
   font-style: normal;
   text-align: center;
 }
-
 .success-dialog {
-  padding: 0px 20px 90px 20px
+  padding: 0px 20px 90px 20px;
 }
+
 </style>
 
 <style scoped>
@@ -1342,7 +1308,6 @@ color: #262626 !important;
 
 .dialog-logo {
   width: 50px;
-
 }
 
 .logo-new-beta {
@@ -1352,18 +1317,21 @@ color: #262626 !important;
   background-color: #49397f;
   padding: 2px 10px;
   border-radius: 10px;
-  color: #EEEEEE;
-  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica, sans-serif;
+  color: #eeeeee;
+  font-family: AssiRegular, Open Sans, Helvetica Neue, Arial, Helvetica,
+    sans-serif;
   font-size: 12px;
 }
 
 .logo-edu {
-  font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: BCExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
   font-size: 40px;
 }
 
 .logo-passport {
-  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: BCSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
   font-size: 17px;
 }
 
@@ -1385,9 +1353,8 @@ color: #262626 !important;
   background-color: #49397f;
   padding: 2px 10px;
   border-radius: 10px;
-  color: #EEEEEE;
+  color: #eeeeee;
 }
-
 
 .t-btn-container {
   text-align: right;
@@ -1405,34 +1372,35 @@ color: #262626 !important;
 }
 
 .home-profile-btn {
-  color: #6648FF;
+  color: #6648ff;
   font-size: 28px;
 }
 
 .a-row-container {
-  background-color: #F0F2F5;
+  background-color: #f0f2f5;
   text-align: center;
   padding-top: 120px;
   font-size: 45px;
-  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .a-row-container span {
-  color: #6648FF;
+  color: #6648ff;
 }
 
-
 .b-row-container {
-  background-color: #F0F2F5;
+  background-color: #f0f2f5;
   text-align: center;
   padding-top: 25px;
   font-size: 23px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .c-row-container {
   padding-top: 50px;
-  background-color: #F0F2F5;
+  background-color: #f0f2f5;
 }
 
 .c-col-container {
@@ -1449,14 +1417,14 @@ color: #262626 !important;
   flex-direction: row;
   align-items: stretch;
   justify-content: space-between;
-
 }
 
 .c-tips {
   width: 1720px;
   margin: 0 auto;
   padding: 25px 0 50px 0;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
   font-size: 16px;
   color: #262626;
 }
@@ -1468,15 +1436,15 @@ color: #262626 !important;
 .f-label {
   text-align: center;
   font-size: 45px;
-  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .f-label span {
-  color: #6648FF;
+  color: #6648ff;
 }
 
 .f-tabs {
-
   width: 667px;
   margin: 50px auto;
   display: flex;
@@ -1486,12 +1454,9 @@ color: #262626 !important;
 
   z-index: 2;
   position: relative;
-
-
 }
 
 .f-tab {
-
   color: #262626;
   font-size: 30px;
 
@@ -1526,18 +1491,17 @@ color: #262626 !important;
   border-radius: 40px;
   left: 0;
   top: 0;
-  background-color: #9173FF;
-  color: #FFFFFF;
+  background-color: #9173ff;
+  color: #ffffff;
   z-index: 1;
-  transition: all .8s;
-
+  transition: all 0.8s;
 }
 
 .f-tab-bg-t-1 {
   width: 167px;
   animation-name: slide-in-left-e;
 
-  animation-duration: .8s;
+  animation-duration: 0.8s;
   transform: translateX(0);
 }
 
@@ -1545,20 +1509,19 @@ color: #262626 !important;
   width: 340px;
   transform: translateX(177px);
   animation-name: slide-in-left-b;
-  animation-duration: .8s;
+  animation-duration: 0.8s;
 }
 
 .f-tab-bg-t-3 {
   width: 130px;
   transform: translateX(522px);
   animation-name: slide-in-left-v;
-  animation-duration: .8s;
+  animation-duration: 0.8s;
 }
-
 
 .f-tab-active {
   /*background-color: #9173FF;*/
-  color: #FFFFFF;
+  color: #ffffff;
   /*transition: all 2.3s;*/
   /*animation-name: slide-in-left;*/
   /*animation-duration: 2s;*/
@@ -1583,7 +1546,6 @@ color: #262626 !important;
 
 .f-c-active {
   opacity: 1;
-
 }
 
 .f-c-l {
@@ -1615,7 +1577,6 @@ color: #262626 !important;
 
 .f-c-r-img {
   height: 100%;
-
 }
 
 /deep/ .f-c-r-img-edu .el-image__inner {
@@ -1636,7 +1597,6 @@ color: #262626 !important;
   justify-content: flex-start;
 
   position: relative;
-
 }
 
 .f-c-l-item:hover {
@@ -1655,31 +1615,33 @@ color: #262626 !important;
   height: 100%;
   top: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, .2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .f-c-l-item-label {
   color: #262626;
   font-size: 30px;
-  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: BSemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .f-c-l-item p {
   margin-top: 15px;
   color: #262626;
   font-size: 23px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .s-col-container {
   padding: 50px 0;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .s-container {
   width: 650px;
   padding: 25px 50px;
-  background-color: #F0F2F5;
+  background-color: #f0f2f5;
   box-shadow: 0px 3px 23px #00000012;
   border-radius: 18px;
   margin: 0 auto;
@@ -1688,22 +1650,23 @@ color: #262626 !important;
 .s-label {
   text-align: center;
   font-size: 45px;
-  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: BExtraBold, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .s-label span {
-  color: #6648FF;
+  color: #6648ff;
 }
 
 .s-tips {
   margin: 15px 25px;
   color: #262626;
   font-size: 23px;
-  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: AssiRegular, "Open Sans", "Helvetica Neue", Arial, Helvetica,
+    sans-serif;
 }
 
 .s-input-container {
-
   margin: 25px 25px 0 25px;
 
   display: flex;
@@ -1714,7 +1677,6 @@ color: #262626 !important;
 
 .s-input-l {
   width: calc(100% - 120px);
-
 }
 
 .s-input-l /deep/ .el-input__wrapper {
@@ -1726,7 +1688,6 @@ color: #262626 !important;
   width: 100px;
   text-align: right;
 }
-
 
 .nav-link-container {
   text-align: left;
@@ -1742,7 +1703,8 @@ color: #262626 !important;
 
   font-size: 18px;
   line-height: 30px;
-  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-family: Assistant-SemiBold, "Open Sans", "Helvetica Neue", Arial,
+    Helvetica, sans-serif;
 }
 
 .nav-link-container a:hover {
@@ -1774,7 +1736,6 @@ color: #262626 !important;
 }
 
 @keyframes slide-in-left-v {
-
   0% {
     transform: translateX(360px);
     opacity: 0;
@@ -1794,11 +1755,9 @@ color: #262626 !important;
   .logo-new-logo-mobile-img {
     display: none;
   }
-
 }
 
 @media screen and (max-width: 768px) {
-
   .logo-new-logo-img {
     display: none;
   }
@@ -1852,7 +1811,6 @@ color: #262626 !important;
   }
 
   .f-tab-bg {
-
     position: absolute;
   }
 
@@ -1872,7 +1830,6 @@ color: #262626 !important;
     flex-direction: column;
     padding-left: 0;
   }
-
 
   .f-c-l {
     width: auto;
@@ -1940,6 +1897,5 @@ color: #262626 !important;
   .t-btn-menu-icon-container {
     padding-right: 15px;
   }
-
 }
 </style>
